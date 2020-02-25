@@ -13,6 +13,15 @@ const linkSchema = gql`
         message: String
     }
 
+    type PageInfo {
+        page: Int!
+        size: Int!
+        totalPages: Int!
+        totalCount: Int!
+        hasNextPage: Boolean!
+        hasPreviousPage: Boolean!
+    }
+
     type Query {
         _: Boolean
     }

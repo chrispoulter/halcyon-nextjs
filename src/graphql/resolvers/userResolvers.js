@@ -22,7 +22,15 @@ module.exports = {
             );
 
             return {
-                ...result,
+                items: result.items,
+                pageInfo: {
+                    page: result.page,
+                    size: result.size,
+                    totalPages: result.totalPages,
+                    totalCount: result.totalCount,
+                    hasNextPage: result.hasNextPage,
+                    hasPreviousPage: result.hasPreviousPage
+                },
                 search: search,
                 sort: sort
             };
