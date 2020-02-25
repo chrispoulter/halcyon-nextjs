@@ -26,7 +26,7 @@ module.exports.generateToken = user => {
         role: (user.roles || []).join()
     };
 
-    const expiresIn = 86400;
+    const expiresIn = 3600;
 
     const accessToken = sign(payload, config.JWT_SECURITYKEY, {
         issuer: config.JWT_ISSUER,
