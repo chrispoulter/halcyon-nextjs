@@ -1,8 +1,6 @@
 const { sign, verify } = require('jsonwebtoken');
 const config = require('./config');
 
-const EXPIRES_IN = 3600;
-
 module.exports.verifyToken = async token => {
     let result = undefined;
 
@@ -28,14 +26,16 @@ module.exports.generateToken = user => {
         role: (user.roles || []).join()
     };
 
+    const expiresIn = 86400;
+
     const accessToken = sign(payload, config.JWT_SECURITYKEY, {
-        expiresIn: EXPIRES_IN,
         issuer: config.JWT_ISSUER,
-        audience: config.JWT_AUDIENCE
+        audience: config.JWT_AUDIENCE,
+        expiresIn
     });
 
     return {
         accessToken,
-        expiresIn: EXPIRES_IN
+        expiresIn
     };
 };
