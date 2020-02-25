@@ -95,9 +95,6 @@ module.exports = {
                         message: `User name "${input.emailAddress}" is already taken.`
                     };
                 }
-
-                user.emailConfirmed = undefined;
-                user.verifyEmailToken = undefined;
             }
 
             user.emailAddress = input.emailAddress;
