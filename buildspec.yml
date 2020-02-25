@@ -1,0 +1,22 @@
+version: 0.2
+
+env:
+    parameter-store:
+        MONGODB_URI: '/halcyon/dev/MONGODB_URI'
+        JWT_SECURITYKEY: '/halcyon/dev/JWT_SECURITYKEY'
+        JWT_AUDIENCE: '/halcyon/dev/JWT_AUDIENCE'
+        JWT_ISSUER: '/halcyon/dev/JWT_ISSUER'
+        MAILGUN_DOMAIN: '/halcyon/dev/MAILGUN_DOMAIN'
+        MAILGUN_PASSWORD: '/halcyon/dev/MAILGUN_PASSWORD'
+        MAILGUN_NOREPLY: '/halcyon/dev/MAILGUN_NOREPLY'
+
+phases:
+    install:
+        runtime-versions:
+            nodejs: 12
+
+    build:
+        commands:
+            - yarn
+            - yarn lint
+            - npx serverless deploy --stage dev --region eu-west-1
