@@ -1,4 +1,5 @@
 const { AuthenticationError, ForbiddenError } = require('apollo-server');
+const { skip } = require('graphql-resolvers');
 const { verifyToken } = require('../utils/jwt');
 
 module.exports = async ({ headers }) => {
@@ -35,23 +36,24 @@ const isAuthorized = (user, requiredRoles) => {
     return true;
 };
 
-module.exports.isAuthenticated = context => {
-    if (!isAuthorized(context.payload)) {
+module.exports.isAuthenticated = (_, __, { payload }) => {
+    if (!isAuthorized(payload)) {
         throw new AuthenticationError(
             'You are not authorized to view this resource.'
         );
     }
+
+    return skip;
 };
 
-module.exports.isUserAdministrator = context => {
+module.exports.isUserAdministrator = (_, __, { payload }) => {
     if (
-        !isAuthorized(context.payload, [
-            'System Administrator',
-            'User Administrator'
-        ])
+        !isAuthorized(payload, ['System Administrator', 'User Administrator'])
     ) {
         throw new ForbiddenError(
             'You are not authorized to view this resource.'
         );
     }
+
+    return skip;
 };
