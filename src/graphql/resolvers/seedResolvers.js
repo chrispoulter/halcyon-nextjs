@@ -17,12 +17,12 @@ module.exports = {
                 dateOfBirth: '1970-01-01',
                 roles: ['System Administrator']
             };
-    
+
             const existing = await getUserByEmailAddress(user.emailAddress);
             if (existing) {
                 await removeUser(existing);
             }
-    
+
             const result = await createUser(user);
 
             return {

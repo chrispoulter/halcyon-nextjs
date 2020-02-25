@@ -1,6 +1,13 @@
 const { gql } = require('apollo-server');
 
 module.exports = gql`
+    enum UserSortExpression {
+        EMAILADDRESS
+        EMAILADDRESS_DESC
+        DISPLAYNAME
+        DISPLAYNAME_DESC
+    }
+
     type User {
         id: ID!
         emailAddress: String!
@@ -10,6 +17,18 @@ module.exports = gql`
         isLockedOut: Boolean
         picture: String
         roles: [String]
+    }
+
+    type UserSearchResult {
+        items: [User]
+        page: Int!
+        size: Int!
+        totalPages: Int!
+        totalCount: Int!
+        hasNextPage: Boolean!
+        hasPreviousPage: Boolean!
+        search: String
+        sort: UserSortExpression
     }
 
     input CreateUserInput {
@@ -37,7 +56,12 @@ module.exports = gql`
     }
 
     extend type Query {
-        users: [User]
+        users(
+            page: Int
+            size: Int
+            search: String
+            sort: UserSortExpression
+        ): UserSearchResult
         getUserById(id: ID!): User
     }
 

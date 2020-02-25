@@ -11,9 +11,21 @@ const { hashPassword } = require('../../utils/password');
 
 module.exports = {
     Query: {
-        users: async (_, __, context) => {
+        users: async (_, { page, size, search, sort }, context) => {
             isUserAdministrator(context);
-            return searchUsers();
+
+            const result = await searchUsers(
+                page || 1,
+                size || 10,
+                search,
+                sort
+            );
+
+            return {
+                ...result,
+                search: search,
+                sort: sort
+            };
         },
         getUserById: async (_, { id }, context) => {
             isUserAdministrator(context);
