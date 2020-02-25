@@ -7,5 +7,7 @@ module.exports = {
     JWT_AUDIENCE: process.env.JWT_AUDIENCE || '',
     MAILGUN_DOMAIN: process.env.MAILGUN_DOMAIN || '',
     MAILGUN_PASSWORD: process.env.MAILGUN_PASSWORD || '',
-    MAILGUN_NOREPLY: process.env.MAILGUN_NOREPLY || ''
+    MAILGUN_NOREPLY: process.env.MAILGUN_NOREPLY || '',
+    SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS || '',
+    SEED_PASSWORD: process.env.SEED_PASSWORD || ''
 };

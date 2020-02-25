@@ -9,6 +9,8 @@ env:
         MAILGUN_DOMAIN: '/halcyon/dev/MAILGUN_DOMAIN'
         MAILGUN_PASSWORD: '/halcyon/dev/MAILGUN_PASSWORD'
         MAILGUN_NOREPLY: '/halcyon/dev/MAILGUN_NOREPLY'
+        SEED_EMAILADDRESS: '/halcyon/dev/SEED_EMAILADDRESS'
+        SEED_PASSWORD: '/halcyon/dev/SEED_PASSWORD'
 
 phases:
     install:

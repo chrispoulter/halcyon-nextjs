@@ -2,6 +2,7 @@ const { gql } = require('apollo-server');
 
 const accountSchema = require('./accountSchema');
 const manageSchema = require('./manageSchema');
+const seedSchema = require('./seedSchema');
 const tokenSchema = require('./tokenSchema');
 const userSchema = require('./userSchema');
 
@@ -26,7 +27,8 @@ const linkSchema = gql`
 module.exports = [
     linkSchema,
     userSchema,
-    tokenSchema,
+    accountSchema,
     manageSchema,
-    accountSchema
+    seedSchema,
+    tokenSchema
 ];

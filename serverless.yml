@@ -15,6 +15,8 @@ provider:
         MAILGUN_DOMAIN: ${env:MAILGUN_DOMAIN, ''}
         MAILGUN_PASSWORD: ${env:MAILGUN_PASSWORD, ''}
         MAILGUN_NOREPLY: ${env:MAILGUN_NOREPLY, ''}
+        SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
+        SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
 
 plugins:
     - serverless-offline
