@@ -31,8 +31,8 @@ module.exports = {
                     hasNextPage: result.hasNextPage,
                     hasPreviousPage: result.hasPreviousPage
                 },
-                search: search,
-                sort: sort
+                search,
+                sort
             };
         },
         getUserById: async (_, { id }, context) => {
