@@ -111,13 +111,13 @@ module.exports = {
         ),
         lockUser: combineResolvers(
             isUserAdministrator,
-            async (_, { id }, context) => {
+            async (_, { id }, { payload }) => {
                 const user = await getUserById(id);
                 if (!user) {
                     throw new UserInputError('User not found.');
                 }
 
-                if (user.id === context.payload.sub) {
+                if (user.id === payload.sub) {
                     throw new UserInputError(
                         'Cannot lock currently logged in user.'
                     );
@@ -152,13 +152,13 @@ module.exports = {
         }),
         deleteUser: combineResolvers(
             isUserAdministrator,
-            async (_, { id }, context) => {
+            async (_, { id }, { payload }) => {
                 const user = await getUserById(id);
                 if (!user) {
                     throw new UserInputError('User not found.');
                 }
 
-                if (user.id === context.payload.sub) {
+                if (user.id === payload.sub) {
                     throw new UserInputError(
                         'Cannot delete currently logged in user.'
                     );
