@@ -1,4 +1,4 @@
-const { AuthenticationError } = require('apollo-server');
+const { AuthenticationError, ForbiddenError } = require('apollo-server');
 const { verifyToken } = require('../utils/jwt');
 
 module.exports = async ({ headers }) => {
@@ -50,7 +50,7 @@ module.exports.isUserAdministrator = context => {
             'User Administrator'
         ])
     ) {
-        throw new AuthenticationError(
+        throw new ForbiddenError(
             'You are not authorized to view this resource.'
         );
     }

@@ -1,3 +1,4 @@
+const { UserInputError } = require('apollo-server');
 const {
     getUserById,
     getUserByEmailAddress,
@@ -20,11 +21,7 @@ module.exports = {
 
             const user = await getUserById(context.payload.sub);
             if (!user) {
-                return {
-                    code: 404,
-                    success: false,
-                    message: 'User not found.'
-                };
+                throw new UserInputError('User not found.');
             }
 
             if (user.emailAddress !== input.emailAddress) {
@@ -33,11 +30,9 @@ module.exports = {
                 );
 
                 if (existing) {
-                    return {
-                        code: 400,
-                        success: false,
-                        message: `User name "${input.emailAddress}" is already taken.`
-                    };
+                    throw new UserInputError(
+                        `User name "${input.emailAddress}" is already taken.`
+                    );
                 }
             }
 
@@ -63,11 +58,7 @@ module.exports = {
 
             const user = await getUserById(context.payload.sub);
             if (!user) {
-                return {
-                    code: 404,
-                    success: false,
-                    message: 'User not found.'
-                };
+                throw new UserInputError('User not found.');
             }
 
             const verified = await verifyPassword(
@@ -76,11 +67,7 @@ module.exports = {
             );
 
             if (!verified) {
-                return {
-                    code: 400,
-                    success: false,
-                    message: 'Incorrect password.'
-                };
+                throw new UserInputError('Incorrect password.');
             }
 
             user.password = await hashPassword(newPassword);
@@ -99,11 +86,7 @@ module.exports = {
 
             const user = await getUserById(context.payload.sub);
             if (!user) {
-                return {
-                    code: 404,
-                    success: false,
-                    message: 'User not found.'
-                };
+                throw new UserInputError('User not found.');
             }
 
             await removeUser(user);

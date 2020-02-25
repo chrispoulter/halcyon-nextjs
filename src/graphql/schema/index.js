@@ -7,6 +7,8 @@ const tokenSchema = require('./tokenSchema');
 const userSchema = require('./userSchema');
 
 const linkSchema = gql`
+    scalar Date
+
     type MutationResponse {
         code: String!
         success: Boolean!

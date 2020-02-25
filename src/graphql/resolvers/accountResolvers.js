@@ -1,3 +1,4 @@
+const { UserInputError } = require('apollo-server');
 const uuidv4 = require('uuid/v4');
 const {
     getUserByEmailAddress,
@@ -12,11 +13,9 @@ module.exports = {
         register: async (_, { input }) => {
             const existing = await getUserByEmailAddress(input.emailAddress);
             if (existing) {
-                return {
-                    code: 400,
-                    success: false,
-                    message: `User name "${input.emailAddress}" is already taken.`
-                };
+                throw new UserInputError(
+                    `User name "${input.emailAddress}" is already taken.`
+                );
             }
 
             const user = {
@@ -61,11 +60,7 @@ module.exports = {
         resetPassword: async (_, { token, emailAddress, newPassword }) => {
             const user = await getUserByEmailAddress(emailAddress);
             if (!user || user.passwordResetToken !== token) {
-                return {
-                    code: 400,
-                    success: false,
-                    message: 'Invalid token.'
-                };
+                throw new UserInputError('Invalid token.');
             }
 
             user.password = await hashPassword(newPassword);

@@ -1,3 +1,4 @@
+const { UserInputError } = require('apollo-server');
 const {
     searchUsers,
     getUserById,
@@ -46,11 +47,9 @@ module.exports = {
 
             const existing = await getUserByEmailAddress(input.emailAddress);
             if (existing) {
-                return {
-                    code: 400,
-                    success: false,
-                    message: `User name "${input.emailAddress}" is already taken.`
-                };
+                throw new UserInputError(
+                    `User name "${input.emailAddress}" is already taken.`
+                );
             }
 
             const user = {
@@ -76,11 +75,7 @@ module.exports = {
 
             const user = await getUserById(id);
             if (!user) {
-                return {
-                    code: 404,
-                    success: false,
-                    message: 'User not found.'
-                };
+                throw new UserInputError('User not found.');
             }
 
             if (user.emailAddress !== input.emailAddress) {
@@ -89,11 +84,9 @@ module.exports = {
                 );
 
                 if (existing) {
-                    return {
-                        code: 400,
-                        success: false,
-                        message: `User name "${input.emailAddress}" is already taken.`
-                    };
+                    throw new UserInputError(
+                        `User name "${input.emailAddress}" is already taken.`
+                    );
                 }
             }
 
@@ -116,19 +109,13 @@ module.exports = {
 
             const user = await getUserById(id);
             if (!user) {
-                return {
-                    code: 404,
-                    success: false,
-                    message: 'User not found.'
-                };
+                throw new UserInputError('User not found.');
             }
 
             if (user.id === context.payload.sub) {
-                return {
-                    code: 400,
-                    success: false,
-                    message: 'Cannot lock currently logged in user.'
-                };
+                throw new UserInputError(
+                    'Cannot lock currently logged in user.'
+                );
             }
 
             user.isLockedOut = true;
@@ -146,11 +133,7 @@ module.exports = {
 
             const user = await getUserById(id);
             if (!user) {
-                return {
-                    code: 404,
-                    success: false,
-                    message: 'User not found.'
-                };
+                throw new UserInputError('User not found.');
             }
 
             user.isLockedOut = false;
@@ -168,19 +151,13 @@ module.exports = {
 
             const user = await getUserById(id);
             if (!user) {
-                return {
-                    code: 404,
-                    success: false,
-                    message: 'User not found.'
-                };
+                throw new UserInputError('User not found.');
             }
 
             if (user.id === context.payload.sub) {
-                return {
-                    code: 400,
-                    success: false,
-                    message: 'Cannot delete currently logged in user.'
-                };
+                throw new UserInputError(
+                    'Cannot delete currently logged in user.'
+                );
             }
 
             await removeUser(user);

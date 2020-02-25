@@ -5,7 +5,7 @@ module.exports = gql`
         emailAddress: String!
         firstName: String!
         lastName: String!
-        dateOfBirth: String!
+        dateOfBirth: Date!
     }
 
     extend type Query {

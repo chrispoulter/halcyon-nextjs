@@ -13,7 +13,7 @@ module.exports = gql`
         emailAddress: String!
         firstName: String!
         lastName: String!
-        dateOfBirth: String!
+        dateOfBirth: Date!
         isLockedOut: Boolean
         picture: String
         roles: [String]
@@ -31,7 +31,7 @@ module.exports = gql`
         password: String!
         firstName: String!
         lastName: String!
-        dateOfBirth: String!
+        dateOfBirth: Date!
         roles: [String]
     }
 
@@ -39,7 +39,7 @@ module.exports = gql`
         emailAddress: String!
         firstName: String!
         lastName: String!
-        dateOfBirth: String!
+        dateOfBirth: Date!
         roles: [String]
     }
 
