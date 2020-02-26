@@ -45,7 +45,7 @@ module.exports = {
                     to: user.emailAddress,
                     template: 'resetPassword',
                     context: {
-                        code: user.passwordResetToken
+                        token: user.passwordResetToken
                     }
                 });
             }
