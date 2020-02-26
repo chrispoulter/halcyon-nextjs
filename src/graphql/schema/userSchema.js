@@ -2,10 +2,10 @@ const { gql } = require('apollo-server');
 
 module.exports = gql`
     enum UserSortExpression {
-        EMAILADDRESS
-        EMAILADDRESS_DESC
-        DISPLAYNAME
-        DISPLAYNAME_DESC
+        EMAIL_ADDRESS
+        EMAIL_ADDRESS_DESC
+        DISPLAY_NAME
+        DISPLAY_NAME_DESC
     }
 
     type User {
