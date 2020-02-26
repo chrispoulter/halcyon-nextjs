@@ -2,20 +2,6 @@ const { AuthenticationError } = require('apollo-server');
 const { skip } = require('graphql-resolvers');
 const { verifyToken } = require('../utils/jwt');
 
-module.exports = async ({ headers }) => {
-    const authHeader = headers.authorization || headers.Authorization || '';
-
-    const token = authHeader.replace(/bearer /giu, '');
-    if (!token) {
-        return undefined;
-    }
-
-    const payload = await verifyToken(token);
-    return {
-        payload
-    };
-};
-
 const isAuthorized = (user, requiredRoles) => {
     if (!user) {
         return false;
@@ -34,6 +20,20 @@ const isAuthorized = (user, requiredRoles) => {
     }
 
     return true;
+};
+
+module.exports = async ({ headers }) => {
+    const authHeader = headers.authorization || headers.Authorization || '';
+
+    const token = authHeader.replace(/bearer /giu, '');
+    if (!token) {
+        return undefined;
+    }
+
+    const payload = await verifyToken(token);
+    return {
+        payload
+    };
 };
 
 module.exports.isAuthenticated = (_, __, { payload }) =>
