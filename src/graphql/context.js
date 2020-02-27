@@ -1,26 +1,7 @@
 const { AuthenticationError } = require('apollo-server');
 const { skip } = require('graphql-resolvers');
 const { verifyToken } = require('../utils/jwt');
-
-const isAuthorized = (user, requiredRoles) => {
-    if (!user) {
-        return false;
-    }
-    if (!requiredRoles) {
-        return true;
-    }
-
-    if (!user.role) {
-        return false;
-    }
-
-    const userRoles = user.role || [];
-    if (!requiredRoles.some(value => userRoles.includes(value))) {
-        return false;
-    }
-
-    return true;
-};
+const { isAuthorized, isUserAdministrator } = require('../utils/auth');
 
 module.exports = async ({ headers }) => {
     const authHeader = headers.authorization || headers.Authorization || '';
@@ -44,7 +25,7 @@ module.exports.isAuthenticated = (_, __, { payload }) =>
           );
 
 module.exports.isUserAdministrator = (_, __, { payload }) =>
-    isAuthorized(payload, ['System Administrator', 'User Administrator'])
+    isAuthorized(payload, isUserAdministrator)
         ? skip
         : new AuthenticationError(
               'You are not authorized to view this resource.'
