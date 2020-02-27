@@ -25,6 +25,6 @@ module.exports = gql`
     }
 
     extend type Mutation {
-        getToken(input: TokenInput): TokenMutationResponse
+        generateToken(input: TokenInput): TokenMutationResponse
     }
 `;

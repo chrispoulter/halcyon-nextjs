@@ -5,7 +5,7 @@ const { verifyPassword } = require('../../utils/password');
 
 module.exports = {
     Mutation: {
-        getToken: async (_, { input }) => {
+        generateToken: async (_, { input }) => {
             const user = await getUserByEmailAddress(input.emailAddress);
             if (!user) {
                 throw new AuthenticationError(
