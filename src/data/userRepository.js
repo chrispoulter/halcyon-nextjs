@@ -50,15 +50,15 @@ const getSortExpression = sort => {
     const sortExpression = [];
 
     switch (sort) {
-        case 'EMAILADDRESS':
-            sortExpression.push(['emailAddress', 'ascending']);
-            break;
-
-        case 'EMAILADDRESS_DESC':
+        case 'EMAIL_ADDRESS_DESC':
             sortExpression.push(['emailAddress', 'descending']);
             break;
 
-        case 'DISPLAYNAME':
+        case 'EMAIL_ADDRESS':
+            sortExpression.push(['emailAddress', 'ascending']);
+            break;
+
+        case 'DISPLAY_NAME_DESC':
             sortExpression.push(['firstName', 'descending']);
             sortExpression.push(['lastName', 'descending']);
             break;
