@@ -10,8 +10,6 @@ const linkSchema = gql`
     scalar Date
 
     type MutationResponse {
-        code: String!
-        success: Boolean!
         message: String
     }
 

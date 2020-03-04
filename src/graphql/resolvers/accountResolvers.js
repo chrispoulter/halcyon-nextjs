@@ -29,8 +29,6 @@ module.exports = {
             const result = await createUser(user);
 
             return {
-                code: 200,
-                success: true,
                 message: 'User successfully registered.',
                 user: result
             };
@@ -51,8 +49,6 @@ module.exports = {
             }
 
             return {
-                code: 200,
-                success: true,
                 message:
                     'Instructions as to how to reset your password have been sent to you via email.'
             };
@@ -68,8 +64,6 @@ module.exports = {
             await updateUser(user);
 
             return {
-                code: 200,
-                success: true,
                 message: 'Your password has been reset.',
                 user
             };

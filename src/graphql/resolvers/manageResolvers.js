@@ -44,8 +44,6 @@ module.exports = {
                 await updateUser(user);
 
                 return {
-                    code: 200,
-                    success: true,
                     message: 'Your profile has been updated.',
                     user
                 };
@@ -73,8 +71,6 @@ module.exports = {
                 await updateUser(user);
 
                 return {
-                    code: 200,
-                    success: true,
                     message: 'Your password has been changed.',
                     user
                 };
@@ -91,8 +87,6 @@ module.exports = {
                 await removeUser(user);
 
                 return {
-                    code: 200,
-                    success: true,
                     message: 'Your account has been deleted.'
                 };
             }

@@ -30,13 +30,7 @@ module.exports = {
                 );
             }
 
-            const token = generateToken(user);
-
-            return {
-                code: 200,
-                success: true,
-                token
-            };
+            return generateToken(user);
         }
     }
 };

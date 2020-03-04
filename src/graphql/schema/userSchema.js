@@ -44,8 +44,6 @@ module.exports = gql`
     }
 
     type UserMutationResponse {
-        code: String!
-        success: Boolean!
         message: String
         user: User
     }

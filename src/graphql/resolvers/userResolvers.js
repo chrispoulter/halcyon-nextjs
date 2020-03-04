@@ -67,8 +67,6 @@ module.exports = {
                 const result = await createUser(user);
 
                 return {
-                    code: 200,
-                    success: true,
                     message: 'User successfully created.',
                     user: result
                 };
@@ -102,8 +100,6 @@ module.exports = {
                 await updateUser(user);
 
                 return {
-                    code: 200,
-                    success: true,
                     message: 'User successfully updated.',
                     user
                 };
@@ -127,8 +123,6 @@ module.exports = {
                 await updateUser(user);
 
                 return {
-                    code: 200,
-                    success: true,
                     message: 'User successfully locked.',
                     user
                 };
@@ -144,8 +138,6 @@ module.exports = {
             await updateUser(user);
 
             return {
-                code: 200,
-                success: true,
                 message: 'User successfully unlocked.',
                 user
             };
@@ -167,8 +159,6 @@ module.exports = {
                 await removeUser(user);
 
                 return {
-                    code: 200,
-                    success: true,
                     message: 'User successfully deleted.'
                 };
             }

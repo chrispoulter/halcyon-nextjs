@@ -26,8 +26,6 @@ module.exports = {
             const result = await createUser(user);
 
             return {
-                code: 200,
-                success: true,
                 message: 'Database seeded.',
                 user: result
             };

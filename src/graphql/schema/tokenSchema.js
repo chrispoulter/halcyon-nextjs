@@ -16,15 +16,7 @@ module.exports = gql`
         password: String
     }
 
-    type TokenMutationResponse {
-        code: String!
-        success: Boolean!
-        message: String
-        isLockedOut: Boolean
-        token: Token
-    }
-
     extend type Mutation {
-        generateToken(input: TokenInput): TokenMutationResponse
+        generateToken(input: TokenInput): Token
     }
 `;
