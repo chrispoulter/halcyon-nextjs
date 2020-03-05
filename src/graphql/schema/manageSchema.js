@@ -13,8 +13,11 @@ module.exports = gql`
     }
 
     extend type Mutation {
-        updateProfile(input: UpdateProfileInput): User
-        changePassword(currentPassword: String!, newPassword: String!): User
-        deleteAccount: Boolean
+        updateProfile(input: UpdateProfileInput): UserMutationResponse
+        changePassword(
+            currentPassword: String!
+            newPassword: String!
+        ): UserMutationResponse
+        deleteAccount: MutationResponse
     }
 `;

@@ -27,7 +27,11 @@ module.exports = {
             };
 
             const result = await createUser(user);
-            return result;
+
+            return {
+                message: 'User successfully registered.',
+                user: result
+            };
         },
         forgotPassword: async (_, { emailAddress }) => {
             const user = await getUserByEmailAddress(emailAddress);
@@ -44,7 +48,10 @@ module.exports = {
                 });
             }
 
-            return true;
+            return {
+                message:
+                    'Instructions as to how to reset your password have been sent to you via email.'
+            };
         },
         resetPassword: async (_, { token, emailAddress, newPassword }) => {
             const user = await getUserByEmailAddress(emailAddress);
@@ -56,7 +63,10 @@ module.exports = {
             user.passwordResetToken = undefined;
             await updateUser(user);
 
-            return user;
+            return {
+                message: 'Your password has been reset.',
+                user
+            };
         }
     }
 };

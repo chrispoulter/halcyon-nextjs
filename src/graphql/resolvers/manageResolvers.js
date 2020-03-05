@@ -43,7 +43,10 @@ module.exports = {
                 user.dateOfBirth = input.dateOfBirth;
                 await updateUser(user);
 
-                return user;
+                return {
+                    message: 'Your profile has been updated.',
+                    user
+                };
             }
         ),
         changePassword: combineResolvers(
@@ -67,7 +70,10 @@ module.exports = {
                 user.passwordResetToken = undefined;
                 await updateUser(user);
 
-                return user;
+                return {
+                    message: 'Your password has been changed.',
+                    user
+                };
             }
         ),
         deleteAccount: combineResolvers(
@@ -80,7 +86,9 @@ module.exports = {
 
                 await removeUser(user);
 
-                return true;
+                return {
+                    message: 'Your account has been deleted.'
+                };
             }
         )
     }

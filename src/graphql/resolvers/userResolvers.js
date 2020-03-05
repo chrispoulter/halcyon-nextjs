@@ -57,7 +57,11 @@ module.exports = {
                 };
 
                 const result = await createUser(user);
-                return result;
+
+                return {
+                    message: 'User successfully created.',
+                    user: result
+                };
             }
         ),
         updateUser: combineResolvers(
@@ -87,7 +91,10 @@ module.exports = {
                 user.roles = input.roles;
                 await updateUser(user);
 
-                return user;
+                return {
+                    message: 'User successfully updated.',
+                    user
+                };
             }
         ),
         lockUser: combineResolvers(
@@ -107,7 +114,10 @@ module.exports = {
                 user.isLockedOut = true;
                 await updateUser(user);
 
-                return user;
+                return {
+                    message: 'User successfully locked.',
+                    user
+                };
             }
         ),
         unlockUser: combineResolvers(isUserAdministrator, async (_, { id }) => {
@@ -119,7 +129,10 @@ module.exports = {
             user.isLockedOut = false;
             await updateUser(user);
 
-            return user;
+            return {
+                message: 'User successfully unlocked.',
+                user
+            };
         }),
         deleteUser: combineResolvers(
             isUserAdministrator,
@@ -137,7 +150,9 @@ module.exports = {
 
                 await removeUser(user);
 
-                return true;
+                return {
+                    message: 'User successfully deleted.'
+                };
             }
         )
     }
