@@ -21,14 +21,9 @@ module.exports = gql`
 
     type UserSearchResult {
         items: [User]
-        page: Int!
-        size: Int!
-        totalPages: Int!
         totalCount: Int!
         hasNextPage: Boolean!
         hasPreviousPage: Boolean!
-        search: String
-        sort: UserSortExpression
     }
 
     input CreateUserInput {

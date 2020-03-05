@@ -29,9 +29,6 @@ module.exports.searchUsers = async (page, size, search, sort) => {
 
     return {
         items: users,
-        page,
-        size,
-        totalPages,
         totalCount,
         hasNextPage: page < totalPages,
         hasPreviousPage: page > 1
