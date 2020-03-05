@@ -21,7 +21,12 @@ module.exports = gql`
 
     type UserSearchResult {
         items: [User]
-        pageInfo: PageInfo!
+        page: Int!
+        size: Int!
+        totalPages: Int!
+        totalCount: Int!
+        hasNextPage: Boolean!
+        hasPreviousPage: Boolean!
         search: String
         sort: UserSortExpression
     }
@@ -43,13 +48,8 @@ module.exports = gql`
         roles: [String]
     }
 
-    type UserMutationResponse {
-        message: String
-        user: User
-    }
-
     extend type Query {
-        users(
+        searchUsers(
             page: Int
             size: Int
             search: String
@@ -59,10 +59,10 @@ module.exports = gql`
     }
 
     extend type Mutation {
-        createUser(input: CreateUserInput): UserMutationResponse
-        updateUser(id: ID!, input: UpdateUserInput): UserMutationResponse
-        lockUser(id: ID!): UserMutationResponse
-        unlockUser(id: ID!): UserMutationResponse
-        deleteUser(id: ID!): MutationResponse
+        createUser(input: CreateUserInput): User
+        updateUser(id: ID!, input: UpdateUserInput): User
+        lockUser(id: ID!): User
+        unlockUser(id: ID!): User
+        deleteUser(id: ID!): Boolean
     }
 `;

@@ -23,12 +23,9 @@ module.exports = {
                 await removeUser(existing);
             }
 
-            const result = await createUser(user);
+            await createUser(user);
 
-            return {
-                message: 'Database seeded.',
-                user: result
-            };
+            return true;
         }
     }
 };

@@ -13,7 +13,7 @@ const { hashPassword } = require('../../utils/password');
 
 module.exports = {
     Query: {
-        users: combineResolvers(
+        searchUsers: combineResolvers(
             isUserAdministrator,
             async (_, { page, size, search, sort }) => {
                 const result = await searchUsers(
@@ -24,15 +24,7 @@ module.exports = {
                 );
 
                 return {
-                    items: result.items,
-                    pageInfo: {
-                        page: result.page,
-                        size: result.size,
-                        totalPages: result.totalPages,
-                        totalCount: result.totalCount,
-                        hasNextPage: result.hasNextPage,
-                        hasPreviousPage: result.hasPreviousPage
-                    },
+                    ...result,
                     search,
                     sort
                 };
@@ -65,11 +57,7 @@ module.exports = {
                 };
 
                 const result = await createUser(user);
-
-                return {
-                    message: 'User successfully created.',
-                    user: result
-                };
+                return result;
             }
         ),
         updateUser: combineResolvers(
@@ -99,10 +87,7 @@ module.exports = {
                 user.roles = input.roles;
                 await updateUser(user);
 
-                return {
-                    message: 'User successfully updated.',
-                    user
-                };
+                return user;
             }
         ),
         lockUser: combineResolvers(
@@ -122,10 +107,7 @@ module.exports = {
                 user.isLockedOut = true;
                 await updateUser(user);
 
-                return {
-                    message: 'User successfully locked.',
-                    user
-                };
+                return user;
             }
         ),
         unlockUser: combineResolvers(isUserAdministrator, async (_, { id }) => {
@@ -137,10 +119,7 @@ module.exports = {
             user.isLockedOut = false;
             await updateUser(user);
 
-            return {
-                message: 'User successfully unlocked.',
-                user
-            };
+            return user;
         }),
         deleteUser: combineResolvers(
             isUserAdministrator,
@@ -158,9 +137,7 @@ module.exports = {
 
                 await removeUser(user);
 
-                return {
-                    message: 'User successfully deleted.'
-                };
+                return true;
             }
         )
     }

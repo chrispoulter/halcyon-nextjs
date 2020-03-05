@@ -9,19 +9,6 @@ const userSchema = require('./userSchema');
 const linkSchema = gql`
     scalar Date
 
-    type MutationResponse {
-        message: String
-    }
-
-    type PageInfo {
-        page: Int!
-        size: Int!
-        totalPages: Int!
-        totalCount: Int!
-        hasNextPage: Boolean!
-        hasPreviousPage: Boolean!
-    }
-
     type Query {
         _: Boolean
     }

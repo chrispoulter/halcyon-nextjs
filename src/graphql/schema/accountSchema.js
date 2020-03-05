@@ -10,12 +10,12 @@ module.exports = gql`
     }
 
     extend type Mutation {
-        register(input: RegisterInput): UserMutationResponse
-        forgotPassword(emailAddress: String!): MutationResponse
+        register(input: RegisterInput): User
+        forgotPassword(emailAddress: String!): Boolean
         resetPassword(
             token: String!
             emailAddress: String!
             newPassword: String!
-        ): UserMutationResponse
+        ): User
     }
 `;
