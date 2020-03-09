@@ -7,6 +7,7 @@ module.exports.isAuthorized = (user, requiredRoles) => {
     if (!user) {
         return false;
     }
+
     if (!requiredRoles) {
         return true;
     }
