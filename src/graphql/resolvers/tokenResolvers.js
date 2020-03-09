@@ -1,4 +1,4 @@
-const { AuthenticationError } = require('apollo-server');
+const { UserInputError } = require('apollo-server');
 const { getUserByEmailAddress } = require('../../data/userRepository');
 const { generateToken } = require('../../utils/jwt');
 const { verifyPassword } = require('../../utils/password');
@@ -8,7 +8,7 @@ module.exports = {
         generateToken: async (_, { input }) => {
             const user = await getUserByEmailAddress(input.emailAddress);
             if (!user) {
-                throw new AuthenticationError(
+                throw new UserInputError(
                     'The credentials provided were invalid.'
                 );
             }
@@ -19,13 +19,13 @@ module.exports = {
             );
 
             if (!verified) {
-                throw new AuthenticationError(
+                throw new UserInputError(
                     'The credentials provided were invalid.'
                 );
             }
 
             if (user.isLockedOut) {
-                throw new AuthenticationError(
+                throw new UserInputError(
                     'This account has been locked out, please try again later.'
                 );
             }
