@@ -63,6 +63,6 @@ module.exports = gql`
         updateUser(id: ID!, input: UpdateUserInput): UserMutationResponse
         lockUser(id: ID!): UserMutationResponse
         unlockUser(id: ID!): UserMutationResponse
-        deleteUser(id: ID!): MutationResponse
+        deleteUser(id: ID!): UserMutationResponse
     }
 `;

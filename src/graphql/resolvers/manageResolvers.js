@@ -12,13 +12,13 @@ const { hashPassword, verifyPassword } = require('../../utils/password');
 module.exports = {
     Query: {
         getProfile: combineResolvers(
-            isAuthenticated,
+            isAuthenticated(),
             async (_, __, { payload }) => getUserById(payload.sub)
         )
     },
     Mutation: {
         updateProfile: combineResolvers(
-            isAuthenticated,
+            isAuthenticated(),
             async (_, { input }, { payload }) => {
                 const user = await getUserById(payload.sub);
                 if (!user) {
@@ -50,7 +50,7 @@ module.exports = {
             }
         ),
         changePassword: combineResolvers(
-            isAuthenticated,
+            isAuthenticated(),
             async (_, { currentPassword, newPassword }, { payload }) => {
                 const user = await getUserById(payload.sub);
                 if (!user) {
@@ -77,7 +77,7 @@ module.exports = {
             }
         ),
         deleteAccount: combineResolvers(
-            isAuthenticated,
+            isAuthenticated(),
             async (_, __, { payload }) => {
                 const user = await getUserById(payload.sub);
                 if (!user) {
@@ -87,7 +87,8 @@ module.exports = {
                 await removeUser(user);
 
                 return {
-                    message: 'Your account has been deleted.'
+                    message: 'Your account has been deleted.',
+                    user
                 };
             }
         )

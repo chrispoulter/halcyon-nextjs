@@ -8,13 +8,14 @@ const {
     updateUser,
     removeUser
 } = require('../../data/userRepository');
-const { isUserAdministrator } = require('../context');
+const { isAuthenticated } = require('../context');
 const { hashPassword } = require('../../utils/password');
+const { USER_ADMINISTRATOR } = require('../../utils/auth');
 
 module.exports = {
     Query: {
         searchUsers: combineResolvers(
-            isUserAdministrator,
+            isAuthenticated(USER_ADMINISTRATOR),
             async (_, { page, size, search, sort }) => {
                 const result = await searchUsers(
                     page || 1,
@@ -30,13 +31,14 @@ module.exports = {
                 };
             }
         ),
-        getUserById: combineResolvers(isUserAdministrator, async (_, { id }) =>
-            getUserById(id)
+        getUserById: combineResolvers(
+            isAuthenticated(USER_ADMINISTRATOR),
+            async (_, { id }) => getUserById(id)
         )
     },
     Mutation: {
         createUser: combineResolvers(
-            isUserAdministrator,
+            isAuthenticated(USER_ADMINISTRATOR),
             async (_, { input }) => {
                 const existing = await getUserByEmailAddress(
                     input.emailAddress
@@ -65,7 +67,7 @@ module.exports = {
             }
         ),
         updateUser: combineResolvers(
-            isUserAdministrator,
+            isAuthenticated(USER_ADMINISTRATOR),
             async (_, { id, input }) => {
                 const user = await getUserById(id);
                 if (!user) {
@@ -98,7 +100,7 @@ module.exports = {
             }
         ),
         lockUser: combineResolvers(
-            isUserAdministrator,
+            isAuthenticated(USER_ADMINISTRATOR),
             async (_, { id }, { payload }) => {
                 const user = await getUserById(id);
                 if (!user) {
@@ -120,22 +122,25 @@ module.exports = {
                 };
             }
         ),
-        unlockUser: combineResolvers(isUserAdministrator, async (_, { id }) => {
-            const user = await getUserById(id);
-            if (!user) {
-                throw new UserInputError('User not found.');
+        unlockUser: combineResolvers(
+            isAuthenticated(USER_ADMINISTRATOR),
+            async (_, { id }) => {
+                const user = await getUserById(id);
+                if (!user) {
+                    throw new UserInputError('User not found.');
+                }
+
+                user.isLockedOut = false;
+                await updateUser(user);
+
+                return {
+                    message: 'User successfully unlocked.',
+                    user
+                };
             }
-
-            user.isLockedOut = false;
-            await updateUser(user);
-
-            return {
-                message: 'User successfully unlocked.',
-                user
-            };
-        }),
+        ),
         deleteUser: combineResolvers(
-            isUserAdministrator,
+            isAuthenticated(USER_ADMINISTRATOR),
             async (_, { id }, { payload }) => {
                 const user = await getUserById(id);
                 if (!user) {
@@ -151,7 +156,8 @@ module.exports = {
                 await removeUser(user);
 
                 return {
-                    message: 'User successfully deleted.'
+                    message: 'User successfully deleted.',
+                    user
                 };
             }
         )

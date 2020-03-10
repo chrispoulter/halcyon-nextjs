@@ -18,6 +18,6 @@ module.exports = gql`
             currentPassword: String!
             newPassword: String!
         ): UserMutationResponse
-        deleteAccount: MutationResponse
+        deleteAccount: UserMutationResponse
     }
 `;
