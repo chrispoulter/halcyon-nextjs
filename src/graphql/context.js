@@ -3,7 +3,8 @@ const { skip } = require('graphql-resolvers');
 const { verifyToken } = require('../utils/jwt');
 const { isAuthorized } = require('../utils/auth');
 
-module.exports = async ({ headers }) => {
+module.exports = async ({ req, event }) => {
+    const headers = (req || event).headers;
     const authHeader = headers.authorization || headers.Authorization || '';
 
     const token = authHeader.replace(/bearer /giu, '');

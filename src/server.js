@@ -7,7 +7,7 @@ openConnection();
 const server = new ApolloServer({
     typeDefs: schema,
     resolvers,
-    context: ({ req }) => context({ headers: req.headers })
+    context
 });
 
 server
