@@ -5,7 +5,7 @@ const { isAuthorized } = require('../utils/auth');
 
 module.exports.context = async ({ req, event, connection }) => {
     if (connection) {
-        return {};
+        return connection.context;
     }
 
     const headers = (req || event).headers;
@@ -24,7 +24,7 @@ module.exports.context = async ({ req, event, connection }) => {
 
 module.exports.subscriptions = {
     onConnect: async connectionParams => {
-        const authHeader = connectionParams.AuthToken || '';
+        const authHeader = connectionParams.authToken || '';
 
         const token = authHeader.replace(/bearer /giu, '');
         if (!token) {
