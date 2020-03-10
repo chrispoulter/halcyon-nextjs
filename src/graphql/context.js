@@ -9,7 +9,7 @@ module.exports = async ({ req, event }) => {
 
     const token = authHeader.replace(/bearer /giu, '');
     if (!token) {
-        return undefined;
+        return {};
     }
 
     const payload = await verifyToken(token);
