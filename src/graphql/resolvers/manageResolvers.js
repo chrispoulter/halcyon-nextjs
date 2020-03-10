@@ -92,7 +92,8 @@ module.exports = {
                 pubsub.publish('userRemoved', { userRemoved: user });
 
                 return {
-                    message: 'Your account has been deleted.'
+                    message: 'Your account has been deleted.',
+                    user
                 };
             }
         )

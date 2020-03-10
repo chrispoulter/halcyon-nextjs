@@ -1,5 +1,5 @@
-const context = require('./context');
-const resolvers = require('./resolvers');
 const schema = require('./schema');
+const resolvers = require('./resolvers');
+const { context, subscriptions } = require('./context');
 
-module.exports = { context, resolvers, schema };
+module.exports = { schema, resolvers, context, subscriptions };

@@ -1,4 +1,4 @@
-const { UserInputError } = require('apollo-server');
+const { UserInputError, withFilter } = require('apollo-server');
 const { combineResolvers } = require('graphql-resolvers');
 const {
     searchUsers,
@@ -11,6 +11,7 @@ const {
 const pubsub = require('../pubsub');
 const { isUserAdministrator } = require('../context');
 const { hashPassword } = require('../../utils/password');
+const { isAuthorized, USER_ADMINISTRATOR } = require('../../utils/auth');
 
 module.exports = {
     Query: {
@@ -162,20 +163,33 @@ module.exports = {
                 pubsub.publish('userRemoved', { userRemoved: user });
 
                 return {
-                    message: 'User successfully deleted.'
+                    message: 'User successfully deleted.',
+                    user
                 };
             }
         )
     },
     Subscription: {
         userCreated: {
-            subscribe: () => pubsub.asyncIterator(['userCreated'])
+            subscribe: withFilter(
+                () => pubsub.asyncIterator('userCreated'),
+                (_, __, { payload }) =>
+                    isAuthorized(payload, USER_ADMINISTRATOR)
+            )
         },
         userUpdated: {
-            subscribe: () => pubsub.asyncIterator(['userUpdated'])
+            subscribe: withFilter(
+                () => pubsub.asyncIterator('userUpdated'),
+                (_, __, { payload }) =>
+                    isAuthorized(payload, USER_ADMINISTRATOR)
+            )
         },
         userRemoved: {
-            subscribe: () => pubsub.asyncIterator(['userRemoved'])
+            subscribe: withFilter(
+                () => pubsub.asyncIterator('userRemoved'),
+                (_, __, { payload }) =>
+                    isAuthorized(payload, USER_ADMINISTRATOR)
+            )
         }
     }
 };

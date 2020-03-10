@@ -1,5 +1,5 @@
 const { ApolloServer } = require('apollo-server');
-const { schema, resolvers, context } = require('./graphql');
+const { schema, resolvers, context, subscriptions } = require('./graphql');
 const { openConnection } = require('./utils/mongo');
 
 openConnection();
@@ -7,7 +7,8 @@ openConnection();
 const server = new ApolloServer({
     typeDefs: schema,
     resolvers,
-    context
+    context,
+    subscriptions
 });
 
 server

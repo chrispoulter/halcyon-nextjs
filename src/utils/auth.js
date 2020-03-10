@@ -1,4 +1,4 @@
-module.exports.isUserAdministrator = [
+module.exports.USER_ADMINISTRATOR = [
     'System Administrator',
     'User Administrator'
 ];
