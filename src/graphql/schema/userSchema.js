@@ -65,4 +65,10 @@ module.exports = gql`
         unlockUser(id: ID!): UserMutationResponse
         deleteUser(id: ID!): MutationResponse
     }
+
+    extend type Subscription {
+        userCreated: User
+        userUpdated: User
+        userRemoved: User
+    }
 `;

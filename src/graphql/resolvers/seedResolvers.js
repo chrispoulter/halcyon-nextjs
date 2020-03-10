@@ -3,6 +3,7 @@ const {
     createUser,
     removeUser
 } = require('../../data/userRepository');
+const pubsub = require('../pubsub');
 const { hashPassword } = require('../../utils/password');
 const config = require('../../utils/config');
 
@@ -21,9 +22,13 @@ module.exports = {
             const existing = await getUserByEmailAddress(user.emailAddress);
             if (existing) {
                 await removeUser(existing);
+
+                pubsub.publish('userRemoved', { userRemoved: existing });
             }
 
-            await createUser(user);
+            const result = await createUser(user);
+
+            pubsub.publish('userCreated', { userCreated: result });
 
             return {
                 message: 'Database seeded.'

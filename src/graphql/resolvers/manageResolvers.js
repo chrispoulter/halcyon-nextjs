@@ -6,6 +6,7 @@ const {
     updateUser,
     removeUser
 } = require('../../data/userRepository');
+const pubsub = require('../pubsub');
 const { isAuthenticated } = require('../context');
 const { hashPassword, verifyPassword } = require('../../utils/password');
 
@@ -42,6 +43,8 @@ module.exports = {
                 user.lastName = input.lastName;
                 user.dateOfBirth = input.dateOfBirth;
                 await updateUser(user);
+
+                pubsub.publish('userUpdated', { userUpdated: user });
 
                 return {
                     message: 'Your profile has been updated.',
@@ -85,6 +88,8 @@ module.exports = {
                 }
 
                 await removeUser(user);
+
+                pubsub.publish('userRemoved', { userRemoved: user });
 
                 return {
                     message: 'Your account has been deleted.'

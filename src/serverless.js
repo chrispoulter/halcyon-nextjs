@@ -5,7 +5,7 @@ const { openConnection } = require('./utils/mongo');
 const server = new ApolloServer({
     typeDefs: schema,
     resolvers,
-    context: ({ event }) => context({ headers: event.headers })
+    context
 });
 
 const graphqlHandler = server.createHandler({

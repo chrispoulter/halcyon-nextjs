@@ -5,6 +5,7 @@ const {
     createUser,
     updateUser
 } = require('../../data/userRepository');
+const pubsub = require('../pubsub');
 const { sendEmail } = require('../../utils/email');
 const { hashPassword } = require('../../utils/password');
 
@@ -27,6 +28,8 @@ module.exports = {
             };
 
             const result = await createUser(user);
+
+            pubsub.publish('userCreated', { userCreated: result });
 
             return {
                 message: 'User successfully registered.',

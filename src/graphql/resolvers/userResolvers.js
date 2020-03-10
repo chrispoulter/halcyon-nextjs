@@ -8,6 +8,7 @@ const {
     updateUser,
     removeUser
 } = require('../../data/userRepository');
+const pubsub = require('../pubsub');
 const { isUserAdministrator } = require('../context');
 const { hashPassword } = require('../../utils/password');
 
@@ -58,6 +59,8 @@ module.exports = {
 
                 const result = await createUser(user);
 
+                pubsub.publish('userCreated', { userCreated: result });
+
                 return {
                     message: 'User successfully created.',
                     user: result
@@ -91,6 +94,8 @@ module.exports = {
                 user.roles = input.roles;
                 await updateUser(user);
 
+                pubsub.publish('userUpdated', { userUpdated: user });
+
                 return {
                     message: 'User successfully updated.',
                     user
@@ -114,6 +119,8 @@ module.exports = {
                 user.isLockedOut = true;
                 await updateUser(user);
 
+                pubsub.publish('userUpdated', { userUpdated: user });
+
                 return {
                     message: 'User successfully locked.',
                     user
@@ -128,6 +135,8 @@ module.exports = {
 
             user.isLockedOut = false;
             await updateUser(user);
+
+            pubsub.publish('userUpdated', { userUpdated: user });
 
             return {
                 message: 'User successfully unlocked.',
@@ -150,10 +159,23 @@ module.exports = {
 
                 await removeUser(user);
 
+                pubsub.publish('userRemoved', { userRemoved: user });
+
                 return {
                     message: 'User successfully deleted.'
                 };
             }
         )
+    },
+    Subscription: {
+        userCreated: {
+            subscribe: () => pubsub.asyncIterator(['userCreated'])
+        },
+        userUpdated: {
+            subscribe: () => pubsub.asyncIterator(['userUpdated'])
+        },
+        userRemoved: {
+            subscribe: () => pubsub.asyncIterator(['userRemoved'])
+        }
     }
 };
