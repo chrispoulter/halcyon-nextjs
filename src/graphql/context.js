@@ -3,7 +3,7 @@ const { skip } = require('graphql-resolvers');
 const { verifyToken } = require('../utils/jwt');
 const { isAuthorized } = require('../utils/auth');
 
-module.exports = async ({ req, event, connection }) => {
+module.exports.context = async ({ req, event, connection }) => {
     if (connection) {
         return connection.context;
     }
