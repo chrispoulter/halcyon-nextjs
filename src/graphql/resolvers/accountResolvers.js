@@ -1,4 +1,4 @@
-const { UserInputError } = require('apollo-server');
+const { ApolloError } = require('apollo-server');
 const uuidv4 = require('uuid/v4');
 const {
     getUserByEmailAddress,
@@ -14,8 +14,9 @@ module.exports = {
         register: async (_, { input }) => {
             const existing = await getUserByEmailAddress(input.emailAddress);
             if (existing) {
-                throw new UserInputError(
-                    `User name "${input.emailAddress}" is already taken.`
+                throw new ApolloError(
+                    `User name "${input.emailAddress}" is already taken.`,
+                    'DUPLICATE_USER'
                 );
             }
 
@@ -33,6 +34,7 @@ module.exports = {
 
             return {
                 message: 'User successfully registered.',
+                code: 'USER_REGISTERED',
                 user: result
             };
         },
@@ -53,13 +55,14 @@ module.exports = {
 
             return {
                 message:
-                    'Instructions as to how to reset your password have been sent to you via email.'
+                    'Instructions as to how to reset your password have been sent to you via email.',
+                code: 'FORGOT_PASSWORD'
             };
         },
         resetPassword: async (_, { token, emailAddress, newPassword }) => {
             const user = await getUserByEmailAddress(emailAddress);
             if (!user || user.passwordResetToken !== token) {
-                throw new UserInputError('Invalid token.');
+                throw new ApolloError('Invalid token.', 'INVALID_TOKEN');
             }
 
             user.password = await hashPassword(newPassword);
@@ -68,6 +71,7 @@ module.exports = {
 
             return {
                 message: 'Your password has been reset.',
+                code: 'PASSWORD_RESET',
                 user
             };
         }

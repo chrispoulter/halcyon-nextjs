@@ -31,7 +31,8 @@ module.exports = {
             pubsub.publish('userCreated', { userCreated: result });
 
             return {
-                message: 'Database seeded.'
+                message: 'Environment seeded.',
+                code: 'ENVIRONMENT_SEEDED'
             };
         }
     }

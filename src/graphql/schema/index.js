@@ -11,6 +11,7 @@ const linkSchema = gql`
 
     type MutationResponse {
         message: String
+        code: String
     }
 
     type Query {
