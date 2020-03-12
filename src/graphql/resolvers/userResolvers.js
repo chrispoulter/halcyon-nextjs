@@ -1,4 +1,4 @@
-const { UserInputError } = require('apollo-server');
+const { ApolloError } = require('apollo-server');
 const { combineResolvers } = require('graphql-resolvers');
 const {
     searchUsers,
@@ -44,8 +44,9 @@ module.exports = {
                     input.emailAddress
                 );
                 if (existing) {
-                    throw new UserInputError(
-                        `User name "${input.emailAddress}" is already taken.`
+                    throw new ApolloError(
+                        `User name "${input.emailAddress}" is already taken.`,
+                        'DUPLICATE_USER'
                     );
                 }
 
@@ -62,6 +63,7 @@ module.exports = {
 
                 return {
                     message: 'User successfully created.',
+                    code: 'USER_CREATED',
                     user: result
                 };
             }
@@ -71,7 +73,7 @@ module.exports = {
             async (_, { id, input }) => {
                 const user = await getUserById(id);
                 if (!user) {
-                    throw new UserInputError('User not found.');
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 if (user.emailAddress !== input.emailAddress) {
@@ -80,8 +82,9 @@ module.exports = {
                     );
 
                     if (existing) {
-                        throw new UserInputError(
-                            `User name "${input.emailAddress}" is already taken.`
+                        throw new ApolloError(
+                            `User name "${input.emailAddress}" is already taken.`,
+                            'DUPLICATE_USER'
                         );
                     }
                 }
@@ -95,6 +98,7 @@ module.exports = {
 
                 return {
                     message: 'User successfully updated.',
+                    code: 'USER_UPDATED',
                     user
                 };
             }
@@ -104,12 +108,13 @@ module.exports = {
             async (_, { id }, { payload }) => {
                 const user = await getUserById(id);
                 if (!user) {
-                    throw new UserInputError('User not found.');
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 if (user.id === payload.sub) {
-                    throw new UserInputError(
-                        'Cannot lock currently logged in user.'
+                    throw new ApolloError(
+                        'Cannot lock currently logged in user.',
+                        'LOCK_CURRENT_USER'
                     );
                 }
 
@@ -118,6 +123,7 @@ module.exports = {
 
                 return {
                     message: 'User successfully locked.',
+                    code: 'USER_LOCKED',
                     user
                 };
             }
@@ -127,7 +133,7 @@ module.exports = {
             async (_, { id }) => {
                 const user = await getUserById(id);
                 if (!user) {
-                    throw new UserInputError('User not found.');
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 user.isLockedOut = false;
@@ -135,6 +141,7 @@ module.exports = {
 
                 return {
                     message: 'User successfully unlocked.',
+                    code: 'USER_UNLOCKED',
                     user
                 };
             }
@@ -144,12 +151,13 @@ module.exports = {
             async (_, { id }, { payload }) => {
                 const user = await getUserById(id);
                 if (!user) {
-                    throw new UserInputError('User not found.');
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 if (user.id === payload.sub) {
-                    throw new UserInputError(
-                        'Cannot delete currently logged in user.'
+                    throw new ApolloError(
+                        'Cannot delete currently logged in user.',
+                        'DELETE_CURRENT_USER'
                     );
                 }
 
@@ -157,6 +165,7 @@ module.exports = {
 
                 return {
                     message: 'User successfully deleted.',
+                    code: 'USER_DELETED',
                     user
                 };
             }

@@ -1,4 +1,4 @@
-const { UserInputError } = require('apollo-server');
+const { ApolloError } = require('apollo-server');
 const { combineResolvers } = require('graphql-resolvers');
 const {
     getUserById,
@@ -22,7 +22,7 @@ module.exports = {
             async (_, { input }, { payload }) => {
                 const user = await getUserById(payload.sub);
                 if (!user) {
-                    throw new UserInputError('User not found.');
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 if (user.emailAddress !== input.emailAddress) {
@@ -31,8 +31,9 @@ module.exports = {
                     );
 
                     if (existing) {
-                        throw new UserInputError(
-                            `User name "${input.emailAddress}" is already taken.`
+                        throw new ApolloError(
+                            `User name "${input.emailAddress}" is already taken.`,
+                            'DUPLICATE_USER'
                         );
                     }
                 }
@@ -45,6 +46,7 @@ module.exports = {
 
                 return {
                     message: 'Your profile has been updated.',
+                    code: 'PROFILE_UPDATED',
                     user
                 };
             }
@@ -54,7 +56,7 @@ module.exports = {
             async (_, { currentPassword, newPassword }, { payload }) => {
                 const user = await getUserById(payload.sub);
                 if (!user) {
-                    throw new UserInputError('User not found.');
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 const verified = await verifyPassword(
@@ -63,7 +65,10 @@ module.exports = {
                 );
 
                 if (!verified) {
-                    throw new UserInputError('Incorrect password.');
+                    throw new ApolloError(
+                        'Incorrect password.',
+                        'INCORRECT_PASSWORD'
+                    );
                 }
 
                 user.password = await hashPassword(newPassword);
@@ -72,6 +77,7 @@ module.exports = {
 
                 return {
                     message: 'Your password has been changed.',
+                    code: 'PASSWORD_CHANGED',
                     user
                 };
             }
@@ -81,13 +87,14 @@ module.exports = {
             async (_, __, { payload }) => {
                 const user = await getUserById(payload.sub);
                 if (!user) {
-                    throw new UserInputError('User not found.');
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 await removeUser(user);
 
                 return {
                     message: 'Your account has been deleted.',
+                    code: 'ACCOUNT_DELETED',
                     user
                 };
             }

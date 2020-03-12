@@ -26,7 +26,8 @@ module.exports = {
             await createUser(user);
 
             return {
-                message: 'Database seeded.'
+                message: 'Environment seeded.',
+                code: 'ENVIRONMENT_SEEDED'
             };
         }
     }
