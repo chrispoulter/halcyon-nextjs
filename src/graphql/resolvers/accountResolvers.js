@@ -52,7 +52,8 @@ module.exports = {
 
             return {
                 message:
-                    'Instructions as to how to reset your password have been sent to you via email.'
+                    'Instructions as to how to reset your password have been sent to you via email.',
+                code: 'FORGOT_PASSWORD'
             };
         },
         resetPassword: async (_, { token, emailAddress, newPassword }) => {
