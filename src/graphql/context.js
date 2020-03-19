@@ -23,8 +23,8 @@ module.exports.context = async ({ req, event, connection }) => {
 };
 
 module.exports.subscriptions = {
-    onConnect: async connectionParams => {
-        const authHeader = connectionParams.authToken || '';
+    onConnect: async params => {
+        const authHeader = params.authorization || params.Authorization || '';
 
         const token = authHeader.replace(/bearer /giu, '');
         if (!token) {
