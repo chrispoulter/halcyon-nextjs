@@ -1,5 +1,3 @@
-const { gql } = require('apollo-server');
-
 const linkSchema = require('./linkSchema');
 const accountSchema = require('./accountSchema');
 const manageSchema = require('./manageSchema');
