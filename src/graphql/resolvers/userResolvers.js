@@ -44,7 +44,7 @@ module.exports = {
                 const existing = await getUserByEmailAddress(
                     input.emailAddress
                 );
-                
+
                 if (existing) {
                     throw new ApolloError(
                         `User name "${input.emailAddress}" is already taken.`,

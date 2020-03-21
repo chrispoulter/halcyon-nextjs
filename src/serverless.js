@@ -1,9 +1,9 @@
 const { ApolloServer } = require('apollo-server-lambda');
-const { schema, resolvers, context, subscriptions } = require('./graphql');
+const { typeDefs, resolvers, context, subscriptions } = require('./graphql');
 const { openConnection } = require('./utils/mongo');
 
 const server = new ApolloServer({
-    typeDefs: schema,
+    typeDefs,
     resolvers,
     context,
     subscriptions
