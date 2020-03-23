@@ -68,8 +68,6 @@ module.exports = gql`
     }
 
     extend type Subscription {
-        userCreated: User
-        userUpdated: User
-        userRemoved: User
+        userUpdated: UserMutationResponse
     }
 `;

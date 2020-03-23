@@ -23,12 +23,22 @@ module.exports = {
             if (existing) {
                 await removeUser(existing);
 
-                pubsub.publish('userRemoved', { userRemoved: existing });
+                pubsub.publish('userUpdated', {
+                    userUpdated: {
+                        code: 'USER_REMOVED',
+                        user: existing
+                    }
+                });
             }
 
             const result = await createUser(user);
 
-            pubsub.publish('userCreated', { userCreated: result });
+            pubsub.publish('userUpdated', {
+                userUpdated: {
+                    code: 'USER_CREATED',
+                    user: result
+                }
+            });
 
             return {
                 message: 'Environment seeded.',

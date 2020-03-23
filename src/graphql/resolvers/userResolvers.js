@@ -63,7 +63,12 @@ module.exports = {
 
                 const result = await createUser(user);
 
-                pubsub.publish('userCreated', { userCreated: result });
+                pubsub.publish('userUpdated', {
+                    userUpdated: {
+                        code: 'USER_CREATED',
+                        user: result
+                    }
+                });
 
                 return {
                     message: 'User successfully created.',
@@ -100,7 +105,12 @@ module.exports = {
                 user.roles = input.roles;
                 await updateUser(user);
 
-                pubsub.publish('userUpdated', { userUpdated: user });
+                pubsub.publish('userUpdated', {
+                    userUpdated: {
+                        code: 'USER_UPDATED',
+                        user
+                    }
+                });
 
                 return {
                     message: 'User successfully updated.',
@@ -127,7 +137,12 @@ module.exports = {
                 user.isLockedOut = true;
                 await updateUser(user);
 
-                pubsub.publish('userUpdated', { userUpdated: user });
+                pubsub.publish('userUpdated', {
+                    userUpdated: {
+                        code: 'USER_UPDATED',
+                        user
+                    }
+                });
 
                 return {
                     message: 'User successfully locked.',
@@ -147,7 +162,12 @@ module.exports = {
                 user.isLockedOut = false;
                 await updateUser(user);
 
-                pubsub.publish('userUpdated', { userUpdated: user });
+                pubsub.publish('userUpdated', {
+                    userUpdated: {
+                        code: 'USER_UPDATED',
+                        user
+                    }
+                });
 
                 return {
                     message: 'User successfully unlocked.',
@@ -173,7 +193,12 @@ module.exports = {
 
                 await removeUser(user);
 
-                pubsub.publish('userRemoved', { userRemoved: user });
+                pubsub.publish('userUpdated', {
+                    userUpdated: {
+                        code: 'USER_DELETED',
+                        user
+                    }
+                });
 
                 return {
                     message: 'User successfully deleted.',
@@ -184,23 +209,9 @@ module.exports = {
         )
     },
     Subscription: {
-        userCreated: {
-            subscribe: withFilter(
-                () => pubsub.asyncIterator('userCreated'),
-                (_, __, { payload }) =>
-                    isAuthorized(payload, USER_ADMINISTRATOR)
-            )
-        },
         userUpdated: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator('userUpdated'),
-                (_, __, { payload }) =>
-                    isAuthorized(payload, USER_ADMINISTRATOR)
-            )
-        },
-        userRemoved: {
-            subscribe: withFilter(
-                () => pubsub.asyncIterator('userRemoved'),
                 (_, __, { payload }) =>
                     isAuthorized(payload, USER_ADMINISTRATOR)
             )

@@ -45,7 +45,12 @@ module.exports = {
                 user.dateOfBirth = input.dateOfBirth;
                 await updateUser(user);
 
-                pubsub.publish('userUpdated', { userUpdated: user });
+                pubsub.publish('userUpdated', {
+                    userUpdated: {
+                        code: 'USER_UPDATED',
+                        user
+                    }
+                });
 
                 return {
                     message: 'Your profile has been updated.',
@@ -95,7 +100,12 @@ module.exports = {
 
                 await removeUser(user);
 
-                pubsub.publish('userRemoved', { userRemoved: user });
+                pubsub.publish('userUpdated', {
+                    userUpdated: {
+                        code: 'USER_REMOVED',
+                        user
+                    }
+                });
 
                 return {
                     message: 'Your account has been deleted.',

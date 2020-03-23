@@ -30,7 +30,12 @@ module.exports = {
 
             const result = await createUser(user);
 
-            pubsub.publish('userCreated', { userCreated: result });
+            pubsub.publish('userUpdated', {
+                userUpdated: {
+                    code: 'USER_CREATED',
+                    user: result
+                }
+            });
 
             return {
                 message: 'User successfully registered.',
