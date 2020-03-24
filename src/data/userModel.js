@@ -12,11 +12,8 @@ const userSchema = new Schema({
     roles: { type: [String] }
 });
 
-userSchema.virtual('picture').get(function() {
-    const hash = createHash('md5')
-        .update(this.emailAddress)
-        .digest('hex');
-
+userSchema.virtual('picture').get(function () {
+    const hash = createHash('md5').update(this.emailAddress).digest('hex');
     return `https://secure.gravatar.com/avatar/${hash}?d=mm`;
 });
 
