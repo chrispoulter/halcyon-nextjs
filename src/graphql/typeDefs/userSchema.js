@@ -49,6 +49,11 @@ module.exports = gql`
         user: User
     }
 
+    type UserSubscriptionResponse {
+        code: String
+        user: User
+    }
+
     extend type Query {
         searchUsers(
             page: Int
@@ -68,6 +73,6 @@ module.exports = gql`
     }
 
     extend type Subscription {
-        userUpdated: UserMutationResponse
+        userUpdated: UserSubscriptionResponse
     }
 `;
