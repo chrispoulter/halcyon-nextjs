@@ -37,4 +37,5 @@ functions:
 
 custom:
     serverless-offline:
-        port: 3001
+        httpPort: 3001
+        noPrependStageInUrl: true
