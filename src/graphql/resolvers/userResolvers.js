@@ -8,7 +8,6 @@ const {
     updateUser,
     removeUser
 } = require('../../data/userRepository');
-const pubsub = require('../pubsub');
 const { isAuthenticated } = require('../context');
 const { hashPassword } = require('../../utils/password');
 const { isAuthorized, USER_ADMINISTRATOR } = require('../../utils/auth');
@@ -40,7 +39,7 @@ module.exports = {
     Mutation: {
         createUser: combineResolvers(
             isAuthenticated(USER_ADMINISTRATOR),
-            async (_, { input }) => {
+            async (_, { input }, { pubsub }) => {
                 const existing = await getUserByEmailAddress(
                     input.emailAddress
                 );
@@ -79,7 +78,7 @@ module.exports = {
         ),
         updateUser: combineResolvers(
             isAuthenticated(USER_ADMINISTRATOR),
-            async (_, { id, input }) => {
+            async (_, { id, input }, { pubsub }) => {
                 const user = await getUserById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
@@ -121,7 +120,7 @@ module.exports = {
         ),
         lockUser: combineResolvers(
             isAuthenticated(USER_ADMINISTRATOR),
-            async (_, { id }, { payload }) => {
+            async (_, { id }, { payload, pubsub }) => {
                 const user = await getUserById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
@@ -153,7 +152,7 @@ module.exports = {
         ),
         unlockUser: combineResolvers(
             isAuthenticated(USER_ADMINISTRATOR),
-            async (_, { id }) => {
+            async (_, { id }, { pubsub }) => {
                 const user = await getUserById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
@@ -178,7 +177,7 @@ module.exports = {
         ),
         deleteUser: combineResolvers(
             isAuthenticated(USER_ADMINISTRATOR),
-            async (_, { id }, { payload }) => {
+            async (_, { id }, { payload, pubsub }) => {
                 const user = await getUserById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
@@ -211,7 +210,7 @@ module.exports = {
     Subscription: {
         userUpdated: {
             subscribe: withFilter(
-                () => pubsub.asyncIterator('userUpdated'),
+                (_, __, { pubsub }) => pubsub.asyncIterator('userUpdated'),
                 (_, __, { payload }) =>
                     isAuthorized(payload, USER_ADMINISTRATOR)
             )

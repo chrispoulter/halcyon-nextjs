@@ -5,13 +5,12 @@ const {
     createUser,
     updateUser
 } = require('../../data/userRepository');
-const pubsub = require('../pubsub');
 const { sendEmail } = require('../../utils/email');
 const { hashPassword } = require('../../utils/password');
 
 module.exports = {
     Mutation: {
-        register: async (_, { input }) => {
+        register: async (_, { input }, { pubsub }) => {
             const existing = await getUserByEmailAddress(input.emailAddress);
             if (existing) {
                 throw new ApolloError(

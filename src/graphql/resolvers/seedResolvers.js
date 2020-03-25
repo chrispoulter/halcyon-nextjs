@@ -3,13 +3,12 @@ const {
     createUser,
     removeUser
 } = require('../../data/userRepository');
-const pubsub = require('../pubsub');
 const { hashPassword } = require('../../utils/password');
 const config = require('../../utils/config');
 
 module.exports = {
     Mutation: {
-        seedData: async () => {
+        seedData: async (_, __, { pubsub }) => {
             const user = {
                 emailAddress: config.SEED_EMAILADDRESS,
                 password: await hashPassword(config.SEED_PASSWORD),

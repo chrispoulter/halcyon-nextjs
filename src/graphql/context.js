@@ -1,7 +1,13 @@
-const { AuthenticationError, ForbiddenError } = require('apollo-server');
+const {
+    PubSub,
+    AuthenticationError,
+    ForbiddenError
+} = require('apollo-server');
 const { skip } = require('graphql-resolvers');
 const { verifyToken } = require('../utils/jwt');
 const { isAuthorized } = require('../utils/auth');
+
+const pubsub = new PubSub();
 
 module.exports.context = async ({ req, event, connection }) => {
     if (connection) {
@@ -13,12 +19,13 @@ module.exports.context = async ({ req, event, connection }) => {
 
     const token = authHeader.replace(/bearer /giu, '');
     if (!token) {
-        return {};
+        return { pubsub };
     }
 
     const payload = await verifyToken(token);
     return {
-        payload
+        payload,
+        pubsub
     };
 };
 
@@ -28,12 +35,13 @@ module.exports.subscriptions = {
 
         const token = authHeader.replace(/bearer /giu, '');
         if (!token) {
-            return {};
+            return { pubsub };
         }
 
         const payload = await verifyToken(token);
         return {
-            payload
+            payload,
+            pubsub
         };
     }
 };
