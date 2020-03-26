@@ -18,8 +18,8 @@ module.exports = {
             isAuthenticated(USER_ADMINISTRATOR),
             async (_, { page, size, search, sort }) => {
                 const result = await searchUsers(
-                    page || 1,
-                    size || 10,
+                    page,
+                    Math.min(size, 50),
                     search,
                     sort
                 );
