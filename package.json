@@ -4,9 +4,13 @@
     "private": true,
     "scripts": {
         "start": "nodemon --inspect src/server.js",
-        "serverless": "serverless offline start --skipCacheInvalidation",
         "lint": "eslint src/**/*.{js,jsx}",
-        "format": "prettier --write \"**/*.{js,jsx,json,css,md,yml,html}\""
+        "format": "prettier --write \"**/*.{js,jsx,json,css,md,yml,html}\"",
+        "serverless:start": "serverless offline start",
+        "serverless:deploy": "serverless deploy",
+        "docker:build": "docker build -t chrispoulter/halcyon-graphql .",
+        "docker:run": "docker run --name halcyon-graphql --env-file .env -p 3001:3001 chrispoulter/halcyon-graphql",
+        "docker:push": "docker push chrispoulter/halcyon-graphql"
     },
     "dependencies": {
         "apollo-server": "2.11.0",
