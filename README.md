@@ -10,8 +10,6 @@ A Node.js GraphQL project template.
     [https://nodejs.org](https://nodejs.org)
 -   Apollo Server
     [https://www.apollographql.com](https://www.apollographql.com)
--   Serverless
-    [https://serverless.com](https://serverless.com)
 -   MongoDB
     [https://www.mongodb.com](https://www.mongodb.com)
 

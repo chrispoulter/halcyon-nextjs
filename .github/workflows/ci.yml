@@ -1,0 +1,39 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    deploy:
+        name: deploy
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - uses: azure/login@v1
+              with:
+                  creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+            - uses: azure/docker-login@v1
+              with:
+                  login-server: ${{ secrets.AZURE_DOCKER_SERVER }}
+                  username: ${{ secrets.AZURE_DOCKER_USERNAME }}
+                  password: ${{ secrets.AZURE_DOCKER_PASSWORD }}
+
+            - run: |
+                  docker build . -t ${{ secrets.AZURE_DOCKER_SERVER }}/halcyon-graphql
+                  docker push ${{ secrets.AZURE_DOCKER_SERVER }}/halcyon-graphql
+
+            - uses: azure/webapps-container-deploy@v1
+              with:
+                  app-name: halcyon-graphql
+                  images: ${{ secrets.AZURE_DOCKER_SERVER }}/halcyon-graphql
+
+            - uses: azure/appservice-settings@v1
+              with:
+                  app-name: halcyon-graphql
+                  app-settings-json: '${{ secrets.AZURE_APP_SETTINGS }}'
+
+            - run: az logout

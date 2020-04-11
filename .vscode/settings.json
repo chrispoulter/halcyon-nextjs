@@ -1,6 +1,5 @@
 {
     "files.exclude": {
-        "node_modules": true,
-        ".serverless": true
+        "node_modules": true
     }
 }
