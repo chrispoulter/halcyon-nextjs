@@ -1,5 +1,5 @@
 const { ApolloError } = require('apollo-server');
-const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 const {
     getUserByEmailAddress,
     createUser,
