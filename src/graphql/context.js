@@ -9,13 +9,13 @@ const { isAuthorized } = require('../utils/auth');
 
 const pubsub = new PubSub();
 
-module.exports.context = async ({ req, connection }) => {
+module.exports.context = async ({ req, event, connection }) => {
     if (connection) {
         return connection.context;
     }
 
-    const authHeader =
-        req.headers.authorization || req.headers.Authorization || '';
+    const headers = (req || event).headers;
+    const authHeader = headers.authorization || headers.Authorization || '';
 
     const token = authHeader.replace(/bearer /giu, '');
     if (!token) {

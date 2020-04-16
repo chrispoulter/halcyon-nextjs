@@ -5,7 +5,9 @@
     "scripts": {
         "start": "nodemon --inspect src/server.js",
         "lint": "eslint src/**/*.{js,jsx}",
-        "format": "prettier --write \"**/*.{js,jsx,json,css,md,yml,html}\""
+        "format": "prettier --write \"**/*.{js,jsx,json,css,md,yml,html}\"",
+        "serverless": "serverless offline start",
+        "deploy": "serverless deploy"
     },
     "dependencies": {
         "apollo-server": "2.11.0",
@@ -17,13 +19,16 @@
         "graphql-resolvers": "0.4.2",
         "jsonwebtoken": "8.5.1",
         "mongoose": "5.9.6",
-        "node-fetch": "2.6.0",
+        "nodemailer": "6.4.6",
         "uuid": "7.0.2"
     },
     "devDependencies": {
         "eslint": "6.8.0",
         "eslint-config-prettier": "6.10.1",
         "nodemon": "2.0.2",
-        "prettier": "2.0.2"
+        "prettier": "2.0.2",
+        "serverless": "1.67.0",
+        "serverless-dotenv-plugin": "2.3.2",
+        "serverless-offline": "6.1.0"
     }
 }

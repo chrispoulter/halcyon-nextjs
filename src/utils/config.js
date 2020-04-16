@@ -5,9 +5,11 @@ module.exports = {
     JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || '',
     JWT_ISSUER: process.env.JWT_ISSUER || '',
     JWT_AUDIENCE: process.env.JWT_AUDIENCE || '',
-    MAILGUN_DOMAIN: process.env.MAILGUN_DOMAIN || '',
-    MAILGUN_PASSWORD: process.env.MAILGUN_PASSWORD || '',
-    MAILGUN_NOREPLY: process.env.MAILGUN_NOREPLY || '',
+    SMTP_HOST: process.env.SMTP_HOST || '',
+    SMTP_PORT: parseInt(process.env.SMTP_PORT || '587'),
+    SMTP_USERNAME: process.env.SMTP_USERNAME || '',
+    SMTP_PASSWORD: process.env.SMTP_PASSWORD || '',
+    SMTP_NOREPLY: process.env.SMTP_NOREPLY || '',
     SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS || '',
     SEED_PASSWORD: process.env.SEED_PASSWORD || ''
 };

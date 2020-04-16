@@ -1,0 +1,41 @@
+service: halcyon-graphql
+
+provider:
+    name: aws
+    runtime: nodejs12.x
+    stage: dev
+    region: eu-west-1
+    memorySize: 1024
+    logRetentionInDays: 3
+    environment:
+        MONGODB_URI: ${env:MONGODB_URI, ''}
+        JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
+        JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
+        JWT_ISSUER: ${env:JWT_ISSUER, ''}
+        SMTP_HOST: ${env:SMTP_HOST, ''}
+        SMTP_PORT: ${env:SMTP_PORT, ''}
+        SMTP_USERNAME: ${env:SMTP_USERNAME, ''}
+        SMTP_PASSWORD: ${env:SMTP_PASSWORD, ''}
+        SMTP_NOREPLY: ${env:SMTP_NOREPLY, ''}
+
+plugins:
+    - serverless-offline
+    - serverless-dotenv-plugin
+
+functions:
+    app:
+        handler: src/serverless.handler
+        events:
+            - http:
+                  path: /
+                  method: ANY
+                  cors: true
+            - http:
+                  path: /{proxy+}
+                  method: ANY
+                  cors: true
+
+custom:
+    serverless-offline:
+        httpPort: 3001
+        noPrependStageInUrl: true

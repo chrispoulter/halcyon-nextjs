@@ -7,5 +7,3 @@ module.exports.format = (str, obj) => {
 
     return result;
 };
-
-module.exports.base64Encode = str => Buffer.from(str).toString('base64');
