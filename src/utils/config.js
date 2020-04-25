@@ -11,5 +11,6 @@ module.exports = {
     SMTP_PASSWORD: process.env.SMTP_PASSWORD || '',
     SMTP_NOREPLY: process.env.SMTP_NOREPLY || '',
     SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS || '',
-    SEED_PASSWORD: process.env.SEED_PASSWORD || ''
+    SEED_PASSWORD: process.env.SEED_PASSWORD || '',
+    SENTRY_DSN: process.env.SENTRY_DSN || ''
 };

@@ -1,11 +1,15 @@
 const { ApolloServer } = require('apollo-server-lambda');
 const { typeDefs, resolvers, context } = require('./graphql');
 const { openConnection } = require('./utils/mongo');
+const logger = require('./utils/logger');
+
+logger.initialize();
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context
+    context,
+    formatError: logger.formatError
 });
 
 const graphqlHandler = server.createHandler({

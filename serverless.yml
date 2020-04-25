@@ -17,6 +17,7 @@ provider:
         SMTP_USERNAME: ${env:SMTP_USERNAME, ''}
         SMTP_PASSWORD: ${env:SMTP_PASSWORD, ''}
         SMTP_NOREPLY: ${env:SMTP_NOREPLY, ''}
+        SENTRY_DSN: ${env:SENTRY_DSN, ''}
 
 plugins:
     - serverless-offline
