@@ -12,7 +12,5 @@ module.exports = {
     SMTP_NOREPLY: process.env.SMTP_NOREPLY,
     SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS,
     SEED_PASSWORD: process.env.SEED_PASSWORD,
-    SENTRY_DSN: process.env.SENTRY_DSN,
-    SENTRY_ENVIRONMENT: process.env.SENTRY_ENVIRONMENT,
-    SENTRY_RELEASE: process.env.SENTRY_RELEASE
+    SENTRY_DSN: process.env.SENTRY_DSN
 };
