@@ -22,7 +22,7 @@ jobs:
             SMTP_PASSWORD: ${{secrets.SMTP_PASSWORD }}
             SMTP_NOREPLY: ${{ secrets.SMTP_NOREPLY }}
             SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-            SENTRY_ENVIRONMENT: ${{ github.ref }}
+            SENTRY_ENVIRONMENT: ${{ secrets.AWS_STAGE }}
             SENTRY_RELEASE: ${{ github.sha }}
 
         steps:
