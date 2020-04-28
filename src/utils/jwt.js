@@ -11,7 +11,7 @@ module.exports.verifyToken = async token => {
             audience: config.JWT_AUDIENCE
         });
     } catch (error) {
-        logger.error('Verify Token Failed', error);
+        logger.error(error);
     }
 
     return result;

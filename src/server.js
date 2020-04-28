@@ -3,7 +3,6 @@ const { typeDefs, resolvers, context, subscriptions } = require('./graphql');
 const { openConnection } = require('./utils/mongo');
 const logger = require('./utils/logger');
 
-logger.initialize();
 openConnection();
 
 const server = new ApolloServer({
@@ -11,12 +10,12 @@ const server = new ApolloServer({
     resolvers,
     context,
     subscriptions,
-    formatError: logger.formatError
+    plugins: [logger.plugin]
 });
 
 server
     .listen({ port: process.env.PORT || 3001 })
     .then(({ url, subscriptionsUrl }) => {
-        logger.log(`Server ready at ${url}`);
-        logger.log(`Subscriptions ready at ${subscriptionsUrl}`);
+        console.log(`Server ready at ${url}`);
+        console.log(`Subscriptions ready at ${subscriptionsUrl}`);
     });

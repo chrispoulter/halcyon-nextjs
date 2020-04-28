@@ -26,6 +26,6 @@ module.exports.sendEmail = async message => {
             html
         });
     } catch (error) {
-        logger.error('SMTP Request Failed', error);
+        logger.error(error);
     }
 };

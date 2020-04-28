@@ -7,7 +7,7 @@ on:
             - sentry-io
 
 jobs:
-    deploy:
+    build:
         name: deploy
         runs-on: ubuntu-latest
         env:

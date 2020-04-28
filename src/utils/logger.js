@@ -1,9 +1,6 @@
 const Sentry = require('@sentry/node');
 const config = require('./config');
 
-module.exports.initialize = () =>
-    Sentry.init({ dsn: config.SENTRY_DSN, normalizeDepth: 0 });
-
 module.exports.formatError = error => {
     Sentry.withScope(scope => {
         scope.setExtras(error);
@@ -22,4 +19,18 @@ module.exports.error = (message, error) => {
         scope.setExtras({ message });
         Sentry.captureException(error);
     });
+};
+
+module.exports.plugin = {
+    serverWillStart() {
+        Sentry.init({ dsn: config.SENTRY_DSN, normalizeDepth: 0 })
+    },
+    requestDidStart() {
+        return {
+            didEncounterErrors(requestContext) {
+                console.log('requestContext', JSON.stringify(requestContext));
+                Sentry.captureException(requestContext);
+            }
+        };
+    }
 };
