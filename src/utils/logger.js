@@ -1,7 +1,7 @@
 const Sentry = require('@sentry/node');
 const config = require('./config');
 
-module.exports.error = error => {
+module.exports.captureException = error => {
     console.error(error);
     Sentry.captureException(error);
 };

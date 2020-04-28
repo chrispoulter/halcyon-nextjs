@@ -1,5 +1,4 @@
 const { sign, verify } = require('jsonwebtoken');
-const logger = require('./logger');
 const config = require('./config');
 
 module.exports.verifyToken = async token => {
@@ -11,7 +10,7 @@ module.exports.verifyToken = async token => {
             audience: config.JWT_AUDIENCE
         });
     } catch (error) {
-        logger.error(error);
+        // ignore errors
     }
 
     return result;

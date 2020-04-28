@@ -1,7 +1,7 @@
 const { ApolloServer } = require('apollo-server');
 const { typeDefs, resolvers, context, subscriptions } = require('./graphql');
 const { openConnection } = require('./utils/mongo');
-const logger = require('./utils/logger');
+const { plugin } = require('./utils/logger');
 
 openConnection();
 
@@ -10,7 +10,7 @@ const server = new ApolloServer({
     resolvers,
     context,
     subscriptions,
-    plugins: [logger.plugin]
+    plugins: [plugin]
 });
 
 server
