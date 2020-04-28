@@ -18,6 +18,8 @@ provider:
         SMTP_PASSWORD: ${env:SMTP_PASSWORD, ''}
         SMTP_NOREPLY: ${env:SMTP_NOREPLY, ''}
         SENTRY_DSN: ${env:SENTRY_DSN, ''}
+        SENTRY_ENVIRONMENT: ${env:SENTRY_ENVIRONMENT, ''}
+        SENTRY_RELEASE: ${env:SENTRY_RELEASE, ''}
 
 plugins:
     - serverless-offline

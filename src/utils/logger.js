@@ -8,7 +8,11 @@ module.exports.error = error => {
 
 module.exports.plugin = {
     serverWillStart() {
-        Sentry.init({ dsn: config.SENTRY_DSN });
+        Sentry.init({
+            dsn: config.SENTRY_DSN,
+            environment: config.SENTRY_ENVIRONMENT,
+            release: config.SENTRY_RELEASE
+        });
     },
     requestDidStart() {
         return {
