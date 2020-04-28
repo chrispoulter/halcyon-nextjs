@@ -21,6 +21,7 @@ jobs:
             SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
             SMTP_PASSWORD: ${{secrets.SMTP_PASSWORD }}
             SMTP_NOREPLY: ${{ secrets.SMTP_NOREPLY }}
+            SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
         steps:
             - uses: actions/checkout@v2
