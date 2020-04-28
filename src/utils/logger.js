@@ -15,7 +15,14 @@ module.exports.plugin = {
             didEncounterErrors(requestContext) {
                 Sentry.withScope(scope => {
                     scope.setUser(requestContext.context.payload);
-                    scope.setExtras(requestContext);
+
+                    scope.setExtras({
+                        operation: requestContext.operation,
+                        operationName: requestContext.operationName,
+                        request: requestContext.request,
+                        response: requestContext.response,
+                        source: requestContext.source
+                    });
 
                     for (const error of requestContext.errors) {
                         Sentry.captureException(error);

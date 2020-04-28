@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - master
-            - sentry-io
 
 jobs:
     build:
