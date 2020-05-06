@@ -10,28 +10,27 @@ A Node.js GraphQL project template.
     [https://nodejs.org](https://nodejs.org)
 -   Apollo Server
     [https://www.apollographql.com](https://www.apollographql.com)
--   MongoDB
-    [https://www.mongodb.com](https://www.mongodb.com)
+-   FaunaDB
+    [https://fauna.com](https://fauna.com)
 
 #### Custom Settings
 
 Create `.env` file in root directory.
 
 ```
-MONGODB_URI=
+FAUNADB_SECRET=
 
 JWT_SECURITYKEY=
 JWT_ISSUER=
 JWT_AUDIENCE=
 
-SMTP_HOST=
-SMTP_PORT=
-SMTP_USERNAME=
-SMTP_PASSWORD=
-SMTP_NOREPLY=
+MAILGUN_DOMAIN=
+MAILGUN_APIKEY=
+MAILGUN_NOREPLY=
 
 SEED_EMAILADDRESS=
 SEED_PASSWORD=
 
 SENTRY_DSN=
+SENTRY_ENVIRONMENT=
 ```

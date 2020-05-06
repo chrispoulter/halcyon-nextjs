@@ -6,16 +6,17 @@ module.exports.captureException = error => {
     Sentry.captureException(error);
 };
 
-module.exports.plugin = {
+module.exports.loggerPlugin = {
     serverWillStart() {
         Sentry.init({
-            dsn: config.SENTRY_DSN
+            dsn: config.SENTRY_DSN,
+            environment: config.SENTRY_ENVIRONMENT
         });
     },
     requestDidStart() {
         return {
             didEncounterErrors(requestContext) {
-                Sentry.withScope(scope => {
+                Sentry.withScope(async scope => {
                     scope.setUser(requestContext.context.payload);
 
                     scope.setExtras({
@@ -29,6 +30,8 @@ module.exports.plugin = {
                     for (const error of requestContext.errors) {
                         Sentry.captureException(error);
                     }
+
+                    await Sentry.flush(2000);
                 });
             }
         };

@@ -1,7 +1,7 @@
 const { ApolloError } = require('apollo-server');
 const { getUserByEmailAddress } = require('../../data/userRepository');
 const { generateToken } = require('../../utils/jwt');
-const { verifyPassword } = require('../../utils/password');
+const { verifyHash } = require('../../utils/hash');
 
 module.exports = {
     Mutation: {
@@ -14,10 +14,7 @@ module.exports = {
                 );
             }
 
-            const verified = await verifyPassword(
-                input.password,
-                user.password
-            );
+            const verified = await verifyHash(input.password, user.password);
 
             if (!verified) {
                 throw new ApolloError(

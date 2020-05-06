@@ -1,73 +1,175 @@
-const UserModel = require('./userModel');
+const { Client, query: q } = require('faunadb');
+const { base64EncodeObj, base64DecodeObj } = require('../utils/encode');
+const config = require('../utils/config');
 
-module.exports.getUserById = id => UserModel.findById(id);
+const client = new Client({ secret: config.FAUNADB_SECRET });
 
-module.exports.getUserByEmailAddress = emailAddress =>
-    UserModel.findOne({
-        emailAddress
-    });
+module.exports.getUserById = async id => {
+    try {
+        const result = await client.query(
+            q.Get(q.Ref(q.Collection('users'), id))
+        );
 
-module.exports.createUser = user => new UserModel(user).save();
+        return { ...result.data, id: result.ref.id };
+    } catch (error) {
+        if (error.name === 'NotFound') {
+            return undefined;
+        }
 
-module.exports.updateUser = user => user.save();
+        throw error;
+    }
+};
 
-module.exports.removeUser = user => user.remove();
+module.exports.getUserByEmailAddress = async emailAddress => {
+    try {
+        const result = await client.query(
+            q.Get(q.Match(q.Index('users_by_email_address'), emailAddress))
+        );
 
-module.exports.searchUsers = async (page, size, search, sort) => {
-    const searchExpression = getSearchExpression(search);
-    const sortExpression = getSortExpression(sort);
+        return mapUser(result);
+    } catch (error) {
+        if (error.name === 'NotFound') {
+            return undefined;
+        }
 
-    const totalCount = await UserModel.find(searchExpression).countDocuments();
+        throw error;
+    }
+};
 
-    const users = await UserModel.find(searchExpression)
-        .sort(sortExpression)
-        .limit(size)
-        .skip(size * (page - 1))
-        .exec();
+module.exports.createUser = async user => {
+    const result = await client.query(
+        q.Create(q.Collection('users'), { data: user })
+    );
 
-    const totalPages = Math.ceil(totalCount / size);
+    return mapUser(result);
+};
+
+module.exports.updateUser = async user => {
+    const { id, ...data } = user;
+
+    const result = await client.query(
+        q.Replace(q.Ref(q.Collection('users'), id), { data })
+    );
+
+    return mapUser(result);
+};
+
+module.exports.removeUser = async ({ id }) => {
+    const result = await client.query(
+        q.Delete(q.Ref(q.Collection('users'), id))
+    );
+
+    return mapUser(result);
+};
+
+module.exports.searchUsers = async ({ size, search, sort, cursor }) => {
+    const { name, values } = getIndex(sort);
+    const { before, after } = parseCursor(cursor);
+
+    const result = await client.query(
+        q.Map(
+            q.Paginate(
+                q.Filter(
+                    q.Match(name),
+                    q.Lambda(
+                        values,
+                        q.ContainsStr(
+                            q.Casefold(q.Var('emailAddress')),
+                            q.Casefold(search)
+                        )
+                    )
+                ),
+                {
+                    size,
+                    before,
+                    after
+                }
+            ),
+            q.Lambda(values, q.Get(q.Var('ref')))
+        )
+    );
 
     return {
-        items: users,
-        page,
-        size,
-        totalPages,
-        totalCount,
-        hasNextPage: page < totalPages,
-        hasPreviousPage: page > 1
+        items: result.data.map(mapUser),
+        ...generateCursors(result)
     };
 };
 
-const getSearchExpression = search => {
-    if (!search) {
+const getIndex = sort => {
+    switch (sort) {
+        case 'EMAIL_ADDRESS_DESC':
+            return {
+                name: 'users_email_address_desc',
+                values: ['emailAddress', 'firstName', 'lastName', 'ref']
+            };
+
+        case 'EMAIL_ADDRESS_ASC':
+            return {
+                name: 'users_email_address_asc',
+                values: ['emailAddress', 'firstName', 'lastName', 'ref']
+            };
+
+        case 'NAME_DESC':
+            return {
+                name: 'users_name_desc',
+                values: ['firstName', 'lastName', 'emailAddress', 'ref']
+            };
+
+        default:
+            return {
+                name: 'users_name_asc',
+                values: ['firstName', 'lastName', 'emailAddress', 'ref']
+            };
+    }
+};
+
+const getItems = arr => {
+    if (!arr) {
         return undefined;
     }
 
-    return { $text: { $search: search } };
+    return arr.map(item => {
+        if (!item.collection) {
+            return item;
+        }
+
+        return { collection: item.collection.id, id: item.id };
+    });
 };
 
-const getSortExpression = sort => {
-    const sortExpression = [];
+const generateCursors = result => ({
+    before:
+        result.before && base64EncodeObj({ before: getItems(result.before) }),
+    after: result.after && base64EncodeObj({ after: getItems(result.after) })
+});
 
-    switch (sort) {
-        case 'EMAIL_ADDRESS_DESC':
-            sortExpression.push(['emailAddress', 'descending']);
-            break;
-
-        case 'EMAIL_ADDRESS':
-            sortExpression.push(['emailAddress', 'ascending']);
-            break;
-
-        case 'DISPLAY_NAME_DESC':
-            sortExpression.push(['firstName', 'descending']);
-            sortExpression.push(['lastName', 'descending']);
-            break;
-
-        default:
-            sortExpression.push(['firstName', 'ascending']);
-            sortExpression.push(['lastName', 'ascending']);
-            break;
+const parseItems = arr => {
+    if (!arr) {
+        return undefined;
     }
 
-    return sortExpression;
+    return arr.map(item => {
+        if (!item.collection) {
+            return item;
+        }
+
+        return q.Ref(q.Collection(item.collection), item.id);
+    });
 };
+
+const parseCursor = str => {
+    const decoded = base64DecodeObj(str);
+    if (!decoded) {
+        return {
+            before: undefined,
+            after: undefined
+        };
+    }
+
+    return {
+        before: parseItems(decoded.before),
+        after: parseItems(decoded.after)
+    };
+};
+
+const mapUser = user => ({ id: user.ref.id, ...user.data });

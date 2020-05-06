@@ -12,16 +12,17 @@ jobs:
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            MONGODB_URI: ${{ secrets.MONGODB_URI }}
+            FAUNADB_SECRET: ${{ secrets.FAUNADB_SECRET }}
             JWT_SECURITYKEY: ${{ secrets.JWT_SECURITYKEY }}
             JWT_AUDIENCE: ${{ secrets.JWT_AUDIENCE }}
             JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
-            SMTP_HOST: ${{ secrets.SMTP_HOST }}
-            SMTP_PORT: ${{ secrets.SMTP_PORT }}
-            SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
-            SMTP_PASSWORD: ${{secrets.SMTP_PASSWORD }}
-            SMTP_NOREPLY: ${{ secrets.SMTP_NOREPLY }}
+            MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
+            MAILGUN_APIKEY: ${{ secrets.MAILGUN_APIKEY }}
+            MAILGUN_NOREPLY: ${{ secrets.MAILGUN_NOREPLY }}
+            SEED_EMAILADDRESS: ${{secrets.SEED_EMAILADDRESS }}
+            SEED_PASSWORD: ${{ secrets.SEED_PASSWORD }}
             SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+            SENTRY_ENVIRONMENT: ${{ secrets.SENTRY_ENVIRONMENT }}
 
         steps:
             - uses: actions/checkout@v2

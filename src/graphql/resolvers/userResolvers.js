@@ -9,27 +9,14 @@ const {
     removeUser
 } = require('../../data/userRepository');
 const { isAuthenticated } = require('../context');
-const { hashPassword } = require('../../utils/password');
+const { generateHash } = require('../../utils/hash');
 const { isAuthorized, USER_ADMINISTRATOR } = require('../../utils/auth');
 
 module.exports = {
     Query: {
         searchUsers: combineResolvers(
             isAuthenticated(USER_ADMINISTRATOR),
-            async (_, { page, size, search, sort }) => {
-                const result = await searchUsers(
-                    page,
-                    Math.min(size, 50),
-                    search,
-                    sort
-                );
-
-                return {
-                    ...result,
-                    search,
-                    sort
-                };
-            }
+            async (_, { input }) => searchUsers(input)
         ),
         getUserById: combineResolvers(
             isAuthenticated(USER_ADMINISTRATOR),
@@ -51,16 +38,15 @@ module.exports = {
                     );
                 }
 
-                const user = {
+                const result = await createUser({
                     emailAddress: input.emailAddress,
-                    password: await hashPassword(input.password),
+                    password: await generateHash(input.password),
                     firstName: input.firstName,
                     lastName: input.lastName,
-                    dateOfBirth: input.dateOfBirth,
+                    dateOfBirth: input.dateOfBirth.toISOString(),
+                    isLockedOut: false,
                     roles: input.roles
-                };
-
-                const result = await createUser(user);
+                });
 
                 pubsub.publish('userUpdated', {
                     userUpdated: {
@@ -100,7 +86,7 @@ module.exports = {
                 user.emailAddress = input.emailAddress;
                 user.firstName = input.firstName;
                 user.lastName = input.lastName;
-                user.dateOfBirth = input.dateOfBirth;
+                user.dateOfBirth = input.dateOfBirth.toISOString();
                 user.roles = input.roles;
                 await updateUser(user);
 

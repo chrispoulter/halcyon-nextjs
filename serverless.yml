@@ -8,16 +8,17 @@ provider:
     memorySize: 1024
     logRetentionInDays: 3
     environment:
-        MONGODB_URI: ${env:MONGODB_URI, ''}
+        FAUNADB_SECRET: ${env:FAUNADB_SECRET, ''}
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
         JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
         JWT_ISSUER: ${env:JWT_ISSUER, ''}
-        SMTP_HOST: ${env:SMTP_HOST, ''}
-        SMTP_PORT: ${env:SMTP_PORT, ''}
-        SMTP_USERNAME: ${env:SMTP_USERNAME, ''}
-        SMTP_PASSWORD: ${env:SMTP_PASSWORD, ''}
-        SMTP_NOREPLY: ${env:SMTP_NOREPLY, ''}
+        MAILGUN_DOMAIN: ${env:MAILGUN_DOMAIN, ''}
+        MAILGUN_APIKEY: ${env:MAILGUN_APIKEY, ''}
+        MAILGUN_NOREPLY: ${env:MAILGUN_NOREPLY, ''}
+        SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
+        SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
         SENTRY_DSN: ${env:SENTRY_DSN, ''}
+        SENTRY_ENVIRONMENT: ${env:SENTRY_ENVIRONMENT, ''}
 
 plugins:
     - serverless-offline

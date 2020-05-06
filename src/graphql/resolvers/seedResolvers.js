@@ -3,22 +3,16 @@ const {
     createUser,
     removeUser
 } = require('../../data/userRepository');
-const { hashPassword } = require('../../utils/password');
+const { generateHash } = require('../../utils/hash');
 const config = require('../../utils/config');
 
 module.exports = {
     Mutation: {
         seedData: async (_, __, { pubsub }) => {
-            const user = {
-                emailAddress: config.SEED_EMAILADDRESS,
-                password: await hashPassword(config.SEED_PASSWORD),
-                firstName: 'System',
-                lastName: 'Administrator',
-                dateOfBirth: '1970-01-01',
-                roles: ['System Administrator']
-            };
+            const existing = await getUserByEmailAddress(
+                config.SEED_EMAILADDRESS
+            );
 
-            const existing = await getUserByEmailAddress(user.emailAddress);
             if (existing) {
                 await removeUser(existing);
 
@@ -30,7 +24,15 @@ module.exports = {
                 });
             }
 
-            const result = await createUser(user);
+            const result = await createUser({
+                emailAddress: config.SEED_EMAILADDRESS,
+                password: await generateHash(config.SEED_PASSWORD),
+                firstName: 'System',
+                lastName: 'Administrator',
+                dateOfBirth: new Date(1970, 0, 1).toISOString(),
+                isLockedOut: false,
+                roles: ['System Administrator']
+            });
 
             pubsub.publish('userUpdated', {
                 userUpdated: {

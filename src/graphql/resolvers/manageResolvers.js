@@ -7,7 +7,7 @@ const {
     removeUser
 } = require('../../data/userRepository');
 const { isAuthenticated } = require('../context');
-const { hashPassword, verifyPassword } = require('../../utils/password');
+const { generateHash, verifyHash } = require('../../utils/hash');
 
 module.exports = {
     Query: {
@@ -41,7 +41,7 @@ module.exports = {
                 user.emailAddress = input.emailAddress;
                 user.firstName = input.firstName;
                 user.lastName = input.lastName;
-                user.dateOfBirth = input.dateOfBirth;
+                user.dateOfBirth = input.dateOfBirth.toISOString();
                 await updateUser(user);
 
                 pubsub.publish('userUpdated', {
@@ -66,7 +66,7 @@ module.exports = {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
-                const verified = await verifyPassword(
+                const verified = await verifyHash(
                     currentPassword,
                     user.password
                 );
@@ -78,7 +78,7 @@ module.exports = {
                     );
                 }
 
-                user.password = await hashPassword(newPassword);
+                user.password = await generateHash(newPassword);
                 user.passwordResetToken = undefined;
                 await updateUser(user);
 

@@ -4,10 +4,10 @@
     "private": true,
     "scripts": {
         "start": "nodemon --inspect src/server.js",
+        "deploy": "serverless deploy",
+        "postdeploy": "node scripts/fauna.js",
         "lint": "eslint src/**/*.{js,jsx}",
-        "format": "prettier --write \"**/*.{js,jsx,json,css,md,yml,html}\"",
-        "serverless": "serverless offline start",
-        "deploy": "serverless deploy"
+        "format": "prettier --write \"**/*.{js,jsx,json,css,md,yml,html}\""
     },
     "dependencies": {
         "@sentry/node": "5.15.5",
@@ -15,12 +15,12 @@
         "apollo-server-lambda": "2.12.0",
         "bcryptjs": "2.4.3",
         "dotenv": "8.2.0",
+        "faunadb": "2.13.1",
         "graphql": "15.0.0",
         "graphql-iso-date": "3.6.1",
         "graphql-resolvers": "0.4.2",
         "jsonwebtoken": "8.5.1",
-        "mongoose": "5.9.10",
-        "nodemailer": "6.4.6",
+        "node-fetch": "2.6.0",
         "uuid": "7.0.3"
     },
     "devDependencies": {
