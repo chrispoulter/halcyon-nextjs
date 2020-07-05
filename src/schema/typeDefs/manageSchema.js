@@ -5,7 +5,12 @@ module.exports = gql`
         emailAddress: String!
         firstName: String!
         lastName: String!
-        dateOfBirth: Date!
+        dateOfBirth: DateTime!
+    }
+
+    input ChangePasswordInput {
+        currentPassword: String!
+        newPassword: String!
     }
 
     extend type Query {
@@ -13,11 +18,8 @@ module.exports = gql`
     }
 
     extend type Mutation {
-        updateProfile(input: UpdateProfileInput): UserMutationResponse
-        changePassword(
-            currentPassword: String!
-            newPassword: String!
-        ): UserMutationResponse
+        updateProfile(input: UpdateProfileInput!): UserMutationResponse
+        changePassword(input: ChangePasswordInput!): UserMutationResponse
         deleteAccount: UserMutationResponse
     }
 `;

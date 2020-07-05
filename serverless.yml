@@ -17,8 +17,6 @@ provider:
         MAILGUN_NOREPLY: ${env:MAILGUN_NOREPLY, ''}
         SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
-        SENTRY_DSN: ${env:SENTRY_DSN, ''}
-        SENTRY_ENVIRONMENT: ${env:SENTRY_ENVIRONMENT, ''}
 
 plugins:
     - serverless-offline

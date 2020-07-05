@@ -6,7 +6,7 @@ const tokenResolvers = require('./tokenResolvers');
 const userResolvers = require('./userResolvers');
 
 const customScalarResolver = {
-    Date: GraphQLDateTime
+    DateTime: GraphQLDateTime
 };
 
 module.exports = [

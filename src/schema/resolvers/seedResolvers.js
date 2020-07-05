@@ -8,23 +8,16 @@ const config = require('../../utils/config');
 
 module.exports = {
     Mutation: {
-        seedData: async (_, __, { pubsub }) => {
+        seedData: async () => {
             const existing = await getUserByEmailAddress(
                 config.SEED_EMAILADDRESS
             );
 
             if (existing) {
                 await removeUser(existing);
-
-                pubsub.publish('userUpdated', {
-                    userUpdated: {
-                        code: 'USER_REMOVED',
-                        user: existing
-                    }
-                });
             }
 
-            const result = await createUser({
+            await createUser({
                 emailAddress: config.SEED_EMAILADDRESS,
                 password: await generateHash(config.SEED_PASSWORD),
                 firstName: 'System',
@@ -32,13 +25,6 @@ module.exports = {
                 dateOfBirth: new Date(1970, 0, 1).toISOString(),
                 isLockedOut: false,
                 roles: ['System Administrator']
-            });
-
-            pubsub.publish('userUpdated', {
-                userUpdated: {
-                    code: 'USER_CREATED',
-                    user: result
-                }
             });
 
             return {

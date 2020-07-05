@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server');
 
 module.exports = gql`
-    scalar Date
+    scalar DateTime
 
     type MutationResponse {
         message: String
@@ -13,10 +13,6 @@ module.exports = gql`
     }
 
     type Mutation {
-        _: Boolean
-    }
-
-    type Subscription {
         _: Boolean
     }
 `;

@@ -12,11 +12,11 @@ module.exports = gql`
 
     input TokenInput {
         grantType: GrantType!
-        emailAddress: String
-        password: String
+        emailAddress: String!
+        password: String!
     }
 
     extend type Mutation {
-        generateToken(input: TokenInput): Token
+        generateToken(input: TokenInput!): Token
     }
 `;

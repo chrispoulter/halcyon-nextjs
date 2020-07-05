@@ -4,15 +4,43 @@ const config = require('../utils/config');
 
 const client = new Client({ secret: config.FAUNADB_SECRET });
 
+const collections = {
+    USERS: 'users'
+};
+
+const indexes = {
+    USERS_BY_EMAIL_ADDRESS: { name: 'users_by_email_address' },
+    USERS_EMAIL_ADDRESS_DESC: {
+        name: 'users_email_address_desc',
+        values: ['emailAddress', 'firstName', 'lastName', 'ref']
+    },
+    USERS_EMAIL_ADDRESS_ASC: {
+        name: 'users_email_address_asc',
+        values: ['emailAddress', 'firstName', 'lastName', 'ref']
+    },
+    USERS_NAME_DESC: {
+        name: 'users_name_desc',
+        values: ['firstName', 'lastName', 'emailAddress', 'ref']
+    },
+    USERS_NAME_ASC: {
+        name: 'users_name_asc',
+        values: ['firstName', 'lastName', 'emailAddress', 'ref']
+    }
+};
+
+const errors = {
+    NOT_FOUND: 'NotFound'
+};
+
 module.exports.getUserById = async id => {
     try {
         const result = await client.query(
-            q.Get(q.Ref(q.Collection('users'), id))
+            q.Get(q.Ref(q.Collection(collections.USERS), id))
         );
 
-        return { ...result.data, id: result.ref.id };
+        return mapUser(result);
     } catch (error) {
-        if (error.name === 'NotFound') {
+        if (error.name === errors.NOT_FOUND) {
             return undefined;
         }
 
@@ -23,12 +51,17 @@ module.exports.getUserById = async id => {
 module.exports.getUserByEmailAddress = async emailAddress => {
     try {
         const result = await client.query(
-            q.Get(q.Match(q.Index('users_by_email_address'), emailAddress))
+            q.Get(
+                q.Match(
+                    q.Index(indexes.USERS_BY_EMAIL_ADDRESS.name),
+                    emailAddress
+                )
+            )
         );
 
         return mapUser(result);
     } catch (error) {
-        if (error.name === 'NotFound') {
+        if (error.name === errors.NOT_FOUND) {
             return undefined;
         }
 
@@ -38,7 +71,7 @@ module.exports.getUserByEmailAddress = async emailAddress => {
 
 module.exports.createUser = async user => {
     const result = await client.query(
-        q.Create(q.Collection('users'), { data: user })
+        q.Create(q.Collection(collections.USERS), { data: user })
     );
 
     return mapUser(result);
@@ -48,23 +81,23 @@ module.exports.updateUser = async user => {
     const { id, ...data } = user;
 
     const result = await client.query(
-        q.Replace(q.Ref(q.Collection('users'), id), { data })
+        q.Replace(q.Ref(q.Collection(collections.USERS), id), { data })
     );
 
     return mapUser(result);
 };
 
-module.exports.removeUser = async ({ id }) => {
+module.exports.removeUser = async user => {
     const result = await client.query(
-        q.Delete(q.Ref(q.Collection('users'), id))
+        q.Delete(q.Ref(q.Collection(collections.USERS), user.id))
     );
 
     return mapUser(result);
 };
 
 module.exports.searchUsers = async ({ size, search, sort, cursor }) => {
-    const { name, values } = getIndex(sort);
-    const { before, after } = parseCursor(cursor);
+    const { name, values } = indexes[sort] || indexes.USERS_NAME_ASC;
+    const { before, after } = parseStringCursor(cursor);
 
     const result = await client.query(
         q.Map(
@@ -91,39 +124,11 @@ module.exports.searchUsers = async ({ size, search, sort, cursor }) => {
 
     return {
         items: result.data.map(mapUser),
-        ...generateCursors(result)
+        ...generateStringCursors(result)
     };
 };
 
-const getIndex = sort => {
-    switch (sort) {
-        case 'EMAIL_ADDRESS_DESC':
-            return {
-                name: 'users_email_address_desc',
-                values: ['emailAddress', 'firstName', 'lastName', 'ref']
-            };
-
-        case 'EMAIL_ADDRESS_ASC':
-            return {
-                name: 'users_email_address_asc',
-                values: ['emailAddress', 'firstName', 'lastName', 'ref']
-            };
-
-        case 'NAME_DESC':
-            return {
-                name: 'users_name_desc',
-                values: ['firstName', 'lastName', 'emailAddress', 'ref']
-            };
-
-        default:
-            return {
-                name: 'users_name_asc',
-                values: ['firstName', 'lastName', 'emailAddress', 'ref']
-            };
-    }
-};
-
-const getItems = arr => {
+const generateStringItems = arr => {
     if (!arr) {
         return undefined;
     }
@@ -137,13 +142,19 @@ const getItems = arr => {
     });
 };
 
-const generateCursors = result => ({
-    before:
-        result.before && base64EncodeObj({ before: getItems(result.before) }),
-    after: result.after && base64EncodeObj({ after: getItems(result.after) })
-});
+const generateStringCursors = cursors => {
+    const before =
+        cursors.before &&
+        base64EncodeObj({ before: generateStringItems(cursors.before) });
 
-const parseItems = arr => {
+    const after =
+        cursors.after &&
+        base64EncodeObj({ after: generateStringItems(cursors.after) });
+
+    return { before, after };
+};
+
+const parseStringItems = arr => {
     if (!arr) {
         return undefined;
     }
@@ -157,19 +168,15 @@ const parseItems = arr => {
     });
 };
 
-const parseCursor = str => {
+const parseStringCursor = str => {
     const decoded = base64DecodeObj(str);
-    if (!decoded) {
-        return {
-            before: undefined,
-            after: undefined
-        };
-    }
 
-    return {
-        before: parseItems(decoded.before),
-        after: parseItems(decoded.after)
-    };
+    const before =
+        decoded && decoded.before && parseStringItems(decoded.before);
+
+    const after = decoded && decoded.after && parseStringItems(decoded.after);
+
+    return { before, after };
 };
 
 const mapUser = user => ({ id: user.ref.id, ...user.data });

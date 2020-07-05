@@ -21,8 +21,6 @@ jobs:
             MAILGUN_NOREPLY: ${{ secrets.MAILGUN_NOREPLY }}
             SEED_EMAILADDRESS: ${{secrets.SEED_EMAILADDRESS }}
             SEED_PASSWORD: ${{ secrets.SEED_PASSWORD }}
-            SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-            SENTRY_ENVIRONMENT: ${{ secrets.SENTRY_ENVIRONMENT }}
 
         steps:
             - uses: actions/checkout@v2

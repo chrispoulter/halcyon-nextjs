@@ -15,7 +15,6 @@ module.exports = {
             }
 
             const verified = await verifyHash(input.password, user.password);
-
             if (!verified) {
                 throw new ApolloError(
                     'The credentials provided were invalid.',

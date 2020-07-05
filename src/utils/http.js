@@ -1,6 +1,5 @@
-const fetch = require('node-fetch');
+const fetch = require('node-fetch').default;
 const { URLSearchParams } = require('url');
-const { captureException } = require('./logger');
 
 module.exports.fetch = async config => {
     try {
@@ -11,7 +10,7 @@ module.exports.fetch = async config => {
 
         return await response.json();
     } catch (error) {
-        captureException(error);
+        console.error(error);
         return undefined;
     }
 };

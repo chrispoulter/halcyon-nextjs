@@ -5,31 +5,31 @@
     "scripts": {
         "start": "nodemon --inspect src/server.js",
         "deploy": "serverless deploy",
-        "postdeploy": "node scripts/fauna.js",
+        "postdeploy": "yarn fauna",
+        "fauna": "node scripts/fauna.js",
         "lint": "eslint src/**/*.{js,jsx}",
         "format": "prettier --write \"**/*.{js,jsx,json,css,md,yml,html}\""
     },
     "dependencies": {
-        "@sentry/node": "5.15.5",
-        "apollo-server": "2.12.0",
-        "apollo-server-lambda": "2.12.0",
+        "apollo-server": "2.15.1",
+        "apollo-server-lambda": "2.15.1",
         "bcryptjs": "2.4.3",
         "dotenv": "8.2.0",
-        "faunadb": "2.13.1",
-        "graphql": "15.0.0",
+        "faunadb": "2.14.2",
+        "graphql": "15.2.0",
         "graphql-iso-date": "3.6.1",
         "graphql-resolvers": "0.4.2",
         "jsonwebtoken": "8.5.1",
         "node-fetch": "2.6.0",
-        "uuid": "7.0.3"
+        "uuid": "8.2.0"
     },
     "devDependencies": {
-        "eslint": "6.8.0",
+        "eslint": "7.4.0",
         "eslint-config-prettier": "6.11.0",
-        "nodemon": "2.0.3",
+        "nodemon": "2.0.4",
         "prettier": "2.0.5",
-        "serverless": "1.68.0",
+        "serverless": "1.74.1",
         "serverless-dotenv-plugin": "2.4.2",
-        "serverless-offline": "6.1.4"
+        "serverless-offline": "6.4.0"
     }
 }

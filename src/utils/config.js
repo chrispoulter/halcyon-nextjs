@@ -9,7 +9,5 @@ module.exports = {
     MAILGUN_APIKEY: process.env.MAILGUN_APIKEY,
     MAILGUN_NOREPLY: process.env.MAILGUN_NOREPLY || 'noreply@chrispoulter.com',
     SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS,
-    SEED_PASSWORD: process.env.SEED_PASSWORD,
-    SENTRY_DSN: process.env.SENTRY_DSN,
-    SENTRY_ENVIRONMENT: process.env.SENTRY_ENVIRONMENT
+    SEED_PASSWORD: process.env.SEED_PASSWORD
 };
