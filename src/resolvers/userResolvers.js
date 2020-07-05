@@ -6,10 +6,10 @@ const {
     createUser,
     updateUser,
     removeUser
-} = require('../../data/userRepository');
+} = require('../data/userRepository');
 const { isAuthenticated } = require('../context');
-const { generateHash } = require('../../utils/hash');
-const { USER_ADMINISTRATOR } = require('../../utils/auth');
+const { generateHash } = require('../utils/hash');
+const { USER_ADMINISTRATOR } = require('../utils/auth');
 
 module.exports = {
     Query: {

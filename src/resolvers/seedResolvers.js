@@ -2,9 +2,9 @@ const {
     getUserByEmailAddress,
     createUser,
     removeUser
-} = require('../../data/userRepository');
-const { generateHash } = require('../../utils/hash');
-const config = require('../../utils/config');
+} = require('../data/userRepository');
+const { generateHash } = require('../utils/hash');
+const config = require('../utils/config');
 
 module.exports = {
     Mutation: {

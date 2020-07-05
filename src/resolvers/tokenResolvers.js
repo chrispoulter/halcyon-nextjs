@@ -1,7 +1,7 @@
 const { ApolloError } = require('apollo-server');
-const { getUserByEmailAddress } = require('../../data/userRepository');
-const { generateToken } = require('../../utils/jwt');
-const { verifyHash } = require('../../utils/hash');
+const { getUserByEmailAddress } = require('../data/userRepository');
+const { generateToken } = require('../utils/jwt');
+const { verifyHash } = require('../utils/hash');
 
 module.exports = {
     Mutation: {

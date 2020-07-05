@@ -4,9 +4,9 @@ const {
     getUserByEmailAddress,
     createUser,
     updateUser
-} = require('../../data/userRepository');
-const { sendEmail } = require('../../utils/email');
-const { generateHash } = require('../../utils/hash');
+} = require('../data/userRepository');
+const { sendEmail } = require('../utils/email');
+const { generateHash } = require('../utils/hash');
 
 module.exports = {
     Mutation: {

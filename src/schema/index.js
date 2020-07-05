@@ -1,5 +1,15 @@
-const typeDefs = require('./typeDefs');
-const resolvers = require('./resolvers');
-const { context } = require('./context');
+const linkSchema = require('./linkSchema');
+const accountSchema = require('./accountSchema');
+const manageSchema = require('./manageSchema');
+const seedSchema = require('./seedSchema');
+const tokenSchema = require('./tokenSchema');
+const userSchema = require('./userSchema');
 
-module.exports = { typeDefs, resolvers, context };
+module.exports = [
+    linkSchema,
+    userSchema,
+    accountSchema,
+    manageSchema,
+    seedSchema,
+    tokenSchema
+];

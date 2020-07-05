@@ -4,9 +4,9 @@ const {
     getUserByEmailAddress,
     updateUser,
     removeUser
-} = require('../../data/userRepository');
+} = require('../data/userRepository');
 const { isAuthenticated } = require('../context');
-const { generateHash, verifyHash } = require('../../utils/hash');
+const { generateHash, verifyHash } = require('../utils/hash');
 
 module.exports = {
     Query: {
