@@ -99,25 +99,26 @@ module.exports.searchUsers = async ({ size, search, sort, cursor }) => {
     const { name, values } = indexes[sort] || indexes.USERS_NAME_ASC;
     const { before, after } = parseStringCursor(cursor);
 
+    const set = search
+        ? q.Filter(
+              q.Match(name),
+              q.Lambda(
+                  values,
+                  q.ContainsStr(
+                      q.Casefold(q.Var('emailAddress')),
+                      q.Casefold(search)
+                  )
+              )
+          )
+        : q.Match(q.Index(name));
+
     const result = await client.query(
         q.Map(
-            q.Paginate(
-                q.Filter(
-                    q.Match(name),
-                    q.Lambda(
-                        values,
-                        q.ContainsStr(
-                            q.Casefold(q.Var('emailAddress')),
-                            q.Casefold(search)
-                        )
-                    )
-                ),
-                {
-                    size,
-                    before,
-                    after
-                }
-            ),
+            q.Paginate(set, {
+                size: Math.min(size, 50),
+                before,
+                after
+            }),
             q.Lambda(values, q.Get(q.Var('ref')))
         )
     );
