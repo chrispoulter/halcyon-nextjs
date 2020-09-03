@@ -12,6 +12,7 @@ provider:
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
         JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
         JWT_ISSUER: ${env:JWT_ISSUER, ''}
+        JWT_EXPIRESIN: ${env:JWT_EXPIRESIN, ''}
         MAILGUN_DOMAIN: ${env:MAILGUN_DOMAIN, ''}
         MAILGUN_APIKEY: ${env:MAILGUN_APIKEY, ''}
         MAILGUN_NOREPLY: ${env:MAILGUN_NOREPLY, ''}
