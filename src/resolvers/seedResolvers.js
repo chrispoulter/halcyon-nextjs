@@ -4,6 +4,7 @@ const {
     removeUser
 } = require('../data/userRepository');
 const { generateHash } = require('../utils/hash');
+const { AVAILABLE_ROLES } = require('../utils/auth');
 const config = require('../utils/config');
 
 module.exports = {
@@ -24,12 +25,11 @@ module.exports = {
                 lastName: 'Administrator',
                 dateOfBirth: new Date(1970, 0, 1).toISOString(),
                 isLockedOut: false,
-                roles: ['System Administrator']
+                roles: AVAILABLE_ROLES
             });
 
             return {
-                message: 'Environment seeded.',
-                code: 'ENVIRONMENT_SEEDED'
+                message: 'Environment seeded.'
             };
         }
     }

@@ -14,8 +14,7 @@ module.exports = {
             const existing = await getUserByEmailAddress(input.emailAddress);
             if (existing) {
                 throw new ApolloError(
-                    `User name "${input.emailAddress}" is already taken.`,
-                    'DUPLICATE_USER'
+                    `User name "${input.emailAddress}" is already taken.`
                 );
             }
 
@@ -31,7 +30,6 @@ module.exports = {
 
             return {
                 message: 'User successfully registered.',
-                code: 'USER_REGISTERED',
                 user: result
             };
         },
@@ -52,14 +50,13 @@ module.exports = {
 
             return {
                 message:
-                    'Instructions as to how to reset your password have been sent to you via email.',
-                code: 'FORGOT_PASSWORD'
+                    'Instructions as to how to reset your password have been sent to you via email.'
             };
         },
         resetPassword: async (_, { input }) => {
             const user = await getUserByEmailAddress(input.emailAddress);
             if (!user || user.passwordResetToken !== input.token) {
-                throw new ApolloError('Invalid token.', 'INVALID_TOKEN');
+                throw new ApolloError('Invalid token.');
             }
 
             user.password = await generateHash(input.newPassword);
@@ -68,7 +65,6 @@ module.exports = {
 
             return {
                 message: 'Your password has been reset.',
-                code: 'PASSWORD_RESET',
                 user
             };
         }

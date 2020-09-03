@@ -50,7 +50,6 @@ module.exports = gql`
 
     type UserMutationResponse {
         message: String
-        code: String
         user: User
     }
 

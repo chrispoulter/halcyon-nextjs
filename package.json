@@ -11,25 +11,25 @@
         "format": "prettier --write \"**/*.{js,jsx,json,css,md,yml,html}\""
     },
     "dependencies": {
-        "apollo-server": "2.15.1",
-        "apollo-server-lambda": "2.15.1",
+        "apollo-server": "2.17.0",
+        "apollo-server-lambda": "2.17.0",
         "bcryptjs": "2.4.3",
         "dotenv": "8.2.0",
-        "faunadb": "2.14.2",
-        "graphql": "15.2.0",
+        "faunadb": "3.0.1",
+        "graphql": "15.3.0",
         "graphql-iso-date": "3.6.1",
         "graphql-resolvers": "0.4.2",
         "jsonwebtoken": "8.5.1",
         "node-fetch": "2.6.0",
-        "uuid": "8.2.0"
+        "uuid": "8.3.0"
     },
     "devDependencies": {
-        "eslint": "7.4.0",
+        "eslint": "7.8.1",
         "eslint-config-prettier": "6.11.0",
         "nodemon": "2.0.4",
-        "prettier": "2.0.5",
-        "serverless": "1.74.1",
-        "serverless-dotenv-plugin": "2.4.2",
-        "serverless-offline": "6.4.0"
+        "prettier": "2.1.1",
+        "serverless": "1.81.1",
+        "serverless-dotenv-plugin": "3.0.0",
+        "serverless-offline": "6.7.0"
     }
 }

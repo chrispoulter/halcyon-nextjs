@@ -9,17 +9,17 @@ const {
 } = require('../data/userRepository');
 const { isAuthenticated } = require('../context');
 const { generateHash } = require('../utils/hash');
-const { USER_ADMINISTRATOR } = require('../utils/auth');
+const { IS_USER_ADMINISTRATOR } = require('../utils/auth');
 
 module.exports = {
     Query: {
         searchUsers: isAuthenticated(
             async (_, { input }) => searchUsers(input),
-            USER_ADMINISTRATOR
+            IS_USER_ADMINISTRATOR
         ),
         getUserById: isAuthenticated(
             async (_, { id }) => getUserById(id),
-            USER_ADMINISTRATOR
+            IS_USER_ADMINISTRATOR
         )
     },
     Mutation: {
@@ -28,8 +28,7 @@ module.exports = {
 
             if (existing) {
                 throw new ApolloError(
-                    `User name "${input.emailAddress}" is already taken.`,
-                    'DUPLICATE_USER'
+                    `User name "${input.emailAddress}" is already taken.`
                 );
             }
 
@@ -45,14 +44,13 @@ module.exports = {
 
             return {
                 message: 'User successfully created.',
-                code: 'USER_CREATED',
                 user: result
             };
-        }, USER_ADMINISTRATOR),
+        }, IS_USER_ADMINISTRATOR),
         updateUser: isAuthenticated(async (_, { id, input }) => {
             const user = await getUserById(id);
             if (!user) {
-                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
+                throw new ApolloError('User not found.');
             }
 
             if (user.emailAddress !== input.emailAddress) {
@@ -62,8 +60,7 @@ module.exports = {
 
                 if (existing) {
                     throw new ApolloError(
-                        `User name "${input.emailAddress}" is already taken.`,
-                        'DUPLICATE_USER'
+                        `User name "${input.emailAddress}" is already taken.`
                     );
                 }
             }
@@ -77,21 +74,17 @@ module.exports = {
 
             return {
                 message: 'User successfully updated.',
-                code: 'USER_UPDATED',
                 user
             };
-        }, USER_ADMINISTRATOR),
+        }, IS_USER_ADMINISTRATOR),
         lockUser: isAuthenticated(async (_, { id }, { payload }) => {
             const user = await getUserById(id);
             if (!user) {
-                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
+                throw new ApolloError('User not found.');
             }
 
             if (user.id === payload.sub) {
-                throw new ApolloError(
-                    'Cannot lock currently logged in user.',
-                    'LOCK_CURRENT_USER'
-                );
+                throw new ApolloError('Cannot lock currently logged in user.');
             }
 
             user.isLockedOut = true;
@@ -99,14 +92,13 @@ module.exports = {
 
             return {
                 message: 'User successfully locked.',
-                code: 'USER_LOCKED',
                 user
             };
-        }, USER_ADMINISTRATOR),
+        }, IS_USER_ADMINISTRATOR),
         unlockUser: isAuthenticated(async (_, { id }) => {
             const user = await getUserById(id);
             if (!user) {
-                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
+                throw new ApolloError('User not found.');
             }
 
             user.isLockedOut = false;
@@ -114,20 +106,18 @@ module.exports = {
 
             return {
                 message: 'User successfully unlocked.',
-                code: 'USER_UNLOCKED',
                 user
             };
-        }, USER_ADMINISTRATOR),
+        }, IS_USER_ADMINISTRATOR),
         deleteUser: isAuthenticated(async (_, { id }, { payload }) => {
             const user = await getUserById(id);
             if (!user) {
-                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
+                throw new ApolloError('User not found.');
             }
 
             if (user.id === payload.sub) {
                 throw new ApolloError(
-                    'Cannot delete currently logged in user.',
-                    'DELETE_CURRENT_USER'
+                    'Cannot delete currently logged in user.'
                 );
             }
 
@@ -135,9 +125,8 @@ module.exports = {
 
             return {
                 message: 'User successfully deleted.',
-                code: 'USER_DELETED',
                 user
             };
-        }, USER_ADMINISTRATOR)
+        }, IS_USER_ADMINISTRATOR)
     }
 };

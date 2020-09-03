@@ -5,7 +5,6 @@ module.exports = gql`
 
     type MutationResponse {
         message: String
-        code: String
     }
 
     type Query {
