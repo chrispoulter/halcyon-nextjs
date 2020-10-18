@@ -6,8 +6,7 @@ on:
             - master
 
 jobs:
-    build:
-        name: deploy
+    build-and-deploy:
         runs-on: ubuntu-latest
         env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -22,13 +21,14 @@ jobs:
             MAILGUN_NOREPLY: ${{ secrets.MAILGUN_NOREPLY }}
             SEED_EMAILADDRESS: ${{secrets.SEED_EMAILADDRESS }}
             SEED_PASSWORD: ${{ secrets.SEED_PASSWORD }}
+            EXTEND_ESLINT: true
 
         steps:
             - uses: actions/checkout@v2
 
             - uses: actions/setup-node@v1
               with:
-                  node-version: '12.x'
+                  node-version: 12.x
             - run: yarn
             - run: yarn lint
             - run: yarn deploy --stage ${{ secrets.AWS_STAGE }} --region ${{ secrets.AWS_REGION }}

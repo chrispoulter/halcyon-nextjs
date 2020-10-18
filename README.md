@@ -1,21 +1,21 @@
 # Halcyon GraphQL
 
-A Node.js GraphQL project template.
+A web application template.
 
 [https://halcyon-graphql.chrispoulter.com](https://halcyon-graphql.chrispoulter.com)
 
 **Technologies used:**
 
--   Node.js
-    [https://nodejs.org](https://nodejs.org)
--   Apollo Server
+-   React
+    [https://reactjs.org](https://reactjs.org)
+-   Apollo GraphQL
     [https://www.apollographql.com](https://www.apollographql.com)
 -   FaunaDB
     [https://fauna.com](https://fauna.com)
 
 #### Custom Settings
 
-Create `.env` file in root directory.
+Create a `.env` file in `the packages/api` directory.
 
 ```
 FAUNADB_SECRET=
@@ -31,4 +31,10 @@ MAILGUN_NOREPLY=noreply@chrispoulter.com
 
 SEED_EMAILADDRESS=
 SEED_PASSWORD=
+```
+
+Create a `.env` file in the `packages/client` directory.
+
+```
+REACT_APP_GRAPHQL_URL=
 ```

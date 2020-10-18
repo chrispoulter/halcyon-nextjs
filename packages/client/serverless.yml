@@ -1,0 +1,34 @@
+service: halcyon-graphql-client
+
+provider:
+    name: aws
+    runtime: nodejs12.x
+    stage: dev
+    region: eu-west-1
+    environment:
+        REACT_APP_GRAPHQL_URL: ${cf:halcyon-graphql-api-${opt:stage, self:provider.stage}.ServiceEndpoint, ''}
+
+plugins:
+    - serverless-build-client
+    - serverless-s3-sync
+
+custom:
+    s3Sync:
+        - bucketNameKey: ClientBucketOutputKey
+          localDir: build
+          deleteRemoved: true
+          acl: public-read
+
+resources:
+    Resources:
+        ClientBucket:
+            Type: AWS::S3::Bucket
+            Properties:
+                BucketName: halcyon-graphql.chrispoulter.com
+                AccessControl: PublicRead
+                WebsiteConfiguration:
+                    IndexDocument: index.html
+                    ErrorDocument: index.html
+    Outputs:
+        ClientBucketOutputKey:
+            Value: !Ref ClientBucket

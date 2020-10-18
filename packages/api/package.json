@@ -1,0 +1,25 @@
+{
+    "name": "@halcyon/halcyon-graphql-api",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "start": "serverless offline start",
+        "predeploy": "yarn fauna",
+        "deploy": "serverless deploy",
+        "reset": "serverless remove",
+        "fauna": "node scripts/fauna.js"
+    },
+    "dependencies": {
+        "apollo-server": "2.18.1",
+        "apollo-server-lambda": "2.18.1",
+        "bcryptjs": "2.4.3",
+        "dotenv": "8.2.0",
+        "faunadb": "3.0.1",
+        "graphql": "15.3.0",
+        "graphql-iso-date": "3.6.1",
+        "graphql-resolvers": "0.4.2",
+        "jsonwebtoken": "8.5.1",
+        "node-fetch": "2.6.1",
+        "uuid": "8.3.0"
+    }
+}
