@@ -2,8 +2,6 @@
 
 A web application template.
 
-[https://halcyon-graphql.chrispoulter.com](https://halcyon-graphql.chrispoulter.com)
-
 **Technologies used:**
 
 -   React
