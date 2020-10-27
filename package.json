@@ -15,12 +15,12 @@
         "lerna": "3.22.1",
         "node-sass": "4.14.1",
         "prettier": "2.1.2",
-        "react-scripts": "3.4.0",
-        "serverless": "2.4.0",
+        "react-scripts": "4.0.0",
+        "serverless": "2.8.0",
         "serverless-build-client": "2.5.0",
-        "serverless-dotenv-plugin": "3.0.0",
+        "serverless-dotenv-plugin": "3.1.0",
         "serverless-offline": "6.8.0",
-        "serverless-s3-sync": "1.14.4",
+        "serverless-s3-sync": "1.15.0",
         "workbox-cli": "5.1.4"
     }
 }
