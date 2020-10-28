@@ -24,7 +24,7 @@ resources:
         ClientBucket:
             Type: AWS::S3::Bucket
             Properties:
-                BucketName: halcyon-graphql-client-${opt:stage, self:provider.stage}
+                BucketName: halcyon-graphql.chrispoulter.com
                 AccessControl: PublicRead
                 WebsiteConfiguration:
                     IndexDocument: index.html
