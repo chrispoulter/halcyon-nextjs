@@ -16,16 +16,16 @@
         "apollo-boost": "0.4.9",
         "bootstrap": "4.5.3",
         "bootswatch": "4.5.3",
-        "formik": "2.2.1",
+        "formik": "2.2.6",
         "graphql": "15.4.0",
-        "jwt-decode": "3.0.0",
+        "jwt-decode": "3.1.2",
         "react": "17.0.1",
         "react-dom": "17.0.1",
         "react-router-dom": "5.2.0",
-        "react-toastify": "6.0.9",
-        "reactstrap": "8.6.0",
+        "react-toastify": "6.2.0",
+        "reactstrap": "8.7.1",
         "reactstrap-confirm": "1.2.0",
-        "yup": "0.29.3"
+        "yup": "0.32.8"
     },
     "browserslist": {
         "production": [

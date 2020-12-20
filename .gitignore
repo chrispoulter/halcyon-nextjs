@@ -1,5 +1,6 @@
 node_modules
 build
 .serverless
+.eslintcache
 .env
 *.lerna_backup

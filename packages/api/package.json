@@ -10,16 +10,16 @@
         "fauna": "node scripts/fauna.js"
     },
     "dependencies": {
-        "apollo-server": "2.18.2",
-        "apollo-server-lambda": "2.18.2",
+        "apollo-server": "2.19.0",
+        "apollo-server-lambda": "2.19.0",
         "bcryptjs": "2.4.3",
         "dotenv": "8.2.0",
-        "faunadb": "3.0.1",
+        "faunadb": "4.0.0",
         "graphql": "15.4.0",
         "graphql-iso-date": "3.6.1",
         "graphql-resolvers": "0.4.2",
         "jsonwebtoken": "8.5.1",
         "node-fetch": "2.6.1",
-        "uuid": "8.3.1"
+        "uuid": "8.3.2"
     }
 }

@@ -2,6 +2,7 @@
     "files.exclude": {
         "**/node_modules": true,
         "**/build": true,
-        "**/.serverless": true
+        "**/.serverless": true,
+        "**/.eslintcache": true
     }
 }
