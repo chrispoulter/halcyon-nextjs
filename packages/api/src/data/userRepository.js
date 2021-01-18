@@ -9,20 +9,20 @@ const collections = {
 };
 
 const indexes = {
-    USERS_BY_EMAIL_ADDRESS: { name: 'users_by_email_address' },
-    USERS_EMAIL_ADDRESS_DESC: {
+    BY_EMAIL_ADDRESS: { name: 'users_by_email_address' },
+    EMAIL_ADDRESS_DESC: {
         name: 'users_email_address_desc',
         values: ['emailAddress', 'firstName', 'lastName', 'ref']
     },
-    USERS_EMAIL_ADDRESS_ASC: {
+    EMAIL_ADDRESS_ASC: {
         name: 'users_email_address_asc',
         values: ['emailAddress', 'firstName', 'lastName', 'ref']
     },
-    USERS_NAME_DESC: {
+    NAME_DESC: {
         name: 'users_name_desc',
         values: ['firstName', 'lastName', 'emailAddress', 'ref']
     },
-    USERS_NAME_ASC: {
+    NAME_ASC: {
         name: 'users_name_asc',
         values: ['firstName', 'lastName', 'emailAddress', 'ref']
     }
@@ -53,7 +53,7 @@ module.exports.getUserByEmailAddress = async emailAddress => {
         const result = await client.query(
             q.Get(
                 q.Match(
-                    q.Index(indexes.USERS_BY_EMAIL_ADDRESS.name),
+                    q.Index(indexes.BY_EMAIL_ADDRESS.name),
                     emailAddress
                 )
             )
