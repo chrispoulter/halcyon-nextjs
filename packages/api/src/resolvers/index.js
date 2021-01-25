@@ -1,15 +1,15 @@
-const { GraphQLDateTime } = require('graphql-iso-date');
-const accountResolvers = require('./accountResolvers');
-const manageResolvers = require('./manageResolvers');
-const seedResolvers = require('./seedResolvers');
-const tokenResolvers = require('./tokenResolvers');
-const userResolvers = require('./userResolvers');
+import { GraphQLDateTime } from 'graphql-iso-date';
+import { accountResolvers } from './accountResolvers';
+import { manageResolvers } from './manageResolvers';
+import { seedResolvers } from './seedResolvers';
+import { tokenResolvers } from './tokenResolvers';
+import { userResolvers } from './userResolvers';
 
 const customScalarResolver = {
     DateTime: GraphQLDateTime
 };
 
-module.exports = [
+export const resolvers = [
     customScalarResolver,
     userResolvers,
     accountResolvers,

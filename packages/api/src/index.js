@@ -1,7 +1,7 @@
-const { ApolloServer } = require('apollo-server-lambda');
-const typeDefs = require('./schema');
-const resolvers = require('./resolvers');
-const context = require('./context');
+import { ApolloServer } from 'apollo-server-lambda';
+import { typeDefs } from './schema';
+import { resolvers } from './resolvers';
+import { context } from './context';
 
 const server = new ApolloServer({
     typeDefs,
@@ -11,11 +11,9 @@ const server = new ApolloServer({
     playground: true
 });
 
-const handler = server.createHandler({
+export const handler = server.createHandler({
     cors: {
         origin: '*',
         credentials: true
     }
 });
-
-module.exports.handler = handler;

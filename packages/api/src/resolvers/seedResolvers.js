@@ -1,13 +1,13 @@
-const {
+import {
     getUserByEmailAddress,
     createUser,
     updateUser
-} = require('../data/userRepository');
-const { generateHash } = require('../utils/hash');
-const { AVAILABLE_ROLES } = require('../utils/auth');
-const config = require('../utils/config');
+} from '../data/userRepository';
+import { generateHash } from '../utils/hash';
+import { AVAILABLE_ROLES } from '../utils/auth';
+import { config } from '../utils/config';
 
-module.exports = {
+export const seedResolvers = {
     Mutation: {
         seedData: async () => {
             const existing = await getUserByEmailAddress(

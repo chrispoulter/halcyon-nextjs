@@ -1,6 +1,6 @@
-const { Client, query: q } = require('faunadb');
-const { base64EncodeObj, base64DecodeObj } = require('../utils/encode');
-const config = require('../utils/config');
+import { Client, query as q } from 'faunadb';
+import { base64EncodeObj, base64DecodeObj } from '../utils/encode';
+import { config } from '../utils/config';
 
 const client = new Client({ secret: config.FAUNADB_SECRET });
 
@@ -32,7 +32,7 @@ const errors = {
     NOT_FOUND: 'NotFound'
 };
 
-module.exports.getUserById = async id => {
+export const getUserById = async id => {
     try {
         const result = await client.query(
             q.Get(q.Ref(q.Collection(collections.USERS), id))
@@ -48,15 +48,10 @@ module.exports.getUserById = async id => {
     }
 };
 
-module.exports.getUserByEmailAddress = async emailAddress => {
+export const getUserByEmailAddress = async emailAddress => {
     try {
         const result = await client.query(
-            q.Get(
-                q.Match(
-                    q.Index(indexes.BY_EMAIL_ADDRESS.name),
-                    emailAddress
-                )
-            )
+            q.Get(q.Match(q.Index(indexes.BY_EMAIL_ADDRESS.name), emailAddress))
         );
 
         return mapUser(result);
@@ -69,7 +64,7 @@ module.exports.getUserByEmailAddress = async emailAddress => {
     }
 };
 
-module.exports.createUser = async user => {
+export const createUser = async user => {
     const result = await client.query(
         q.Create(q.Collection(collections.USERS), { data: user })
     );
@@ -77,7 +72,7 @@ module.exports.createUser = async user => {
     return mapUser(result);
 };
 
-module.exports.updateUser = async user => {
+export const updateUser = async user => {
     const { id, ...data } = user;
 
     const result = await client.query(
@@ -87,7 +82,7 @@ module.exports.updateUser = async user => {
     return mapUser(result);
 };
 
-module.exports.removeUser = async user => {
+export const removeUser = async user => {
     const result = await client.query(
         q.Delete(q.Ref(q.Collection(collections.USERS), user.id))
     );
@@ -95,7 +90,7 @@ module.exports.removeUser = async user => {
     return mapUser(result);
 };
 
-module.exports.searchUsers = async ({ size, search, sort, cursor }) => {
+export const searchUsers = async ({ size, search, sort, cursor }) => {
     const { name, values } = indexes[sort] || indexes.USERS_NAME_ASC;
     const { before, after } = parseStringCursor(cursor);
 

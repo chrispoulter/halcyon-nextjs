@@ -1,14 +1,14 @@
-const { ApolloError } = require('apollo-server');
-const { v4: uuidv4 } = require('uuid');
-const {
+import { ApolloError } from 'apollo-server';
+import { v4 as uuidv4 } from 'uuid';
+import {
     getUserByEmailAddress,
     createUser,
     updateUser
-} = require('../data/userRepository');
-const { sendEmail } = require('../utils/email');
-const { generateHash } = require('../utils/hash');
+} from '../data/userRepository';
+import { sendEmail } from '../utils/email';
+import { generateHash } from '../utils/hash';
 
-module.exports = {
+export const accountResolvers = {
     Mutation: {
         register: async (_, { input }) => {
             const existing = await getUserByEmailAddress(input.emailAddress);

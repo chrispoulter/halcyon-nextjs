@@ -2,14 +2,11 @@ const SYSTEM_ADMINISTRATOR = 'System Administrator';
 
 const USER_ADMINISTRATOR = 'User Administrator';
 
-module.exports.AVAILABLE_ROLES = [SYSTEM_ADMINISTRATOR, USER_ADMINISTRATOR];
+export const AVAILABLE_ROLES = [SYSTEM_ADMINISTRATOR, USER_ADMINISTRATOR];
 
-module.exports.IS_USER_ADMINISTRATOR = [
-    SYSTEM_ADMINISTRATOR,
-    USER_ADMINISTRATOR
-];
+export const IS_USER_ADMINISTRATOR = [SYSTEM_ADMINISTRATOR, USER_ADMINISTRATOR];
 
-module.exports.isAuthorized = (user, requiredRoles) => {
+export const isAuthorized = (user, requiredRoles) => {
     if (!user) {
         return false;
     }

@@ -1,14 +1,14 @@
-const { ApolloError } = require('apollo-server');
-const {
+import { ApolloError } from 'apollo-server';
+import {
     getUserById,
     getUserByEmailAddress,
     updateUser,
     removeUser
-} = require('../data/userRepository');
-const { isAuthenticated } = require('../context');
-const { generateHash, verifyHash } = require('../utils/hash');
+} from '../data/userRepository';
+import { isAuthenticated } from '../context';
+import { generateHash, verifyHash } from '../utils/hash';
 
-module.exports = {
+export const manageResolvers = {
     Query: {
         getProfile: isAuthenticated(async (_, __, { payload }) =>
             getUserById(payload.sub)

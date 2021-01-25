@@ -1,9 +1,9 @@
-const fetch = require('node-fetch').default;
-const { URLSearchParams } = require('url');
+import nodeFetch from 'node-fetch';
+import { URLSearchParams } from 'url';
 
-module.exports.fetch = async config => {
+export const fetch = async config => {
     try {
-        const response = await fetch(config.url, {
+        const response = await nodeFetch(config.url, {
             ...config,
             body: new URLSearchParams(config.body)
         });

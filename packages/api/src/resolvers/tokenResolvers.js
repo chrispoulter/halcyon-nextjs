@@ -1,9 +1,9 @@
-const { ApolloError } = require('apollo-server');
-const { getUserByEmailAddress } = require('../data/userRepository');
-const { generateToken } = require('../utils/jwt');
-const { verifyHash } = require('../utils/hash');
+import { ApolloError } from 'apollo-server';
+import { getUserByEmailAddress } from '../data/userRepository';
+import { generateToken } from '../utils/jwt';
+import { verifyHash } from '../utils/hash';
 
-module.exports = {
+export const tokenResolvers = {
     Mutation: {
         generateToken: async (_, { input }) => {
             const user = await getUserByEmailAddress(input.emailAddress);

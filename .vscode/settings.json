@@ -3,6 +3,7 @@
         "**/node_modules": true,
         "**/build": true,
         "**/.serverless": true,
+        "**/.webpack": true,
         "**/.eslintcache": true
     }
 }

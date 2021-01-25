@@ -1,7 +1,7 @@
-const { sign, verify } = require('jsonwebtoken');
-const config = require('./config');
+import { sign, verify } from 'jsonwebtoken';
+import { config } from './config';
 
-module.exports.verifyToken = async token => {
+export const verifyToken = async token => {
     try {
         return verify(token, config.JWT_SECURITYKEY, {
             issuer: config.JWT_ISSUER,
@@ -13,7 +13,7 @@ module.exports.verifyToken = async token => {
     }
 };
 
-module.exports.generateToken = user => {
+export const generateToken = user => {
     const payload = {
         sub: user.id,
         email: user.emailAddress,

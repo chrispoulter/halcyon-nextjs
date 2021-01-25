@@ -1,6 +1,6 @@
 const { gql } = require('apollo-server');
 
-module.exports = gql`
+export const manageSchema = gql`
     input UpdateProfileInput {
         emailAddress: String!
         firstName: String!

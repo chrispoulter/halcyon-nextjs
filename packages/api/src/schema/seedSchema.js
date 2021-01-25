@@ -1,6 +1,6 @@
 const { gql } = require('apollo-server');
 
-module.exports = gql`
+export const seedSchema = gql`
     extend type Mutation {
         seedData: MutationResponse
     }

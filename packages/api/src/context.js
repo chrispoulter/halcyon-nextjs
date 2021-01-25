@@ -1,8 +1,8 @@
-const { AuthenticationError, ForbiddenError } = require('apollo-server');
-const { verifyToken } = require('./utils/jwt');
-const { isAuthorized } = require('./utils/auth');
+import { AuthenticationError, ForbiddenError } from 'apollo-server';
+import { verifyToken } from './utils/jwt';
+import { isAuthorized } from './utils/auth';
 
-module.exports = async ({ req, event }) => {
+export const context = async ({ req, event }) => {
     const request = req || event;
 
     const authHeader =
@@ -19,7 +19,7 @@ module.exports = async ({ req, event }) => {
     };
 };
 
-module.exports.isAuthenticated = (resolverFn, requiredRoles) => (
+export const isAuthenticated = (resolverFn, requiredRoles) => (
     parent,
     args,
     context,

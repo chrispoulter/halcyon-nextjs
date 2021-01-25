@@ -1,11 +1,11 @@
-const linkSchema = require('./linkSchema');
-const accountSchema = require('./accountSchema');
-const manageSchema = require('./manageSchema');
-const seedSchema = require('./seedSchema');
-const tokenSchema = require('./tokenSchema');
-const userSchema = require('./userSchema');
+import { linkSchema } from './linkSchema';
+import { accountSchema } from './accountSchema';
+import { manageSchema } from './manageSchema';
+import { seedSchema } from './seedSchema';
+import { tokenSchema } from './tokenSchema';
+import { userSchema } from './userSchema';
 
-module.exports = [
+export const typeDefs = [
     linkSchema,
     userSchema,
     accountSchema,

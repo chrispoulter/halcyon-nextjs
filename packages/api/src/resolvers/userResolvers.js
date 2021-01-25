@@ -1,17 +1,17 @@
-const { ApolloError } = require('apollo-server');
-const {
+import { ApolloError } from 'apollo-server';
+import {
     searchUsers,
     getUserById,
     getUserByEmailAddress,
     createUser,
     updateUser,
     removeUser
-} = require('../data/userRepository');
-const { isAuthenticated } = require('../context');
-const { generateHash } = require('../utils/hash');
-const { IS_USER_ADMINISTRATOR } = require('../utils/auth');
+} from '../data/userRepository';
+import { isAuthenticated } from '../context';
+import { generateHash } from '../utils/hash';
+import { IS_USER_ADMINISTRATOR } from '../utils/auth';
 
-module.exports = {
+export const userResolvers = {
     Query: {
         searchUsers: isAuthenticated(
             async (_, { input }) => searchUsers(input),

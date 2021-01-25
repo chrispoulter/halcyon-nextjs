@@ -1,6 +1,6 @@
 const { gql } = require('apollo-server');
 
-module.exports = gql`
+export const accountSchema = gql`
     input RegisterInput {
         emailAddress: String!
         password: String!
