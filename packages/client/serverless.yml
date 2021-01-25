@@ -16,8 +16,6 @@ custom:
     s3Sync:
         - bucketNameKey: ClientBucketOutputKey
           localDir: build
-          deleteRemoved: true
-          acl: public-read
 
 resources:
     Resources:
@@ -25,10 +23,7 @@ resources:
             Type: AWS::S3::Bucket
             Properties:
                 BucketName: halcyon-graphql-${opt:stage, self:provider.stage}
-                AccessControl: PublicRead
-                WebsiteConfiguration:
-                    IndexDocument: index.html
-                    ErrorDocument: index.html
+                
     Outputs:
         ClientBucketOutputKey:
             Value: !Ref ClientBucket
