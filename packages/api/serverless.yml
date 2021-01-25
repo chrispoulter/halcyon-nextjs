@@ -1,4 +1,4 @@
-service: halcyon-graphql-api
+service: halcyon-api
 
 provider:
     name: aws

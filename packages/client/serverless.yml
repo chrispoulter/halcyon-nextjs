@@ -1,4 +1,4 @@
-service: halcyon-graphql-client
+service: halcyon-client
 
 provider:
     name: aws
@@ -6,7 +6,7 @@ provider:
     stage: dev
     region: eu-west-1
     environment:
-        REACT_APP_GRAPHQL_URL: ${cf:halcyon-graphql-api-${opt:stage, self:provider.stage}.ServiceEndpoint, ''}
+        REACT_APP_GRAPHQL_URL: ${cf:halcyon-api-${opt:stage, self:provider.stage}.ServiceEndpoint, ''}
 
 plugins:
     - serverless-build-client
@@ -22,7 +22,7 @@ resources:
         ClientBucket:
             Type: AWS::S3::Bucket
             Properties:
-                BucketName: halcyon-graphql-${opt:stage, self:provider.stage}
+                BucketName: halcyon-client-${opt:stage, self:provider.stage}
                 
     Outputs:
         ClientBucketOutputKey:

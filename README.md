@@ -1,4 +1,4 @@
-# Halcyon GraphQL
+# Halcyon
 
 A web application template.
 
