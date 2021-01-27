@@ -40,7 +40,7 @@ export const CheckboxGroupInput = ({ field, form, label, options }) => {
             <Label>{label}</Label>
             <ul>
                 {options.map(option => (
-                    <li key={`${name}.${option}`}>
+                    <li key={`${name}.${option.value}`}>
                         <Input
                             id={`${name}.${option.value}`}
                             name={`${name}.${option.value}`}

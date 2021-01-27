@@ -50,7 +50,7 @@ export const UpdateProfilePage = ({ history }) => {
     const onSubmit = async variables => {
         try {
             const result = await updateProfile({ variables });
-            toast.success(t(`Codes:${result.data.updateProfile.code}`));
+            toast.success(t(`Api:Codes:${result.data.updateProfile.code}`));
             history.push('/my-account');
         } catch (error) {
             console.error(error);

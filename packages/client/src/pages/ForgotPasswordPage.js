@@ -27,7 +27,7 @@ export const ForgotPasswordPage = ({ history }) => {
     const onSubmit = async variables => {
         try {
             const result = await forgotPassword({ variables });
-            toast.success(t(`Codes:${result.data.forgotPassword.code}`));
+            toast.success(t(`Api:Codes:${result.data.forgotPassword.code}`));
             history.push('/login');
         } catch (error) {
             console.error(error);

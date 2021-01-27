@@ -111,7 +111,7 @@ export const UserPage = () => {
                                                     }
                                                 >
                                                     {t(
-                                                        `Pages:User:Form:SortOptions:${option}`
+                                                        `Api:UserSortExpressions:${option}`
                                                     )}
                                                 </DropdownItem>
                                             ))}
@@ -157,7 +157,7 @@ export const UserPage = () => {
                                         color="primary"
                                         className="mr-1"
                                     >
-                                        {t(`Pages:User:Roles:${role}`)}
+                                        {t(`Api:UserRoles:${role}`)}
                                     </Badge>
                                 ))}
                             </div>

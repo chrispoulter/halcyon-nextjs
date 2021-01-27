@@ -43,7 +43,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                 variables: { token: match.params.token, ...variables }
             });
 
-            toast.success(t(`Codes:${result.data.resetPassword.code}`));
+            toast.success(t(`Api:Codes:${result.data.resetPassword.code}`));
             history.push('/login');
         } catch (error) {
             console.error(error);

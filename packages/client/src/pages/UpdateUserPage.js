@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -75,7 +75,7 @@ export const UpdateUserPage = ({ history, match }) => {
                 variables: { id: match.params.id, ...variables }
             });
 
-            toast.success(t(`Codes:${result.data.updateUser.code}`));
+            toast.success(t(`Api:Codes:${result.data.updateUser.code}`));
             history.push('/user');
         } catch (error) {
             console.error(error);
@@ -85,7 +85,12 @@ export const UpdateUserPage = ({ history, match }) => {
     const onLockUser = async () => {
         const confirmed = await confirm({
             title: t('Pages:UpdateUser:LockModal:Title'),
-            message: t('Pages:UpdateUser:LockModal:Message', data.getUserById),
+            message: (
+                <Trans
+                    i18nKey="Pages:UpdateUser:LockModal:Message"
+                    values={data.getUserById}
+                />
+            ),
             confirmText: t('Pages:UpdateUser:LockModal:Confirm'),
             cancelText: t('Pages:UpdateUser:LockModal:Cancel'),
             cancelColor: 'secondary'
@@ -99,7 +104,7 @@ export const UpdateUserPage = ({ history, match }) => {
             const result = await lockUser({
                 variables: { id: match.params.id }
             });
-            toast.success(t(`Codes:${result.data.lockUser.code}`));
+            toast.success(t(`Api:Codes:${result.data.lockUser.code}`));
         } catch (error) {
             console.error(error);
         }
@@ -108,9 +113,11 @@ export const UpdateUserPage = ({ history, match }) => {
     const onUnlockUser = async () => {
         const confirmed = await confirm({
             title: t('Pages:UpdateUser:UnlockModal:Title'),
-            message: t(
-                'Pages:UpdateUser:UnlockModal:Message',
-                data.getUserById
+            message: (
+                <Trans
+                    i18nKey="Pages:UpdateUser:UnlockModal:Message"
+                    values={data.getUserById}
+                />
             ),
             confirmText: t('Pages:UpdateUser:UnlockModal:Confirm'),
             cancelText: t('Pages:UpdateUser:UnlockModal:Cancel'),
@@ -125,7 +132,7 @@ export const UpdateUserPage = ({ history, match }) => {
             const result = await unlockUser({
                 variables: { id: match.params.id }
             });
-            toast.success(t(`Codes:${result.data.unlockUser.code}`));
+            toast.success(t(`Api:Codes:${result.data.unlockUser.code}`));
         } catch (error) {
             console.error(error);
         }
@@ -134,9 +141,11 @@ export const UpdateUserPage = ({ history, match }) => {
     const onDeleteUser = async () => {
         const confirmed = await confirm({
             title: t('Pages:UpdateUser:DeleteModal:Title'),
-            message: t(
-                'Pages:UpdateUser:DeleteModal:Message',
-                data.getUserById
+            message: (
+                <Trans
+                    i18nKey="Pages:UpdateUser:DeleteModal:Message"
+                    values={data.getUserById}
+                />
             ),
             confirmText: t('Pages:UpdateUser:DeleteModal:Confirm'),
             cancelText: t('Pages:UpdateUser:DeleteModal:Cancel'),
@@ -151,7 +160,7 @@ export const UpdateUserPage = ({ history, match }) => {
             const result = await deleteUser({
                 variables: { id: match.params.id }
             });
-            toast.success(t(`Codes:${result.data.deleteUser.code}`));
+            toast.success(t(`Api:Codes:${result.data.deleteUser.code}`));
             history.push('/user');
         } catch (error) {
             console.error(error);
@@ -218,7 +227,7 @@ export const UpdateUserPage = ({ history, match }) => {
                             label={t('Pages:UpdateUser:Form:Roles')}
                             options={AVAILABLE_ROLES.map(role => ({
                                 value: role,
-                                label: t(`Roles:${role}`)
+                                label: t(`Api:UserRoles:${role}`)
                             }))}
                             component={CheckboxGroupInput}
                         />

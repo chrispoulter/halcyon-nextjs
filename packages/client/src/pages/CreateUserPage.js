@@ -63,7 +63,7 @@ export const CreateUserPage = ({ history }) => {
     const onSubmit = async variables => {
         try {
             const result = await createUser({ variables });
-            toast.success(t(`Codes:${result.data.createUser.code}`));
+            toast.success(t(`Api:Codes:${result.data.createUser.code}`));
             history.push('/user');
         } catch (error) {
             console.error(error);
@@ -149,7 +149,7 @@ export const CreateUserPage = ({ history }) => {
                             label={t('Pages:CreateUser:Form:Roles')}
                             options={AVAILABLE_ROLES.map(role => ({
                                 value: role,
-                                label: t(`Roles:${role}`)
+                                label: t(`Api:UserRoles:${role}`)
                             }))}
                             component={CheckboxGroupInput}
                         />

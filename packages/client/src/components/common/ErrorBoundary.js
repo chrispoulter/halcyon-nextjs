@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Jumbotron, Button } from 'reactstrap';
+
 export class ErrorBoundary extends React.Component {
     state = { hasError: false };
 

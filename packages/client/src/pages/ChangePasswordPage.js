@@ -40,7 +40,7 @@ export const ChangePasswordPage = ({ history }) => {
     const onSubmit = async variables => {
         try {
             const result = await changePassword({ variables });
-            toast.success(t(`Codes:${result.data.changePassword.code}`));
+            toast.success(t(`Api:Codes:${result.data.changePassword.code}`));
             history.push('/my-account');
         } catch (error) {
             console.error(error);

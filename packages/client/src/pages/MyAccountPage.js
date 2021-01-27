@@ -46,7 +46,7 @@ export const MyAccountPage = ({ history }) => {
 
         try {
             const result = await deleteAccount();
-            toast.success(t(`Codes:${result.data.deleteAccount.code}`));
+            toast.success(t(`Api:Codes:${result.data.deleteAccount.code}`));
             removeToken();
             history.push('/');
         } catch (error) {
