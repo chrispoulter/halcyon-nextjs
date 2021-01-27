@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 export const PublicRoute = ({ component: PublicComponent, title, ...rest }) => {
     const { t } = useTranslation();
 
-    const translatedSiteName = t('ui:SiteName');
-    const translatedSeperator = t('ui:Seperator');
+    const baseTitle = t('Components:PublicRoute:BaseTitle');
+    const seperator = t('Components:PublicRoute:Seperator');
 
     document.title = title
-        ? `${title} ${t(translatedSeperator)} ${t(translatedSiteName)}`
-        : t(translatedSiteName);
+        ? `${title} ${seperator} ${baseTitle}`
+        : t(baseTitle);
 
     return <Route component={PublicComponent} {...rest} />;
 };

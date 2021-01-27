@@ -19,14 +19,14 @@ export const Pager = ({
             {hasPreviousPage && (
                 <PaginationItem>
                     <PaginationLink onClick={onPreviousPage}>
-                        {t('ui:Components:Pager:Previous')}
+                        {t('Components:Pager:Previous')}
                     </PaginationLink>
                 </PaginationItem>
             )}
             {hasNextPage && (
                 <PaginationItem>
                     <PaginationLink onClick={onNextPage}>
-                        {t('ui:Components:Pager:Next')}
+                        {t('Components:Pager:Next')}
                     </PaginationLink>
                 </PaginationItem>
             )}

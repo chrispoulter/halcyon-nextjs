@@ -23,34 +23,34 @@ export const UpdateProfilePage = ({ history }) => {
     if (!data?.getProfile) {
         return (
             <Alert color="info" className="container p-3 mb-3">
-                {t('ui:Pages:UpdateProfile:ProfileNotFound')}
+                {t('Pages:UpdateProfile:ProfileNotFound')}
             </Alert>
         );
     }
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('ui:Pages:UpdateProfile:Form:EmailAddress'))
-            .max(254, t('ui:Validation:Max'))
-            .email(t('ui:Validation:Email'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:UpdateProfile:Form:EmailAddress'))
+            .max(254, t('Validation:Max'))
+            .email(t('Validation:Email'))
+            .required(t('Validation:Required')),
         firstName: Yup.string()
-            .label(t('ui:Pages:UpdateProfile:Form:FirstName'))
-            .max(50, t('ui:Validation:Max'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:UpdateProfile:Form:FirstName'))
+            .max(50, t('Validation:Max'))
+            .required(t('Validation:Required')),
         lastName: Yup.string()
-            .label(t('ui:Pages:UpdateProfile:Form:LastName'))
-            .max(50, t('ui:Validation:Max'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:UpdateProfile:Form:LastName'))
+            .max(50, t('Validation:Max'))
+            .required(t('Validation:Required')),
         dateOfBirth: Yup.string()
-            .label(t('ui:Pages:UpdateProfile:Form:DateOfBirth'))
-            .required(t('ui:Validation:Required'))
+            .label(t('Pages:UpdateProfile:Form:DateOfBirth'))
+            .required(t('Validation:Required'))
     });
 
     const onSubmit = async variables => {
         try {
             const result = await updateProfile({ variables });
-            toast.success(t(`api:Codes:${result.data.updateProfile.code}`));
+            toast.success(t(`Codes:${result.data.updateProfile.code}`));
             history.push('/my-account');
         } catch (error) {
             console.error(error);
@@ -59,7 +59,7 @@ export const UpdateProfilePage = ({ history }) => {
 
     return (
         <Container>
-            <h1>{t('ui:Pages:UpdateProfile:Title')}</h1>
+            <h1>{t('Pages:UpdateProfile:Title')}</h1>
             <hr />
 
             <Formik
@@ -73,9 +73,7 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t(
-                                'ui:Pages:UpdateProfile:Form:EmailAddress'
-                            )}
+                            label={t('Pages:UpdateProfile:Form:EmailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -85,7 +83,7 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="firstName"
                             type="text"
-                            label={t('ui:Pages:UpdateProfile:Form:FirstName')}
+                            label={t('Pages:UpdateProfile:Form:FirstName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -94,7 +92,7 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="lastName"
                             type="text"
-                            label={t('ui:Pages:UpdateProfile:Form:LastName')}
+                            label={t('Pages:UpdateProfile:Form:LastName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -103,7 +101,7 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="dateOfBirth"
                             type="date"
-                            label={t('ui:Pages:UpdateProfile:Form:DateOfBirth')}
+                            label={t('Pages:UpdateProfile:Form:DateOfBirth')}
                             required
                             component={DateInput}
                         />
@@ -114,14 +112,14 @@ export const UpdateProfilePage = ({ history }) => {
                                 className="mr-1"
                                 tag={Link}
                             >
-                                {t('ui:Pages:UpdateProfile:CancelButton')}
+                                {t('Pages:UpdateProfile:CancelButton')}
                             </Button>
                             <Button
                                 type="submit"
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('ui:Pages:UpdateProfile:SubmitButton')}
+                                {t('Pages:UpdateProfile:SubmitButton')}
                             </Button>
                         </FormGroup>
                     </Form>

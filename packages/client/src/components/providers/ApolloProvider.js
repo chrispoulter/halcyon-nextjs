@@ -20,14 +20,16 @@ export const ApolloProvider = ({ children }) => {
                     authorization: accessToken ? `Bearer ${accessToken}` : ''
                 }
             }),
-        onError: ({ graphQLErrors, networkError }) => {
+        onError: ({ graphQLErrors, networkError, operation }) => {
             if (graphQLErrors) {
                 for (const graphQLError of graphQLErrors || []) {
                     const { code } = graphQLError.extensions;
-
                     switch (code) {
                         case 'BAD_USER_INPUT':
-                            toast.error(t(`api:Codes:${code}`));
+                            toast.error(
+                                t(`Codes:${code}`),
+                                operation.variables
+                            );
                             break;
 
                         case 'UNAUTHENTICATED':
@@ -35,20 +37,23 @@ export const ApolloProvider = ({ children }) => {
                             break;
 
                         case 'FORBIDDEN':
-                            toast.warn(t(`api:Codes:${code}`));
+                            toast.warn(t(`Codes:${code}`, operation.variables));
                             break;
 
                         default:
                             toast.error(
-                                toast.error(t(`api:Codes:${code}`)) ||
-                                    t('api:Codes:UNKNOWN_ERROR')
+                                t(`Codes:${code}`, operation.variables) ||
+                                    t(
+                                        'Codes:UNKNOWN_ERROR',
+                                        operation.variables
+                                    )
                             );
 
                             break;
                     }
                 }
             } else if (networkError) {
-                toast.error(t('api:Codes:UNKNOWN_ERROR'));
+                toast.error(t('Codes:UNKNOWN_ERROR', operation.variables));
             }
         }
     });

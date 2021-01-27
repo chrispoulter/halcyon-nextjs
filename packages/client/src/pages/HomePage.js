@@ -11,10 +11,10 @@ export const HomePage = () => {
             <Jumbotron>
                 <Container>
                     <h1 className="display-3">
-                        {t('ui:Pages:Home:Jumbotron:Title')}
+                        {t('Pages:Home:Jumbotron:Title')}
                     </h1>
                     <hr />
-                    <p className="lead">{t('ui:Pages:Home:Jumbotron:Lead')}</p>
+                    <p className="lead">{t('Pages:Home:Jumbotron:Lead')}</p>
                     <p className="text-right">
                         <Button
                             to="/register"
@@ -22,7 +22,7 @@ export const HomePage = () => {
                             size="lg"
                             tag={Link}
                         >
-                            {t('ui:Pages:Home:Jumbotron:RegisterButton')}
+                            {t('Pages:Home:Jumbotron:RegisterButton')}
                         </Button>
                     </p>
                 </Container>
@@ -31,19 +31,19 @@ export const HomePage = () => {
             <Container>
                 <Row className="justify-content-md-center">
                     <Col lg={4}>
-                        <h2>{t('ui:Pages:Home:Panel:Title')}</h2>
+                        <h2>{t('Pages:Home:Panel:Title')}</h2>
                         <hr />
-                        <p>{t('ui:Pages:Home:Panel:Text')}</p>
+                        <p>{t('Pages:Home:Panel:Text')}</p>
                     </Col>
                     <Col lg={4}>
-                        <h2>{t('ui:Pages:Home:Panel:Title')}</h2>
+                        <h2>{t('Pages:Home:Panel:Title')}</h2>
                         <hr />
-                        <p>{t('ui:Pages:Home:Panel:Text')}</p>
+                        <p>{t('Pages:Home:Panel:Text')}</p>
                     </Col>
                     <Col lg={4}>
-                        <h2>{t('ui:Pages:Home:Panel:Title')}</h2>
+                        <h2>{t('Pages:Home:Panel:Title')}</h2>
                         <hr />
-                        <p>{t('ui:Pages:Home:Panel:Text')}</p>
+                        <p>{t('Pages:Home:Panel:Text')}</p>
                     </Col>
                 </Row>
             </Container>

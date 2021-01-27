@@ -21,19 +21,19 @@ export const ResetPasswordPage = ({ match, history }) => {
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('ui:Pages:ResetPassword:Form:EmailAddress'))
-            .email(t('ui:Validation:Email'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:ResetPassword:Form:EmailAddress'))
+            .email(t('Validation:Email'))
+            .required(t('Validation:Required')),
         newPassword: Yup.string()
-            .label(t('ui:Pages:ResetPassword:Form:NewPassword'))
-            .min(8, t('ui:Validation:Min'))
-            .max(50, t('ui:Validation:Max'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:ResetPassword:Form:NewPassword'))
+            .min(8, t('Validation:Min'))
+            .max(50, t('Validation:Max'))
+            .required(t('Validation:Required')),
         confirmNewPassword: Yup.string()
-            .label(t('ui:Pages:ResetPassword:Form:ConfirmNewPassword'))
-            .required(t('ui:Validation:Required'))
+            .label(t('Pages:ResetPassword:Form:ConfirmNewPassword'))
+            .required(t('Validation:Required'))
             .oneOf([Yup.ref('newPassword')], d =>
-                t('ui:Validation:FieldsDoNotMatch', d)
+                t('Validation:FieldsDoNotMatch', d)
             )
     });
 
@@ -43,7 +43,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                 variables: { token: match.params.token, ...variables }
             });
 
-            toast.success(t(`api:Codes:${result.data.resetPassword.code}`));
+            toast.success(t(`Codes:${result.data.resetPassword.code}`));
             history.push('/login');
         } catch (error) {
             console.error(error);
@@ -52,7 +52,7 @@ export const ResetPasswordPage = ({ match, history }) => {
 
     return (
         <Container>
-            <h1>{t('ui:Pages:ResetPassword:Title')}</h1>
+            <h1>{t('Pages:ResetPassword:Title')}</h1>
             <hr />
 
             <Formik
@@ -65,9 +65,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t(
-                                'ui:Pages:ResetPassword:Form:EmailAddress'
-                            )}
+                            label={t('Pages:ResetPassword:Form:EmailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -76,7 +74,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                         <Field
                             name="newPassword"
                             type="password"
-                            label={t('ui:Pages:ResetPassword:Form:NewPassword')}
+                            label={t('Pages:ResetPassword:Form:NewPassword')}
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -86,7 +84,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                             name="confirmNewPassword"
                             type="password"
                             label={t(
-                                'ui:Pages:ResetPassword:Form:ConfirmNewPassword'
+                                'Pages:ResetPassword:Form:ConfirmNewPassword'
                             )}
                             required
                             maxLength={50}
@@ -100,7 +98,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('ui:Pages:ResetPassword:SubmitButton')}
+                                {t('Pages:ResetPassword:SubmitButton')}
                             </Button>
                         </FormGroup>
                     </Form>

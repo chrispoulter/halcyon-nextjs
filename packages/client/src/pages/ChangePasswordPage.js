@@ -22,25 +22,25 @@ export const ChangePasswordPage = ({ history }) => {
 
     const validationSchema = Yup.object().shape({
         currentPassword: Yup.string()
-            .label(t('ui:Pages:ChangePassword:Form:CurrentPassword'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:ChangePassword:Form:CurrentPassword'))
+            .required(t('Validation:Required')),
         newPassword: Yup.string()
-            .label(t('ui:Pages:ChangePassword:Form:NewPassword'))
-            .min(8, t('ui:Validation:Min'))
-            .max(50, t('ui:Validation:Max'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:ChangePassword:Form:NewPassword'))
+            .min(8, t('Validation:Min'))
+            .max(50, t('Validation:Max'))
+            .required(t('Validation:Required')),
         confirmNewPassword: Yup.string()
-            .label(t('ui:Pages:ChangePassword:Form:ConfirmNewPassword'))
-            .required(t('ui:Validation:Required'))
+            .label(t('Pages:ChangePassword:Form:ConfirmNewPassword'))
+            .required(t('Validation:Required'))
             .oneOf([Yup.ref('newPassword')], d =>
-                t('ui:Validation:FieldsDoNotMatch', d)
+                t('Validation:FieldsDoNotMatch', d)
             )
     });
 
     const onSubmit = async variables => {
         try {
             const result = await changePassword({ variables });
-            toast.success(t(`api:Codes:${result.data.changePassword.code}`));
+            toast.success(t(`Codes:${result.data.changePassword.code}`));
             history.push('/my-account');
         } catch (error) {
             console.error(error);
@@ -49,7 +49,7 @@ export const ChangePasswordPage = ({ history }) => {
 
     return (
         <Container>
-            <h1>{t('ui:Pages:ChangePassword:Title')}</h1>
+            <h1>{t('Pages:ChangePassword:Title')}</h1>
             <hr />
 
             <Formik
@@ -63,7 +63,7 @@ export const ChangePasswordPage = ({ history }) => {
                             name="currentPassword"
                             type="password"
                             label={t(
-                                'ui:Pages:ChangePassword:Form:CurrentPassword'
+                                'Pages:ChangePassword:Form:CurrentPassword'
                             )}
                             required
                             maxLength={50}
@@ -73,9 +73,7 @@ export const ChangePasswordPage = ({ history }) => {
                         <Field
                             name="newPassword"
                             type="password"
-                            label={t(
-                                'ui:Pages:ChangePassword:Form:NewPassword'
-                            )}
+                            label={t('Pages:ChangePassword:Form:NewPassword')}
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -85,7 +83,7 @@ export const ChangePasswordPage = ({ history }) => {
                             name="confirmNewPassword"
                             type="password"
                             label={t(
-                                'ui:Pages:ChangePassword:Form:ConfirmNewPassword'
+                                'Pages:ChangePassword:Form:ConfirmNewPassword'
                             )}
                             required
                             maxLength={50}
@@ -99,14 +97,14 @@ export const ChangePasswordPage = ({ history }) => {
                                 className="mr-1"
                                 tag={Link}
                             >
-                                {t('ui:Pages:ChangePassword:CancelButton')}
+                                {t('Pages:ChangePassword:CancelButton')}
                             </Button>
                             <Button
                                 type="submit"
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('ui:Pages:ChangePassword:SubmitButton')}
+                                {t('Pages:ChangePassword:SubmitButton')}
                             </Button>
                         </FormGroup>
                     </Form>
@@ -114,9 +112,9 @@ export const ChangePasswordPage = ({ history }) => {
             </Formik>
 
             <p>
-                {t('ui:Pages:ChangePassword:ForgotPasswordPrompt')}{' '}
+                {t('Pages:ChangePassword:ForgotPasswordPrompt')}{' '}
                 <Link to="/forgot-password">
-                    {t('ui:Pages:ChangePassword:ForgotPasswordLink')}
+                    {t('Pages:ChangePassword:ForgotPasswordLink')}
                 </Link>
             </p>
         </Container>

@@ -61,14 +61,14 @@ export const UserPage = () => {
     return (
         <Container>
             <div className="d-flex justify-content-between mb-3">
-                <h1>{t('ui:Pages:User:Title')}</h1>
+                <h1>{t('Pages:User:Title')}</h1>
                 <Button
                     to="/user/create"
                     color="primary"
                     className="align-self-start"
                     tag={Link}
                 >
-                    {t('ui:Pages:User:CreateNewButton')}
+                    {t('Pages:User:CreateNewButton')}
                 </Button>
             </div>
             <hr />
@@ -85,7 +85,7 @@ export const UserPage = () => {
                                     name="search"
                                     type="text"
                                     placeholder={t(
-                                        'ui:Pages:User:Form:SearchPlaceholder'
+                                        'Pages:User:Form:SearchPlaceholder'
                                     )}
                                     value={values.search}
                                     onChange={handleChange}
@@ -93,13 +93,11 @@ export const UserPage = () => {
                                 />
                                 <InputGroupAddon addonType="append">
                                     <Button type="submit" color="secondary">
-                                        {t('ui:Pages:User:Form:SearchButton')}
+                                        {t('Pages:User:Form:SearchButton')}
                                     </Button>
                                     <UncontrolledDropdown>
                                         <DropdownToggle caret color="secondary">
-                                            {t(
-                                                'ui:Pages:User:Form:SortByButton'
-                                            )}{' '}
+                                            {t('Pages:User:Form:SortByButton')}{' '}
                                         </DropdownToggle>
                                         <DropdownMenu right>
                                             {sortOptions.map(option => (
@@ -113,7 +111,7 @@ export const UserPage = () => {
                                                     }
                                                 >
                                                     {t(
-                                                        `ui:Pages:User:Form:SortOptions:${option}`
+                                                        `Pages:User:Form:SortOptions:${option}`
                                                     )}
                                                 </DropdownItem>
                                             ))}
@@ -128,7 +126,7 @@ export const UserPage = () => {
 
             {!data?.searchUsers.items.length ? (
                 <Alert color="info" className="container p-3 mb-3">
-                    {t('ui:Pages:User:UsersNotFound')}
+                    {t('Pages:User:UsersNotFound')}
                 </Alert>
             ) : (
                 <>
@@ -150,7 +148,7 @@ export const UserPage = () => {
                             <div>
                                 {user.isLockedOut && (
                                     <Badge color="danger" className="mr-1">
-                                        {t('ui:Pages:User:LockedBadge')}
+                                        {t('Pages:User:LockedBadge')}
                                     </Badge>
                                 )}
                                 {user.roles.map(role => (
@@ -159,7 +157,7 @@ export const UserPage = () => {
                                         color="primary"
                                         className="mr-1"
                                     >
-                                        {t(`ui:Pages:User:Roles:${role}`)}
+                                        {t(`Pages:User:Roles:${role}`)}
                                     </Badge>
                                 ))}
                             </div>

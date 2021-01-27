@@ -32,38 +32,38 @@ export const CreateUserPage = ({ history }) => {
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('ui:Pages:CreateUser:Form:EmailAddress'))
-            .max(254, t('ui:Validation:Max'))
-            .email(t('ui:Validation:Email'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:CreateUser:Form:EmailAddress'))
+            .max(254, t('Validation:Max'))
+            .email(t('Validation:Email'))
+            .required(t('Validation:Required')),
         password: Yup.string()
-            .label(t('ui:Pages:CreateUser:Form:Password'))
-            .min(8, t('ui:Validation:Min'))
-            .max(50, t('ui:Validation:Max'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:CreateUser:Form:Password'))
+            .min(8, t('Validation:Min'))
+            .max(50, t('Validation:Max'))
+            .required(t('Validation:Required')),
         confirmPassword: Yup.string()
-            .label(t('ui:Pages:CreateUser:Form:ConfirmPassword'))
-            .required(t('ui:Validation:Required'))
+            .label(t('Pages:CreateUser:Form:ConfirmPassword'))
+            .required(t('Validation:Required'))
             .oneOf([Yup.ref('password')], d =>
-                t('ui:Validation:FieldsDoNotMatch', d)
+                t('Validation:FieldsDoNotMatch', d)
             ),
         firstName: Yup.string()
-            .label(t('ui:Pages:CreateUser:Form:FirstName'))
-            .max(50, t('ui:Validation:Max'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:CreateUser:Form:FirstName'))
+            .max(50, t('Validation:Max'))
+            .required(t('Validation:Required')),
         lastName: Yup.string()
-            .label(t('ui:Pages:CreateUser:Form:LastName'))
-            .max(50, t('ui:Validation:Max'))
-            .required(t('ui:Validation:Required')),
+            .label(t('Pages:CreateUser:Form:LastName'))
+            .max(50, t('Validation:Max'))
+            .required(t('Validation:Required')),
         dateOfBirth: Yup.string()
-            .label(t('ui:Pages:CreateUser:Form:DateOfBirth'))
-            .required(t('ui:Validation:Required'))
+            .label(t('Pages:CreateUser:Form:DateOfBirth'))
+            .required(t('Validation:Required'))
     });
 
     const onSubmit = async variables => {
         try {
             const result = await createUser({ variables });
-            toast.success(t(`api:Codes:${result.data.createUser.code}`));
+            toast.success(t(`Codes:${result.data.createUser.code}`));
             history.push('/user');
         } catch (error) {
             console.error(error);
@@ -73,10 +73,10 @@ export const CreateUserPage = ({ history }) => {
     return (
         <Container>
             <h1>
-                {t('ui:Pages:CreateUser:Title')}
+                {t('Pages:CreateUser:Title')}
                 <br />
                 <small className="text-muted">
-                    {t('ui:Pages:CreateUser:Subtitle')}
+                    {t('Pages:CreateUser:Subtitle')}
                 </small>
             </h1>
             <hr />
@@ -91,7 +91,7 @@ export const CreateUserPage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t('ui:Pages:CreateUser:Form:EmailAddress')}
+                            label={t('Pages:CreateUser:Form:EmailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -101,7 +101,7 @@ export const CreateUserPage = ({ history }) => {
                         <Field
                             name="password"
                             type="password"
-                            label={t('ui:Pages:CreateUser:Form:Password')}
+                            label={t('Pages:CreateUser:Form:Password')}
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -111,9 +111,7 @@ export const CreateUserPage = ({ history }) => {
                         <Field
                             name="confirmPassword"
                             type="password"
-                            label={t(
-                                'ui:Pages:CreateUser:Form:ConfirmPassword'
-                            )}
+                            label={t('Pages:CreateUser:Form:ConfirmPassword')}
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -123,7 +121,7 @@ export const CreateUserPage = ({ history }) => {
                         <Field
                             name="firstName"
                             type="text"
-                            label={t('ui:Pages:CreateUser:Form:FirstName')}
+                            label={t('Pages:CreateUser:Form:FirstName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -132,7 +130,7 @@ export const CreateUserPage = ({ history }) => {
                         <Field
                             name="lastName"
                             type="text"
-                            label={t('ui:Pages:CreateUser:Form:LastName')}
+                            label={t('Pages:CreateUser:Form:LastName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -141,31 +139,31 @@ export const CreateUserPage = ({ history }) => {
                         <Field
                             name="dateOfBirth"
                             type="date"
-                            label={t('ui:Pages:CreateUser:Form:DateOfBirth')}
+                            label={t('Pages:CreateUser:Form:DateOfBirth')}
                             required
                             component={DateInput}
                         />
 
                         <Field
                             name="roles"
-                            label={t('ui:Pages:CreateUser:Form:Roles')}
+                            label={t('Pages:CreateUser:Form:Roles')}
                             options={AVAILABLE_ROLES.map(role => ({
                                 value: role,
-                                label: t(`api:Roles:${role}`)
+                                label: t(`Roles:${role}`)
                             }))}
                             component={CheckboxGroupInput}
                         />
 
                         <FormGroup className="text-right">
                             <Button to="/user" className="mr-1" tag={Link}>
-                                {t('ui:Pages:CreateUser:CancelButton')}
+                                {t('Pages:CreateUser:CancelButton')}
                             </Button>
                             <Button
                                 type="submit"
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('ui:Pages:CreateUser:SubmitButton')}
+                                {t('Pages:CreateUser:SubmitButton')}
                             </Button>
                         </FormGroup>
                     </Form>

@@ -19,15 +19,15 @@ export const ForgotPasswordPage = ({ history }) => {
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('ui:Pages:ForgotPassword:Form:EmailAddress'))
-            .email(t('ui:Validation:Email'))
-            .required(t('ui:Validation:Required'))
+            .label(t('Pages:ForgotPassword:Form:EmailAddress'))
+            .email(t('Validation:Email'))
+            .required(t('Validation:Required'))
     });
 
     const onSubmit = async variables => {
         try {
             const result = await forgotPassword({ variables });
-            toast.success(t(`api:Codes:${result.data.forgotPassword.code}`));
+            toast.success(t(`Codes:${result.data.forgotPassword.code}`));
             history.push('/login');
         } catch (error) {
             console.error(error);
@@ -36,7 +36,7 @@ export const ForgotPasswordPage = ({ history }) => {
 
     return (
         <Container>
-            <h1>{t('ui:Pages:ForgotPassword:Title')}</h1>
+            <h1>{t('Pages:ForgotPassword:Title')}</h1>
             <hr />
 
             <Formik
@@ -49,9 +49,7 @@ export const ForgotPasswordPage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t(
-                                'ui:Pages:ForgotPassword:Form:EmailAddress'
-                            )}
+                            label={t('Pages:ForgotPassword:Form:EmailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -64,7 +62,7 @@ export const ForgotPasswordPage = ({ history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('ui:Pages:ForgotPassword:SubmitButton')}
+                                {t('Pages:ForgotPassword:SubmitButton')}
                             </Button>
                         </FormGroup>
                     </Form>
