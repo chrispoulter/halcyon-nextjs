@@ -75,7 +75,7 @@ export const DateInput = ({ field, form, label }) => {
                     className="mr-1"
                 >
                     <option value={-1}>
-                        {t('UI:Components:DateInput:Day')}
+                        {t('ui:Components:DateInput:Day')}
                     </option>
                     {Array.from({ length: 31 }).map((_, index) => (
                         <option key={index}>{index + 1}</option>
@@ -90,11 +90,11 @@ export const DateInput = ({ field, form, label }) => {
                     className="mr-1"
                 >
                     <option value={-1}>
-                        {t('UI:Components:DateInput:Month')}
+                        {t('ui:Components:DateInput:Month')}
                     </option>
                     {Array.from({ length: 12 }).map((_, index) => (
                         <option key={index} value={index}>
-                            {t(`UI:Components:DateInput:MonthNames:${index}`)}
+                            {t(`ui:Components:DateInput:MonthNames:${index}`)}
                         </option>
                     ))}
                 </Input>
@@ -106,7 +106,7 @@ export const DateInput = ({ field, form, label }) => {
                     onBlur={handleBlur}
                 >
                     <option value={-1}>
-                        {t('UI:Components:DateInput:Year')}
+                        {t('ui:Components:DateInput:Year')}
                     </option>
                     {Array.from({ length: 120 }).map((_, index) => (
                         <option key={index}>{currentYear - index}</option>

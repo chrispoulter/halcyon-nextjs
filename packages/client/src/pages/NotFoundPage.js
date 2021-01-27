@@ -10,13 +10,13 @@ export const NotFoundPage = () => {
         <Jumbotron>
             <Container>
                 <h1 className="display-3">
-                    {t('UI:Pages:NotFound:Jumotron:Title')}
+                    {t('ui:Pages:NotFound:Jumotron:Title')}
                 </h1>
                 <hr />
-                <p className="lead">{t('UI:Pages:NotFound:Jumotron:Lead')}</p>
+                <p className="lead">{t('ui:Pages:NotFound:Jumotron:Lead')}</p>
                 <p className="text-right">
                     <Button to="/" color="primary" size="lg" tag={Link}>
-                        {t('UI:Pages:NotFound:Jumotron:HomeButton')}
+                        {t('ui:Pages:NotFound:Jumotron:HomeButton')}
                     </Button>
                 </p>
             </Container>

@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 export const PublicRoute = ({ component: PublicComponent, title, ...rest }) => {
     const { t } = useTranslation();
 
-    const translatedSiteName = t("UI:SiteName");
-    const translatedSeperator = t("UI:Seperator");
+    const translatedSiteName = t('ui:SiteName');
+    const translatedSeperator = t('ui:Seperator');
 
     document.title = title
         ? `${title} ${t(translatedSeperator)} ${t(translatedSiteName)}`

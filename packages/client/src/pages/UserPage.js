@@ -61,14 +61,14 @@ export const UserPage = () => {
     return (
         <Container>
             <div className="d-flex justify-content-between mb-3">
-                <h1>{t('UI:Pages:User:Title')}</h1>
+                <h1>{t('ui:Pages:User:Title')}</h1>
                 <Button
                     to="/user/create"
                     color="primary"
                     className="align-self-start"
                     tag={Link}
                 >
-                    {t('UI:Pages:User:CreateNewButton')}
+                    {t('ui:Pages:User:CreateNewButton')}
                 </Button>
             </div>
             <hr />
@@ -85,7 +85,7 @@ export const UserPage = () => {
                                     name="search"
                                     type="text"
                                     placeholder={t(
-                                        'UI:Pages:User:Form:SearchPlaceholder'
+                                        'ui:Pages:User:Form:SearchPlaceholder'
                                     )}
                                     value={values.search}
                                     onChange={handleChange}
@@ -93,12 +93,12 @@ export const UserPage = () => {
                                 />
                                 <InputGroupAddon addonType="append">
                                     <Button type="submit" color="secondary">
-                                        {t('UI:Pages:User:Form:SearchButton')}
+                                        {t('ui:Pages:User:Form:SearchButton')}
                                     </Button>
                                     <UncontrolledDropdown>
                                         <DropdownToggle caret color="secondary">
                                             {t(
-                                                'UI:Pages:User:Form:SortByButton'
+                                                'ui:Pages:User:Form:SortByButton'
                                             )}{' '}
                                         </DropdownToggle>
                                         <DropdownMenu right>
@@ -113,7 +113,7 @@ export const UserPage = () => {
                                                     }
                                                 >
                                                     {t(
-                                                        `UI:Pages:User:Form:SortOptions:${option}`
+                                                        `ui:Pages:User:Form:SortOptions:${option}`
                                                     )}
                                                 </DropdownItem>
                                             ))}
@@ -128,7 +128,7 @@ export const UserPage = () => {
 
             {!data?.searchUsers.items.length ? (
                 <Alert color="info" className="container p-3 mb-3">
-                    {t('UI:Pages:User:UsersNotFound')}
+                    {t('ui:Pages:User:UsersNotFound')}
                 </Alert>
             ) : (
                 <>
@@ -150,7 +150,7 @@ export const UserPage = () => {
                             <div>
                                 {user.isLockedOut && (
                                     <Badge color="danger" className="mr-1">
-                                        {t('UI:Pages:User:LockedBadge')}
+                                        {t('ui:Pages:User:LockedBadge')}
                                     </Badge>
                                 )}
                                 {user.roles.map(role => (
@@ -159,7 +159,7 @@ export const UserPage = () => {
                                         color="primary"
                                         className="mr-1"
                                     >
-                                        {t(`UI:Pages:User:Roles:${role}`)}
+                                        {t(`ui:Pages:User:Roles:${role}`)}
                                     </Badge>
                                 ))}
                             </div>

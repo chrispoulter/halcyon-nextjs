@@ -23,34 +23,34 @@ export const UpdateProfilePage = ({ history }) => {
     if (!data?.getProfile) {
         return (
             <Alert color="info" className="container p-3 mb-3">
-                {t('UI:Pages:UpdateProfile:ProfileNotFound')}
+                {t('ui:Pages:UpdateProfile:ProfileNotFound')}
             </Alert>
         );
     }
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('UI:Pages:UpdateProfile:Form:EmailAddress'))
-            .max(254)
-            .email()
-            .required(),
+            .label(t('ui:Pages:UpdateProfile:Form:EmailAddress'))
+            .max(254, t('ui:Validation:Max'))
+            .email(t('ui:Validation:Email'))
+            .required(t('ui:Validation:Required')),
         firstName: Yup.string()
-            .label(t('UI:Pages:UpdateProfile:Form:FirstName'))
-            .max(50)
-            .required(),
+            .label(t('ui:Pages:UpdateProfile:Form:FirstName'))
+            .max(50, t('ui:Validation:Max'))
+            .required(t('ui:Validation:Required')),
         lastName: Yup.string()
-            .label(t('UI:Pages:UpdateProfile:Form:LastName'))
-            .max(50)
-            .required(),
+            .label(t('ui:Pages:UpdateProfile:Form:LastName'))
+            .max(50, t('ui:Validation:Max'))
+            .required(t('ui:Validation:Required')),
         dateOfBirth: Yup.string()
-            .label(t('UI:Pages:UpdateProfile:Form:DateOfBirth'))
-            .required()
+            .label(t('ui:Pages:UpdateProfile:Form:DateOfBirth'))
+            .required(t('ui:Validation:Required'))
     });
 
     const onSubmit = async variables => {
         try {
             const result = await updateProfile({ variables });
-            toast.success(t(`Api:Codes:${result.data.updateProfile.code}`));
+            toast.success(t(`api:Codes:${result.data.updateProfile.code}`));
             history.push('/my-account');
         } catch (error) {
             console.error(error);
@@ -59,7 +59,7 @@ export const UpdateProfilePage = ({ history }) => {
 
     return (
         <Container>
-            <h1>{t('UI:Pages:UpdateProfile:Title')}</h1>
+            <h1>{t('ui:Pages:UpdateProfile:Title')}</h1>
             <hr />
 
             <Formik
@@ -74,7 +74,7 @@ export const UpdateProfilePage = ({ history }) => {
                             name="emailAddress"
                             type="email"
                             label={t(
-                                'UI:Pages:UpdateProfile:Form:EmailAddress'
+                                'ui:Pages:UpdateProfile:Form:EmailAddress'
                             )}
                             required
                             maxLength={254}
@@ -85,7 +85,7 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="firstName"
                             type="text"
-                            label={t('UI:Pages:UpdateProfile:Form:FirstName')}
+                            label={t('ui:Pages:UpdateProfile:Form:FirstName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -94,7 +94,7 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="lastName"
                             type="text"
-                            label={t('UI:Pages:UpdateProfile:Form:LastName')}
+                            label={t('ui:Pages:UpdateProfile:Form:LastName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -103,7 +103,7 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="dateOfBirth"
                             type="date"
-                            label={t('UI:Pages:UpdateProfile:Form:DateOfBirth')}
+                            label={t('ui:Pages:UpdateProfile:Form:DateOfBirth')}
                             required
                             component={DateInput}
                         />
@@ -114,14 +114,14 @@ export const UpdateProfilePage = ({ history }) => {
                                 className="mr-1"
                                 tag={Link}
                             >
-                                {t('UI:Pages:UpdateProfile:CancelButton')}
+                                {t('ui:Pages:UpdateProfile:CancelButton')}
                             </Button>
                             <Button
                                 type="submit"
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('UI:Pages:UpdateProfile:Form:SubmitButton')}
+                                {t('ui:Pages:UpdateProfile:SubmitButton')}
                             </Button>
                         </FormGroup>
                     </Form>

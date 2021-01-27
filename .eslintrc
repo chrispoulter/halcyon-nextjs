@@ -4,5 +4,8 @@
         "react": {
             "version": "999.999.999"
         }
+    },
+    "rules": {
+        "no-template-curly-in-string": 0
     }
 }

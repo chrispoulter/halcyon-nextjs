@@ -26,17 +26,17 @@ export const MyAccountPage = ({ history }) => {
     if (!data?.getProfile) {
         return (
             <Alert color="info" className="container p-3 mb-3">
-                {t('UI:Pages:MyAccount:ProfileNotFound')}
+                {t('ui:Pages:MyAccount:ProfileNotFound')}
             </Alert>
         );
     }
 
     const onDeleteAccount = async () => {
         const confirmed = await confirm({
-            title: t('UI:Pages:MyAccount:DeleteModal:Title'),
-            message: t('UI:Pages:MyAccount:DeleteModal:Message'),
-            confirmText: t('UI:Pages:MyAccount:DeleteModal:Confirm'),
-            cancelText: t('UI:Pages:MyAccount:DeleteModal:Cancel'),
+            title: t('ui:Pages:MyAccount:DeleteModal:Title'),
+            message: t('ui:Pages:MyAccount:DeleteModal:Message'),
+            confirmText: t('ui:Pages:MyAccount:DeleteModal:Confirm'),
+            cancelText: t('ui:Pages:MyAccount:DeleteModal:Cancel'),
             cancelColor: 'secondary'
         });
 
@@ -46,7 +46,7 @@ export const MyAccountPage = ({ history }) => {
 
         try {
             const result = await deleteAccount();
-            toast.success(t(`Api:Codes:${result.data.deleteAccount.code}`));
+            toast.success(t(`api:Codes:${result.data.deleteAccount.code}`));
             removeToken();
             history.push('/');
         } catch (error) {
@@ -56,25 +56,25 @@ export const MyAccountPage = ({ history }) => {
 
     return (
         <Container>
-            <h1>{t('UI:Pages:MyAccount:Title')}</h1>
+            <h1>{t('ui:Pages:MyAccount:Title')}</h1>
             <hr />
 
             <div className="d-flex justify-content-between">
-                <h3>{t('UI:Pages:MyAccount:ProfileSection:Title')}</h3>
+                <h3>{t('ui:Pages:MyAccount:ProfileSection:Title')}</h3>
                 <Button
                     to="/update-profile"
                     color="primary"
                     className="align-self-start"
                     tag={Link}
                 >
-                    {t('UI:Pages:MyAccount:ProfileSection:UpdateButton')}
+                    {t('ui:Pages:MyAccount:ProfileSection:UpdateButton')}
                 </Button>
             </div>
             <hr />
 
             <p>
                 <span className="text-muted">
-                    {t('UI:Pages:MyAccount:ProfileSection:EmailAddress')}
+                    {t('ui:Pages:MyAccount:ProfileSection:EmailAddress')}
                 </span>
                 <br />
                 {data.getProfile.emailAddress}
@@ -82,19 +82,19 @@ export const MyAccountPage = ({ history }) => {
 
             <p>
                 <span className="text-muted">
-                    {t('UI:Pages:MyAccount:ProfileSection:Password')}
+                    {t('ui:Pages:MyAccount:ProfileSection:Password')}
                 </span>
                 <br />
                 ********
                 <br />
                 <Link to="/change-password">
-                    {t('UI:Pages:MyAccount:ProfileSection:ChangePasswordLink')}
+                    {t('ui:Pages:MyAccount:ProfileSection:ChangePasswordLink')}
                 </Link>
             </p>
 
             <p>
                 <span className="text-muted">
-                    {t('UI:Pages:MyAccount:ProfileSection:Name')}
+                    {t('ui:Pages:MyAccount:ProfileSection:Name')}
                 </span>
                 <br />
                 {data.getProfile.firstName} {data.getProfile.lastName}
@@ -102,22 +102,22 @@ export const MyAccountPage = ({ history }) => {
 
             <p>
                 <span className="text-muted">
-                    {t('UI:Pages:MyAccount:ProfileSection:DateOfBirth')}
+                    {t('ui:Pages:MyAccount:ProfileSection:DateOfBirth')}
                 </span>
                 <br />
                 {new Date(data.getProfile.dateOfBirth).toLocaleDateString()}
             </p>
 
-            <h3>{t('UI:Pages:MyAccount:SettingsSection:Title')}</h3>
+            <h3>{t('ui:Pages:MyAccount:SettingsSection:Title')}</h3>
             <hr />
-            <p>{t('UI:Pages:MyAccount:SettingsSection:DeletePrompt')}</p>
+            <p>{t('ui:Pages:MyAccount:SettingsSection:DeletePrompt')}</p>
             <p>
                 <Button
                     color="danger"
                     loading={isDeleting}
                     onClick={onDeleteAccount}
                 >
-                    {t('UI:Pages:MyAccount:SettingsSection:DeleteButton')}
+                    {t('ui:Pages:MyAccount:SettingsSection:DeleteButton')}
                 </Button>
             </p>
         </Container>
