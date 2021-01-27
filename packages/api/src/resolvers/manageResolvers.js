@@ -18,7 +18,7 @@ export const manageResolvers = {
         updateProfile: isAuthenticated(async (_, { input }, { payload }) => {
             const user = await getUserById(payload.sub);
             if (!user) {
-                throw new ApolloError('User not found.');
+                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
             }
 
             if (user.emailAddress !== input.emailAddress) {
@@ -28,7 +28,8 @@ export const manageResolvers = {
 
                 if (existing) {
                     throw new ApolloError(
-                        `User name "${input.emailAddress}" is already taken.`
+                        `User name "${input.emailAddress}" is already taken.`,
+                        'DUPLICATE_USER'
                     );
                 }
             }
@@ -40,6 +41,7 @@ export const manageResolvers = {
             await updateUser(user);
 
             return {
+                code: 'PROFILE_UPDATED',
                 message: 'Your profile has been updated.',
                 user
             };
@@ -47,7 +49,7 @@ export const manageResolvers = {
         changePassword: isAuthenticated(async (_, { input }, { payload }) => {
             const user = await getUserById(payload.sub);
             if (!user) {
-                throw new ApolloError('User not found.');
+                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
             }
 
             const verified = await verifyHash(
@@ -56,7 +58,10 @@ export const manageResolvers = {
             );
 
             if (!verified) {
-                throw new ApolloError('Incorrect password.');
+                throw new ApolloError(
+                    'Incorrect password.',
+                    'INCORRECT_PASSWORD'
+                );
             }
 
             user.password = await generateHash(input.newPassword);
@@ -64,6 +69,7 @@ export const manageResolvers = {
             await updateUser(user);
 
             return {
+                code: 'PASSWORD_CHANGED',
                 message: 'Your password has been changed.',
                 user
             };
@@ -71,12 +77,13 @@ export const manageResolvers = {
         deleteAccount: isAuthenticated(async (_, __, { payload }) => {
             const user = await getUserById(payload.sub);
             if (!user) {
-                throw new ApolloError('User not found.');
+                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
             }
 
             await removeUser(user);
 
             return {
+                code: 'ACCOUNT_DELETED',
                 message: 'Your account has been deleted.',
                 user
             };

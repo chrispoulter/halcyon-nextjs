@@ -14,7 +14,8 @@ export const accountResolvers = {
             const existing = await getUserByEmailAddress(input.emailAddress);
             if (existing) {
                 throw new ApolloError(
-                    `User name "${input.emailAddress}" is already taken.`
+                    `User name "${input.emailAddress}" is already taken.`,
+                    'DUPLICATE_USER'
                 );
             }
 
@@ -29,6 +30,7 @@ export const accountResolvers = {
             });
 
             return {
+                code: 'USER_REGISTERED',
                 message: 'User successfully registered.',
                 user: result
             };
@@ -49,6 +51,7 @@ export const accountResolvers = {
             }
 
             return {
+                code: 'FORGOT_PASSWORD',
                 message:
                     'Instructions as to how to reset your password have been sent to you via email.'
             };
@@ -56,7 +59,7 @@ export const accountResolvers = {
         resetPassword: async (_, { input }) => {
             const user = await getUserByEmailAddress(input.emailAddress);
             if (!user || user.passwordResetToken !== input.token) {
-                throw new ApolloError('Invalid token.');
+                throw new ApolloError('Invalid token.', 'INVALID_TOKEN');
             }
 
             user.password = await generateHash(input.newPassword);
@@ -64,6 +67,7 @@ export const accountResolvers = {
             await updateUser(user);
 
             return {
+                code: 'PASSWORD_RESET',
                 message: 'Your password has been reset.',
                 user
             };

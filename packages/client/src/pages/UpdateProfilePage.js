@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -8,18 +9,9 @@ import { toast } from 'react-toastify';
 import { GET_PROFILE, UPDATE_PROFILE } from '../graphql';
 import { Spinner, TextInput, DateInput, Button } from '../components';
 
-const validationSchema = Yup.object().shape({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .max(254)
-        .email()
-        .required(),
-    firstName: Yup.string().label('First Name').max(50).required(),
-    lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.string().label('Date of Birth').required()
-});
-
 export const UpdateProfilePage = ({ history }) => {
+    const { t } = useTranslation();
+
     const { loading, data } = useQuery(GET_PROFILE);
 
     const [updateProfile] = useMutation(UPDATE_PROFILE);
@@ -31,15 +23,34 @@ export const UpdateProfilePage = ({ history }) => {
     if (!data?.getProfile) {
         return (
             <Alert color="info" className="container p-3 mb-3">
-                Profile could not be found.
+                {t('UI:Pages:UpdateProfile:ProfileNotFound')}
             </Alert>
         );
     }
 
+    const validationSchema = Yup.object().shape({
+        emailAddress: Yup.string()
+            .label(t('UI:Pages:UpdateProfile:Form:EmailAddress'))
+            .max(254)
+            .email()
+            .required(),
+        firstName: Yup.string()
+            .label(t('UI:Pages:UpdateProfile:Form:FirstName'))
+            .max(50)
+            .required(),
+        lastName: Yup.string()
+            .label(t('UI:Pages:UpdateProfile:Form:LastName'))
+            .max(50)
+            .required(),
+        dateOfBirth: Yup.string()
+            .label(t('UI:Pages:UpdateProfile:Form:DateOfBirth'))
+            .required()
+    });
+
     const onSubmit = async variables => {
         try {
             const result = await updateProfile({ variables });
-            toast.success(result.data.updateProfile.message);
+            toast.success(t(`Api:Codes:${result.data.updateProfile.code}`));
             history.push('/my-account');
         } catch (error) {
             console.error(error);
@@ -48,7 +59,7 @@ export const UpdateProfilePage = ({ history }) => {
 
     return (
         <Container>
-            <h1>Update Profile</h1>
+            <h1>{t('UI:Pages:UpdateProfile:Title')}</h1>
             <hr />
 
             <Formik
@@ -62,7 +73,9 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label="Email Address"
+                            label={t(
+                                'UI:Pages:UpdateProfile:Form:EmailAddress'
+                            )}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -72,7 +85,7 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="firstName"
                             type="text"
-                            label="First Name"
+                            label={t('UI:Pages:UpdateProfile:Form:FirstName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -81,7 +94,7 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="lastName"
                             type="text"
-                            label="Last Name"
+                            label={t('UI:Pages:UpdateProfile:Form:LastName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -90,7 +103,7 @@ export const UpdateProfilePage = ({ history }) => {
                         <Field
                             name="dateOfBirth"
                             type="date"
-                            label="Date Of Birth"
+                            label={t('UI:Pages:UpdateProfile:Form:DateOfBirth')}
                             required
                             component={DateInput}
                         />
@@ -101,14 +114,14 @@ export const UpdateProfilePage = ({ history }) => {
                                 className="mr-1"
                                 tag={Link}
                             >
-                                Cancel
+                                {t('UI:Pages:UpdateProfile:CancelButton')}
                             </Button>
                             <Button
                                 type="submit"
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                Submit
+                                {t('UI:Pages:UpdateProfile:Form:SubmitButton')}
                             </Button>
                         </FormGroup>
                     </Form>

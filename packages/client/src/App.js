@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ToastContainer, Slide } from 'react-toastify';
 import {
     AuthProvider,
@@ -26,89 +27,93 @@ import {
 } from './pages';
 import { IS_USER_ADMINISTRATOR } from './utils/auth';
 
-export const App = () => (
-    <AuthProvider>
-        <ApolloProvider>
-            <BrowserRouter>
-                <Header />
-                <ErrorBoundary>
-                    <Switch>
-                        <PublicRoute path="/" component={HomePage} exact />
-                        <PublicRoute
-                            title="Register"
-                            path="/register"
-                            component={RegisterPage}
-                            exact
-                        />
-                        <PublicRoute
-                            title="Login"
-                            path="/login"
-                            component={LoginPage}
-                            exact
-                        />
-                        <PublicRoute
-                            title="Forgot Password"
-                            path="/forgot-password"
-                            component={ForgotPasswordPage}
-                            exact
-                        />
-                        <PublicRoute
-                            title="Reset Password"
-                            path="/reset-password/:token"
-                            component={ResetPasswordPage}
-                            exact
-                        />
-                        <PrivateRoute
-                            title="My Account"
-                            path="/my-account"
-                            component={MyAccountPage}
-                            exact
-                        />
-                        <PrivateRoute
-                            title="Update Profile"
-                            path="/update-profile"
-                            component={UpdateProfilePage}
-                            exact
-                        />
-                        <PrivateRoute
-                            title="Change Password"
-                            path="/change-password"
-                            component={ChangePasswordPage}
-                            exact
-                        />
-                        <PrivateRoute
-                            title="Users"
-                            path="/user"
-                            requiredRoles={IS_USER_ADMINISTRATOR}
-                            component={UserPage}
-                            exact
-                        />
-                        <PrivateRoute
-                            title="Create User"
-                            path="/user/create"
-                            requiredRoles={IS_USER_ADMINISTRATOR}
-                            component={CreateUserPage}
-                            exact
-                        />
-                        <PrivateRoute
-                            title="Update User"
-                            path="/user/:id"
-                            requiredRoles={IS_USER_ADMINISTRATOR}
-                            component={UpdateUserPage}
-                            exact
-                        />
-                        <PublicRoute component={NotFoundPage} />
-                    </Switch>
-                </ErrorBoundary>
-                <Footer />
-            </BrowserRouter>
+export const App = () => {
+    const { t } = useTranslation();
 
-            <ToastContainer
-                position="bottom-right"
-                hideProgressBar
-                draggable={false}
-                transition={Slide}
-            />
-        </ApolloProvider>
-    </AuthProvider>
-);
+    return (
+        <AuthProvider>
+            <ApolloProvider>
+                <BrowserRouter>
+                    <Header />
+                    <ErrorBoundary>
+                        <Switch>
+                            <PublicRoute path="/" component={HomePage} exact />
+                            <PublicRoute
+                                title={t('UI:Pages:Register:Meta:Title')}
+                                path="/register"
+                                component={RegisterPage}
+                                exact
+                            />
+                            <PublicRoute
+                                title={t('UI:Pages:Login:Meta:Title')}
+                                path="/login"
+                                component={LoginPage}
+                                exact
+                            />
+                            <PublicRoute
+                                title={t('UI:Pages:ForgotPassword:Meta:Title')}
+                                path="/forgot-password"
+                                component={ForgotPasswordPage}
+                                exact
+                            />
+                            <PublicRoute
+                                title={t('UI:Pages:ResetPassword:Meta:Title')}
+                                path="/reset-password/:token"
+                                component={ResetPasswordPage}
+                                exact
+                            />
+                            <PrivateRoute
+                                title={t('UI:Pages:MyAccount:Meta:Title')}
+                                path="/my-account"
+                                component={MyAccountPage}
+                                exact
+                            />
+                            <PrivateRoute
+                                title={t('UI:Pages:UpdateProfile:Meta:Title')}
+                                path="/update-profile"
+                                component={UpdateProfilePage}
+                                exact
+                            />
+                            <PrivateRoute
+                                title={t('UI:Pages:ChangePassword:Meta:Title')}
+                                path="/change-password"
+                                component={ChangePasswordPage}
+                                exact
+                            />
+                            <PrivateRoute
+                                title={t('UI:Pages:User:Meta:Title')}
+                                path="/user"
+                                requiredRoles={IS_USER_ADMINISTRATOR}
+                                component={UserPage}
+                                exact
+                            />
+                            <PrivateRoute
+                                title={t('UI:Pages:CreateUser:Meta:Title')}
+                                path="/user/create"
+                                requiredRoles={IS_USER_ADMINISTRATOR}
+                                component={CreateUserPage}
+                                exact
+                            />
+                            <PrivateRoute
+                                title={t('UI:Pages:UpdateUser:Meta:Title')}
+                                path="/user/:id"
+                                requiredRoles={IS_USER_ADMINISTRATOR}
+                                component={UpdateUserPage}
+                                exact
+                            />
+                            <PublicRoute component={NotFoundPage} />
+                        </Switch>
+                    </ErrorBoundary>
+                    <Footer />
+                </BrowserRouter>
+
+                <ToastContainer
+                    position="bottom-right"
+                    hideProgressBar
+                    draggable={false}
+                    transition={Slide}
+                />
+            </ApolloProvider>
+        </AuthProvider>
+    );
+};

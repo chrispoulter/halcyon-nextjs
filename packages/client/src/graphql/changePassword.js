@@ -8,6 +8,7 @@ export const CHANGE_PASSWORD = gql`
                 newPassword: $newPassword
             }
         ) {
+            code
             message
         }
     }

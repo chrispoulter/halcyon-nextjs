@@ -13,6 +13,7 @@ export const RESET_PASSWORD = gql`
                 newPassword: $newPassword
             }
         ) {
+            code
             message
         }
     }

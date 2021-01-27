@@ -31,6 +31,7 @@ export const seedResolvers = {
             const result = await method;
 
             return {
+                code: 'ENVIRONMENT_SEEDED',
                 message: 'Environment seeded.',
                 user: result
             };

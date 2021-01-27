@@ -7,7 +7,7 @@ export const CREATE_USER = gql`
         $firstName: String!
         $lastName: String!
         $dateOfBirth: DateTime!
-        $roles: [String!]
+        $roles: [UserRole!]
     ) {
         createUser(
             input: {
@@ -19,6 +19,7 @@ export const CREATE_USER = gql`
                 roles: $roles
             }
         ) {
+            code
             message
             user {
                 id

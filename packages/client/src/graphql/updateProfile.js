@@ -15,6 +15,7 @@ export const UPDATE_PROFILE = gql`
                 dateOfBirth: $dateOfBirth
             }
         ) {
+            code
             message
             user {
                 id

@@ -28,7 +28,8 @@ export const userResolvers = {
 
             if (existing) {
                 throw new ApolloError(
-                    `User name "${input.emailAddress}" is already taken.`
+                    `User name "${input.emailAddress}" is already taken.`,
+                    'DUPLICATE_USER'
                 );
             }
 
@@ -43,6 +44,7 @@ export const userResolvers = {
             });
 
             return {
+                code: 'USER_CREATED',
                 message: 'User successfully created.',
                 user: result
             };
@@ -60,7 +62,8 @@ export const userResolvers = {
 
                 if (existing) {
                     throw new ApolloError(
-                        `User name "${input.emailAddress}" is already taken.`
+                        `User name "${input.emailAddress}" is already taken.`,
+                        'DUPLICATE_USER'
                     );
                 }
             }
@@ -73,6 +76,7 @@ export const userResolvers = {
             await updateUser(user);
 
             return {
+                code: 'USER_UPDATED',
                 message: 'User successfully updated.',
                 user
             };
@@ -80,17 +84,21 @@ export const userResolvers = {
         lockUser: isAuthenticated(async (_, { id }, { payload }) => {
             const user = await getUserById(id);
             if (!user) {
-                throw new ApolloError('User not found.');
+                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
             }
 
             if (user.id === payload.sub) {
-                throw new ApolloError('Cannot lock currently logged in user.');
+                throw new ApolloError(
+                    'Cannot lock currently logged in user.',
+                    'LOCK_CURRENT_USER'
+                );
             }
 
             user.isLockedOut = true;
             await updateUser(user);
 
             return {
+                code: 'USER_LOCKED',
                 message: 'User successfully locked.',
                 user
             };
@@ -98,13 +106,14 @@ export const userResolvers = {
         unlockUser: isAuthenticated(async (_, { id }) => {
             const user = await getUserById(id);
             if (!user) {
-                throw new ApolloError('User not found.');
+                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
             }
 
             user.isLockedOut = false;
             await updateUser(user);
 
             return {
+                code: 'USER_UNLOCKED',
                 message: 'User successfully unlocked.',
                 user
             };
@@ -112,18 +121,20 @@ export const userResolvers = {
         deleteUser: isAuthenticated(async (_, { id }, { payload }) => {
             const user = await getUserById(id);
             if (!user) {
-                throw new ApolloError('User not found.');
+                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
             }
 
             if (user.id === payload.sub) {
                 throw new ApolloError(
-                    'Cannot delete currently logged in user.'
+                    'Cannot delete currently logged in user.',
+                    'DELETE_CURRENT_USER'
                 );
             }
 
             await removeUser(user);
 
             return {
+                code: 'USER_DELETED',
                 message: 'User successfully deleted.',
                 user
             };

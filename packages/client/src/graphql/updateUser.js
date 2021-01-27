@@ -7,7 +7,7 @@ export const UPDATE_USER = gql`
         $firstName: String!
         $lastName: String!
         $dateOfBirth: DateTime!
-        $roles: [String!]
+        $roles: [UserRole!]
     ) {
         updateUser(
             id: $id
@@ -19,6 +19,7 @@ export const UPDATE_USER = gql`
                 roles: $roles
             }
         ) {
+            code
             message
             user {
                 id

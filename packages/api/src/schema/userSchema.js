@@ -8,6 +8,11 @@ export const userSchema = gql`
         EMAIL_ADDRESS_DESC
     }
 
+    enum UserRole {
+        SYSTEM_ADMINISTRATOR
+        USER_ADMINISTRATOR
+    }
+
     type User {
         id: ID!
         emailAddress: String!
@@ -15,7 +20,7 @@ export const userSchema = gql`
         lastName: String!
         dateOfBirth: DateTime!
         isLockedOut: Boolean!
-        roles: [String]
+        roles: [UserRole]
     }
 
     type UserSearchResult {
@@ -37,7 +42,7 @@ export const userSchema = gql`
         firstName: String!
         lastName: String!
         dateOfBirth: DateTime!
-        roles: [String!]
+        roles: [UserRole!]
     }
 
     input UpdateUserInput {
@@ -45,10 +50,11 @@ export const userSchema = gql`
         firstName: String!
         lastName: String!
         dateOfBirth: DateTime!
-        roles: [String!]
+        roles: [UserRole!]
     }
 
     type UserMutationResponse {
+        code: String
         message: String
         user: User
     }

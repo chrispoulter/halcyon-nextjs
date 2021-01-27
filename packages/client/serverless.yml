@@ -24,7 +24,7 @@ resources:
             Type: AWS::S3::Bucket
             Properties:
                 BucketName: halcyon-client-${opt:stage, self:provider.stage}
-                
+
     Outputs:
         ClientBucketOutputKey:
             Value: !Ref ClientBucket

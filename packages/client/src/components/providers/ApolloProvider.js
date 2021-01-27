@@ -1,11 +1,14 @@
 import React, { useContext } from 'react';
 import { ApolloProvider as BaseApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { AuthContext } from './AuthProvider';
 import config from '../../utils/config';
 
 export const ApolloProvider = ({ children }) => {
+    const { t } = useTranslation();
+
     const { accessToken, removeToken } = useContext(AuthContext);
 
     const client = new ApolloClient({
@@ -20,9 +23,11 @@ export const ApolloProvider = ({ children }) => {
         onError: ({ graphQLErrors, networkError }) => {
             if (graphQLErrors) {
                 for (const graphQLError of graphQLErrors || []) {
-                    switch (graphQLError.extensions.code) {
+                    const { code } = graphQLError.extensions;
+
+                    switch (code) {
                         case 'BAD_USER_INPUT':
-                            toast.error(graphQLError.message);
+                            toast.error(t(`Api:Codes:${code}`));
                             break;
 
                         case 'UNAUTHENTICATED':
@@ -30,22 +35,20 @@ export const ApolloProvider = ({ children }) => {
                             break;
 
                         case 'FORBIDDEN':
-                            toast.warn(graphQLError.message);
+                            toast.warn(t(`Api:Codes:${code}`));
                             break;
 
                         default:
                             toast.error(
-                                graphQLError.message ||
-                                    'An unknown error has occurred whilst communicating with the server.'
+                                toast.error(t(`Api:Codes:${code}`)) ||
+                                    t('Api:Codes:UNKNOWN_ERROR')
                             );
 
                             break;
                     }
                 }
             } else if (networkError) {
-                toast.error(
-                    'An unknown error has occurred whilst communicating with the server.'
-                );
+                toast.error(t('Api:Codes:UNKNOWN_ERROR'));
             }
         }
     });

@@ -17,6 +17,7 @@ export const REGISTER = gql`
                 dateOfBirth: $dateOfBirth
             }
         ) {
+            code
             message
             user {
                 id

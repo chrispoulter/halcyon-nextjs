@@ -1,24 +1,12 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormGroup, Label, FormText, Input } from 'reactstrap';
-
-const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-];
 
 const currentYear = new Date().getFullYear();
 
 export const DateInput = ({ field, form, label }) => {
+    const { t } = useTranslation();
+
     const { name, onChange, onBlur, value } = field;
     const { errors, touched } = form;
     const error = errors[name];
@@ -86,7 +74,9 @@ export const DateInput = ({ field, form, label }) => {
                     onBlur={handleBlur}
                     className="mr-1"
                 >
-                    <option value={-1}>Day...</option>
+                    <option value={-1}>
+                        {t('UI:Components:DateInput:Day')}
+                    </option>
                     {Array.from({ length: 31 }).map((_, index) => (
                         <option key={index}>{index + 1}</option>
                     ))}
@@ -99,10 +89,12 @@ export const DateInput = ({ field, form, label }) => {
                     onBlur={handleBlur}
                     className="mr-1"
                 >
-                    <option value={-1}>Month...</option>
-                    {months.map((month, index) => (
+                    <option value={-1}>
+                        {t('UI:Components:DateInput:Month')}
+                    </option>
+                    {Array.from({ length: 12 }).map((_, index) => (
                         <option key={index} value={index}>
-                            {month}
+                            {t(`UI:Components:DateInput:MonthNames:${index}`)}
                         </option>
                     ))}
                 </Input>
@@ -113,7 +105,9 @@ export const DateInput = ({ field, form, label }) => {
                     onChange={event => handleYear(event.target.value)}
                     onBlur={handleBlur}
                 >
-                    <option value={-1}>Year...</option>
+                    <option value={-1}>
+                        {t('UI:Components:DateInput:Year')}
+                    </option>
                     {Array.from({ length: 120 }).map((_, index) => (
                         <option key={index}>{currentYear - index}</option>
                     ))}

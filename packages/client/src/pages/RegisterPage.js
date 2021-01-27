@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -16,31 +17,44 @@ const initialValues = {
     dateOfBirth: ''
 };
 
-const validationSchema = Yup.object().shape({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .max(254)
-        .email()
-        .required(),
-    password: Yup.string().label('Password').min(8).max(50).required(),
-    confirmPassword: Yup.string()
-        .label('Confirm Password')
-        .required()
-        .oneOf(
-            [Yup.ref('password')],
-            d => `The "${d.label}" field does not match.`
-        ),
-    firstName: Yup.string().label('First Name').max(50).required(),
-    lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.string().label('Date of Birth').required()
-});
-
 export const RegisterPage = ({ history }) => {
+    const { t } = useTranslation();
+
     const { setToken } = useContext(AuthContext);
 
     const [register] = useMutation(REGISTER);
 
     const [generateToken] = useMutation(GENERATE_TOKEN);
+
+    const validationSchema = Yup.object().shape({
+        emailAddress: Yup.string()
+            .label(t('UI:Pages:Register:Form:EmailAddress'))
+            .max(254)
+            .email()
+            .required(),
+        password: Yup.string()
+            .label(t('UI:Pages:Register:Form:Password'))
+            .min(8)
+            .max(50)
+            .required(),
+        confirmPassword: Yup.string()
+            .label(t('UI:Pages:Register:Form:ConfirmPassword'))
+            .required()
+            .oneOf([Yup.ref('password')], d =>
+                t('UI:Validation:FieldsDoNotMatch', d)
+            ),
+        firstName: Yup.string()
+            .label(t('UI:Pages:Register:Form:FirstName'))
+            .max(50)
+            .required(),
+        lastName: Yup.string()
+            .label(t('UI:Pages:Register:Form:Last Name'))
+            .max(50)
+            .required(),
+        dateOfBirth: Yup.string()
+            .label(t('UI:Pages:Register:Form:DateOfBirth'))
+            .required()
+    });
 
     const onSubmit = async variables => {
         try {
@@ -59,7 +73,7 @@ export const RegisterPage = ({ history }) => {
 
     return (
         <Container>
-            <h1>Register</h1>
+            <h1>{t('UI:Pages:Register:Title')}</h1>
             <hr />
 
             <Formik
@@ -72,7 +86,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label="Email Address"
+                            label={t('UI:Pages:Register:Form:EmailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -82,7 +96,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="password"
                             type="password"
-                            label="Password"
+                            label={t('UI:Pages:Register:Form:Password')}
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -92,7 +106,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="confirmPassword"
                             type="password"
-                            label="Confirm Password"
+                            label={t('UI:Pages:Register:Form:ConfirmPassword')}
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -102,7 +116,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="firstName"
                             type="text"
-                            label="First Name"
+                            label={t('UI:Pages:Register:Form:FirstName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -111,7 +125,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="lastName"
                             type="text"
-                            label="Last Name"
+                            label={t('UI:Pages:Register:Form:LastName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -120,7 +134,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="dateOfBirth"
                             type="date"
-                            label="Date Of Birth"
+                            label={t('UI:Pages:Register:Form:DateOfBirth')}
                             required
                             component={DateInput}
                         />
@@ -131,7 +145,7 @@ export const RegisterPage = ({ history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                Submit
+                                {t('UI:Pages:Register:SubmitButton')}
                             </Button>
                         </FormGroup>
                     </Form>
@@ -139,7 +153,8 @@ export const RegisterPage = ({ history }) => {
             </Formik>
 
             <p>
-                Already have an account? <Link to="/login">Log in now</Link>
+                {t('UI:Pages:Register:LoginPrompt')}{' '}
+                <Link to="/login">{t('UI:Pages:Register:LoginLink')}</Link>
             </p>
         </Container>
     );

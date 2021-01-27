@@ -4,6 +4,7 @@ export const linkSchema = gql`
     scalar DateTime
 
     type MutationResponse {
+        code: String
         message: String
     }
 

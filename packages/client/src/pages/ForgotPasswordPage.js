@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -11,17 +12,22 @@ const initialValues = {
     emailAddress: ''
 };
 
-const validationSchema = Yup.object().shape({
-    emailAddress: Yup.string().label('Email Address').email().required()
-});
-
 export const ForgotPasswordPage = ({ history }) => {
+    const { t } = useTranslation();
+
     const [forgotPassword] = useMutation(FORGOT_PASSWORD);
+
+    const validationSchema = Yup.object().shape({
+        emailAddress: Yup.string()
+            .label(t('UI:Pages:ForgotPassword:Form:EmailAddress'))
+            .email()
+            .required()
+    });
 
     const onSubmit = async variables => {
         try {
             const result = await forgotPassword({ variables });
-            toast.success(result.data.forgotPassword.message);
+            toast.success(t(`Api:Codes:${result.data.forgotPassword.code}`));
             history.push('/login');
         } catch (error) {
             console.error(error);
@@ -30,7 +36,7 @@ export const ForgotPasswordPage = ({ history }) => {
 
     return (
         <Container>
-            <h1>Forgotten Password</h1>
+            <h1>{t('UI:Pages:ForgotPassword:Title')}</h1>
             <hr />
 
             <Formik
@@ -43,7 +49,9 @@ export const ForgotPasswordPage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label="Email Address"
+                            label={t(
+                                'UI:Pages:ForgotPassword:Form:EmailAddress'
+                            )}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -56,7 +64,7 @@ export const ForgotPasswordPage = ({ history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                Submit
+                                {t('UI:Pages:ForgotPassword:SubmitButton')}
                             </Button>
                         </FormGroup>
                     </Form>

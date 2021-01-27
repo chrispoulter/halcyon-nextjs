@@ -8,17 +8,24 @@ export const tokenResolvers = {
         generateToken: async (_, { input }) => {
             const user = await getUserByEmailAddress(input.emailAddress);
             if (!user) {
-                throw new ApolloError('The credentials provided were invalid.');
+                throw new ApolloError(
+                    'The credentials provided were invalid.',
+                    'CREDENTIALS_INVALID'
+                );
             }
 
             const verified = await verifyHash(input.password, user.password);
             if (!verified) {
-                throw new ApolloError('The credentials provided were invalid.');
+                throw new ApolloError(
+                    'The credentials provided were invalid.',
+                    'CREDENTIALS_INVALID'
+                );
             }
 
             if (user.isLockedOut) {
                 throw new ApolloError(
-                    'This account has been locked out, please try again later.'
+                    'This account has been locked out, please try again later.',
+                    'USER_LOCKED_OUT'
                 );
             }
 

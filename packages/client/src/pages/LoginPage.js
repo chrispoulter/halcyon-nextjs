@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -13,15 +14,22 @@ const initialValues = {
     rememberMe: true
 };
 
-const validationSchema = Yup.object().shape({
-    emailAddress: Yup.string().label('Email Address').email().required(),
-    password: Yup.string().label('Password').required()
-});
-
 export const LoginPage = ({ history }) => {
+    const { t } = useTranslation();
+
     const { setToken } = useContext(AuthContext);
 
     const [generateToken] = useMutation(GENERATE_TOKEN);
+
+    const validationSchema = Yup.object().shape({
+        emailAddress: Yup.string()
+            .label(t('UI:Pages:Login:Form:EmailAddress'))
+            .email()
+            .required(),
+        password: Yup.string()
+            .label(t('UI:Pages:Login:Form:Password'))
+            .required()
+    });
 
     const onSubmit = async variables => {
         try {
@@ -42,7 +50,7 @@ export const LoginPage = ({ history }) => {
 
     return (
         <Container>
-            <h1>Login</h1>
+            <h1>{t('UI:Pages:Login:Title')}</h1>
             <hr />
 
             <Formik
@@ -55,7 +63,7 @@ export const LoginPage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label="Email Address"
+                            label={t('UI:Pages:Login:Form:EmailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -65,7 +73,7 @@ export const LoginPage = ({ history }) => {
                         <Field
                             name="password"
                             type="password"
-                            label="Password"
+                            label={t('UI:Pages:Login:Form:Password')}
                             required
                             maxLength={50}
                             autoComplete="current-password"
@@ -74,7 +82,7 @@ export const LoginPage = ({ history }) => {
 
                         <Field
                             name="rememberMe"
-                            label="Remember my password on this computer"
+                            label={t('UI:Pages:Login:Form:RememberMe')}
                             component={CheckboxInput}
                         />
 
@@ -84,7 +92,7 @@ export const LoginPage = ({ history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                Submit
+                                {t('UI:Pages:Login:SubmitButton')}
                             </Button>
                         </FormGroup>
                     </Form>
@@ -92,11 +100,14 @@ export const LoginPage = ({ history }) => {
             </Formik>
 
             <p>
-                Not already a member? <Link to="/register">Register now</Link>
+                {t('UI:Pages:Login:RegisterPrompt')}{' '}
+                <Link to="/register">{t('UI:Pages:Login:RegisterLink')}</Link>
             </p>
             <p>
-                Forgotten your password?{' '}
-                <Link to="/forgot-password">Request reset</Link>
+                {t('UI:Pages:ChangePassword:ForgotPasswordPrompt')}{' '}
+                <Link to="/forgot-password">
+                    {t('UI:Pages:ChangePassword:ForgotPasswordLink')}
+                </Link>
             </p>
         </Container>
     );
