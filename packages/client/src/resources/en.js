@@ -1,6 +1,6 @@
 export const en = {
-    Api: {
-        Codes: {
+    api: {
+        codes: {
             USER_REGISTERED: 'User successfully registered.',
             FORGOT_PASSWORD:
                 'Instructions as to how to reset your password have been sent to you via email.',
@@ -26,258 +26,258 @@ export const en = {
             UNKNOWN_ERROR:
                 'An unknown error has occurred whilst communicating with the server.'
         },
-        UserRoles: {
+        userRoles: {
             SYSTEM_ADMINISTRATOR: 'System Administrator',
             USER_ADMINISTRATOR: 'User Administrator'
         },
-        UserSortExpressions: {
+        userSortExpressions: {
             NAME_ASC: 'Name A-Z',
             NAME_DESC: 'Name Z-A',
             EMAIL_ADDRESS_ASC: 'Email Address A-Z',
             EMAIL_ADDRESS_DESC: 'Email Address Z-A'
         }
     },
-    Validation: {
-        Required: '${label} is a required field.',
-        Email: '${label} must be a valid email.',
-        Max: '${label} must be at most ${max} characters.',
-        Min: '${label} must be at least ${min} characters.',
-        FieldsDoNotMatch: 'The "{{label}}" field does not match.'
+    validation: {
+        required: '${label} is a required field.',
+        email: '${label} must be a valid email.',
+        max: '${label} must be at most ${max} characters.',
+        min: '${label} must be at least ${min} characters.',
+        fieldsDoNotMatch: 'The "{{label}}" field does not match.'
     },
-    Components: {
-        Header: {
-            Brand: 'Halcyon',
-            Nav: {
-                Users: 'Users',
-                MyAccount: 'My Account',
-                Logout: 'Logout',
-                Login: 'Login',
-                Register: 'Register'
+    components: {
+        header: {
+            brand: 'Halcyon',
+            nav: {
+                users: 'Users',
+                myAccount: 'My Account',
+                logout: 'Logout',
+                login: 'Login',
+                register: 'Register'
             }
         },
-        Pager: {
-            Next: 'Next',
-            Previous: 'Previous'
+        pager: {
+            next: 'Next',
+            previous: 'Previous'
         },
-        DateInput: {
-            Day: 'Day...',
-            Month: 'Month...',
-            Year: 'Year...',
-            MonthNames: {
-                0: 'January',
-                1: 'February',
-                2: 'March',
-                3: 'April',
-                4: 'May',
-                5: 'June',
-                6: 'July',
-                7: 'August',
-                8: 'September',
-                9: 'October',
-                10: 'November',
-                11: 'December'
-            }
+        dateInput: {
+            day: 'Day...',
+            month: 'Month...',
+            year: 'Year...',
+            monthNames: [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
+            ]
         },
-        AccessDenied: {
-            Title: 'Access Denied',
-            Lead: 'Sorry, you do not have access to this resource.',
-            HomeButton: 'Home'
+        accessDenied: {
+            title: 'Access Denied',
+            lead: 'Sorry, you do not have access to this resource.',
+            homeButton: 'Home'
         },
-        PrivateRoute: {
-            Title: 'Access Denied'
+        privateRoute: {
+            title: 'Access Denied'
         },
-        PublicRoute: {
-            BaseTitle: 'Halcyon',
-            Seperator: '//'
+        publicRoute: {
+            baseTitle: 'Halcyon',
+            seperator: '//'
         }
     },
-    Pages: {
-        Home: {
-            Jumbotron: {
-                Title: 'Welcome!',
-                Lead:
+    pages: {
+        home: {
+            jumbotron: {
+                title: 'Welcome!',
+                lead:
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc dui porta orci, quis semper odio felis ut quam.',
-                RegisterButton: 'Get Started'
+                registerButton: 'Get Started'
             },
-            Panel: {
-                Title: 'Fusce condimentum',
-                Text:
+            panel: {
+                title: 'Fusce condimentum',
+                text:
                     'In vel tincidunt elit, id pretium massa. Nullam rhoncus orci nisl. Pellentesque in mi et eros porttitor sagittis quis at justo. Sed ac faucibus enim, at tempus enim. Nunc gravida accumsan diam ut maximus. Ut sed tellus odio. N am semper blandit pretium. Suspendisse vitae elit turpis.'
             }
         },
-        NotFound: {
-            Jumbotron: {
-                Title: 'Page Not Found',
-                Lead:
+        notFound: {
+            jumbotron: {
+                title: 'Page Not Found',
+                lead:
                     'Sorry, the Page you were looking for could not be found.',
-                HomeButton: 'Home'
+                homeButton: 'Home'
             }
         },
-        Register: {
-            Meta: { Title: 'Register' },
-            Title: 'Register',
-            Form: {
-                EmailAddress: 'Email Address',
-                Password: 'Password',
-                ConfirmPassword: 'Confirm Password',
-                FirstName: 'First Name',
-                LastName: 'Last Name',
-                DateOfBirth: 'Date Of Birth'
+        register: {
+            meta: { title: 'Register' },
+            title: 'Register',
+            form: {
+                emailAddress: 'Email Address',
+                password: 'Password',
+                confirmPassword: 'Confirm Password',
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                dateOfBirth: 'Date Of Birth'
             },
-            SubmitButton: 'Submit',
-            LoginPrompt: 'Already have an account?',
-            LoginLink: 'Log in now'
+            submitButton: 'Submit',
+            loginPrompt: 'Already have an account?',
+            loginLink: 'Log in now'
         },
-        Login: {
-            Meta: { Title: 'Login' },
-            Title: 'Login',
-            Form: {
-                EmailAddress: 'Email Address',
-                Password: 'Password',
-                RememberMe: 'Remember my password on this computer'
+        login: {
+            meta: { title: 'Login' },
+            title: 'Login',
+            form: {
+                emailAddress: 'Email Address',
+                password: 'Password',
+                rememberMe: 'Remember my password on this computer'
             },
-            SubmitButton: 'Submit',
-            RegisterPrompt: 'Not already a member?',
-            RegisterLink: 'Register now',
-            ForgotPasswordPrompt: 'Forgotten your password?',
-            ForgotPasswordLink: 'Request reset'
+            submitButton: 'Submit',
+            registerPrompt: 'Not already a member?',
+            registerLink: 'Register now',
+            forgotPasswordPrompt: 'Forgotten your password?',
+            forgotPasswordLink: 'Request reset'
         },
-        ForgotPassword: {
-            Meta: { Title: 'Forgot Password' },
-            Title: 'Forgotten Password',
-            Form: {
-                EmailAddress: 'Email Address'
+        forgotPassword: {
+            meta: { title: 'Forgot Password' },
+            title: 'Forgotten Password',
+            form: {
+                emailAddress: 'Email Address'
             },
-            SubmitButton: 'Submit'
+            submitButton: 'Submit'
         },
-        ResetPassword: {
-            Meta: { Title: 'Reset Password' },
-            Title: 'Reset Password',
-            Form: {
-                EmailAddress: 'Email Address',
-                NewPassword: 'New Password',
-                ConfirmNewPassword: 'Confirm New Password'
+        resetPassword: {
+            meta: { title: 'Reset Password' },
+            title: 'Reset Password',
+            form: {
+                emailAddress: 'Email Address',
+                newPassword: 'New Password',
+                confirmNewPassword: 'Confirm New Password'
             },
-            SubmitButton: 'Submit'
+            submitButton: 'Submit'
         },
-        MyAccount: {
-            Meta: { Title: 'My Account' },
-            Title: 'My Account',
-            ProfileNotFound: 'Profile could not be found.',
-            ProfileSection: {
-                Title: 'Profile',
-                UpdateButton: 'Update',
-                EmailAddress: 'Email Address',
-                Password: 'Password',
-                ChangePasswordLink: 'Change your password...',
-                Name: 'Name',
-                DateOfBirth: 'Date Of Birth'
+        myAccount: {
+            meta: { title: 'My Account' },
+            title: 'My Account',
+            profilenotFound: 'Profile could not be found.',
+            profileSection: {
+                title: 'Profile',
+                updateButton: 'Update',
+                emailAddress: 'Email Address',
+                password: 'Password',
+                changePasswordLink: 'Change your password...',
+                name: 'Name',
+                dateOfBirth: 'Date Of Birth'
             },
-            SettingsSection: {
-                Title: 'Settings',
-                DeletePrompt:
+            settingsSection: {
+                title: 'Settings',
+                deletePrompt:
                     'Once you delete your account all of your data and settings will be removed. Please be certain.',
-                DeleteButton: 'Delete Account'
+                deleteButton: 'Delete Account'
             },
-            DeleteModal: {
-                Title: 'Confirm',
-                Message: 'Are you sure you want to delete your account?',
-                Confirm: 'Ok',
-                Cancel: 'Cancel'
+            deleteModal: {
+                title: 'Confirm',
+                message: 'Are you sure you want to delete your account?',
+                confirm: 'Ok',
+                cancel: 'Cancel'
             }
         },
-        UpdateProfile: {
-            Meta: { Title: 'Update Profile' },
-            Title: 'Update Profile',
-            ProfileNotFound: 'Profile could not be found.',
-            Form: {
-                EmailAddress: 'Email Address',
-                FirstName: 'First Name',
-                LastName: 'Last Name',
-                DateOfBirth: 'Date Of Birth'
+        updateProfile: {
+            meta: { title: 'Update Profile' },
+            title: 'Update Profile',
+            profilenotFound: 'Profile could not be found.',
+            form: {
+                emailAddress: 'Email Address',
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                dateOfBirth: 'Date Of Birth'
             },
-            CancelButton: 'Cancel',
-            SubmitButton: 'Submit'
+            cancelButton: 'Cancel',
+            submitButton: 'Submit'
         },
-        ChangePassword: {
-            Meta: { Title: 'Change Password' },
-            Title: 'Change Password',
-            Form: {
-                CurrentPassword: 'Current Password',
-                NewPassword: 'New Password',
-                ConfirmNewPassword: 'Confirm New Password'
+        changePassword: {
+            meta: { title: 'Change Password' },
+            title: 'Change Password',
+            form: {
+                currentPassword: 'Current Password',
+                newPassword: 'New Password',
+                confirmNewPassword: 'Confirm New Password'
             },
-            CancelButton: 'Cancel',
-            SubmitButton: 'Submit',
-            ForgotPasswordPrompt: 'Forgotten your password?',
-            ForgotPasswordLink: 'Request reset'
+            cancelButton: 'Cancel',
+            submitButton: 'Submit',
+            forgotPasswordPrompt: 'Forgotten your password?',
+            forgotPasswordLink: 'Request reset'
         },
-        User: {
-            Meta: { Title: 'Users' },
-            Title: 'Users',
-            CreateNewButton: 'Create New',
-            UsersNotFound: 'No users could be found.',
-            Form: {
-                SearchPlaceholder: 'Search...',
-                SearchButton: 'Search',
-                SortByButton: 'Sort By'
+        user: {
+            meta: { title: 'Users' },
+            title: 'Users',
+            createNewButton: 'Create New',
+            usersnotFound: 'No users could be found.',
+            form: {
+                searchPlaceholder: 'Search...',
+                searchButton: 'Search',
+                sortByButton: 'Sort By'
             },
-            LockedBadge: 'Locked'
+            lockedBadge: 'Locked'
         },
-        CreateUser: {
-            Meta: { Title: 'Create User' },
-            Title: 'User',
-            Subtitle: 'Create',
-            Form: {
-                EmailAddress: 'Email Address',
-                Password: 'Password',
-                ConfirmPassword: 'Confirm Password',
-                FirstName: 'First Name',
-                LastName: 'Last Name',
-                DateOfBirth: 'Date Of Birth',
-                Roles: 'Roles'
+        createUser: {
+            meta: { title: 'Create User' },
+            title: 'User',
+            subtitle: 'Create',
+            form: {
+                emailAddress: 'Email Address',
+                password: 'Password',
+                confirmPassword: 'Confirm Password',
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                dateOfBirth: 'Date Of Birth',
+                roles: 'Roles'
             },
-            CancelButton: 'Cancel',
-            SubmitButton: 'Submit'
+            cancelButton: 'Cancel',
+            submitButton: 'Submit'
         },
-        UpdateUser: {
-            Meta: { Title: 'Update Update' },
-            Title: 'User',
-            Subtitle: 'Update',
-            UserNotFound: 'User could not be found.',
-            Form: {
-                EmailAddress: 'Email Address',
-                FirstName: 'First Name',
-                LastName: 'Last Name',
-                DateOfBirth: 'Date Of Birth',
-                Roles: 'Roles'
+        updateUser: {
+            meta: { title: 'Update Update' },
+            title: 'User',
+            subtitle: 'Update',
+            usernotFound: 'User could not be found.',
+            form: {
+                emailAddress: 'Email Address',
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                dateOfBirth: 'Date Of Birth',
+                roles: 'Roles'
             },
-            LockModal: {
-                Title: 'Confirm',
-                Message:
+            lockModal: {
+                title: 'Confirm',
+                message:
                     'Are you sure you want to lock <strong>{{firstName}} {{lastName}}</strong>?',
-                Confirm: 'Ok',
-                Cancel: 'Cancel'
+                confirm: 'Ok',
+                cancel: 'Cancel'
             },
-            UnlockModal: {
-                Title: 'Confirm',
-                Message:
+            unlockModal: {
+                title: 'Confirm',
+                message:
                     'Are you sure you want to unlock <strong>{{firstName}} {{lastName}}</strong>?',
-                Confirm: 'Ok',
-                Cancel: 'Cancel'
+                confirm: 'Ok',
+                cancel: 'Cancel'
             },
-            DeleteModal: {
-                Title: 'Confirm',
-                Message:
+            deleteModal: {
+                title: 'Confirm',
+                message:
                     'Are you sure you want to delete <strong>{{firstName}} {{lastName}}</strong>?',
-                Confirm: 'Ok',
-                Cancel: 'Cancel'
+                confirm: 'Ok',
+                cancel: 'Cancel'
             },
-            CancelButton: 'Cancel',
-            LockButton: 'Lock',
-            UnlockButton: 'Unlock',
-            DeleteButton: 'Delete',
-            SubmitButton: 'Submit'
+            cancelButton: 'Cancel',
+            lockButton: 'Lock',
+            unlockButton: 'Unlock',
+            deleteButton: 'Delete',
+            submitButton: 'Submit'
         }
     }
 };

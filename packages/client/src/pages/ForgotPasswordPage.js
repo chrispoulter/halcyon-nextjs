@@ -19,15 +19,15 @@ export const ForgotPasswordPage = ({ history }) => {
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('Pages:ForgotPassword:Form:EmailAddress'))
-            .email(t('Validation:Email'))
-            .required(t('Validation:Required'))
+            .label(t('pages:forgotPassword.form.emailAddress'))
+            .email(t('validation:email'))
+            .required(t('validation:required'))
     });
 
     const onSubmit = async variables => {
         try {
             const result = await forgotPassword({ variables });
-            toast.success(t(`Api:Codes:${result.data.forgotPassword.code}`));
+            toast.success(t(`api:codes.${result.data.forgotPassword.code}`));
             history.push('/login');
         } catch (error) {
             console.error(error);
@@ -36,7 +36,7 @@ export const ForgotPasswordPage = ({ history }) => {
 
     return (
         <Container>
-            <h1>{t('Pages:ForgotPassword:Title')}</h1>
+            <h1>{t('pages:forgotPassword.title')}</h1>
             <hr />
 
             <Formik
@@ -49,7 +49,7 @@ export const ForgotPasswordPage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t('Pages:ForgotPassword:Form:EmailAddress')}
+                            label={t('pages:forgotPassword.form.emailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -62,7 +62,7 @@ export const ForgotPasswordPage = ({ history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('Pages:ForgotPassword:SubmitButton')}
+                                {t('pages:forgotPassword.submitButton')}
                             </Button>
                         </FormGroup>
                     </Form>

@@ -21,19 +21,19 @@ export const ResetPasswordPage = ({ match, history }) => {
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('Pages:ResetPassword:Form:EmailAddress'))
-            .email(t('Validation:Email'))
-            .required(t('Validation:Required')),
+            .label(t('pages:resetPassword.form.emailAddress'))
+            .email(t('validation:email'))
+            .required(t('validation:required')),
         newPassword: Yup.string()
-            .label(t('Pages:ResetPassword:Form:NewPassword'))
-            .min(8, t('Validation:Min'))
-            .max(50, t('Validation:Max'))
-            .required(t('Validation:Required')),
+            .label(t('pages:resetPassword.form.newPassword'))
+            .min(8, t('validation:min'))
+            .max(50, t('validation:max'))
+            .required(t('validation:required')),
         confirmNewPassword: Yup.string()
-            .label(t('Pages:ResetPassword:Form:ConfirmNewPassword'))
-            .required(t('Validation:Required'))
+            .label(t('pages:resetPassword.form.confirmNewPassword'))
+            .required(t('validation:required'))
             .oneOf([Yup.ref('newPassword')], d =>
-                t('Validation:FieldsDoNotMatch', d)
+                t('validation:fieldsDoNotMatch', d)
             )
     });
 
@@ -43,7 +43,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                 variables: { token: match.params.token, ...variables }
             });
 
-            toast.success(t(`Api:Codes:${result.data.resetPassword.code}`));
+            toast.success(t(`api:codes.${result.data.resetPassword.code}`));
             history.push('/login');
         } catch (error) {
             console.error(error);
@@ -52,7 +52,7 @@ export const ResetPasswordPage = ({ match, history }) => {
 
     return (
         <Container>
-            <h1>{t('Pages:ResetPassword:Title')}</h1>
+            <h1>{t('pages:resetPassword.title')}</h1>
             <hr />
 
             <Formik
@@ -65,7 +65,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t('Pages:ResetPassword:Form:EmailAddress')}
+                            label={t('pages:resetPassword.form.emailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -74,7 +74,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                         <Field
                             name="newPassword"
                             type="password"
-                            label={t('Pages:ResetPassword:Form:NewPassword')}
+                            label={t('pages:resetPassword.form.newPassword')}
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -84,7 +84,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                             name="confirmNewPassword"
                             type="password"
                             label={t(
-                                'Pages:ResetPassword:Form:ConfirmNewPassword'
+                                'pages:resetPassword.form.confirmNewPassword'
                             )}
                             required
                             maxLength={50}
@@ -98,7 +98,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('Pages:ResetPassword:SubmitButton')}
+                                {t('pages:resetPassword.submitButton')}
                             </Button>
                         </FormGroup>
                     </Form>

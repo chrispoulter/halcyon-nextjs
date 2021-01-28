@@ -23,12 +23,12 @@ export const LoginPage = ({ history }) => {
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('Pages:Login:Form:EmailAddress'))
-            .email(t('Validation:Email'))
-            .required(t('Validation:Required')),
+            .label(t('pages:login.form.emailAddress'))
+            .email(t('validation:email'))
+            .required(t('validation:required')),
         password: Yup.string()
-            .label(t('Pages:Login:Form:Password'))
-            .required(t('Validation:Required'))
+            .label(t('pages:login.form.password'))
+            .required(t('validation:required'))
     });
 
     const onSubmit = async variables => {
@@ -50,7 +50,7 @@ export const LoginPage = ({ history }) => {
 
     return (
         <Container>
-            <h1>{t('Pages:Login:Title')}</h1>
+            <h1>{t('pages:login.title')}</h1>
             <hr />
 
             <Formik
@@ -63,7 +63,7 @@ export const LoginPage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t('Pages:Login:Form:EmailAddress')}
+                            label={t('pages:login.form.emailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -73,7 +73,7 @@ export const LoginPage = ({ history }) => {
                         <Field
                             name="password"
                             type="password"
-                            label={t('Pages:Login:Form:Password')}
+                            label={t('pages:login.form.password')}
                             required
                             maxLength={50}
                             autoComplete="current-password"
@@ -82,7 +82,7 @@ export const LoginPage = ({ history }) => {
 
                         <Field
                             name="rememberMe"
-                            label={t('Pages:Login:Form:RememberMe')}
+                            label={t('pages:login.form.rememberMe')}
                             component={CheckboxInput}
                         />
 
@@ -92,7 +92,7 @@ export const LoginPage = ({ history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('Pages:Login:SubmitButton')}
+                                {t('pages:login.submitButton')}
                             </Button>
                         </FormGroup>
                     </Form>
@@ -100,13 +100,13 @@ export const LoginPage = ({ history }) => {
             </Formik>
 
             <p>
-                {t('Pages:Login:RegisterPrompt')}{' '}
-                <Link to="/register">{t('Pages:Login:RegisterLink')}</Link>
+                {t('pages:login.registerPrompt')}{' '}
+                <Link to="/register">{t('pages:login.registerLink')}</Link>
             </p>
             <p>
-                {t('Pages:ChangePassword:ForgotPasswordPrompt')}{' '}
+                {t('pages:login.forgotPasswordPrompt')}{' '}
                 <Link to="/forgot-password">
-                    {t('Pages:ChangePassword:ForgotPasswordLink')}
+                    {t('pages:login.forgotPasswordLink')}
                 </Link>
             </p>
         </Container>

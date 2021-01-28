@@ -28,32 +28,32 @@ export const RegisterPage = ({ history }) => {
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('Pages:Register:Form:EmailAddress'))
-            .max(254, t('Validation:Max'))
-            .email(t('Validation:Email'))
-            .required(t('Validation:Required')),
+            .label(t('pages:register.form.emailAddress'))
+            .max(254, t('validation:max'))
+            .email(t('validation:email'))
+            .required(t('validation:required')),
         password: Yup.string()
-            .label(t('Pages:Register:Form:Password'))
-            .min(8, t('Validation:Min'))
-            .max(50, t('Validation:Max'))
-            .required(t('Validation:Required')),
+            .label(t('pages:register.form.password'))
+            .min(8, t('validation:min'))
+            .max(50, t('validation:max'))
+            .required(t('validation:required')),
         confirmPassword: Yup.string()
-            .label(t('Pages:Register:Form:ConfirmPassword'))
-            .required(t('Validation:Required'))
+            .label(t('pages:register.form.confirmPassword'))
+            .required(t('validation:required'))
             .oneOf([Yup.ref('password')], d =>
-                t('Validation:FieldsDoNotMatch', d)
+                t('validation:fieldsDoNotMatch', d)
             ),
         firstName: Yup.string()
-            .label(t('Pages:Register:Form:FirstName'))
-            .max(50, t('Validation:Max'))
-            .required(t('Validation:Required')),
+            .label(t('pages:register.form.firstName'))
+            .max(50, t('validation:max'))
+            .required(t('validation:required')),
         lastName: Yup.string()
-            .label(t('Pages:Register:Form:LastName'))
-            .max(50, t('Validation:Max'))
-            .required(t('Validation:Required')),
+            .label(t('pages:register.form.lastName'))
+            .max(50, t('validation:max'))
+            .required(t('validation:required')),
         dateOfBirth: Yup.string()
-            .label(t('Pages:Register:Form:DateOfBirth'))
-            .required(t('Validation:Required'))
+            .label(t('pages:register.form.dateOfBirth'))
+            .required(t('validation:required'))
     });
 
     const onSubmit = async variables => {
@@ -73,7 +73,7 @@ export const RegisterPage = ({ history }) => {
 
     return (
         <Container>
-            <h1>{t('Pages:Register:Title')}</h1>
+            <h1>{t('pages:register.title')}</h1>
             <hr />
 
             <Formik
@@ -86,7 +86,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t('Pages:Register:Form:EmailAddress')}
+                            label={t('pages:register.form.emailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -96,7 +96,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="password"
                             type="password"
-                            label={t('Pages:Register:Form:Password')}
+                            label={t('pages:register.form.password')}
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -106,7 +106,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="confirmPassword"
                             type="password"
-                            label={t('Pages:Register:Form:ConfirmPassword')}
+                            label={t('pages:register.form.confirmPassword')}
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -116,7 +116,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="firstName"
                             type="text"
-                            label={t('Pages:Register:Form:FirstName')}
+                            label={t('pages:register.form.firstName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -125,7 +125,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="lastName"
                             type="text"
-                            label={t('Pages:Register:Form:LastName')}
+                            label={t('pages:register.form.lastName')}
                             required
                             maxLength={50}
                             component={TextInput}
@@ -134,7 +134,7 @@ export const RegisterPage = ({ history }) => {
                         <Field
                             name="dateOfBirth"
                             type="date"
-                            label={t('Pages:Register:Form:DateOfBirth')}
+                            label={t('pages:register.form.dateOfBirth')}
                             required
                             component={DateInput}
                         />
@@ -145,7 +145,7 @@ export const RegisterPage = ({ history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('Pages:Register:SubmitButton')}
+                                {t('pages:register.submitButton')}
                             </Button>
                         </FormGroup>
                     </Form>
@@ -153,8 +153,8 @@ export const RegisterPage = ({ history }) => {
             </Formik>
 
             <p>
-                {t('Pages:Register:LoginPrompt')}{' '}
-                <Link to="/login">{t('Pages:Register:LoginLink')}</Link>
+                {t('pages:register.loginPrompt')}{' '}
+                <Link to="/login">{t('pages:register.loginLink')}</Link>
             </p>
         </Container>
     );

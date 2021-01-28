@@ -39,63 +39,63 @@ export const App = () => {
                         <Switch>
                             <PublicRoute path="/" component={HomePage} exact />
                             <PublicRoute
-                                title={t('Pages:Register:Meta:Title')}
+                                title={t('pages:register.meta.title')}
                                 path="/register"
                                 component={RegisterPage}
                                 exact
                             />
                             <PublicRoute
-                                title={t('Pages:Login:Meta:Title')}
+                                title={t('pages:login.meta.title')}
                                 path="/login"
                                 component={LoginPage}
                                 exact
                             />
                             <PublicRoute
-                                title={t('Pages:ForgotPassword:Meta:Title')}
+                                title={t('pages:forgotPassword.meta.title')}
                                 path="/forgot-password"
                                 component={ForgotPasswordPage}
                                 exact
                             />
                             <PublicRoute
-                                title={t('Pages:ResetPassword:Meta:Title')}
+                                title={t('pages:resetPassword.meta.title')}
                                 path="/reset-password/:token"
                                 component={ResetPasswordPage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('Pages:MyAccount:Meta:Title')}
+                                title={t('pages:myAccount.meta.title')}
                                 path="/my-account"
                                 component={MyAccountPage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('Pages:UpdateProfile:Meta:Title')}
+                                title={t('pages:updateProfile.meta.title')}
                                 path="/update-profile"
                                 component={UpdateProfilePage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('Pages:ChangePassword:Meta:Title')}
+                                title={t('pages:changePassword.meta.title')}
                                 path="/change-password"
                                 component={ChangePasswordPage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('Pages:User:Meta:Title')}
+                                title={t('pages:user.meta.title')}
                                 path="/user"
                                 requiredRoles={IS_USER_ADMINISTRATOR}
                                 component={UserPage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('Pages:CreateUser:Meta:Title')}
+                                title={t('pages:createUser.meta.title')}
                                 path="/user/create"
                                 requiredRoles={IS_USER_ADMINISTRATOR}
                                 component={CreateUserPage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('Pages:UpdateUser:Meta:Title')}
+                                title={t('pages:updateUser.meta.title')}
                                 path="/user/:id"
                                 requiredRoles={IS_USER_ADMINISTRATOR}
                                 component={UpdateUserPage}

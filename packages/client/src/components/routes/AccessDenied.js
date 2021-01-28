@@ -10,13 +10,13 @@ export const AccessDenied = () => {
         <Jumbotron>
             <Container>
                 <h1 className="display-3">
-                    {t('Components:AccessDenied:Title')}
+                    {t('components:accessDenied.title')}
                 </h1>
                 <hr />
-                <p className="lead">{t('Components:AccessDenied:Lead')}</p>
+                <p className="lead">{t('components:accessDenied.lead')}</p>
                 <p className="text-right">
                     <Button to="/" color="primary" size="lg" tag={Link}>
-                        {t('Components:AccessDenied:HomeButton')}
+                        {t('components:accessDenied.homeButton')}
                     </Button>
                 </p>
             </Container>
