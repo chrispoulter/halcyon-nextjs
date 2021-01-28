@@ -241,7 +241,7 @@ export const en = {
             submitButton: 'Submit'
         },
         updateUser: {
-            meta: { title: 'Update Update' },
+            meta: { title: 'Update User' },
             title: 'User',
             subtitle: 'Update',
             usernotFound: 'User could not be found.',
