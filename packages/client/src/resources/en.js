@@ -37,6 +37,10 @@ export const en = {
             EMAIL_ADDRESS_DESC: 'Email Address Z-A'
         }
     },
+    languages: {
+        en: 'EN',
+        zh: '簡'
+    },
     validation: {
         required: '${label} is a required field.',
         email: '${label} must be a valid email.',

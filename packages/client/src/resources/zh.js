@@ -13,7 +13,7 @@ export const zh = {
             USER_LOCKED: '用户成功锁定。',
             USER_UNLOCKED: '用户已成功解锁。',
             USER_DELETED: '用户已成功删除。',
-            DUPLICATE_USER: '用户名“ {{emailAddress}}”已被使用。',
+            DUPLICATE_USER: '用户名 "{{emailAddress}}" 已被使用。',
             INVALID_TOKEN: '令牌无效。',
             USER_NOT_FOUND: '找不到用户。',
             INCORRECT_PASSWORD: '密码错误。',
@@ -33,6 +33,10 @@ export const zh = {
             EMAIL_ADDRESS_ASC: '电子邮件地址A-Z',
             EMAIL_ADDRESS_DESC: '电子邮件地址Z-A'
         }
+    },
+    languages: {
+        en: 'EN',
+        zh: '簡'
     },
     validation: {
         required: '${label} 是必填字段。',
@@ -250,21 +254,21 @@ export const zh = {
             lockModal: {
                 title: '确认',
                 message:
-                    '您确定要锁定 <strong>{{firstName}} {{lastName}}</ strong> 吗？',
+                    '您确定要锁定 <strong>{{firstName}} {{lastName}}</strong> 吗？',
                 confirm: '好',
                 cancel: '取消'
             },
             unlockModal: {
                 title: '确认',
                 message:
-                    '您确定要解锁 <strong>{{firstName}} {{lastName}}</ strong> 吗？',
+                    '您确定要解锁 <strong>{{firstName}} {{lastName}}</strong> 吗？',
                 confirm: '好',
                 cancel: '取消'
             },
             deleteModal: {
                 title: '确认',
                 message:
-                    '您确定要删除 <strong>{{firstName}} {{lastName}}</ strong> 吗？',
+                    '您确定要删除 <strong>{{firstName}} {{lastName}}</strong> 吗？',
                 confirm: '好',
                 cancel: '取消'
             },
