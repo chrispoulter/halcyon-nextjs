@@ -82,6 +82,11 @@ export const en = {
                 'December'
             ]
         },
+        errorBoundary: {
+            title: 'Error',
+            lead: 'Sorry, something went wrong. Please try again later.',
+            homeButton: 'Home'
+        },
         accessDenied: {
             title: 'Access Denied',
             lead: 'Sorry, you do not have access to this resource.',

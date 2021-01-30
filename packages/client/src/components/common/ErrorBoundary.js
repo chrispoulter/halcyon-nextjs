@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Trans } from 'react-i18next';
 import { Container, Jumbotron, Button } from 'reactstrap';
 
 export class ErrorBoundary extends React.Component {
@@ -21,15 +22,16 @@ export class ErrorBoundary extends React.Component {
         return (
             <Jumbotron>
                 <Container>
-                    <h1 className="display-3">Error</h1>
+                    <h1 className="display-3">
+                        <Trans>components:errorBoundary.title</Trans>
+                    </h1>
                     <hr />
                     <p className="lead">
-                        Sorry, something went wrong. Please try again later.
+                        <Trans>components:errorBoundary.lead</Trans>
                     </p>
-
                     <p className="text-right">
                         <Button to="/" color="primary" size="lg" tag={Link}>
-                            Home
+                            <Trans>components:errorBoundary.homeButton</Trans>
                         </Button>
                     </p>
                 </Container>

@@ -79,6 +79,11 @@ export const zh = {
                 '十二月'
             ]
         },
+        errorBoundary: {
+            title: '错误',
+            lead: '抱歉，出了一些问题。请稍后再试。',
+            homeButton: '家'
+        },
         accessDenied: {
             title: '拒绝访问',
             lead: '抱歉，您无权访问此资源。',
