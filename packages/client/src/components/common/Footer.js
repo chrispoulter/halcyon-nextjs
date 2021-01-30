@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Container } from 'reactstrap';
+import { Container, Button } from 'reactstrap';
 import * as resources from '../../resources';
 
 const currentYear = new Date().getFullYear();
@@ -24,14 +24,14 @@ export const Footer = () => {
                     </p>
                     <p>
                         {Object.keys(resources).map(lng => (
-                            <button
+                            <Button
                                 key={lng}
-                                type="button"
-                                className="btn btn-link p-0 ml-2"
+                                color="link"
+                                className="p-0 ml-2"
                                 onClick={() => changeLanguage(lng)}
                             >
                                 {t(`languages:${lng}`)}
-                            </button>
+                            </Button>
                         ))}
                     </p>
                 </div>
