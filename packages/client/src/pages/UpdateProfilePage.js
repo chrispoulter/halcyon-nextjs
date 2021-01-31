@@ -31,20 +31,20 @@ export const UpdateProfilePage = ({ history }) => {
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
             .label(t('pages:updateProfile.form.emailAddress'))
-            .max(254, t('validation:max'))
-            .email(t('validation:email'))
-            .required(t('validation:required')),
+            .max(254)
+            .email()
+            .required(),
         firstName: Yup.string()
             .label(t('pages:updateProfile.form.firstName'))
-            .max(50, t('validation:max'))
-            .required(t('validation:required')),
+            .max(50)
+            .required(),
         lastName: Yup.string()
             .label(t('pages:updateProfile.form.lastName'))
-            .max(50, t('validation:max'))
-            .required(t('validation:required')),
+            .max(50)
+            .required(),
         dateOfBirth: Yup.string()
             .label(t('pages:updateProfile.form.dateOfBirth'))
-            .required(t('validation:required'))
+            .required()
     });
 
     const onSubmit = async variables => {

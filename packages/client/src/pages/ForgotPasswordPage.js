@@ -20,8 +20,8 @@ export const ForgotPasswordPage = ({ history }) => {
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
             .label(t('pages:forgotPassword.form.emailAddress'))
-            .email(t('validation:email'))
-            .required(t('validation:required'))
+            .email()
+            .required()
     });
 
     const onSubmit = async variables => {

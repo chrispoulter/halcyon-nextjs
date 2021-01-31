@@ -43,7 +43,7 @@
         "email": "${label} 必须是有效的电子邮件。",
         "max": "${label} 最多只能包含 ${max} 个字符。",
         "min": "${label} 必须至少包含 ${min} 个字符。",
-        "fieldsDoNotMatch": "\"{{label}}\" 字段不匹配。"
+        "oneOf": "\"${label}\" 字段不匹配。"
     },
     "components": {
         "header": {

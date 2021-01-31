@@ -29,31 +29,29 @@ export const RegisterPage = ({ history }) => {
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
             .label(t('pages:register.form.emailAddress'))
-            .max(254, t('validation:max'))
-            .email(t('validation:email'))
-            .required(t('validation:required')),
+            .max(254)
+            .email()
+            .required(),
         password: Yup.string()
             .label(t('pages:register.form.password'))
-            .min(8, t('validation:min'))
-            .max(50, t('validation:max'))
-            .required(t('validation:required')),
+            .min(8)
+            .max(50)
+            .required(),
         confirmPassword: Yup.string()
             .label(t('pages:register.form.confirmPassword'))
-            .required(t('validation:required'))
-            .oneOf([Yup.ref('password')], d =>
-                t('validation:fieldsDoNotMatch', d)
-            ),
+            .required()
+            .oneOf([Yup.ref('password')]),
         firstName: Yup.string()
             .label(t('pages:register.form.firstName'))
-            .max(50, t('validation:max'))
-            .required(t('validation:required')),
+            .max(50)
+            .required(),
         lastName: Yup.string()
             .label(t('pages:register.form.lastName'))
-            .max(50, t('validation:max'))
-            .required(t('validation:required')),
+            .max(50)
+            .required(),
         dateOfBirth: Yup.string()
             .label(t('pages:register.form.dateOfBirth'))
-            .required(t('validation:required'))
+            .required()
     });
 
     const onSubmit = async variables => {

@@ -24,11 +24,9 @@ export const LoginPage = ({ history }) => {
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
             .label(t('pages:login.form.emailAddress'))
-            .email(t('validation:email'))
-            .required(t('validation:required')),
-        password: Yup.string()
-            .label(t('pages:login.form.password'))
-            .required(t('validation:required'))
+            .email()
+            .required(),
+        password: Yup.string().label(t('pages:login.form.password')).required()
     });
 
     const onSubmit = async variables => {

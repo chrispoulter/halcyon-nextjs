@@ -43,7 +43,7 @@
         "email": "${label} must be a valid email.",
         "max": "${label} must be at most ${max} characters.",
         "min": "${label} must be at least ${min} characters.",
-        "fieldsDoNotMatch": "The \"{{label}}\" field does not match."
+        "oneOf": "The \"${label}\" field does not match."
     },
     "components": {
         "header": {

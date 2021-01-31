@@ -22,19 +22,17 @@ export const ResetPasswordPage = ({ match, history }) => {
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
             .label(t('pages:resetPassword.form.emailAddress'))
-            .email(t('validation:email'))
-            .required(t('validation:required')),
+            .email()
+            .required(),
         newPassword: Yup.string()
             .label(t('pages:resetPassword.form.newPassword'))
-            .min(8, t('validation:min'))
-            .max(50, t('validation:max'))
-            .required(t('validation:required')),
+            .min(8)
+            .max(50)
+            .required(),
         confirmNewPassword: Yup.string()
             .label(t('pages:resetPassword.form.confirmNewPassword'))
-            .required(t('validation:required'))
-            .oneOf([Yup.ref('newPassword')], d =>
-                t('validation:fieldsDoNotMatch', d)
-            )
+            .required()
+            .oneOf([Yup.ref('newPassword')])
     });
 
     const onSubmit = async variables => {

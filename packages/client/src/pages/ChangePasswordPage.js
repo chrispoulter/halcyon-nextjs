@@ -23,18 +23,16 @@ export const ChangePasswordPage = ({ history }) => {
     const validationSchema = Yup.object().shape({
         currentPassword: Yup.string()
             .label(t('pages:changePassword.form.currentPassword'))
-            .required(t('validation:required')),
+            .required(),
         newPassword: Yup.string()
             .label(t('pages:changePassword.form.newPassword'))
-            .min(8, t('validation:min'))
-            .max(50, t('validation:max'))
-            .required(t('validation:required')),
+            .min(8)
+            .max(50)
+            .required(),
         confirmNewPassword: Yup.string()
             .label(t('pages:changePassword.form.confirmNewPassword'))
-            .required(t('validation:required'))
-            .oneOf([Yup.ref('newPassword')], d =>
-                t('validation:fieldsDoNotMatch', d)
-            )
+            .required()
+            .oneOf([Yup.ref('newPassword')])
     });
 
     const onSubmit = async variables => {
