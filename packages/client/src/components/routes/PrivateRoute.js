@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import { Redirect } from 'react-router';
-import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../providers/AuthProvider';
 import { PublicRoute } from './PublicRoute';
-import { AccessDenied } from './AccessDenied';
+import { AccessDeniedPage } from '../../pages';
 import { isAuthorized } from '../../utils/auth';
 
 export const PrivateRoute = ({
@@ -11,19 +10,17 @@ export const PrivateRoute = ({
     requiredRoles,
     ...rest
 }) => {
-    const { t } = useTranslation();
-
     const { currentUser } = useContext(AuthContext);
 
     if (!isAuthorized(currentUser)) {
         return <Redirect to="/login" />;
     }
 
-    if (!isAuthorized(currentUser, requiredRoles)) {
+    if (isAuthorized(currentUser, requiredRoles)) {
         return (
             <PublicRoute
-                title={t('components:accessDenied.meta.title')}
-                component={AccessDenied}
+                meta="pages:accessDenied.meta"
+                component={AccessDeniedPage}
             />
         );
     }

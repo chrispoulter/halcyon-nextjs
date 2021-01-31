@@ -1,17 +1,25 @@
 import React from 'react';
 import { Route } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 
-export const PublicRoute = ({ component: PublicComponent, title, ...rest }) => {
+export const PublicRoute = ({ component: PublicComponent, meta, ...rest }) => {
     const { t } = useTranslation();
 
-    const meta = t('components:publicRoute.meta', {
+    const { title, description, keywords } = t(meta, {
         returnObjects: true
     });
 
-    document.title = title
-        ? `${title} ${meta.seperator} ${meta.title}`
-        : meta.title;
-
-    return <Route component={PublicComponent} {...rest} />;
+    return (
+        <>
+            <Helmet>
+                {title && <title>{title}</title>}
+                {description && (
+                    <meta name="description" content={description} />
+                )}
+                {keywords && <meta name="keywords" content={keywords} />}
+            </Helmet>
+            <Route component={PublicComponent} {...rest} />;
+        </>
+    );
 };

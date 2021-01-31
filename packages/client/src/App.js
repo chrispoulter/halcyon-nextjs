@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer, Slide } from 'react-toastify';
+import { Helmet } from 'react-helmet';
 import {
     AuthProvider,
     ApolloProvider,
@@ -33,69 +34,77 @@ export const App = () => {
     return (
         <AuthProvider>
             <ApolloProvider>
+                <Helmet
+                    defaultTitle={t('meta:title')}
+                    titleTemplate={t('meta:template')}
+                >
+                    <meta name="description" content={t('meta:description')} />
+                    <meta name="keywords" content={t('meta:keywords')} />
+                </Helmet>
+
                 <BrowserRouter>
                     <Header />
                     <ErrorBoundary>
                         <Switch>
                             <PublicRoute path="/" component={HomePage} exact />
                             <PublicRoute
-                                title={t('pages:register.meta.title')}
+                                meta="pages:register.meta"
                                 path="/register"
                                 component={RegisterPage}
                                 exact
                             />
                             <PublicRoute
-                                title={t('pages:login.meta.title')}
+                                meta="pages:login.meta"
                                 path="/login"
                                 component={LoginPage}
                                 exact
                             />
                             <PublicRoute
-                                title={t('pages:forgotPassword.meta.title')}
+                                meta="pages:forgotPassword.meta"
                                 path="/forgot-password"
                                 component={ForgotPasswordPage}
                                 exact
                             />
                             <PublicRoute
-                                title={t('pages:resetPassword.meta.title')}
+                                meta="pages:resetPassword.meta"
                                 path="/reset-password/:token"
                                 component={ResetPasswordPage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('pages:myAccount.meta.title')}
+                                meta="pages:myAccount.meta"
                                 path="/my-account"
                                 component={MyAccountPage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('pages:updateProfile.meta.title')}
+                                meta="pages:updateProfile.meta"
                                 path="/update-profile"
                                 component={UpdateProfilePage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('pages:changePassword.meta.title')}
+                                meta="pages:changePassword.meta"
                                 path="/change-password"
                                 component={ChangePasswordPage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('pages:user.meta.title')}
+                                meta="pages:user.meta"
                                 path="/user"
                                 requiredRoles={IS_USER_ADMINISTRATOR}
                                 component={UserPage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('pages:createUser.meta.title')}
+                                meta="pages:createUser.meta"
                                 path="/user/create"
                                 requiredRoles={IS_USER_ADMINISTRATOR}
                                 component={CreateUserPage}
                                 exact
                             />
                             <PrivateRoute
-                                title={t('pages:updateUser.meta.title')}
+                                meta="pages:updateUser.meta"
                                 path="/user/:id"
                                 requiredRoles={IS_USER_ADMINISTRATOR}
                                 component={UpdateUserPage}

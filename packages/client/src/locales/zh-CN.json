@@ -45,6 +45,12 @@
         "min": "${label} 必须至少包含 ${min} 个字符。",
         "oneOf": "\"${label}\" 字段不匹配。"
     },
+    "meta": {
+        "title": "太平",
+        "template": "%s // 太平",
+        "description": "一个React网站项目模板。",
+        "keywords": "项目模板，做出反应"
+    },
     "components": {
         "header": {
             "brand": "太平",
@@ -85,24 +91,6 @@
                 "lead": "抱歉，出了一些问题。请稍后再试。",
                 "homeButton": "家"
             }
-        },
-        "accessDenied": {
-            "meta": {
-                "title": "拒绝访问"
-            },
-            "jumbotron": {
-                "title": "拒绝访问",
-                "lead": "抱歉，您无权访问此资源。",
-                "homeButton": "家"
-            }
-        },
-        "publicRoute": {
-            "meta": {
-                "title": "太平",
-                "description": "一个React网站项目模板。",
-                "keywords": "项目模板，做出反应",
-                "seperator": "//"
-            }
         }
     },
     "pages": {
@@ -121,6 +109,16 @@
             "jumbotron": {
                 "title": "网页未找到",
                 "lead": "抱歉，找不到您要查找的页面。",
+                "homeButton": "家"
+            }
+        },
+        "accessDenied": {
+            "meta": {
+                "title": "拒绝访问"
+            },
+            "jumbotron": {
+                "title": "拒绝访问",
+                "lead": "抱歉，您无权访问此资源。",
                 "homeButton": "家"
             }
         },
@@ -184,7 +182,7 @@
                 "title": "我的帐户"
             },
             "title": "我的帐户",
-            "profilenotFound": "找不到个人资料。",
+            "profileNotFound": "找不到个人资料。",
             "profileSection": {
                 "title": "个人资料",
                 "updateButton": "更新",
@@ -211,7 +209,7 @@
                 "title": "更新配置文件"
             },
             "title": "更新配置文件",
-            "profilenotFound": "找不到个人资料。",
+            "profileNotFound": "找不到个人资料。",
             "form": {
                 "emailAddress": "电子邮件地址",
                 "firstName": "名字",

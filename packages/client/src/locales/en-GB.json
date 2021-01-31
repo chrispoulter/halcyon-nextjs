@@ -45,6 +45,12 @@
         "min": "${label} must be at least ${min} characters.",
         "oneOf": "The \"${label}\" field does not match."
     },
+    "meta": {
+        "title": "Halcyon",
+        "template": "%s // Halcyon",
+        "description": "A React web site project template.",
+        "keywords": "project template, react"
+    },
     "components": {
         "header": {
             "brand": "Halcyon",
@@ -85,24 +91,6 @@
                 "lead": "Sorry, something went wrong. Please try again later.",
                 "homeButton": "Home"
             }
-        },
-        "accessDenied": {
-            "meta": {
-                "title": "Access Denied"
-            },
-            "jumbotron": {
-                "title": "Access Denied",
-                "lead": "Sorry, you do not have access to this resource.",
-                "homeButton": "Home"
-            }
-        },
-        "publicRoute": {
-            "meta": {
-                "title": "Halcyon",
-                "description": "A React web site project template.",
-                "keywords": "project template, react",
-                "seperator": "//"
-            }
         }
     },
     "pages": {
@@ -121,6 +109,16 @@
             "jumbotron": {
                 "title": "Page Not Found",
                 "lead": "Sorry, the Page you were looking for could not be found.",
+                "homeButton": "Home"
+            }
+        },
+        "accessDenied": {
+            "meta": {
+                "title": "Access Denied"
+            },
+            "jumbotron": {
+                "title": "Access Denied",
+                "lead": "Sorry, you do not have access to this resource.",
                 "homeButton": "Home"
             }
         },
@@ -184,7 +182,7 @@
                 "title": "My Account"
             },
             "title": "My Account",
-            "profilenotFound": "Profile could not be found.",
+            "profileNotFound": "Profile could not be found.",
             "profileSection": {
                 "title": "Profile",
                 "updateButton": "Update",
@@ -211,7 +209,7 @@
                 "title": "Update Profile"
             },
             "title": "Update Profile",
-            "profilenotFound": "Profile could not be found.",
+            "profileNotFound": "Profile could not be found.",
             "form": {
                 "emailAddress": "Email Address",
                 "firstName": "First Name",
