@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Container, Button } from 'reactstrap';
-import * as resources from '../../resources';
 
 const currentYear = new Date().getFullYear();
 
@@ -23,7 +22,7 @@ export const Footer = () => {
                         {currentYear}
                     </p>
                     <p>
-                        {Object.keys(resources).map(lng => (
+                        {Object.keys(i18n.store.data).map(lng => (
                             <Button
                                 key={lng}
                                 color="link"

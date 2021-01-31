@@ -1,22 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import * as resources from './resources';
+import './i18n';
 import * as serviceWorker from './serviceWorker';
 import { App } from './App';
 import './styles/index.scss';
-
-i18n.use(LanguageDetector)
-    .use(initReactI18next)
-    .init({
-        resources,
-        fallbackLng: 'en',
-        interpolation: {
-            escapeValue: false
-        }
-    });
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

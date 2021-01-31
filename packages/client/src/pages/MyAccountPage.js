@@ -9,7 +9,7 @@ import { GET_PROFILE, DELETE_ACCOUNT } from '../graphql';
 import { Button, Spinner, AuthContext } from '../components';
 
 export const MyAccountPage = ({ history }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const { removeToken } = useContext(AuthContext);
 
@@ -105,7 +105,9 @@ export const MyAccountPage = ({ history }) => {
                     {t('pages:myAccount.profileSection.dateOfBirth')}
                 </span>
                 <br />
-                {new Date(data.getProfile.dateOfBirth).toLocaleDateString()}
+                {new Date(data.getProfile.dateOfBirth).toLocaleDateString(
+                    i18n.language
+                )}
             </p>
 
             <h3>{t('pages:myAccount.settingsSection.title')}</h3>
