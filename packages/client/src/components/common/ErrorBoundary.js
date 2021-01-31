@@ -23,15 +23,17 @@ export class ErrorBoundary extends React.Component {
             <Jumbotron>
                 <Container>
                     <h1 className="display-3">
-                        <Trans>components:errorBoundary.title</Trans>
+                        <Trans>components:errorBoundary.jumbotron.title</Trans>
                     </h1>
                     <hr />
                     <p className="lead">
-                        <Trans>components:errorBoundary.lead</Trans>
+                        <Trans>components:errorBoundary.jumbotron.lead</Trans>
                     </p>
                     <p className="text-right">
                         <Button to="/" color="primary" size="lg" tag={Link}>
-                            <Trans>components:errorBoundary.homeButton</Trans>
+                            <Trans>
+                                components:errorBoundary.jumbotron.homeButton
+                            </Trans>
                         </Button>
                     </p>
                 </Container>

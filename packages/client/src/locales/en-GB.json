@@ -80,21 +80,29 @@
             ]
         },
         "errorBoundary": {
-            "title": "Error",
-            "lead": "Sorry, something went wrong. Please try again later.",
-            "homeButton": "Home"
+            "jumbotron": {
+                "title": "Error",
+                "lead": "Sorry, something went wrong. Please try again later.",
+                "homeButton": "Home"
+            }
         },
         "accessDenied": {
-            "title": "Access Denied",
-            "lead": "Sorry, you do not have access to this resource.",
-            "homeButton": "Home"
-        },
-        "privateRoute": {
-            "title": "Access Denied"
+            "meta": {
+                "title": "Access Denied"
+            },
+            "jumbotron": {
+                "title": "Access Denied",
+                "lead": "Sorry, you do not have access to this resource.",
+                "homeButton": "Home"
+            }
         },
         "publicRoute": {
-            "baseTitle": "Halcyon",
-            "seperator": "//"
+            "meta": {
+                "title": "Halcyon",
+                "description": "A React web site project template.",
+                "keywords": "project template, react",
+                "seperator": "//"
+            }
         }
     },
     "pages": {
@@ -117,7 +125,9 @@
             }
         },
         "register": {
-            "meta": { "title": "Register" },
+            "meta": {
+                "title": "Register"
+            },
             "title": "Register",
             "form": {
                 "emailAddress": "Email Address",
@@ -132,7 +142,9 @@
             "loginLink": "Log in now"
         },
         "login": {
-            "meta": { "title": "Login" },
+            "meta": {
+                "title": "Login"
+            },
             "title": "Login",
             "form": {
                 "emailAddress": "Email Address",
@@ -146,7 +158,9 @@
             "forgotPasswordLink": "Request reset"
         },
         "forgotPassword": {
-            "meta": { "title": "Forgot Password" },
+            "meta": {
+                "title": "Forgot Password"
+            },
             "title": "Forgotten Password",
             "form": {
                 "emailAddress": "Email Address"
@@ -154,7 +168,9 @@
             "submitButton": "Submit"
         },
         "resetPassword": {
-            "meta": { "title": "Reset Password" },
+            "meta": {
+                "title": "Reset Password"
+            },
             "title": "Reset Password",
             "form": {
                 "emailAddress": "Email Address",
@@ -164,7 +180,9 @@
             "submitButton": "Submit"
         },
         "myAccount": {
-            "meta": { "title": "My Account" },
+            "meta": {
+                "title": "My Account"
+            },
             "title": "My Account",
             "profilenotFound": "Profile could not be found.",
             "profileSection": {
@@ -189,7 +207,9 @@
             }
         },
         "updateProfile": {
-            "meta": { "title": "Update Profile" },
+            "meta": {
+                "title": "Update Profile"
+            },
             "title": "Update Profile",
             "profilenotFound": "Profile could not be found.",
             "form": {
@@ -202,7 +222,9 @@
             "submitButton": "Submit"
         },
         "changePassword": {
-            "meta": { "title": "Change Password" },
+            "meta": {
+                "title": "Change Password"
+            },
             "title": "Change Password",
             "form": {
                 "currentPassword": "Current Password",
@@ -215,7 +237,9 @@
             "forgotPasswordLink": "Request reset"
         },
         "user": {
-            "meta": { "title": "Users" },
+            "meta": {
+                "title": "Users"
+            },
             "title": "Users",
             "createNewButton": "Create New",
             "usersnotFound": "No users could be found.",
@@ -227,7 +251,9 @@
             "lockedBadge": "Locked"
         },
         "createUser": {
-            "meta": { "title": "Create User" },
+            "meta": {
+                "title": "Create User"
+            },
             "title": "User",
             "subtitle": "Create",
             "form": {
@@ -243,7 +269,9 @@
             "submitButton": "Submit"
         },
         "updateUser": {
-            "meta": { "title": "Update User" },
+            "meta": {
+                "title": "Update User"
+            },
             "title": "User",
             "subtitle": "Update",
             "usernotFound": "User could not be found.",

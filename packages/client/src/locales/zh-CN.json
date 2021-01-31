@@ -80,21 +80,29 @@
             ]
         },
         "errorBoundary": {
-            "title": "错误",
-            "lead": "抱歉，出了一些问题。请稍后再试。",
-            "homeButton": "家"
+            "jumbotron": {
+                "title": "错误",
+                "lead": "抱歉，出了一些问题。请稍后再试。",
+                "homeButton": "家"
+            }
         },
         "accessDenied": {
-            "title": "拒绝访问",
-            "lead": "抱歉，您无权访问此资源。",
-            "homeButton": "家"
-        },
-        "privateRoute": {
-            "title": "拒绝访问"
+            "meta": {
+                "title": "拒绝访问"
+            },
+            "jumbotron": {
+                "title": "拒绝访问",
+                "lead": "抱歉，您无权访问此资源。",
+                "homeButton": "家"
+            }
         },
         "publicRoute": {
-            "baseTitle": "太平",
-            "seperator": "//"
+            "meta": {
+                "title": "太平",
+                "description": "一个React网站项目模板。",
+                "keywords": "项目模板，做出反应",
+                "seperator": "//"
+            }
         }
     },
     "pages": {
@@ -117,7 +125,9 @@
             }
         },
         "register": {
-            "meta": { "title": "登记" },
+            "meta": {
+                "title": "登记"
+            },
             "title": "登记",
             "form": {
                 "emailAddress": "电子邮件地址",
@@ -132,7 +142,9 @@
             "loginLink": "现在登录"
         },
         "login": {
-            "meta": { "title": "登录" },
+            "meta": {
+                "title": "登录"
+            },
             "title": "登录",
             "form": {
                 "emailAddress": "电子邮件地址",
@@ -146,7 +158,9 @@
             "forgotPasswordLink": "要求重设"
         },
         "forgotPassword": {
-            "meta": { "title": "忘记密码" },
+            "meta": {
+                "title": "忘记密码"
+            },
             "title": "忘记密码",
             "form": {
                 "emailAddress": "电子邮件地址"
@@ -154,7 +168,9 @@
             "submitButton": "提交"
         },
         "resetPassword": {
-            "meta": { "title": "重设密码" },
+            "meta": {
+                "title": "重设密码"
+            },
             "title": "重设密码",
             "form": {
                 "emailAddress": "电子邮件地址",
@@ -164,7 +180,9 @@
             "submitButton": "提交"
         },
         "myAccount": {
-            "meta": { "title": "我的帐户" },
+            "meta": {
+                "title": "我的帐户"
+            },
             "title": "我的帐户",
             "profilenotFound": "找不到个人资料。",
             "profileSection": {
@@ -189,7 +207,9 @@
             }
         },
         "updateProfile": {
-            "meta": { "title": "更新配置文件" },
+            "meta": {
+                "title": "更新配置文件"
+            },
             "title": "更新配置文件",
             "profilenotFound": "找不到个人资料。",
             "form": {
@@ -202,7 +222,9 @@
             "submitButton": "提交"
         },
         "changePassword": {
-            "meta": { "title": "更改密码" },
+            "meta": {
+                "title": "更改密码"
+            },
             "title": "更改密码",
             "form": {
                 "currentPassword": "当前密码",
@@ -215,7 +237,9 @@
             "forgotPasswordLink": "要求重设"
         },
         "user": {
-            "meta": { "title": "用户" },
+            "meta": {
+                "title": "用户"
+            },
             "title": "用户",
             "createNewButton": "创建新的",
             "usersnotFound": "找不到用户。",
@@ -227,7 +251,9 @@
             "lockedBadge": "已锁定"
         },
         "createUser": {
-            "meta": { "title": "创建用户" },
+            "meta": {
+                "title": "创建用户"
+            },
             "title": "用户",
             "subtitle": "创造",
             "form": {
@@ -243,7 +269,9 @@
             "submitButton": "提交"
         },
         "updateUser": {
-            "meta": { "title": "更新用户" },
+            "meta": {
+                "title": "更新用户"
+            },
             "title": "用户",
             "subtitle": "更新",
             "usernotFound": "找不到用户。",

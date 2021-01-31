@@ -22,7 +22,7 @@ export const PrivateRoute = ({
     if (!isAuthorized(currentUser, requiredRoles)) {
         return (
             <PublicRoute
-                title={t('components:privateRout.title')}
+                title={t('components:accessDenied.meta.title')}
                 component={AccessDenied}
             />
         );
