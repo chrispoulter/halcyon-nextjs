@@ -16,7 +16,7 @@ export const PrivateRoute = ({
         return <Redirect to="/login" />;
     }
 
-    if (isAuthorized(currentUser, requiredRoles)) {
+    if (!isAuthorized(currentUser, requiredRoles)) {
         return (
             <PublicRoute
                 meta="pages:accessDenied.meta"
