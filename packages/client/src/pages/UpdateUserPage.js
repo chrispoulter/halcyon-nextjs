@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -169,6 +170,10 @@ export const UpdateUserPage = ({ history, match }) => {
 
     return (
         <Container>
+            <Helmet>
+                <title>{t('pages:updateUser.meta.title')}</title>
+            </Helmet>
+
             <h1>
                 {t('pages:updateUser.title')}
                 <br />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 import { useQuery } from '@apollo/react-hooks';
 import { Formik, Form } from 'formik';
 import {
@@ -60,6 +61,10 @@ export const UserPage = () => {
 
     return (
         <Container>
+            <Helmet>
+                <title>{t('pages:user.meta.title')}</title>
+            </Helmet>
+
             <div className="d-flex justify-content-between mb-3">
                 <h1>{t('pages:user.title')}</h1>
                 <Button

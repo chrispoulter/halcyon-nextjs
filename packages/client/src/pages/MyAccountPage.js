@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Container, Alert } from 'reactstrap';
 import confirm from 'reactstrap-confirm';
@@ -56,6 +57,10 @@ export const MyAccountPage = ({ history }) => {
 
     return (
         <Container>
+            <Helmet>
+                <title>{t('pages:myAccount.meta.title')}</title>
+            </Helmet>
+
             <h1>{t('pages:myAccount.title')}</h1>
             <hr />
 
