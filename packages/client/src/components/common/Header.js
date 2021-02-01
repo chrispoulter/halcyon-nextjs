@@ -47,7 +47,7 @@ export const Header = () => {
             <Navbar color="dark" dark expand="md" fixed="top">
                 <Container>
                     <NavbarBrand to="/" tag={Link}>
-                        {t('components:header.brand')}
+                        {t('components.header.brand')}
                     </NavbarBrand>
                     <NavbarToggler onClick={toggle} />
                     <Collapse isOpen={isOpen} navbar>
@@ -55,7 +55,7 @@ export const Header = () => {
                             {isUserAdmin && (
                                 <NavItem>
                                     <NavLink to="/user" tag={Link}>
-                                        {t('components:header.nav.users')}
+                                        {t('components.header.nav.users')}
                                     </NavLink>
                                 </NavItem>
                             )}
@@ -74,11 +74,11 @@ export const Header = () => {
                                             tag={Link}
                                         >
                                             {t(
-                                                'components:header.nav.myAccount'
+                                                'components.header.nav.myAccount'
                                             )}
                                         </DropdownItem>
                                         <DropdownItem onClick={logout}>
-                                            {t('components:header.nav.logout')}
+                                            {t('components.header.nav.logout')}
                                         </DropdownItem>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
@@ -86,13 +86,13 @@ export const Header = () => {
                                 <>
                                     <NavItem>
                                         <NavLink to="/login" tag={Link}>
-                                            {t('components:header.nav.login')}
+                                            {t('components.header.nav.login')}
                                         </NavLink>
                                     </NavItem>
                                     <NavItem>
                                         <NavLink to="/register" tag={Link}>
                                             {t(
-                                                'components:header.nav.register'
+                                                'components.header.nav.register'
                                             )}
                                         </NavLink>
                                     </NavItem>

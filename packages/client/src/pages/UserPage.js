@@ -62,18 +62,18 @@ export const UserPage = () => {
     return (
         <Container>
             <Helmet>
-                <title>{t('pages:user.meta.title')}</title>
+                <title>{t('pages.user.meta.title')}</title>
             </Helmet>
 
             <div className="d-flex justify-content-between mb-3">
-                <h1>{t('pages:user.title')}</h1>
+                <h1>{t('pages.user.title')}</h1>
                 <Button
                     to="/user/create"
                     color="primary"
                     className="align-self-start"
                     tag={Link}
                 >
-                    {t('pages:user.createNewButton')}
+                    {t('pages.user.createNewButton')}
                 </Button>
             </div>
             <hr />
@@ -90,7 +90,7 @@ export const UserPage = () => {
                                     name="search"
                                     type="text"
                                     placeholder={t(
-                                        'pages:user.form.searchPlaceholder'
+                                        'pages.user.form.searchPlaceholder'
                                     )}
                                     value={values.search}
                                     onChange={handleChange}
@@ -98,11 +98,11 @@ export const UserPage = () => {
                                 />
                                 <InputGroupAddon addonType="append">
                                     <Button type="submit" color="secondary">
-                                        {t('pages:user.form.searchButton')}
+                                        {t('pages.user.form.searchButton')}
                                     </Button>
                                     <UncontrolledDropdown>
                                         <DropdownToggle caret color="secondary">
-                                            {t('pages:user.form.sortByButton')}{' '}
+                                            {t('pages.user.form.sortByButton')}{' '}
                                         </DropdownToggle>
                                         <DropdownMenu right>
                                             {sortOptions.map(option => (
@@ -116,7 +116,7 @@ export const UserPage = () => {
                                                     }
                                                 >
                                                     {t(
-                                                        `api:userSortExpressions:${option}`
+                                                        `api.userSortExpressions:${option}`
                                                     )}
                                                 </DropdownItem>
                                             ))}
@@ -131,7 +131,7 @@ export const UserPage = () => {
 
             {!data?.searchUsers.items.length ? (
                 <Alert color="info" className="container p-3 mb-3">
-                    {t('pages:user.usersNotFound')}
+                    {t('pages.user.usersNotFound')}
                 </Alert>
             ) : (
                 <>
@@ -153,7 +153,7 @@ export const UserPage = () => {
                             <div>
                                 {user.isLockedOut && (
                                     <Badge color="danger" className="mr-1">
-                                        {t('pages:user.lockedBadge')}
+                                        {t('pages.user.lockedBadge')}
                                     </Badge>
                                 )}
                                 {user.roles.map(role => (
@@ -162,7 +162,7 @@ export const UserPage = () => {
                                         color="primary"
                                         className="mr-1"
                                     >
-                                        {t(`api:userRoles.${role}`)}
+                                        {t(`api.userRoles.${role}`)}
                                     </Badge>
                                 ))}
                             </div>

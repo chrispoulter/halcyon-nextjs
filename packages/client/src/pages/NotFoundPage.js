@@ -10,19 +10,19 @@ export const NotFoundPage = () => {
     return (
         <>
             <Helmet>
-                <title>{t('pages:notFound.meta.title')}</title>
+                <title>{t('pages.notFound.meta.title')}</title>
             </Helmet>
 
             <Jumbotron>
                 <Container>
                     <h1 className="display-3">
-                        {t('pages:notFound.jumbotron.title')}
+                        {t('pages.notFound.jumbotron.title')}
                     </h1>
                     <hr />
-                    <p className="lead">{t('pages:notFound.jumbotron.lead')}</p>
+                    <p className="lead">{t('pages.notFound.jumbotron.lead')}</p>
                     <p className="text-right">
                         <Button to="/" color="primary" size="lg" tag={Link}>
-                            {t('pages:notFound.jumbotron.homeButton')}
+                            {t('pages.notFound.jumbotron.homeButton')}
                         </Button>
                     </p>
                 </Container>

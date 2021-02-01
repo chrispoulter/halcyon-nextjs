@@ -22,16 +22,16 @@ export const ResetPasswordPage = ({ match, history }) => {
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('pages:resetPassword.form.emailAddress'))
+            .label(t('pages.resetPassword.form.emailAddress'))
             .email()
             .required(),
         newPassword: Yup.string()
-            .label(t('pages:resetPassword.form.newPassword'))
+            .label(t('pages.resetPassword.form.newPassword'))
             .min(8)
             .max(50)
             .required(),
         confirmNewPassword: Yup.string()
-            .label(t('pages:resetPassword.form.confirmNewPassword'))
+            .label(t('pages.resetPassword.form.confirmNewPassword'))
             .required()
             .oneOf([Yup.ref('newPassword')])
     });
@@ -42,7 +42,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                 variables: { token: match.params.token, ...variables }
             });
 
-            toast.success(t(`api:codes.${result.data.resetPassword.code}`));
+            toast.success(t(`api.codes.${result.data.resetPassword.code}`));
             history.push('/login');
         } catch (error) {
             console.error(error);
@@ -52,10 +52,10 @@ export const ResetPasswordPage = ({ match, history }) => {
     return (
         <Container>
             <Helmet>
-                <title>{t('pages:resetPassword.meta.title')}</title>
+                <title>{t('pages.resetPassword.meta.title')}</title>
             </Helmet>
 
-            <h1>{t('pages:resetPassword.title')}</h1>
+            <h1>{t('pages.resetPassword.title')}</h1>
             <hr />
 
             <Formik
@@ -68,7 +68,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t('pages:resetPassword.form.emailAddress')}
+                            label={t('pages.resetPassword.form.emailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -77,7 +77,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                         <Field
                             name="newPassword"
                             type="password"
-                            label={t('pages:resetPassword.form.newPassword')}
+                            label={t('pages.resetPassword.form.newPassword')}
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -87,7 +87,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                             name="confirmNewPassword"
                             type="password"
                             label={t(
-                                'pages:resetPassword.form.confirmNewPassword'
+                                'pages.resetPassword.form.confirmNewPassword'
                             )}
                             required
                             maxLength={50}
@@ -101,7 +101,7 @@ export const ResetPasswordPage = ({ match, history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('pages:resetPassword.submitButton')}
+                                {t('pages.resetPassword.submitButton')}
                             </Button>
                         </FormGroup>
                     </Form>

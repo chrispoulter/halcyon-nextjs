@@ -27,7 +27,7 @@ export const ApolloProvider = ({ children }) => {
                     switch (code) {
                         case 'BAD_USER_INPUT':
                             toast.error(
-                                t(`api:codes.${code}`),
+                                t(`api.codes.${code}`),
                                 operation.variables
                             );
                             break;
@@ -38,7 +38,7 @@ export const ApolloProvider = ({ children }) => {
 
                         case 'FORBIDDEN':
                             toast.warn(
-                                t(`api:codes.${code}`, operation.variables)
+                                t(`api.codes.${code}`, operation.variables)
                             );
                             break;
 
@@ -46,8 +46,8 @@ export const ApolloProvider = ({ children }) => {
                             toast.error(
                                 t(
                                     [
-                                        `api:codes.${code}`,
-                                        'api:codes.UNKNOWN_ERROR'
+                                        `api.codes.${code}`,
+                                        'api.codes.UNKNOWN_ERROR'
                                     ],
                                     operation.variables
                                 )
@@ -57,7 +57,7 @@ export const ApolloProvider = ({ children }) => {
                     }
                 }
             } else if (networkError) {
-                toast.error(t('api:codes.UNKNOWN_ERROR', operation.variables));
+                toast.error(t('api.codes.UNKNOWN_ERROR', operation.variables));
             }
         }
     });

@@ -10,21 +10,21 @@ export const AccessDeniedPage = () => {
     return (
         <>
             <Helmet>
-                <title>{t('pages:accessDenied.meta.title')}</title>
+                <title>{t('pages.accessDenied.meta.title')}</title>
             </Helmet>
 
             <Jumbotron>
                 <Container>
                     <h1 className="display-3">
-                        {t('pages:accessDenied.jumbotron.title')}
+                        {t('pages.accessDenied.jumbotron.title')}
                     </h1>
                     <hr />
                     <p className="lead">
-                        {t('pages:accessDenied.jumbotron.lead')}
+                        {t('pages.accessDenied.jumbotron.lead')}
                     </p>
                     <p className="text-right">
                         <Button to="/" color="primary" size="lg" tag={Link}>
-                            {t('pages:accessDenied.jumbotron.homeButton')}
+                            {t('pages.accessDenied.jumbotron.homeButton')}
                         </Button>
                     </p>
                 </Container>

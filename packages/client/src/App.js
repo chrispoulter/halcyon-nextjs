@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { ToastContainer, Slide } from 'react-toastify';
-import { Helmet } from 'react-helmet';
 import {
     AuthProvider,
     ApolloProvider,
     Header,
     Footer,
     PrivateRoute,
-    ErrorBoundary
+    ErrorBoundary,
+    Spinner,
+    Meta
 } from './components';
 import {
     HomePage,
@@ -27,22 +27,12 @@ import {
 } from './pages';
 import { IS_USER_ADMINISTRATOR } from './utils/auth';
 
-export const App = () => {
-    const { t, i18n } = useTranslation();
-
-    return (
-        <AuthProvider>
-            <ApolloProvider>
-                <Helmet
-                    defaultTitle={t('meta:title')}
-                    titleTemplate={t('meta:template')}
-                >
-                    <html lang={i18n.language} />
-                    <meta name="description" content={t('meta:description')} />
-                    <meta name="keywords" content={t('meta:keywords')} />
-                </Helmet>
-
-                <BrowserRouter>
+export const App = () => (
+    <Suspense fallback={<Spinner />}>
+        <BrowserRouter>
+            <AuthProvider>
+                <ApolloProvider>
+                    <Meta />
                     <Header />
                     <ErrorBoundary>
                         <Switch>
@@ -91,7 +81,7 @@ export const App = () => {
                                 exact
                             />
                             <PrivateRoute
-                                meta="pages:updateUser.meta"
+                                meta="pages.updateUser.meta"
                                 path="/user/:id"
                                 requiredRoles={IS_USER_ADMINISTRATOR}
                                 component={UpdateUserPage}
@@ -101,15 +91,14 @@ export const App = () => {
                         </Switch>
                     </ErrorBoundary>
                     <Footer />
-                </BrowserRouter>
-
-                <ToastContainer
-                    position="bottom-right"
-                    hideProgressBar
-                    draggable={false}
-                    transition={Slide}
-                />
-            </ApolloProvider>
-        </AuthProvider>
-    );
-};
+                    <ToastContainer
+                        position="bottom-right"
+                        hideProgressBar
+                        draggable={false}
+                        transition={Slide}
+                    />
+                </ApolloProvider>
+            </AuthProvider>
+        </BrowserRouter>
+    </Suspense>
+);

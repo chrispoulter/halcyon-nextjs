@@ -24,10 +24,10 @@ export const LoginPage = ({ history }) => {
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('pages:login.form.emailAddress'))
+            .label(t('pages.login.form.emailAddress'))
             .email()
             .required(),
-        password: Yup.string().label(t('pages:login.form.password')).required()
+        password: Yup.string().label(t('pages.login.form.password')).required()
     });
 
     const onSubmit = async variables => {
@@ -50,10 +50,10 @@ export const LoginPage = ({ history }) => {
     return (
         <Container>
             <Helmet>
-                <title>{t('pages:login.meta.title')}</title>
+                <title>{t('pages.login.meta.title')}</title>
             </Helmet>
 
-            <h1>{t('pages:login.title')}</h1>
+            <h1>{t('pages.login.title')}</h1>
             <hr />
 
             <Formik
@@ -66,7 +66,7 @@ export const LoginPage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t('pages:login.form.emailAddress')}
+                            label={t('pages.login.form.emailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -76,7 +76,7 @@ export const LoginPage = ({ history }) => {
                         <Field
                             name="password"
                             type="password"
-                            label={t('pages:login.form.password')}
+                            label={t('pages.login.form.password')}
                             required
                             maxLength={50}
                             autoComplete="current-password"
@@ -85,7 +85,7 @@ export const LoginPage = ({ history }) => {
 
                         <Field
                             name="rememberMe"
-                            label={t('pages:login.form.rememberMe')}
+                            label={t('pages.login.form.rememberMe')}
                             component={CheckboxInput}
                         />
 
@@ -95,7 +95,7 @@ export const LoginPage = ({ history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('pages:login.submitButton')}
+                                {t('pages.login.submitButton')}
                             </Button>
                         </FormGroup>
                     </Form>
@@ -103,13 +103,13 @@ export const LoginPage = ({ history }) => {
             </Formik>
 
             <p>
-                {t('pages:login.registerPrompt')}{' '}
-                <Link to="/register">{t('pages:login.registerLink')}</Link>
+                {t('pages.login.registerPrompt')}{' '}
+                <Link to="/register">{t('pages.login.registerLink')}</Link>
             </p>
             <p>
-                {t('pages:login.forgotPasswordPrompt')}{' '}
+                {t('pages.login.forgotPasswordPrompt')}{' '}
                 <Link to="/forgot-password">
-                    {t('pages:login.forgotPasswordLink')}
+                    {t('pages.login.forgotPasswordLink')}
                 </Link>
             </p>
         </Container>

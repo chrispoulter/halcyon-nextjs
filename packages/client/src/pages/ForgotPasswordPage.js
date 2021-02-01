@@ -20,7 +20,7 @@ export const ForgotPasswordPage = ({ history }) => {
 
     const validationSchema = Yup.object().shape({
         emailAddress: Yup.string()
-            .label(t('pages:forgotPassword.form.emailAddress'))
+            .label(t('pages.forgotPassword.form.emailAddress'))
             .email()
             .required()
     });
@@ -28,7 +28,7 @@ export const ForgotPasswordPage = ({ history }) => {
     const onSubmit = async variables => {
         try {
             const result = await forgotPassword({ variables });
-            toast.success(t(`api:codes.${result.data.forgotPassword.code}`));
+            toast.success(t(`api.codes.${result.data.forgotPassword.code}`));
             history.push('/login');
         } catch (error) {
             console.error(error);
@@ -38,10 +38,10 @@ export const ForgotPasswordPage = ({ history }) => {
     return (
         <Container>
             <Helmet>
-                <title>{t('pages:forgotPassword.meta.title')}</title>
+                <title>{t('pages.forgotPassword.meta.title')}</title>
             </Helmet>
 
-            <h1>{t('pages:forgotPassword.title')}</h1>
+            <h1>{t('pages.forgotPassword.title')}</h1>
             <hr />
 
             <Formik
@@ -54,7 +54,7 @@ export const ForgotPasswordPage = ({ history }) => {
                         <Field
                             name="emailAddress"
                             type="email"
-                            label={t('pages:forgotPassword.form.emailAddress')}
+                            label={t('pages.forgotPassword.form.emailAddress')}
                             required
                             maxLength={254}
                             autoComplete="username"
@@ -67,7 +67,7 @@ export const ForgotPasswordPage = ({ history }) => {
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('pages:forgotPassword.submitButton')}
+                                {t('pages.forgotPassword.submitButton')}
                             </Button>
                         </FormGroup>
                     </Form>

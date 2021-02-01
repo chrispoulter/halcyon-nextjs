@@ -7,6 +7,8 @@ const currentYear = new Date().getFullYear();
 export const Footer = () => {
     const { t, i18n } = useTranslation();
 
+    const languages = t('languages', { returnObjects: true });
+
     const changeLanguage = lng => {
         i18n.changeLanguage(lng);
     };
@@ -22,14 +24,14 @@ export const Footer = () => {
                         {currentYear}
                     </p>
                     <p>
-                        {Object.keys(i18n.store.data).map(lng => (
+                        {Object.entries(languages).map(([key, value]) => (
                             <Button
-                                key={lng}
+                                key={key}
                                 color="link"
                                 className="p-0 ml-2"
-                                onClick={() => changeLanguage(lng)}
+                                onClick={() => changeLanguage(key)}
                             >
-                                {t(`languages:${lng}`)}
+                                {value}
                             </Button>
                         ))}
                     </p>
