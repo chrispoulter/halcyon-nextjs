@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer, Slide } from 'react-toastify';
 import { Helmet } from 'react-helmet';
@@ -8,7 +8,6 @@ import {
     ApolloProvider,
     Header,
     Footer,
-    PublicRoute,
     PrivateRoute,
     ErrorBoundary
 } from './components';
@@ -47,58 +46,45 @@ export const App = () => {
                     <Header />
                     <ErrorBoundary>
                         <Switch>
-                            <PublicRoute path="/" component={HomePage} exact />
-                            <PublicRoute
-                                meta="pages:register.meta"
+                            <Route path="/" component={HomePage} exact />
+                            <Route
                                 path="/register"
                                 component={RegisterPage}
                                 exact
                             />
-                            <PublicRoute
-                                meta="pages:login.meta"
-                                path="/login"
-                                component={LoginPage}
-                                exact
-                            />
-                            <PublicRoute
-                                meta="pages:forgotPassword.meta"
+                            <Route path="/login" component={LoginPage} exact />
+                            <Route
                                 path="/forgot-password"
                                 component={ForgotPasswordPage}
                                 exact
                             />
-                            <PublicRoute
-                                meta="pages:resetPassword.meta"
+                            <Route
                                 path="/reset-password/:token"
                                 component={ResetPasswordPage}
                                 exact
                             />
                             <PrivateRoute
-                                meta="pages:myAccount.meta"
                                 path="/my-account"
                                 component={MyAccountPage}
                                 exact
                             />
                             <PrivateRoute
-                                meta="pages:updateProfile.meta"
                                 path="/update-profile"
                                 component={UpdateProfilePage}
                                 exact
                             />
                             <PrivateRoute
-                                meta="pages:changePassword.meta"
                                 path="/change-password"
                                 component={ChangePasswordPage}
                                 exact
                             />
                             <PrivateRoute
-                                meta="pages:user.meta"
                                 path="/user"
                                 requiredRoles={IS_USER_ADMINISTRATOR}
                                 component={UserPage}
                                 exact
                             />
                             <PrivateRoute
-                                meta="pages:createUser.meta"
                                 path="/user/create"
                                 requiredRoles={IS_USER_ADMINISTRATOR}
                                 component={CreateUserPage}
@@ -111,7 +97,7 @@ export const App = () => {
                                 component={UpdateUserPage}
                                 exact
                             />
-                            <PublicRoute component={NotFoundPage} />
+                            <Route component={NotFoundPage} />
                         </Switch>
                     </ErrorBoundary>
                     <Footer />

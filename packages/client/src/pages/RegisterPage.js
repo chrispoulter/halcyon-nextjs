@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -71,6 +72,10 @@ export const RegisterPage = ({ history }) => {
 
     return (
         <Container>
+            <Helmet>
+                <title>{t('pages:register.meta.title')}</title>
+            </Helmet>
+
             <h1>{t('pages:register.title')}</h1>
             <hr />
 

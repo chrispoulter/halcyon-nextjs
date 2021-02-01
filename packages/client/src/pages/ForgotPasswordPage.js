@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -36,6 +37,10 @@ export const ForgotPasswordPage = ({ history }) => {
 
     return (
         <Container>
+            <Helmet>
+                <title>{t('pages:forgotPassword.meta.title')}</title>
+            </Helmet>
+
             <h1>{t('pages:forgotPassword.title')}</h1>
             <hr />
 

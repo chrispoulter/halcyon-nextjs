@@ -106,6 +106,9 @@
             }
         },
         "notFound": {
+            "meta": {
+                "title": "Page Not Found"
+            },
             "jumbotron": {
                 "title": "Page Not Found",
                 "lead": "Sorry, the Page you were looking for could not be found.",
@@ -240,7 +243,7 @@
             },
             "title": "Users",
             "createNewButton": "Create New",
-            "usersnotFound": "No users could be found.",
+            "usersNotFound": "No users could be found.",
             "form": {
                 "searchPlaceholder": "Search...",
                 "searchButton": "Search",
@@ -272,7 +275,7 @@
             },
             "title": "User",
             "subtitle": "Update",
-            "usernotFound": "User could not be found.",
+            "userNotFound": "User could not be found.",
             "form": {
                 "emailAddress": "Email Address",
                 "firstName": "First Name",
