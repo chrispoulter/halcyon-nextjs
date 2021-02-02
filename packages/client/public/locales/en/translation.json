@@ -36,7 +36,7 @@
     },
     "languages": {
         "en": "EN",
-        "zh-CN": "簡"
+        "zh": "簡"
     },
     "validation": {
         "required": "${label} is a required field.",
