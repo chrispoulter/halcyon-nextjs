@@ -1,4 +1,4 @@
-service: halcyon-api
+service: halcyon
 
 provider:
     name: aws
@@ -18,11 +18,14 @@ provider:
         MAILGUN_NOREPLY: ${env:MAILGUN_NOREPLY, ''}
         SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
+        REACT_APP_GRAPHQL_URL: ${cf:halcyon-${opt:stage, self:provider.stage}.ServiceEndpoint, ''}
 
 plugins:
     - serverless-webpack
     - serverless-offline
     - serverless-dotenv-plugin
+    - serverless-build-client
+    - serverless-s3-sync
 
 functions:
     app:
@@ -41,3 +44,19 @@ custom:
     serverless-offline:
         httpPort: 3001
         noPrependStageInUrl: true
+
+    s3Sync:
+        - bucketNameKey: ClientBucketOutputKey
+          localDir: build
+          deleteRemoved: true
+
+resources:
+    Resources:
+        ClientBucket:
+            Type: AWS::S3::Bucket
+            Properties:
+                BucketName: halcyon-${opt:stage, self:provider.stage}
+
+    Outputs:
+        ClientBucketOutputKey:
+            Value: !Ref ClientBucket

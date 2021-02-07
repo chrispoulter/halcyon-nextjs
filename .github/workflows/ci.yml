@@ -31,4 +31,5 @@ jobs:
                   node-version: 12.x
             - run: yarn
             - run: yarn lint
+            - run: yarn fauna
             - run: yarn deploy --stage ${{ secrets.AWS_STAGE }} --region ${{ secrets.AWS_REGION }}

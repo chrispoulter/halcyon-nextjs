@@ -1,6 +1,6 @@
 require('dotenv/config');
 
-const { Client, query: q } = require('../src/apollo/data/node_modules/faunadb');
+const { Client, query: q } = require('faunadb');
 
 (async () => {
     const client = new Client({ secret: process.env.FAUNADB_SECRET });
