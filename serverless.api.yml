@@ -26,7 +26,7 @@ plugins:
 
 functions:
     app:
-        handler: src/index.handler
+        handler: api/index.handler
         events:
             - http:
                   path: /

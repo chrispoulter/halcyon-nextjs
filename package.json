@@ -1,15 +1,56 @@
 {
-    "name": "@halcyon/halcyon-root",
+    "name": "@halcyon/halcyon",
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "postinstall": "lerna bootstrap",
-        "start": "lerna run start --parallel",
-        "build": "lerna run build",
-        "deploy": "lerna exec -- yarn deploy",
-        "reset": "lerna exec -- yarn reset",
+        "start": "",
+        "build": "",
+        "predeploy": "",
+        "deploy": "",
+        "reset": "",
+        "api:start": "serverless offline start -c serverless.api.yml",
+        "api:deploy": "serverless deploy -c serverless.api.yml",
+        "api:reset": "serverless remove -c serverless.api.yml",
+        "client:start": "react-scripts start",
+        "client:build": "react-scripts build",
+        "client:predeploy": "serverless client build -c serverless.client.yml",
+        "client:deploy": "serverless deploy -c serverless.client.yml",
+        "client:reset": "serverless remove -c serverless.client.yml",
+        "workbox": "workbox injectManifest workbox-config.js",
+        "fauna": "node scripts/fauna.js",
         "lint": "eslint \"**/*.{js,jsx}\"",
         "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\""
+    },
+    "dependencies": {
+        "@apollo/react-hooks": "4.0.0",
+        "apollo-boost": "0.4.9",
+        "apollo-server": "2.19.0",
+        "apollo-server-lambda": "2.19.0",
+        "bcryptjs": "2.4.3",
+        "bootstrap": "4.5.3",
+        "bootswatch": "4.5.3",
+        "dotenv": "8.2.0",
+        "faunadb": "4.0.0",
+        "formik": "2.2.6",
+        "graphql": "15.4.0",
+        "graphql-iso-date": "3.6.1",
+        "graphql-resolvers": "0.4.2",
+        "i18next": "19.8.4",
+        "i18next-browser-languagedetector": "6.0.1",
+        "i18next-http-backend": "1.1.0",
+        "jsonwebtoken": "8.5.1",
+        "jwt-decode": "3.1.2",
+        "node-fetch": "2.6.1",
+        "react": "17.0.1",
+        "react-dom": "17.0.1",
+        "react-helmet": "6.1.0",
+        "react-i18next": "11.8.5",
+        "react-router-dom": "5.2.0",
+        "react-toastify": "6.2.0",
+        "reactstrap": "8.7.1",
+        "reactstrap-confirm": "1.2.0",
+        "uuid": "8.3.2",
+        "yup": "0.32.8"
     },
     "devDependencies": {
         "@babel/core": "7.11.1",
@@ -18,7 +59,7 @@
         "babel-plugin-transform-runtime": "6.23.0",
         "babel-polyfill": "6.23.0",
         "babel-preset-env": "1.6.0",
-        "lerna": "3.22.1",
+        "concurrently": "5.3.0",
         "node-sass": "4.14.1",
         "prettier": "2.2.1",
         "react-scripts": "4.0.1",
@@ -30,5 +71,17 @@
         "serverless-webpack": "5.3.1",
         "webpack": "4.44.2",
         "workbox-cli": "6.0.2"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
     }
 }

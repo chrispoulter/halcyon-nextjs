@@ -4,4 +4,3 @@ build
 .webpack
 .eslintcache
 .env
-*.lerna_backup

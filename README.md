@@ -13,7 +13,7 @@ A web application template.
 
 #### Custom Settings
 
-Create a `.env` file in `the packages/api` directory.
+Create a `.env` file in the web project directory.
 
 ```
 FAUNADB_SECRET=
@@ -29,10 +29,10 @@ MAILGUN_NOREPLY=noreply@chrispoulter.com
 
 SEED_EMAILADDRESS=
 SEED_PASSWORD=
-```
 
-Create a `.env` file in the `packages/client` directory.
-
-```
 REACT_APP_GRAPHQL_URL=
+```
+
+```
+
 ```
