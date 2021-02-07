@@ -32,7 +32,3 @@ SEED_PASSWORD=
 
 REACT_APP_GRAPHQL_URL=
 ```
-
-```
-
-```
