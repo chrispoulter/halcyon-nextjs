@@ -13,7 +13,7 @@ A web application template.
 
 #### Custom Settings
 
-Create a `.env` file in the `packages/api` directory.
+Create a `.env` file in the web project directory.
 
 ```
 FAUNADB_SECRET=
