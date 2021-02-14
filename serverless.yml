@@ -22,7 +22,6 @@ provider:
         MAILGUN_NOREPLY: ${env:MAILGUN_NOREPLY, ''}
         SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
-        REACT_APP_GRAPHQL_URL: ${cf:halcyon-${opt:stage, self:provider.stage}.ServiceEndpoint, ''}
 
 plugins:
     - serverless-webpack
@@ -49,17 +48,26 @@ custom:
         httpPort: 3001
         noPrependStageInUrl: true
 
+    buildClient:
+        environment:
+            REACT_APP_GRAPHQL_URL: ${cf:${self:service}-${opt:stage, self:provider.stage}.ServiceEndpoint, ''}
+
     s3Sync:
         - bucketNameKey: ClientBucketOutputKey
           localDir: build
           deleteRemoved: true
+          acl: public-read
 
 resources:
     Resources:
         ClientBucket:
             Type: AWS::S3::Bucket
             Properties:
-                BucketName: halcyon-${opt:stage, self:provider.stage}
+                BucketName: ${self:service}-${opt:stage, self:provider.stage}
+                AccessControl: PublicRead
+                WebsiteConfiguration:
+                    IndexDocument: index.html
+                    ErrorDocument: index.html
 
     Outputs:
         ClientBucketOutputKey:

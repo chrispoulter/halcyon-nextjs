@@ -3,7 +3,7 @@ name: CI
 on:
     push:
         branches:
-            - master
+            - '**'
 
 jobs:
     build-and-deploy:
@@ -29,7 +29,9 @@ jobs:
             - uses: actions/setup-node@v1
               with:
                   node-version: 12.x
+
             - run: yarn
             - run: yarn lint
             - run: yarn fauna
-            - run: yarn deploy --stage ${{ secrets.AWS_STAGE }} --region ${{ secrets.AWS_REGION }}
+            - run: yarn serverless:build --stage ${GITHUB_REF##*/} --region ${{ secrets.AWS_REGION }}
+            - run: yarn serverless:deploy --stage ${GITHUB_REF##*/} --region ${{ secrets.AWS_REGION }}
