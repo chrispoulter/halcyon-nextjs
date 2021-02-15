@@ -10,7 +10,6 @@ jobs:
         runs-on: ubuntu-latest
         env:
             EXTEND_ESLINT: true
-            ENVIRONMENT: ${{ github.ref##*/ }}
             FAUNADB_SECRET: ${{ secrets.FAUNADB_SECRET }}
             JWT_SECURITYKEY: ${{ secrets.JWT_SECURITYKEY }}
             JWT_AUDIENCE: ${{ secrets.JWT_AUDIENCE }}
@@ -31,8 +30,10 @@ jobs:
               with:
                   node-version: 12.x
 
+            - run: echo "ENVIRONMENT=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+
             - run: yarn
             - run: yarn lint
             - run: yarn fauna
-            - run: yarn serverless:build --stage ${{ github.ref##*/ }} --region ${{ secrets.AWS_REGION }}
-            - run: yarn serverless:deploy --stage ${{ github.ref##*/ }} --region ${{ secrets.AWS_REGION }}
+            - run: yarn serverless:build --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
+            - run: yarn serverless:deploy --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
