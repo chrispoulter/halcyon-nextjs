@@ -2,21 +2,23 @@ require('dotenv/config');
 
 const { Client, query: q } = require('faunadb');
 
-const secret = process.env.FAUNADB_SECRET;
-const environment = process.env.ENVIRONMENT || 'dev';
+const config = {
+    ENVIRONMENT: process.env.ENVIRONMENT || 'dev',
+    FAUNADB_SECRET: process.env.FAUNADB_SECRET
+};
 
 (async () => {
-    const adminClient = new Client({ secret });
+    const adminClient = new Client({ secret: config.FAUNADB_SECRET });
 
     try {
-        await adminClient.query(q.CreateDatabase({ name: environment }));
+        await adminClient.query(q.CreateDatabase({ name: config.ENVIRONMENT }));
         console.log('Database created.');
     } catch (error) {
         console.log(error.message);
     }
 
     const client = new Client({
-        secret: `${secret}:${environment}:server`
+        secret: `${config.FAUNADB_SECRET}:${config.ENVIRONMENT}:server`
     });
 
     try {
