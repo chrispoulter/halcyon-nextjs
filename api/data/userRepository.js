@@ -2,7 +2,9 @@ import { Client, query as q } from 'faunadb';
 import { base64EncodeObj, base64DecodeObj } from '../utils/encode';
 import { config } from '../utils/config';
 
-const client = new Client({ secret: config.FAUNADB_SECRET });
+const secret = `${config.FAUNADB_SECRET}:${config.ENVIRONMENT}:server`;
+
+const client = new Client({ secret });
 
 const collections = {
     USERS: 'users'

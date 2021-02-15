@@ -16,6 +16,8 @@ A web application template.
 Create a `.env` file in the web project directory.
 
 ```
+ENVIRONMENT=dev
+
 FAUNADB_SECRET=
 
 JWT_SECURITYKEY=change-me-1234567890
