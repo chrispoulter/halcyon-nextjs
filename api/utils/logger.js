@@ -15,6 +15,8 @@ export const initializeLogger = () => {
         tracesSampleRate: 1.0
     });
 
+    Sentry.setTag('project', 'api')
+
     sentryInitialized = true;
 };
 
