@@ -84,13 +84,6 @@
                 "十一月",
                 "十二月"
             ]
-        },
-        "errorBoundary": {
-            "jumbotron": {
-                "title": "错误",
-                "lead": "抱歉，出了一些问题。请稍后再试。",
-                "homeButton": "家"
-            }
         }
     },
     "pages": {
@@ -112,6 +105,16 @@
             "jumbotron": {
                 "title": "网页未找到",
                 "lead": "抱歉，找不到您要查找的页面。",
+                "homeButton": "家"
+            }
+        },
+        "error": {
+            "meta": {
+                "title": "错误"
+            },
+            "jumbotron": {
+                "title": "错误",
+                "lead": "抱歉，出了一些问题。请稍后再试。",
                 "homeButton": "家"
             }
         },

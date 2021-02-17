@@ -84,13 +84,6 @@
                 "November",
                 "December"
             ]
-        },
-        "errorBoundary": {
-            "jumbotron": {
-                "title": "Error",
-                "lead": "Sorry, something went wrong. Please try again later.",
-                "homeButton": "Home"
-            }
         }
     },
     "pages": {
@@ -112,6 +105,16 @@
             "jumbotron": {
                 "title": "Page Not Found",
                 "lead": "Sorry, the Page you were looking for could not be found.",
+                "homeButton": "Home"
+            }
+        },
+        "error": {
+            "meta": {
+                "title": "Error"
+            },
+            "jumbotron": {
+                "title": "Error",
+                "lead": "Sorry, something went wrong. Please try again later.",
                 "homeButton": "Home"
             }
         },

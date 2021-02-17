@@ -13,6 +13,7 @@ provider:
         shouldStartNameWithService: true
     environment:
         ENVIRONMENT: ${env:ENVIRONMENT, ''}
+        RELEASE: ${env:RELEASE, ''}
         FAUNADB_SECRET: ${env:FAUNADB_SECRET, ''}
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
         JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
@@ -23,6 +24,7 @@ provider:
         MAILGUN_NOREPLY: ${env:MAILGUN_NOREPLY, ''}
         SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
+        SENTRY_DSN: ${env:SENTRY_DSN, ''}
 
 plugins:
     - serverless-webpack
@@ -51,6 +53,9 @@ custom:
 
     buildClient:
         environment:
+            REACT_APP_ENVIRONMENT: ${env:ENVIRONMENT, ''}
+            REACT_APP_RELEASE: ${env:RELEASE, ''}
+            REACT_APP_SENTRY_DSN: ${env:SENTRY_DSN, ''}
             REACT_APP_GRAPHQL_URL: ${cf:${self:service}-${opt:stage, self:provider.stage}.ServiceEndpoint, ''}
 
     s3Sync:

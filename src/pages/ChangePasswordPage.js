@@ -9,6 +9,7 @@ import { Container, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { CHANGE_PASSWORD } from '../graphql';
 import { TextInput, Button } from '../components';
+import { captureException } from '../utils/logger';
 
 const initialValues = {
     currentPassword: '',
@@ -42,7 +43,7 @@ export const ChangePasswordPage = ({ history }) => {
             toast.success(t(`api.codes.${result.data.changePassword.code}`));
             history.push('/my-account');
         } catch (error) {
-            console.error(error);
+            captureException(error);
         }
     };
 

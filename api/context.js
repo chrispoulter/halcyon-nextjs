@@ -1,6 +1,7 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server';
 import { verifyToken } from './utils/jwt';
 import { isAuthorized } from './utils/auth';
+import { setUser } from './utils/logger';
 
 export const context = async ({ req, event }) => {
     const request = req || event;
@@ -30,6 +31,8 @@ export const isAuthenticated = (resolverFn, requiredRoles) => (
     if (!payload) {
         throw new AuthenticationError('The token provided was invalid.');
     }
+
+    setUser(payload);
 
     const authorized = isAuthorized(payload, requiredRoles);
     if (!authorized) {

@@ -18,6 +18,9 @@
     },
     "dependencies": {
         "@apollo/react-hooks": "4.0.0",
+        "@sentry/react": "6.1.0",
+        "@sentry/serverless": "6.1.0",
+        "@sentry/tracing": "6.1.0",
         "apollo-boost": "0.4.9",
         "apollo-server": "2.19.0",
         "apollo-server-lambda": "2.19.0",

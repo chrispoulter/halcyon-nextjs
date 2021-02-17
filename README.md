@@ -16,7 +16,10 @@ A web application template.
 Create a `.env` file in the web project directory.
 
 ```
+## Api #############################################
+
 ENVIRONMENT=dev
+RELEASE=dev
 
 FAUNADB_SECRET=
 
@@ -31,6 +34,15 @@ MAILGUN_NOREPLY=noreply@chrispoulter.com
 
 SEED_EMAILADDRESS=
 SEED_PASSWORD=
+
+SENTRY_DSN=
+
+## Front End #######################################
+
+REACT_APP_ENVIRONMENT=dev
+REACT_APP_RELEASE=dev
+
+REACT_APP_SENTRY_DSN=
 
 REACT_APP_GRAPHQL_URL=
 ```

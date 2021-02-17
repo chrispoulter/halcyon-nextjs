@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-boost';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { AuthContext } from './AuthProvider';
-import config from '../../utils/config';
+import { config } from '../../utils/config';
 
 export const ApolloProvider = ({ children }) => {
     const { t } = useTranslation();

@@ -23,6 +23,7 @@ import {
     Button
 } from '../components';
 import { AVAILABLE_ROLES } from '../utils/auth';
+import { captureException } from '../utils/logger';
 
 export const UpdateUserPage = ({ history, match }) => {
     const { t } = useTranslation();
@@ -79,7 +80,7 @@ export const UpdateUserPage = ({ history, match }) => {
             toast.success(t(`api.codes.${result.data.updateUser.code}`));
             history.push('/user');
         } catch (error) {
-            console.error(error);
+            captureException(error);
         }
     };
 
@@ -107,7 +108,7 @@ export const UpdateUserPage = ({ history, match }) => {
             });
             toast.success(t(`api.codes.${result.data.lockUser.code}`));
         } catch (error) {
-            console.error(error);
+            captureException(error);
         }
     };
 
@@ -135,7 +136,7 @@ export const UpdateUserPage = ({ history, match }) => {
             });
             toast.success(t(`api.codes.${result.data.unlockUser.code}`));
         } catch (error) {
-            console.error(error);
+            captureException(error);
         }
     };
 
@@ -164,7 +165,7 @@ export const UpdateUserPage = ({ history, match }) => {
             toast.success(t(`api.codes.${result.data.deleteUser.code}`));
             history.push('/user');
         } catch (error) {
-            console.error(error);
+            captureException(error);
         }
     };
 

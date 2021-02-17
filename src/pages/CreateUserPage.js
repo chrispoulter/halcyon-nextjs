@@ -15,6 +15,7 @@ import {
     Button
 } from '../components';
 import { AVAILABLE_ROLES } from '../utils/auth';
+import { captureException } from '../utils/logger';
 
 const initialValues = {
     emailAddress: '',
@@ -65,7 +66,7 @@ export const CreateUserPage = ({ history }) => {
             toast.success(t(`api.codes.${result.data.createUser.code}`));
             history.push('/user');
         } catch (error) {
-            console.error(error);
+            captureException(error);
         }
     };
 
