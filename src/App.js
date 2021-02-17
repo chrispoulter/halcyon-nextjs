@@ -35,7 +35,7 @@ export const App = () => (
                 <ApolloProvider>
                     <Meta />
                     <Header />
-                    <ErrorBoundary fallback={ErrorPage}>
+                    <ErrorBoundary fallback={<ErrorPage />}>
                         <Switch>
                             <Route path="/" component={HomePage} exact />
                             <Route
