@@ -8,16 +8,7 @@ import * as Yup from 'yup';
 import { Container, FormGroup } from 'reactstrap';
 import { REGISTER, GENERATE_TOKEN } from '../graphql';
 import { TextInput, DateInput, Button, AuthContext } from '../components';
-import { captureException } from '../utils/logger';
-
-const initialValues = {
-    emailAddress: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    dateOfBirth: ''
-};
+import { captureError } from '../utils/logger';
 
 export const RegisterPage = ({ history }) => {
     const { t } = useTranslation();
@@ -27,34 +18,6 @@ export const RegisterPage = ({ history }) => {
     const [register] = useMutation(REGISTER);
 
     const [generateToken] = useMutation(GENERATE_TOKEN);
-
-    const validationSchema = Yup.object().shape({
-        emailAddress: Yup.string()
-            .label(t('pages.register.form.emailAddress'))
-            .max(254)
-            .email()
-            .required(),
-        password: Yup.string()
-            .label(t('pages.register.form.password'))
-            .min(8)
-            .max(50)
-            .required(),
-        confirmPassword: Yup.string()
-            .label(t('pages.register.form.confirmPassword'))
-            .required()
-            .oneOf([Yup.ref('password')]),
-        firstName: Yup.string()
-            .label(t('pages.register.form.firstName'))
-            .max(50)
-            .required(),
-        lastName: Yup.string()
-            .label(t('pages.register.form.lastName'))
-            .max(50)
-            .required(),
-        dateOfBirth: Yup.string()
-            .label(t('pages.register.form.dateOfBirth'))
-            .required()
-    });
 
     const onSubmit = async variables => {
         try {
@@ -67,7 +30,7 @@ export const RegisterPage = ({ history }) => {
             setToken(result.data.generateToken.accessToken);
             history.push('/');
         } catch (error) {
-            captureException(error);
+            captureError(error);
         }
     };
 
@@ -81,8 +44,41 @@ export const RegisterPage = ({ history }) => {
             <hr />
 
             <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
+                initialValues={{
+                    emailAddress: '',
+                    password: '',
+                    confirmPassword: '',
+                    firstName: '',
+                    lastName: '',
+                    dateOfBirth: ''
+                }}
+                validationSchema={Yup.object().shape({
+                    emailAddress: Yup.string()
+                        .label(t('pages.register.form.emailAddress'))
+                        .max(254)
+                        .email()
+                        .required(),
+                    password: Yup.string()
+                        .label(t('pages.register.form.password'))
+                        .min(8)
+                        .max(50)
+                        .required(),
+                    confirmPassword: Yup.string()
+                        .label(t('pages.register.form.confirmPassword'))
+                        .required()
+                        .oneOf([Yup.ref('password')]),
+                    firstName: Yup.string()
+                        .label(t('pages.register.form.firstName'))
+                        .max(50)
+                        .required(),
+                    lastName: Yup.string()
+                        .label(t('pages.register.form.lastName'))
+                        .max(50)
+                        .required(),
+                    dateOfBirth: Yup.string()
+                        .label(t('pages.register.form.dateOfBirth'))
+                        .required()
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (

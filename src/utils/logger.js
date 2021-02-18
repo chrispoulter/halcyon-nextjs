@@ -17,7 +17,7 @@ export const initializeLogger = () => {
         tracesSampleRate: 1.0
     });
 
-    Sentry.setTag('project', 'frontend')
+    Sentry.setTag('project', 'frontend');
 
     sentryInitialized = true;
 };
@@ -38,7 +38,7 @@ export const setUser = user => {
     Sentry.setUser(user);
 };
 
-export const captureException = error => {
+export const captureError = error => {
     if (!sentryInitialized) {
         return;
     }

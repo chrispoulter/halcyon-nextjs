@@ -8,7 +8,7 @@ import confirm from 'reactstrap-confirm';
 import { toast } from 'react-toastify';
 import { GET_PROFILE, DELETE_ACCOUNT } from '../graphql';
 import { Button, Spinner, AuthContext } from '../components';
-import { captureException } from '../utils/logger';
+import { captureError } from '../utils/logger';
 
 export const MyAccountPage = ({ history }) => {
     const { t, i18n } = useTranslation();
@@ -52,7 +52,7 @@ export const MyAccountPage = ({ history }) => {
             removeToken();
             history.push('/');
         } catch (error) {
-            captureException(error);
+            captureError(error);
         }
     };
 

@@ -8,13 +8,7 @@ import * as Yup from 'yup';
 import { Container, FormGroup } from 'reactstrap';
 import { GENERATE_TOKEN } from '../graphql';
 import { TextInput, CheckboxInput, Button, AuthContext } from '../components';
-import { captureException } from '../utils/logger';
-
-const initialValues = {
-    emailAddress: '',
-    password: '',
-    rememberMe: true
-};
+import { captureError } from '../utils/logger';
 
 export const LoginPage = ({ history }) => {
     const { t } = useTranslation();
@@ -22,14 +16,6 @@ export const LoginPage = ({ history }) => {
     const { setToken } = useContext(AuthContext);
 
     const [generateToken] = useMutation(GENERATE_TOKEN);
-
-    const validationSchema = Yup.object().shape({
-        emailAddress: Yup.string()
-            .label(t('pages.login.form.emailAddress'))
-            .email()
-            .required(),
-        password: Yup.string().label(t('pages.login.form.password')).required()
-    });
 
     const onSubmit = async variables => {
         try {
@@ -44,7 +30,7 @@ export const LoginPage = ({ history }) => {
 
             history.push('/');
         } catch (error) {
-            captureException(error);
+            captureError(error);
         }
     };
 
@@ -58,8 +44,20 @@ export const LoginPage = ({ history }) => {
             <hr />
 
             <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
+                initialValues={{
+                    emailAddress: '',
+                    password: '',
+                    rememberMe: true
+                }}
+                validationSchema={Yup.object().shape({
+                    emailAddress: Yup.string()
+                        .label(t('pages.login.form.emailAddress'))
+                        .email()
+                        .required(),
+                    password: Yup.string()
+                        .label(t('pages.login.form.password'))
+                        .required()
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (

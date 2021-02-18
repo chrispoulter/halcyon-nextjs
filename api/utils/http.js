@@ -1,6 +1,6 @@
 import nodeFetch from 'node-fetch';
 import { URLSearchParams } from 'url';
-import { captureException } from './logger';
+import { captureError } from './logger';
 
 export const fetch = async config => {
     try {
@@ -11,7 +11,7 @@ export const fetch = async config => {
 
         return await response.json();
     } catch (error) {
-        captureException(error);
+        captureError(error);
         return undefined;
     }
 };

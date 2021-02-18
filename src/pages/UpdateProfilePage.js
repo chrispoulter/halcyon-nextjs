@@ -9,7 +9,7 @@ import { Container, Alert, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { GET_PROFILE, UPDATE_PROFILE } from '../graphql';
 import { Spinner, TextInput, DateInput, Button } from '../components';
-import { captureException } from '../utils/logger';
+import { captureError } from '../utils/logger';
 
 export const UpdateProfilePage = ({ history }) => {
     const { t } = useTranslation();
@@ -30,32 +30,13 @@ export const UpdateProfilePage = ({ history }) => {
         );
     }
 
-    const validationSchema = Yup.object().shape({
-        emailAddress: Yup.string()
-            .label(t('pages.updateProfile.form.emailAddress'))
-            .max(254)
-            .email()
-            .required(),
-        firstName: Yup.string()
-            .label(t('pages.updateProfile.form.firstName'))
-            .max(50)
-            .required(),
-        lastName: Yup.string()
-            .label(t('pages.updateProfile.form.lastName'))
-            .max(50)
-            .required(),
-        dateOfBirth: Yup.string()
-            .label(t('pages.updateProfile.form.dateOfBirth'))
-            .required()
-    });
-
     const onSubmit = async variables => {
         try {
             const result = await updateProfile({ variables });
             toast.success(t(`api.codes.${result.data.updateProfile.code}`));
             history.push('/my-account');
         } catch (error) {
-            captureException(error);
+            captureError(error);
         }
     };
 
@@ -71,7 +52,24 @@ export const UpdateProfilePage = ({ history }) => {
             <Formik
                 enableReinitialize={true}
                 initialValues={data.getProfile}
-                validationSchema={validationSchema}
+                validationSchema={Yup.object().shape({
+                    emailAddress: Yup.string()
+                        .label(t('pages.updateProfile.form.emailAddress'))
+                        .max(254)
+                        .email()
+                        .required(),
+                    firstName: Yup.string()
+                        .label(t('pages.updateProfile.form.firstName'))
+                        .max(50)
+                        .required(),
+                    lastName: Yup.string()
+                        .label(t('pages.updateProfile.form.lastName'))
+                        .max(50)
+                        .required(),
+                    dateOfBirth: Yup.string()
+                        .label(t('pages.updateProfile.form.dateOfBirth'))
+                        .required()
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (

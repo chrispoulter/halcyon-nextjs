@@ -10,7 +10,7 @@ const initializeValidation = lang => {
         return;
     }
 
-    setTag('locale', lang);
+    setTag('page_locale', lang);
 
     setLocale({
         mixed: {

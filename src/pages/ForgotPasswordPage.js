@@ -8,23 +8,12 @@ import { Container, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { FORGOT_PASSWORD } from '../graphql';
 import { TextInput, Button } from '../components';
-import { captureException } from '../utils/logger';
-
-const initialValues = {
-    emailAddress: ''
-};
+import { captureError } from '../utils/logger';
 
 export const ForgotPasswordPage = ({ history }) => {
     const { t } = useTranslation();
 
     const [forgotPassword] = useMutation(FORGOT_PASSWORD);
-
-    const validationSchema = Yup.object().shape({
-        emailAddress: Yup.string()
-            .label(t('pages.forgotPassword.form.emailAddress'))
-            .email()
-            .required()
-    });
 
     const onSubmit = async variables => {
         try {
@@ -32,7 +21,7 @@ export const ForgotPasswordPage = ({ history }) => {
             toast.success(t(`api.codes.${result.data.forgotPassword.code}`));
             history.push('/login');
         } catch (error) {
-            captureException(error);
+            captureError(error);
         }
     };
 
@@ -46,8 +35,15 @@ export const ForgotPasswordPage = ({ history }) => {
             <hr />
 
             <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
+                initialValues={{
+                    emailAddress: ''
+                }}
+                validationSchema={Yup.object().shape({
+                    emailAddress: Yup.string()
+                        .label(t('pages.forgotPassword.form.emailAddress'))
+                        .email()
+                        .required()
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (

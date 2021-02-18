@@ -23,7 +23,7 @@ import {
     Button
 } from '../components';
 import { AVAILABLE_ROLES } from '../utils/auth';
-import { captureException } from '../utils/logger';
+import { captureError } from '../utils/logger';
 
 export const UpdateUserPage = ({ history, match }) => {
     const { t } = useTranslation();
@@ -52,25 +52,6 @@ export const UpdateUserPage = ({ history, match }) => {
         );
     }
 
-    const validationSchema = Yup.object().shape({
-        emailAddress: Yup.string()
-            .label(t('pages.updateUser.form.emailAddress'))
-            .max(254)
-            .email()
-            .required(),
-        firstName: Yup.string()
-            .label(t('pages.updateUser.form.firstName'))
-            .max(50)
-            .required(),
-        lastName: Yup.string()
-            .label(t('pages.updateUser.form.lastName'))
-            .max(50)
-            .required(),
-        dateOfBirth: Yup.string()
-            .label(t('pages.updateUser.form.dateOfBirth'))
-            .required()
-    });
-
     const onSubmit = async variables => {
         try {
             const result = await updateUser({
@@ -80,7 +61,7 @@ export const UpdateUserPage = ({ history, match }) => {
             toast.success(t(`api.codes.${result.data.updateUser.code}`));
             history.push('/user');
         } catch (error) {
-            captureException(error);
+            captureError(error);
         }
     };
 
@@ -108,7 +89,7 @@ export const UpdateUserPage = ({ history, match }) => {
             });
             toast.success(t(`api.codes.${result.data.lockUser.code}`));
         } catch (error) {
-            captureException(error);
+            captureError(error);
         }
     };
 
@@ -136,7 +117,7 @@ export const UpdateUserPage = ({ history, match }) => {
             });
             toast.success(t(`api.codes.${result.data.unlockUser.code}`));
         } catch (error) {
-            captureException(error);
+            captureError(error);
         }
     };
 
@@ -165,7 +146,7 @@ export const UpdateUserPage = ({ history, match }) => {
             toast.success(t(`api.codes.${result.data.deleteUser.code}`));
             history.push('/user');
         } catch (error) {
-            captureException(error);
+            captureError(error);
         }
     };
 
@@ -187,7 +168,24 @@ export const UpdateUserPage = ({ history, match }) => {
             <Formik
                 enableReinitialize={true}
                 initialValues={data.getUserById}
-                validationSchema={validationSchema}
+                validationSchema={Yup.object().shape({
+                    emailAddress: Yup.string()
+                        .label(t('pages.updateUser.form.emailAddress'))
+                        .max(254)
+                        .email()
+                        .required(),
+                    firstName: Yup.string()
+                        .label(t('pages.updateUser.form.firstName'))
+                        .max(50)
+                        .required(),
+                    lastName: Yup.string()
+                        .label(t('pages.updateUser.form.lastName'))
+                        .max(50)
+                        .required(),
+                    dateOfBirth: Yup.string()
+                        .label(t('pages.updateUser.form.dateOfBirth'))
+                        .required()
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (

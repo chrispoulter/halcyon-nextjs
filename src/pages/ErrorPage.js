@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
-import { Container, Jumbotron, Button } from 'reactstrap';
+import { Container, Jumbotron } from 'reactstrap';
 
 export const ErrorPage = () => {
     const { t } = useTranslation();
@@ -21,9 +20,9 @@ export const ErrorPage = () => {
                     <hr />
                     <p className="lead">{t('pages.error.jumbotron.lead')}</p>
                     <p className="text-right">
-                        <Button to="/" color="primary" size="lg" tag={Link}>
+                        <a href="/" className="btn btn-lg btn-primary">
                             {t('pages.error.jumbotron.homeButton')}
-                        </Button>
+                        </a>
                     </p>
                 </Container>
             </Jumbotron>

@@ -9,33 +9,12 @@ import { Container, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { CHANGE_PASSWORD } from '../graphql';
 import { TextInput, Button } from '../components';
-import { captureException } from '../utils/logger';
-
-const initialValues = {
-    currentPassword: '',
-    newPassword: '',
-    confirmNewPassword: ''
-};
+import { captureError } from '../utils/logger';
 
 export const ChangePasswordPage = ({ history }) => {
     const { t } = useTranslation();
 
     const [changePassword] = useMutation(CHANGE_PASSWORD);
-
-    const validationSchema = Yup.object().shape({
-        currentPassword: Yup.string()
-            .label(t('pages.changePassword.form.currentPassword'))
-            .required(),
-        newPassword: Yup.string()
-            .label(t('pages.changePassword.form.newPassword'))
-            .min(8)
-            .max(50)
-            .required(),
-        confirmNewPassword: Yup.string()
-            .label(t('pages.changePassword.form.confirmNewPassword'))
-            .required()
-            .oneOf([Yup.ref('newPassword')])
-    });
 
     const onSubmit = async variables => {
         try {
@@ -43,7 +22,7 @@ export const ChangePasswordPage = ({ history }) => {
             toast.success(t(`api.codes.${result.data.changePassword.code}`));
             history.push('/my-account');
         } catch (error) {
-            captureException(error);
+            captureError(error);
         }
     };
 
@@ -57,8 +36,27 @@ export const ChangePasswordPage = ({ history }) => {
             <hr />
 
             <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
+                initialValues={{
+                    currentPassword: '',
+                    newPassword: '',
+                    confirmNewPassword: ''
+                }}
+                validationSchema={Yup.object().shape({
+                    currentPassword: Yup.string()
+                        .label(t('pages.changePassword.form.currentPassword'))
+                        .required(),
+                    newPassword: Yup.string()
+                        .label(t('pages.changePassword.form.newPassword'))
+                        .min(8)
+                        .max(50)
+                        .required(),
+                    confirmNewPassword: Yup.string()
+                        .label(
+                            t('pages.changePassword.form.confirmNewPassword')
+                        )
+                        .required()
+                        .oneOf([Yup.ref('newPassword')])
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (
