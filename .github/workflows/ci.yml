@@ -39,3 +39,13 @@ jobs:
             - run: yarn fauna
             - run: yarn serverless:build --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
             - run: yarn serverless:deploy --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
+
+            - uses: getsentry/action-release@v1
+              env:
+                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+                  SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+                  SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+              with:
+                  environment: ${{ env.ENVIRONMENT }}
+                  version: ${{ env.RELEASE }}
+                  sourcemaps: ./build
