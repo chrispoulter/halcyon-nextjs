@@ -20,19 +20,7 @@ module.exports = {
                 include: __dirname,
                 use: [
                     {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: [
-                                [
-                                    '@babel/preset-env',
-                                    {
-                                        targets: {
-                                            node: 'current'
-                                        }
-                                    }
-                                ]
-                            ]
-                        }
+                        loader: 'babel-loader'
                     }
                 ]
             }

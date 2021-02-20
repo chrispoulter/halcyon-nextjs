@@ -7,7 +7,6 @@
             "PROFILE_UPDATED": "您的个人资料已更新。",
             "PASSWORD_CHANGED": "您的密码已被更改。",
             "ACCOUNT_DELETED": "您的帐户已被删除。",
-            "ENVIRONMENT_SEEDED": "环境播种。",
             "USER_CREATED": "用户创建成功。",
             "USER_UPDATED": "用户已成功更新。",
             "USER_LOCKED": "用户成功锁定。",

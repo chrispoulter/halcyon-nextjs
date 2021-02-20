@@ -12,7 +12,7 @@
         "serverless:build": "serverless client build --command client:build",
         "serverless:deploy": "serverless deploy",
         "serverless:remove": "serverless remove",
-        "fauna": "node scripts/fauna.js",
+        "fauna": "babel-node scripts/fauna.js",
         "lint": "eslint \"**/*.{js,jsx}\"",
         "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\""
     },
@@ -52,6 +52,7 @@
     },
     "devDependencies": {
         "@babel/core": "7.11.1",
+        "@babel/node": "7.12.17",
         "@babel/preset-env": "7.11.0",
         "babel-loader": "8.1.0",
         "babel-plugin-transform-runtime": "6.23.0",

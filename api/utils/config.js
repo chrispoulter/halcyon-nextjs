@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 export const config = {
     ENVIRONMENT: process.env.ENVIRONMENT || 'dev',
     RELEASE: process.env.RELEASE || 'dev',

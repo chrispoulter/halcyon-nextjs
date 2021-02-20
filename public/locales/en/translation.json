@@ -7,7 +7,6 @@
             "PROFILE_UPDATED": "Your profile has been updated.",
             "PASSWORD_CHANGED": "Your password has been changed.",
             "ACCOUNT_DELETED": "Your account has been deleted.",
-            "ENVIRONMENT_SEEDED": "Environment seeded.",
             "USER_CREATED": "User successfully created.",
             "USER_UPDATED": "User successfully updated.",
             "USER_LOCKED": "User successfully locked.",
