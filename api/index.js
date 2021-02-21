@@ -1,20 +1,18 @@
 import { ApolloServer } from 'apollo-server-lambda';
-import { UserRepository } from './dataSources';
+import { dataSources } from './dataSources';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
 import { context } from './context';
-import { initializeLogger, formatError } from './utils/logger';
+import { initializeLogger, loggerPlugin } from './utils/logger';
 
 const server = new ApolloServer({
+    dataSources,
     typeDefs,
     resolvers,
     context,
+    plugins: [loggerPlugin],
     introspection: true,
-    playground: true,
-    formatError,
-    dataSources: () => ({
-        users: new UserRepository()
-    })
+    playground: true
 });
 
 export const handler = initializeLogger(

@@ -22,21 +22,39 @@ export const initializeLogger = handler => {
     return Sentry.AWSLambda.wrapHandler(handler);
 };
 
-export const formatError = error => {
-    if (sentryInitialized) {
-        console.log('formatError', error);
-        Sentry.captureException(error);
+export const loggerPlugin = {
+    requestDidStart() {
+        return {
+            didEncounterErrors(ctx) {
+                if (!sentryInitialized) {
+                    return;
+                }
+
+                ctx.errors?.forEach(error => {
+                    Sentry.withScope(scope => {
+                        scope.setTag('kind', ctx.operation?.operation);
+                        scope.setExtra('query', ctx.request?.query);
+                        scope.setExtra('variables', ctx.request?.variables);
+
+                        const payload = ctx.context?.payload;
+                        if (payload) {
+                            scope.setUser(payload);
+                        }
+
+                        if (error.path) {
+                            scope.addBreadcrumb({
+                                category: 'query-path',
+                                message: error.path.join(' > '),
+                                level: Sentry.Severity.Debug
+                            });
+                        }
+
+                        Sentry.captureException(error);
+                    });
+                });
+            }
+        };
     }
-
-    return error;
-};
-
-export const setUser = user => {
-    if (!sentryInitialized) {
-        return;
-    }
-
-    Sentry.setUser(user);
 };
 
 export const captureError = error => {

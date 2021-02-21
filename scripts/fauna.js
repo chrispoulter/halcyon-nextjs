@@ -120,7 +120,9 @@ import { config } from '../api/utils/config';
         const users = new UserRepository();
         users.initialize();
 
-        const existing = await users.getUserByEmailAddress(config.SEED_EMAILADDRESS);
+        const existing = await users.getUserByEmailAddress(
+            config.SEED_EMAILADDRESS
+        );
 
         const user = {
             emailAddress: config.SEED_EMAILADDRESS,
