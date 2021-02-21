@@ -1,12 +1,4 @@
 import { ApolloError } from 'apollo-server';
-import {
-    searchUsers,
-    getUserById,
-    getUserByEmailAddress,
-    createUser,
-    updateUser,
-    removeUser
-} from '../data/userRepository';
 import { isAuthenticated } from '../context';
 import { generateHash } from '../utils/hash';
 import { IS_USER_ADMINISTRATOR } from '../utils/auth';
@@ -14,17 +6,21 @@ import { IS_USER_ADMINISTRATOR } from '../utils/auth';
 export const userResolvers = {
     Query: {
         searchUsers: isAuthenticated(
-            async (_, { input }) => searchUsers(input),
+            async (_, { input }, { dataSources }) =>
+                dataSources.users.searchUsers(input),
             IS_USER_ADMINISTRATOR
         ),
         getUserById: isAuthenticated(
-            async (_, { id }) => getUserById(id),
+            async (_, { id }, { dataSources }) =>
+                dataSources.users.getUserById(id),
             IS_USER_ADMINISTRATOR
         )
     },
     Mutation: {
-        createUser: isAuthenticated(async (_, { input }) => {
-            const existing = await getUserByEmailAddress(input.emailAddress);
+        createUser: isAuthenticated(async (_, { input }, { dataSources }) => {
+            const existing = await dataSources.users.getUserByEmailAddress(
+                input.emailAddress
+            );
 
             if (existing) {
                 throw new ApolloError(
@@ -33,7 +29,7 @@ export const userResolvers = {
                 );
             }
 
-            const result = await createUser({
+            const result = await dataSources.users.createUser({
                 emailAddress: input.emailAddress,
                 password: await generateHash(input.password),
                 firstName: input.firstName,
@@ -49,68 +45,74 @@ export const userResolvers = {
                 user: result
             };
         }, IS_USER_ADMINISTRATOR),
-        updateUser: isAuthenticated(async (_, { id, input }) => {
-            const user = await getUserById(id);
-            if (!user) {
-                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
-            }
+        updateUser: isAuthenticated(
+            async (_, { id, input }, { dataSources }) => {
+                const user = await dataSources.users.getUserById(id);
+                if (!user) {
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
+                }
 
-            if (user.emailAddress !== input.emailAddress) {
-                const existing = await getUserByEmailAddress(
-                    input.emailAddress
-                );
+                if (user.emailAddress !== input.emailAddress) {
+                    const existing = await dataSources.users.getUserByEmailAddress(
+                        input.emailAddress
+                    );
 
-                if (existing) {
+                    if (existing) {
+                        throw new ApolloError(
+                            `User name "${input.emailAddress}" is already taken.`,
+                            'DUPLICATE_USER'
+                        );
+                    }
+                }
+
+                user.emailAddress = input.emailAddress;
+                user.firstName = input.firstName;
+                user.lastName = input.lastName;
+                user.dateOfBirth = input.dateOfBirth.toISOString();
+                user.roles = input.roles;
+                await dataSources.users.updateUser(user);
+
+                return {
+                    code: 'USER_UPDATED',
+                    message: 'User successfully updated.',
+                    user
+                };
+            },
+            IS_USER_ADMINISTRATOR
+        ),
+        lockUser: isAuthenticated(
+            async (_, { id }, { dataSources, payload }) => {
+                const user = await dataSources.users.getUserById(id);
+                if (!user) {
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
+                }
+
+                if (user.id === payload.sub) {
                     throw new ApolloError(
-                        `User name "${input.emailAddress}" is already taken.`,
-                        'DUPLICATE_USER'
+                        'Cannot lock currently logged in user.',
+                        'LOCK_CURRENT_USER'
                     );
                 }
-            }
 
-            user.emailAddress = input.emailAddress;
-            user.firstName = input.firstName;
-            user.lastName = input.lastName;
-            user.dateOfBirth = input.dateOfBirth.toISOString();
-            user.roles = input.roles;
-            await updateUser(user);
+                user.isLockedOut = true;
+                await dataSources.users.updateUser(user);
 
-            return {
-                code: 'USER_UPDATED',
-                message: 'User successfully updated.',
-                user
-            };
-        }, IS_USER_ADMINISTRATOR),
-        lockUser: isAuthenticated(async (_, { id }, { payload }) => {
-            const user = await getUserById(id);
-            if (!user) {
-                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
-            }
-
-            if (user.id === payload.sub) {
-                throw new ApolloError(
-                    'Cannot lock currently logged in user.',
-                    'LOCK_CURRENT_USER'
-                );
-            }
-
-            user.isLockedOut = true;
-            await updateUser(user);
-
-            return {
-                code: 'USER_LOCKED',
-                message: 'User successfully locked.',
-                user
-            };
-        }, IS_USER_ADMINISTRATOR),
-        unlockUser: isAuthenticated(async (_, { id }) => {
-            const user = await getUserById(id);
+                return {
+                    code: 'USER_LOCKED',
+                    message: 'User successfully locked.',
+                    user
+                };
+            },
+            IS_USER_ADMINISTRATOR
+        ),
+        unlockUser: isAuthenticated(async (_, { id }, { dataSources }) => {
+            const user = await dataSources.users.getUserById(id);
             if (!user) {
                 throw new ApolloError('User not found.', 'USER_NOT_FOUND');
             }
 
             user.isLockedOut = false;
-            await updateUser(user);
+            await dataSources.users.updateUser(user);
 
             return {
                 code: 'USER_UNLOCKED',
@@ -118,26 +120,29 @@ export const userResolvers = {
                 user
             };
         }, IS_USER_ADMINISTRATOR),
-        deleteUser: isAuthenticated(async (_, { id }, { payload }) => {
-            const user = await getUserById(id);
-            if (!user) {
-                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
-            }
+        deleteUser: isAuthenticated(
+            async (_, { id }, { dataSources, payload }) => {
+                const user = await dataSources.users.getUserById(id);
+                if (!user) {
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
+                }
 
-            if (user.id === payload.sub) {
-                throw new ApolloError(
-                    'Cannot delete currently logged in user.',
-                    'DELETE_CURRENT_USER'
-                );
-            }
+                if (user.id === payload.sub) {
+                    throw new ApolloError(
+                        'Cannot delete currently logged in user.',
+                        'DELETE_CURRENT_USER'
+                    );
+                }
 
-            await removeUser(user);
+                await dataSources.users.removeUser(user);
 
-            return {
-                code: 'USER_DELETED',
-                message: 'User successfully deleted.',
-                user
-            };
-        }, IS_USER_ADMINISTRATOR)
+                return {
+                    code: 'USER_DELETED',
+                    message: 'User successfully deleted.',
+                    user
+                };
+            },
+            IS_USER_ADMINISTRATOR
+        )
     }
 };

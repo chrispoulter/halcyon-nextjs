@@ -1,12 +1,13 @@
 import { ApolloError } from 'apollo-server';
-import { getUserByEmailAddress } from '../data/userRepository';
 import { generateToken } from '../utils/jwt';
 import { verifyHash } from '../utils/hash';
 
 export const tokenResolvers = {
     Mutation: {
-        generateToken: async (_, { input }) => {
-            const user = await getUserByEmailAddress(input.emailAddress);
+        generateToken: async (_, { input }, { dataSources }) => {
+            const user = await dataSources.users.getUserByEmailAddress(
+                input.emailAddress
+            );
             if (!user) {
                 throw new ApolloError(
                     'The credentials provided were invalid.',

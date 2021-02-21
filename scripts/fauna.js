@@ -1,9 +1,5 @@
 import { Client, query as q } from 'faunadb';
-import {
-    getUserByEmailAddress,
-    createUser,
-    updateUser
-} from '../api/data/userRepository';
+import { UserRepository } from '../api/dataSources';
 import { generateHash } from '../api/utils/hash';
 import { AVAILABLE_ROLES } from '../api/utils/auth';
 import { config } from '../api/utils/config';
@@ -121,7 +117,10 @@ import { config } from '../api/utils/config';
     }
 
     try {
-        const existing = await getUserByEmailAddress(config.SEED_EMAILADDRESS);
+        const users = new UserRepository();
+        users.initialize();
+
+        const existing = await users.getUserByEmailAddress(config.SEED_EMAILADDRESS);
 
         const user = {
             emailAddress: config.SEED_EMAILADDRESS,
@@ -134,8 +133,8 @@ import { config } from '../api/utils/config';
         };
 
         const method = existing
-            ? updateUser({ ...existing, ...user })
-            : createUser(user);
+            ? users.updateUser({ ...existing, ...user })
+            : users.createUser(user);
 
         await method;
 
