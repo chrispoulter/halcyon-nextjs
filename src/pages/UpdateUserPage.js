@@ -22,7 +22,7 @@ import {
     CheckboxGroupInput,
     Button
 } from '../components';
-import { allRoles } from '../utils/auth';
+import { ALL_ROLES } from '../utils/auth';
 import { captureError } from '../utils/logger';
 
 export const UpdateUserPage = ({ history, match }) => {
@@ -229,7 +229,7 @@ export const UpdateUserPage = ({ history, match }) => {
                         <Field
                             name="roles"
                             label={t('pages.updateUser.form.roles')}
-                            options={allRoles.map(role => ({
+                            options={ALL_ROLES.map(role => ({
                                 value: role,
                                 label: t(`api.userRoles.${role}`)
                             }))}

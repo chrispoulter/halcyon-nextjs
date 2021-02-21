@@ -16,7 +16,7 @@ import {
     Container
 } from 'reactstrap';
 import { AuthContext } from '../providers/AuthProvider';
-import { isAuthorized, userAdministratorRoles } from '../../utils/auth';
+import { isAuthorized, USER_ADMINISTRATOR_ROLES } from '../../utils/auth';
 
 export const Header = () => {
     const { t } = useTranslation();
@@ -35,7 +35,7 @@ export const Header = () => {
     const isAuthenticated = isAuthorized(currentUser);
     const isUserAdministrator = isAuthorized(
         currentUser,
-        userAdministratorRoles
+        USER_ADMINISTRATOR_ROLES
     );
 
     const logout = () => {

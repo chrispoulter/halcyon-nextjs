@@ -14,7 +14,7 @@ import {
     CheckboxGroupInput,
     Button
 } from '../components';
-import { allRoles } from '../utils/auth';
+import { ALL_ROLES } from '../utils/auth';
 import { captureError } from '../utils/logger';
 
 export const CreateUserPage = ({ history }) => {
@@ -147,7 +147,7 @@ export const CreateUserPage = ({ history }) => {
                         <Field
                             name="roles"
                             label={t('pages.createUser.form.roles')}
-                            options={allRoles.map(role => ({
+                            options={ALL_ROLES.map(role => ({
                                 value: role,
                                 label: t(`api.userRoles.${role}`)
                             }))}

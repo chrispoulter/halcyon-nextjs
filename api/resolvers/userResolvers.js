@@ -1,19 +1,19 @@
 import { ApolloError } from 'apollo-server';
 import { isAuthenticated } from '../context';
 import { generateHash } from '../utils/hash';
-import { userAdministratorRoles } from '../utils/auth';
+import { USER_ADMINISTRATOR_ROLES } from '../utils/auth';
 
 export const userResolvers = {
     Query: {
         searchUsers: isAuthenticated(
             async (_, { input }, { dataSources }) =>
                 dataSources.users.searchUsers(input),
-            userAdministratorRoles
+            USER_ADMINISTRATOR_ROLES
         ),
         getUserById: isAuthenticated(
             async (_, { id }, { dataSources }) =>
                 dataSources.users.getUserById(id),
-            userAdministratorRoles
+            USER_ADMINISTRATOR_ROLES
         )
     },
     Mutation: {
@@ -44,7 +44,7 @@ export const userResolvers = {
                 message: 'User successfully created.',
                 user: result
             };
-        }, userAdministratorRoles),
+        }, USER_ADMINISTRATOR_ROLES),
         updateUser: isAuthenticated(
             async (_, { id, input }, { dataSources }) => {
                 const user = await dataSources.users.getUserById(id);
@@ -78,7 +78,7 @@ export const userResolvers = {
                     user
                 };
             },
-            userAdministratorRoles
+            USER_ADMINISTRATOR_ROLES
         ),
         lockUser: isAuthenticated(
             async (_, { id }, { dataSources, payload }) => {
@@ -103,7 +103,7 @@ export const userResolvers = {
                     user
                 };
             },
-            userAdministratorRoles
+            USER_ADMINISTRATOR_ROLES
         ),
         unlockUser: isAuthenticated(async (_, { id }, { dataSources }) => {
             const user = await dataSources.users.getUserById(id);
@@ -119,7 +119,7 @@ export const userResolvers = {
                 message: 'User successfully unlocked.',
                 user
             };
-        }, userAdministratorRoles),
+        }, USER_ADMINISTRATOR_ROLES),
         deleteUser: isAuthenticated(
             async (_, { id }, { dataSources, payload }) => {
                 const user = await dataSources.users.getUserById(id);
@@ -142,7 +142,7 @@ export const userResolvers = {
                     user
                 };
             },
-            userAdministratorRoles
+            USER_ADMINISTRATOR_ROLES
         )
     }
 };

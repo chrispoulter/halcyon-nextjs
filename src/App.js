@@ -26,7 +26,7 @@ import {
     CreateUserPage,
     UpdateUserPage
 } from './pages';
-import { userAdministratorRoles } from './utils/auth';
+import { USER_ADMINISTRATOR_ROLES } from './utils/auth';
 
 export const App = () => (
     <Suspense fallback={<Spinner />}>
@@ -71,20 +71,20 @@ export const App = () => (
                             />
                             <PrivateRoute
                                 path="/user"
-                                requiredRoles={userAdministratorRoles}
+                                requiredRoles={USER_ADMINISTRATOR_ROLES}
                                 component={UserPage}
                                 exact
                             />
                             <PrivateRoute
                                 path="/user/create"
-                                requiredRoles={userAdministratorRoles}
+                                requiredRoles={USER_ADMINISTRATOR_ROLES}
                                 component={CreateUserPage}
                                 exact
                             />
                             <PrivateRoute
                                 meta="pages.updateUser.meta"
                                 path="/user/:id"
-                                requiredRoles={userAdministratorRoles}
+                                requiredRoles={USER_ADMINISTRATOR_ROLES}
                                 component={UpdateUserPage}
                                 exact
                             />
