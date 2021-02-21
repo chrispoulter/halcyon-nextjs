@@ -1,6 +1,6 @@
-export const AVAILABLE_ROLES = ['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'];
+export const allRoles = ['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'];
 
-export const IS_USER_ADMINISTRATOR = [
+export const userAdministratorRoles = [
     'SYSTEM_ADMINISTRATOR',
     'USER_ADMINISTRATOR'
 ];

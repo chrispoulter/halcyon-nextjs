@@ -3,35 +3,27 @@ import { DataSource } from 'apollo-datasource';
 import { base64EncodeObj, base64DecodeObj } from '../utils/encode';
 import { config } from '../utils/config';
 
+const indexes = {
+    BY_EMAIL_ADDRESS: { name: 'users_by_email_address' },
+    EMAIL_ADDRESS_DESC: {
+        name: 'users_email_address_desc',
+        values: ['emailAddress', 'firstName', 'lastName', 'ref']
+    },
+    EMAIL_ADDRESS_ASC: {
+        name: 'users_email_address_asc',
+        values: ['emailAddress', 'firstName', 'lastName', 'ref']
+    },
+    NAME_DESC: {
+        name: 'users_name_desc',
+        values: ['firstName', 'lastName', 'emailAddress', 'ref']
+    },
+    NAME_ASC: {
+        name: 'users_name_asc',
+        values: ['firstName', 'lastName', 'emailAddress', 'ref']
+    }
+};
+
 export class UserRepository extends DataSource {
-    collections = {
-        USERS: 'users'
-    };
-
-    indexes = {
-        BY_EMAIL_ADDRESS: { name: 'users_by_email_address' },
-        EMAIL_ADDRESS_DESC: {
-            name: 'users_email_address_desc',
-            values: ['emailAddress', 'firstName', 'lastName', 'ref']
-        },
-        EMAIL_ADDRESS_ASC: {
-            name: 'users_email_address_asc',
-            values: ['emailAddress', 'firstName', 'lastName', 'ref']
-        },
-        NAME_DESC: {
-            name: 'users_name_desc',
-            values: ['firstName', 'lastName', 'emailAddress', 'ref']
-        },
-        NAME_ASC: {
-            name: 'users_name_asc',
-            values: ['firstName', 'lastName', 'emailAddress', 'ref']
-        }
-    };
-
-    errors = {
-        NOT_FOUND: 'NotFound'
-    };
-
     initialize() {
         this.client = new Client({
             secret: `${config.FAUNADB_SECRET}:${config.ENVIRONMENT}:server`
@@ -41,12 +33,12 @@ export class UserRepository extends DataSource {
     async getUserById(id) {
         try {
             const result = await this.client.query(
-                q.Get(q.Ref(q.Collection(this.collections.USERS), id))
+                q.Get(q.Ref(q.Collection('users'), id))
             );
 
             return this.mapUser(result);
         } catch (error) {
-            if (error.name === this.errors.NOT_FOUND) {
+            if (error.name === 'NotFound') {
                 return undefined;
             }
 
@@ -59,7 +51,7 @@ export class UserRepository extends DataSource {
             const result = await this.client.query(
                 q.Get(
                     q.Match(
-                        q.Index(this.indexes.BY_EMAIL_ADDRESS.name),
+                        q.Index(indexes.BY_EMAIL_ADDRESS.name),
                         emailAddress
                     )
                 )
@@ -67,7 +59,7 @@ export class UserRepository extends DataSource {
 
             return this.mapUser(result);
         } catch (error) {
-            if (error.name === this.errors.NOT_FOUND) {
+            if (error.name === 'NotFound') {
                 return undefined;
             }
 
@@ -77,7 +69,7 @@ export class UserRepository extends DataSource {
 
     async createUser(user) {
         const result = await this.client.query(
-            q.Create(q.Collection(this.collections.USERS), { data: user })
+            q.Create(q.Collection('users'), { data: user })
         );
 
         return this.mapUser(result);
@@ -87,7 +79,7 @@ export class UserRepository extends DataSource {
         const { id, ...data } = user;
 
         const result = await this.client.query(
-            q.Replace(q.Ref(q.Collection(this.collections.USERS), id), { data })
+            q.Replace(q.Ref(q.Collection('users'), id), { data })
         );
 
         return this.mapUser(result);
@@ -95,15 +87,14 @@ export class UserRepository extends DataSource {
 
     async removeUser(user) {
         const result = await this.client.query(
-            q.Delete(q.Ref(q.Collection(this.collections.USERS), user.id))
+            q.Delete(q.Ref(q.Collection('users'), user.id))
         );
 
         return this.mapUser(result);
     }
 
     async searchUsers({ size, search, sort, cursor }) {
-        const { name, values } =
-            this.indexes[sort] || this.indexes.USERS_NAME_ASC;
+        const { name, values } = indexes[sort] || indexes.USERS_NAME_ASC;
         const { before, after } = this.parseStringCursor(cursor);
 
         const set = search

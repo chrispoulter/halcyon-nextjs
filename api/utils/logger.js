@@ -30,13 +30,17 @@ export const loggerPlugin = {
                     return;
                 }
 
+                const payload = ctx.context?.payload;
+                const transactionId = ctx.request?.http?.headers?.get(
+                    'x-transaction-id'
+                );
+
                 ctx.errors?.forEach(error => {
                     Sentry.withScope(scope => {
                         scope.setTag('kind', ctx.operation?.operation);
                         scope.setExtra('query', ctx.request?.query);
                         scope.setExtra('variables', ctx.request?.variables);
 
-                        const payload = ctx.context?.payload;
                         if (payload) {
                             scope.setUser(payload);
                         }
@@ -47,6 +51,10 @@ export const loggerPlugin = {
                                 message: error.path.join(' > '),
                                 level: Sentry.Severity.Debug
                             });
+                        }
+
+                        if (transactionId) {
+                            scope.setTransactionName(transactionId);
                         }
 
                         Sentry.captureException(error);

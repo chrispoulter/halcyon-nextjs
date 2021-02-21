@@ -16,7 +16,7 @@ import {
     Container
 } from 'reactstrap';
 import { AuthContext } from '../providers/AuthProvider';
-import { isAuthorized, IS_USER_ADMINISTRATOR } from '../../utils/auth';
+import { isAuthorized, userAdministratorRoles } from '../../utils/auth';
 
 export const Header = () => {
     const { t } = useTranslation();
@@ -33,7 +33,10 @@ export const Header = () => {
     }, [history]);
 
     const isAuthenticated = isAuthorized(currentUser);
-    const isUserAdmin = isAuthorized(currentUser, IS_USER_ADMINISTRATOR);
+    const isUserAdministrator = isAuthorized(
+        currentUser,
+        userAdministratorRoles
+    );
 
     const logout = () => {
         removeToken();
@@ -52,7 +55,7 @@ export const Header = () => {
                     <NavbarToggler onClick={toggle} />
                     <Collapse isOpen={isOpen} navbar>
                         <Nav navbar>
-                            {isUserAdmin && (
+                            {isUserAdministrator && (
                                 <NavItem>
                                     <NavLink to="/user" tag={Link}>
                                         {t('components.header.nav.users')}

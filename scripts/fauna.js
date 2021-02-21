@@ -1,7 +1,7 @@
 import { Client, query as q } from 'faunadb';
 import { UserRepository } from '../api/dataSources';
 import { generateHash } from '../api/utils/hash';
-import { AVAILABLE_ROLES } from '../api/utils/auth';
+import { allRoles } from '../api/utils/auth';
 import { config } from '../api/utils/config';
 
 (async () => {
@@ -131,7 +131,7 @@ import { config } from '../api/utils/config';
             lastName: 'Administrator',
             dateOfBirth: new Date(1970, 0, 1).toISOString(),
             isLockedOut: false,
-            roles: AVAILABLE_ROLES
+            roles: allRoles
         };
 
         const method = existing

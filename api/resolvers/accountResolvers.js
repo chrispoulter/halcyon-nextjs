@@ -42,8 +42,8 @@ export const accountResolvers = {
                 await dataSources.users.updateUser(user);
 
                 await sendEmail({
+                    template: 'RESET_PASSWORD',
                     to: user.emailAddress,
-                    template: 'resetPassword',
                     context: {
                         token: user.passwordResetToken
                     }
