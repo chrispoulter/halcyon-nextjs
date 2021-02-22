@@ -35,7 +35,12 @@ export const loggerPlugin = {
                     'x-transaction-id'
                 );
 
-                ctx.errors?.forEach(error => {
+                for (const error of ctx.errors) {
+                    const code = error.extensions?.code || 'INTERNAL_SERVER_ERROR';
+                    if (code !== 'INTERNAL_SERVER_ERROR') {
+                        continue;
+                    }
+
                     Sentry.withScope(scope => {
                         scope.setTag('kind', ctx.operation?.operation);
                         scope.setExtra('query', ctx.request?.query);
@@ -59,7 +64,7 @@ export const loggerPlugin = {
 
                         Sentry.captureException(error);
                     });
-                });
+                }
             }
         };
     }
