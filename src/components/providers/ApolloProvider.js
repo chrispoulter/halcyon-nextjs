@@ -3,9 +3,10 @@ import { ApolloProvider as BaseApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
 import { AuthContext } from './AuthProvider';
+import { captureGraphQLError } from '../../utils/logger';
 import { config } from '../../utils/config';
-import { captureError, captureGraphQLError } from '../../utils/logger';
 
 export const ApolloProvider = ({ children }) => {
     const { t } = useTranslation();
@@ -18,30 +19,23 @@ export const ApolloProvider = ({ children }) => {
         request: operation =>
             operation.setContext({
                 headers: {
-                    authorization: accessToken ? `Bearer ${accessToken}` : ''
+                    authorization: accessToken ? `Bearer ${accessToken}` : '',
+                    'x-transaction-id': uuidv4()
                 }
             }),
-        onError: ({ graphQLErrors, networkError, operation }) => {
-            if (graphQLErrors) {
-                for (const error of graphQLErrors || []) {
-                    switch (error.extensions?.code) {
+        onError: error => {
+            if (error.graphQLErrors) {
+                for (const graphQLError of error.graphQLErrors) {
+                    switch (graphQLError.extensions?.code) {
                         case 'UNAUTHENTICATED':
                             removeToken();
                             break;
 
                         case 'FORBIDDEN':
                             toast.warn(
-                                t('api.codes.FORBIDDEN', operation.variables)
-                            );
-                            break;
-
-                        case 'INTERNAL_SERVER_ERROR':
-                            captureGraphQLError(error);
-
-                            toast.error(
                                 t(
-                                    'api.codes.INTERNAL_SERVER_ERROR',
-                                    operation.variables
+                                    `api.codes.${graphQLError.extensions?.code}`,
+                                    error.operation.variables
                                 )
                             );
                             break;
@@ -50,22 +44,25 @@ export const ApolloProvider = ({ children }) => {
                             toast.error(
                                 t(
                                     [
-                                        `api.codes.${error.extensions?.code}`,
-                                        'api.codes.UNKNOWN_ERROR'
+                                        `api.codes.${graphQLError.extensions?.code}`,
+                                        'api.codes.INTERNAL_SERVER_ERROR'
                                     ],
-                                    operation.variables
+                                    error.operation.variables
                                 )
                             );
                             break;
                     }
                 }
-            } else if (networkError) {
-                captureError(networkError);
-
+            } else if (error.networkError) {
                 toast.error(
-                    t('api.codes.INTERNAL_SERVER_ERROR', operation.variables)
+                    t(
+                        'api.codes.INTERNAL_SERVER_ERROR',
+                        error.operation.variables
+                    )
                 );
             }
+
+            captureGraphQLError(error);
         }
     });
 

@@ -1,6 +1,5 @@
 import { ApolloError } from 'apollo-server';
 import { v4 as uuidv4 } from 'uuid';
-
 import { sendEmail } from '../utils/email';
 import { generateHash } from '../utils/hash';
 

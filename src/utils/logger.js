@@ -38,23 +38,35 @@ export const setUser = user => {
     Sentry.setUser(user);
 };
 
-export const captureError = error => {
-    if (!sentryInitialized) {
-        return;
-    }
-
-    Sentry.captureException(error);
-};
-
 export const captureGraphQLError = error => {
     if (!sentryInitialized) {
         return;
     }
 
-    Sentry.captureMessage(error.message, scope => {
-        scope.setExtra('locations', error.locations);
-        scope.setExtra('path', error.path);
-        scope.setExtra('code', error.extensions?.code);
-        scope.setExtra('stacktrace', error.extensions?.exception?.stacktrace);
-    });
+    if (error.graphQLErrors) {
+        const ctx = error.operation?.getContext();
+        const transactionId = ctx.headers?.['x-transaction-id'];
+
+        for (const graphQLError of error.graphQLErrors) {
+            if (
+                graphQLError.extensions?.code &&
+                graphQLError.extensions?.code !== 'INTERNAL_SERVER_ERROR'
+            ) {
+                continue;
+            }
+
+            Sentry.captureMessage(graphQLError.message, scope => {
+                scope.setExtra('path', graphQLError.path);
+                scope.setExtra('locations', graphQLError.locations);
+                scope.setExtra('code', graphQLError.extensions?.code);
+                scope.setExtra('stacktrace', graphQLError.extensions?.exception?.stacktrace);
+
+                if (transactionId) {
+                    scope.setTransactionName(transactionId);
+                }
+            });
+        }
+    } else if (error.networkError) {
+        Sentry.captureException(error.networkError);
+    }
 };
