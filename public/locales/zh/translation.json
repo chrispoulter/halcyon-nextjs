@@ -20,7 +20,7 @@
             "USER_LOCKED_OUT": "此帐户已被锁定，请稍后再试。",
             "LOCK_CURRENT_USER": "无法锁定当前登录的用户。",
             "DELETE_CURRENT_USER": "无法删除当前登录的用户。",
-            "UNKNOWN_ERROR": "与服务器通信时发生未知错误。"
+            "INTERNAL_SERVER_ERROR": "与服务器通信时发生未知错误。"
         },
         "userRoles": {
             "SYSTEM_ADMINISTRATOR": "系统管理员",

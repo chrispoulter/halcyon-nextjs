@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { AuthContext } from './AuthProvider';
 import { config } from '../../utils/config';
+import { captureError, captureGraphQLError } from '../../utils/logger';
 
 export const ApolloProvider = ({ children }) => {
     const { t } = useTranslation();
@@ -22,23 +23,26 @@ export const ApolloProvider = ({ children }) => {
             }),
         onError: ({ graphQLErrors, networkError, operation }) => {
             if (graphQLErrors) {
-                for (const graphQLError of graphQLErrors || []) {
-                    const { code } = graphQLError.extensions;
-                    switch (code) {
-                        case 'BAD_USER_INPUT':
-                            toast.error(
-                                t(`api.codes.${code}`),
-                                operation.variables
-                            );
-                            break;
-
+                for (const error of graphQLErrors || []) {
+                    switch (error.extensions?.code) {
                         case 'UNAUTHENTICATED':
                             removeToken();
                             break;
 
                         case 'FORBIDDEN':
                             toast.warn(
-                                t(`api.codes.${code}`, operation.variables)
+                                t('api.codes.FORBIDDEN', operation.variables)
+                            );
+                            break;
+
+                        case 'INTERNAL_SERVER_ERROR':
+                            captureGraphQLError(error);
+
+                            toast.error(
+                                t(
+                                    'api.codes.INTERNAL_SERVER_ERROR',
+                                    operation.variables
+                                )
                             );
                             break;
 
@@ -46,18 +50,21 @@ export const ApolloProvider = ({ children }) => {
                             toast.error(
                                 t(
                                     [
-                                        `api.codes.${code}`,
+                                        `api.codes.${error.extensions?.code}`,
                                         'api.codes.UNKNOWN_ERROR'
                                     ],
                                     operation.variables
                                 )
                             );
-
                             break;
                     }
                 }
             } else if (networkError) {
-                toast.error(t('api.codes.UNKNOWN_ERROR', operation.variables));
+                captureError(networkError);
+
+                toast.error(
+                    t('api.codes.INTERNAL_SERVER_ERROR', operation.variables)
+                );
             }
         }
     });

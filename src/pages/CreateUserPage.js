@@ -15,7 +15,6 @@ import {
     Button
 } from '../components';
 import { ALL_ROLES } from '../utils/auth';
-import { captureError } from '../utils/logger';
 
 export const CreateUserPage = ({ history }) => {
     const { t } = useTranslation();
@@ -28,7 +27,7 @@ export const CreateUserPage = ({ history }) => {
             toast.success(t(`api.codes.${result.data.createUser.code}`));
             history.push('/user');
         } catch (error) {
-            captureError(error);
+            console.error(error);
         }
     };
 

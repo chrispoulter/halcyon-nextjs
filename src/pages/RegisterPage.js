@@ -8,7 +8,6 @@ import * as Yup from 'yup';
 import { Container, FormGroup } from 'reactstrap';
 import { REGISTER, GENERATE_TOKEN } from '../graphql';
 import { TextInput, DateInput, Button, AuthContext } from '../components';
-import { captureError } from '../utils/logger';
 
 export const RegisterPage = ({ history }) => {
     const { t } = useTranslation();
@@ -30,7 +29,7 @@ export const RegisterPage = ({ history }) => {
             setToken(result.data.generateToken.accessToken);
             history.push('/');
         } catch (error) {
-            captureError(error);
+            console.error(error);
         }
     };
 

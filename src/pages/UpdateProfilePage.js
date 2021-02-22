@@ -9,7 +9,6 @@ import { Container, Alert, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { GET_PROFILE, UPDATE_PROFILE } from '../graphql';
 import { Spinner, TextInput, DateInput, Button } from '../components';
-import { captureError } from '../utils/logger';
 
 export const UpdateProfilePage = ({ history }) => {
     const { t } = useTranslation();
@@ -36,7 +35,7 @@ export const UpdateProfilePage = ({ history }) => {
             toast.success(t(`api.codes.${result.data.updateProfile.code}`));
             history.push('/my-account');
         } catch (error) {
-            captureError(error);
+            console.error(error);
         }
     };
 

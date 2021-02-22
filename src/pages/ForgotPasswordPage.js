@@ -8,7 +8,6 @@ import { Container, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { FORGOT_PASSWORD } from '../graphql';
 import { TextInput, Button } from '../components';
-import { captureError } from '../utils/logger';
 
 export const ForgotPasswordPage = ({ history }) => {
     const { t } = useTranslation();
@@ -21,7 +20,7 @@ export const ForgotPasswordPage = ({ history }) => {
             toast.success(t(`api.codes.${result.data.forgotPassword.code}`));
             history.push('/login');
         } catch (error) {
-            captureError(error);
+            console.error(error);
         }
     };
 

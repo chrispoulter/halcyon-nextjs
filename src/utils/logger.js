@@ -45,3 +45,16 @@ export const captureError = error => {
 
     Sentry.captureException(error);
 };
+
+export const captureGraphQLError = error => {
+    if (!sentryInitialized) {
+        return;
+    }
+
+    Sentry.captureMessage(error.message, scope => {
+        scope.setExtra('locations', error.locations);
+        scope.setExtra('path', error.path);
+        scope.setExtra('code', error.extensions?.code);
+        scope.setExtra('stacktrace', error.extensions?.exception?.stacktrace);
+    });
+};
