@@ -36,8 +36,10 @@ export const loggerPlugin = {
                 );
 
                 for (const error of ctx.errors) {
-                    const code = error.extensions?.code || 'INTERNAL_SERVER_ERROR';
-                    if (code !== 'INTERNAL_SERVER_ERROR') {
+                    if (
+                        error.extensions?.code &&
+                        error.extensions?.code !== 'INTERNAL_SERVER_ERROR'
+                    ) {
                         continue;
                     }
 

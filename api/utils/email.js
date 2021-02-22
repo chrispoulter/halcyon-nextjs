@@ -3,10 +3,10 @@ import { fetch } from './http';
 import { base64Encode } from './encode';
 import { config } from './config';
 
-const mailgunUrl = `https://api.mailgun.net/v3/${config.MAILGUN_DOMAIN}/messages`;
-const mailgunAuth = `Basic ${base64Encode(`api:${config.MAILGUN_APIKEY}`)}`;
+const url = `https://api.mailgun.net/v3/${config.MAILGUN_DOMAIN}/messages`;
+const authorization = `Basic ${base64Encode(`api:${config.MAILGUN_APIKEY}`)}`;
 
-const emailTemplates = {
+const templates = {
     RESET_PASSWORD: {
         subject: 'Password Reset // Halcyon',
         html:
@@ -15,15 +15,15 @@ const emailTemplates = {
 };
 
 export const sendEmail = message => {
-    const template = emailTemplates[message.template];
+    const template = templates[message.template];
     const subject = format(template.subject, message.context);
     const html = format(template.html, message.context);
 
     return fetch({
-        url: mailgunUrl,
+        url,
         method: 'POST',
         headers: {
-            Authorization: mailgunAuth
+            authorization
         },
         body: {
             from: config.MAILGUN_NOREPLY,
