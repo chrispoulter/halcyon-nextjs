@@ -155,7 +155,5 @@ export class FaunaRepository extends DataSource {
         return { before, after };
     }
 
-    mapItem(item) {
-        return { id: item.ref.id, ...item.data };
-    }
+    mapItem = item => ({ id: item.ref.id, ...item.data });
 }
