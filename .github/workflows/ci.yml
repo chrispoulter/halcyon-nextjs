@@ -20,6 +20,7 @@ jobs:
             MAILGUN_NOREPLY: ${{ secrets.MAILGUN_NOREPLY }}
             SEED_EMAILADDRESS: ${{secrets.SEED_EMAILADDRESS }}
             SEED_PASSWORD: ${{ secrets.SEED_PASSWORD }}
+            SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
@@ -31,9 +32,20 @@ jobs:
                   node-version: 12.x
 
             - run: echo "ENVIRONMENT=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+            - run: echo "RELEASE=$(echo ${GITHUB_SHA})" >> $GITHUB_ENV
 
             - run: yarn
             - run: yarn lint
             - run: yarn fauna
             - run: yarn serverless:build --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
             - run: yarn serverless:deploy --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
+
+            - uses: getsentry/action-release@v1
+              env:
+                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+                  SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+                  SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+              with:
+                  environment: ${{ env.ENVIRONMENT }}
+                  version: ${{ env.RELEASE }}
+                  sourcemaps: ./build

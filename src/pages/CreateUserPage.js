@@ -14,50 +14,12 @@ import {
     CheckboxGroupInput,
     Button
 } from '../components';
-import { AVAILABLE_ROLES } from '../utils/auth';
-
-const initialValues = {
-    emailAddress: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    dateOfBirth: '',
-    roles: []
-};
+import { ALL_ROLES } from '../utils/auth';
 
 export const CreateUserPage = ({ history }) => {
     const { t } = useTranslation();
 
     const [createUser] = useMutation(CREATE_USER);
-
-    const validationSchema = Yup.object().shape({
-        emailAddress: Yup.string()
-            .label(t('pages.createUser.form.emailAddress'))
-            .max(254)
-            .email()
-            .required(),
-        password: Yup.string()
-            .label(t('pages.createUser.form.password'))
-            .min(8)
-            .max(50)
-            .required(),
-        confirmPassword: Yup.string()
-            .label(t('pages.createUser.form.confirmPassword'))
-            .required()
-            .oneOf([Yup.ref('password')]),
-        firstName: Yup.string()
-            .label(t('pages.createUser.form.firstName'))
-            .max(50)
-            .required(),
-        lastName: Yup.string()
-            .label(t('pages.createUser.form.lastName'))
-            .max(50)
-            .required(),
-        dateOfBirth: Yup.string()
-            .label(t('pages.createUser.form.dateOfBirth'))
-            .required()
-    });
 
     const onSubmit = async variables => {
         try {
@@ -85,8 +47,42 @@ export const CreateUserPage = ({ history }) => {
             <hr />
 
             <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
+                initialValues={{
+                    emailAddress: '',
+                    password: '',
+                    confirmPassword: '',
+                    firstName: '',
+                    lastName: '',
+                    dateOfBirth: '',
+                    roles: []
+                }}
+                validationSchema={Yup.object().shape({
+                    emailAddress: Yup.string()
+                        .label(t('pages.createUser.form.emailAddress'))
+                        .max(254)
+                        .email()
+                        .required(),
+                    password: Yup.string()
+                        .label(t('pages.createUser.form.password'))
+                        .min(8)
+                        .max(50)
+                        .required(),
+                    confirmPassword: Yup.string()
+                        .label(t('pages.createUser.form.confirmPassword'))
+                        .required()
+                        .oneOf([Yup.ref('password')]),
+                    firstName: Yup.string()
+                        .label(t('pages.createUser.form.firstName'))
+                        .max(50)
+                        .required(),
+                    lastName: Yup.string()
+                        .label(t('pages.createUser.form.lastName'))
+                        .max(50)
+                        .required(),
+                    dateOfBirth: Yup.string()
+                        .label(t('pages.createUser.form.dateOfBirth'))
+                        .required()
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (
@@ -150,7 +146,7 @@ export const CreateUserPage = ({ history }) => {
                         <Field
                             name="roles"
                             label={t('pages.createUser.form.roles')}
-                            options={AVAILABLE_ROLES.map(role => ({
+                            options={ALL_ROLES.map(role => ({
                                 value: role,
                                 label: t(`api.userRoles.${role}`)
                             }))}

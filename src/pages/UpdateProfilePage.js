@@ -29,25 +29,6 @@ export const UpdateProfilePage = ({ history }) => {
         );
     }
 
-    const validationSchema = Yup.object().shape({
-        emailAddress: Yup.string()
-            .label(t('pages.updateProfile.form.emailAddress'))
-            .max(254)
-            .email()
-            .required(),
-        firstName: Yup.string()
-            .label(t('pages.updateProfile.form.firstName'))
-            .max(50)
-            .required(),
-        lastName: Yup.string()
-            .label(t('pages.updateProfile.form.lastName'))
-            .max(50)
-            .required(),
-        dateOfBirth: Yup.string()
-            .label(t('pages.updateProfile.form.dateOfBirth'))
-            .required()
-    });
-
     const onSubmit = async variables => {
         try {
             const result = await updateProfile({ variables });
@@ -70,7 +51,24 @@ export const UpdateProfilePage = ({ history }) => {
             <Formik
                 enableReinitialize={true}
                 initialValues={data.getProfile}
-                validationSchema={validationSchema}
+                validationSchema={Yup.object().shape({
+                    emailAddress: Yup.string()
+                        .label(t('pages.updateProfile.form.emailAddress'))
+                        .max(254)
+                        .email()
+                        .required(),
+                    firstName: Yup.string()
+                        .label(t('pages.updateProfile.form.firstName'))
+                        .max(50)
+                        .required(),
+                    lastName: Yup.string()
+                        .label(t('pages.updateProfile.form.lastName'))
+                        .max(50)
+                        .required(),
+                    dateOfBirth: Yup.string()
+                        .label(t('pages.updateProfile.form.dateOfBirth'))
+                        .required()
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (

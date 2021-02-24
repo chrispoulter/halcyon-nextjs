@@ -9,21 +9,10 @@ import { toast } from 'react-toastify';
 import { FORGOT_PASSWORD } from '../graphql';
 import { TextInput, Button } from '../components';
 
-const initialValues = {
-    emailAddress: ''
-};
-
 export const ForgotPasswordPage = ({ history }) => {
     const { t } = useTranslation();
 
     const [forgotPassword] = useMutation(FORGOT_PASSWORD);
-
-    const validationSchema = Yup.object().shape({
-        emailAddress: Yup.string()
-            .label(t('pages.forgotPassword.form.emailAddress'))
-            .email()
-            .required()
-    });
 
     const onSubmit = async variables => {
         try {
@@ -45,8 +34,15 @@ export const ForgotPasswordPage = ({ history }) => {
             <hr />
 
             <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
+                initialValues={{
+                    emailAddress: ''
+                }}
+                validationSchema={Yup.object().shape({
+                    emailAddress: Yup.string()
+                        .label(t('pages.forgotPassword.form.emailAddress'))
+                        .email()
+                        .required()
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (

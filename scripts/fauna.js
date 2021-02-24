@@ -1,11 +1,8 @@
-require('dotenv/config');
-
-const { Client, query: q } = require('faunadb');
-
-const config = {
-    ENVIRONMENT: process.env.ENVIRONMENT || 'dev',
-    FAUNADB_SECRET: process.env.FAUNADB_SECRET
-};
+import { Client, query as q } from 'faunadb';
+import { UserRepository } from '../api/dataSources';
+import { generateHash } from '../api/utils/hash';
+import { ALL_ROLES } from '../api/utils/auth';
+import { config } from '../api/utils/config';
 
 (async () => {
     const adminClient = new Client({ secret: config.FAUNADB_SECRET });
@@ -115,6 +112,35 @@ const config = {
         );
 
         console.log('Index users_name_desc created.');
+    } catch (error) {
+        console.log(error.message);
+    }
+
+    try {
+        const users = new UserRepository();
+        users.initialize();
+
+        const existing = await users.getUserByEmailAddress(
+            config.SEED_EMAILADDRESS
+        );
+
+        const user = {
+            emailAddress: config.SEED_EMAILADDRESS,
+            password: await generateHash(config.SEED_PASSWORD),
+            firstName: 'System',
+            lastName: 'Administrator',
+            dateOfBirth: new Date(1970, 0, 1).toISOString(),
+            isLockedOut: false,
+            roles: ALL_ROLES
+        };
+
+        const method = existing
+            ? users.updateUser({ ...existing, ...user })
+            : users.createUser(user);
+
+        await method;
+
+        console.log('Admin user created.');
     } catch (error) {
         console.log(error.message);
     }

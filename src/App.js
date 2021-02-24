@@ -1,19 +1,20 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { ToastContainer, Slide } from 'react-toastify';
+import { ErrorBoundary } from '@sentry/react';
 import {
     AuthProvider,
     ApolloProvider,
     Header,
     Footer,
     PrivateRoute,
-    ErrorBoundary,
     Spinner,
     Meta
 } from './components';
 import {
     HomePage,
     NotFoundPage,
+    ErrorPage,
     LoginPage,
     RegisterPage,
     ForgotPasswordPage,
@@ -25,7 +26,7 @@ import {
     CreateUserPage,
     UpdateUserPage
 } from './pages';
-import { IS_USER_ADMINISTRATOR } from './utils/auth';
+import { USER_ADMINISTRATOR_ROLES } from './utils/auth';
 
 export const App = () => (
     <Suspense fallback={<Spinner />}>
@@ -34,7 +35,7 @@ export const App = () => (
                 <ApolloProvider>
                     <Meta />
                     <Header />
-                    <ErrorBoundary>
+                    <ErrorBoundary fallback={<ErrorPage />}>
                         <Switch>
                             <Route path="/" component={HomePage} exact />
                             <Route
@@ -70,20 +71,20 @@ export const App = () => (
                             />
                             <PrivateRoute
                                 path="/user"
-                                requiredRoles={IS_USER_ADMINISTRATOR}
+                                requiredRoles={USER_ADMINISTRATOR_ROLES}
                                 component={UserPage}
                                 exact
                             />
                             <PrivateRoute
                                 path="/user/create"
-                                requiredRoles={IS_USER_ADMINISTRATOR}
+                                requiredRoles={USER_ADMINISTRATOR_ROLES}
                                 component={CreateUserPage}
                                 exact
                             />
                             <PrivateRoute
                                 meta="pages.updateUser.meta"
                                 path="/user/:id"
-                                requiredRoles={IS_USER_ADMINISTRATOR}
+                                requiredRoles={USER_ADMINISTRATOR_ROLES}
                                 component={UpdateUserPage}
                                 exact
                             />

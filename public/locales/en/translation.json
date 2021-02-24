@@ -7,7 +7,6 @@
             "PROFILE_UPDATED": "Your profile has been updated.",
             "PASSWORD_CHANGED": "Your password has been changed.",
             "ACCOUNT_DELETED": "Your account has been deleted.",
-            "ENVIRONMENT_SEEDED": "Environment seeded.",
             "USER_CREATED": "User successfully created.",
             "USER_UPDATED": "User successfully updated.",
             "USER_LOCKED": "User successfully locked.",
@@ -21,7 +20,7 @@
             "USER_LOCKED_OUT": "This account has been locked out, please try again later.",
             "LOCK_CURRENT_USER": "Cannot lock currently logged in user.",
             "DELETE_CURRENT_USER": "Cannot delete currently logged in user.",
-            "UNKNOWN_ERROR": "An unknown error has occurred whilst communicating with the server."
+            "INTERNAL_SERVER_ERROR": "An unknown error has occurred whilst communicating with the server."
         },
         "userRoles": {
             "SYSTEM_ADMINISTRATOR": "System Administrator",
@@ -84,13 +83,6 @@
                 "November",
                 "December"
             ]
-        },
-        "errorBoundary": {
-            "jumbotron": {
-                "title": "Error",
-                "lead": "Sorry, something went wrong. Please try again later.",
-                "homeButton": "Home"
-            }
         }
     },
     "pages": {
@@ -112,6 +104,16 @@
             "jumbotron": {
                 "title": "Page Not Found",
                 "lead": "Sorry, the Page you were looking for could not be found.",
+                "homeButton": "Home"
+            }
+        },
+        "error": {
+            "meta": {
+                "title": "Error"
+            },
+            "jumbotron": {
+                "title": "Error",
+                "lead": "Sorry, something went wrong. Please try again later.",
                 "homeButton": "Home"
             }
         },

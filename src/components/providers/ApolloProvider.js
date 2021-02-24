@@ -3,8 +3,10 @@ import { ApolloProvider as BaseApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
 import { AuthContext } from './AuthProvider';
-import config from '../../utils/config';
+import { captureGraphQLError } from '../../utils/logger';
+import { config } from '../../utils/config';
 
 export const ApolloProvider = ({ children }) => {
     const { t } = useTranslation();
@@ -17,28 +19,24 @@ export const ApolloProvider = ({ children }) => {
         request: operation =>
             operation.setContext({
                 headers: {
-                    authorization: accessToken ? `Bearer ${accessToken}` : ''
+                    authorization: accessToken ? `Bearer ${accessToken}` : '',
+                    'x-transaction-id': uuidv4()
                 }
             }),
-        onError: ({ graphQLErrors, networkError, operation }) => {
-            if (graphQLErrors) {
-                for (const graphQLError of graphQLErrors || []) {
-                    const { code } = graphQLError.extensions;
-                    switch (code) {
-                        case 'BAD_USER_INPUT':
-                            toast.error(
-                                t(`api.codes.${code}`),
-                                operation.variables
-                            );
-                            break;
-
+        onError: error => {
+            if (error.graphQLErrors) {
+                for (const graphQLError of error.graphQLErrors) {
+                    switch (graphQLError.extensions?.code) {
                         case 'UNAUTHENTICATED':
                             removeToken();
                             break;
 
                         case 'FORBIDDEN':
                             toast.warn(
-                                t(`api.codes.${code}`, operation.variables)
+                                t(
+                                    `api.codes.${graphQLError.extensions?.code}`,
+                                    error.operation.variables
+                                )
                             );
                             break;
 
@@ -46,19 +44,25 @@ export const ApolloProvider = ({ children }) => {
                             toast.error(
                                 t(
                                     [
-                                        `api.codes.${code}`,
-                                        'api.codes.UNKNOWN_ERROR'
+                                        `api.codes.${graphQLError.extensions?.code}`,
+                                        'api.codes.INTERNAL_SERVER_ERROR'
                                     ],
-                                    operation.variables
+                                    error.operation.variables
                                 )
                             );
-
                             break;
                     }
                 }
-            } else if (networkError) {
-                toast.error(t('api.codes.UNKNOWN_ERROR', operation.variables));
+            } else if (error.networkError) {
+                toast.error(
+                    t(
+                        'api.codes.INTERNAL_SERVER_ERROR',
+                        error.operation.variables
+                    )
+                );
             }
+
+            captureGraphQLError(error);
         }
     });
 

@@ -10,31 +10,10 @@ import { toast } from 'react-toastify';
 import { CHANGE_PASSWORD } from '../graphql';
 import { TextInput, Button } from '../components';
 
-const initialValues = {
-    currentPassword: '',
-    newPassword: '',
-    confirmNewPassword: ''
-};
-
 export const ChangePasswordPage = ({ history }) => {
     const { t } = useTranslation();
 
     const [changePassword] = useMutation(CHANGE_PASSWORD);
-
-    const validationSchema = Yup.object().shape({
-        currentPassword: Yup.string()
-            .label(t('pages.changePassword.form.currentPassword'))
-            .required(),
-        newPassword: Yup.string()
-            .label(t('pages.changePassword.form.newPassword'))
-            .min(8)
-            .max(50)
-            .required(),
-        confirmNewPassword: Yup.string()
-            .label(t('pages.changePassword.form.confirmNewPassword'))
-            .required()
-            .oneOf([Yup.ref('newPassword')])
-    });
 
     const onSubmit = async variables => {
         try {
@@ -56,8 +35,27 @@ export const ChangePasswordPage = ({ history }) => {
             <hr />
 
             <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
+                initialValues={{
+                    currentPassword: '',
+                    newPassword: '',
+                    confirmNewPassword: ''
+                }}
+                validationSchema={Yup.object().shape({
+                    currentPassword: Yup.string()
+                        .label(t('pages.changePassword.form.currentPassword'))
+                        .required(),
+                    newPassword: Yup.string()
+                        .label(t('pages.changePassword.form.newPassword'))
+                        .min(8)
+                        .max(50)
+                        .required(),
+                    confirmNewPassword: Yup.string()
+                        .label(
+                            t('pages.changePassword.form.confirmNewPassword')
+                        )
+                        .required()
+                        .oneOf([Yup.ref('newPassword')])
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (

@@ -9,26 +9,12 @@ import { Container, FormGroup } from 'reactstrap';
 import { GENERATE_TOKEN } from '../graphql';
 import { TextInput, CheckboxInput, Button, AuthContext } from '../components';
 
-const initialValues = {
-    emailAddress: '',
-    password: '',
-    rememberMe: true
-};
-
 export const LoginPage = ({ history }) => {
     const { t } = useTranslation();
 
     const { setToken } = useContext(AuthContext);
 
     const [generateToken] = useMutation(GENERATE_TOKEN);
-
-    const validationSchema = Yup.object().shape({
-        emailAddress: Yup.string()
-            .label(t('pages.login.form.emailAddress'))
-            .email()
-            .required(),
-        password: Yup.string().label(t('pages.login.form.password')).required()
-    });
 
     const onSubmit = async variables => {
         try {
@@ -57,8 +43,20 @@ export const LoginPage = ({ history }) => {
             <hr />
 
             <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
+                initialValues={{
+                    emailAddress: '',
+                    password: '',
+                    rememberMe: true
+                }}
+                validationSchema={Yup.object().shape({
+                    emailAddress: Yup.string()
+                        .label(t('pages.login.form.emailAddress'))
+                        .email()
+                        .required(),
+                    password: Yup.string()
+                        .label(t('pages.login.form.password'))
+                        .required()
+                })}
                 onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (
