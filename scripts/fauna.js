@@ -69,8 +69,8 @@ import { config } from '../api/utils/config';
             data: {
                 emailAddress: config.SEED_EMAILADDRESS,
                 password: await generateHash(config.SEED_PASSWORD),
-                firstName: 'Seed',
-                lastName: 'User',
+                firstName: 'System',
+                lastName: 'Administrator',
                 dateOfBirth: new Date(1970, 0, 1).toISOString(),
                 isLockedOut: false,
                 roles: ALL_ROLES

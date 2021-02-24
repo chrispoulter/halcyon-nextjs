@@ -92,7 +92,7 @@ export const DateInput = ({ field, form, label }) => {
                     </option>
                     {Array.from({ length: 12 }).map((_, index) => (
                         <option key={index} value={index}>
-                            {t(`components.dateInput.monthNames:${index}`)}
+                            {t(`components.dateInput.monthNames.${index}`)}
                         </option>
                     ))}
                 </Input>
