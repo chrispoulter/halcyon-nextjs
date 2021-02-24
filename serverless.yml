@@ -42,28 +42,14 @@ functions:
                   method: ANY
                   cors:
                       origin: '*'
-                      headers:
-                          - Content-Type
-                          - X-Amz-Date
-                          - Authorization
-                          - X-Api-Key
-                          - X-Amz-Security-Token
-                          - X-Amz-User-Agent
-                          - X-Transaction-Id
+                      headers: '*'
                       allowCredentials: true
             - http:
                   path: /{proxy+}
                   method: ANY
                   cors:
                       origin: '*'
-                      headers:
-                          - Content-Type
-                          - X-Amz-Date
-                          - Authorization
-                          - X-Api-Key
-                          - X-Amz-Security-Token
-                          - X-Amz-User-Agent
-                          - X-Transaction-Id
+                      headers: '*'
                       allowCredentials: true
 
 custom:
