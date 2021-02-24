@@ -116,7 +116,7 @@ export const UserPage = () => {
                                                     }
                                                 >
                                                     {t(
-                                                        `api.userSortExpressions:${option}`
+                                                        `api.userSortExpressions.${option}`
                                                     )}
                                                 </DropdownItem>
                                             ))}

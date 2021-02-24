@@ -59,7 +59,10 @@ export const captureGraphQLError = error => {
                 scope.setExtra('path', graphQLError.path);
                 scope.setExtra('locations', graphQLError.locations);
                 scope.setExtra('code', graphQLError.extensions?.code);
-                scope.setExtra('stacktrace', graphQLError.extensions?.exception?.stacktrace);
+                scope.setExtra(
+                    'stacktrace',
+                    graphQLError.extensions?.exception?.stacktrace
+                );
 
                 if (transactionId) {
                     scope.setTransactionName(transactionId);

@@ -6,54 +6,57 @@ import { USER_ADMINISTRATOR_ROLES } from '../utils/auth';
 export const userResolvers = {
     Query: {
         searchUsers: isAuthenticated(
-            async (_, { input }, { dataSources }) =>
-                dataSources.users.searchUsers(input),
+            async (_, { input }, { dataSources: { users } }) =>
+                users.searchUsers(input),
             USER_ADMINISTRATOR_ROLES
         ),
         getUserById: isAuthenticated(
-            async (_, { id }, { dataSources }) =>
-                dataSources.users.getUserById(id),
+            async (_, { id }, { dataSources: { users } }) =>
+                users.getUserById(id),
             USER_ADMINISTRATOR_ROLES
         )
     },
     Mutation: {
-        createUser: isAuthenticated(async (_, { input }, { dataSources }) => {
-            const existing = await dataSources.users.getUserByEmailAddress(
-                input.emailAddress
-            );
-
-            if (existing) {
-                throw new ApolloError(
-                    `User name "${input.emailAddress}" is already taken.`,
-                    'DUPLICATE_USER'
+        createUser: isAuthenticated(
+            async (_, { input }, { dataSources: { users } }) => {
+                const existing = await users.getUserByEmailAddress(
+                    input.emailAddress
                 );
-            }
 
-            const result = await dataSources.users.createUser({
-                emailAddress: input.emailAddress,
-                password: await generateHash(input.password),
-                firstName: input.firstName,
-                lastName: input.lastName,
-                dateOfBirth: input.dateOfBirth.toISOString(),
-                isLockedOut: false,
-                roles: input.roles
-            });
+                if (existing) {
+                    throw new ApolloError(
+                        `User name "${input.emailAddress}" is already taken.`,
+                        'DUPLICATE_USER'
+                    );
+                }
 
-            return {
-                code: 'USER_CREATED',
-                message: 'User successfully created.',
-                user: result
-            };
-        }, USER_ADMINISTRATOR_ROLES),
+                const result = await users.createUser({
+                    emailAddress: input.emailAddress,
+                    password: await generateHash(input.password),
+                    firstName: input.firstName,
+                    lastName: input.lastName,
+                    dateOfBirth: input.dateOfBirth.toISOString(),
+                    isLockedOut: false,
+                    roles: input.roles
+                });
+
+                return {
+                    code: 'USER_CREATED',
+                    message: 'User successfully created.',
+                    user: result
+                };
+            },
+            USER_ADMINISTRATOR_ROLES
+        ),
         updateUser: isAuthenticated(
-            async (_, { id, input }, { dataSources }) => {
-                const user = await dataSources.users.getUserById(id);
+            async (_, { id, input }, { dataSources: { users } }) => {
+                const user = await users.getUserById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 if (user.emailAddress !== input.emailAddress) {
-                    const existing = await dataSources.users.getUserByEmailAddress(
+                    const existing = await users.getUserByEmailAddress(
                         input.emailAddress
                     );
 
@@ -70,7 +73,7 @@ export const userResolvers = {
                 user.lastName = input.lastName;
                 user.dateOfBirth = input.dateOfBirth.toISOString();
                 user.roles = input.roles;
-                await dataSources.users.updateUser(user);
+                await users.updateUser(user);
 
                 return {
                     code: 'USER_UPDATED',
@@ -81,8 +84,8 @@ export const userResolvers = {
             USER_ADMINISTRATOR_ROLES
         ),
         lockUser: isAuthenticated(
-            async (_, { id }, { dataSources, payload }) => {
-                const user = await dataSources.users.getUserById(id);
+            async (_, { id }, { dataSources: { users }, payload }) => {
+                const user = await users.getUserById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
@@ -95,7 +98,7 @@ export const userResolvers = {
                 }
 
                 user.isLockedOut = true;
-                await dataSources.users.updateUser(user);
+                await users.updateUser(user);
 
                 return {
                     code: 'USER_LOCKED',
@@ -105,24 +108,27 @@ export const userResolvers = {
             },
             USER_ADMINISTRATOR_ROLES
         ),
-        unlockUser: isAuthenticated(async (_, { id }, { dataSources }) => {
-            const user = await dataSources.users.getUserById(id);
-            if (!user) {
-                throw new ApolloError('User not found.', 'USER_NOT_FOUND');
-            }
+        unlockUser: isAuthenticated(
+            async (_, { id }, { dataSources: { users } }) => {
+                const user = await users.getUserById(id);
+                if (!user) {
+                    throw new ApolloError('User not found.', 'USER_NOT_FOUND');
+                }
 
-            user.isLockedOut = false;
-            await dataSources.users.updateUser(user);
+                user.isLockedOut = false;
+                await users.updateUser(user);
 
-            return {
-                code: 'USER_UNLOCKED',
-                message: 'User successfully unlocked.',
-                user
-            };
-        }, USER_ADMINISTRATOR_ROLES),
+                return {
+                    code: 'USER_UNLOCKED',
+                    message: 'User successfully unlocked.',
+                    user
+                };
+            },
+            USER_ADMINISTRATOR_ROLES
+        ),
         deleteUser: isAuthenticated(
-            async (_, { id }, { dataSources, payload }) => {
-                const user = await dataSources.users.getUserById(id);
+            async (_, { id }, { dataSources: { users }, payload }) => {
+                const user = await users.getUserById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
@@ -134,7 +140,7 @@ export const userResolvers = {
                     );
                 }
 
-                await dataSources.users.removeUser(user);
+                await users.removeUser(user);
 
                 return {
                     code: 'USER_DELETED',

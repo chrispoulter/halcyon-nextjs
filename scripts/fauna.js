@@ -1,5 +1,4 @@
 import { Client, query as q } from 'faunadb';
-import { UserRepository } from '../api/dataSources';
 import { generateHash } from '../api/utils/hash';
 import { ALL_ROLES } from '../api/utils/auth';
 import { config } from '../api/utils/config';
@@ -20,7 +19,14 @@ import { config } from '../api/utils/config';
 
     try {
         await client.query(q.CreateCollection({ name: 'users' }));
-        console.log('Collection created.');
+        console.log('Collection users created.');
+    } catch (error) {
+        console.log(error.message);
+    }
+
+    try {
+        await client.query(q.CreateCollection({ name: 'templates' }));
+        console.log('Collection templates created.');
     } catch (error) {
         console.log(error.message);
     }
@@ -117,30 +123,53 @@ import { config } from '../api/utils/config';
     }
 
     try {
-        const users = new UserRepository();
-        users.initialize();
-
-        const existing = await users.getUserByEmailAddress(
-            config.SEED_EMAILADDRESS
+        await client.query(
+            q.CreateIndex({
+                name: 'templates_by_key',
+                source: q.Collection('templates'),
+                terms: [{ field: ['data', 'key'] }],
+                unique: true
+            })
         );
 
-        const user = {
-            emailAddress: config.SEED_EMAILADDRESS,
-            password: await generateHash(config.SEED_PASSWORD),
-            firstName: 'System',
-            lastName: 'Administrator',
-            dateOfBirth: new Date(1970, 0, 1).toISOString(),
-            isLockedOut: false,
-            roles: ALL_ROLES
-        };
+        console.log('Index templates_by_key created.');
+    } catch (error) {
+        console.log(error.message);
+    }
 
-        const method = existing
-            ? users.updateUser({ ...existing, ...user })
-            : users.createUser(user);
+    try {
+        await client.query(
+            q.Update(q.Collection('users'), {
+                data: {
+                    emailAddress: config.SEED_EMAILADDRESS,
+                    password: await generateHash(config.SEED_PASSWORD),
+                    firstName: 'System',
+                    lastName: 'Administrator',
+                    dateOfBirth: new Date(1970, 0, 1).toISOString(),
+                    isLockedOut: false,
+                    roles: ALL_ROLES
+                }
+            })
+        );
 
-        await method;
+        console.log('User created.');
+    } catch (error) {
+        console.log(error.message);
+    }
 
-        console.log('Admin user created.');
+    try {
+        await client.query(
+            q.Update(q.Collection('templates'), {
+                data: {
+                    key: 'RESET_PASSWORD',
+                    subject: 'Password Reset // Halcyon',
+                    html:
+                        '<html><head><title>Halcyon</title></head><body><p style="font-family: verdana, geneva, sans-serif; font-size: 11px;">We have received a request to reset your password.</p><p style="font-family: verdana, geneva, sans-serif; font-size: 11px;">In order to complete the process and select a new password please click here:</p><p style="font-family: verdana, geneva, sans-serif; font-size: 11px;"><a href="https://halcyon.chrispoulter.com/reset-password/{token}">Reset your password</a></p><p style="font-family: verdana, geneva, sans-serif; font-size: 11px;"><strong>Important</strong>: If you did not request a password reset do not worry. Your account is still secure and your old password will remain active.</p><p style="font-family: verdana, geneva, sans-serif; font-size: 11px;">Regards,<br /><strong>Halcyon</strong><br /><a href="https://halcyon.chrispoulter.com">https://halcyon.chrispoulter.com</a></p></body></html>'
+                }
+            })
+        );
+
+        console.log('Template RESET_PASSWORD created.');
     } catch (error) {
         console.log(error.message);
     }

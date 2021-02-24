@@ -5,10 +5,11 @@ import { generateHash } from '../utils/hash';
 
 export const accountResolvers = {
     Mutation: {
-        register: async (_, { input }, { dataSources }) => {
-            const existing = await dataSources.users.getUserByEmailAddress(
+        register: async (_, { input }, { dataSources: { users } }) => {
+            const existing = await users.getUserByEmailAddress(
                 input.emailAddress
             );
+
             if (existing) {
                 throw new ApolloError(
                     `User name "${input.emailAddress}" is already taken.`,
@@ -16,7 +17,7 @@ export const accountResolvers = {
                 );
             }
 
-            const result = await dataSources.users.createUser({
+            const result = await users.createUser({
                 emailAddress: input.emailAddress,
                 password: await generateHash(input.password),
                 firstName: input.firstName,
@@ -32,16 +33,24 @@ export const accountResolvers = {
                 user: result
             };
         },
-        forgotPassword: async (_, { emailAddress }, { dataSources }) => {
-            const user = await dataSources.users.getUserByEmailAddress(
-                emailAddress
-            );
+        forgotPassword: async (
+            _,
+            { emailAddress },
+            { dataSources: { users, templates } }
+        ) => {
+            const user = await users.getUserByEmailAddress(emailAddress);
+
             if (user) {
                 user.passwordResetToken = uuidv4();
-                await dataSources.users.updateUser(user);
+                await users.updateUser(user);
+
+                const template = await templates.getTemplateByKey(
+                    'RESET_PASSWORD'
+                );
 
                 await sendEmail({
-                    template: 'RESET_PASSWORD',
+                    subject: template.subject,
+                    html: template.html,
                     to: user.emailAddress,
                     context: {
                         token: user.passwordResetToken
@@ -55,17 +64,15 @@ export const accountResolvers = {
                     'Instructions as to how to reset your password have been sent to you via email.'
             };
         },
-        resetPassword: async (_, { input }, { dataSources }) => {
-            const user = await dataSources.users.getUserByEmailAddress(
-                input.emailAddress
-            );
+        resetPassword: async (_, { input }, { dataSources: { users } }) => {
+            const user = await users.getUserByEmailAddress(input.emailAddress);
             if (!user || user.passwordResetToken !== input.token) {
                 throw new ApolloError('Invalid token.', 'INVALID_TOKEN');
             }
 
             user.password = await generateHash(input.newPassword);
             user.passwordResetToken = undefined;
-            await dataSources.users.updateUser(user);
+            await users.updateUser(user);
 
             return {
                 code: 'PASSWORD_RESET',
