@@ -40,11 +40,17 @@ functions:
             - http:
                   path: /
                   method: ANY
-                  cors: true
+                  cors:
+                      origin: '*'
+                      headers: '*'
+                      allowCredentials: true
             - http:
                   path: /{proxy+}
                   method: ANY
-                  cors: true
+                  cors:
+                      origin: '*'
+                      headers: '*'
+                      allowCredentials: true
 
 custom:
     serverless-offline:
