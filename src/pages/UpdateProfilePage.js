@@ -39,7 +39,7 @@ export const UpdateProfilePage = ({ history }) => {
             trackEvent({
                 category: 'Account',
                 action: 'Profile Updated',
-                userId: result.data.updateProfile.user.id
+                entityId: result.data.updateProfile.user.id
             });
 
             history.push('/my-account');

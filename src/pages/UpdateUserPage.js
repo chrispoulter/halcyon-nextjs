@@ -63,7 +63,7 @@ export const UpdateUserPage = ({ history, match }) => {
             trackEvent({
                 category: 'User',
                 action: 'User Updated',
-                userId: result.data.updateUser.user.id
+                entityId: result.data.updateUser.user.id
             });
 
             history.push('/user');
@@ -102,7 +102,7 @@ export const UpdateUserPage = ({ history, match }) => {
             trackEvent({
                 category: 'User',
                 action: 'User Locked',
-                userId: result.data.lockUser.user.id
+                entityId: result.data.lockUser.user.id
             });
         } catch (error) {
             console.error(error);
@@ -139,7 +139,7 @@ export const UpdateUserPage = ({ history, match }) => {
             trackEvent({
                 category: 'User',
                 action: 'User Unlocked',
-                userId: result.data.unlockUser.user.id
+                entityId: result.data.unlockUser.user.id
             });
         } catch (error) {
             console.error(error);
@@ -176,7 +176,7 @@ export const UpdateUserPage = ({ history, match }) => {
             trackEvent({
                 category: 'User',
                 action: 'User Deleted',
-                userId: result.data.deleteUser.user.id
+                entityId: result.data.deleteUser.user.id
             });
 
             history.push('/user');

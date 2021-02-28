@@ -26,7 +26,7 @@ export const ResetPasswordPage = ({ match, history }) => {
             trackEvent({
                 category: 'Account',
                 action: 'Reset Password',
-                userId: result.data.resetPassword.user.id
+                entityId: result.data.resetPassword.user.id
             });
 
             history.push('/login');
