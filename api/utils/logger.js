@@ -3,7 +3,7 @@ import { config } from './config';
 
 var sentryInitialized = false;
 
-export const initializeLogger = handler => {
+export const wrapper = handler => {
     if (!config.SENTRY_DSN) {
         return handler;
     }
@@ -22,7 +22,7 @@ export const initializeLogger = handler => {
     return Sentry.AWSLambda.wrapHandler(handler);
 };
 
-export const loggerPlugin = {
+export const plugin = {
     requestDidStart() {
         return {
             didEncounterErrors(ctx) {

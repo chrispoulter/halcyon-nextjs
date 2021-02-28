@@ -1,10 +1,18 @@
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
+import ReactGA from 'react-ga';
+import { history } from './history';
 import { config } from './config';
 
 var sentryInitialized = false;
+var gaInitialized = false;
 
-export const initializeLogger = () => {
+export const initialize = () => {
+    initializeSentry();
+    initializeGA();
+};
+
+const initializeSentry = () => {
     if (!config.SENTRY_DSN) {
         return;
     }
@@ -22,20 +30,55 @@ export const initializeLogger = () => {
     sentryInitialized = true;
 };
 
-export const setTag = (key, value) => {
-    if (!sentryInitialized) {
+const initializeGA = () => {
+    if (!config.GA_MEASUREMENTID) {
         return;
     }
 
-    Sentry.setTag(key, value);
+    ReactGA.initialize(config.GA_MEASUREMENTID);
+
+    history.listen(location => {
+        ReactGA.set({ page: location.pathname });
+        ReactGA.pageview(location.pathname);
+    });
+
+    gaInitialized = true;
+};
+
+export const setContext = context => {
+    if (sentryInitialized) {
+        Sentry.setTags(context);
+    }
+
+    if (gaInitialized) {
+        ReactGA.set(context);
+    }
 };
 
 export const setUser = user => {
-    if (!sentryInitialized) {
+    if (sentryInitialized) {
+        Sentry.setUser(user);
+    }
+
+    if (gaInitialized) {
+        ReactGA.set({ userId: user?.sub, role: user?.role });
+    }
+};
+
+export const modalView = name => {
+    if (!gaInitialized) {
         return;
     }
 
-    Sentry.setUser(user);
+    ReactGA.modalview(name);
+};
+
+export const trackEvent = event => {
+    if (!gaInitialized) {
+        return;
+    }
+
+    ReactGA.event(event);
 };
 
 export const captureGraphQLError = error => {

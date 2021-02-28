@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import './i18n';
 import * as serviceWorker from './serviceWorker';
 import { App } from './App';
-import { initializeLogger } from './utils/logger';
+import { initialize } from './utils/logger';
 import './styles/index.scss';
 
-initializeLogger();
+initialize();
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

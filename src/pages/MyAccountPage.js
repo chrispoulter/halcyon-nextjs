@@ -8,6 +8,7 @@ import confirm from 'reactstrap-confirm';
 import { toast } from 'react-toastify';
 import { GET_PROFILE, DELETE_ACCOUNT } from '../graphql';
 import { Button, Spinner, AuthContext } from '../components';
+import { modalView, trackEvent } from '../utils/logger';
 
 export const MyAccountPage = ({ history }) => {
     const { t, i18n } = useTranslation();
@@ -33,6 +34,8 @@ export const MyAccountPage = ({ history }) => {
     }
 
     const onDeleteAccount = async () => {
+        modalView('delete-account');
+
         const confirmed = await confirm({
             title: t('pages.myAccount.deleteModal.title'),
             message: t('pages.myAccount.deleteModal.message'),
@@ -47,7 +50,15 @@ export const MyAccountPage = ({ history }) => {
 
         try {
             const result = await deleteAccount();
+
             toast.success(t(`api.codes.${result.data.deleteAccount.code}`));
+
+            trackEvent({
+                category: 'Account',
+                action: 'Account Deleted',
+                entityId: result.data.deleteAccount.user.id
+            });
+
             removeToken();
             history.push('/');
         } catch (error) {

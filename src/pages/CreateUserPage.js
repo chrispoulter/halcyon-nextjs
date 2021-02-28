@@ -15,6 +15,7 @@ import {
     Button
 } from '../components';
 import { ALL_ROLES } from '../utils/auth';
+import { trackEvent } from '../utils/logger';
 
 export const CreateUserPage = ({ history }) => {
     const { t } = useTranslation();
@@ -24,7 +25,15 @@ export const CreateUserPage = ({ history }) => {
     const onSubmit = async variables => {
         try {
             const result = await createUser({ variables });
+
             toast.success(t(`api.codes.${result.data.createUser.code}`));
+
+            trackEvent({
+                category: 'User',
+                action: 'User Created',
+                entityId: result.data.createUser.user.id
+            });
+
             history.push('/user');
         } catch (error) {
             console.error(error);

@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { Container, FormGroup } from 'reactstrap';
 import { REGISTER, GENERATE_TOKEN } from '../graphql';
 import { TextInput, DateInput, Button, AuthContext } from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const RegisterPage = ({ history }) => {
     const { t } = useTranslation();
@@ -20,13 +21,20 @@ export const RegisterPage = ({ history }) => {
 
     const onSubmit = async variables => {
         try {
-            await register({ mutation: REGISTER, variables });
+            let result = await register({ mutation: REGISTER, variables });
 
-            const result = await generateToken({
+            trackEvent({
+                category: 'Account',
+                action: 'Register',
+                entityId: result.data.register.user.id
+            });
+
+            result = await generateToken({
                 variables: { grantType: 'PASSWORD', ...variables }
             });
 
             setToken(result.data.generateToken.accessToken);
+
             history.push('/');
         } catch (error) {
             console.error(error);
