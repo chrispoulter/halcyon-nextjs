@@ -31,7 +31,7 @@ export const CreateUserPage = ({ history }) => {
             trackEvent({
                 category: 'User',
                 action: 'User Created',
-                value: result.data.createUser.user.id
+                userId: result.data.createUser.user.id
             });
 
             history.push('/user');

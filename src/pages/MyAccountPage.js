@@ -56,7 +56,7 @@ export const MyAccountPage = ({ history }) => {
             trackEvent({
                 category: 'Account',
                 action: 'Account Deleted',
-                value: result.data.deleteAccount.user.id
+                userId: result.data.deleteAccount.user.id
             });
 
             removeToken();

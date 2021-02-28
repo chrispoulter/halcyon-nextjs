@@ -26,7 +26,7 @@ export const RegisterPage = ({ history }) => {
             trackEvent({
                 category: 'Account',
                 action: 'Register',
-                value: result.data.register.user.id
+                userId: result.data.register.user.id
             });
 
             result = await generateToken({

@@ -25,7 +25,7 @@ export const ChangePasswordPage = ({ history }) => {
             trackEvent({
                 category: 'Account',
                 action: 'Change Password',
-                value: result.data.changePassword.user.id
+                userId: result.data.changePassword.user.id
             });
 
             history.push('/my-account');
