@@ -34,7 +34,7 @@ export const MyAccountPage = ({ history }) => {
     }
 
     const onDeleteAccount = async () => {
-        modalView('Delete Account');
+        modalView('delete-account');
 
         const confirmed = await confirm({
             title: t('pages.myAccount.deleteModal.title'),

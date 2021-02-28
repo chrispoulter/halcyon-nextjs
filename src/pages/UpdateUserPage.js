@@ -73,7 +73,7 @@ export const UpdateUserPage = ({ history, match }) => {
     };
 
     const onLockUser = async () => {
-        modalView('Lock User');
+        modalView('lock-user');
 
         const confirmed = await confirm({
             title: t('pages.updateUser.lockModal.title'),
@@ -110,7 +110,7 @@ export const UpdateUserPage = ({ history, match }) => {
     };
 
     const onUnlockUser = async () => {
-        modalView('Unlock User');
+        modalView('unlock-user');
 
         const confirmed = await confirm({
             title: t('pages.updateUser.unlockModal.title'),
@@ -147,7 +147,7 @@ export const UpdateUserPage = ({ history, match }) => {
     };
 
     const onDeleteUser = async () => {
-        modalView('Delete User');
+        modalView('delete-user');
 
         const confirmed = await confirm({
             title: t('pages.updateUser.deleteModal.title'),
