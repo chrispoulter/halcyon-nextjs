@@ -8,6 +8,7 @@ import { Container, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { RESET_PASSWORD } from '../graphql';
 import { TextInput, Button } from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const ResetPasswordPage = ({ match, history }) => {
     const { t } = useTranslation();
@@ -21,6 +22,13 @@ export const ResetPasswordPage = ({ match, history }) => {
             });
 
             toast.success(t(`api.codes.${result.data.resetPassword.code}`));
+
+            trackEvent({
+                category: 'Account',
+                action: 'Reset Password',
+                value: result.data.resetPassword.user.id
+            });
+
             history.push('/login');
         } catch (error) {
             console.error(error);

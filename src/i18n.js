@@ -3,14 +3,14 @@ import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { setLocale } from 'yup';
-import { setTag } from './utils/logger';
+import { setContext } from './utils/logger';
 
 const initializeValidation = lang => {
     if (!lang) {
         return;
     }
 
-    setTag('page_locale', lang);
+    setContext({ page_locale: lang });
 
     setLocale({
         mixed: {

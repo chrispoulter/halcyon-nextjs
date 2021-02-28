@@ -3,19 +3,19 @@ import { dataSources } from './dataSources';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
 import { context } from './context';
-import { initializeLogger, loggerPlugin } from './utils/logger';
+import { wrapper, plugin } from './utils/logger';
 
 const server = new ApolloServer({
     dataSources,
     typeDefs,
     resolvers,
     context,
-    plugins: [loggerPlugin],
+    plugins: [plugin],
     introspection: true,
     playground: true
 });
 
-export const handler = initializeLogger(
+export const handler = wrapper(
     server.createHandler({
         cors: {
             origin: '*',

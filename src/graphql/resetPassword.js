@@ -15,6 +15,9 @@ export const RESET_PASSWORD = gql`
         ) {
             code
             message
+            user {
+                id
+            }
         }
     }
 `;

@@ -9,6 +9,7 @@ import { Container, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { CHANGE_PASSWORD } from '../graphql';
 import { TextInput, Button } from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const ChangePasswordPage = ({ history }) => {
     const { t } = useTranslation();
@@ -18,7 +19,15 @@ export const ChangePasswordPage = ({ history }) => {
     const onSubmit = async variables => {
         try {
             const result = await changePassword({ variables });
+
             toast.success(t(`api.codes.${result.data.changePassword.code}`));
+
+            trackEvent({
+                category: 'Account',
+                action: 'Change Password',
+                value: result.data.changePassword.user.id
+            });
+
             history.push('/my-account');
         } catch (error) {
             console.error(error);

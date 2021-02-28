@@ -23,6 +23,7 @@ import {
     Button
 } from '../components';
 import { ALL_ROLES } from '../utils/auth';
+import { modalView, trackEvent } from '../utils/logger';
 
 export const UpdateUserPage = ({ history, match }) => {
     const { t } = useTranslation();
@@ -58,6 +59,13 @@ export const UpdateUserPage = ({ history, match }) => {
             });
 
             toast.success(t(`api.codes.${result.data.updateUser.code}`));
+
+            trackEvent({
+                category: 'User',
+                action: 'User Updated',
+                value: result.data.updateUser.user.id
+            });
+
             history.push('/user');
         } catch (error) {
             console.error(error);
@@ -65,6 +73,8 @@ export const UpdateUserPage = ({ history, match }) => {
     };
 
     const onLockUser = async () => {
+        modalView('Lock User');
+
         const confirmed = await confirm({
             title: t('pages.updateUser.lockModal.title'),
             message: (
@@ -86,13 +96,22 @@ export const UpdateUserPage = ({ history, match }) => {
             const result = await lockUser({
                 variables: { id: match.params.id }
             });
+
             toast.success(t(`api.codes.${result.data.lockUser.code}`));
+
+            trackEvent({
+                category: 'User',
+                action: 'User Locked',
+                value: result.data.lockUser.user.id
+            });
         } catch (error) {
             console.error(error);
         }
     };
 
     const onUnlockUser = async () => {
+        modalView('Unlock User');
+
         const confirmed = await confirm({
             title: t('pages.updateUser.unlockModal.title'),
             message: (
@@ -114,13 +133,22 @@ export const UpdateUserPage = ({ history, match }) => {
             const result = await unlockUser({
                 variables: { id: match.params.id }
             });
+
             toast.success(t(`api.codes.${result.data.unlockUser.code}`));
+
+            trackEvent({
+                category: 'User',
+                action: 'User Unlocked',
+                value: result.data.unlockUser.user.id
+            });
         } catch (error) {
             console.error(error);
         }
     };
 
     const onDeleteUser = async () => {
+        modalView('Delete User');
+
         const confirmed = await confirm({
             title: t('pages.updateUser.deleteModal.title'),
             message: (
@@ -142,7 +170,15 @@ export const UpdateUserPage = ({ history, match }) => {
             const result = await deleteUser({
                 variables: { id: match.params.id }
             });
+
             toast.success(t(`api.codes.${result.data.deleteUser.code}`));
+
+            trackEvent({
+                category: 'User',
+                action: 'User Deleted',
+                value: result.data.deleteUser.user.id
+            });
+
             history.push('/user');
         } catch (error) {
             console.error(error);

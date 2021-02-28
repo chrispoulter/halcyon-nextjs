@@ -9,6 +9,7 @@ import { Container, Alert, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { GET_PROFILE, UPDATE_PROFILE } from '../graphql';
 import { Spinner, TextInput, DateInput, Button } from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const UpdateProfilePage = ({ history }) => {
     const { t } = useTranslation();
@@ -32,7 +33,15 @@ export const UpdateProfilePage = ({ history }) => {
     const onSubmit = async variables => {
         try {
             const result = await updateProfile({ variables });
+
             toast.success(t(`api.codes.${result.data.updateProfile.code}`));
+
+            trackEvent({
+                category: 'Account',
+                action: 'Profile Updated',
+                value: result.data.updateProfile.user.id
+            });
+
             history.push('/my-account');
         } catch (error) {
             console.error(error);

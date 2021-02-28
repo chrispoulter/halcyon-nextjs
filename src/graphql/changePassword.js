@@ -10,6 +10,9 @@ export const CHANGE_PASSWORD = gql`
         ) {
             code
             message
+            user {
+                id
+            }
         }
     }
 `;

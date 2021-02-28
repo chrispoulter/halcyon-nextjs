@@ -5,6 +5,9 @@ export const DELETE_ACCOUNT = gql`
         deleteAccount {
             code
             message
+            user {
+                id
+            }
         }
     }
 `;

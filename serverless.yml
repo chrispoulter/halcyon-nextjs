@@ -62,6 +62,7 @@ custom:
             REACT_APP_ENVIRONMENT: ${env:ENVIRONMENT, ''}
             REACT_APP_RELEASE: ${env:RELEASE, ''}
             REACT_APP_SENTRY_DSN: ${env:SENTRY_DSN, ''}
+            REACT_APP_GA_MEASUREMENTID: ${env:GA_MEASUREMENTID, 'G-W9ZEZ64QDR'}
             REACT_APP_GRAPHQL_URL: ${cf:${self:service}-${opt:stage, self:provider.stage}.ServiceEndpoint, ''}
 
     s3Sync:

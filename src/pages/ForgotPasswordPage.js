@@ -8,6 +8,7 @@ import { Container, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { FORGOT_PASSWORD } from '../graphql';
 import { TextInput, Button } from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const ForgotPasswordPage = ({ history }) => {
     const { t } = useTranslation();
@@ -17,7 +18,14 @@ export const ForgotPasswordPage = ({ history }) => {
     const onSubmit = async variables => {
         try {
             const result = await forgotPassword({ variables });
+
             toast.success(t(`api.codes.${result.data.forgotPassword.code}`));
+
+            trackEvent({
+                category: 'Account',
+                action: 'Forgot Password'
+            });
+
             history.push('/login');
         } catch (error) {
             console.error(error);
