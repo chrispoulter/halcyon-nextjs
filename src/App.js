@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { ToastContainer, Slide } from 'react-toastify';
 import { ErrorBoundary } from '@sentry/react';
 import {
@@ -26,12 +26,11 @@ import {
     CreateUserPage,
     UpdateUserPage
 } from './pages';
-import { history } from './utils/history';
 import { USER_ADMINISTRATOR_ROLES } from './utils/auth';
 
 export const App = () => (
     <Suspense fallback={<Spinner />}>
-        <Router history={history}>
+        <BrowserRouter>
             <AuthProvider>
                 <ApolloProvider>
                     <Meta />
@@ -101,6 +100,6 @@ export const App = () => (
                     />
                 </ApolloProvider>
             </AuthProvider>
-        </Router>
+        </BrowserRouter>
     </Suspense>
 );

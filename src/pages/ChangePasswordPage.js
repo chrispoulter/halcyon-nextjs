@@ -22,11 +22,7 @@ export const ChangePasswordPage = ({ history }) => {
 
             toast.success(t(`api.codes.${result.data.changePassword.code}`));
 
-            trackEvent({
-                category: 'Account',
-                action: 'Change Password',
-                entityId: result.data.changePassword.user.id
-            });
+            trackEvent('password_changed');
 
             history.push('/my-account');
         } catch (error) {

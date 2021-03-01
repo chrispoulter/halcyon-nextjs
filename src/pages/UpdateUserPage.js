@@ -23,7 +23,7 @@ import {
     Button
 } from '../components';
 import { ALL_ROLES } from '../utils/auth';
-import { modalView, trackEvent } from '../utils/logger';
+import { trackEvent } from '../utils/logger';
 
 export const UpdateUserPage = ({ history, match }) => {
     const { t } = useTranslation();
@@ -60,9 +60,7 @@ export const UpdateUserPage = ({ history, match }) => {
 
             toast.success(t(`api.codes.${result.data.updateUser.code}`));
 
-            trackEvent({
-                category: 'User',
-                action: 'User Updated',
+            trackEvent('user_updated', {
                 entityId: result.data.updateUser.user.id
             });
 
@@ -73,7 +71,9 @@ export const UpdateUserPage = ({ history, match }) => {
     };
 
     const onLockUser = async () => {
-        modalView('lock-user');
+        trackEvent('screen_view', {
+            screen_name: 'lock-user-modal'
+        });
 
         const confirmed = await confirm({
             title: t('pages.updateUser.lockModal.title'),
@@ -99,9 +99,7 @@ export const UpdateUserPage = ({ history, match }) => {
 
             toast.success(t(`api.codes.${result.data.lockUser.code}`));
 
-            trackEvent({
-                category: 'User',
-                action: 'User Locked',
+            trackEvent('user_locked', {
                 entityId: result.data.lockUser.user.id
             });
         } catch (error) {
@@ -110,7 +108,9 @@ export const UpdateUserPage = ({ history, match }) => {
     };
 
     const onUnlockUser = async () => {
-        modalView('unlock-user');
+        trackEvent('screen_view', {
+            screen_name: 'unlock-user-modal'
+        });
 
         const confirmed = await confirm({
             title: t('pages.updateUser.unlockModal.title'),
@@ -136,9 +136,7 @@ export const UpdateUserPage = ({ history, match }) => {
 
             toast.success(t(`api.codes.${result.data.unlockUser.code}`));
 
-            trackEvent({
-                category: 'User',
-                action: 'User Unlocked',
+            trackEvent('user_unlocked', {
                 entityId: result.data.unlockUser.user.id
             });
         } catch (error) {
@@ -147,7 +145,9 @@ export const UpdateUserPage = ({ history, match }) => {
     };
 
     const onDeleteUser = async () => {
-        modalView('delete-user');
+        trackEvent('screen_view', {
+            screen_name: 'delete-user-modal'
+        });
 
         const confirmed = await confirm({
             title: t('pages.updateUser.deleteModal.title'),
@@ -173,9 +173,7 @@ export const UpdateUserPage = ({ history, match }) => {
 
             toast.success(t(`api.codes.${result.data.deleteUser.code}`));
 
-            trackEvent({
-                category: 'User',
-                action: 'User Deleted',
+            trackEvent('user_deleted', {
                 entityId: result.data.deleteUser.user.id
             });
 

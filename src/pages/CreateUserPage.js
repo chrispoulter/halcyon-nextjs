@@ -28,9 +28,7 @@ export const CreateUserPage = ({ history }) => {
 
             toast.success(t(`api.codes.${result.data.createUser.code}`));
 
-            trackEvent({
-                category: 'User',
-                action: 'User Created',
+            trackEvent('user_created', {
                 entityId: result.data.createUser.user.id
             });
 

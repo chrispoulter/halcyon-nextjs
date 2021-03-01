@@ -16,6 +16,8 @@ const getInitialState = () => {
 
     const currentUser = jwtDecode(accessToken);
 
+    setUser(currentUser);
+
     return {
         accessToken,
         currentUser

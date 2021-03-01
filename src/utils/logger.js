@@ -1,7 +1,5 @@
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
-import ReactGA from 'react-ga';
-import { history } from './history';
 import { config } from './config';
 
 var sentryInitialized = false;
@@ -35,12 +33,17 @@ const initializeGA = () => {
         return;
     }
 
-    ReactGA.initialize(config.GA_MEASUREMENTID);
+    const script = document.createElement('script');
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${config.GA_MEASUREMENTID}`;
+    script.id = 'googleAnalytics';
+    document.body.appendChild(script);
 
-    history.listen(location => {
-        ReactGA.set({ page: location.pathname });
-        ReactGA.pageview(location.pathname);
-    });
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () {
+        window.dataLayer.push(arguments);
+    };
+    window.gtag('js', new Date());
+    window.gtag('config', config.GA_MEASUREMENTID);
 
     gaInitialized = true;
 };
@@ -51,7 +54,7 @@ export const setContext = context => {
     }
 
     if (gaInitialized) {
-        ReactGA.set(context);
+        window.gtag('set', context);
     }
 };
 
@@ -61,24 +64,19 @@ export const setUser = user => {
     }
 
     if (gaInitialized) {
-        ReactGA.set({ userId: user?.sub, role: user?.role });
+        window.gtag('set', {
+            user_id: user?.sub,
+            role: user?.role
+        });
     }
 };
 
-export const modalView = name => {
+export const trackEvent = (event, params) => {
     if (!gaInitialized) {
         return;
     }
 
-    ReactGA.modalview(name);
-};
-
-export const trackEvent = event => {
-    if (!gaInitialized) {
-        return;
-    }
-
-    ReactGA.event(event);
+    window.gtag('event', event, params);
 };
 
 export const captureGraphQLError = error => {

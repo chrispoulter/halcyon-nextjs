@@ -21,10 +21,7 @@ export const ForgotPasswordPage = ({ history }) => {
 
             toast.success(t(`api.codes.${result.data.forgotPassword.code}`));
 
-            trackEvent({
-                category: 'Account',
-                action: 'Forgot Password'
-            });
+            trackEvent('password_reminder');
 
             history.push('/login');
         } catch (error) {

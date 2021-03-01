@@ -23,9 +23,7 @@ export const RegisterPage = ({ history }) => {
         try {
             let result = await register({ mutation: REGISTER, variables });
 
-            trackEvent({
-                category: 'Account',
-                action: 'Register',
+            trackEvent('sign_up', {
                 entityId: result.data.register.user.id
             });
 

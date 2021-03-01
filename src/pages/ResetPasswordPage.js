@@ -23,11 +23,7 @@ export const ResetPasswordPage = ({ match, history }) => {
 
             toast.success(t(`api.codes.${result.data.resetPassword.code}`));
 
-            trackEvent({
-                category: 'Account',
-                action: 'Reset Password',
-                entityId: result.data.resetPassword.user.id
-            });
+            trackEvent('password_reset');
 
             history.push('/login');
         } catch (error) {

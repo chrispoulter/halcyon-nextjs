@@ -36,11 +36,7 @@ export const UpdateProfilePage = ({ history }) => {
 
             toast.success(t(`api.codes.${result.data.updateProfile.code}`));
 
-            trackEvent({
-                category: 'Account',
-                action: 'Profile Updated',
-                entityId: result.data.updateProfile.user.id
-            });
+            trackEvent('profile_updated');
 
             history.push('/my-account');
         } catch (error) {

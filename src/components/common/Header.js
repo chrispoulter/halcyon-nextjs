@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AuthContext } from '../providers/AuthProvider';
 import { isAuthorized, USER_ADMINISTRATOR_ROLES } from '../../utils/auth';
+import { trackEvent } from '../../utils/logger';
 
 export const Header = () => {
     const { t } = useTranslation();
@@ -40,6 +41,9 @@ export const Header = () => {
 
     const logout = () => {
         removeToken();
+
+        trackEvent('logout');
+
         history.push('/');
     };
 

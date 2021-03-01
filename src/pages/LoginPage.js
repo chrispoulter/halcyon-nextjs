@@ -28,10 +28,7 @@ export const LoginPage = ({ history }) => {
                 variables.rememberMe
             );
 
-            trackEvent({
-                category: 'Account',
-                action: 'Login'
-            });
+            trackEvent('login');
 
             history.push('/');
         } catch (error) {
