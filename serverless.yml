@@ -34,10 +34,10 @@ provider:
               - ${self:custom.sns.sendEmail.arn}
 
 plugins:
+    - serverless-pseudo-parameters
     - serverless-webpack
     - serverless-offline
     - serverless-offline-sns
-    - serverless-pseudo-parameters
     - serverless-build-client
     - serverless-s3-sync
 
@@ -63,7 +63,6 @@ functions:
 
 custom:
     accountId: '#{AWS::AccountId}'
-
     stage: ${opt:stage, self:provider.stage}
     region: ${opt:region, self:provider.region}
 
