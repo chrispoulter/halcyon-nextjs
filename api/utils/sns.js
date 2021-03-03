@@ -1,17 +1,14 @@
 import { SNS } from 'aws-sdk';
 import { captureError } from './logger';
-import { config } from './config';
+import { isDev } from './config';
 
-const options =
-    config.ENVIRONMENT === 'dev'
-        ? {
-              endpoint: 'http://127.0.0.1:4002'
-          }
-        : undefined;
-
-const sns = new SNS(options);
+const sns = new SNS({
+    endpoint: isDev ? 'http://127.0.0.1:4002' : undefined
+});
 
 export const publish = async ({ topic, data }) => {
+    console.log('publish', topic, data)
+
     try {
         await sns
             .publish({

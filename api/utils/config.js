@@ -16,3 +16,5 @@ export const config = {
     SENTRY_DSN: process.env.SENTRY_DSN,
     SNS_SENDEMAIL: process.env.SNS_SENDEMAIL
 };
+
+export const isDev = config.ENVIRONMENT === 'dev';
