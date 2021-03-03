@@ -31,12 +31,13 @@ provider:
           Action:
               - sns:Publish
           Resource:
-              - arn:aws:sns:${self:custom.region}:#{AWS::AccountId}:${self:custom.sns.sendEmail.topicName}
+              - ${self:custom.sns.sendEmail.arn}
 
 plugins:
     - serverless-webpack
     - serverless-offline
     - serverless-offline-sns
+    - serverless-pseudo-parameters
     - serverless-build-client
     - serverless-s3-sync
 
@@ -75,7 +76,7 @@ custom:
     sns:
         sendEmail:
             topicName: ${self:service}-${self:custom.stage}-sendEmail
-            arn: 'arn:aws:sns:${self:custom.region}:${AWS::AccountId}:${self:custom.sns.sendEmail.topicName}'
+            arn: 'arn:aws:sns:${self:custom.region}:#{AWS::AccountId}:${self:custom.sns.sendEmail.topicName}'
 
     endpoints:
         graphQL: ${cf:${self:service}-${self:custom.stage}.ServiceEndpoint, ''}
