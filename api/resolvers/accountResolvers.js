@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-server';
 import { v4 as uuidv4 } from 'uuid';
-import { sendEmail } from '../utils/email';
+import { publish } from '../utils/sns';
 import { generateHash } from '../utils/hash';
 
 export const accountResolvers = {
@@ -36,7 +36,7 @@ export const accountResolvers = {
         forgotPassword: async (
             _,
             { emailAddress },
-            { dataSources: { users, templates } }
+            { dataSources: { users } }
         ) => {
             const user = await users.getUserByEmailAddress(emailAddress);
 
@@ -44,16 +44,14 @@ export const accountResolvers = {
                 user.passwordResetToken = uuidv4();
                 await users.updateUser(user);
 
-                const template = await templates.getTemplateByKey(
-                    'RESET_PASSWORD'
-                );
-
-                await sendEmail({
-                    subject: template.subject,
-                    html: template.html,
-                    to: user.emailAddress,
-                    context: {
-                        token: user.passwordResetToken
+                await publish({
+                    topic: 'sendEmail',
+                    data: {
+                        template: 'RESET_PASSWORD',
+                        to: user.emailAddress,
+                        context: {
+                            token: user.passwordResetToken
+                        }
                     }
                 });
             }

@@ -13,5 +13,6 @@ export const config = {
     MAILGUN_NOREPLY: process.env.MAILGUN_NOREPLY || 'noreply@chrispoulter.com',
     SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS,
     SEED_PASSWORD: process.env.SEED_PASSWORD,
-    SENTRY_DSN: process.env.SENTRY_DSN
+    SENTRY_DSN: process.env.SENTRY_DSN,
+    SNS_SENDEMAIL: process.env.SNS_SENDEMAIL
 };

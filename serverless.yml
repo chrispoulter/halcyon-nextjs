@@ -25,37 +25,68 @@ provider:
         SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
         SENTRY_DSN: ${env:SENTRY_DSN, ''}
+        SNS_SENDEMAIL: ${self:custom.sns.sendEmail.arn}
+    iamRoleStatements:
+        - Effect: Allow
+          Action:
+              - sns:Publish
+          Resource:
+              - arn:aws:sns:${self:custom.region}:#{AWS::AccountId}:${self:custom.sns.sendEmail.topicName}
 
 plugins:
     - serverless-webpack
     - serverless-offline
-    - serverless-dotenv-plugin
+    - serverless-offline-sns
     - serverless-build-client
     - serverless-s3-sync
 
 functions:
+    sendEmail:
+        handler: api/handlers/sendEmail.handler
+        events:
+            - sns:
+                  arn: ${self:custom.sns.sendEmail.arn}
+                  topicName: ${self:custom.sns.sendEmail.topicName}
+
     app:
         handler: api/index.handler
         events:
             - http:
                   path: /
                   method: ANY
-                  cors:
-                      origin: '*'
-                      headers: '*'
-                      allowCredentials: true
+                  cors: ${self:custom.cors}
             - http:
                   path: /{proxy+}
                   method: ANY
-                  cors:
-                      origin: '*'
-                      headers: '*'
-                      allowCredentials: true
+                  cors: ${self:custom.cors}
 
 custom:
+    stage: ${opt:stage, self:provider.stage}
+    region: ${opt:region, self:provider.region}
+
+    cors:
+        origin: '*'
+        headers: '*'
+        allowCredentials: true
+
+    s3:
+        client: ${self:service}-${self:custom.stage}
+
+    sns:
+        sendEmail:
+            topicName: ${self:service}-${self:custom.stage}-sendEmail
+            arn: 'arn:aws:sns:${self:custom.region}:${AWS::AccountId}:${self:custom.sns.sendEmail.topicName}'
+
+    endpoints:
+        graphQL: ${cf:${self:service}-${self:custom.stage}.ServiceEndpoint, ''}
+
     serverless-offline:
         httpPort: 3001
         noPrependStageInUrl: true
+
+    serverless-offline-sns:
+        port: 4002
+        debug: true
 
     buildClient:
         environment:
@@ -63,7 +94,7 @@ custom:
             REACT_APP_RELEASE: ${env:RELEASE, ''}
             REACT_APP_SENTRY_DSN: ${env:SENTRY_DSN, ''}
             REACT_APP_GA_MEASUREMENTID: ${env:GA_MEASUREMENTID, ''}
-            REACT_APP_GRAPHQL_URL: ${cf:${self:service}-${opt:stage, self:provider.stage}.ServiceEndpoint, ''}
+            REACT_APP_GRAPHQL_URL: ${self:custom.endpoints.graphQL}
 
     s3Sync:
         - bucketNameKey: ClientBucketOutputKey
@@ -73,10 +104,15 @@ custom:
 
 resources:
     Resources:
+        SendEmailSnsTopic:
+            Type: AWS::SNS::Topic
+            Properties:
+                TopicName: ${self:custom.sns.sendEmail.topicName}
+
         ClientBucket:
             Type: AWS::S3::Bucket
             Properties:
-                BucketName: ${self:service}-${opt:stage, self:provider.stage}
+                BucketName: ${self:custom.s3.client}
                 AccessControl: PublicRead
                 WebsiteConfiguration:
                     IndexDocument: index.html
