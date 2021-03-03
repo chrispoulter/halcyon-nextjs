@@ -37,6 +37,7 @@ plugins:
     - serverless-webpack
     - serverless-offline
     - serverless-offline-sns
+    - serverless-pseudo-parameters
     - serverless-build-client
     - serverless-s3-sync
 
@@ -61,6 +62,8 @@ functions:
                   cors: ${self:custom.cors}
 
 custom:
+    accountId: '#{AWS::AccountId}'
+
     stage: ${opt:stage, self:provider.stage}
     region: ${opt:region, self:provider.region}
 
@@ -75,7 +78,7 @@ custom:
     sns:
         sendEmail:
             topicName: ${self:service}-${self:custom.stage}-sendEmail
-            arn: 'arn:aws:sns:${self:custom.region}:${AWS::AccountId}:${self:custom.sns.sendEmail.topicName}'
+            arn: arn:aws:sns:${self:custom.region}:${self:custom.accountId}:${self:custom.sns.sendEmail.topicName}
 
     endpoints:
         graphQL: ${cf:${self:service}-${self:custom.stage}.ServiceEndpoint, ''}
