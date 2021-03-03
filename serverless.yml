@@ -29,7 +29,7 @@ provider:
     iamRoleStatements:
         - Effect: Allow
           Action:
-              - SNS:Publish
+              - sns:*
           Resource:
               - ${self:custom.sns.sendEmail.arn}
 
