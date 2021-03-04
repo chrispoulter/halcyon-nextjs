@@ -11,6 +11,7 @@ provider:
     logRetentionInDays: 3
     apiGateway:
         shouldStartNameWithService: true
+    lambdaHashingVersion: 20201221
     environment:
         ENVIRONMENT: ${env:ENVIRONMENT, ''}
         RELEASE: ${env:RELEASE, ''}
