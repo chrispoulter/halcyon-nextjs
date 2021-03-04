@@ -33,6 +33,9 @@ provider:
           Resource:
               - ${self:custom.sns.sendEmail.arn}
 
+package:
+  individually: true
+
 plugins:
     - serverless-pseudo-parameters
     - serverless-webpack
