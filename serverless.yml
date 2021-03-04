@@ -11,6 +11,7 @@ provider:
     logRetentionInDays: 3
     apiGateway:
         shouldStartNameWithService: true
+    lambdaHashingVersion: 20201221
     environment:
         ENVIRONMENT: ${env:ENVIRONMENT, ''}
         RELEASE: ${env:RELEASE, ''}
@@ -26,15 +27,17 @@ provider:
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
         SENTRY_DSN: ${env:SENTRY_DSN, ''}
         SNS_SENDEMAIL: ${self:custom.sns.sendEmail.arn}
-    iamRoleStatements:
-        - Effect: Allow
-          Action:
-              - sns:*
-          Resource:
-              - ${self:custom.sns.sendEmail.arn}
+    iam:
+        role:
+            statements:
+                - Effect: Allow
+                  Action:
+                      - sns:*
+                  Resource:
+                      - ${self:custom.sns.sendEmail.arn}
 
 package:
-  individually: true
+    individually: true
 
 plugins:
     - serverless-pseudo-parameters
