@@ -1,8 +1,8 @@
 import 'dotenv/config';
 
 export const config = {
-    ENVIRONMENT: process.env.ENVIRONMENT || 'dev',
-    RELEASE: process.env.RELEASE || 'dev',
+    ENVIRONMENT: process.env.ENVIRONMENT || 'local',
+    RELEASE: process.env.RELEASE || 'local',
     FAUNADB_SECRET: process.env.FAUNADB_SECRET,
     JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',

@@ -7011,7 +7011,7 @@ dot-qs@0.2.0:
   resolved "https://registry.yarnpkg.com/dot-qs/-/dot-qs-0.2.0.tgz#d36517fe24b7cda61fce7a5026a0024afaf5a439"
   integrity sha1-02UX/iS3zaYfznpQJqACSvr1pDk=
 
-dotenv-expand@5.1.0, dotenv-expand@^5.1.0:
+dotenv-expand@5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/dotenv-expand/-/dotenv-expand-5.1.0.tgz#3fbaf020bfd794884072ea26b1e9791d45a629f0"
   integrity sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==
@@ -15039,15 +15039,6 @@ serverless-build-client@2.5.0:
   integrity sha512-O1flvUuprPGvIS6yKGyEO1aYGCv6Q+iMnGqG90KO8qfIe2kq9DmefH/Lnx4efW/i7AjfKtzIqvy5qq4XJlg3/A==
   dependencies:
     cross-spawn "^6.0.5"
-
-serverless-dotenv-plugin@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/serverless-dotenv-plugin/-/serverless-dotenv-plugin-3.1.0.tgz#f1482a5e69b01cc4de8c6439bdd8c134fc923534"
-  integrity sha512-R9Jld4a/hDDd0lHiSq9xQuFlhtfgXqKKmODrYp7115iQ9kgf16SMxZbxJ0Cb9GqL6/4+5GlS42iHxsqv8GxZeQ==
-  dependencies:
-    chalk "^4.1.0"
-    dotenv "^8.2.0"
-    dotenv-expand "^5.1.0"
 
 serverless-offline@6.8.0:
   version "6.8.0"
