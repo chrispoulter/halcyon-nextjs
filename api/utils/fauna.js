@@ -4,6 +4,14 @@ import { base64EncodeObj, base64DecodeObj } from '../utils/encode';
 import { config } from '../utils/config';
 
 export class FaunaRepository extends DataSource {
+    constructor(initialize) {
+        super();
+
+        if (initialize) {
+            this.initialize();
+        }
+    }
+
     initialize() {
         this.client = new Client({
             secret: `${config.FAUNADB_SECRET}:${config.ENVIRONMENT}:server`
@@ -73,15 +81,15 @@ export class FaunaRepository extends DataSource {
 
         const set = search
             ? q.Filter(
-                  q.Match(index.name),
-                  q.Lambda(
-                      index.values,
-                      q.ContainsStr(
-                          q.Casefold(q.Var(index.term)),
-                          q.Casefold(search)
-                      )
-                  )
-              )
+                q.Match(index.name),
+                q.Lambda(
+                    index.values,
+                    q.ContainsStr(
+                        q.Casefold(q.Var(index.term)),
+                        q.Casefold(search)
+                    )
+                )
+            )
             : q.Match(q.Index(index.name));
 
         const result = await this.client.query(

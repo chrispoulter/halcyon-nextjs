@@ -5,7 +5,7 @@ useDotenv: true
 provider:
     name: aws
     runtime: nodejs12.x
-    stage: dev
+    stage: local
     region: eu-west-1
     memorySize: 1024
     logRetentionInDays: 3
