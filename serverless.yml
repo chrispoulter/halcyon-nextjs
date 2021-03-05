@@ -26,7 +26,7 @@ provider:
         SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
         SENTRY_DSN: ${env:SENTRY_DSN, ''}
-        SNS_SENDEMAIL: ${self:custom.sns.sendEmail.arn}
+        SNS_EVENTSARN: ${self:custom.sns.events.arn}
     iam:
         role:
             statements:
@@ -34,7 +34,7 @@ provider:
                   Action:
                       - sns:*
                   Resource:
-                      - ${self:custom.sns.sendEmail.arn}
+                      - ${self:custom.sns.events.arn}
 
 package:
     individually: true
@@ -48,12 +48,12 @@ plugins:
     - serverless-s3-sync
 
 functions:
-    sendEmail:
-        handler: api/handlers/sendEmail.handler
+    events:
+        handler: api/eventHandlers/index.handler
         events:
             - sns:
-                  arn: ${self:custom.sns.sendEmail.arn}
-                  topicName: ${self:custom.sns.sendEmail.topicName}
+                  arn: ${self:custom.sns.events.arn}
+                  topicName: ${self:custom.sns.events.topicName}
 
     app:
         handler: api/index.handler
@@ -81,9 +81,9 @@ custom:
         client: ${self:service}-${self:custom.stage}
 
     sns:
-        sendEmail:
-            topicName: ${self:service}-${self:custom.stage}-sendEmail
-            arn: arn:aws:sns:${self:custom.region}:${self:custom.accountId}:${self:custom.sns.sendEmail.topicName}
+        events:
+            topicName: ${self:service}-${self:custom.stage}-events
+            arn: arn:aws:sns:${self:custom.region}:${self:custom.accountId}:${self:custom.sns.events.topicName}
 
     endpoints:
         graphQL: ${cf:${self:service}-${self:custom.stage}.ServiceEndpoint, ''}
@@ -112,10 +112,10 @@ custom:
 
 resources:
     Resources:
-        SendEmailSnsTopic:
+        EventsSnsTopic:
             Type: AWS::SNS::Topic
             Properties:
-                TopicName: ${self:custom.sns.sendEmail.topicName}
+                TopicName: ${self:custom.sns.events.topicName}
 
         ClientBucket:
             Type: AWS::S3::Bucket

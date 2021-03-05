@@ -1,0 +1,16 @@
+import { TemplateRepository } from '../dataSources/templateRepository';
+import { sendEmail } from '../utils/email';
+
+export const sendEmailHandler = async data => {
+    const templates = new TemplateRepository(true);
+
+    const template = await templates.getTemplateByKey(data.template);
+    if (!template) {
+        throw new Error(`Unknown email template: ${data.template}`);
+    }
+
+    await sendEmail({
+        ...template,
+        ...data
+    });
+};

@@ -1,15 +1,15 @@
 import { SNS } from 'aws-sdk';
 import { captureError } from './logger';
-import { settings } from './config';
+import { config, settings } from './config';
 
 const sns = new SNS(settings.sns);
 
-export const publish = async ({ topic, data }) => {
+export const publish = async message => {
     try {
         await sns
             .publish({
-                Message: JSON.stringify(data),
-                TopicArn: topic
+                Message: JSON.stringify(message),
+                TopicArn: config.SNS_EVENTSARN
             })
             .promise();
     } catch (error) {

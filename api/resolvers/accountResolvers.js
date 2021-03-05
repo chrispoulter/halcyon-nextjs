@@ -1,8 +1,7 @@
 import { ApolloError } from 'apollo-server';
 import { v4 as uuidv4 } from 'uuid';
-import { publish } from '../utils/sns';
+import { publish } from '../utils/events';
 import { generateHash } from '../utils/hash';
-import { config } from '../utils/config';
 
 export const accountResolvers = {
     Mutation: {
@@ -46,7 +45,7 @@ export const accountResolvers = {
                 await users.updateUser(user);
 
                 await publish({
-                    topic: config.SNS_SENDEMAIL,
+                    type: 'SEND_EMAIL',
                     data: {
                         template: 'RESET_PASSWORD',
                         to: user.emailAddress,

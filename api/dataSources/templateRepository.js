@@ -1,4 +1,4 @@
-import { FaunaRepository } from '../utils/fauna';
+import { FaunaRepository } from './faunaRepository';
 
 const indexes = {
     BY_KEY: 'templates_by_key'

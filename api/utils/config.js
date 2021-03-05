@@ -3,7 +3,7 @@ import 'dotenv/config';
 export const config = {
     ENVIRONMENT: process.env.ENVIRONMENT || 'local',
     RELEASE: process.env.RELEASE || 'local',
-    SNS_SENDEMAIL: process.env.SNS_SENDEMAIL,
+    SNS_EVENTSARN: process.env.SNS_EVENTSARN,
     FAUNADB_SECRET: process.env.FAUNADB_SECRET,
     JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
