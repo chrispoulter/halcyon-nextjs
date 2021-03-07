@@ -48,8 +48,8 @@ export const accountResolvers = {
                 await publish({
                     type: 'SEND_EMAIL',
                     data: {
-                        template: 'RESET_PASSWORD',
                         to: user.emailAddress,
+                        template: 'RESET_PASSWORD',
                         context: {
                             token: user.passwordResetToken,
                             clientUrl: config.CLIENT_URL

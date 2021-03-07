@@ -5,7 +5,7 @@ export const config = {
     RELEASE: process.env.RELEASE || 'local',
     SNS_EVENTSARN: process.env.SNS_EVENTSARN,
     SNS_ENDPOINT: process.env.SNS_ENDPOINT,
-    CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:3000',
+    CLIENT_URL: process.env.CLIENT_URL,
     FAUNADB_SECRET: process.env.FAUNADB_SECRET,
     JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
