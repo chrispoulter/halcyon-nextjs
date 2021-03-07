@@ -1,8 +1,10 @@
 import { SNS } from 'aws-sdk';
 import { captureError } from './logger';
-import { config, settings } from './config';
+import { config } from './config';
 
-const sns = new SNS(settings.sns);
+const sns = new SNS({
+    endpoint: process.env.SNS_ENDPOINT
+});
 
 export const publish = async message => {
     try {

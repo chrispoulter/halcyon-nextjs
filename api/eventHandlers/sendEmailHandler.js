@@ -10,7 +10,9 @@ export const sendEmailHandler = async data => {
     }
 
     await sendEmail({
-        ...template,
-        ...data
+        to: data.to,
+        subject: template.subject,
+        html: template.html,
+        context: data.context
     });
 };

@@ -4,6 +4,8 @@ export const config = {
     ENVIRONMENT: process.env.ENVIRONMENT || 'local',
     RELEASE: process.env.RELEASE || 'local',
     SNS_EVENTSARN: process.env.SNS_EVENTSARN,
+    SNS_ENDPOINT: process.env.SNS_ENDPOINT,
+    CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:3000',
     FAUNADB_SECRET: process.env.FAUNADB_SECRET,
     JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
@@ -15,11 +17,4 @@ export const config = {
     SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS,
     SEED_PASSWORD: process.env.SEED_PASSWORD,
     SENTRY_DSN: process.env.SENTRY_DSN
-};
-
-export const settings = {
-    sns: {
-        endpoint:
-            config.ENVIRONMENT === 'local' ? 'http://127.0.0.1:4002' : undefined
-    }
 };

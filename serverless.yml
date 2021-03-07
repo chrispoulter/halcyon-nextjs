@@ -15,6 +15,9 @@ provider:
     environment:
         ENVIRONMENT: ${env:ENVIRONMENT, ''}
         RELEASE: ${env:RELEASE, ''}
+        CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url.${self:custom.stage}, self:custom.s3.client.url.default}
+        SNS_ENDPOINT: ${self:custom.sns.endpoint.${self:custom.stage}, self:custom.sns.endpoint.default}
+        SNS_EVENTSARN: ${self:custom.sns.events.arn}
         FAUNADB_SECRET: ${env:FAUNADB_SECRET, ''}
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
         JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
@@ -26,7 +29,6 @@ provider:
         SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
         SENTRY_DSN: ${env:SENTRY_DSN, ''}
-        SNS_EVENTSARN: ${self:custom.sns.events.arn}
     iam:
         role:
             statements:
@@ -71,6 +73,7 @@ custom:
     accountId: '#{AWS::AccountId}'
     stage: ${opt:stage, self:provider.stage}
     region: ${opt:region, self:provider.region}
+    prefix: ${self:service}-${self:custom.stage}
 
     cors:
         origin: '*'
@@ -78,15 +81,22 @@ custom:
         allowCredentials: true
 
     s3:
-        client: ${self:service}-${self:custom.stage}
+        client:
+            bucket: ${self:custom.prefix}
+            url:
+                default: http://${self:custom.s3.client.bucket}.s3-website-${self:custom.region}.amazonaws.com
+                local: http://localhost:3000
 
     sns:
         events:
-            topicName: ${self:service}-${self:custom.stage}-events
+            topicName: ${self:custom.prefix}-events
             arn: arn:aws:sns:${self:custom.region}:${self:custom.accountId}:${self:custom.sns.events.topicName}
+        endpoint:
+            default: null
+            local: http://127.0.0.1:4002
 
     endpoints:
-        graphQL: ${cf:${self:service}-${self:custom.stage}.ServiceEndpoint, ''}
+        graphQL: $cf:${self:custom.prefix}.ServiceEndpoint}
 
     serverless-offline:
         httpPort: 3001
@@ -102,7 +112,7 @@ custom:
             REACT_APP_RELEASE: ${env:RELEASE, ''}
             REACT_APP_SENTRY_DSN: ${env:SENTRY_DSN, ''}
             REACT_APP_GA_MEASUREMENTID: ${env:GA_MEASUREMENTID, ''}
-            REACT_APP_GRAPHQL_URL: ${self:custom.endpoints.graphQL}
+            REACT_APP_GRAPHQL_URL: ${env:GRAPHQL_URL, self:custom.endpoints.graphQL}
 
     s3Sync:
         - bucketNameKey: ClientBucketOutputKey
@@ -120,7 +130,7 @@ resources:
         ClientBucket:
             Type: AWS::S3::Bucket
             Properties:
-                BucketName: ${self:custom.s3.client}
+                BucketName: ${self:custom.s3.client.bucket}
                 AccessControl: PublicRead
                 WebsiteConfiguration:
                     IndexDocument: index.html
