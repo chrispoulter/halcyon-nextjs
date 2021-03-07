@@ -96,7 +96,7 @@ custom:
             local: http://127.0.0.1:4002
 
     endpoints:
-        graphQL: $cf:${self:custom.prefix}.ServiceEndpoint}
+        graphQL: ${cf:${self:custom.prefix}.ServiceEndpoint}
 
     serverless-offline:
         httpPort: 3001
