@@ -5,10 +5,10 @@ import { isAuthorized } from './utils/auth';
 export const context = async ({ req, event }) => {
     const request = req || event;
 
-    const authorization = request.headers['authorization'] || [];
+    const authorization = request.headers['authorization'];
     const transactionId = request.headers['x-transaction-id'];
 
-    const token = authorization.replace(/bearer /giu, '');
+    const token = authorization?.replace(/bearer /giu, '');
     if (!token) {
         return { transactionId };
     }
