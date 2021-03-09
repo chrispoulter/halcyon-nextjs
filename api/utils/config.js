@@ -18,3 +18,8 @@ export const config = {
     SEED_PASSWORD: process.env.SEED_PASSWORD,
     SENTRY_DSN: process.env.SENTRY_DSN
 };
+
+if (config.ENVIRONMENT === 'local') {
+    config.SNS_ENDPOINT = 'http://127.0.0.1:4002';
+    config.CLIENT_URL = 'http://localhost:3000';
+}

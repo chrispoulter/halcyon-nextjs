@@ -1,6 +1,7 @@
 service: halcyon
 
 useDotenv: true
+variablesResolutionMode: 20210219
 
 provider:
     name: aws
@@ -15,8 +16,7 @@ provider:
     environment:
         ENVIRONMENT: ${env:ENVIRONMENT, ''}
         RELEASE: ${env:RELEASE, ''}
-        CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url.${self:custom.stage}, self:custom.s3.client.url.default}
-        SNS_ENDPOINT: ${self:custom.sns.endpoint.${self:custom.stage}, self:custom.sns.endpoint.default}
+        CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url}
         SNS_EVENTSARN: ${self:custom.sns.events.arn}
         FAUNADB_SECRET: ${env:FAUNADB_SECRET, ''}
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
@@ -83,17 +83,12 @@ custom:
     s3:
         client:
             bucket: ${self:custom.prefix}
-            url:
-                default: http://${self:custom.s3.client.bucket}.s3-website-${self:custom.region}.amazonaws.com
-                local: http://localhost:3000
+            url: http://${self:custom.s3.client.bucket}.s3-website-${self:custom.region}.amazonaws.com
 
     sns:
         events:
             topicName: ${self:custom.prefix}-events
             arn: arn:aws:sns:${self:custom.region}:${self:custom.accountId}:${self:custom.sns.events.topicName}
-        endpoint:
-            default: null
-            local: http://127.0.0.1:4002
 
     endpoints:
         graphQL: ${cf:${self:custom.prefix}.ServiceEndpoint, ''}
