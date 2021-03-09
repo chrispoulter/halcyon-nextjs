@@ -1,7 +1,8 @@
 import { ApolloError } from 'apollo-server';
 import { v4 as uuidv4 } from 'uuid';
-import { sendEmail } from '../utils/email';
+import { publish } from '../utils/events';
 import { generateHash } from '../utils/hash';
+import { config } from '../utils/config';
 
 export const accountResolvers = {
     Mutation: {
@@ -36,7 +37,7 @@ export const accountResolvers = {
         forgotPassword: async (
             _,
             { emailAddress },
-            { dataSources: { users, templates } }
+            { dataSources: { users }, transactionId }
         ) => {
             const user = await users.getUserByEmailAddress(emailAddress);
 
@@ -44,17 +45,17 @@ export const accountResolvers = {
                 user.passwordResetToken = uuidv4();
                 await users.updateUser(user);
 
-                const template = await templates.getTemplateByKey(
-                    'RESET_PASSWORD'
-                );
-
-                await sendEmail({
-                    subject: template.subject,
-                    html: template.html,
-                    to: user.emailAddress,
-                    context: {
-                        token: user.passwordResetToken
-                    }
+                await publish({
+                    type: 'SEND_EMAIL',
+                    data: {
+                        to: user.emailAddress,
+                        template: 'RESET_PASSWORD',
+                        context: {
+                            token: user.passwordResetToken,
+                            clientUrl: config.CLIENT_URL
+                        }
+                    },
+                    transactionId
                 });
             }
 

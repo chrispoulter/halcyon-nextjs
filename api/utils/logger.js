@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/serverless';
 import { config } from './config';
 
-var sentryInitialized = false;
+var initialized = false;
 
 export const wrapper = handler => {
     if (!config.SENTRY_DSN) {
@@ -17,7 +17,7 @@ export const wrapper = handler => {
 
     Sentry.setTag('project', 'api');
 
-    sentryInitialized = true;
+    initialized = true;
 
     return Sentry.AWSLambda.wrapHandler(handler);
 };
@@ -26,10 +26,6 @@ export const plugin = {
     requestDidStart() {
         return {
             didEncounterErrors(ctx) {
-                if (!sentryInitialized) {
-                    return;
-                }
-
                 const payload = ctx.context?.payload;
                 const transactionId = ctx.request?.http?.headers?.get(
                     'x-transaction-id'
@@ -43,29 +39,33 @@ export const plugin = {
                         continue;
                     }
 
-                    Sentry.withScope(scope => {
-                        scope.setTag('kind', ctx.operation?.operation);
-                        scope.setExtra('query', ctx.request?.query);
-                        scope.setExtra('variables', ctx.request?.variables);
+                    console.error(error);
 
-                        if (payload) {
-                            scope.setUser(payload);
-                        }
+                    if (initialized) {
+                        Sentry.withScope(scope => {
+                            scope.setTag('kind', ctx.operation?.operation);
+                            scope.setExtra('query', ctx.request?.query);
+                            scope.setExtra('variables', ctx.request?.variables);
 
-                        if (error.path) {
-                            scope.addBreadcrumb({
-                                category: 'query-path',
-                                message: error.path.join(' > '),
-                                level: Sentry.Severity.Debug
-                            });
-                        }
+                            if (payload) {
+                                scope.setUser(payload);
+                            }
 
-                        if (transactionId) {
-                            scope.setTransactionName(transactionId);
-                        }
+                            if (error.path) {
+                                scope.addBreadcrumb({
+                                    category: 'query-path',
+                                    message: error.path.join(' > '),
+                                    level: Sentry.Severity.Debug
+                                });
+                            }
 
-                        Sentry.captureException(error);
-                    });
+                            if (transactionId) {
+                                scope.setTransactionName(transactionId);
+                            }
+
+                            Sentry.captureException(error);
+                        });
+                    }
                 }
             }
         };
@@ -73,9 +73,9 @@ export const plugin = {
 };
 
 export const captureError = error => {
-    if (!sentryInitialized) {
-        return;
-    }
+    console.error(error);
 
-    Sentry.captureException(error);
+    if (initialized) {
+        Sentry.captureException(error);
+    }
 };

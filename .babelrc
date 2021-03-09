@@ -15,6 +15,14 @@
             {
                 "loose": true
             }
+        ],
+        [
+            "babel-plugin-inline-import",
+            {
+                "extensions": [
+                    ".html"
+                ]
+            }
         ]
     ]
 }
