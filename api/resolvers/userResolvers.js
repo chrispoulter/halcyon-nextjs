@@ -7,19 +7,18 @@ export const userResolvers = {
     Query: {
         searchUsers: isAuthenticated(
             async (_, { input }, { dataSources: { users } }) =>
-                users.searchUsers(input),
+                users.search(input),
             USER_ADMINISTRATOR_ROLES
         ),
         getUserById: isAuthenticated(
-            async (_, { id }, { dataSources: { users } }) =>
-                users.getUserById(id),
+            async (_, { id }, { dataSources: { users } }) => users.getById(id),
             USER_ADMINISTRATOR_ROLES
         )
     },
     Mutation: {
         createUser: isAuthenticated(
             async (_, { input }, { dataSources: { users } }) => {
-                const existing = await users.getUserByEmailAddress(
+                const existing = await users.getByEmailAddress(
                     input.emailAddress
                 );
 
@@ -30,7 +29,7 @@ export const userResolvers = {
                     );
                 }
 
-                const result = await users.createUser({
+                const result = await users.create({
                     emailAddress: input.emailAddress,
                     password: await generateHash(input.password),
                     firstName: input.firstName,
@@ -50,13 +49,13 @@ export const userResolvers = {
         ),
         updateUser: isAuthenticated(
             async (_, { id, input }, { dataSources: { users } }) => {
-                const user = await users.getUserById(id);
+                const user = await users.getById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 if (user.emailAddress !== input.emailAddress) {
-                    const existing = await users.getUserByEmailAddress(
+                    const existing = await users.getByEmailAddress(
                         input.emailAddress
                     );
 
@@ -73,7 +72,7 @@ export const userResolvers = {
                 user.lastName = input.lastName;
                 user.dateOfBirth = input.dateOfBirth.toISOString();
                 user.roles = input.roles;
-                await users.updateUser(user);
+                await users.update(user);
 
                 return {
                     code: 'USER_UPDATED',
@@ -85,7 +84,7 @@ export const userResolvers = {
         ),
         lockUser: isAuthenticated(
             async (_, { id }, { dataSources: { users }, payload }) => {
-                const user = await users.getUserById(id);
+                const user = await users.getById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
@@ -98,7 +97,7 @@ export const userResolvers = {
                 }
 
                 user.isLockedOut = true;
-                await users.updateUser(user);
+                await users.update(user);
 
                 return {
                     code: 'USER_LOCKED',
@@ -110,13 +109,13 @@ export const userResolvers = {
         ),
         unlockUser: isAuthenticated(
             async (_, { id }, { dataSources: { users } }) => {
-                const user = await users.getUserById(id);
+                const user = await users.getById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 user.isLockedOut = false;
-                await users.updateUser(user);
+                await users.update(user);
 
                 return {
                     code: 'USER_UNLOCKED',
@@ -128,7 +127,7 @@ export const userResolvers = {
         ),
         deleteUser: isAuthenticated(
             async (_, { id }, { dataSources: { users }, payload }) => {
-                const user = await users.getUserById(id);
+                const user = await users.getById(id);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
@@ -140,7 +139,7 @@ export const userResolvers = {
                     );
                 }
 
-                await users.removeUser(user);
+                await users.remove(user);
 
                 return {
                     code: 'USER_DELETED',

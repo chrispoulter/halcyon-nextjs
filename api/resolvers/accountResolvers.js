@@ -7,9 +7,7 @@ import { config } from '../utils/config';
 export const accountResolvers = {
     Mutation: {
         register: async (_, { input }, { dataSources: { users } }) => {
-            const existing = await users.getUserByEmailAddress(
-                input.emailAddress
-            );
+            const existing = await users.getByEmailAddress(input.emailAddress);
 
             if (existing) {
                 throw new ApolloError(
@@ -18,7 +16,7 @@ export const accountResolvers = {
                 );
             }
 
-            const result = await users.createUser({
+            const result = await users.create({
                 emailAddress: input.emailAddress,
                 password: await generateHash(input.password),
                 firstName: input.firstName,
@@ -39,11 +37,10 @@ export const accountResolvers = {
             { emailAddress },
             { dataSources: { users }, transactionId }
         ) => {
-            const user = await users.getUserByEmailAddress(emailAddress);
-
+            const user = await users.getByEmailAddress(emailAddress);
             if (user) {
                 user.passwordResetToken = uuidv4();
-                await users.updateUser(user);
+                await users.update(user);
 
                 await publish({
                     type: 'SEND_EMAIL',
@@ -66,14 +63,14 @@ export const accountResolvers = {
             };
         },
         resetPassword: async (_, { input }, { dataSources: { users } }) => {
-            const user = await users.getUserByEmailAddress(input.emailAddress);
+            const user = await users.getByEmailAddress(input.emailAddress);
             if (!user || user.passwordResetToken !== input.token) {
                 throw new ApolloError('Invalid token.', 'INVALID_TOKEN');
             }
 
             user.password = await generateHash(input.newPassword);
             user.passwordResetToken = undefined;
-            await users.updateUser(user);
+            await users.update(user);
 
             return {
                 code: 'PASSWORD_RESET',

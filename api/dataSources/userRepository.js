@@ -27,19 +27,30 @@ const indexes = {
 };
 
 export class UserRepository extends FaunaRepository {
-    getUserById = id => this.getItemById(collection, id);
+    getById = id => this._getById(collection, id);
 
-    getUserByEmailAddress = emailAddress =>
-        this.getItemByIndex(indexes.BY_EMAIL_ADDRESS, emailAddress);
+    getByEmailAddress = emailAddress =>
+        this._getByIndex(indexes.BY_EMAIL_ADDRESS, emailAddress);
 
-    createUser = user => this.createItem(collection, user);
+    create = user => this._create(collection, user);
 
-    updateUser = user => this.updateItem(collection, user);
+    update = user => this._update(collection, user);
 
-    removeUser = user => this.removeItem(collection, user);
+    upsert = async user => {
+        const existing = await this._getByIndex(
+            indexes.BY_EMAIL_ADDRESS,
+            user.emailAddress
+        );
 
-    searchUsers = request =>
-        this.searchItems({
+        return existing
+            ? this._update(collection, { ...existing, ...user })
+            : this._create(collection, user);
+    };
+
+    remove = user => this._remove(collection, user);
+
+    search = request =>
+        this._search({
             ...request,
             index: indexes[request.sort] || indexes.USERS_NAME_ASC
         });

@@ -1,9 +1,5 @@
 import { Client, query as q } from 'faunadb';
-import { generateHash } from '../api/utils/hash';
-import { ALL_ROLES } from '../api/utils/auth';
 import { config } from '../api/utils/config';
-
-import resetPassword from './templates/resetPassword.html';
 
 (async () => {
     const database = config.ENVIRONMENT;
@@ -73,31 +69,6 @@ import resetPassword from './templates/resetPassword.html';
         }
     ];
 
-    const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
-
-    const items = [
-        {
-            collection: q.Collection('users'),
-            data: {
-                emailAddress: config.SEED_EMAILADDRESS,
-                password: await generateHash(config.SEED_PASSWORD),
-                firstName: 'System',
-                lastName: 'Administrator',
-                dateOfBirth: new Date(1970, 0, 1).toISOString(),
-                isLockedOut: false,
-                roles: ALL_ROLES
-            }
-        },
-        {
-            collection: q.Collection('templates'),
-            data: {
-                key: 'RESET_PASSWORD',
-                subject: subjectRegEx.exec(resetPassword)[1],
-                html: resetPassword
-            }
-        }
-    ];
-
     const adminClient = new Client({ secret: config.FAUNADB_SECRET });
 
     try {
@@ -126,15 +97,6 @@ import resetPassword from './templates/resetPassword.html';
             } catch (error) {
                 console.log(`Collection ${index.name}: ${error.message}`);
             }
-        }
-    }
-
-    for (const { collection, data } of items) {
-        try {
-            await client.query(q.Create(collection, { data }));
-            console.log(`Data ${JSON.stringify(collection)} created.`);
-        } catch (error) {
-            console.log(`Data ${JSON.stringify(collection)}: ${error.message}`);
         }
     }
 

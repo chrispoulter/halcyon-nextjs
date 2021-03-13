@@ -6,19 +6,19 @@ export const manageResolvers = {
     Query: {
         getProfile: isAuthenticated(
             async (_, __, { dataSources: { users }, payload }) =>
-                users.getUserById(payload.sub)
+                users.getById(payload.sub)
         )
     },
     Mutation: {
         updateProfile: isAuthenticated(
             async (_, { input }, { dataSources: { users }, payload }) => {
-                const user = await users.getUserById(payload.sub);
+                const user = await users.getById(payload.sub);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
                 if (user.emailAddress !== input.emailAddress) {
-                    const existing = await users.getUserByEmailAddress(
+                    const existing = await users.getByEmailAddress(
                         input.emailAddress
                     );
 
@@ -34,7 +34,7 @@ export const manageResolvers = {
                 user.firstName = input.firstName;
                 user.lastName = input.lastName;
                 user.dateOfBirth = input.dateOfBirth.toISOString();
-                await users.updateUser(user);
+                await users.update(user);
 
                 return {
                     code: 'PROFILE_UPDATED',
@@ -45,7 +45,7 @@ export const manageResolvers = {
         ),
         changePassword: isAuthenticated(
             async (_, { input }, { dataSources: { users }, payload }) => {
-                const user = await users.getUserById(payload.sub);
+                const user = await users.getById(payload.sub);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
@@ -64,7 +64,7 @@ export const manageResolvers = {
 
                 user.password = await generateHash(input.newPassword);
                 user.passwordResetToken = undefined;
-                await users.updateUser(user);
+                await users.update(user);
 
                 return {
                     code: 'PASSWORD_CHANGED',
@@ -75,12 +75,12 @@ export const manageResolvers = {
         ),
         deleteAccount: isAuthenticated(
             async (_, __, { dataSources: { users }, payload }) => {
-                const user = await users.getUserById(payload.sub);
+                const user = await users.getById(payload.sub);
                 if (!user) {
                     throw new ApolloError('User not found.', 'USER_NOT_FOUND');
                 }
 
-                await users.removeUser(user);
+                await users.remove(user);
 
                 return {
                     code: 'ACCOUNT_DELETED',

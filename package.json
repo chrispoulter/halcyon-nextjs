@@ -13,6 +13,7 @@
         "serverless:deploy": "serverless deploy",
         "serverless:remove": "serverless remove",
         "fauna": "babel-node scripts/fauna.js",
+        "seed": "babel-node scripts/seed.js",
         "lint": "eslint \"**/*.{js,jsx}\"",
         "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\""
     },

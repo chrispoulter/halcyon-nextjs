@@ -5,7 +5,7 @@ import { verifyHash } from '../utils/hash';
 export const tokenResolvers = {
     Mutation: {
         generateToken: async (_, { input }, { dataSources: { users } }) => {
-            const user = await users.getUserByEmailAddress(input.emailAddress);
+            const user = await users.getByEmailAddress(input.emailAddress);
             if (!user) {
                 throw new ApolloError(
                     'The credentials provided were invalid.',
