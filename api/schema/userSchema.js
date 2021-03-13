@@ -19,12 +19,12 @@ export const userSchema = gql`
         firstName: String!
         lastName: String!
         dateOfBirth: DateTime!
-        isLockedOut: Boolean!
-        roles: [UserRole]
+        isLockedOut: Boolean
+        roles: [UserRole!]
     }
 
     type UserSearchResult {
-        items: [User]
+        items: [User!]
         before: String
         after: String
     }

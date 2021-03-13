@@ -6,7 +6,7 @@ export const tokenResolvers = {
     Mutation: {
         generateToken: async (_, { input }, { dataSources: { users } }) => {
             const user = await users.getByEmailAddress(input.emailAddress);
-            if (!user) {
+            if (!user || !user.password) {
                 throw new ApolloError(
                     'The credentials provided were invalid.',
                     'CREDENTIALS_INVALID'

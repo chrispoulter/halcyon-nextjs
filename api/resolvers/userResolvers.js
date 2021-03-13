@@ -35,7 +35,6 @@ export const userResolvers = {
                     firstName: input.firstName,
                     lastName: input.lastName,
                     dateOfBirth: input.dateOfBirth.toISOString(),
-                    isLockedOut: false,
                     roles: input.roles
                 });
 

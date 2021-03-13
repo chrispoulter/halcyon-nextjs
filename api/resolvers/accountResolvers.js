@@ -21,9 +21,7 @@ export const accountResolvers = {
                 password: await generateHash(input.password),
                 firstName: input.firstName,
                 lastName: input.lastName,
-                dateOfBirth: input.dateOfBirth.toISOString(),
-                isLockedOut: false,
-                roles: []
+                dateOfBirth: input.dateOfBirth.toISOString()
             });
 
             return {

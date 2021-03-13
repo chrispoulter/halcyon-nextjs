@@ -156,7 +156,7 @@ export const UserPage = () => {
                                         {t('pages.user.lockedBadge')}
                                     </Badge>
                                 )}
-                                {user.roles.map(role => (
+                                {user.roles?.map(role => (
                                     <Badge
                                         key={role}
                                         color="primary"

@@ -14,6 +14,7 @@
         "serverless:remove": "serverless remove",
         "fauna": "babel-node scripts/fauna.js",
         "seed": "babel-node scripts/seed.js",
+        "populate": "babel-node scripts/populate.js",
         "lint": "eslint \"**/*.{js,jsx}\"",
         "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\""
     },
