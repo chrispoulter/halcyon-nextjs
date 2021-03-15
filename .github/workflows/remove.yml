@@ -1,4 +1,4 @@
-name: CI
+name: Remove
 
 on:
     delete:
@@ -6,7 +6,7 @@ on:
             - '**'
 
 jobs:
-    remove:
+    remove-resources:
         runs-on: ubuntu-latest
         env:
             FAUNADB_SECRET: ${{ secrets.FAUNADB_SECRET }}
@@ -22,5 +22,6 @@ jobs:
 
             - run: echo "ENVIRONMENT=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
 
+            - run: yarn
             - run: yarn db:remove
             - run: yarn serverless:remove --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
