@@ -12,9 +12,10 @@
         "serverless:build": "serverless client build --command client:build",
         "serverless:deploy": "serverless deploy",
         "serverless:remove": "serverless remove",
-        "fauna": "babel-node scripts/fauna.js",
-        "seed": "babel-node scripts/seed.js",
-        "populate": "babel-node scripts/populate.js",
+        "db:generate": "babel-node scripts/generate.js",
+        "db:seed": "babel-node scripts/seed.js",
+        "db:populate": "babel-node scripts/populate.js",
+        "db:remove": "babel-node scripts/remove.js",
         "lint": "eslint \"**/*.{js,jsx}\"",
         "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\""
     },

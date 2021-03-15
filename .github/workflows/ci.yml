@@ -38,8 +38,10 @@ jobs:
 
             - run: yarn
             - run: yarn lint
-            - run: yarn fauna
-            - run: yarn seed
+
+            - run: yarn db:generate
+            - run: yarn db:seed
+
             - run: yarn serverless:build --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
             - run: yarn serverless:deploy --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
 
