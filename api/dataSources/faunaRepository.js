@@ -4,11 +4,13 @@ import { base64EncodeObj, base64DecodeObj } from '../utils/encode';
 import { config } from '../utils/config';
 
 export class FaunaRepository extends DataSource {
-    constructor(initialize) {
+    constructor(database) {
         super();
 
-        if (initialize) {
-            this.initialize();
+        if (database) {
+            this._client = new Client({
+                secret: `${config.FAUNADB_SECRET}:${database}:server`
+            });
         }
     }
 

@@ -1,74 +1,76 @@
 import { Client, query as q } from 'faunadb';
 import { config } from '../api/utils/config';
 
+const [environment] = process.argv.slice(2);
+
+const database = environment || config.ENVIRONMENT;
+
+const collections = [
+    {
+        name: 'users',
+        indexes: [
+            {
+                name: 'users_by_email_address',
+                source: q.Collection('users'),
+                terms: [{ field: ['data', 'emailAddress'] }],
+                unique: true
+            },
+            {
+                name: 'users_email_address_asc',
+                source: q.Collection('users'),
+                values: [
+                    { field: ['data', 'emailAddress'] },
+                    { field: ['data', 'firstName'] },
+                    { field: ['data', 'lastName'] },
+                    { field: ['ref'] }
+                ]
+            },
+            {
+                name: 'users_email_address_desc',
+                source: q.Collection('users'),
+                values: [
+                    { field: ['data', 'emailAddress'], reverse: true },
+                    { field: ['data', 'firstName'], reverse: true },
+                    { field: ['data', 'lastName'], reverse: true },
+                    { field: ['ref'] }
+                ]
+            },
+            {
+                name: 'users_name_asc',
+                source: q.Collection('users'),
+                values: [
+                    { field: ['data', 'firstName'] },
+                    { field: ['data', 'lastName'] },
+                    { field: ['data', 'emailAddress'] },
+                    { field: ['ref'] }
+                ]
+            },
+            {
+                name: 'users_name_desc',
+                source: q.Collection('users'),
+                values: [
+                    { field: ['data', 'firstName'], reverse: true },
+                    { field: ['data', 'lastName'], reverse: true },
+                    { field: ['data', 'emailAddress'], reverse: true },
+                    { field: ['ref'] }
+                ]
+            }
+        ]
+    },
+    {
+        name: 'templates',
+        indexes: [
+            {
+                name: 'templates_by_key',
+                source: q.Collection('templates'),
+                terms: [{ field: ['data', 'key'] }],
+                unique: true
+            }
+        ]
+    }
+];
+
 (async () => {
-    const database = config.ENVIRONMENT;
-
-    const collections = [
-        {
-            name: 'users',
-            indexes: [
-                {
-                    name: 'users_by_email_address',
-                    source: q.Collection('users'),
-                    terms: [{ field: ['data', 'emailAddress'] }],
-                    unique: true
-                },
-                {
-                    name: 'users_email_address_asc',
-                    source: q.Collection('users'),
-                    values: [
-                        { field: ['data', 'emailAddress'] },
-                        { field: ['data', 'firstName'] },
-                        { field: ['data', 'lastName'] },
-                        { field: ['ref'] }
-                    ]
-                },
-                {
-                    name: 'users_email_address_desc',
-                    source: q.Collection('users'),
-                    values: [
-                        { field: ['data', 'emailAddress'], reverse: true },
-                        { field: ['data', 'firstName'], reverse: true },
-                        { field: ['data', 'lastName'], reverse: true },
-                        { field: ['ref'] }
-                    ]
-                },
-                {
-                    name: 'users_name_asc',
-                    source: q.Collection('users'),
-                    values: [
-                        { field: ['data', 'firstName'] },
-                        { field: ['data', 'lastName'] },
-                        { field: ['data', 'emailAddress'] },
-                        { field: ['ref'] }
-                    ]
-                },
-                {
-                    name: 'users_name_desc',
-                    source: q.Collection('users'),
-                    values: [
-                        { field: ['data', 'firstName'], reverse: true },
-                        { field: ['data', 'lastName'], reverse: true },
-                        { field: ['data', 'emailAddress'], reverse: true },
-                        { field: ['ref'] }
-                    ]
-                }
-            ]
-        },
-        {
-            name: 'templates',
-            indexes: [
-                {
-                    name: 'templates_by_key',
-                    source: q.Collection('templates'),
-                    terms: [{ field: ['data', 'key'] }],
-                    unique: true
-                }
-            ]
-        }
-    ];
-
     const adminClient = new Client({ secret: config.FAUNADB_SECRET });
 
     try {

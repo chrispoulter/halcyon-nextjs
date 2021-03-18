@@ -1,9 +1,11 @@
 import { Client, query as q } from 'faunadb';
 import { config } from '../api/utils/config';
 
-(async () => {
-    const database = config.ENVIRONMENT;
+const [environment] = process.argv.slice(2);
 
+const database = environment || config.ENVIRONMENT;
+
+(async () => {
     const adminClient = new Client({ secret: config.FAUNADB_SECRET });
 
     try {

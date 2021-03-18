@@ -5,7 +5,12 @@ import { config } from '../api/utils/config';
 
 import resetPassword from './templates/resetPassword.html';
 
-const { users, templates } = dataSources(true);
+const [environment] = process.argv.slice(2);
+
+const database = environment || config.ENVIRONMENT;
+
+const { users, templates } = dataSources(database);
+
 const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
 
 (async () => {
