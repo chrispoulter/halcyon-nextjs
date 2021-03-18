@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/serverless';
+import { v4 as uuidv4 } from 'uuid';
 import { config } from './config';
 
 var initialized = false;
@@ -22,60 +23,131 @@ export const wrapper = handler => {
     return Sentry.AWSLambda.wrapHandler(handler);
 };
 
-export const plugin = {
-    requestDidStart() {
-        return {
-            didEncounterErrors(ctx) {
-                const payload = ctx.context?.payload;
-                const transactionId = ctx.request?.http?.headers?.get(
-                    'x-transaction-id'
-                );
+export const plugin = () => {
+    return {
+        requestDidStart({ context, request, operation }) {
+            const transactionId =
+                request?.http?.headers?.get('x-transaction-id') || uuidv4();
 
-                for (const error of ctx.errors) {
-                    if (
-                        error.extensions?.code &&
-                        error.extensions?.code !== 'INTERNAL_SERVER_ERROR'
-                    ) {
-                        continue;
+            const kind = operation?.operation;
+            const payload = context?.payload;
+            const query = request?.query?.replace(/\n/g, '');
+            const variables = Object.keys(request?.variables || {});
+
+            console.log('requestDidStart', {
+                transactionId,
+                kind,
+                payload,
+                query,
+                variables
+            });
+
+            return {
+                didEncounterErrors({ errors }) {
+                    console.log('didEncounterErrors', {
+                        transactionId,
+                        errors
+                    });
+
+                    if (!initialized) {
+                        return;
                     }
 
-                    console.error(error);
+                    for (const error of errors) {
+                        if (
+                            error.extensions?.code &&
+                            error.extensions?.code !== 'INTERNAL_SERVER_ERROR'
+                        ) {
+                            continue;
+                        }
 
-                    if (initialized) {
-                        Sentry.withScope(scope => {
-                            scope.setTag('kind', ctx.operation?.operation);
-                            scope.setExtra('query', ctx.request?.query);
-                            scope.setExtra('variables', ctx.request?.variables);
+                        if (initialized) {
+                            Sentry.withScope(scope => {
+                                scope.setTag('kind', kind);
+                                scope.setExtra('query', query);
+                                scope.setExtra('variables', variables);
 
-                            if (payload) {
-                                scope.setUser(payload);
-                            }
+                                if (payload) {
+                                    scope.setUser(payload);
+                                }
 
-                            if (error.path) {
-                                scope.addBreadcrumb({
-                                    category: 'query-path',
-                                    message: error.path.join(' > '),
-                                    level: Sentry.Severity.Debug
-                                });
-                            }
+                                if (error.path) {
+                                    scope.addBreadcrumb({
+                                        category: 'query-path',
+                                        message: error.path.join(' > '),
+                                        level: Sentry.Severity.Debug
+                                    });
+                                }
 
-                            if (transactionId) {
-                                scope.setTransactionName(transactionId);
-                            }
+                                if (transactionId) {
+                                    scope.setTransactionName(transactionId);
+                                }
 
-                            Sentry.captureException(error);
-                        });
+                                Sentry.captureException(error);
+                            });
+                        }
                     }
+                },
+
+                didResolveOperation({ metrics, operationName }) {
+                    console.log('didResolveOperation', {
+                        transactionId,
+                        metrics,
+                        operationName
+                    });
+                },
+
+                executionDidStart({ metrics }) {
+                    console.log('executionDidStart', {
+                        transactionId,
+                        metrics
+                    });
+                },
+
+                parsingDidStart({ metrics }) {
+                    console.log('parsingDidStart', { transactionId, metrics });
+                },
+
+                responseForOperation({ metrics, operationName }) {
+                    console.log('responseForOperation', {
+                        transactionId,
+                        metrics,
+                        operationName
+                    });
+                    return null;
+                },
+
+                validationDidStart({ metrics }) {
+                    console.log('validationDidStart', {
+                        transactionId,
+                        metrics
+                    });
+                },
+
+                willSendResponse({ metrics }) {
+                    console.log('willSendResponse', { transactionId, metrics });
                 }
-            }
-        };
-    }
+            };
+        }
+    };
 };
 
-export const captureError = error => {
-    console.error(error);
+export const captureError = (message, data) => {
+    console.log(message, data);
 
     if (initialized) {
-        Sentry.captureException(error);
+        Sentry.withScope(scope => {
+            scope.setTag('kind', data.kind);
+            scope.setExtra('type', data.type);
+            scope.setExtra('data', data.data);
+
+            if (data.transactionId) {
+                scope.setTransactionName(data.transactionId);
+            }
+
+            Sentry.captureException(data.error);
+        });
     }
 };
+
+export const captureMessage = console.log;

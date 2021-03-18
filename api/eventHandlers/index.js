@@ -1,22 +1,26 @@
 import { sendEmailHandler } from './sendEmailHandler';
-import { captureError } from '../utils/logger';
+import { captureMessage, captureError } from '../utils/logger';
 
 const handlers = {
     SEND_EMAIL: sendEmailHandler
 };
 
 export const handler = async event => {
-    try {
-        const message = event.Records[0].Sns.Message;
-        const { type, data } = JSON.parse(message);
+    const message = JSON.parse(event.Records[0].Sns.Message);
 
-        const eventHandler = handlers[type];
+    captureMessage('eventHandlerStarted', message);
+
+    try {
+        const eventHandler = handlers[message.type];
         if (!eventHandler) {
-            throw new Error(`Unknown event type: ${type}`);
+            throw new Error(`Unknown event type: ${message.type}`);
         }
 
-        await eventHandler(data);
+        await eventHandler(message.data);
     } catch (error) {
-        captureError(error);
+        captureError('eventHandlerError', {
+            ...message,
+            error
+        });
     }
 };
