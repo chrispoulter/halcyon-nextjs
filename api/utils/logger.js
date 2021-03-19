@@ -133,7 +133,7 @@ export const plugin = () => {
 };
 
 export const captureError = (message, data) => {
-    console.log(message, data);
+    console.error(message, data);
 
     if (!initialized) {
         return;
