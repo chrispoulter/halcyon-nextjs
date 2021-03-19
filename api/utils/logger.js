@@ -25,18 +25,16 @@ export const wrapper = handler => {
 
 export const plugin = () => {
     return {
-        requestDidStart({ context, request, operation }) {
+        requestDidStart({ context, request }) {
             const transactionId =
                 request?.http?.headers?.get('x-transaction-id') || uuidv4();
 
-            const kind = operation?.operation;
             const payload = context?.payload;
             const query = request?.query?.replace(/\n/g, '');
             const variables = Object.keys(request?.variables || {});
 
             console.log('GraphQL', {
                 transactionId,
-                kind,
                 payload,
                 query,
                 variables
@@ -54,12 +52,15 @@ export const plugin = () => {
 
                         console.error('GraphQL', {
                             transactionId,
+                            payload,
+                            query,
+                            variables,
                             error
                         });
 
                         if (initialized) {
                             Sentry.withScope(scope => {
-                                scope.setExtras({ kind, query, variables });
+                                scope.setExtras({ query, variables });
 
                                 if (payload) {
                                     scope.setUser(payload);
