@@ -135,19 +135,20 @@ export const plugin = () => {
 export const captureError = (message, data) => {
     console.log(message, data);
 
-    if (initialized) {
-        Sentry.withScope(scope => {
-            scope.setTag('kind', data.kind);
-            scope.setExtra('type', data.type);
-            scope.setExtra('data', data.data);
-
-            if (data.transactionId) {
-                scope.setTransactionName(data.transactionId);
-            }
-
-            Sentry.captureException(data.error);
-        });
+    if (!initialized) {
+        return;
     }
+
+    Sentry.withScope(scope => {
+        scope.setTag('type', data.type);
+        scope.setExtra('data', data.data);
+
+        if (data.transactionId) {
+            scope.setTransactionName(data.transactionId);
+        }
+
+        Sentry.captureException(data.error);
+    });
 };
 
 export const captureMessage = console.log;
