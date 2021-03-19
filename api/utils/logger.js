@@ -34,7 +34,7 @@ export const plugin = () => {
             const query = request?.query?.replace(/\n/g, '');
             const variables = Object.keys(request?.variables || {});
 
-            console.log('requestDidStart', {
+            console.log('GraphQL', {
                 transactionId,
                 kind,
                 payload,
@@ -44,15 +44,6 @@ export const plugin = () => {
 
             return {
                 didEncounterErrors({ errors }) {
-                    console.log('didEncounterErrors', {
-                        transactionId,
-                        errors
-                    });
-
-                    if (!initialized) {
-                        return;
-                    }
-
                     for (const error of errors) {
                         if (
                             error.extensions?.code &&
@@ -61,11 +52,14 @@ export const plugin = () => {
                             continue;
                         }
 
+                        console.error('GraphQL', {
+                            transactionId,
+                            error
+                        });
+
                         if (initialized) {
                             Sentry.withScope(scope => {
-                                scope.setTag('kind', kind);
-                                scope.setExtra('query', query);
-                                scope.setExtra('variables', variables);
+                                scope.setExtras({ kind, query, variables });
 
                                 if (payload) {
                                     scope.setUser(payload);
@@ -87,45 +81,6 @@ export const plugin = () => {
                             });
                         }
                     }
-                },
-
-                didResolveOperation({ metrics, operationName }) {
-                    console.log('didResolveOperation', {
-                        transactionId,
-                        metrics,
-                        operationName
-                    });
-                },
-
-                executionDidStart({ metrics }) {
-                    console.log('executionDidStart', {
-                        transactionId,
-                        metrics
-                    });
-                },
-
-                parsingDidStart({ metrics }) {
-                    console.log('parsingDidStart', { transactionId, metrics });
-                },
-
-                responseForOperation({ metrics, operationName }) {
-                    console.log('responseForOperation', {
-                        transactionId,
-                        metrics,
-                        operationName
-                    });
-                    return null;
-                },
-
-                validationDidStart({ metrics }) {
-                    console.log('validationDidStart', {
-                        transactionId,
-                        metrics
-                    });
-                },
-
-                willSendResponse({ metrics }) {
-                    console.log('willSendResponse', { transactionId, metrics });
                 }
             };
         }
@@ -139,16 +94,19 @@ export const captureError = (message, data) => {
         return;
     }
 
-    Sentry.withScope(scope => {
-        scope.setTag('type', data.type);
-        scope.setExtra('data', data.data);
+    const { transactionId, error, ...extras } = data;
 
-        if (data.transactionId) {
-            scope.setTransactionName(data.transactionId);
+    Sentry.withScope(scope => {
+        scope.setExtras(extras);
+
+        if (transactionId) {
+            scope.setTransactionName(transactionId);
         }
 
-        Sentry.captureException(data.error);
+        Sentry.captureException(error);
     });
 };
 
-export const captureMessage = console.log;
+export const captureMessage = (message, data) => {
+    console.log(message, data);
+};

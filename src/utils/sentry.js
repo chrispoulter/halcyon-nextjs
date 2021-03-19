@@ -56,13 +56,12 @@ export const captureGraphQLError = error => {
             }
 
             Sentry.captureMessage(graphQLError.message, scope => {
-                scope.setExtra('path', graphQLError.path);
-                scope.setExtra('locations', graphQLError.locations);
-                scope.setExtra('code', graphQLError.extensions?.code);
-                scope.setExtra(
-                    'stacktrace',
-                    graphQLError.extensions?.exception?.stacktrace
-                );
+                scope.setExtras({
+                    path: graphQLError.path,
+                    locations: graphQLError.locations,
+                    code: graphQLError.extensions?.code,
+                    stacktrace: graphQLError.extensions?.exception?.stacktrace
+                });
 
                 if (transactionId) {
                     scope.setTransactionName(transactionId);
