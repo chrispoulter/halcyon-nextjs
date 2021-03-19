@@ -29,15 +29,15 @@ export const plugin = () => {
             const transactionId =
                 request?.http?.headers?.get('x-transaction-id') || uuidv4();
 
-            const payload = context?.payload;
-            const query = request?.query?.replace(/\n/g, '');
+            const query = request?.query;
             const variables = Object.keys(request?.variables || {});
+            const payload = context?.payload;
 
-            console.log('GraphQL', {
+            console.log('graphql', {
                 transactionId,
-                payload,
                 query,
-                variables
+                variables,
+                payload
             });
 
             return {
@@ -50,16 +50,17 @@ export const plugin = () => {
                             continue;
                         }
 
-                        console.error('GraphQL', {
+                        console.error('graphql', {
                             transactionId,
-                            payload,
                             query,
                             variables,
+                            payload,
                             error
                         });
 
                         if (initialized) {
                             Sentry.withScope(scope => {
+                                scope.setTag('source', 'graphql');
                                 scope.setExtras({ query, variables });
 
                                 if (payload) {
@@ -88,8 +89,8 @@ export const plugin = () => {
     };
 };
 
-export const captureError = (message, data) => {
-    console.error(message, data);
+export const captureError = (source, data) => {
+    console.error(source, data);
 
     if (!initialized) {
         return;
@@ -98,6 +99,7 @@ export const captureError = (message, data) => {
     const { transactionId, error, ...extras } = data;
 
     Sentry.withScope(scope => {
+        scope.setTag('source', source);
         scope.setExtras(extras);
 
         if (transactionId) {
@@ -108,6 +110,6 @@ export const captureError = (message, data) => {
     });
 };
 
-export const captureMessage = (message, data) => {
-    console.log(message, data);
+export const captureMessage = (source, data) => {
+    console.log(source, data);
 };
