@@ -1,8 +1,9 @@
-import { TemplateRepository } from '../dataSources/templateRepository';
+import { dataSources } from '../dataSources';
 import { sendEmail } from '../utils/email';
+import { config } from '../utils/config';
 
 export const sendEmailHandler = async data => {
-    const templates = new TemplateRepository(true);
+    const { templates } = dataSources(config.ENVIRONMENT);
 
     const template = await templates.getByKey(data.template);
     if (!template) {

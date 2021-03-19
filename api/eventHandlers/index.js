@@ -8,7 +8,7 @@ const handlers = {
 export const handler = wrapper(async event => {
     const message = JSON.parse(event.Records[0].Sns.Message);
 
-    captureMessage('Event', message);
+    captureMessage('event', message);
 
     try {
         const eventHandler = handlers[message.type];
@@ -18,7 +18,7 @@ export const handler = wrapper(async event => {
 
         await eventHandler(message.data);
     } catch (error) {
-        captureError('Event', {
+        captureError('event', {
             ...message,
             error
         });
