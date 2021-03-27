@@ -122,7 +122,12 @@ export const MyAccountPage = ({ history }) => {
                 </span>
                 <br />
                 {new Date(data.getProfile.dateOfBirth).toLocaleDateString(
-                    i18n.language
+                    i18n.language,
+                    {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                    }
                 )}
             </p>
 
