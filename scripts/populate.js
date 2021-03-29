@@ -1,11 +1,6 @@
 import { dataSources } from '../api/dataSources';
-import { config } from '../api/utils/config';
 
-const [environment] = process.argv.slice(2);
-
-const database = environment || config.ENVIRONMENT;
-
-const { users } = dataSources(database);
+const { users } = dataSources();
 
 const firstNames = [
     'Amelia',

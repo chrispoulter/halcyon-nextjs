@@ -40,7 +40,8 @@ export const UserPage = () => {
     });
 
     const { loading, data } = useQuery(SEARCH_USERS, {
-        variables: state
+        variables: state,
+        fetchPolicy: 'no-cache'
     });
 
     if (loading) {

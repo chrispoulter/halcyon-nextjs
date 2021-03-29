@@ -6,7 +6,9 @@ export const config = {
     SNS_EVENTSARN: process.env.SNS_EVENTSARN,
     SNS_ENDPOINT: process.env.SNS_ENDPOINT,
     CLIENT_URL: process.env.CLIENT_URL,
-    FAUNADB_SECRET: process.env.FAUNADB_SECRET,
+    DYNAMODB_USERS: process.env.DYNAMODB_USERS || 'halcyon-local-users',
+    DYNAMODB_TEMPLATES:
+        process.env.DYNAMODB_TEMPLATES || 'halcyon-local-templates',
     JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
     JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient',
@@ -22,4 +24,7 @@ export const config = {
 if (config.ENVIRONMENT === 'local') {
     config.SNS_ENDPOINT = 'http://127.0.0.1:4002';
     config.CLIENT_URL = 'http://localhost:3000';
+
+    config.DYNAMODB_ENDPOINT = 'http://localhost:8000';
+    config.DYNAMODB_REGION = 'localhost';
 }

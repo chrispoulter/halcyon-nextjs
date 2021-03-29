@@ -8,8 +8,8 @@ A web application template.
     [https://reactjs.org](https://reactjs.org)
 -   Apollo GraphQL
     [https://www.apollographql.com](https://www.apollographql.com)
--   FaunaDB
-    [https://fauna.com](https://fauna.com)
+-   DynamoDB
+    [https://aws.amazon.com/dynamodb](https://aws.amazon.com/dynamodb)
 
 #### Custom Settings
 
@@ -17,8 +17,6 @@ Create a `.env` file in the web project directory.
 
 ```
 ## Api #############################################
-
-FAUNADB_SECRET=
 
 JWT_SECURITYKEY=change-me-1234567890
 JWT_ISSUER=HalcyonApi

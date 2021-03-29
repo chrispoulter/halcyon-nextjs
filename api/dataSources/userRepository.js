@@ -1,57 +1,119 @@
-import { FaunaRepository } from './faunaRepository';
+import AWS from 'aws-sdk';
+import { DataSource } from 'apollo-datasource';
+import { v4 as uuidv4 } from 'uuid';
+import { config } from '../utils/config';
 
-const collection = 'users';
+const dynamoDb = new AWS.DynamoDB.DocumentClient({
+    region: config.DYNAMODB_REGION,
+    endpoint: config.DYNAMODB_ENDPOINT
+});
 
-const indexes = {
-    BY_EMAIL_ADDRESS: 'users_by_email_address',
-    EMAIL_ADDRESS_DESC: {
-        name: 'users_email_address_desc',
-        term: 'emailAddress',
-        values: ['emailAddress', 'firstName', 'lastName', 'ref']
-    },
-    EMAIL_ADDRESS_ASC: {
-        name: 'users_email_address_asc',
-        term: 'emailAddress',
-        values: ['emailAddress', 'firstName', 'lastName', 'ref']
-    },
-    NAME_DESC: {
-        name: 'users_name_desc',
-        term: 'emailAddress',
-        values: ['firstName', 'lastName', 'emailAddress', 'ref']
-    },
-    NAME_ASC: {
-        name: 'users_name_asc',
-        term: 'emailAddress',
-        values: ['firstName', 'lastName', 'emailAddress', 'ref']
+export class UserRepository extends DataSource {
+    async getById(id) {
+        const params = {
+            TableName: config.DYNAMODB_USERS,
+            Key: { id }
+        };
+
+        const result = await dynamoDb.get(params).promise();
+
+        return this._map(result.Item);
     }
-};
 
-export class UserRepository extends FaunaRepository {
-    getById = id => this._getById(collection, id);
+    async getByEmailAddress(emailAddress) {
+        const params = {
+            TableName: config.DYNAMODB_USERS,
+            IndexName: 'emailAddress-index',
+            ExpressionAttributeNames: { '#emailAddress': 'emailAddress' },
+            ExpressionAttributeValues: { ':emailAddress': emailAddress },
+            KeyConditionExpression: '#emailAddress = :emailAddress'
+        };
 
-    getByEmailAddress = emailAddress =>
-        this._getByIndex(indexes.BY_EMAIL_ADDRESS, emailAddress);
+        const result = await dynamoDb.query(params).promise();
 
-    create = user => this._create(collection, user);
+        return this._map(result.Items[0]);
+    }
 
-    update = user => this._update(collection, user);
+    async create(user) {
+        const params = {
+            TableName: config.DYNAMODB_USERS,
+            Item: {
+                id: uuidv4(),
+                ...user
+            }
+        };
 
-    upsert = async user => {
-        const existing = await this._getByIndex(
-            indexes.BY_EMAIL_ADDRESS,
-            user.emailAddress
-        );
+        const result = await dynamoDb.put(params).promise();
+
+        return this._map(result.Item);
+    }
+
+    async update(user) {
+        const params = {
+            TableName: config.DYNAMODB_USERS,
+            Key: {
+                id: user.id
+            },
+            ExpressionAttributeNames: {
+                '#emailAddress': 'emailAddress',
+                '#password': 'password',
+                '#firstName': 'firstName',
+                '#lastName': 'lastName',
+                '#dateOfBirth': 'dateOfBirth',
+                '#isLockedOut': 'isLockedOut',
+                '#passwordResetToken': 'passwordResetToken',
+                '#roles': 'roles'
+            },
+            ExpressionAttributeValues: {
+                ':emailAddress': user.emailAddress,
+                ':password': user.password || '',
+                ':firstName': user.firstName,
+                ':lastName': user.lastName,
+                ':dateOfBirth': user.dateOfBirth,
+                ':isLockedOut': user.isLockedOut,
+                ':passwordResetToken': user.passwordResetToken || '',
+                ':roles': user.roles
+            },
+            UpdateExpression:
+                'SET #emailAddress = :emailAddress, #password = :password, #firstName = :firstName, #lastName = :lastName, #dateOfBirth = :dateOfBirth, #isLockedOut = :isLockedOut, #passwordResetToken = :passwordResetToken, #roles = :roles',
+            ReturnValues: 'ALL_NEW'
+        };
+
+        const result = await dynamoDb.update(params).promise();
+
+        return this._map(result.Attributes);
+    }
+
+    async remove(user) {
+        const params = {
+            TableName: config.DYNAMODB_USERS,
+            Key: { id: user.id }
+        };
+
+        const result = await dynamoDb.delete(params).promise();
+
+        return this._map(result.Item);
+    }
+
+    async upsert(user) {
+        const existing = await this.getByEmailAddress(user.emailAddress);
 
         return existing
-            ? this._update(collection, { ...existing, ...user })
-            : this._create(collection, user);
-    };
+            ? this.update({ ...existing, ...user })
+            : this.create(user);
+    }
 
-    remove = user => this._remove(collection, user);
+    async search(request) {
+        const params = {
+            TableName: config.DYNAMODB_USERS
+        };
 
-    search = request =>
-        this._search({
-            ...request,
-            index: indexes[request.sort] || indexes.USERS_NAME_ASC
-        });
+        const result = await dynamoDb.scan(params).promise();
+
+        return {
+            items: result.Items.map(this._map)
+        };
+    }
+
+    _map = user => user;
 }
