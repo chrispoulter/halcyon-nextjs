@@ -16,7 +16,10 @@ export const config = {
         process.env.DYNAMODB_USERS || `halcyon-${environment}-users`,
     DYNAMODB_TEMPLATES:
         process.env.DYNAMODB_TEMPLATES || `halcyon-${environment}-templates`,
-    CLIENT_URL: environment === 'local' ? 'http://localhost:3000' : undefined,
+    CLIENT_URL:
+        environment === 'local'
+            ? 'http://localhost:3000'
+            : process.env.CLIENT_URL,
     JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
     JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient',
