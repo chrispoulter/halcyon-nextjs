@@ -43,8 +43,8 @@ provider:
                   Action:
                       - dynamodb:*
                   Resource:
-                      - ${self:custom.dynamodb.users.arn}
-                      - ${self:custom.dynamodb.templates.arn}
+                      - ${self:custom.dynamodb.users.arn}*
+                      - ${self:custom.dynamodb.templates.arn}*
 
 package:
     individually: true
