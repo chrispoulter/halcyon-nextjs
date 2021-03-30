@@ -19,8 +19,8 @@ provider:
         REGION: ${self:custom.region}
         CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url}
         SNS_EVENTSARN: ${self:custom.sns.events.arn}
-        DYNAMODB_USERS: ${self:custom.dynamodb.usersTable}
-        DYNAMODB_TEMPLATES: ${self:custom.dynamodb.templatesTable}
+        DYNAMODB_USERS: ${self:custom.dynamodb.users.tableName}
+        DYNAMODB_TEMPLATES: ${self:custom.dynamodb.templates.tableName}
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
         JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
         JWT_ISSUER: ${env:JWT_ISSUER, ''}
@@ -43,8 +43,8 @@ provider:
                   Action:
                       - dynamodb:*
                   Resource:
-                      - ${self:custom.dynamodb.usersTable}
-                      - ${self:custom.dynamodb.templatesTable}
+                      - ${self:custom.dynamodb.users.arn}
+                      - ${self:custom.dynamodb.templates.arn}
 
 package:
     individually: true
@@ -111,8 +111,12 @@ custom:
         debug: true
 
     dynamodb:
-        usersTable: ${self:custom.prefix}-users
-        templatesTable: ${self:custom.prefix}-templates
+        users:
+            tableName: ${self:custom.prefix}-users
+            arn: arn:aws:dynamodb:${self:custom.region}:${self:custom.accountId}:table/${self:custom.dynamodb.users.tableName}
+        templates:
+            tableName: ${self:custom.prefix}-templates
+            arn: arn:aws:dynamodb:${self:custom.region}:${self:custom.accountId}:table/${self:custom.dynamodb.templates.tableName}
         stages:
             - local
         start:
@@ -143,7 +147,7 @@ resources:
         UsersTable:
             Type: AWS::DynamoDB::Table
             Properties:
-                TableName: ${self:custom.dynamodb.usersTable}
+                TableName: ${self:custom.dynamodb.users.tableName}
                 AttributeDefinitions:
                     - AttributeName: id
                       AttributeType: S
@@ -164,7 +168,7 @@ resources:
         TemplatesTable:
             Type: AWS::DynamoDB::Table
             Properties:
-                TableName: ${self:custom.dynamodb.templatesTable}
+                TableName: ${self:custom.dynamodb.templates.tableName}
                 AttributeDefinitions:
                     - AttributeName: key
                       AttributeType: S
