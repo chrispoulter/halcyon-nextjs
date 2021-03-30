@@ -1,9 +1,9 @@
 const path = require('path');
-// eslint-disable-next-line import/no-unresolved
 const slsw = require('serverless-webpack');
 
 module.exports = {
     entry: slsw.lib.entries,
+    externals: [{ 'aws-sdk': 'commonjs aws-sdk' }],
     output: {
         libraryTarget: 'commonjs',
         filename: '[name].js',
@@ -14,9 +14,9 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/, // include .js files
-                enforce: 'pre', // preload the jshint loader
-                exclude: /node_modules/, // exclude any and all files in the node_modules folder
+                test: /\.js$/,
+                enforce: 'pre',
+                exclude: /node_modules/,
                 include: __dirname,
                 use: [
                     {
