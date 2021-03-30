@@ -1,14 +1,22 @@
 import 'dotenv/config';
 
+const environment = process.env.ENVIRONMENT || 'local';
+const release = process.env.RELEASE || 'local';
+const region = process.env.REGION || 'eu-west-1';
+
 export const config = {
-    ENVIRONMENT: process.env.ENVIRONMENT || 'local',
-    RELEASE: process.env.RELEASE || 'local',
+    ENVIRONMENT: environment,
+    RELEASE: release,
+    REGION: region,
+    SNS_ENDPOINT: environment === 'local' ? 'http://127.0.0.1:4002' : undefined,
     SNS_EVENTSARN: process.env.SNS_EVENTSARN,
-    SNS_ENDPOINT: process.env.SNS_ENDPOINT,
-    CLIENT_URL: process.env.CLIENT_URL,
-    DYNAMODB_USERS: process.env.DYNAMODB_USERS || 'halcyon-local-users',
+    DYNAMODB_ENDPOINT:
+        environment === 'local' ? 'http://localhost:8000' : undefined,
+    DYNAMODB_USERS:
+        process.env.DYNAMODB_USERS || `halcyon-${environment}-users`,
     DYNAMODB_TEMPLATES:
-        process.env.DYNAMODB_TEMPLATES || 'halcyon-local-templates',
+        process.env.DYNAMODB_TEMPLATES || `halcyon-${environment}-templates`,
+    CLIENT_URL: environment === 'local' ? 'http://localhost:3000' : undefined,
     JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
     JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient',
@@ -20,11 +28,3 @@ export const config = {
     SEED_PASSWORD: process.env.SEED_PASSWORD,
     SENTRY_DSN: process.env.SENTRY_DSN
 };
-
-if (config.ENVIRONMENT === 'local') {
-    config.SNS_ENDPOINT = 'http://127.0.0.1:4002';
-    config.CLIENT_URL = 'http://localhost:3000';
-
-    config.DYNAMODB_ENDPOINT = 'http://localhost:8000';
-    config.DYNAMODB_REGION = 'localhost';
-}

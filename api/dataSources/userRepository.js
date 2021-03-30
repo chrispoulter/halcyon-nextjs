@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { config } from '../utils/config';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient({
-    region: config.DYNAMODB_REGION,
+    region: config.REGION,
     endpoint: config.DYNAMODB_ENDPOINT
 });
 
@@ -66,12 +66,12 @@ export class UserRepository extends DataSource {
             },
             ExpressionAttributeValues: {
                 ':emailAddress': user.emailAddress,
-                ':password': user.password || '',
+                ':password': user.password || null,
                 ':firstName': user.firstName,
                 ':lastName': user.lastName,
                 ':dateOfBirth': user.dateOfBirth,
                 ':isLockedOut': user.isLockedOut,
-                ':passwordResetToken': user.passwordResetToken || '',
+                ':passwordResetToken': user.passwordResetToken || null,
                 ':roles': user.roles
             },
             UpdateExpression:

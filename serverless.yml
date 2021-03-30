@@ -16,6 +16,7 @@ provider:
     environment:
         ENVIRONMENT: ${env:ENVIRONMENT, ''}
         RELEASE: ${env:RELEASE, ''}
+        REGION: ${self:custom.region}
         CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url}
         SNS_EVENTSARN: ${self:custom.sns.events.arn}
         DYNAMODB_USERS: ${self:custom.dynamodb.usersTable}
@@ -116,6 +117,7 @@ custom:
             - local
         start:
             migrate: true
+            dbPath: .dynamodb/
 
     buildClient:
         environment:

@@ -2,7 +2,8 @@ import { SNS } from 'aws-sdk';
 import { config } from './config';
 
 const sns = new SNS({
-    endpoint: process.env.SNS_ENDPOINT
+    region: config.REGION,
+    endpoint: config.SNS_ENDPOINT
 });
 
 export const publish = async message =>

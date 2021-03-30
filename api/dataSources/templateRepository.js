@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { config } from '../utils/config';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient({
-    region: config.DYNAMODB_REGION,
+    region: config.REGION,
     endpoint: config.DYNAMODB_ENDPOINT
 });
 
