@@ -83,6 +83,7 @@ custom:
     stage: ${opt:stage, self:provider.stage}
     region: ${opt:region, self:provider.region}
     prefix: ${self:service}-${self:custom.stage}
+    endpoint: ${cf:${self:custom.prefix}.ServiceEndpoint, ''}
 
     cors:
         origin: '*'
@@ -99,17 +100,6 @@ custom:
             topicName: ${self:custom.prefix}-events
             arn: arn:aws:sns:${self:custom.region}:${self:custom.accountId}:${self:custom.sns.events.topicName}
 
-    endpoints:
-        graphQL: ${cf:${self:custom.prefix}.ServiceEndpoint, ''}
-
-    serverless-offline:
-        httpPort: 3001
-        noPrependStageInUrl: true
-
-    serverless-offline-sns:
-        port: 4002
-        debug: true
-
     dynamodb:
         users:
             tableName: ${self:custom.prefix}-users
@@ -123,13 +113,21 @@ custom:
             migrate: true
             dbPath: .dynamodb/
 
+    serverless-offline:
+        httpPort: 3001
+        noPrependStageInUrl: true
+
+    serverless-offline-sns:
+        port: 4002
+        debug: true
+
     buildClient:
         environment:
             REACT_APP_ENVIRONMENT: ${env:ENVIRONMENT, ''}
             REACT_APP_RELEASE: ${env:RELEASE, ''}
             REACT_APP_SENTRY_DSN: ${env:SENTRY_DSN, ''}
             REACT_APP_GA_MEASUREMENTID: ${env:GA_MEASUREMENTID, ''}
-            REACT_APP_GRAPHQL_URL: ${env:GRAPHQL_URL, self:custom.endpoints.graphQL}
+            REACT_APP_GRAPHQL_URL: ${env:GRAPHQL_URL, self:custom.endpoint}
 
     s3Sync:
         - bucketNameKey: ClientBucketOutputKey
