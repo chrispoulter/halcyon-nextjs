@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk';
 import { DataSource } from 'apollo-datasource';
 import { v4 as uuidv4 } from 'uuid';
+import { base64EncodeObj, base64DecodeObj } from '../utils/encode';
 import { config } from '../utils/config';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient({
@@ -26,7 +27,8 @@ export class UserRepository extends DataSource {
             IndexName: 'emailAddress-index',
             ExpressionAttributeNames: { '#emailAddress': 'emailAddress' },
             ExpressionAttributeValues: { ':emailAddress': emailAddress },
-            KeyConditionExpression: '#emailAddress = :emailAddress'
+            KeyConditionExpression: '#emailAddress = :emailAddress',
+            Limit: 1
         };
 
         const result = await dynamoDb.query(params).promise();
@@ -105,13 +107,27 @@ export class UserRepository extends DataSource {
 
     async search(request) {
         const params = {
-            TableName: config.DYNAMODB_USERS
+            TableName: config.DYNAMODB_USERS,
+            IndexName: 'emailAddress-index',
+            Limit: 10,
+            ExclusiveStartKey: base64DecodeObj(request.cursor)
         };
+
+        if (request.search) {
+            params.ExpressionAttributeNames = {
+                '#emailAddress': 'emailAddress'
+            };
+            params.ExpressionAttributeValues = {
+                ':emailAddress': request.search
+            };
+            params.FilterExpression = 'contains(#emailAddress, :emailAddress)';
+        }
 
         const result = await dynamoDb.scan(params).promise();
 
         return {
-            items: result.Items.map(this._map)
+            items: result.Items.map(this._map),
+            after: base64EncodeObj(result.LastEvaluatedKey)
         };
     }
 
