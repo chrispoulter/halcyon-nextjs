@@ -22,12 +22,7 @@ import {
 import { SEARCH_USERS } from '../graphql';
 import { Spinner, Pager } from '../components';
 
-const sortOptions = [
-    'NAME_ASC',
-    'NAME_DESC',
-    'EMAIL_ADDRESS_ASC',
-    'EMAIL_ADDRESS_DESC'
-];
+const sortOptions = ['NAME_ASC', 'EMAIL_ADDRESS_ASC'];
 
 export const UserPage = () => {
     const { t } = useTranslation();

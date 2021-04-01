@@ -151,6 +151,8 @@ resources:
                       AttributeType: S
                     - AttributeName: emailAddress
                       AttributeType: S
+                    - AttributeName: fullName
+                      AttributeType: S
                 KeySchema:
                     - AttributeName: id
                       KeyType: HASH
@@ -158,6 +160,12 @@ resources:
                     - IndexName: emailAddress-index
                       KeySchema:
                           - AttributeName: emailAddress
+                            KeyType: HASH
+                      Projection:
+                          ProjectionType: 'ALL'
+                    - IndexName: fullName-index
+                      KeySchema:
+                          - AttributeName: fullName
                             KeyType: HASH
                       Projection:
                           ProjectionType: 'ALL'

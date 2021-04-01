@@ -9,6 +9,11 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
     endpoint: config.DYNAMODB_ENDPOINT
 });
 
+const indexes = {
+    EMAIL_ADDRESS_ASC: 'emailAddress-index',
+    NAME_ASC: 'fullName-index'
+};
+
 export class UserRepository extends DataSource {
     async getById(id) {
         const params = {
@@ -24,7 +29,7 @@ export class UserRepository extends DataSource {
     async getByEmailAddress(emailAddress) {
         const params = {
             TableName: config.DYNAMODB_USERS,
-            IndexName: 'emailAddress-index',
+            IndexName: indexes.EMAIL_ADDRESS_ASC,
             ExpressionAttributeNames: { '#emailAddress': 'emailAddress' },
             ExpressionAttributeValues: { ':emailAddress': emailAddress },
             KeyConditionExpression: '#emailAddress = :emailAddress',
@@ -37,24 +42,25 @@ export class UserRepository extends DataSource {
     }
 
     async create(user) {
+        const item = this._generate(user);
+
         const params = {
             TableName: config.DYNAMODB_USERS,
-            Item: {
-                id: uuidv4(),
-                ...user
-            }
+            Item: item
         };
 
-        const result = await dynamoDb.put(params).promise();
+        await dynamoDb.put(params).promise();
 
-        return this._map(result.Item);
+        return this._map(item);
     }
 
     async update(user) {
+        const item = this._generate(user);
+
         const params = {
             TableName: config.DYNAMODB_USERS,
             Key: {
-                id: user.id
+                id: item.id
             },
             ExpressionAttributeNames: {
                 '#emailAddress': 'emailAddress',
@@ -64,20 +70,33 @@ export class UserRepository extends DataSource {
                 '#dateOfBirth': 'dateOfBirth',
                 '#isLockedOut': 'isLockedOut',
                 '#passwordResetToken': 'passwordResetToken',
-                '#roles': 'roles'
+                '#roles': 'roles',
+                '#fullName': 'fullName',
+                '#search': 'search'
             },
             ExpressionAttributeValues: {
-                ':emailAddress': user.emailAddress,
-                ':password': user.password || null,
-                ':firstName': user.firstName,
-                ':lastName': user.lastName,
-                ':dateOfBirth': user.dateOfBirth,
-                ':isLockedOut': user.isLockedOut,
-                ':passwordResetToken': user.passwordResetToken || null,
-                ':roles': user.roles
+                ':emailAddress': item.emailAddress,
+                ':password': item.password,
+                ':firstName': item.firstName,
+                ':lastName': item.lastName,
+                ':dateOfBirth': item.dateOfBirth,
+                ':isLockedOut': item.isLockedOut,
+                ':passwordResetToken': item.passwordResetToken,
+                ':roles': item.roles,
+                ':fullName': item.fullName,
+                ':search': item.search
             },
             UpdateExpression:
-                'SET #emailAddress = :emailAddress, #password = :password, #firstName = :firstName, #lastName = :lastName, #dateOfBirth = :dateOfBirth, #isLockedOut = :isLockedOut, #passwordResetToken = :passwordResetToken, #roles = :roles',
+                'SET #emailAddress = :emailAddress, ' +
+                '#password = :password, ' +
+                '#firstName = :firstName, ' +
+                '#lastName = :lastName, ' +
+                '#dateOfBirth = :dateOfBirth, ' +
+                '#isLockedOut = :isLockedOut, ' +
+                '#passwordResetToken = :passwordResetToken, ' +
+                '#roles = :roles, ' +
+                '#fullName = :fullName, ' +
+                '#search = :search',
             ReturnValues: 'ALL_NEW'
         };
 
@@ -106,21 +125,23 @@ export class UserRepository extends DataSource {
     }
 
     async search(request) {
+        const index = indexes[request.sort] || indexes.USERS_NAME_ASC;
+
         const params = {
             TableName: config.DYNAMODB_USERS,
-            IndexName: 'emailAddress-index',
+            IndexName: index,
             Limit: 10,
             ExclusiveStartKey: base64DecodeObj(request.cursor)
         };
 
         if (request.search) {
             params.ExpressionAttributeNames = {
-                '#emailAddress': 'emailAddress'
+                '#search': 'search'
             };
             params.ExpressionAttributeValues = {
-                ':emailAddress': request.search
+                ':search': request.search.toLowerCase()
             };
-            params.FilterExpression = 'contains(#emailAddress, :emailAddress)';
+            params.FilterExpression = 'contains(#search, :search)';
         }
 
         const result = await dynamoDb.scan(params).promise();
@@ -131,5 +152,31 @@ export class UserRepository extends DataSource {
         };
     }
 
-    _map = user => user;
+    _generate = user => ({
+        ...user,
+        id: user.id || uuidv4(),
+        isLockedOut: user.isLockedOut || null,
+        password: user.password || null,
+        passwordResetToken: user.passwordResetToken || null,
+        fullName: `${user.firstName} ${user.lastName}`,
+        search: `${user.firstName} ${user.lastName} ${user.emailAddress}`.toLowerCase()
+    });
+
+    _map = user => {
+        if (!user) {
+            return undefined;
+        }
+
+        return {
+            id: user.id,
+            emailAddress: user.emailAddress,
+            password: user.password,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            dateOfBirth: user.dateOfBirth,
+            isLockedOut: user.isLockedOut,
+            passwordResetToken: user.passwordResetToken,
+            roles: user.roles
+        };
+    };
 }

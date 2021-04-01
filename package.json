@@ -16,6 +16,7 @@
         "db:start": "serverless dynamodb start",
         "db:seed": "babel-node scripts/seed.js",
         "db:populate": "babel-node scripts/populate.js",
+        "db:remove": "rimraf ./.dynamodb/shared-local-instance.db",
         "lint": "eslint \"**/*.{js,jsx}\"",
         "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\""
     },

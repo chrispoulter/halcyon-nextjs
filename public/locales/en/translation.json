@@ -28,9 +28,7 @@
         },
         "userSortExpressions": {
             "NAME_ASC": "Name A-Z",
-            "NAME_DESC": "Name Z-A",
-            "EMAIL_ADDRESS_ASC": "Email Address A-Z",
-            "EMAIL_ADDRESS_DESC": "Email Address Z-A"
+            "EMAIL_ADDRESS_ASC": "Email Address A-Z"
         }
     },
     "languages": {
