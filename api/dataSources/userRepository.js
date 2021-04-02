@@ -41,7 +41,9 @@ export class UserRepository extends DataSource {
         return this._map(result.Items[0]);
     }
 
-    async create(user) {
+    create = this.update;
+
+    async update(user) {
         const item = this._generate(user);
 
         const params = {
@@ -54,74 +56,20 @@ export class UserRepository extends DataSource {
         return this._map(item);
     }
 
-    async update(user) {
-        const item = this._generate(user);
-
-        const params = {
-            TableName: config.DYNAMODB_USERS,
-            Key: {
-                id: item.id
-            },
-            ExpressionAttributeNames: {
-                '#emailAddress': 'emailAddress',
-                '#password': 'password',
-                '#firstName': 'firstName',
-                '#lastName': 'lastName',
-                '#dateOfBirth': 'dateOfBirth',
-                '#isLockedOut': 'isLockedOut',
-                '#passwordResetToken': 'passwordResetToken',
-                '#roles': 'roles',
-                '#fullName': 'fullName',
-                '#search': 'search'
-            },
-            ExpressionAttributeValues: {
-                ':emailAddress': item.emailAddress,
-                ':password': item.password,
-                ':firstName': item.firstName,
-                ':lastName': item.lastName,
-                ':dateOfBirth': item.dateOfBirth,
-                ':isLockedOut': item.isLockedOut,
-                ':passwordResetToken': item.passwordResetToken,
-                ':roles': item.roles,
-                ':fullName': item.fullName,
-                ':search': item.search
-            },
-            UpdateExpression:
-                'SET #emailAddress = :emailAddress, ' +
-                '#password = :password, ' +
-                '#firstName = :firstName, ' +
-                '#lastName = :lastName, ' +
-                '#dateOfBirth = :dateOfBirth, ' +
-                '#isLockedOut = :isLockedOut, ' +
-                '#passwordResetToken = :passwordResetToken, ' +
-                '#roles = :roles, ' +
-                '#fullName = :fullName, ' +
-                '#search = :search',
-            ReturnValues: 'ALL_NEW'
-        };
-
-        const result = await dynamoDb.update(params).promise();
-
-        return this._map(result.Attributes);
-    }
-
     async remove(user) {
         const params = {
             TableName: config.DYNAMODB_USERS,
             Key: { id: user.id }
         };
 
-        const result = await dynamoDb.delete(params).promise();
+        await dynamoDb.delete(params).promise();
 
-        return this._map(result.Item);
+        return this._map(user);
     }
 
     async upsert(user) {
         const existing = await this.getByEmailAddress(user.emailAddress);
-
-        return existing
-            ? this.update({ ...existing, ...user })
-            : this.create(user);
+        return this.update({ ...existing, ...user });
     }
 
     async search(request) {
@@ -155,9 +103,9 @@ export class UserRepository extends DataSource {
     _generate = user => ({
         ...user,
         id: user.id || uuidv4(),
-        isLockedOut: user.isLockedOut || null,
-        password: user.password || null,
-        passwordResetToken: user.passwordResetToken || null,
+        isLockedOut: user.isLockedOut,
+        password: user.password,
+        passwordResetToken: user.passwordResetToken,
         fullName: `${user.firstName} ${user.lastName}`,
         search: `${user.firstName} ${user.lastName} ${user.emailAddress}`.toLowerCase()
     });

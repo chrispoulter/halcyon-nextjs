@@ -19,7 +19,9 @@ export class TemplateRepository extends DataSource {
         return this._map(result.Item);
     }
 
-    async create(template) {
+    create = this.update;
+
+    async update(template) {
         const params = {
             TableName: config.DYNAMODB_TEMPLATES,
             Item: template
@@ -30,35 +32,9 @@ export class TemplateRepository extends DataSource {
         return this._map(template);
     }
 
-    async update(template) {
-        const params = {
-            TableName: config.DYNAMODB_TEMPLATES,
-            Key: {
-                key: template.key
-            },
-            ExpressionAttributeNames: {
-                '#subject': 'subject',
-                '#html': 'html'
-            },
-            ExpressionAttributeValues: {
-                ':subject': template.subject,
-                ':html': template.html
-            },
-            UpdateExpression: 'SET #subject = :subject, #html = :html',
-            ReturnValues: 'ALL_NEW'
-        };
-
-        const result = await dynamoDb.update(params).promise();
-
-        return this._map(result.Attributes);
-    }
-
     async upsert(template) {
         const existing = await this.getByKey(template.key);
-
-        return existing
-            ? this.update({ ...existing, ...template })
-            : this.create(template);
+        return this.update({ ...existing, ...template });
     }
 
     _map = template => {
