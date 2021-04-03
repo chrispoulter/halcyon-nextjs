@@ -65,6 +65,7 @@
         "babel-preset-env": "1.7.0",
         "concurrently": "6.0.0",
         "dotenv": "8.2.0",
+        "faker": "5.5.2",
         "node-sass": "5.0.0",
         "prettier": "2.2.1",
         "react-scripts": "4.0.3",
