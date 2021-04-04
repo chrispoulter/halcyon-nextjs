@@ -28,7 +28,9 @@
         },
         "userSortExpressions": {
             "NAME_ASC": "名称A-Z",
-            "EMAIL_ADDRESS_ASC": "电子邮件地址A-Z"
+            "NAME_DESC": "名称Z-A",
+            "EMAIL_ADDRESS_ASC": "电子邮件地址A-Z",
+            "EMAIL_ADDRESS_DESC": "电子邮件地址Z-A"
         }
     },
     "languages": {

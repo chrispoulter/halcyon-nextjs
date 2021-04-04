@@ -1,7 +1,6 @@
 import AWS from 'aws-sdk';
 import { DataSource } from 'apollo-datasource';
 import { v4 as uuidv4 } from 'uuid';
-import { base64EncodeObj, base64DecodeObj } from '../utils/encode';
 import { config } from '../utils/config';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient({
@@ -10,8 +9,14 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
 });
 
 const indexes = {
-    EMAIL_ADDRESS_ASC: 'emailAddress-index',
-    NAME_ASC: 'fullName-index'
+    EMAIL_ADDRESS: 'emailAddress-index'
+};
+
+const sortOptions = {
+    NAME_ASC: 'NAME_ASC',
+    NAME_DESC: 'NAME_DESC',
+    EMAIL_ADDRESS_ASC: 'EMAIL_ADDRESS_ASC',
+    EMAIL_ADDRESS_DESC: 'EMAIL_ADDRESS_DESC'
 };
 
 export class UserRepository extends DataSource {
@@ -29,7 +34,7 @@ export class UserRepository extends DataSource {
     async getByEmailAddress(emailAddress) {
         const params = {
             TableName: config.DYNAMODB_USERS,
-            IndexName: indexes.EMAIL_ADDRESS_ASC,
+            IndexName: indexes.EMAIL_ADDRESS,
             ExpressionAttributeNames: { '#emailAddress': 'emailAddress' },
             ExpressionAttributeValues: { ':emailAddress': emailAddress },
             KeyConditionExpression: '#emailAddress = :emailAddress',
@@ -73,58 +78,107 @@ export class UserRepository extends DataSource {
     }
 
     async search(request) {
-        const index = indexes[request.sort] || indexes.USERS_NAME_ASC;
+        let users = await this._getAll();
 
-        const params = {
-            TableName: config.DYNAMODB_USERS,
-            IndexName: index,
-            Limit: 10,
-            ExclusiveStartKey: base64DecodeObj(request.cursor)
-        };
+        users = this._search(
+            users,
+            user => `${user.firstName} ${user.lastName} ${user.emailAddress}`,
+            request.search
+        );
 
-        if (request.search) {
-            params.ExpressionAttributeNames = {
-                '#search': 'search'
-            };
-            params.ExpressionAttributeValues = {
-                ':search': request.search.toLowerCase()
-            };
-            params.FilterExpression = 'contains(#search, :search)';
+        switch (request.sort) {
+            case sortOptions.EMAIL_ADDRESS_ASC:
+                this._sort(users, user => user.emailAddress);
+                break;
+
+            case sortOptions.EMAIL_ADDRESS_DESC:
+                this._sort(users, user => user.emailAddress, true);
+                break;
+
+            case sortOptions.NAME_DESC:
+                this._sort(
+                    users,
+                    user => `${user.firstName} ${user.lastName}`,
+                    true
+                );
+                break;
+
+            default:
+                this._sort(users, user => `${user.firstName} ${user.lastName}`);
+                break;
         }
 
-        const result = await dynamoDb.scan(params).promise();
-
         return {
-            items: result.Items.map(this._map),
-            after: base64EncodeObj(result.LastEvaluatedKey)
+            items: users.map(this._map),
+            before: undefined,
+            after: undefined
         };
     }
 
-    _generate = user => ({
-        ...user,
-        id: user.id || uuidv4(),
-        isLockedOut: user.isLockedOut,
-        password: user.password,
-        passwordResetToken: user.passwordResetToken,
-        fullName: `${user.firstName} ${user.lastName}`,
-        search: `${user.firstName} ${user.lastName} ${user.emailAddress}`.toLowerCase()
+    _getAll = async () => {
+        const params = {
+            TableName: config.DYNAMODB_USERS
+        };
+
+        let items = [];
+        let result;
+
+        do {
+            result = await dynamoDb.scan(params).promise();
+            result.Items.forEach(item => items.push(item));
+            params.ExclusiveStartKey = result.LastEvaluatedKey;
+        } while (result.LastEvaluatedKey !== undefined);
+
+        return items;
+    };
+
+    _search = (items, valueFunc, filter) => {
+        if (!filter) {
+            return items;
+        }
+
+        return items.filter(item =>
+            valueFunc(item).toLowerCase().includes(filter.toLowerCase())
+        );
+    };
+
+    _sort = (items, valueFunc, desc) => {
+        items.sort((a, b) =>
+            valueFunc(a).toLowerCase() > valueFunc(b).toLowerCase()
+                ? desc
+                    ? -1
+                    : 1
+                : valueFunc(b).toLowerCase() > valueFunc(a).toLowerCase()
+                ? desc
+                    ? 1
+                    : -1
+                : 0
+        );
+    };
+
+    _generate = item => ({
+        ...item,
+        id: item.id || uuidv4(),
+        isLockedOut: item.isLockedOut,
+        password: item.password,
+        passwordResetToken: item.passwordResetToken
     });
 
-    _map = user => {
-        if (!user) {
+    _map = item => {
+        if (!item) {
             return undefined;
         }
 
         return {
-            id: user.id,
-            emailAddress: user.emailAddress,
-            password: user.password,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth,
-            isLockedOut: user.isLockedOut,
-            passwordResetToken: user.passwordResetToken,
-            roles: user.roles
+            id: item.id,
+            emailAddress: item.emailAddress,
+            password: item.password,
+            firstName: item.firstName,
+            lastName: item.lastName,
+            dateOfBirth: item.dateOfBirth,
+            isLockedOut: item.isLockedOut,
+            passwordResetToken: item.passwordResetToken,
+            roles: item.roles
         };
     };
 }

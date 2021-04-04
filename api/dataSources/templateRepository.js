@@ -37,15 +37,15 @@ export class TemplateRepository extends DataSource {
         return this.update({ ...existing, ...template });
     }
 
-    _map = template => {
-        if (!template) {
+    _map = item => {
+        if (!item) {
             return undefined;
         }
 
         return {
-            key: template.key,
-            subject: template.subject,
-            html: template.html
+            key: item.key,
+            subject: item.subject,
+            html: item.html
         };
     };
 }

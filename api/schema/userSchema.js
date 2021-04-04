@@ -3,7 +3,9 @@ import { gql } from 'apollo-server';
 export const userSchema = gql`
     enum UserSortExpression {
         NAME_ASC
+        NAME_DESC
         EMAIL_ADDRESS_ASC
+        EMAIL_ADDRESS_DESC
     }
 
     enum UserRole {
