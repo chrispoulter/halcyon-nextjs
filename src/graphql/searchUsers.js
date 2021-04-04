@@ -2,18 +2,13 @@ import { gql } from 'apollo-boost';
 
 export const SEARCH_USERS = gql`
     query SearchUsers(
+        $page: Int
         $size: Int
         $search: String
         $sort: UserSortExpression
-        $cursor: String
     ) {
         searchUsers(
-            input: {
-                size: $size
-                search: $search
-                sort: $sort
-                cursor: $cursor
-            }
+            input: { page: $page, size: $size, search: $search, sort: $sort }
         ) {
             items {
                 id
@@ -24,8 +19,8 @@ export const SEARCH_USERS = gql`
                 isLockedOut
                 roles
             }
-            before
-            after
+            hasNextPage
+            hasPreviousPage
         }
     }
 `;

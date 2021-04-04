@@ -12,11 +12,28 @@ const indexes = {
     EMAIL_ADDRESS: 'emailAddress-index'
 };
 
+const searchFunc = user =>
+    `${user.firstName} ${user.lastName} ${user.emailAddress}`;
+
 const sortOptions = {
-    NAME_ASC: 'NAME_ASC',
-    NAME_DESC: 'NAME_DESC',
-    EMAIL_ADDRESS_ASC: 'EMAIL_ADDRESS_ASC',
-    EMAIL_ADDRESS_DESC: 'EMAIL_ADDRESS_DESC'
+    NAME_ASC: {
+        name: 'NAME_ASC',
+        valueFunc: user => `${user.firstName} ${user.lastName}`
+    },
+    NAME_DESC: {
+        name: 'NAME_DESC',
+        valueFunc: user => `${user.firstName} ${user.lastName}`,
+        desc: true
+    },
+    EMAIL_ADDRESS_ASC: {
+        name: 'EMAIL_ADDRESS_ASC',
+        valueFunc: user => user.emailAddress
+    },
+    EMAIL_ADDRESS_DESC: {
+        name: 'EMAIL_ADDRESS_DESC',
+        valueFunc: user => user.emailAddress,
+        desc: true
+    }
 };
 
 export class UserRepository extends DataSource {
@@ -78,41 +95,15 @@ export class UserRepository extends DataSource {
     }
 
     async search(request) {
-        let users = await this._getAll();
-
-        users = this._search(
-            users,
-            user => `${user.firstName} ${user.lastName} ${user.emailAddress}`,
+        const users = this._search(
+            await this._getAll(),
+            searchFunc,
             request.search
         );
 
-        switch (request.sort) {
-            case sortOptions.EMAIL_ADDRESS_ASC:
-                this._sort(users, user => user.emailAddress);
-                break;
+        this._sort(users, sortOptions[request.sort] || sortOptions.NAME_ASC);
 
-            case sortOptions.EMAIL_ADDRESS_DESC:
-                this._sort(users, user => user.emailAddress, true);
-                break;
-
-            case sortOptions.NAME_DESC:
-                this._sort(
-                    users,
-                    user => `${user.firstName} ${user.lastName}`,
-                    true
-                );
-                break;
-
-            default:
-                this._sort(users, user => `${user.firstName} ${user.lastName}`);
-                break;
-        }
-
-        return {
-            items: users.map(this._map),
-            before: undefined,
-            after: undefined
-        };
+        return this._paginate(users, request.page || 1, request.size || 10);
     }
 
     _getAll = async () => {
@@ -142,7 +133,7 @@ export class UserRepository extends DataSource {
         );
     };
 
-    _sort = (items, valueFunc, desc) => {
+    _sort = (items, { valueFunc, desc }) => {
         items.sort((a, b) =>
             valueFunc(a).toLowerCase() > valueFunc(b).toLowerCase()
                 ? desc
@@ -154,6 +145,20 @@ export class UserRepository extends DataSource {
                     : -1
                 : 0
         );
+    };
+
+    _paginate = (items, page, size) => {
+        const pageCount = (items.length + size - 1) / size;
+
+        if (page > 1) {
+            items = items.filter((_, i) => i >= (page - 1) * size);
+        }
+
+        return {
+            items: items.filter((_, i) => i < size).map(this._map),
+            hasNextPage: page < pageCount,
+            hasPreviousPage: page > 1
+        };
     };
 
     _generate = item => ({
