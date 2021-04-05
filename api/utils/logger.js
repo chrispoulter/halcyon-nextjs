@@ -12,7 +12,7 @@ export const wrapper = handler => {
     Sentry.AWSLambda.init({
         dsn: config.SENTRY_DSN,
         release: `halcyon@${config.RELEASE}`,
-        environment: config.ENVIRONMENT,
+        environment: config.STAGE,
         tracesSampleRate: 1.0
     });
 

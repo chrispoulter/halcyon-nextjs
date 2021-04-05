@@ -12,7 +12,7 @@ export const initialize = () => {
     Sentry.init({
         dsn: config.SENTRY_DSN,
         release: `halcyon@${config.RELEASE}`,
-        environment: config.ENVIRONMENT,
+        environment: config.STAGE,
         integrations: [new Integrations.BrowserTracing()],
         tracesSampleRate: 1.0
     });

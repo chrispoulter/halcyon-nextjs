@@ -14,13 +14,11 @@ provider:
         shouldStartNameWithService: true
     lambdaHashingVersion: 20201221
     environment:
-        ENVIRONMENT: ${env:ENVIRONMENT, ''}
-        RELEASE: ${env:RELEASE, ''}
+        ACCOUNTID: ${self:custom.accountId}
+        STAGE: ${self:custom.stage}
         REGION: ${self:custom.region}
+        RELEASE: ${env:RELEASE, ''}
         CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url}
-        SNS_EVENTSARN: ${self:custom.sns.events.arn}
-        DYNAMODB_USERS: ${self:custom.dynamodb.users.tableName}
-        DYNAMODB_TEMPLATES: ${self:custom.dynamodb.templates.tableName}
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
         JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
         JWT_ISSUER: ${env:JWT_ISSUER, ''}
@@ -123,7 +121,7 @@ custom:
 
     buildClient:
         environment:
-            REACT_APP_ENVIRONMENT: ${env:ENVIRONMENT, ''}
+            REACT_APP_STAGE: ${env:STAGE, ''}
             REACT_APP_RELEASE: ${env:RELEASE, ''}
             REACT_APP_SENTRY_DSN: ${env:SENTRY_DSN, ''}
             REACT_APP_GA_MEASUREMENTID: ${env:GA_MEASUREMENTID, ''}

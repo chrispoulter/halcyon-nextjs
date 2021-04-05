@@ -5,10 +5,10 @@ import { config } from '../utils/config';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient({
     region: config.REGION,
-    endpoint: config.DYNAMODB_ENDPOINT
+    endpoint: config.STAGE === 'local' ? 'http://localhost:8000' : undefined
 });
 
-const tableName = config.DYNAMODB_USERS;
+const tableName = `halcyon-${config.STAGE}-users`;
 
 const indexes = {
     EMAIL_ADDRESS: 'emailAddress-index'

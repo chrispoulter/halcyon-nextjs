@@ -32,14 +32,14 @@ jobs:
               with:
                   node-version: 12.x
 
-            - run: echo "ENVIRONMENT=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+            - run: echo "STAGE=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
             - run: echo "RELEASE=$(echo ${GITHUB_SHA})" >> $GITHUB_ENV
 
             - run: yarn
             - run: yarn lint
 
-            - run: yarn serverless:build --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
-            - run: yarn serverless:deploy --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
+            - run: yarn serverless:build --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
+            - run: yarn serverless:deploy --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
 
             - run: yarn db:seed
 
@@ -49,6 +49,6 @@ jobs:
                   SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
                   SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
               with:
-                  environment: ${{ env.ENVIRONMENT }}
+                  environment: ${{ env.STAGE }}
                   version: ${{ env.RELEASE }}
                   sourcemaps: ./build
