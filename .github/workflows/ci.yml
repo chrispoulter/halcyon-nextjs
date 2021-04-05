@@ -10,21 +10,26 @@ jobs:
         runs-on: ubuntu-latest
         env:
             EXTEND_ESLINT: true
-            CLIENT_URL: ${{ secrets.CLIENT_URL }}
+
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
             JWT_SECURITYKEY: ${{ secrets.JWT_SECURITYKEY }}
             JWT_AUDIENCE: ${{ secrets.JWT_AUDIENCE }}
             JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
             JWT_EXPIRESIN: ${{ secrets.JWT_EXPIRESIN }}
+
             MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
             MAILGUN_APIKEY: ${{ secrets.MAILGUN_APIKEY }}
             MAILGUN_NOREPLY: ${{ secrets.MAILGUN_NOREPLY }}
+
             SEED_EMAILADDRESS: ${{secrets.SEED_EMAILADDRESS }}
             SEED_PASSWORD: ${{ secrets.SEED_PASSWORD }}
+
             SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
             GA_MEASUREMENTID: ${{ secrets.GA_MEASUREMENTID }}
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+            CLIENT_URL: ${{ secrets.CLIENT_URL }}
         steps:
             - uses: actions/checkout@v2
 
