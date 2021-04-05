@@ -6,8 +6,10 @@ import { config } from './config';
 const url = `https://api.mailgun.net/v3/${config.MAILGUN_DOMAIN}/messages`;
 const authorization = `Basic ${base64Encode(`api:${config.MAILGUN_APIKEY}`)}`;
 
-export const sendEmail = message =>
-    fetch({
+export const sendEmail = message => {
+    const context = { ...message.context, clientUrl: config.CLIENT_URL };
+
+    return fetch({
         url,
         method: 'POST',
         headers: {
@@ -16,7 +18,8 @@ export const sendEmail = message =>
         body: {
             from: config.MAILGUN_NOREPLY,
             to: message.to,
-            subject: format(message.subject, message.context),
-            html: format(message.html, message.context)
+            subject: format(message.subject, context),
+            html: format(message.html, context)
         }
     });
+};
