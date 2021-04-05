@@ -8,6 +8,8 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
     endpoint: config.DYNAMODB_ENDPOINT
 });
 
+const tableName = config.DYNAMODB_USERS;
+
 const indexes = {
     EMAIL_ADDRESS: 'emailAddress-index'
 };
@@ -39,7 +41,7 @@ const sortOptions = {
 export class UserRepository extends DataSource {
     async getById(id) {
         const params = {
-            TableName: config.DYNAMODB_USERS,
+            TableName: tableName,
             Key: { id }
         };
 
@@ -50,7 +52,7 @@ export class UserRepository extends DataSource {
 
     async getByEmailAddress(emailAddress) {
         const params = {
-            TableName: config.DYNAMODB_USERS,
+            TableName: tableName,
             IndexName: indexes.EMAIL_ADDRESS,
             ExpressionAttributeNames: { '#emailAddress': 'emailAddress' },
             ExpressionAttributeValues: { ':emailAddress': emailAddress },
@@ -69,7 +71,7 @@ export class UserRepository extends DataSource {
         const item = this._generate(user);
 
         const params = {
-            TableName: config.DYNAMODB_USERS,
+            TableName: tableName,
             Item: item
         };
 
@@ -80,7 +82,7 @@ export class UserRepository extends DataSource {
 
     async remove(user) {
         const params = {
-            TableName: config.DYNAMODB_USERS,
+            TableName: tableName,
             Key: { id: user.id }
         };
 
@@ -108,7 +110,7 @@ export class UserRepository extends DataSource {
 
     _getAll = async () => {
         const params = {
-            TableName: config.DYNAMODB_USERS
+            TableName: tableName
         };
 
         let items = [];
@@ -128,8 +130,10 @@ export class UserRepository extends DataSource {
             return items;
         }
 
+        const lowerFilter = filter.toLowerCase();
+
         return items.filter(item =>
-            valueFunc(item).toLowerCase().includes(filter.toLowerCase())
+            valueFunc(item).toLowerCase().includes(lowerFilter)
         );
     };
 

@@ -7,10 +7,12 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
     endpoint: config.DYNAMODB_ENDPOINT
 });
 
+const tableName = config.DYNAMODB_TEMPLATES;
+
 export class TemplateRepository extends DataSource {
     async getByKey(key) {
         const params = {
-            TableName: config.DYNAMODB_TEMPLATES,
+            TableName: tableName,
             Key: { key }
         };
 
@@ -19,11 +21,9 @@ export class TemplateRepository extends DataSource {
         return this._map(result.Item);
     }
 
-    create = this.update;
-
     async update(template) {
         const params = {
-            TableName: config.DYNAMODB_TEMPLATES,
+            TableName: tableName,
             Item: template
         };
 
