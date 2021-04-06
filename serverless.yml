@@ -18,7 +18,6 @@ provider:
         STAGE: ${self:custom.stage}
         REGION: ${self:custom.region}
         RELEASE: ${env:RELEASE, ''}
-        CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url}
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
         JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
         JWT_ISSUER: ${env:JWT_ISSUER, ''}
@@ -29,6 +28,7 @@ provider:
         SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
         SENTRY_DSN: ${env:SENTRY_DSN, ''}
+        CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url}
     iam:
         role:
             statements:
