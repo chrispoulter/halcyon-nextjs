@@ -10,22 +10,26 @@ jobs:
         runs-on: ubuntu-latest
         env:
             EXTEND_ESLINT: true
-            CLIENT_URL: ${{ secrets.CLIENT_URL }}
-            FAUNADB_SECRET: ${{ secrets.FAUNADB_SECRET }}
+
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
             JWT_SECURITYKEY: ${{ secrets.JWT_SECURITYKEY }}
             JWT_AUDIENCE: ${{ secrets.JWT_AUDIENCE }}
             JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
             JWT_EXPIRESIN: ${{ secrets.JWT_EXPIRESIN }}
+
             MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
             MAILGUN_APIKEY: ${{ secrets.MAILGUN_APIKEY }}
             MAILGUN_NOREPLY: ${{ secrets.MAILGUN_NOREPLY }}
+
             SEED_EMAILADDRESS: ${{secrets.SEED_EMAILADDRESS }}
             SEED_PASSWORD: ${{ secrets.SEED_PASSWORD }}
+
             SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
             GA_MEASUREMENTID: ${{ secrets.GA_MEASUREMENTID }}
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+            CLIENT_URL: ${{ secrets.CLIENT_URL }}
         steps:
             - uses: actions/checkout@v2
 
@@ -33,17 +37,16 @@ jobs:
               with:
                   node-version: 12.x
 
-            - run: echo "ENVIRONMENT=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+            - run: echo "STAGE=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
             - run: echo "RELEASE=$(echo ${GITHUB_SHA})" >> $GITHUB_ENV
 
             - run: yarn
             - run: yarn lint
 
-            - run: yarn db:generate
-            - run: yarn db:seed
+            - run: yarn serverless:build --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
+            - run: yarn serverless:deploy --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
 
-            - run: yarn serverless:build --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
-            - run: yarn serverless:deploy --stage ${{ env.ENVIRONMENT }} --region ${{ secrets.AWS_REGION }}
+            - run: yarn db:seed
 
             - uses: getsentry/action-release@v1
               env:
@@ -51,6 +54,6 @@ jobs:
                   SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
                   SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
               with:
-                  environment: ${{ env.ENVIRONMENT }}
+                  environment: ${{ env.STAGE }}
                   version: ${{ env.RELEASE }}
                   sourcemaps: ./build

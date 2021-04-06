@@ -14,11 +14,10 @@ provider:
         shouldStartNameWithService: true
     lambdaHashingVersion: 20201221
     environment:
-        ENVIRONMENT: ${env:ENVIRONMENT, ''}
+        ACCOUNTID: ${self:custom.accountId}
+        STAGE: ${self:custom.stage}
+        REGION: ${self:custom.region}
         RELEASE: ${env:RELEASE, ''}
-        CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url}
-        SNS_EVENTSARN: ${self:custom.sns.events.arn}
-        FAUNADB_SECRET: ${env:FAUNADB_SECRET, ''}
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
         JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
         JWT_ISSUER: ${env:JWT_ISSUER, ''}
@@ -29,6 +28,7 @@ provider:
         SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
         SENTRY_DSN: ${env:SENTRY_DSN, ''}
+        CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url}
     iam:
         role:
             statements:
@@ -37,6 +37,12 @@ provider:
                       - sns:*
                   Resource:
                       - ${self:custom.sns.events.arn}
+                - Effect: Allow
+                  Action:
+                      - dynamodb:*
+                  Resource:
+                      - ${self:custom.dynamodb.users.arn}*
+                      - ${self:custom.dynamodb.templates.arn}*
 
 package:
     individually: true
@@ -44,6 +50,7 @@ package:
 plugins:
     - serverless-pseudo-parameters
     - serverless-webpack
+    - serverless-dynamodb-local
     - serverless-offline
     - serverless-offline-sns
     - serverless-build-client
@@ -74,6 +81,7 @@ custom:
     stage: ${opt:stage, self:provider.stage}
     region: ${opt:region, self:provider.region}
     prefix: ${self:service}-${self:custom.stage}
+    endpoint: ${cf:${self:custom.prefix}.ServiceEndpoint, ''}
 
     cors:
         origin: '*'
@@ -90,8 +98,18 @@ custom:
             topicName: ${self:custom.prefix}-events
             arn: arn:aws:sns:${self:custom.region}:${self:custom.accountId}:${self:custom.sns.events.topicName}
 
-    endpoints:
-        graphQL: ${cf:${self:custom.prefix}.ServiceEndpoint, ''}
+    dynamodb:
+        users:
+            tableName: ${self:custom.prefix}-users
+            arn: arn:aws:dynamodb:${self:custom.region}:${self:custom.accountId}:table/${self:custom.dynamodb.users.tableName}
+        templates:
+            tableName: ${self:custom.prefix}-templates
+            arn: arn:aws:dynamodb:${self:custom.region}:${self:custom.accountId}:table/${self:custom.dynamodb.templates.tableName}
+        stages:
+            - local
+        start:
+            migrate: true
+            dbPath: .dynamodb/
 
     serverless-offline:
         httpPort: 3001
@@ -103,11 +121,11 @@ custom:
 
     buildClient:
         environment:
-            REACT_APP_ENVIRONMENT: ${env:ENVIRONMENT, ''}
+            REACT_APP_STAGE: ${env:STAGE, ''}
             REACT_APP_RELEASE: ${env:RELEASE, ''}
             REACT_APP_SENTRY_DSN: ${env:SENTRY_DSN, ''}
             REACT_APP_GA_MEASUREMENTID: ${env:GA_MEASUREMENTID, ''}
-            REACT_APP_GRAPHQL_URL: ${env:GRAPHQL_URL, self:custom.endpoints.graphQL}
+            REACT_APP_GRAPHQL_URL: ${env:GRAPHQL_URL, self:custom.endpoint}
 
     s3Sync:
         - bucketNameKey: ClientBucketOutputKey
@@ -121,6 +139,39 @@ resources:
             Type: AWS::SNS::Topic
             Properties:
                 TopicName: ${self:custom.sns.events.topicName}
+
+        UsersTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: ${self:custom.dynamodb.users.tableName}
+                AttributeDefinitions:
+                    - AttributeName: id
+                      AttributeType: S
+                    - AttributeName: emailAddress
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: id
+                      KeyType: HASH
+                GlobalSecondaryIndexes:
+                    - IndexName: emailAddress-index
+                      KeySchema:
+                          - AttributeName: emailAddress
+                            KeyType: HASH
+                      Projection:
+                          ProjectionType: 'ALL'
+                BillingMode: PAY_PER_REQUEST
+
+        TemplatesTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: ${self:custom.dynamodb.templates.tableName}
+                AttributeDefinitions:
+                    - AttributeName: key
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: key
+                      KeyType: HASH
+                BillingMode: PAY_PER_REQUEST
 
         ClientBucket:
             Type: AWS::S3::Bucket

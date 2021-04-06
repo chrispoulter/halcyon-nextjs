@@ -2,13 +2,16 @@ import { SNS } from 'aws-sdk';
 import { config } from './config';
 
 const sns = new SNS({
-    endpoint: process.env.SNS_ENDPOINT
+    region: config.REGION,
+    endpoint: config.STAGE === 'local' ? 'http://127.0.0.1:4002' : undefined
 });
+
+const topicArn = `arn:aws:sns:${config.REGION}:${config.ACCOUNTID}:halcyon-${config.STAGE}-events`;
 
 export const publish = async message =>
     sns
         .publish({
-            Message: JSON.stringify(message),
-            TopicArn: config.SNS_EVENTSARN
+            TopicArn: topicArn,
+            Message: JSON.stringify(message)
         })
         .promise();

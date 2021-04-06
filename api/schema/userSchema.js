@@ -25,15 +25,15 @@ export const userSchema = gql`
 
     type UserSearchResult {
         items: [User!]
-        before: String
-        after: String
+        hasNextPage: Boolean
+        hasPreviousPage: Boolean
     }
 
     input SearchUserInput {
+        page: Int
         size: Int
         search: String
         sort: UserSortExpression
-        cursor: String
     }
 
     input CreateUserInput {

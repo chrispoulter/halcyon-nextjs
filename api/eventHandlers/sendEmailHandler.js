@@ -1,9 +1,8 @@
 import { dataSources } from '../dataSources';
 import { sendEmail } from '../utils/email';
-import { config } from '../utils/config';
 
 export const sendEmailHandler = async data => {
-    const { templates } = dataSources(config.ENVIRONMENT);
+    const { templates } = dataSources();
 
     const template = await templates.getByKey(data.template);
     if (!template) {
@@ -11,9 +10,9 @@ export const sendEmailHandler = async data => {
     }
 
     await sendEmail({
-        to: data.to,
         subject: template.subject,
         html: template.html,
+        to: data.to,
         context: data.context
     });
 };

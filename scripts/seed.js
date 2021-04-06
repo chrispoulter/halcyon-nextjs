@@ -5,11 +5,7 @@ import { config } from '../api/utils/config';
 
 import resetPassword from './templates/resetPassword.html';
 
-const [environment] = process.argv.slice(2);
-
-const database = environment || config.ENVIRONMENT;
-
-const { users, templates } = dataSources(database);
+const { users, templates } = dataSources();
 
 const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
 
@@ -20,7 +16,6 @@ const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
         firstName: 'System',
         lastName: 'Administrator',
         dateOfBirth: new Date(1970, 0, 1).toISOString(),
-        isLockedOut: false,
         roles: ALL_ROLES
     });
 

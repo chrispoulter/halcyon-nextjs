@@ -1,57 +1,193 @@
-import { FaunaRepository } from './faunaRepository';
+import AWS from 'aws-sdk';
+import { DataSource } from 'apollo-datasource';
+import { v4 as uuidv4 } from 'uuid';
+import { config } from '../utils/config';
 
-const collection = 'users';
+const dynamoDb = new AWS.DynamoDB.DocumentClient({
+    region: config.REGION,
+    endpoint: config.STAGE === 'local' ? 'http://localhost:8000' : undefined
+});
+
+const tableName = `halcyon-${config.STAGE}-users`;
 
 const indexes = {
-    BY_EMAIL_ADDRESS: 'users_by_email_address',
-    EMAIL_ADDRESS_DESC: {
-        name: 'users_email_address_desc',
-        term: 'emailAddress',
-        values: ['emailAddress', 'firstName', 'lastName', 'ref']
-    },
-    EMAIL_ADDRESS_ASC: {
-        name: 'users_email_address_asc',
-        term: 'emailAddress',
-        values: ['emailAddress', 'firstName', 'lastName', 'ref']
+    EMAIL_ADDRESS: 'emailAddress-index'
+};
+
+const searchFunc = user =>
+    `${user.firstName} ${user.lastName} ${user.emailAddress}`;
+
+const sortOptions = {
+    NAME_ASC: {
+        name: 'NAME_ASC',
+        valueFunc: user => `${user.firstName} ${user.lastName}`
     },
     NAME_DESC: {
-        name: 'users_name_desc',
-        term: 'emailAddress',
-        values: ['firstName', 'lastName', 'emailAddress', 'ref']
+        name: 'NAME_DESC',
+        valueFunc: user => `${user.firstName} ${user.lastName}`,
+        desc: true
     },
-    NAME_ASC: {
-        name: 'users_name_asc',
-        term: 'emailAddress',
-        values: ['firstName', 'lastName', 'emailAddress', 'ref']
+    EMAIL_ADDRESS_ASC: {
+        name: 'EMAIL_ADDRESS_ASC',
+        valueFunc: user => user.emailAddress
+    },
+    EMAIL_ADDRESS_DESC: {
+        name: 'EMAIL_ADDRESS_DESC',
+        valueFunc: user => user.emailAddress,
+        desc: true
     }
 };
 
-export class UserRepository extends FaunaRepository {
-    getById = id => this._getById(collection, id);
+export class UserRepository extends DataSource {
+    async getById(id) {
+        const params = {
+            TableName: tableName,
+            Key: { id }
+        };
 
-    getByEmailAddress = emailAddress =>
-        this._getByIndex(indexes.BY_EMAIL_ADDRESS, emailAddress);
+        const result = await dynamoDb.get(params).promise();
 
-    create = user => this._create(collection, user);
+        return this._map(result.Item);
+    }
 
-    update = user => this._update(collection, user);
+    async getByEmailAddress(emailAddress) {
+        const params = {
+            TableName: tableName,
+            IndexName: indexes.EMAIL_ADDRESS,
+            ExpressionAttributeNames: { '#emailAddress': 'emailAddress' },
+            ExpressionAttributeValues: { ':emailAddress': emailAddress },
+            KeyConditionExpression: '#emailAddress = :emailAddress',
+            Limit: 1
+        };
 
-    upsert = async user => {
-        const existing = await this._getByIndex(
-            indexes.BY_EMAIL_ADDRESS,
-            user.emailAddress
+        const result = await dynamoDb.query(params).promise();
+
+        return this._map(result.Items[0]);
+    }
+
+    create = this.update;
+
+    async update(user) {
+        const item = this._generate(user);
+
+        const params = {
+            TableName: tableName,
+            Item: item
+        };
+
+        await dynamoDb.put(params).promise();
+
+        return this._map(item);
+    }
+
+    async remove(user) {
+        const params = {
+            TableName: tableName,
+            Key: { id: user.id }
+        };
+
+        await dynamoDb.delete(params).promise();
+
+        return this._map(user);
+    }
+
+    async upsert(user) {
+        const existing = await this.getByEmailAddress(user.emailAddress);
+        return this.update({ ...existing, ...user });
+    }
+
+    async search(request) {
+        const users = this._search(
+            await this._getAll(),
+            searchFunc,
+            request.search
         );
 
-        return existing
-            ? this._update(collection, { ...existing, ...user })
-            : this._create(collection, user);
+        this._sort(users, sortOptions[request.sort] || sortOptions.NAME_ASC);
+
+        return this._paginate(users, request.page || 1, request.size || 10);
+    }
+
+    _getAll = async () => {
+        const params = {
+            TableName: tableName
+        };
+
+        let items = [];
+        let result;
+
+        do {
+            result = await dynamoDb.scan(params).promise();
+            result.Items.forEach(item => items.push(item));
+            params.ExclusiveStartKey = result.LastEvaluatedKey;
+        } while (result.LastEvaluatedKey !== undefined);
+
+        return items;
     };
 
-    remove = user => this._remove(collection, user);
+    _search = (items, valueFunc, filter) => {
+        if (!filter) {
+            return items;
+        }
 
-    search = request =>
-        this._search({
-            ...request,
-            index: indexes[request.sort] || indexes.USERS_NAME_ASC
-        });
+        const lowerFilter = filter.toLowerCase();
+
+        return items.filter(item =>
+            valueFunc(item).toLowerCase().includes(lowerFilter)
+        );
+    };
+
+    _sort = (items, { valueFunc, desc }) => {
+        items.sort((a, b) =>
+            valueFunc(a).toLowerCase() > valueFunc(b).toLowerCase()
+                ? desc
+                    ? -1
+                    : 1
+                : valueFunc(b).toLowerCase() > valueFunc(a).toLowerCase()
+                ? desc
+                    ? 1
+                    : -1
+                : 0
+        );
+    };
+
+    _paginate = (items, page, size) => {
+        const pageCount = (items.length + size - 1) / size;
+
+        if (page > 1) {
+            items = items.filter((_, i) => i >= (page - 1) * size);
+        }
+
+        return {
+            items: items.filter((_, i) => i < size).map(this._map),
+            hasNextPage: page < pageCount,
+            hasPreviousPage: page > 1
+        };
+    };
+
+    _generate = item => ({
+        ...item,
+        id: item.id || uuidv4(),
+        isLockedOut: item.isLockedOut,
+        password: item.password,
+        passwordResetToken: item.passwordResetToken
+    });
+
+    _map = item => {
+        if (!item) {
+            return undefined;
+        }
+
+        return {
+            id: item.id,
+            emailAddress: item.emailAddress,
+            password: item.password,
+            firstName: item.firstName,
+            lastName: item.lastName,
+            dateOfBirth: item.dateOfBirth,
+            isLockedOut: item.isLockedOut,
+            passwordResetToken: item.passwordResetToken,
+            roles: item.roles
+        };
+    };
 }

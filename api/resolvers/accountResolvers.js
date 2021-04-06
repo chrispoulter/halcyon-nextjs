@@ -2,7 +2,6 @@ import { ApolloError } from 'apollo-server';
 import { v4 as uuidv4 } from 'uuid';
 import { publish } from '../utils/events';
 import { generateHash } from '../utils/hash';
-import { config } from '../utils/config';
 
 export const accountResolvers = {
     Mutation: {
@@ -46,8 +45,7 @@ export const accountResolvers = {
                         to: user.emailAddress,
                         template: 'RESET_PASSWORD',
                         context: {
-                            token: user.passwordResetToken,
-                            clientUrl: config.CLIENT_URL
+                            token: user.passwordResetToken
                         }
                     },
                     transactionId
