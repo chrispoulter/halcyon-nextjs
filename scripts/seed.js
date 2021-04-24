@@ -8,9 +8,9 @@ const { dynamo } = dataSources();
 
     let result = await dynamo.create({
         pk: 'TYPE#TEMPLATE',
-        sk: id,
+        sk: `TEMPLATE#${id}`,
         gs1pk: 'TYPE#TEMPLATE#KEY',
-        gs1sk: 'test-key',
+        gs1sk: `TEMPLATE#test-key`,
         subject: 'testing 1234....',
         html: 'testing 56789....'
     });
@@ -19,9 +19,9 @@ const { dynamo } = dataSources();
 
     result = await dynamo.update({
         pk: 'TYPE#TEMPLATE',
-        sk: id,
+        sk: `TEMPLATE#${id}`,
         gs1pk: 'TYPE#TEMPLATE#KEY',
-        gs1sk: 'test-key',
+        gs1sk: `TEMPLATE#test-key`,
         subject: 'testing 4321....',
         html: 'testing 98765....'
     });
@@ -30,9 +30,9 @@ const { dynamo } = dataSources();
 
     result = await dynamo.upsert({
         pk: 'TYPE#TEMPLATE',
-        sk: id,
+        sk: `TEMPLATE#${id}`,
         gs1pk: 'TYPE#TEMPLATE#KEY',
-        gs1sk: 'test-key',
+        gs1sk: `TEMPLATE#test-key`,
         subject: 'testing 4321....',
         html: 'testing 98765....'
     });
@@ -43,15 +43,15 @@ const { dynamo } = dataSources();
 
     // console.log('remove', result);
 
-    result = await dynamo.getByPk('TYPE#TEMPLATE', id);
+    result = await dynamo.getByPk('TYPE#TEMPLATE', `TEMPLATE#${id}`);
 
     console.log('getByPk', result);
 
-    result = await dynamo.getByGs1pk('TYPE#TEMPLATE#KEY', 'test-key');
+    result = await dynamo.getByGs1pk('TYPE#TEMPLATE#KEY', `TEMPLATE#test-key`);
 
     console.log('getByGs1pk', result);
 
-    result = await dynamo.getAll('TYPE#TEMPLATE');
+    result = await dynamo.getAll('TYPE#TEMPLATE', 'TEMPLATE#');
 
     console.log('getAll', result);
 

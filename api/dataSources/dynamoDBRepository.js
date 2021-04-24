@@ -66,21 +66,23 @@ export class DynamoDBRepository extends DataSource {
         await dynamoDb.delete(params).promise();
     }
 
-    async getAll(pk) {
+    async getAll(pk, sk) {
         const params = {
             TableName: tableName,
             ExpressionAttributeNames: {
-                '#pk': 'pk'
+                '#pk': 'pk',
+                '#sk': 'sk'
             },
-            ExpressionAttributeValues: { ':pk': pk },
-            FilterExpression: '#pk = :pk'
+            ExpressionAttributeValues: { ':pk': pk, ':sk': sk },
+            KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :sk)',
+            Limit: 1
         };
 
         let items = [];
         let result;
 
         do {
-            result = await dynamoDb.scan(params).promise();
+            result = await dynamoDb.query(params).promise();
             result.Items.forEach(item => items.push(item));
             params.ExclusiveStartKey = result.LastEvaluatedKey;
         } while (result.LastEvaluatedKey !== undefined);
