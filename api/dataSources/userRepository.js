@@ -8,11 +8,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
     endpoint: config.STAGE === 'local' ? 'http://localhost:8000' : undefined
 });
 
-const tableName = `halcyon-${config.STAGE}-users`;
-
-const indexes = {
-    EMAIL_ADDRESS: 'emailAddress-index'
-};
+const tableName = `halcyon-${config.STAGE}-entities`;
 
 const searchFunc = user =>
     `${user.firstName} ${user.lastName} ${user.emailAddress}`;
@@ -42,7 +38,7 @@ export class UserRepository extends DataSource {
     async getById(id) {
         const params = {
             TableName: tableName,
-            Key: { id }
+            Key: { pk: 'TYPE#USER', sk: `USER#${id}` }
         };
 
         const result = await dynamoDb.get(params).promise();
@@ -53,10 +49,16 @@ export class UserRepository extends DataSource {
     async getByEmailAddress(emailAddress) {
         const params = {
             TableName: tableName,
-            IndexName: indexes.EMAIL_ADDRESS,
-            ExpressionAttributeNames: { '#emailAddress': 'emailAddress' },
-            ExpressionAttributeValues: { ':emailAddress': emailAddress },
-            KeyConditionExpression: '#emailAddress = :emailAddress',
+            IndexName: 'gs1-index',
+            ExpressionAttributeNames: {
+                '#gs1pk': 'gs1pk',
+                '#gs1sk': 'gs1sk'
+            },
+            ExpressionAttributeValues: {
+                ':gs1pk': 'TYPE#USER#EMAIL_ADDRESS',
+                ':gs1sk': `USER#${emailAddress}`
+            },
+            KeyConditionExpression: '#gs1pk = :gs1pk AND #gs1sk = :gs1sk',
             Limit: 1
         };
 
@@ -81,14 +83,16 @@ export class UserRepository extends DataSource {
     }
 
     async remove(user) {
+        const item = this._generate(user);
+
         const params = {
             TableName: tableName,
-            Key: { id: user.id }
+            Key: { pk: item.pk, sk: item.sk }
         };
 
         await dynamoDb.delete(params).promise();
 
-        return this._map(user);
+        return this._map(item);
     }
 
     async upsert(user) {
@@ -110,14 +114,21 @@ export class UserRepository extends DataSource {
 
     _getAll = async () => {
         const params = {
-            TableName: tableName
+            TableName: tableName,
+            ExpressionAttributeNames: {
+                '#pk': 'pk',
+                '#sk': 'sk'
+            },
+            ExpressionAttributeValues: { ':pk': 'TYPE#USER', ':sk': 'USER#' },
+            KeyConditionExpression: '#pk = :pk and begins_with(#sk, :sk)',
+            Limit: 1
         };
 
         let items = [];
         let result;
 
         do {
-            result = await dynamoDb.scan(params).promise();
+            result = await dynamoDb.query(params).promise();
             result.Items.forEach(item => items.push(item));
             params.ExclusiveStartKey = result.LastEvaluatedKey;
         } while (result.LastEvaluatedKey !== undefined);
@@ -165,29 +176,26 @@ export class UserRepository extends DataSource {
         };
     };
 
-    _generate = item => ({
-        ...item,
-        id: item.id || uuidv4(),
-        isLockedOut: item.isLockedOut,
-        password: item.password,
-        passwordResetToken: item.passwordResetToken
-    });
+    _generate = item => {
+        const id = item.id || uuidv4();
+
+        return {
+            ...item,
+            id,
+            pk: 'TYPE#USER',
+            sk: `USER#${id}`,
+            gs1pk: 'TYPE#USER#EMAIL_ADDRESS',
+            gs1sk: `USER#${item.emailAddress}`
+        };
+    };
 
     _map = item => {
         if (!item) {
             return undefined;
         }
 
-        return {
-            id: item.id,
-            emailAddress: item.emailAddress,
-            password: item.password,
-            firstName: item.firstName,
-            lastName: item.lastName,
-            dateOfBirth: item.dateOfBirth,
-            isLockedOut: item.isLockedOut,
-            passwordResetToken: item.passwordResetToken,
-            roles: item.roles
-        };
+        const { pk, sk, gs1pk, gs1sk, ...rest } = item;
+
+        return rest;
     };
 }

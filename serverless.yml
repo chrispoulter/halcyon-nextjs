@@ -42,8 +42,6 @@ provider:
                       - dynamodb:*
                   Resource:
                       - ${self:custom.dynamodb.entities.arn}*
-                      - ${self:custom.dynamodb.users.arn}*
-                      - ${self:custom.dynamodb.templates.arn}*
 
 package:
     individually: true
@@ -100,12 +98,6 @@ custom:
             arn: arn:aws:sns:${self:custom.region}:${self:custom.accountId}:${self:custom.sns.events.topicName}
 
     dynamodb:
-        users:
-            tableName: ${self:custom.prefix}-users
-            arn: arn:aws:dynamodb:${self:custom.region}:${self:custom.accountId}:table/${self:custom.dynamodb.users.tableName}
-        templates:
-            tableName: ${self:custom.prefix}-templates
-            arn: arn:aws:dynamodb:${self:custom.region}:${self:custom.accountId}:table/${self:custom.dynamodb.templates.tableName}
         entities:
             tableName: ${self:custom.prefix}-entities
             arn: arn:aws:dynamodb:${self:custom.region}:${self:custom.accountId}:table/${self:custom.dynamodb.entities.tableName}
@@ -143,39 +135,6 @@ resources:
             Type: AWS::SNS::Topic
             Properties:
                 TopicName: ${self:custom.sns.events.topicName}
-
-        UsersTable:
-            Type: AWS::DynamoDB::Table
-            Properties:
-                TableName: ${self:custom.dynamodb.users.tableName}
-                AttributeDefinitions:
-                    - AttributeName: id
-                      AttributeType: S
-                    - AttributeName: emailAddress
-                      AttributeType: S
-                KeySchema:
-                    - AttributeName: id
-                      KeyType: HASH
-                GlobalSecondaryIndexes:
-                    - IndexName: emailAddress-index
-                      KeySchema:
-                          - AttributeName: emailAddress
-                            KeyType: HASH
-                      Projection:
-                          ProjectionType: 'ALL'
-                BillingMode: PAY_PER_REQUEST
-
-        TemplatesTable:
-            Type: AWS::DynamoDB::Table
-            Properties:
-                TableName: ${self:custom.dynamodb.templates.tableName}
-                AttributeDefinitions:
-                    - AttributeName: key
-                      AttributeType: S
-                KeySchema:
-                    - AttributeName: key
-                      KeyType: HASH
-                BillingMode: PAY_PER_REQUEST
 
         EntitiesTable:
             Type: AWS::DynamoDB::Table
