@@ -41,8 +41,7 @@ provider:
                   Action:
                       - dynamodb:*
                   Resource:
-                      - ${self:custom.dynamodb.users.arn}*
-                      - ${self:custom.dynamodb.templates.arn}*
+                      - ${self:custom.dynamodb.entities.arn}*
 
 package:
     individually: true
@@ -99,12 +98,9 @@ custom:
             arn: arn:aws:sns:${self:custom.region}:${self:custom.accountId}:${self:custom.sns.events.topicName}
 
     dynamodb:
-        users:
-            tableName: ${self:custom.prefix}-users
-            arn: arn:aws:dynamodb:${self:custom.region}:${self:custom.accountId}:table/${self:custom.dynamodb.users.tableName}
-        templates:
-            tableName: ${self:custom.prefix}-templates
-            arn: arn:aws:dynamodb:${self:custom.region}:${self:custom.accountId}:table/${self:custom.dynamodb.templates.tableName}
+        entities:
+            tableName: ${self:custom.prefix}-entities
+            arn: arn:aws:dynamodb:${self:custom.region}:${self:custom.accountId}:table/${self:custom.dynamodb.entities.tableName}
         stages:
             - local
         start:
@@ -140,37 +136,33 @@ resources:
             Properties:
                 TopicName: ${self:custom.sns.events.topicName}
 
-        UsersTable:
+        EntitiesTable:
             Type: AWS::DynamoDB::Table
             Properties:
-                TableName: ${self:custom.dynamodb.users.tableName}
+                TableName: ${self:custom.dynamodb.entities.tableName}
                 AttributeDefinitions:
-                    - AttributeName: id
+                    - AttributeName: pk
                       AttributeType: S
-                    - AttributeName: emailAddress
+                    - AttributeName: sk
+                      AttributeType: S
+                    - AttributeName: gs1pk
+                      AttributeType: S
+                    - AttributeName: gs1sk
                       AttributeType: S
                 KeySchema:
-                    - AttributeName: id
+                    - AttributeName: pk
                       KeyType: HASH
+                    - AttributeName: sk
+                      KeyType: RANGE
                 GlobalSecondaryIndexes:
-                    - IndexName: emailAddress-index
+                    - IndexName: gs1-index
                       KeySchema:
-                          - AttributeName: emailAddress
+                          - AttributeName: gs1pk
                             KeyType: HASH
+                          - AttributeName: gs1sk
+                            KeyType: RANGE
                       Projection:
                           ProjectionType: 'ALL'
-                BillingMode: PAY_PER_REQUEST
-
-        TemplatesTable:
-            Type: AWS::DynamoDB::Table
-            Properties:
-                TableName: ${self:custom.dynamodb.templates.tableName}
-                AttributeDefinitions:
-                    - AttributeName: key
-                      AttributeType: S
-                KeySchema:
-                    - AttributeName: key
-                      KeyType: HASH
                 BillingMode: PAY_PER_REQUEST
 
         ClientBucket:
