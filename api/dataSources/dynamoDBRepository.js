@@ -152,7 +152,7 @@ export class DynamoDBRepository extends DataSource {
     };
 
     _generate = item => {
-        const id = item.id ?? uuidv4();
+        const id = item.id || uuidv4();
 
         return {
             ...item,
