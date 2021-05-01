@@ -105,7 +105,7 @@ export class DynamoDBRepository extends DataSource {
         );
 
         const page = request.page || 1;
-        const size = request.size || 10;
+        const size = Math.min(request.size || 10, 50);
         const pageCount = (items.length + size - 1) / size;
 
         const hasNextPage = page < pageCount;
