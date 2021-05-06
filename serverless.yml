@@ -52,6 +52,7 @@ plugins:
     - serverless-dynamodb-local
     - serverless-offline
     - serverless-offline-sns
+    - serverless-api-gateway-throttling
     - serverless-build-client
     - serverless-s3-sync
 
@@ -86,6 +87,10 @@ custom:
         origin: '*'
         headers: '*'
         allowCredentials: true
+
+    apiGatewayThrottling:
+        maxRequestsPerSecond: 1000
+        maxConcurrentRequests: 500
 
     s3:
         client:
@@ -164,28 +169,6 @@ resources:
                       Projection:
                           ProjectionType: 'ALL'
                 BillingMode: PAY_PER_REQUEST
-
-        GatewayResponseDefault4XX:
-            Type: 'AWS::ApiGateway::GatewayResponse'
-            Properties:
-                ResponseParameters:
-                    gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-                    gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-                    gatewayresponse.header.Access-Control-Allow-Methods: "'*'"
-                ResponseType: DEFAULT_4XX
-                RestApiId:
-                    Ref: 'ApiGatewayRestApi'
-
-        GatewayResponseDefault5XX:
-            Type: 'AWS::ApiGateway::GatewayResponse'
-            Properties:
-                ResponseParameters:
-                    gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-                    gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-                    gatewayresponse.header.Access-Control-Allow-Methods: "'*'"
-                ResponseType: DEFAULT_5XX
-                RestApiId:
-                    Ref: 'ApiGatewayRestApi'
 
         ClientBucket:
             Type: AWS::S3::Bucket
