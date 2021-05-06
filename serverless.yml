@@ -52,6 +52,7 @@ plugins:
     - serverless-dynamodb-local
     - serverless-offline
     - serverless-offline-sns
+    - serverless-api-gateway-throttling
     - serverless-build-client
     - serverless-s3-sync
 
@@ -86,6 +87,10 @@ custom:
         origin: '*'
         headers: '*'
         allowCredentials: true
+
+    apiGatewayThrottling:
+        maxRequestsPerSecond: 10
+        maxConcurrentRequests: 5
 
     s3:
         client:
