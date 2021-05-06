@@ -89,8 +89,8 @@ custom:
         allowCredentials: true
 
     apiGatewayThrottling:
-        maxRequestsPerSecond: 1000
-        maxConcurrentRequests: 500
+        maxRequestsPerSecond: 10
+        maxConcurrentRequests: 5
 
     s3:
         client:
