@@ -1,7 +1,7 @@
 import AWS from 'aws-sdk';
 import { DataSource } from 'apollo-datasource';
 import { v4 as uuidv4 } from 'uuid';
-import { config } from '../utils/config';
+import { config } from './config';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient({
     region: config.REGION,
@@ -10,7 +10,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient({
 
 const tableName = `halcyon-${config.STAGE}-entities`;
 
-export class DynamoDBRepository extends DataSource {
+export class DynamoDBDataSource extends DataSource {
     async getById(id) {
         const params = {
             TableName: tableName,
@@ -104,8 +104,8 @@ export class DynamoDBRepository extends DataSource {
                 : 0
         );
 
-        const page = request.page || 1;
-        const size = Math.min(request.size || 10, 50);
+        const page = Math.max(request.page || 1, 1);
+        const size = Math.min(request.size || 50, 50);
         const pageCount = (items.length + size - 1) / size;
 
         const hasNextPage = page < pageCount;

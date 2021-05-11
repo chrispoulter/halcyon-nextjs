@@ -1,7 +1,7 @@
-import { UserRepository } from './userRepository';
-import { TemplateRepository } from './templateRepository';
+import { UserDataSource } from './userDataSource';
+import { TemplateDataSource } from './templateDataSource';
 
 export const dataSources = () => ({
-    users: new UserRepository(),
-    templates: new TemplateRepository()
+    users: new UserDataSource(),
+    templates: new TemplateDataSource()
 });

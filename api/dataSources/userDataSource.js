@@ -1,6 +1,6 @@
-import { DynamoDBRepository } from './dynamoDBRepository';
+import { DynamoDBDataSource } from '../utils/data';
 
-export class UserRepository extends DynamoDBRepository {
+export class UserDataSource extends DynamoDBDataSource {
     entity = 'USER';
     gs1Key = 'emailAddress';
 
