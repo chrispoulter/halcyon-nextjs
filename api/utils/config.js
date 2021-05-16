@@ -25,6 +25,10 @@ export const config = {
 
     SENTRY_DSN: process.env.SENTRY_DSN,
 
+    DYNAMODB_ENDPOINT: stage === 'local' ? 'http://localhost:8000' : undefined,
+
+    SNS_ENDPOINT: stage === 'local' ? 'http://127.0.0.1:4002' : undefined,
+
     CLIENT_URL:
         stage === 'local' ? 'http://localhost:3000' : process.env.CLIENT_URL
 };

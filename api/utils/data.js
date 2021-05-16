@@ -5,7 +5,7 @@ import { config } from './config';
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient({
     region: config.REGION,
-    endpoint: config.STAGE === 'local' ? 'http://localhost:8000' : undefined
+    endpoint: config.DYNAMODB_ENDPOINT
 });
 
 const tableName = `halcyon-${config.STAGE}-entities`;
