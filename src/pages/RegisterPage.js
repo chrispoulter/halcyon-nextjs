@@ -33,6 +33,8 @@ export const RegisterPage = ({ history }) => {
 
             setToken(result.data.generateToken.accessToken);
 
+            trackEvent('login');
+
             history.push('/');
         } catch (error) {
             console.error(error);
