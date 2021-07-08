@@ -37,7 +37,6 @@ jobs:
                   node-version: 14.x
 
             - run: echo "STAGE=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
-            - run: echo "RELEASE=$(echo ${GITHUB_SHA})" >> $GITHUB_ENV
 
             - run: yarn
             - run: yarn lint
