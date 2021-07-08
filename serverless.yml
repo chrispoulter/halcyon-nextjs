@@ -27,7 +27,6 @@ provider:
         MAILGUN_NOREPLY: ${env:MAILGUN_NOREPLY, ''}
         SEED_EMAILADDRESS: ${env:SEED_EMAILADDRESS, ''}
         SEED_PASSWORD: ${env:SEED_PASSWORD, ''}
-        SENTRY_DSN: ${env:SENTRY_DSN, ''}
         CLIENT_URL: ${env:CLIENT_URL, self:custom.s3.client.url}
     iam:
         role:
@@ -124,7 +123,6 @@ custom:
         environment:
             REACT_APP_STAGE: ${env:STAGE, ''}
             REACT_APP_RELEASE: ${env:RELEASE, ''}
-            REACT_APP_SENTRY_DSN: ${env:SENTRY_DSN, ''}
             REACT_APP_GA_MEASUREMENTID: ${env:GA_MEASUREMENTID, ''}
             REACT_APP_GRAPHQL_URL: ${env:GRAPHQL_URL, self:custom.endpoint}
 

@@ -9,7 +9,7 @@ import { Container, Alert, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { GET_PROFILE, UPDATE_PROFILE } from '../graphql';
 import { Spinner, TextInput, DateInput, Button } from '../components';
-import { trackEvent } from '../utils/logger';
+import { trackEvent, captureError } from '../utils/logger';
 
 export const UpdateProfilePage = ({ history }) => {
     const { t } = useTranslation();
@@ -40,7 +40,7 @@ export const UpdateProfilePage = ({ history }) => {
 
             history.push('/my-account');
         } catch (error) {
-            console.error(error);
+            captureError(error);
         }
     };
 

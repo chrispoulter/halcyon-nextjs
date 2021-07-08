@@ -23,8 +23,6 @@ export const config = {
     SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS,
     SEED_PASSWORD: process.env.SEED_PASSWORD,
 
-    SENTRY_DSN: process.env.SENTRY_DSN,
-
     DYNAMODB_ENDPOINT: stage === 'local' ? 'http://localhost:8000' : undefined,
 
     SNS_ENDPOINT: stage === 'local' ? 'http://127.0.0.1:4002' : undefined,

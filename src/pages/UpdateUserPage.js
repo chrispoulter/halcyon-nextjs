@@ -23,7 +23,7 @@ import {
     Button
 } from '../components';
 import { ALL_ROLES } from '../utils/auth';
-import { trackEvent } from '../utils/logger';
+import { trackEvent, captureError } from '../utils/logger';
 
 export const UpdateUserPage = ({ history, match }) => {
     const { t } = useTranslation();
@@ -66,7 +66,7 @@ export const UpdateUserPage = ({ history, match }) => {
 
             history.push('/user');
         } catch (error) {
-            console.error(error);
+            captureError(error);
         }
     };
 
@@ -103,7 +103,7 @@ export const UpdateUserPage = ({ history, match }) => {
                 entityId: result.data.lockUser.user.id
             });
         } catch (error) {
-            console.error(error);
+            captureError(error);
         }
     };
 
@@ -140,7 +140,7 @@ export const UpdateUserPage = ({ history, match }) => {
                 entityId: result.data.unlockUser.user.id
             });
         } catch (error) {
-            console.error(error);
+            captureError(error);
         }
     };
 
@@ -179,7 +179,7 @@ export const UpdateUserPage = ({ history, match }) => {
 
             history.push('/user');
         } catch (error) {
-            console.error(error);
+            captureError(error);
         }
     };
 

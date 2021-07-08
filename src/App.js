@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { ToastContainer, Slide } from 'react-toastify';
-import { ErrorBoundary } from '@sentry/react';
 import {
     AuthProvider,
     ApolloProvider,
@@ -9,12 +8,12 @@ import {
     Footer,
     PrivateRoute,
     Spinner,
-    Meta
+    Meta,
+    ErrorBoundary
 } from './components';
 import {
     HomePage,
     NotFoundPage,
-    ErrorPage,
     LoginPage,
     RegisterPage,
     ForgotPasswordPage,
@@ -35,7 +34,7 @@ export const App = () => (
                 <ApolloProvider>
                     <Meta />
                     <Header />
-                    <ErrorBoundary fallback={<ErrorPage />}>
+                    <ErrorBoundary>
                         <Switch>
                             <Route path="/" component={HomePage} exact />
                             <Route
@@ -82,7 +81,6 @@ export const App = () => (
                                 exact
                             />
                             <PrivateRoute
-                                meta="pages.updateUser.meta"
                                 path="/user/:id"
                                 requiredRoles={USER_ADMINISTRATOR_ROLES}
                                 component={UpdateUserPage}

@@ -8,7 +8,7 @@ import { Container, FormGroup } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { FORGOT_PASSWORD } from '../graphql';
 import { TextInput, Button } from '../components';
-import { trackEvent } from '../utils/logger';
+import { trackEvent, captureError } from '../utils/logger';
 
 export const ForgotPasswordPage = ({ history }) => {
     const { t } = useTranslation();
@@ -25,7 +25,7 @@ export const ForgotPasswordPage = ({ history }) => {
 
             history.push('/login');
         } catch (error) {
-            console.error(error);
+            captureError(error);
         }
     };
 

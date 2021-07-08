@@ -3,7 +3,6 @@ import { ApolloProvider as BaseApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { v4 as uuidv4 } from 'uuid';
 import { AuthContext } from './AuthProvider';
 import { captureGraphQLError } from '../../utils/logger';
 import { config } from '../../utils/config';
@@ -19,8 +18,7 @@ export const ApolloProvider = ({ children }) => {
         request: operation =>
             operation.setContext({
                 headers: {
-                    authorization: accessToken ? `Bearer ${accessToken}` : '',
-                    'x-transaction-id': uuidv4()
+                    authorization: accessToken ? `Bearer ${accessToken}` : ''
                 }
             }),
         onError: error => {

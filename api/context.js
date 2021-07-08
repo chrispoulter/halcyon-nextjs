@@ -8,17 +8,14 @@ export const context = async ({ req, event }) => {
     const authorization =
         request.headers['authorization'] || request.headers['Authorization'];
 
-    const transactionId = request.headers['x-transaction-id'];
-
     const token = authorization?.replace(/bearer /giu, '');
     if (!token) {
-        return { transactionId };
+        return {};
     }
 
     const payload = await verifyToken(token);
     return {
-        payload,
-        transactionId
+        payload
     };
 };
 

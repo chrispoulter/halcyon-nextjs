@@ -15,7 +15,7 @@ import {
     Button
 } from '../components';
 import { ALL_ROLES } from '../utils/auth';
-import { trackEvent } from '../utils/logger';
+import { trackEvent, captureError } from '../utils/logger';
 
 export const CreateUserPage = ({ history }) => {
     const { t } = useTranslation();
@@ -34,7 +34,7 @@ export const CreateUserPage = ({ history }) => {
 
             history.push('/user');
         } catch (error) {
-            console.error(error);
+            captureError(error);
         }
     };
 

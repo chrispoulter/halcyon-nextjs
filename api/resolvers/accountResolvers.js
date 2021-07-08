@@ -32,7 +32,7 @@ export const accountResolvers = {
         forgotPassword: async (
             _,
             { emailAddress },
-            { dataSources: { users }, transactionId }
+            { dataSources: { users } }
         ) => {
             const user = await users.getByEmailAddress(emailAddress);
             if (user) {
@@ -47,8 +47,7 @@ export const accountResolvers = {
                         context: {
                             token: user.passwordResetToken
                         }
-                    },
-                    transactionId
+                    }
                 });
             }
 

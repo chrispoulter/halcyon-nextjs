@@ -26,7 +26,6 @@ jobs:
             SEED_EMAILADDRESS: ${{secrets.SEED_EMAILADDRESS }}
             SEED_PASSWORD: ${{ secrets.SEED_PASSWORD }}
 
-            SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
             GA_MEASUREMENTID: ${{ secrets.GA_MEASUREMENTID }}
 
             CLIENT_URL: ${{ secrets.CLIENT_URL }}
@@ -47,13 +46,3 @@ jobs:
             - run: yarn serverless:deploy --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
 
             - run: yarn db:seed
-
-            - uses: getsentry/action-release@v1
-              env:
-                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-                  SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-                  SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-              with:
-                  environment: ${{ env.STAGE }}
-                  version: ${{ env.RELEASE }}
-                  sourcemaps: ./build

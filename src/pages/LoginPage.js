@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { Container, FormGroup } from 'reactstrap';
 import { GENERATE_TOKEN } from '../graphql';
 import { TextInput, CheckboxInput, Button, AuthContext } from '../components';
-import { trackEvent } from '../utils/logger';
+import { trackEvent, captureError } from '../utils/logger';
 
 export const LoginPage = ({ history }) => {
     const { t } = useTranslation();
@@ -32,7 +32,7 @@ export const LoginPage = ({ history }) => {
 
             history.push('/');
         } catch (error) {
-            console.error(error);
+            captureError(error);
         }
     };
 

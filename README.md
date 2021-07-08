@@ -30,10 +30,7 @@ MAILGUN_NOREPLY=noreply@chrispoulter.com
 SEED_EMAILADDRESS=
 SEED_PASSWORD=
 
-SENTRY_DSN=
-
 ## Front End #######################################
 
-REACT_APP_SENTRY_DSN=
 REACT_APP_GA_MEASUREMENTID=
 ```
