@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
 import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
@@ -12,15 +11,13 @@ import { TextInput, Button } from '../components';
 import { trackEvent, captureError } from '../utils/logger';
 
 export const ChangePasswordPage = ({ history }) => {
-    const { t } = useTranslation();
-
     const [changePassword] = useMutation(CHANGE_PASSWORD);
 
     const onSubmit = async variables => {
         try {
             const result = await changePassword({ variables });
 
-            toast.success(t(`api.codes.${result.data.changePassword.code}`));
+            toast.success(result.data.changePassword.message);
 
             trackEvent('password_changed');
 
@@ -33,10 +30,10 @@ export const ChangePasswordPage = ({ history }) => {
     return (
         <Container>
             <Helmet>
-                <title>{t('pages.changePassword.meta.title')}</title>
+                <title>Change Password</title>
             </Helmet>
 
-            <h1>{t('pages.changePassword.title')}</h1>
+            <h1>Change Password</h1>
             <hr />
 
             <Formik
@@ -47,17 +44,15 @@ export const ChangePasswordPage = ({ history }) => {
                 }}
                 validationSchema={Yup.object().shape({
                     currentPassword: Yup.string()
-                        .label(t('pages.changePassword.form.currentPassword'))
+                        .label('Current Password')
                         .required(),
                     newPassword: Yup.string()
-                        .label(t('pages.changePassword.form.newPassword'))
+                        .label('New Password')
                         .min(8)
                         .max(50)
                         .required(),
                     confirmNewPassword: Yup.string()
-                        .label(
-                            t('pages.changePassword.form.confirmNewPassword')
-                        )
+                        .label('Confirm New Password')
                         .required()
                         .oneOf([Yup.ref('newPassword')])
                 })}
@@ -68,9 +63,7 @@ export const ChangePasswordPage = ({ history }) => {
                         <Field
                             name="currentPassword"
                             type="password"
-                            label={t(
-                                'pages.changePassword.form.currentPassword'
-                            )}
+                            label="Current Password"
                             required
                             maxLength={50}
                             autoComplete="current-password"
@@ -79,7 +72,7 @@ export const ChangePasswordPage = ({ history }) => {
                         <Field
                             name="newPassword"
                             type="password"
-                            label={t('pages.changePassword.form.newPassword')}
+                            label="New Password"
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -88,9 +81,7 @@ export const ChangePasswordPage = ({ history }) => {
                         <Field
                             name="confirmNewPassword"
                             type="password"
-                            label={t(
-                                'pages.changePassword.form.confirmNewPassword'
-                            )}
+                            label="Confirm New Password"
                             required
                             maxLength={50}
                             autoComplete="new-password"
@@ -103,14 +94,14 @@ export const ChangePasswordPage = ({ history }) => {
                                 className="mr-1"
                                 tag={Link}
                             >
-                                {t('pages.changePassword.cancelButton')}
+                                Cancel
                             </Button>
                             <Button
                                 type="submit"
                                 color="primary"
                                 loading={isSubmitting}
                             >
-                                {t('pages.changePassword.submitButton')}
+                                Submit
                             </Button>
                         </FormGroup>
                     </Form>
@@ -118,10 +109,8 @@ export const ChangePasswordPage = ({ history }) => {
             </Formik>
 
             <p>
-                {t('pages.changePassword.forgotPasswordPrompt')}{' '}
-                <Link to="/forgot-password">
-                    {t('pages.changePassword.forgotPasswordLink')}
-                </Link>
+                Forgotten your password?{' '}
+                <Link to="/forgot-password">Request reset</Link>
             </p>
         </Container>
     );

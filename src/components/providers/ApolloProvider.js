@@ -1,15 +1,12 @@
 import React, { useContext } from 'react';
 import { ApolloProvider as BaseApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { AuthContext } from './AuthProvider';
 import { captureGraphQLError } from '../../utils/logger';
 import { config } from '../../utils/config';
 
 export const ApolloProvider = ({ children }) => {
-    const { t } = useTranslation();
-
     const { accessToken, removeToken } = useContext(AuthContext);
 
     const client = new ApolloClient({
@@ -30,33 +27,20 @@ export const ApolloProvider = ({ children }) => {
                             break;
 
                         case 'FORBIDDEN':
-                            toast.warn(
-                                t(
-                                    `api.codes.${graphQLError.extensions?.code}`,
-                                    error.operation.variables
-                                )
-                            );
+                            toast.warn(graphQLError.extensions?.message);
                             break;
 
                         default:
                             toast.error(
-                                t(
-                                    [
-                                        `api.codes.${graphQLError.extensions?.code}`,
-                                        'api.codes.INTERNAL_SERVER_ERROR'
-                                    ],
-                                    error.operation.variables
-                                )
+                                graphQLError.extensions?.message ||
+                                    'An unknown error has occurred whilst communicating with the server.'
                             );
                             break;
                     }
                 }
             } else if (error.networkError) {
                 toast.error(
-                    t(
-                        'api.codes.INTERNAL_SERVER_ERROR',
-                        error.operation.variables
-                    )
+                    'An unknown error has occurred whilst communicating with the server.'
                 );
             }
 
