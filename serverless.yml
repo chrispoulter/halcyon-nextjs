@@ -15,8 +15,9 @@ provider:
     lambdaHashingVersion: 20201221
     environment:
         ACCOUNTID: ${self:custom.accountId}
-        STAGE: ${self:custom.stage}
         REGION: ${self:custom.region}
+        STAGE: ${self:custom.stage}
+        RELEASE: ${env:RELEASE, ''}
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
         JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
         JWT_ISSUER: ${env:JWT_ISSUER, ''}
@@ -120,6 +121,8 @@ custom:
 
     buildClient:
         environment:
+            REACT_APP_STAGE: ${env:STAGE, ''}
+            REACT_APP_RELEASE: ${env:RELEASE, ''}
             REACT_APP_GA_MEASUREMENTID: ${env:GA_MEASUREMENTID, ''}
             REACT_APP_GRAPHQL_URL: ${env:GRAPHQL_URL, self:custom.endpoint}
 
