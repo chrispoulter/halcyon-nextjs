@@ -17,11 +17,15 @@
             }
         ],
         [
+            "@babel/plugin-proposal-private-methods",
+            {
+                "loose": true
+            }
+        ],
+        [
             "babel-plugin-inline-import",
             {
-                "extensions": [
-                    ".html"
-                ]
+                "extensions": [".html"]
             }
         ]
     ]
