@@ -17,7 +17,7 @@ provider:
         ACCOUNTID: ${self:custom.accountId}
         REGION: ${self:custom.region}
         STAGE: ${self:custom.stage}
-        RELEASE: ${env:RELEASE, ''}
+        VERSION: ${self:custom.version}
         JWT_SECURITYKEY: ${env:JWT_SECURITYKEY, ''}
         JWT_AUDIENCE: ${env:JWT_AUDIENCE, ''}
         JWT_ISSUER: ${env:JWT_ISSUER, ''}
@@ -77,8 +77,9 @@ functions:
 
 custom:
     accountId: '#{AWS::AccountId}'
-    stage: ${opt:stage, self:provider.stage}
     region: ${opt:region, self:provider.region}
+    stage: ${opt:stage, self:provider.stage}
+    version: ${env:VERSION, ''}
     prefix: ${self:service}-${self:custom.stage}
     endpoint: ${cf:${self:custom.prefix}.ServiceEndpoint, ''}
 
@@ -121,8 +122,8 @@ custom:
 
     buildClient:
         environment:
-            REACT_APP_STAGE: ${env:STAGE, ''}
-            REACT_APP_RELEASE: ${env:RELEASE, ''}
+            REACT_APP_STAGE: ${self:custom.stage}
+            REACT_APP_VERSION: ${self:custom.version}
             REACT_APP_GA_MEASUREMENTID: ${env:GA_MEASUREMENTID, ''}
             REACT_APP_GRAPHQL_URL: ${env:GRAPHQL_URL, self:custom.endpoint}
 

@@ -3,13 +3,13 @@ import 'dotenv/config';
 const accountId = process.env.ACCOUNTID || '123456789012';
 const region = process.env.REGION || 'eu-west-1';
 const stage = process.env.STAGE || 'local';
-const release = process.env.RELEASE || 'local';
+const version = process.env.VERSION || '1.0.0';
 
 export const config = {
     ACCOUNTID: accountId,
     REGION: region,
     STAGE: stage,
-    RELEASE: release,
+    VERSION: version,
 
     JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',

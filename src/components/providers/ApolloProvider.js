@@ -27,12 +27,12 @@ export const ApolloProvider = ({ children }) => {
                             break;
 
                         case 'FORBIDDEN':
-                            toast.warn(graphQLError.extensions?.message);
+                            toast.warn(graphQLError.message);
                             break;
 
                         default:
                             toast.error(
-                                graphQLError.extensions?.message ||
+                                graphQLError.message ||
                                     'An unknown error has occurred whilst communicating with the server.'
                             );
                             break;

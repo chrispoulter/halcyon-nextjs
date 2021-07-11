@@ -14,9 +14,7 @@ export const Footer = () => (
                     <a href="https://www.chrispoulter.com">Chris Poulter</a>{' '}
                     {currentYear}
                 </p>
-                <p>
-                    {config.STAGE}/{config.RELEASE}
-                </p>
+                <p>v{config.VERSION}</p>
             </div>
         </Container>
     </footer>
