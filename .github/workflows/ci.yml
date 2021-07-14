@@ -46,15 +46,14 @@ jobs:
               with:
                   useConfigFile: true
 
-            - run: echo "STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
-            - run: echo "VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
+            - run: |
+                  echo "VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
+                  echo "STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
 
-            - run: yarn version --new-version ${{ env.VERSION }} --no-git-tag-version
-
-            - run: yarn
-            - run: yarn lint
-
-            - run: yarn serverless:build --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
-            - run: yarn serverless:deploy --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
-
-            - run: yarn db:seed
+            - run: |
+                  yarn version --new-version ${{ env.VERSION }} --no-git-tag-version
+                  yarn
+                  yarn lint
+                  yarn serverless:build --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
+                  yarn serverless:deploy --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
+                  yarn db:seed
