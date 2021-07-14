@@ -30,30 +30,39 @@ jobs:
 
             CLIENT_URL: ${{ secrets.CLIENT_URL }}
         steps:
-            - uses: actions/checkout@v2
+            - name: Checkout
+              uses: actions/checkout@v2
               with:
                   fetch-depth: 0
 
-            - uses: actions/setup-node@v1
+            - name: Setup Node
+              uses: actions/setup-node@v1
               with:
                   node-version: 14.x
 
-            - uses: gittools/actions/gitversion/setup@v0.9.7
+            - name: Install GitVersion
+              uses: gittools/actions/gitversion/setup@v0.9.7
               with:
                   versionSpec: 5.x
 
-            - uses: gittools/actions/gitversion/execute@v0.9.7
+            - name: Determine Version
+              uses: gittools/actions/gitversion/execute@v0.9.7
               with:
                   useConfigFile: true
 
-            - run: |
+            - name: Set Environment Variables
+              run: |
                   echo "VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
                   echo "STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
 
-            - run: |
-                  yarn version --new-version ${{ env.VERSION }} --no-git-tag-version
+            - name: Build
+              run: |
                   yarn
                   yarn lint
+                  yarn version --new-version ${{ env.VERSION }} --no-git-tag-version
                   yarn serverless:build --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
+
+            - name: Deploy
+              run: |
                   yarn serverless:deploy --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
                   yarn db:seed
