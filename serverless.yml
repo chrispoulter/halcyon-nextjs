@@ -122,6 +122,7 @@ custom:
     buildClient:
         environment:
             REACT_APP_VERSION: ${self:custom.version}
+            REACT_APP_STAGE: ${self:custom.stage}
             REACT_APP_GA_MEASUREMENTID: ${env:GA_MEASUREMENTID, ''}
             REACT_APP_GRAPHQL_URL: ${env:GRAPHQL_URL, self:custom.endpoint}
 
