@@ -1,15 +1,14 @@
 import 'dotenv/config';
 
-const accountId = process.env.ACCOUNTID || '123456789012';
-const region = process.env.REGION || 'eu-west-1';
-const stage = process.env.STAGE || 'local';
-const version = process.env.VERSION || '1.0.0';
+const VERSION = process.env.VERSION || '1.0.0';
+const STAGE = process.env.STAGE || 'local';
 
 export const config = {
-    ACCOUNTID: accountId,
-    REGION: region,
-    STAGE: stage,
-    VERSION: version,
+    VERSION,
+    STAGE,
+
+    AWS_ACCOUNTID: process.env.AWS_ACCOUNTID || '123456789012',
+    AWS_REGION: process.env.AWS_REGION || 'eu-west-1',
 
     JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
@@ -23,10 +22,10 @@ export const config = {
     SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS,
     SEED_PASSWORD: process.env.SEED_PASSWORD,
 
-    DYNAMODB_ENDPOINT: stage === 'local' ? 'http://localhost:8000' : undefined,
+    DYNAMODB_ENDPOINT: STAGE === 'local' ? 'http://localhost:8000' : undefined,
 
-    SNS_ENDPOINT: stage === 'local' ? 'http://127.0.0.1:4002' : undefined,
+    SNS_ENDPOINT: STAGE === 'local' ? 'http://127.0.0.1:4002' : undefined,
 
     CLIENT_URL:
-        stage === 'local' ? 'http://localhost:3000' : process.env.CLIENT_URL
+        STAGE === 'local' ? 'http://localhost:3000' : process.env.CLIENT_URL
 };
