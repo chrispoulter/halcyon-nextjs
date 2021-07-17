@@ -54,7 +54,7 @@ jobs:
             - name: Build
               env:
                   GA_MEASUREMENTID: ${{ secrets[format('{0}_GA_MEASUREMENTID', env.STAGE)] }}
-                  CLIENT_URL: ${{ secrets[format('{0}_GA_MEASUREMENTID', env.STAGE)] }}
+                  CLIENT_URL: ${{ secrets[format('{0}_CLIENT_URL', env.STAGE)] }}
               run: |
                   yarn
                   yarn lint
@@ -64,7 +64,7 @@ jobs:
             - name: Deploy
               env:
                   GA_MEASUREMENTID: ${{ secrets[format('{0}_GA_MEASUREMENTID', env.STAGE)] }}
-                  CLIENT_URL: ${{ secrets[format('{0}_GA_MEASUREMENTID', env.STAGE)] }}
+                  CLIENT_URL: ${{ secrets[format('{0}_CLIENT_URL', env.STAGE)] }}
               run: |
                   yarn serverless:deploy --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
                   yarn db:seed
