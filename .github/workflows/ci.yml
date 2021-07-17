@@ -36,6 +36,7 @@ jobs:
 
     build-and-deploy:
         runs-on: ubuntu-latest
+        needs: get-build-version
         env:
             EXTEND_ESLINT: true
 
