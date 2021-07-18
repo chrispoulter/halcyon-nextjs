@@ -8,8 +8,12 @@ A web application template.
     [https://reactjs.org](https://reactjs.org)
 -   Apollo GraphQL
     [https://www.apollographql.com](https://www.apollographql.com)
+-   Serverless
+    [https://www.serverless.com](https://www.serverless.com)
 -   DynamoDB
     [https://aws.amazon.com/dynamodb](https://aws.amazon.com/dynamodb)
+-   SNS
+    [https://aws.amazon.com/sns](https://aws.amazon.com/sns)
 
 #### Custom Settings
 
