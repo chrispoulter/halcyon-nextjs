@@ -3,7 +3,7 @@ import { config } from './config';
 
 const sns = new SNS({
     region: config.AWS_REGION,
-    endpoint: config.SNS_ENDPOINT
+    endpoint: config.AWS_SNS_ENDPOINT
 });
 
 const topicArn = `arn:aws:sns:${config.AWS_REGION}:${config.AWS_ACCOUNTID}:halcyon-${config.STAGE}-events`;
