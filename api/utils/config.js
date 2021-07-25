@@ -17,7 +17,9 @@ export const config = {
     MAILGUN_NOREPLY: process.env.MAILGUN_NOREPLY || 'noreply@chrispoulter.com',
 
     SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS,
-    SEED_PASSWORD: process.env.SEED_PASSWORD
+    SEED_PASSWORD: process.env.SEED_PASSWORD,
+
+    CLIENT_URL: process.env.CLIENT_URL
 };
 
 switch (config.STAGE) {
