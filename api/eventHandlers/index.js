@@ -1,11 +1,11 @@
 import { sendEmailHandler } from './sendEmailHandler';
-import { wrapper, captureMessage, captureError } from '../utils/logger';
+import { captureMessage, captureError } from '../utils/logger';
 
 const handlers = {
     SEND_EMAIL: sendEmailHandler
 };
 
-export const handler = wrapper(async event => {
+export const handler = async event => {
     const message = JSON.parse(event.Records[0].Sns.Message);
 
     captureMessage('event', message);
@@ -23,4 +23,4 @@ export const handler = wrapper(async event => {
             error
         });
     }
-});
+};
