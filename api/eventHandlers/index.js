@@ -6,21 +6,23 @@ const handlers = {
 };
 
 export const handler = async event => {
-    const message = JSON.parse(event.Records[0].Sns.Message);
+    for (const record of event.Records) {
+        const message = JSON.parse(record.Sns.Message);
 
-    captureMessage('event', message);
+        captureMessage('event', message);
 
-    try {
-        const eventHandler = handlers[message.type];
-        if (!eventHandler) {
-            throw new Error(`Unknown event type: ${message.type}`);
+        try {
+            const eventHandler = handlers[message.type];
+            if (!eventHandler) {
+                throw new Error(`Unknown event type: ${message.type}`);
+            }
+
+            await eventHandler(message.data);
+        } catch (error) {
+            captureError('event', {
+                ...message,
+                error
+            });
         }
-
-        await eventHandler(message.data);
-    } catch (error) {
-        captureError('event', {
-            ...message,
-            error
-        });
     }
 };
