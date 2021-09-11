@@ -1,16 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Container, FormGroup } from 'reactstrap';
+import Container from 'react-bootstrap/Container';
 import { GENERATE_TOKEN } from '../graphql';
-import { TextInput, CheckboxInput, Button, AuthContext } from '../components';
+import { TextInput, CheckboxInput, Button, useAuth } from '../components';
 import { trackEvent, captureError } from '../utils/logger';
 
 export const LoginPage = ({ history }) => {
-    const { setToken } = useContext(AuthContext);
+    const { setToken } = useAuth();
 
     const [generateToken] = useMutation(GENERATE_TOKEN);
 
@@ -85,15 +85,15 @@ export const LoginPage = ({ history }) => {
                             component={CheckboxInput}
                         />
 
-                        <FormGroup className="text-right">
+                        <div className="mb-3 text-end">
                             <Button
                                 type="submit"
-                                color="primary"
+                                variant="primary"
                                 loading={isSubmitting}
                             >
                                 Submit
                             </Button>
-                        </FormGroup>
+                        </div>
                     </Form>
                 )}
             </Formik>

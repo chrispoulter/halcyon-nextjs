@@ -1,13 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ApolloProvider as BaseApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import { toast } from 'react-toastify';
-import { AuthContext } from './AuthProvider';
+import { useAuth, useToast } from '../providers';
 import { captureGraphQLError } from '../../utils/logger';
 import { config } from '../../utils/config';
 
 export const ApolloProvider = ({ children }) => {
-    const { accessToken, removeToken } = useContext(AuthContext);
+    const { accessToken, removeToken } = useAuth();
+
+    const toast = useToast();
 
     const client = new ApolloClient({
         uri: config.GRAPHQL_URL,

@@ -4,19 +4,21 @@ import { Helmet } from 'react-helmet';
 import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Container, FormGroup } from 'reactstrap';
-import { toast } from 'react-toastify';
+import Container from 'react-bootstrap/Container';
 import { CREATE_USER } from '../graphql';
 import {
     TextInput,
     DateInput,
     CheckboxGroupInput,
-    Button
+    Button,
+    useToast
 } from '../components';
 import { ALL_ROLES } from '../utils/auth';
 import { trackEvent, captureError } from '../utils/logger';
 
 export const CreateUserPage = ({ history }) => {
+    const toast = useToast();
+
     const [createUser] = useMutation(CREATE_USER);
 
     const onSubmit = async variables => {
@@ -150,18 +152,23 @@ export const CreateUserPage = ({ history }) => {
                             component={CheckboxGroupInput}
                         />
 
-                        <FormGroup className="text-right">
-                            <Button to="/user" className="mr-1" tag={Link}>
+                        <div className="mb-3 text-end">
+                            <Button
+                                to="/user"
+                                as={Link}
+                                variant="secondary"
+                                className="me-1"
+                            >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
-                                color="primary"
+                                variant="primary"
                                 loading={isSubmitting}
                             >
                                 Submit
                             </Button>
-                        </FormGroup>
+                        </div>
                     </Form>
                 )}
             </Formik>

@@ -3,13 +3,14 @@ import { Helmet } from 'react-helmet';
 import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Container, FormGroup } from 'reactstrap';
-import { toast } from 'react-toastify';
+import Container from 'react-bootstrap/Container';
 import { RESET_PASSWORD } from '../graphql';
-import { TextInput, Button } from '../components';
+import { TextInput, Button, useToast } from '../components';
 import { trackEvent, captureError } from '../utils/logger';
 
 export const ResetPasswordPage = ({ match, history }) => {
+    const toast = useToast();
+
     const [resetPassword] = useMutation(RESET_PASSWORD);
 
     const onSubmit = async variables => {
@@ -90,15 +91,15 @@ export const ResetPasswordPage = ({ match, history }) => {
                             component={TextInput}
                         />
 
-                        <FormGroup className="text-right">
+                        <div className="mb-3 text-end">
                             <Button
                                 type="submit"
-                                color="primary"
+                                variant="primary"
                                 loading={isSubmitting}
                             >
                                 Submit
                             </Button>
-                        </FormGroup>
+                        </div>
                     </Form>
                 )}
             </Formik>

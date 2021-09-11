@@ -1,22 +1,24 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { Container, Alert } from 'reactstrap';
-import confirm from 'reactstrap-confirm';
-import { toast } from 'react-toastify';
+import Container from 'react-bootstrap/Container';
+import Alert from 'react-bootstrap/Alert';
 import { GET_PROFILE, DELETE_ACCOUNT } from '../graphql';
-import { Button, Spinner, AuthContext } from '../components';
+import { Button, Spinner, useModal, useAuth, useToast } from '../components';
 import { trackEvent, captureError } from '../utils/logger';
 
 export const MyAccountPage = ({ history }) => {
-    const { removeToken } = useContext(AuthContext);
+    const { removeToken } = useAuth();
+
+    const { showModal } = useModal();
+
+    const toast = useToast();
 
     const { loading, data } = useQuery(GET_PROFILE);
 
-    const [deleteAccount, { loading: isDeleting }] = useMutation(
-        DELETE_ACCOUNT
-    );
+    const [deleteAccount, { loading: isDeleting }] =
+        useMutation(DELETE_ACCOUNT);
 
     if (loading) {
         return <Spinner />;
@@ -24,44 +26,37 @@ export const MyAccountPage = ({ history }) => {
 
     if (!data?.getProfile) {
         return (
-            <Alert color="info" className="container p-3 mb-3">
-                Profile could not be found.
-            </Alert>
+            <Container>
+                <Alert variant="info">Profile could not be found.</Alert>
+            </Container>
         );
     }
 
-    const onDeleteAccount = async () => {
-        trackEvent('screen_view', {
-            screen_name: 'delete-account-modal'
-        });
-
-        const confirmed = await confirm({
+    const onDeleteAccount = () =>
+        showModal({
             title: 'Confirm',
-            message: 'Are you sure you want to delete your account?',
-            confirmText: 'Ok',
-            cancelText: 'Cancel',
-            cancelColor: 'secondary'
+            body: 'Are you sure you want to delete your account?',
+            onOpen: () =>
+                trackEvent('screen_view', {
+                    screen_name: 'delete-account-modal'
+                }),
+            onOk: async () => {
+                try {
+                    const result = await deleteAccount();
+
+                    toast.success(result.data.deleteAccount.message);
+
+                    trackEvent('account_deleted', {
+                        entityId: result.data.deleteAccount.user.id
+                    });
+
+                    removeToken();
+                    history.push('/');
+                } catch (error) {
+                    captureError(error);
+                }
+            }
         });
-
-        if (!confirmed) {
-            return;
-        }
-
-        try {
-            const result = await deleteAccount();
-
-            toast.success(result.data.deleteAccount.message);
-
-            trackEvent('account_deleted', {
-                entityId: result.data.deleteAccount.user.id
-            });
-
-            removeToken();
-            history.push('/');
-        } catch (error) {
-            captureError(error);
-        }
-    };
 
     return (
         <Container>
@@ -74,12 +69,7 @@ export const MyAccountPage = ({ history }) => {
 
             <div className="d-flex justify-content-between">
                 <h3>Profile</h3>
-                <Button
-                    to="/update-profile"
-                    color="primary"
-                    className="align-self-start"
-                    tag={Link}
-                >
+                <Button to="/update-profile" as={Link} variant="primary">
                     Update
                 </Button>
             </div>
@@ -126,7 +116,7 @@ export const MyAccountPage = ({ history }) => {
             </p>
             <p>
                 <Button
-                    color="danger"
+                    variant="danger"
                     loading={isDeleting}
                     onClick={onDeleteAccount}
                 >
