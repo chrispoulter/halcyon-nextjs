@@ -19,24 +19,20 @@ export const context = async ({ req, event }) => {
     };
 };
 
-export const isAuthenticated = (resolverFn, requiredRoles) => (
-    parent,
-    args,
-    context,
-    info
-) => {
-    const { payload } = context;
+export const isAuthenticated =
+    (resolverFn, requiredRoles) => (parent, args, context, info) => {
+        const { payload } = context;
 
-    if (!payload) {
-        throw new AuthenticationError('The token provided was invalid.');
-    }
+        if (!payload) {
+            throw new AuthenticationError('The token provided was invalid.');
+        }
 
-    const authorized = isAuthorized(payload, requiredRoles);
-    if (!authorized) {
-        throw new ForbiddenError(
-            'You are not authorized to view this resource.'
-        );
-    }
+        const authorized = isAuthorized(payload, requiredRoles);
+        if (!authorized) {
+            throw new ForbiddenError(
+                'You are not authorized to view this resource.'
+            );
+        }
 
-    return resolverFn(parent, args, context, info);
-};
+        return resolverFn(parent, args, context, info);
+    };

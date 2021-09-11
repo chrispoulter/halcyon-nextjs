@@ -3,20 +3,21 @@ import { Helmet } from 'react-helmet';
 import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Container, FormGroup } from 'reactstrap';
-import { toast } from 'react-toastify';
+import Container from 'react-bootstrap/Container';
 import { FORGOT_PASSWORD } from '../graphql';
-import { TextInput, Button } from '../components';
+import { TextInput, Button, useToast } from '../components';
 import { trackEvent, captureError } from '../utils/logger';
 
 export const ForgotPasswordPage = ({ history }) => {
+    const toast = useToast();
+
     const [forgotPassword] = useMutation(FORGOT_PASSWORD);
 
     const onSubmit = async variables => {
         try {
             const result = await forgotPassword({ variables });
 
-            toast.success(result.data.forgotPassword.code.message);
+            toast.success(result.data.forgotPassword.message);
 
             trackEvent('password_reminder');
 
@@ -59,15 +60,15 @@ export const ForgotPasswordPage = ({ history }) => {
                             component={TextInput}
                         />
 
-                        <FormGroup className="text-right">
+                        <div className="mb-3 text-end">
                             <Button
                                 type="submit"
-                                color="primary"
+                                variant="primary"
                                 loading={isSubmitting}
                             >
                                 Submit
                             </Button>
-                        </FormGroup>
+                        </div>
                     </Form>
                 )}
             </Formik>
