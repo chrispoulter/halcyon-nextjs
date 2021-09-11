@@ -17,7 +17,7 @@ export const ForgotPasswordPage = ({ history }) => {
         try {
             const result = await forgotPassword({ variables });
 
-            toast.success(result.data.forgotPassword.code.message);
+            toast.success(result.data.forgotPassword.message);
 
             trackEvent('password_reminder');
 
