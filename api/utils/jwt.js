@@ -3,7 +3,7 @@ import { config } from './config';
 
 export const verifyToken = async token => {
     try {
-        return verify(token, config.JWT_SECURITYKEY, {
+        return verify(token, config.JWT_SECURITY_KEY, {
             issuer: config.JWT_ISSUER,
             audience: config.JWT_AUDIENCE
         });
@@ -22,9 +22,9 @@ export const generateToken = user => {
         role: (user.roles || []).join()
     };
 
-    const expiresIn = config.JWT_EXPIRESIN;
+    const expiresIn = config.JWT_EXPIRES_IN;
 
-    const accessToken = sign(payload, config.JWT_SECURITYKEY, {
+    const accessToken = sign(payload, config.JWT_SECURITY_KEY, {
         issuer: config.JWT_ISSUER,
         audience: config.JWT_AUDIENCE,
         expiresIn

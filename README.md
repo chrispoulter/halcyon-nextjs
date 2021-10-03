@@ -22,19 +22,19 @@ Create a `.env` file in the web project directory.
 ```
 ## Api #############################################
 
-JWT_SECURITYKEY=change-me-1234567890
+JWT_SECURITY_KEY=change-me-1234567890
 JWT_ISSUER=HalcyonApi
 JWT_AUDIENCE=HalcyonClient
-JWT_EXPIRESIN=3600
+JWT_EXPIRES_IN=3600
 
 MAILGUN_DOMAIN=
-MAILGUN_APIKEY=
-MAILGUN_NOREPLY=noreply@chrispoulter.com
+MAILGUN_API_KEY=
+MAILGUN_NO_REPLY=noreply@chrispoulter.com
 
-SEED_EMAILADDRESS=
+SEED_EMAIL_ADDRESS=
 SEED_PASSWORD=
 
 ## Front End #######################################
 
-REACT_APP_GA_MEASUREMENTID=
+REACT_APP_GA_MEASUREMENT_ID=
 ```

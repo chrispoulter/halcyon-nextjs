@@ -4,19 +4,20 @@ export const config = {
     VERSION: process.env.VERSION || '1.0.0',
     STAGE: process.env.STAGE || 'local',
 
-    AWS_ACCOUNTID: process.env.AWS_ACCOUNTID || '123456789012',
+    AWS_ACCOUNT_ID: process.env.AWS_ACCOUNT_ID || '123456789012',
     AWS_REGION: process.env.AWS_REGION || 'eu-west-1',
 
-    JWT_SECURITYKEY: process.env.JWT_SECURITYKEY || 'change-me-1234567890',
+    JWT_SECURITY_KEY: process.env.JWT_SECURITY_KEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
     JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient',
-    JWT_EXPIRESIN: parseInt(process.env.JWT_EXPIRESIN || '3600'),
+    JWT_EXPIRES_IN: parseInt(process.env.JWT_EXPIRES_IN || '3600'),
 
     MAILGUN_DOMAIN: process.env.MAILGUN_DOMAIN,
-    MAILGUN_APIKEY: process.env.MAILGUN_APIKEY,
-    MAILGUN_NOREPLY: process.env.MAILGUN_NOREPLY || 'noreply@chrispoulter.com',
+    MAILGUN_API_KEY: process.env.MAILGUN_API_KEY,
+    MAILGUN_NO_REPLY:
+        process.env.MAILGUN_NO_REPLY || 'noreply@chrispoulter.com',
 
-    SEED_EMAILADDRESS: process.env.SEED_EMAILADDRESS,
+    SEED_EMAIL_ADDRESS: process.env.SEED_EMAIL_ADDRESS,
     SEED_PASSWORD: process.env.SEED_PASSWORD,
 
     CLIENT_URL: process.env.CLIENT_URL

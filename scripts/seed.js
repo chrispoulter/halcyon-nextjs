@@ -11,7 +11,7 @@ const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
 
 (async () => {
     await users.upsert({
-        emailAddress: config.SEED_EMAILADDRESS,
+        emailAddress: config.SEED_EMAIL_ADDRESS,
         password: await generateHash(config.SEED_PASSWORD),
         firstName: 'System',
         lastName: 'Administrator',
