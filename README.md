@@ -6,14 +6,10 @@ A web application template.
 
 -   React
     [https://reactjs.org](https://reactjs.org)
--   Apollo GraphQL
-    [https://www.apollographql.com](https://www.apollographql.com)
--   Serverless
-    [https://www.serverless.com](https://www.serverless.com)
--   DynamoDB
-    [https://aws.amazon.com/dynamodb](https://aws.amazon.com/dynamodb)
--   SNS
-    [https://aws.amazon.com/sns](https://aws.amazon.com/sns)
+-   Express
+    [https://expressjs.com/](https://expressjs.com/)
+-   PostgreSQL
+    [https://www.postgresql.org/](https://www.postgresql.org/)
 
 #### Custom Settings
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { useQuery } from '@apollo/react-hooks';
 import { Formik, Form } from 'formik';
 import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -11,8 +10,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
-import { SEARCH_USERS } from '../graphql';
-import { Button, Spinner, Pager } from '../components';
+import { Button, Spinner, Pager, useFetch } from '../components';
 import { ALL_ROLES } from '../utils/auth';
 
 const SORT_OPTIONS = {
@@ -30,9 +28,10 @@ export const UserPage = () => {
         sort: 'NAME_ASC'
     });
 
-    const { loading, data } = useQuery(SEARCH_USERS, {
-        variables: state,
-        fetchPolicy: 'no-cache'
+    const { loading, data } = useFetch({
+        method: 'GET',
+        url: '/user',
+        params: state
     });
 
     if (loading) {
@@ -107,11 +106,11 @@ export const UserPage = () => {
                 )}
             </Formik>
 
-            {!data?.searchUsers?.items?.length ? (
+            {!data?.items.length ? (
                 <Alert variant="info">No users could be found.</Alert>
             ) : (
                 <>
-                    {data.searchUsers.items.map(user => (
+                    {data.items.map(user => (
                         <Card
                             key={user.id}
                             to={`/user/${user.id}`}
@@ -146,8 +145,8 @@ export const UserPage = () => {
                     ))}
 
                     <Pager
-                        hasNextPage={data.searchUsers.hasNextPage}
-                        hasPreviousPage={data.searchUsers.hasPreviousPage}
+                        hasNextPage={data.hasNextPage}
+                        hasPreviousPage={data.hasPreviousPage}
                         onNextPage={onNextPage}
                         onPreviousPage={onPreviousPage}
                     />

@@ -1,7 +1,5 @@
 node_modules
 build
-.dynamodb
-.serverless
 .webpack
 .eslintcache
 .env

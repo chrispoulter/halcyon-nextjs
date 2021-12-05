@@ -1,39 +1,47 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
-import { CREATE_USER } from '../graphql';
 import {
     TextInput,
     DateInput,
     CheckboxGroupInput,
     Button,
+    useFetch,
     useToast
 } from '../components';
 import { ALL_ROLES } from '../utils/auth';
-import { trackEvent, captureError } from '../utils/logger';
+import { trackEvent } from '../utils/logger';
 
 export const CreateUserPage = ({ history }) => {
     const toast = useToast();
 
-    const [createUser] = useMutation(CREATE_USER);
+    const { refetch: createUser } = useFetch({
+        method: 'POST',
+        url: '/user',
+        manual: true
+    });
 
     const onSubmit = async variables => {
-        try {
-            const result = await createUser({ variables });
+        const result = await createUser({
+            emailAddress: variables.emailAddress,
+            password: variables.emailAddress,
+            firstName: variables.firstName,
+            lastName: variables.lastName,
+            dateOfBirth: variables.dateOfBirth,
+            roles: variables.roles
+        });
 
-            toast.success(result.data.createUser.message);
+        if (result.ok) {
+            toast.success(result.message);
 
             trackEvent('user_created', {
-                entityId: result.data.createUser.user.id
+                entityId: result.data.id
             });
 
             history.push('/user');
-        } catch (error) {
-            captureError(error);
         }
     };
 

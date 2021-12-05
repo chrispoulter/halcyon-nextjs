@@ -62,34 +62,3 @@ export const captureError = (error, fatal, data) => {
         data
     });
 };
-
-export const captureGraphQLError = error => {
-    if (!initialized) {
-        return;
-    }
-
-    if (error.graphQLErrors) {
-        for (const graphQLError of error.graphQLErrors) {
-            if (
-                graphQLError.extensions?.code &&
-                graphQLError.extensions?.code !== 'INTERNAL_SERVER_ERROR'
-            ) {
-                continue;
-            }
-
-            window.gtag('event', 'exception', {
-                description: graphQLError.message,
-                fatal: false,
-                path: graphQLError.path,
-                locations: graphQLError.locations,
-                code: graphQLError.extensions?.code,
-                stacktrace: graphQLError.extensions?.exception?.stacktrace
-            });
-        }
-    } else if (error.networkError) {
-        window.gtag('event', 'exception', {
-            description: error.networkError,
-            fatal: false
-        });
-    }
-};

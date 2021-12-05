@@ -1,30 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
-import { CHANGE_PASSWORD } from '../graphql';
-import { TextInput, Button, useToast } from '../components';
-import { trackEvent, captureError } from '../utils/logger';
+import { TextInput, Button, useFetch, useToast } from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const ChangePasswordPage = ({ history }) => {
     const toast = useToast();
 
-    const [changePassword] = useMutation(CHANGE_PASSWORD);
+    const { refetch: changePassword } = useFetch({
+        method: 'PUT',
+        url: '/manage/changepassword',
+        manual: true
+    });
 
     const onSubmit = async variables => {
-        try {
-            const result = await changePassword({ variables });
+        const result = await changePassword({
+            currentPassword: variables.currentPassword,
+            newPassword: variables.newPassword
+        });
 
-            toast.success(result.data.changePassword.message);
-
+        if (result.ok) {
+            toast.success(result.message);
             trackEvent('password_changed');
-
             history.push('/my-account');
-        } catch (error) {
-            captureError(error);
         }
     };
 

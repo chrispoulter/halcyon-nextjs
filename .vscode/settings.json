@@ -2,8 +2,6 @@
     "files.exclude": {
         "**/node_modules": true,
         "**/build": true,
-        "**/.dynamodb": true,
-        "**/.serverless": true,
         "**/.webpack": true,
         "**/.eslintcache": true
     }

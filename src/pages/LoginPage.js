@@ -1,35 +1,39 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
-import { GENERATE_TOKEN } from '../graphql';
-import { TextInput, CheckboxInput, Button, useAuth } from '../components';
-import { trackEvent, captureError } from '../utils/logger';
+import {
+    TextInput,
+    CheckboxInput,
+    Button,
+    useAuth,
+    useFetch
+} from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const LoginPage = ({ history }) => {
     const { setToken } = useAuth();
 
-    const [generateToken] = useMutation(GENERATE_TOKEN);
+    const { refetch: generateToken } = useFetch({
+        method: 'POST',
+        url: '/token',
+        manual: true
+    });
 
     const onSubmit = async variables => {
-        try {
-            const result = await generateToken({
-                variables: { grantType: 'PASSWORD', ...variables }
-            });
+        const result = await generateToken({
+            grantType: 'PASSWORD',
+            emailAddress: variables.emailAddress,
+            password: variables.password
+        });
 
-            setToken(
-                result.data.generateToken.accessToken,
-                variables.rememberMe
-            );
+        if (result.ok) {
+            setToken(result.data.accessToken, variables.rememberMe);
 
             trackEvent('login');
-
             history.push('/');
-        } catch (error) {
-            captureError(error);
         }
     };
 

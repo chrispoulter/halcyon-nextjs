@@ -1,52 +1,62 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import {
-    GET_USER_BY_ID,
-    UPDATE_USER,
-    LOCK_USER,
-    UNLOCK_USER,
-    DELETE_USER
-} from '../graphql';
 import {
     Spinner,
     TextInput,
     DateInput,
     CheckboxGroupInput,
     Button,
+    useFetch,
     useModal,
     useToast
 } from '../components';
 import { ALL_ROLES } from '../utils/auth';
-import { trackEvent, captureError } from '../utils/logger';
+import { trackEvent } from '../utils/logger';
 
 export const UpdateUserPage = ({ history, match }) => {
     const { showModal } = useModal();
 
     const toast = useToast();
 
-    const { loading, data } = useQuery(GET_USER_BY_ID, {
-        variables: { id: match.params.id }
+    const { refetch, loading, data } = useFetch({
+        method: 'GET',
+        url: `/user/${match.params.id}`
     });
 
-    const [updateUser] = useMutation(UPDATE_USER);
+    const { refetch: updateUser } = useFetch({
+        method: 'PUT',
+        url: `/user/${match.params.id}`,
+        manual: true
+    });
 
-    const [lockUser, { loading: isLocking }] = useMutation(LOCK_USER);
+    const { refetch: lockUser, loading: isLocking } = useFetch({
+        method: 'PUT',
+        url: `/user/${match.params.id}/lock`,
+        manual: true
+    });
 
-    const [unlockUser, { loading: isUnlocking }] = useMutation(UNLOCK_USER);
+    const { refetch: unlockUser, loading: isUnlocking } = useFetch({
+        method: 'PUT',
+        url: `/user/${match.params.id}/unlock`,
+        manual: true
+    });
 
-    const [deleteUser, { loading: isDeleting }] = useMutation(DELETE_USER);
+    const { refetch: deleteUser, loading: isDeleting } = useFetch({
+        method: 'DELETE',
+        url: `/user/${match.params.id}`,
+        manual: true
+    });
 
     if (loading) {
         return <Spinner />;
     }
 
-    if (!data?.getUserById) {
+    if (!data) {
         return (
             <Container>
                 <Alert variant="info">User could not be found.</Alert>
@@ -55,20 +65,22 @@ export const UpdateUserPage = ({ history, match }) => {
     }
 
     const onSubmit = async variables => {
-        try {
-            const result = await updateUser({
-                variables: { id: match.params.id, ...variables }
-            });
+        const result = await updateUser({
+            emailAddress: variables.emailAddress,
+            firstName: variables.firstName,
+            lastName: variables.lastName,
+            dateOfBirth: variables.dateOfBirth,
+            roles: variables.roles
+        });
 
-            toast.success(result.data.updateUser.message);
+        if (result.ok) {
+            toast.success(result.message);
 
             trackEvent('user_updated', {
-                entityId: result.data.updateUser.user.id
+                entityId: result.data.id
             });
 
             history.push('/user');
-        } catch (error) {
-            captureError(error);
         }
     };
 
@@ -79,7 +91,7 @@ export const UpdateUserPage = ({ history, match }) => {
                 <>
                     Are you sure you want to lock{' '}
                     <strong>
-                        {data.getUserById.firstName} {data.getUserById.lastName}
+                        {data.firstName} {data.lastName}
                     </strong>
                     ?
                 </>
@@ -89,18 +101,15 @@ export const UpdateUserPage = ({ history, match }) => {
                     screen_name: 'lock-user-modal'
                 }),
             onOk: async () => {
-                try {
-                    const result = await lockUser({
-                        variables: { id: match.params.id }
-                    });
+                const result = await lockUser();
+                if (result.ok) {
+                    await refetch();
 
-                    toast.success(result.data.lockUser.message);
+                    toast.success(result.message);
 
                     trackEvent('user_locked', {
-                        entityId: result.data.lockUser.user.id
+                        entityId: result.data.id
                     });
-                } catch (error) {
-                    captureError(error);
                 }
             }
         });
@@ -112,7 +121,7 @@ export const UpdateUserPage = ({ history, match }) => {
                 <>
                     Are you sure you want to unlock{' '}
                     <strong>
-                        {data.getUserById.firstName} {data.getUserById.lastName}
+                        {data.firstName} {data.lastName}
                     </strong>
                     ?
                 </>
@@ -122,18 +131,15 @@ export const UpdateUserPage = ({ history, match }) => {
                     screen_name: 'unlock-user-modal'
                 }),
             onOk: async () => {
-                try {
-                    const result = await unlockUser({
-                        variables: { id: match.params.id }
-                    });
+                const result = await unlockUser();
+                if (result.ok) {
+                    await refetch();
 
-                    toast.success(result.data.unlockUser.message);
+                    toast.success(result.message);
 
                     trackEvent('user_unlocked', {
-                        entityId: result.data.unlockUser.user.id
+                        entityId: result.data.id
                     });
-                } catch (error) {
-                    captureError(error);
                 }
             }
         });
@@ -145,7 +151,7 @@ export const UpdateUserPage = ({ history, match }) => {
                 <>
                     Are you sure you want to delete{' '}
                     <strong>
-                        {data.getUserById.firstName} {data.getUserById.lastName}
+                        {data.firstName} {data.lastName}
                     </strong>
                     ?
                 </>
@@ -155,20 +161,15 @@ export const UpdateUserPage = ({ history, match }) => {
                     screen_name: 'delete-user-modal'
                 }),
             onOk: async () => {
-                try {
-                    const result = await deleteUser({
-                        variables: { id: match.params.id }
-                    });
-
-                    toast.success(result.data.deleteUser.message);
+                const result = await deleteUser();
+                if (result.ok) {
+                    toast.success(result.message);
 
                     trackEvent('user_deleted', {
-                        entityId: result.data.deleteUser.user.id
+                        entityId: result.data.id
                     });
 
                     history.push('/user');
-                } catch (error) {
-                    captureError(error);
                 }
             }
         });
@@ -188,7 +189,7 @@ export const UpdateUserPage = ({ history, match }) => {
 
             <Formik
                 enableReinitialize={true}
-                initialValues={data.getUserById}
+                initialValues={data}
                 validationSchema={Yup.object().shape({
                     emailAddress: Yup.string()
                         .label('Email Address')
@@ -261,7 +262,7 @@ export const UpdateUserPage = ({ history, match }) => {
                             >
                                 Cancel
                             </Button>
-                            {data.getUserById.isLockedOut ? (
+                            {data.isLockedOut ? (
                                 <Button
                                     variant="warning"
                                     className="me-1"

@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import {
     AuthProvider,
-    ApolloProvider,
     ModalProvider,
     ToastProvider,
     Header,
@@ -19,14 +18,12 @@ export const App = () => (
             <AuthProvider>
                 <ModalProvider>
                     <ToastProvider>
-                        <ApolloProvider>
-                            <Meta />
-                            <Header />
-                            <ErrorBoundary>
-                                <Routes />
-                            </ErrorBoundary>
-                            <Footer />
-                        </ApolloProvider>
+                        <Meta />
+                        <Header />
+                        <ErrorBoundary>
+                            <Routes />
+                        </ErrorBoundary>
+                        <Footer />
                     </ToastProvider>
                 </ModalProvider>
             </AuthProvider>

@@ -1,31 +1,31 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
-import { RESET_PASSWORD } from '../graphql';
-import { TextInput, Button, useToast } from '../components';
-import { trackEvent, captureError } from '../utils/logger';
+import { TextInput, Button, useFetch, useToast } from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const ResetPasswordPage = ({ match, history }) => {
     const toast = useToast();
 
-    const [resetPassword] = useMutation(RESET_PASSWORD);
+    const { refetch: resetPassword } = useFetch({
+        method: 'PUT',
+        url: '/account/resetpassword',
+        manual: true
+    });
 
     const onSubmit = async variables => {
-        try {
-            const result = await resetPassword({
-                variables: { token: match.params.token, ...variables }
-            });
+        const result = await resetPassword({
+            token: match.params.token,
+            emailAddress: variables.emailAddress,
+            newPassword: variables.newPassword
+        });
 
-            toast.success(result.data.resetPassword.message);
-
+        if (result.ok) {
+            toast.success(result.message);
             trackEvent('password_reset');
-
             history.push('/login');
-        } catch (error) {
-            captureError(error);
         }
     };
 

@@ -1,40 +1,51 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
-import { REGISTER, GENERATE_TOKEN } from '../graphql';
-import { TextInput, DateInput, Button, useAuth } from '../components';
-import { trackEvent, captureError } from '../utils/logger';
+import { TextInput, DateInput, Button, useAuth, useFetch } from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const RegisterPage = ({ history }) => {
     const { setToken } = useAuth();
 
-    const [register] = useMutation(REGISTER);
+    const { refetch: register } = useFetch({
+        method: 'POST',
+        url: '/account/register',
+        manual: true
+    });
 
-    const [generateToken] = useMutation(GENERATE_TOKEN);
+    const { refetch: generateToken } = useFetch({
+        method: 'POST',
+        url: '/token',
+        manual: true
+    });
 
     const onSubmit = async variables => {
-        try {
-            let result = await register({ mutation: REGISTER, variables });
+        let result = await register({
+            emailAddress: variables.emailAddress,
+            password: variables.password,
+            firstName: variables.firstName,
+            lastName: variables.lastName,
+            dateOfBirth: variables.dateOfBirth
+        });
 
+        if (result.ok) {
             trackEvent('sign_up', {
-                entityId: result.data.register.user.id
+                entityId: result.data.id
             });
 
             result = await generateToken({
-                variables: { grantType: 'PASSWORD', ...variables }
+                grantType: 'PASSWORD',
+                emailAddress: variables.emailAddress,
+                password: variables.password
             });
 
-            setToken(result.data.generateToken.accessToken);
-
-            trackEvent('login');
-
-            history.push('/');
-        } catch (error) {
-            captureError(error);
+            if (result.ok) {
+                setToken(result.data.accessToken);
+                history.push('/');
+            }
         }
     };
 

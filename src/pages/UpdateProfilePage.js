@@ -1,27 +1,39 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import { GET_PROFILE, UPDATE_PROFILE } from '../graphql';
-import { Spinner, TextInput, DateInput, Button, useToast } from '../components';
-import { trackEvent, captureError } from '../utils/logger';
+import {
+    Spinner,
+    TextInput,
+    DateInput,
+    Button,
+    useFetch,
+    useToast
+} from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const UpdateProfilePage = ({ history }) => {
     const toast = useToast();
 
-    const { loading, data } = useQuery(GET_PROFILE);
+    const { loading, data } = useFetch({
+        method: 'GET',
+        url: '/manage'
+    });
 
-    const [updateProfile] = useMutation(UPDATE_PROFILE);
+    const { refetch: updateProfile } = useFetch({
+        method: 'PUT',
+        url: '/manage',
+        manual: true
+    });
 
     if (loading) {
         return <Spinner />;
     }
 
-    if (!data?.getProfile) {
+    if (!data) {
         return (
             <Container>
                 <Alert variant="info">Profile could not be found.</Alert>
@@ -30,16 +42,17 @@ export const UpdateProfilePage = ({ history }) => {
     }
 
     const onSubmit = async variables => {
-        try {
-            const result = await updateProfile({ variables });
+        const result = await updateProfile({
+            emailAddress: variables.emailAddress,
+            firstName: variables.firstName,
+            lastName: variables.lastName,
+            dateOfBirth: variables.dateOfBirth
+        });
 
-            toast.success(result.data.updateProfile.message);
-
+        if (result.ok) {
+            toast.success(result.message);
             trackEvent('profile_updated');
-
             history.push('/my-account');
-        } catch (error) {
-            captureError(error);
         }
     };
 
@@ -54,7 +67,7 @@ export const UpdateProfilePage = ({ history }) => {
 
             <Formik
                 enableReinitialize={true}
-                initialValues={data.getProfile}
+                initialValues={data}
                 validationSchema={Yup.object().shape({
                     emailAddress: Yup.string()
                         .label('Email Address')

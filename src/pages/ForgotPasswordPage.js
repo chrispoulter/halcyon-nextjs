@@ -1,29 +1,29 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { useMutation } from '@apollo/react-hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
-import { FORGOT_PASSWORD } from '../graphql';
-import { TextInput, Button, useToast } from '../components';
-import { trackEvent, captureError } from '../utils/logger';
+import { TextInput, Button, useFetch, useToast } from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const ForgotPasswordPage = ({ history }) => {
     const toast = useToast();
 
-    const [forgotPassword] = useMutation(FORGOT_PASSWORD);
+    const { refetch: forgotPassword } = useFetch({
+        method: 'PUT',
+        url: '/account/forgotpassword',
+        manual: true
+    });
 
     const onSubmit = async variables => {
-        try {
-            const result = await forgotPassword({ variables });
+        const result = await forgotPassword({
+            emailAddress: variables.emailAddress
+        });
 
-            toast.success(result.data.forgotPassword.message);
-
+        if (result.ok) {
+            toast.success(result.message);
             trackEvent('password_reminder');
-
             history.push('/login');
-        } catch (error) {
-            captureError(error);
         }
     };
 

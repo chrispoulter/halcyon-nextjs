@@ -1,12 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { useQuery, useMutation } from '@apollo/react-hooks';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import { GET_PROFILE, DELETE_ACCOUNT } from '../graphql';
-import { Button, Spinner, useModal, useAuth, useToast } from '../components';
-import { trackEvent, captureError } from '../utils/logger';
+import {
+    Button,
+    Spinner,
+    useFetch,
+    useModal,
+    useAuth,
+    useToast
+} from '../components';
+import { trackEvent } from '../utils/logger';
 
 export const MyAccountPage = ({ history }) => {
     const { removeToken } = useAuth();
@@ -15,16 +20,22 @@ export const MyAccountPage = ({ history }) => {
 
     const toast = useToast();
 
-    const { loading, data } = useQuery(GET_PROFILE);
+    const { loading, data } = useFetch({
+        method: 'GET',
+        url: '/manage'
+    });
 
-    const [deleteAccount, { loading: isDeleting }] =
-        useMutation(DELETE_ACCOUNT);
+    const { refetch: deleteAccount, loading: isDeleting } = useFetch({
+        method: 'DELETE',
+        url: '/manage',
+        manual: true
+    });
 
     if (loading) {
         return <Spinner />;
     }
 
-    if (!data?.getProfile) {
+    if (!data) {
         return (
             <Container>
                 <Alert variant="info">Profile could not be found.</Alert>
@@ -41,19 +52,17 @@ export const MyAccountPage = ({ history }) => {
                     screen_name: 'delete-account-modal'
                 }),
             onOk: async () => {
-                try {
-                    const result = await deleteAccount();
+                const result = await deleteAccount();
 
-                    toast.success(result.data.deleteAccount.message);
+                if (result.ok) {
+                    toast.success(result.message);
 
                     trackEvent('account_deleted', {
-                        entityId: result.data.deleteAccount.user.id
+                        entityId: result.data.id
                     });
 
                     removeToken();
                     history.push('/');
-                } catch (error) {
-                    captureError(error);
                 }
             }
         });
@@ -78,7 +87,7 @@ export const MyAccountPage = ({ history }) => {
             <p>
                 <span className="text-muted">Email Address</span>
                 <br />
-                {data.getProfile.emailAddress}
+                {data.emailAddress}
             </p>
 
             <p>
@@ -92,20 +101,17 @@ export const MyAccountPage = ({ history }) => {
             <p>
                 <span className="text-muted">Name</span>
                 <br />
-                {data.getProfile.firstName} {data.getProfile.lastName}
+                {data.firstName} {data.lastName}
             </p>
 
             <p>
                 <span className="text-muted">Date Of Birth</span>
                 <br />
-                {new Date(data.getProfile.dateOfBirth).toLocaleDateString(
-                    'en',
-                    {
-                        day: '2-digit',
-                        month: 'long',
-                        year: 'numeric'
-                    }
-                )}
+                {new Date(data.dateOfBirth).toLocaleDateString('en', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                })}
             </p>
 
             <h3>Settings</h3>
