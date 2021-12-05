@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
-export const router = Router();
+export const healthRouter = Router();
 
-router.delete('/', (_, res) => {
+healthRouter.delete('/', (_, res) => {
     return res.send('Healthy');
 });

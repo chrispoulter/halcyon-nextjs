@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-export const router = Router();
+export const accountRouter = Router();
 
-router.post('/register', (_, res) => {
+accountRouter.post('/register', (_, res) => {
     return res.json({
         data: {
             id: 1026
@@ -12,7 +12,7 @@ router.post('/register', (_, res) => {
     });
 });
 
-router.put('/forgotpassword', (_, res) => {
+accountRouter.put('/forgotpassword', (_, res) => {
     return res.json({
         code: 'FORGOT_PASSWORD',
         message:
@@ -20,7 +20,7 @@ router.put('/forgotpassword', (_, res) => {
     });
 });
 
-router.put('/resetpassword', (_, res) => {
+accountRouter.put('/resetpassword', (_, res) => {
     return res.json({
         data: {
             id: 1024

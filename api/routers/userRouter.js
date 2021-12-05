@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-export const router = Router();
+export const userRouter = Router();
 
-router.get('/', (_, res) => {
+userRouter.get('/', (_, res) => {
     return res.json({
         data: {
             items: [
@@ -103,7 +103,7 @@ router.get('/', (_, res) => {
     });
 });
 
-router.post('/', (_, res) => {
+userRouter.post('/', (_, res) => {
     return res.json({
         data: {
             id: 1
@@ -113,7 +113,7 @@ router.post('/', (_, res) => {
     });
 });
 
-router.get('/:userId', (_, res) => {
+userRouter.get('/:userId', (_, res) => {
     return res.json({
         data: {
             id: 1027,
@@ -127,7 +127,7 @@ router.get('/:userId', (_, res) => {
     });
 });
 
-router.put('/:userId', (_, res) => {
+userRouter.put('/:userId', (_, res) => {
     return res.json({
         data: {
             id: 1027
@@ -137,7 +137,7 @@ router.put('/:userId', (_, res) => {
     });
 });
 
-router.put('/:userId/lock', (_, res) => {
+userRouter.put('/:userId/lock', (_, res) => {
     return res.json({
         data: {
             id: 1027
@@ -147,7 +147,7 @@ router.put('/:userId/lock', (_, res) => {
     });
 });
 
-router.put('/:userId/unlock', (_, res) => {
+userRouter.put('/:userId/unlock', (_, res) => {
     return res.json({
         data: {
             id: 1027
@@ -157,7 +157,7 @@ router.put('/:userId/unlock', (_, res) => {
     });
 });
 
-router.delete('/:userId', (_, res) => {
+userRouter.delete('/:userId', (_, res) => {
     return res.json({
         data: {
             id: 1027

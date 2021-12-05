@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-export const router = Router();
+export const seedRouter = Router();
 
-router.get('/', (_, res) => {
+seedRouter.get('/', (_, res) => {
     return res.json({
         data: {
             id: 1

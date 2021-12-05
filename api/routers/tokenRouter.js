@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-export const router = Router();
+export const tokenRouter = Router();
 
-router.post('/', (_, res) => {
+tokenRouter.post('/', (_, res) => {
     return res.json({
         data: {
             accessToken:

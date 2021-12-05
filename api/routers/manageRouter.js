@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-export const router = Router();
+export const manageRouter = Router();
 
-router.get('/', (_, res) => {
+manageRouter.get('/', (_, res) => {
     return res.json({
         data: {
             id: 1024,
@@ -14,7 +14,7 @@ router.get('/', (_, res) => {
     });
 });
 
-router.put('/', (_, res) => {
+manageRouter.put('/', (_, res) => {
     return res.json({
         data: {
             id: 1024
@@ -24,7 +24,7 @@ router.put('/', (_, res) => {
     });
 });
 
-router.put('/changepassword', (_, res) => {
+manageRouter.put('/changepassword', (_, res) => {
     return res.json({
         data: {
             id: 1024
@@ -34,7 +34,7 @@ router.put('/changepassword', (_, res) => {
     });
 });
 
-router.delete('/', (_, res) => {
+manageRouter.delete('/', (_, res) => {
     return res.json({
         data: {
             id: 1024
