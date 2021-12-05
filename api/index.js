@@ -1,23 +1,27 @@
-import { ApolloServer } from 'apollo-server-lambda';
-import { dataSources } from './dataSources';
-import { typeDefs } from './schema';
-import { resolvers } from './resolvers';
-import { context } from './context';
-import { plugin } from './utils/logger';
+import express from 'express';
+import {
+    accountRouter,
+    healthRouter,
+    manageRouter,
+    seedRouter,
+    tokenRouter,
+    userRouter
+} from './routers';
 
-const server = new ApolloServer({
-    dataSources,
-    typeDefs,
-    resolvers,
-    context,
-    plugins: [plugin],
-    introspection: true,
-    playground: true
-});
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-export const handler = server.createHandler({
-    cors: {
-        origin: '*',
-        credentials: true
-    }
-});
+const errorResponse = {
+    code: 'DUPLICATE_USER',
+    message: 'User name "cpoulter@hotmail.co.uk" is already taken.'
+};
+
+app.use('/api/account', accountRouter);
+app.use('/api/health', healthRouter);
+app.use('/api/manage', manageRouter);
+app.use('/api/seed', seedRouter);
+app.use('/api/token', tokenRouter);
+app.use('/api/userRouter', userRouter);
+
+app.listen(3001, () => console.log('App listening on port 3001'));

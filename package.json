@@ -8,15 +8,9 @@
         "client:build": "react-scripts build",
         "postclient:build": "yarn client:workbox",
         "client:workbox": "workbox injectManifest workbox-config.js",
-        "api:start": "serverless offline start",
-        "api:build": "serverless client build --command client:build",
-        "api:deploy": "serverless deploy",
-        "servapierless:remove": "serverless remove",
-        "db:install": "serverless dynamodb install",
-        "db:start": "serverless dynamodb start",
+        "api:start": "nodemon --exec babel-node api/index.js",
         "db:seed": "babel-node scripts/seed.js",
         "db:populate": "babel-node scripts/populate.js",
-        "db:remove": "rimraf ./.dynamodb/shared-local-instance.db",
         "lint": "eslint \"**/*.{js,jsx}\"",
         "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\""
     },
@@ -38,14 +32,26 @@
         "yup": "0.32.9"
     },
     "devDependencies": {
+        "@babel/core": "7.14.0",
+        "@babel/node": "7.13.13",
+        "@babel/plugin-proposal-class-properties": "7.13.0",
+        "@babel/preset-env": "7.14.0",
+        "babel-loader": "8.1.0",
+        "babel-node": "^0.0.1-security",
+        "babel-plugin-inline-import": "3.0.0",
+        "babel-plugin-transform-runtime": "6.23.0",
+        "babel-polyfill": "6.26.0",
+        "babel-preset-env": "1.7.0",
         "concurrently": "6.4.0",
         "dotenv": "10.0.0",
         "faker": "5.5.3",
         "node-sass": "6.0.1",
+        "nodemon": "^2.0.15",
         "prettier": "2.5.1",
         "react-scripts": "4.0.3",
         "workbox-cli": "6.4.2"
     },
+    "proxy": "http://localhost:3001",
     "browserslist": {
         "production": [
             ">0.2%",
