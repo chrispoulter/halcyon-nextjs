@@ -12,11 +12,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/health', healthRouter);
+
 app.use('/api/account', accountRouter);
-app.use('/api/health', healthRouter);
 app.use('/api/manage', manageRouter);
 app.use('/api/token', tokenRouter);
-app.use('/api/userRouter', userRouter);
+app.use('/api/user', userRouter);
 
 app.use(errorMiddleware);
 
