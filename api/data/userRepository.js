@@ -5,11 +5,8 @@ export const userRepository = {
         let statement =
             'SELECT user_id, email_address, password, password_reset_token, first_name, last_name, date_of_birth, is_locked_out FROM users';
 
-        const offset = (page - 1) * [size];
-        const params = [offset, size, search];
-
         if (search) {
-            statement += ` WHERE LOWER(first_name || ' ' || last_name || ' ' || email_address) LIKE '%' || $1 || '%'`;
+            statement += ` WHERE (first_name || ' ' || last_name || ' ' || email_address) ILIKE  '%' || $1 || '%'`;
         }
 
         if (sort) {
@@ -29,15 +26,10 @@ export const userRepository = {
             }
         }
 
-        if (page) {
-            statement += ' OFFSET $2 ';
-        }
+        const offset = (page - 1) * [size];
+        statement += ' OFFSET $2 LIMIT $3';
 
-        if (size) {
-            statement += ' LIMIT $3';
-        }
-
-        return await query(statement, [params]);
+        return await query(statement, [search, offset, size]);
     },
 
     getById: async id => {
