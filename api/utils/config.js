@@ -4,6 +4,12 @@ export const config = {
     VERSION: process.env.VERSION || '1.0.0',
     STAGE: process.env.STAGE || 'local',
 
+    DB_HOST: process.env.DB_HOST || 'localhost',
+    DB_PORT: parseInt(process.env.DB_PORT || '5432'),
+    DB_USER: process.env.DB_USER || 'postgres',
+    DB_PASSWORD: process.env.DB_PASSWORD || 'example',
+    DB_DATABASE: process.env.DB_DATABASE || 'halcyon',
+
     JWT_SECURITY_KEY: process.env.JWT_SECURITY_KEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
     JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient',

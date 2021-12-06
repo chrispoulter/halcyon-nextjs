@@ -18,6 +18,12 @@ Create a `.env` file in the web project directory.
 ```
 ## Api #############################################
 
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=example
+DB_DATABASE=halcyon
+
 JWT_SECURITY_KEY=change-me-1234567890
 JWT_ISSUER=HalcyonApi
 JWT_AUDIENCE=HalcyonClient
