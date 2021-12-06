@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { asyncMiddleware, authMiddleware } from '../middleware';
+import * as Yup from 'yup';
+import {
+    asyncMiddleware,
+    authMiddleware,
+    validationMiddleware
+} from '../middleware';
 import { userRepository } from '../data';
 import { USER_ADMINISTRATOR_ROLES } from '../utils/auth';
 import { generateHash } from '../utils/hash';
@@ -38,6 +43,19 @@ userRouter.get(
 
 userRouter.post(
     '/',
+    validationMiddleware(
+        Yup.object().shape({
+            emailAddress: Yup.string()
+                .label('Email Address')
+                .max(254)
+                .email()
+                .required(),
+            password: Yup.string().label('Password').min(8).max(50).required(),
+            firstName: Yup.string().label('First Name').max(50).required(),
+            lastName: Yup.string().label('Last Name').max(50).required(),
+            dateOfBirth: Yup.string().label('Date Of Birth').required()
+        })
+    ),
     asyncMiddleware(async ({ body }, res) => {
         const existing = await userRepository.getByEmailAddress(
             body.emailAddress
@@ -97,6 +115,18 @@ userRouter.get(
 
 userRouter.put(
     '/:userId',
+    validationMiddleware(
+        Yup.object().shape({
+            emailAddress: Yup.string()
+                .label('Email Address')
+                .max(254)
+                .email()
+                .required(),
+            firstName: Yup.string().label('First Name').max(50).required(),
+            lastName: Yup.string().label('Last Name').max(50).required(),
+            dateOfBirth: Yup.string().label('Date Of Birth').required()
+        })
+    ),
     asyncMiddleware(async ({ params, body }, res) => {
         const user = await userRepository.getById(params.userId);
 

@@ -1,11 +1,16 @@
 import { Router } from 'express';
-import { asyncMiddleware, authMiddleware } from '../middleware';
+import * as Yup from 'yup';
+import {
+    asyncMiddleware,
+    authMiddleware,
+    validationMiddleware
+} from '../middleware';
 import { userRepository } from '../data';
 import { verifyHash, generateHash } from '../utils/hash';
 
 export const manageRouter = Router();
 
-manageRouter.use(authMiddleware())
+manageRouter.use(authMiddleware());
 
 manageRouter.get(
     '/',
@@ -33,6 +38,18 @@ manageRouter.get(
 
 manageRouter.put(
     '/',
+    validationMiddleware(
+        Yup.object().shape({
+            emailAddress: Yup.string()
+                .label('Email Address')
+                .max(254)
+                .email()
+                .required(),
+            firstName: Yup.string().label('First Name').max(50).required(),
+            lastName: Yup.string().label('Last Name').max(50).required(),
+            dateOfBirth: Yup.string().label('Date Of Birth').required()
+        })
+    ),
     asyncMiddleware(async ({ payload, body }, res) => {
         const user = await userRepository.getById(payload.sub);
 
@@ -74,6 +91,16 @@ manageRouter.put(
 
 manageRouter.put(
     '/changepassword',
+    validationMiddleware(
+        Yup.object().shape({
+            currentPassword: Yup.string().label('Current Password').required(),
+            newPassword: Yup.string()
+                .label('New Password')
+                .min(8)
+                .max(50)
+                .required()
+        })
+    ),
     asyncMiddleware(async ({ payload, body }, res) => {
         const user = await userRepository.getById(payload.sub);
 

@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { asyncMiddleware } from '../middleware';
+import * as Yup from 'yup';
+import { asyncMiddleware, validationMiddleware } from '../middleware';
 import { userRepository } from '../data';
 import { verifyHash } from '../utils/hash';
 import { generateToken } from '../utils/jwt';
@@ -8,6 +9,15 @@ export const tokenRouter = Router();
 
 tokenRouter.post(
     '/',
+    validationMiddleware(
+        Yup.object().shape({
+            emailAddress: Yup.string()
+                .label('Email Address')
+                .email()
+                .required(),
+            password: Yup.string().label('Password').required()
+        })
+    ),
     asyncMiddleware(async ({ body }, res) => {
         const user = await userRepository.getByEmailAddress(body.emailAddress);
 
