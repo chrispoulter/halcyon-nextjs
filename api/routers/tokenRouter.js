@@ -9,15 +9,15 @@ export const tokenRouter = Router();
 
 tokenRouter.post(
     '/',
-    validationMiddleware(
-        Yup.object().shape({
+    validationMiddleware({
+        body: {
             emailAddress: Yup.string()
                 .label('Email Address')
                 .email()
                 .required(),
             password: Yup.string().label('Password').required()
-        })
-    ),
+        }
+    }),
     asyncMiddleware(async ({ body }, res) => {
         const user = await userRepository.getByEmailAddress(body.emailAddress);
 

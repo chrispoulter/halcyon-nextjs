@@ -38,8 +38,8 @@ manageRouter.get(
 
 manageRouter.put(
     '/',
-    validationMiddleware(
-        Yup.object().shape({
+    validationMiddleware({
+        body: {
             emailAddress: Yup.string()
                 .label('Email Address')
                 .max(254)
@@ -48,8 +48,8 @@ manageRouter.put(
             firstName: Yup.string().label('First Name').max(50).required(),
             lastName: Yup.string().label('Last Name').max(50).required(),
             dateOfBirth: Yup.string().label('Date Of Birth').required()
-        })
-    ),
+        }
+    }),
     asyncMiddleware(async ({ payload, body }, res) => {
         const user = await userRepository.getById(payload.sub);
 
@@ -91,16 +91,16 @@ manageRouter.put(
 
 manageRouter.put(
     '/changepassword',
-    validationMiddleware(
-        Yup.object().shape({
+    validationMiddleware({
+        body: {
             currentPassword: Yup.string().label('Current Password').required(),
             newPassword: Yup.string()
                 .label('New Password')
                 .min(8)
                 .max(50)
                 .required()
-        })
-    ),
+        }
+    }),
     asyncMiddleware(async ({ payload, body }, res) => {
         const user = await userRepository.getById(payload.sub);
 

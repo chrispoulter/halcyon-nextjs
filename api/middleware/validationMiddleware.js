@@ -1,8 +1,13 @@
+import * as Yup from 'yup';
+
 export const validationMiddleware =
     schema =>
-    async ({ body }, res, next) => {
+    async ({ body, query }, res, next) => {
         try {
-            await schema.validate(body);
+            await Promise.all([
+                Yup.object(schema.query).validate(query),
+                Yup.object(schema.body).validate(body)
+            ]);
         } catch (err) {
             return res.status(400).json({
                 code: 'INVALID_REQUEST',

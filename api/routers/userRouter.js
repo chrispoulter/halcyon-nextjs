@@ -15,6 +15,21 @@ userRouter.use(authMiddleware(USER_ADMINISTRATOR_ROLES));
 
 userRouter.get(
     '/',
+    validationMiddleware({
+        query: {
+            search: Yup.string().label('Search'),
+            sort: Yup.string()
+                .label('Sort')
+                .oneOf([
+                    'NAME_ASC',
+                    'NAME_DESC',
+                    'EMAIL_ADDRESS_ASC',
+                    'EMAIL_ADDRESS_DESC'
+                ]),
+            page: Yup.number().label('Page'),
+            size: Yup.number().label('Size')
+        }
+    }),
     asyncMiddleware(async ({ body }, res) => {
         const result = await userRepository.search({
             search: body.search,
@@ -43,8 +58,8 @@ userRouter.get(
 
 userRouter.post(
     '/',
-    validationMiddleware(
-        Yup.object().shape({
+    validationMiddleware({
+        body: {
             emailAddress: Yup.string()
                 .label('Email Address')
                 .max(254)
@@ -54,8 +69,8 @@ userRouter.post(
             firstName: Yup.string().label('First Name').max(50).required(),
             lastName: Yup.string().label('Last Name').max(50).required(),
             dateOfBirth: Yup.string().label('Date Of Birth').required()
-        })
-    ),
+        }
+    }),
     asyncMiddleware(async ({ body }, res) => {
         const existing = await userRepository.getByEmailAddress(
             body.emailAddress
@@ -115,8 +130,8 @@ userRouter.get(
 
 userRouter.put(
     '/:userId',
-    validationMiddleware(
-        Yup.object().shape({
+    validationMiddleware({
+        body: {
             emailAddress: Yup.string()
                 .label('Email Address')
                 .max(254)
@@ -125,8 +140,8 @@ userRouter.put(
             firstName: Yup.string().label('First Name').max(50).required(),
             lastName: Yup.string().label('Last Name').max(50).required(),
             dateOfBirth: Yup.string().label('Date Of Birth').required()
-        })
-    ),
+        }
+    }),
     asyncMiddleware(async ({ params, body }, res) => {
         const user = await userRepository.getById(params.userId);
 

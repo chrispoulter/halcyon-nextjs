@@ -10,8 +10,8 @@ export const accountRouter = Router();
 
 accountRouter.post(
     '/register',
-    validationMiddleware(
-        Yup.object().shape({
+    validationMiddleware({
+        body: {
             emailAddress: Yup.string()
                 .label('Email Address')
                 .max(254)
@@ -21,8 +21,8 @@ accountRouter.post(
             firstName: Yup.string().label('First Name').max(50).required(),
             lastName: Yup.string().label('Last Name').max(50).required(),
             dateOfBirth: Yup.string().label('Date Of Birth').required()
-        })
-    ),
+        }
+    }),
     asyncMiddleware(async ({ body }, res) => {
         const existing = await userRepository.getByEmailAddress(
             body.emailAddress
@@ -55,15 +55,15 @@ accountRouter.post(
 
 accountRouter.put(
     '/forgotpassword',
-    validationMiddleware(
-        Yup.object().shape({
+    validationMiddleware({
+        body: {
             emailAddress: Yup.string()
                 .label('Email Address')
                 .max(254)
                 .email()
                 .required()
-        })
-    ),
+        }
+    }),
     asyncMiddleware(async (req, res) => {
         const user = await userRepository.getByEmailAddress(
             req.body.emailAddress
@@ -95,8 +95,8 @@ accountRouter.put(
 
 accountRouter.put(
     '/resetpassword',
-    validationMiddleware(
-        Yup.object().shape({
+    validationMiddleware({
+        body: {
             token: Yup.string().label('Token').required(),
             emailAddress: Yup.string()
                 .label('Email Address')
@@ -108,8 +108,8 @@ accountRouter.put(
                 .min(8)
                 .max(50)
                 .required()
-        })
-    ),
+        }
+    }),
     asyncMiddleware(async ({ body }, res) => {
         const user = await userRepository.getByEmailAddress(body.emailAddress);
 
