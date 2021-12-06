@@ -19,6 +19,7 @@ export const isAuthorized = (user, requiredRoles) => {
     }
 
     const userRoles = user.role || [];
+
     if (!requiredRoles.some(value => userRoles.includes(value))) {
         return false;
     }

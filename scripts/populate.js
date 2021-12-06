@@ -1,7 +1,5 @@
 import faker from 'faker';
-import { dataSources } from '../api/dataSources';
-
-const { users } = dataSources();
+import { userRepository } from '../api/data';
 
 (async () => {
     for (var i = 1; i <= 50; i++) {
@@ -11,7 +9,7 @@ const { users } = dataSources();
         const dateOfBirth = faker.date.past().toISOString();
         const isLockedOut = faker.datatype.boolean();
 
-        await users.upsert({
+        await userRepository.upsert({
             emailAddress,
             firstName,
             lastName,

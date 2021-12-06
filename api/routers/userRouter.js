@@ -1,107 +1,33 @@
 import { Router } from 'express';
 import { asyncMiddleware } from '../middleware';
+import { userRepository } from '../data';
+import { generateHash } from '../utils/hash';
 
 export const userRouter = Router();
 
 userRouter.get(
     '/',
-    asyncMiddleware((_, res) => {
+    asyncMiddleware(async ({ body }, res) => {
+        const result = await userRepository.search({
+            search: body.search,
+            sort: body.sort,
+            page: body.page,
+            size: body.size
+        });
+
         return res.json({
             data: {
-                items: [
-                    {
-                        id: 1017,
-                        emailAddress: 'amelia.thomas.25668@chrispoulter.com',
-                        firstName: 'Amelia',
-                        lastName: 'Thomas',
-                        dateOfBirth: '1970-01-01T00:00:00Z',
-                        isLockedOut: true,
-                        roles: []
-                    },
-                    {
-                        id: 1026,
-                        emailAddress: 'charlie.taylor.79319@chrispoulter.com',
-                        firstName: 'Charlie',
-                        lastName: 'Taylor',
-                        dateOfBirth: '1970-01-01T00:00:00Z',
-                        isLockedOut: false,
-                        roles: []
-                    },
-                    {
-                        id: 1021,
-                        emailAddress: 'charlie.thomas.19984@chrispoulter.com',
-                        firstName: 'Charlie',
-                        lastName: 'Thomas',
-                        dateOfBirth: '1970-01-01T00:00:00Z',
-                        isLockedOut: false,
-                        roles: []
-                    },
-                    {
-                        id: 1023,
-                        emailAddress: 'chris.poulter@novafori.com',
-                        firstName: 'Chris',
-                        lastName: 'Poulter',
-                        dateOfBirth: '2021-01-01T00:00:00Z',
-                        isLockedOut: false,
-                        roles: []
-                    },
-                    {
-                        id: 1025,
-                        emailAddress: 'chrisp-cix01@yopmail.com',
-                        firstName: 'Chris',
-                        lastName: 'Poulter',
-                        dateOfBirth: '2021-01-02T00:00:00Z',
-                        isLockedOut: false,
-                        roles: []
-                    },
-                    {
-                        id: 1027,
-                        emailAddress: 'cpoulter@hotmail.co.uk',
-                        firstName: 'Chris',
-                        lastName: 'Poulter',
-                        dateOfBirth: '1970-01-01T00:00:00Z',
-                        isLockedOut: false,
-                        roles: []
-                    },
-                    {
-                        id: 1006,
-                        emailAddress: 'emily.brown.98092@chrispoulter.com',
-                        firstName: 'Emily',
-                        lastName: 'Brown',
-                        dateOfBirth: '1970-01-01T00:00:00Z',
-                        isLockedOut: false,
-                        roles: []
-                    },
-                    {
-                        id: 1004,
-                        emailAddress: 'george.brown.17210@chrispoulter.com',
-                        firstName: 'George',
-                        lastName: 'Brown',
-                        dateOfBirth: '1970-01-01T00:00:00Z',
-                        isLockedOut: false,
-                        roles: []
-                    },
-                    {
-                        id: 1010,
-                        emailAddress: 'george.davies.87401@chrispoulter.com',
-                        firstName: 'George',
-                        lastName: 'Davies',
-                        dateOfBirth: '1970-01-01T00:00:00Z',
-                        isLockedOut: false,
-                        roles: []
-                    },
-                    {
-                        id: 1014,
-                        emailAddress: 'harry.brown.50122@chrispoulter.com',
-                        firstName: 'Harry',
-                        lastName: 'Brown',
-                        dateOfBirth: '1970-01-01T00:00:00Z',
-                        isLockedOut: false,
-                        roles: []
-                    }
-                ],
-                hasNextPage: true,
-                hasPreviousPage: false
+                items: result.data.map(user => ({
+                    id: user.id,
+                    emailAddress: user.emailAddress,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    dateOfBirth: user.dateOfBirth.toISOString(),
+                    isLockedOut: user.isLockedOut,
+                    roles: user.roles
+                })),
+                hasNextPage: result.hasNextPage,
+                hasPreviousPage: result.hasPreviousPage
             }
         });
     })
@@ -109,29 +35,58 @@ userRouter.get(
 
 userRouter.post(
     '/',
-    asyncMiddleware((_, res) => {
+    asyncMiddleware(async ({ body }, res) => {
+        const existing = await userRepository.getByEmailAddress(
+            body.emailAddress
+        );
+
+        if (existing) {
+            return res.status(400).json({
+                code: 'DUPLICATE_USER',
+                message: `User name "${body.emailAddress}" is already taken.`
+            });
+        }
+
+        const result = await userRepository.create({
+            emailAddress: body.emailAddress,
+            password: await generateHash(body.password),
+            firstName: body.firstName,
+            lastName: body.lastName,
+            dateOfBirth: body.dateOfBirth.toISOString(),
+            roles: body.roles
+        });
+
         return res.json({
-            data: {
-                id: 1
-            },
             code: 'USER_CREATED',
-            message: 'User successfully created.'
+            message: 'User successfully created.',
+            data: {
+                id: result.id
+            }
         });
     })
 );
 
 userRouter.get(
     '/:userId',
-    asyncMiddleware((_, res) => {
+    asyncMiddleware(async ({ params }, res) => {
+        const user = userRepository.getById(params.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                code: 'USER_NOT_FOUND',
+                message: 'User not found.'
+            });
+        }
+
         return res.json({
             data: {
-                id: 1027,
-                emailAddress: 'cpoulter@hotmail.co.uk',
-                firstName: 'Chris',
-                lastName: 'Poulter',
-                dateOfBirth: '1970-01-01T00:00:00Z',
-                isLockedOut: false,
-                roles: []
+                id: user.id,
+                emailAddress: user.emailAddress,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                dateOfBirth: user.dateOfBirth.toISOString(),
+                isLockedOut: user.isLockedOut,
+                roles: user.roles
             }
         });
     })
@@ -139,52 +94,130 @@ userRouter.get(
 
 userRouter.put(
     '/:userId',
-    asyncMiddleware((_, res) => {
+    asyncMiddleware(async ({ params, body }, res) => {
+        const user = await userRepository.getById(params.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                code: 'USER_NOT_FOUND',
+                message: 'User not found.'
+            });
+        }
+
+        if (user.emailAddress !== body.emailAddress) {
+            const existing = await userRepository.getByEmailAddress(
+                body.emailAddress
+            );
+
+            if (existing) {
+                return res.status(400).json({
+                    code: 'DUPLICATE_USER',
+                    message: `User name "${body.emailAddress}" is already taken.`
+                });
+            }
+        }
+
+        user.emailAddress = body.emailAddress;
+        user.firstName = body.firstName;
+        user.lastName = body.lastName;
+        user.dateOfBirth = body.dateOfBirth.toISOString();
+        user.roles = body.roles;
+        await userRepository.update(user);
+
         return res.json({
-            data: {
-                id: 1027
-            },
             code: 'USER_UPDATED',
-            message: 'User successfully updated.'
+            message: 'User successfully updated.',
+            data: {
+                id: user.id
+            }
         });
     })
 );
 
 userRouter.put(
     '/:userId/lock',
-    asyncMiddleware((_, res) => {
+    asyncMiddleware(async ({ params, payload }, res) => {
+        const user = await userRepository.getById(params.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                code: 'USER_NOT_FOUND',
+                message: 'User not found.'
+            });
+        }
+
+        if (user.id === payload.sub) {
+            return res.status(400).json({
+                code: 'LOCK_CURRENT_USER',
+                message: 'Cannot lock currently logged in user.'
+            });
+        }
+
+        user.isLockedOut = true;
+        await userRepository.update(user);
+
         return res.json({
-            data: {
-                id: 1027
-            },
             code: 'USER_LOCKED',
-            message: 'User successfully locked.'
+            message: 'User successfully locked.',
+            data: {
+                id: user.id
+            }
         });
     })
 );
 
 userRouter.put(
     '/:userId/unlock',
-    asyncMiddleware((_, res) => {
+    asyncMiddleware(async ({ params }, res) => {
+        const user = await userRepository.getById(params.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                code: 'USER_NOT_FOUND',
+                message: 'User not found.'
+            });
+        }
+
+        user.isLockedOut = false;
+        await userRepository.update(user);
+
         return res.json({
-            data: {
-                id: 1027
-            },
             code: 'USER_UNLOCKED',
-            message: 'User successfully unlocked.'
+            message: 'User successfully unlocked.',
+            data: {
+                id: user.id
+            }
         });
     })
 );
 
 userRouter.delete(
     '/:userId',
-    asyncMiddleware((_, res) => {
+    asyncMiddleware(async ({ params, payload }, res) => {
+        const user = await userRepository.getById(params.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                code: 'USER_NOT_FOUND',
+                message: 'User not found.'
+            });
+        }
+
+        if (user.id === payload.sub) {
+            return res.status(400).json({
+                code: 'DELETE_CURRENT_USER',
+                message: 'Cannot delete currently logged in user.'
+            });
+        }
+
+        await userRepository.remove(user);
+
         return res.json({
-            data: {
-                id: 1027
-            },
             code: 'USER_DELETED',
-            message: 'User successfully deleted.'
+            message: 'User successfully deleted.',
+            data: {
+                id: user.id
+            }
         });
     })
 );

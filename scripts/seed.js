@@ -1,16 +1,14 @@
-import { dataSources } from '../api/dataSources';
+import { userRepository, templateRepository } from '../api/data';
 import { generateHash } from '../api/utils/hash';
 import { ALL_ROLES } from '../api/utils/auth';
 import { config } from '../api/utils/config';
 
 import resetPassword from './templates/resetPassword.html';
 
-const { users, templates } = dataSources();
-
 const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
 
 (async () => {
-    await users.upsert({
+    await userRepository.upsert({
         emailAddress: config.SEED_EMAIL_ADDRESS,
         password: await generateHash(config.SEED_PASSWORD),
         firstName: 'System',
@@ -19,7 +17,7 @@ const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
         roles: ALL_ROLES
     });
 
-    await templates.upsert({
+    await templateRepository.upsert({
         key: 'RESET_PASSWORD',
         subject: subjectRegEx.exec(resetPassword)[1],
         html: resetPassword

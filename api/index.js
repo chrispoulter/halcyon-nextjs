@@ -13,11 +13,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const errorResponse = {
-    code: 'DUPLICATE_USER',
-    message: 'User name "cpoulter@hotmail.co.uk" is already taken.'
-};
-
 app.use('/api/account', accountRouter);
 app.use('/api/health', healthRouter);
 app.use('/api/manage', manageRouter);
