@@ -1,4 +1,5 @@
 import express from 'express';
+import { errorMiddleware } from './middleware';
 import {
     accountRouter,
     healthRouter,
@@ -23,5 +24,7 @@ app.use('/api/manage', manageRouter);
 app.use('/api/seed', seedRouter);
 app.use('/api/token', tokenRouter);
 app.use('/api/userRouter', userRouter);
+
+app.use(errorMiddleware);
 
 app.listen(3001, () => console.log('App listening on port 3001'));
