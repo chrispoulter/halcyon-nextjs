@@ -1,25 +1,29 @@
+import nodemailer from 'nodemailer';
+import { templateRepository } from '../data';
 import { format } from './string';
-import { fetch } from './http';
-import { base64Encode } from './encode';
 import { config } from './config';
 
-const url = `https://api.mailgun.net/v3/${config.MAILGUN_DOMAIN}/messages`;
-const authorization = `Basic ${base64Encode(`api:${config.MAILGUN_API_KEY}`)}`;
+export const sendEmail = async message => {
+    const template = await templateRepository.getByKey(message.template);
 
-export const sendEmail = message => {
-    const context = { ...message.context, clientUrl: config.CLIENT_URL };
+    if (!template) {
+        throw new Error(`Unknown email template: ${message.template}`);
+    }
 
-    return fetch({
-        url,
-        method: 'POST',
-        headers: {
-            authorization
-        },
-        body: {
-            from: config.MAILGUN_NO_REPLY,
-            to: message.to,
-            subject: format(message.subject, context),
-            html: format(message.html, context)
+    const transporter = nodemailer.createTransport({
+        host: config.EMAIL_SMTP_SERVER,
+        port: config.EMAIL_SMTP_PORT,
+        secure: false,
+        auth: {
+            user: config.EMAIL_SMTP_USERNAME,
+            pass: config.EMAIL_SMTP_PASSWORD
         }
+    });
+
+    await transporter.sendMail({
+        from: config.EMAIL_NO_REPLY_ADDRESS,
+        to: message.to,
+        subject: format(template.subject, message.context),
+        html: format(template.html, message.context)
     });
 };

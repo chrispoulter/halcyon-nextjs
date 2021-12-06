@@ -4,7 +4,6 @@ import {
     accountRouter,
     healthRouter,
     manageRouter,
-    seedRouter,
     tokenRouter,
     userRouter
 } from './routers';
@@ -16,7 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/account', accountRouter);
 app.use('/api/health', healthRouter);
 app.use('/api/manage', manageRouter);
-app.use('/api/seed', seedRouter);
 app.use('/api/token', tokenRouter);
 app.use('/api/userRouter', userRouter);
 
