@@ -1,9 +1,11 @@
 import { Router } from 'express';
-import { asyncMiddleware } from '../middleware';
+import { asyncMiddleware, authMiddleware } from '../middleware';
 import { userRepository } from '../data';
 import { verifyHash, generateHash } from '../utils/hash';
 
 export const manageRouter = Router();
+
+manageRouter.use(authMiddleware())
 
 manageRouter.get(
     '/',

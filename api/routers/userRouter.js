@@ -1,9 +1,12 @@
 import { Router } from 'express';
-import { asyncMiddleware } from '../middleware';
+import { asyncMiddleware, authMiddleware } from '../middleware';
 import { userRepository } from '../data';
+import { USER_ADMINISTRATOR_ROLES } from '../utils/auth';
 import { generateHash } from '../utils/hash';
 
 export const userRouter = Router();
+
+userRouter.use(authMiddleware(USER_ADMINISTRATOR_ROLES));
 
 userRouter.get(
     '/',
