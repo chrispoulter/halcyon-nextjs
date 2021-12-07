@@ -14,8 +14,8 @@ manageRouter.use(authMiddleware());
 
 manageRouter.get(
     '/',
-    asyncMiddleware(({ payload }, res) => {
-        const user = userRepository.getById(payload.sub);
+    asyncMiddleware(async ({ payload }, res) => {
+        const user = await userRepository.getById(payload.sub);
 
         if (!user || user.is_locked_out) {
             return res.status(404).json({
@@ -76,7 +76,7 @@ manageRouter.put(
         user.email_address = body.emailAddress;
         user.first_name = body.firstName;
         user.last_name = body.lastName;
-        user.date_of_birth = body.dateOfBirth.toISOString();
+        user.date_of_birth = body.dateOfBirth;
         await userRepository.update(user);
 
         return res.json({

@@ -9,12 +9,12 @@ const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
 
 (async () => {
     await userRepository.upsert({
-        emailAddress: config.SEED_EMAIL_ADDRESS,
+        email_address: config.SEED_EMAIL_ADDRESS,
         password: await generateHash(config.SEED_PASSWORD),
-        firstName: 'System',
-        lastName: 'Administrator',
-        dateOfBirth: new Date(1970, 0, 1).toISOString(),
-        isLockedOut: false,
+        first_name: 'System',
+        last_name: 'Administrator',
+        date_of_birth: new Date(1970, 0, 1).toISOString(),
+        is_locked_out: false,
         roles: ALL_ROLES
     });
 

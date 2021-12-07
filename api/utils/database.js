@@ -10,6 +10,7 @@ const pool = new Pool({
 });
 
 export const query = async (query, params) => {
+    console.log('query', query, params);
     const { rows } = await pool.query(query, params);
     return rows;
 };

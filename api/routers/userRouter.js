@@ -88,7 +88,8 @@ userRouter.post(
             password: await generateHash(body.password),
             first_name: body.firstName,
             last_name: body.lastName,
-            date_of_birth: body.dateOfBirth.toISOString(),
+            date_of_birth: body.dateOfBirth,
+            is_locked_out: false,
             roles: body.roles
         });
 
@@ -103,9 +104,9 @@ userRouter.post(
 );
 
 userRouter.get(
-    '/:userId',
+    '/:id',
     asyncMiddleware(async ({ params }, res) => {
-        const user = userRepository.getById(params.userId);
+        const user = await userRepository.getById(params.id);
 
         if (!user) {
             return res.status(404).json({
@@ -129,7 +130,7 @@ userRouter.get(
 );
 
 userRouter.put(
-    '/:userId',
+    '/:id',
     validationMiddleware({
         body: {
             emailAddress: Yup.string()
@@ -143,7 +144,7 @@ userRouter.put(
         }
     }),
     asyncMiddleware(async ({ params, body }, res) => {
-        const user = await userRepository.getById(params.userId);
+        const user = await userRepository.getById(params.id);
 
         if (!user) {
             return res.status(404).json({
@@ -168,7 +169,7 @@ userRouter.put(
         user.email_address = body.emailAddress;
         user.first_name = body.firstName;
         user.last_name = body.lastName;
-        user.date_of_birth = body.dateOfBirth.toISOString();
+        user.date_of_birth = body.dateOfBirth;
         user.roles = body.roles;
         await userRepository.update(user);
 
@@ -183,9 +184,9 @@ userRouter.put(
 );
 
 userRouter.put(
-    '/:userId/lock',
+    '/:id/lock',
     asyncMiddleware(async ({ params, payload }, res) => {
-        const user = await userRepository.getById(params.userId);
+        const user = await userRepository.getById(params.id);
 
         if (!user) {
             return res.status(404).json({
@@ -215,9 +216,9 @@ userRouter.put(
 );
 
 userRouter.put(
-    '/:userId/unlock',
+    '/:id/unlock',
     asyncMiddleware(async ({ params }, res) => {
-        const user = await userRepository.getById(params.userId);
+        const user = await userRepository.getById(params.id);
 
         if (!user) {
             return res.status(404).json({
@@ -240,9 +241,9 @@ userRouter.put(
 );
 
 userRouter.delete(
-    '/:userId',
+    '/:id',
     asyncMiddleware(async ({ params, payload }, res) => {
-        const user = await userRepository.getById(params.userId);
+        const user = await userRepository.getById(params.id);
 
         if (!user) {
             return res.status(404).json({

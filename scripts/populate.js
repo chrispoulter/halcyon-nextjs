@@ -3,18 +3,22 @@ import { userRepository } from '../api/data';
 
 (async () => {
     for (var i = 1; i <= 50; i++) {
-        const emailAddress = faker.internet.exampleEmail();
-        const firstName = faker.name.firstName();
-        const lastName = faker.name.lastName();
-        const dateOfBirth = faker.date.past().toISOString();
-        const isLockedOut = faker.datatype.boolean();
+        const first_name = faker.name.firstName();
+        const last_name = faker.name.lastName();
+        const date_of_birth = faker.date.past(18).toISOString();
+        const is_locked_out = faker.datatype.boolean();
+
+        const email_address = faker.internet.exampleEmail(
+            first_name,
+            last_name
+        );
 
         await userRepository.upsert({
-            emailAddress,
-            firstName,
-            lastName,
-            dateOfBirth,
-            isLockedOut
+            email_address,
+            first_name,
+            last_name,
+            date_of_birth,
+            is_locked_out
         });
     }
 
