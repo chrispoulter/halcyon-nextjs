@@ -17,7 +17,7 @@ manageRouter.get(
     asyncMiddleware(({ payload }, res) => {
         const user = userRepository.getById(payload.sub);
 
-        if (!user || user.IsLockedOut) {
+        if (!user || user.is_locked_out) {
             return res.status(404).json({
                 code: 'USER_NOT_FOUND',
                 message: 'User not found.'
@@ -26,11 +26,11 @@ manageRouter.get(
 
         return res.json({
             data: {
-                id: user.id,
-                emailAddress: user.emailAddress,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                dateOfBirth: user.dateOfBirth.toISOString()
+                id: user.user_id,
+                emailAddress: user.email_address,
+                firstName: user.first_name,
+                lastName: user.last_name,
+                dateOfBirth: user.date_of_birth.toISOString()
             }
         });
     })
@@ -60,7 +60,7 @@ manageRouter.put(
             });
         }
 
-        if (user.emailAddress !== body.emailAddress) {
+        if (user.email_address !== body.emailAddress) {
             const existing = await userRepository.getByEmailAddress(
                 body.emailAddress
             );
@@ -73,17 +73,17 @@ manageRouter.put(
             }
         }
 
-        user.emailAddress = body.emailAddress;
-        user.firstName = body.firstName;
-        user.lastName = body.lastName;
-        user.dateOfBirth = body.dateOfBirth.toISOString();
+        user.email_address = body.emailAddress;
+        user.first_name = body.firstName;
+        user.last_name = body.lastName;
+        user.date_of_birth = body.dateOfBirth.toISOString();
         await userRepository.update(user);
 
         return res.json({
             code: 'PROFILE_UPDATED',
             message: 'Your profile has been updated.',
             data: {
-                id: user.id
+                id: user.user_id
             }
         });
     })
@@ -121,14 +121,14 @@ manageRouter.put(
         }
 
         user.password = await generateHash(body.newPassword);
-        user.passwordResetToken = undefined;
+        user.password_reset_token = undefined;
         await userRepository.update(user);
 
         return res.json({
             code: 'PASSWORD_CHANGED',
             message: 'Your password has been changed.',
             data: {
-                id: user.id
+                id: user.user_id
             }
         });
     })
@@ -152,7 +152,7 @@ manageRouter.delete(
             code: 'ACCOUNT_DELETED',
             message: 'Your account has been deleted.',
             data: {
-                id: user.id
+                id: user.user_id
             }
         });
     })

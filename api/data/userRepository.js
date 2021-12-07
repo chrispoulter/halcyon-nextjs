@@ -2,8 +2,7 @@ import { query } from '../utils/database';
 
 export const userRepository = {
     search: async ({ search, sort, page, size }) => {
-        let statement =
-            'SELECT user_id, email_address, password, password_reset_token, first_name, last_name, date_of_birth, is_locked_out FROM users';
+        let statement = 'SELECT * FROM users';
 
         if (search) {
             statement += ` WHERE (first_name || ' ' || last_name || ' ' || email_address) ILIKE  '%' || $1 || '%'`;
@@ -34,7 +33,7 @@ export const userRepository = {
 
     getById: async id => {
         const result = await query(
-            'SELECT user_id, email_address, password, password_reset_token, first_name, last_name, date_of_birth, is_locked_out FROM users WHERE id = $1 LIMIT 1',
+            'SELECT * FROM users WHERE user_id = $1 LIMIT 1',
             [id]
         );
 
@@ -43,7 +42,7 @@ export const userRepository = {
 
     getByEmailAddress: async emailAddress => {
         const result = await query(
-            'SELECT user_id, email_address, password, password_reset_token, first_name, last_name, date_of_birth, is_locked_out FROM users WHERE email_address = $1 LIMIT 1',
+            'SELECT * FROM users WHERE email_address ILIKE $1 LIMIT 1',
             [emailAddress]
         );
 
@@ -57,10 +56,12 @@ export const userRepository = {
         firstName,
         lastName,
         dateOfBirth,
-        is_locked_out
+        isLockedOut
     }) => {
         const result = await query(
-            'INSERT INTO users (email_address, password, password_reset_token, first_name, last_name, date_of_birth, is_locked_out) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING user_id',
+            'INSERT INTO users (email_address, password, password_reset_token, first_name, last_name, date_of_birth, is_locked_out)' +
+                ' VALUES ($1, $2, $3, $4, $5, $6, $7)' +
+                ' RETURNING *',
             [
                 emailAddress,
                 password,
@@ -68,7 +69,7 @@ export const userRepository = {
                 firstName,
                 lastName,
                 dateOfBirth,
-                is_locked_out
+                isLockedOut
             ]
         );
 
@@ -83,10 +84,13 @@ export const userRepository = {
         firstName,
         lastName,
         dateOfBirth,
-        is_locked_out
+        isLockedOut
     }) => {
         const result = await query(
-            'UPDATE users SET email_address = $1, password = $2, password_reset_token = $3, first_name = $4, last_name = $5, date_of_birth = $6, is_locked_out = $7) WHERE id = $8',
+            'UPDATE users' +
+                ' SET email_address = $1, password = $2, password_reset_token = $3, first_name = $4, last_name = $5, date_of_birth = $6, is_locked_out = $7 ' +
+                ' WHERE user_id = $8' +
+                ' RETURNING *',
             [
                 emailAddress,
                 password,
@@ -94,7 +98,7 @@ export const userRepository = {
                 firstName,
                 lastName,
                 dateOfBirth,
-                is_locked_out,
+                isLockedOut,
                 id
             ]
         );
@@ -109,10 +113,14 @@ export const userRepository = {
         firstName,
         lastName,
         dateOfBirth,
-        is_locked_out
+        isLockedOut
     }) => {
         const result = await query(
-            'INSERT INTO users (email_address, password, password_reset_token, first_name, last_name, date_of_birth, is_locked_out) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING user_id',
+            'INSERT INTO users (email_address, password, password_reset_token, first_name, last_name, date_of_birth, is_locked_out)' +
+                ' VALUES ($1, $2, $3, $4, $5, $6, $7)' +
+                ' ON CONFLICT ON CONSTRAINT users_email_address_key' +
+                ' DO UPDATE SET email_address = EXCLUDED.email_address, password = EXCLUDED.password, password_reset_token = EXCLUDED.password_reset_token, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, date_of_birth = EXCLUDED.date_of_birth, is_locked_out = EXCLUDED.is_locked_out' +
+                ' RETURNING *',
             [
                 emailAddress,
                 password,
@@ -120,7 +128,7 @@ export const userRepository = {
                 firstName,
                 lastName,
                 dateOfBirth,
-                is_locked_out
+                isLockedOut
             ]
         );
 
@@ -128,7 +136,7 @@ export const userRepository = {
     },
 
     remove: async ({ id }) => {
-        const result = await query('DELETE FROM users WHERE user_id = $1', [
+        const result = await query('DELETE FROM users WHERE user_id = $1 RETURNING *', [
             id
         ]);
 

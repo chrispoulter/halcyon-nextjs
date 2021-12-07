@@ -37,7 +37,7 @@ tokenRouter.post(
             });
         }
 
-        if (user.isLockedOut) {
+        if (user.is_locked_out) {
             return res.status(400).json({
                 code: 'USER_LOCKED_OUT',
                 message:

@@ -36,18 +36,18 @@ accountRouter.post(
         }
 
         const result = await userRepository.create({
-            emailAddress: body.emailAddress,
+            email_address: body.emailAddress,
             password: await generateHash(body.password),
-            firstName: body.firstName,
-            lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth.toISOString()
+            first_name: body.firstName,
+            last_name: body.lastName,
+            date_of_birth: body.dateOfBirth.toISOString()
         });
 
         return res.json({
             code: 'USER_REGISTERED',
             message: 'User successfully registered.',
             data: {
-                id: result.id
+                id: result.user_id
             }
         });
     })
@@ -70,17 +70,17 @@ accountRouter.put(
         );
 
         if (user) {
-            user.passwordResetToken = uuidv4();
+            user.password_reset_token = uuidv4();
             await userRepository.update(user);
 
             const siteUrl = `${req.protocol}://${req.get('host')}`;
 
             await sendEmail({
-                to: user.emailAddress,
+                to: user.email_address,
                 template: 'RESET_PASSWORD',
                 context: {
                     siteUrl,
-                    passwordResetUrl: `${siteUrl}/reset-password/${user.passwordResetToken}`
+                    passwordResetUrl: `${siteUrl}/reset-password/${user.password_reset_token}`
                 }
             });
         }
@@ -113,7 +113,7 @@ accountRouter.put(
     asyncMiddleware(async ({ body }, res) => {
         const user = await userRepository.getByEmailAddress(body.emailAddress);
 
-        if (!user || user.passwordResetToken !== body.token) {
+        if (!user || user.password_reset_token !== body.token) {
             return res.status(400).json({
                 code: 'INVALID_TOKEN',
                 message: 'Invalid token.'
@@ -121,14 +121,14 @@ accountRouter.put(
         }
 
         user.password = await generateHash(body.newPassword);
-        user.passwordResetToken = undefined;
+        user.password_reset_token = undefined;
         await userRepository.update(user);
 
         return res.json({
             code: 'PASSWORD_RESET',
             message: 'Your password has been reset.',
             data: {
-                id: user.id
+                id: user.user_id
             }
         });
     })

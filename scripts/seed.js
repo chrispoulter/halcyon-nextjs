@@ -14,6 +14,7 @@ const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
         firstName: 'System',
         lastName: 'Administrator',
         dateOfBirth: new Date(1970, 0, 1).toISOString(),
+        isLockedOut: false,
         roles: ALL_ROLES
     });
 

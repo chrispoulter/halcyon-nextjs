@@ -41,16 +41,16 @@ userRouter.get(
         return res.json({
             data: {
                 items: result.data.map(user => ({
-                    id: user.id,
-                    emailAddress: user.emailAddress,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    dateOfBirth: user.dateOfBirth.toISOString(),
-                    isLockedOut: user.isLockedOut,
+                    id: user.user_id,
+                    emailAddress: user.email_address,
+                    firstName: user.first_name,
+                    lastName: user.last_name,
+                    dateOfBirth: user.date_of_birth.toISOString(),
+                    isLockedOut: user.is_locked_out,
                     roles: user.roles
                 })),
-                hasNextPage: result.hasNextPage,
-                hasPreviousPage: result.hasPreviousPage
+                hasNextPage: result.has_next_page,
+                hasPreviousPage: result.has_previous_page
             }
         });
     })
@@ -84,11 +84,11 @@ userRouter.post(
         }
 
         const result = await userRepository.create({
-            emailAddress: body.emailAddress,
+            email_address: body.emailAddress,
             password: await generateHash(body.password),
-            firstName: body.firstName,
-            lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth.toISOString(),
+            first_name: body.firstName,
+            last_name: body.lastName,
+            date_of_birth: body.dateOfBirth.toISOString(),
             roles: body.roles
         });
 
@@ -96,7 +96,7 @@ userRouter.post(
             code: 'USER_CREATED',
             message: 'User successfully created.',
             data: {
-                id: result.id
+                id: result.user_id
             }
         });
     })
@@ -116,12 +116,12 @@ userRouter.get(
 
         return res.json({
             data: {
-                id: user.id,
-                emailAddress: user.emailAddress,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                dateOfBirth: user.dateOfBirth.toISOString(),
-                isLockedOut: user.isLockedOut,
+                id: user.user_id,
+                emailAddress: user.email_address,
+                firstName: user.first_name,
+                lastName: user.last_name,
+                dateOfBirth: user.date_of_birth.toISOString(),
+                isLockedOut: user.is_locked_out,
                 roles: user.roles
             }
         });
@@ -152,7 +152,7 @@ userRouter.put(
             });
         }
 
-        if (user.emailAddress !== body.emailAddress) {
+        if (user.email_address !== body.emailAddress) {
             const existing = await userRepository.getByEmailAddress(
                 body.emailAddress
             );
@@ -165,10 +165,10 @@ userRouter.put(
             }
         }
 
-        user.emailAddress = body.emailAddress;
-        user.firstName = body.firstName;
-        user.lastName = body.lastName;
-        user.dateOfBirth = body.dateOfBirth.toISOString();
+        user.email_address = body.emailAddress;
+        user.first_name = body.firstName;
+        user.last_name = body.lastName;
+        user.date_of_birth = body.dateOfBirth.toISOString();
         user.roles = body.roles;
         await userRepository.update(user);
 
@@ -176,7 +176,7 @@ userRouter.put(
             code: 'USER_UPDATED',
             message: 'User successfully updated.',
             data: {
-                id: user.id
+                id: user.user_id
             }
         });
     })
@@ -194,21 +194,21 @@ userRouter.put(
             });
         }
 
-        if (user.id === payload.sub) {
+        if (user.user_id === payload.sub) {
             return res.status(400).json({
                 code: 'LOCK_CURRENT_USER',
                 message: 'Cannot lock currently logged in user.'
             });
         }
 
-        user.isLockedOut = true;
+        user.is_locked_out = true;
         await userRepository.update(user);
 
         return res.json({
             code: 'USER_LOCKED',
             message: 'User successfully locked.',
             data: {
-                id: user.id
+                id: user.user_id
             }
         });
     })
@@ -226,14 +226,14 @@ userRouter.put(
             });
         }
 
-        user.isLockedOut = false;
+        user.is_locked_out = false;
         await userRepository.update(user);
 
         return res.json({
             code: 'USER_UNLOCKED',
             message: 'User successfully unlocked.',
             data: {
-                id: user.id
+                id: user.user_id
             }
         });
     })
@@ -251,7 +251,7 @@ userRouter.delete(
             });
         }
 
-        if (user.id === payload.sub) {
+        if (user.user_id === payload.sub) {
             return res.status(400).json({
                 code: 'DELETE_CURRENT_USER',
                 message: 'Cannot delete currently logged in user.'
@@ -264,7 +264,7 @@ userRouter.delete(
             code: 'USER_DELETED',
             message: 'User successfully deleted.',
             data: {
-                id: user.id
+                id: user.user_id
             }
         });
     })

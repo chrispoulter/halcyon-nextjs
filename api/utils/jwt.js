@@ -15,10 +15,10 @@ export const verifyToken = async token => {
 
 export const generateToken = user => {
     const payload = {
-        sub: user.id,
-        email: user.emailAddress,
-        given_name: user.firstName,
-        family_name: user.lastName,
+        sub: user.user_id,
+        email: user.email_address,
+        given_name: user.first_name,
+        family_name: user.last_name,
         role: (user.roles || []).join()
     };
 
