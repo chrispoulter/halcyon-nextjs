@@ -136,9 +136,10 @@ export const userRepository = {
     },
 
     remove: async ({ id }) => {
-        const result = await query('DELETE FROM users WHERE user_id = $1 RETURNING *', [
-            id
-        ]);
+        const result = await query(
+            'DELETE FROM users WHERE user_id = $1 RETURNING *',
+            [id]
+        );
 
         return result[0];
     }
