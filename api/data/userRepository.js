@@ -1,39 +1,76 @@
 import { query } from '../utils/database';
 
 export const userRepository = {
-    search: async ({ search, sort, page, size }) => {
-        let statement = 'SELECT * FROM users';
+    search: async model => {
+        const search = model.search || null;
+        const sort = model.sort || 'NAME_ASC';
+        const page = Math.max(model.page || 1, 1);
+        const size = Math.min(model.size || 50, 50);
+        const offset = (page - 1) * size;
+        const params = [];
+
+        let countQuery = 'SELECT 1 FROM users u';
+
+        let dataQuery =
+            'SELECT' +
+            ' u.*,' +
+            ' ARRAY(SELECT r.name FROM user_roles ur INNER JOIN roles r ON r.role_id = ur.role_id WHERE ur.user_id = u.user_id) AS roles' +
+            ' FROM users u';
 
         if (search) {
-            statement += ` WHERE (first_name || ' ' || last_name || ' ' || email_address) ILIKE  '%' || $1 || '%'`;
+            const filter = ` WHERE (u.email_address || ' ' || u.first_name || ' ' || u.last_name) ILIKE  '%' || $${
+                params.length + 1
+            } || '%'`;
+
+            countQuery += filter;
+            dataQuery += filter;
+            params.push(search);
         }
 
-        if (sort) {
-            switch (sort) {
-                case 'EMAIL_ADDRESS_ASC':
-                    statement += ' ORDER BY email_address ASC';
-                    break;
-                case 'EMAIL_ADDRESS_DESC':
-                    statement += ' ORDER BY email_address DESC';
-                    break;
-                case 'NAME_DESC':
-                    statement += ' ORDER BY first_name DESC, last_name DESC';
-                    break;
-                default:
-                    statement += ' ORDER BY first_name ASC, last_name ASC';
-                    break;
-            }
+        const count = await query(countQuery, params);
+
+        switch (sort) {
+            case 'EMAIL_ADDRESS_ASC':
+                dataQuery += ' ORDER BY LOWER(u.email_address) ASC';
+                break;
+            case 'EMAIL_ADDRESS_DESC':
+                dataQuery += ' ORDER BY LOWER(u.email_address) DESC';
+                break;
+            case 'NAME_DESC':
+                dataQuery +=
+                    ' ORDER BY LOWER(u.first_name) DESC, LOWER(u.last_name) DESC';
+                break;
+            default:
+                dataQuery +=
+                    ' ORDER BY LOWER(u.first_name) ASC, LOWER(u.last_name) ASC';
+                break;
         }
 
-        const offset = (page - 1) * [size];
-        statement += ' OFFSET $2 LIMIT $3';
+        dataQuery += ` OFFSET $${params.length + 1} LIMIT $${
+            params.length + 2
+        }`;
+        params.push(offset, size);
 
-        return await query(statement, [search, offset, size]);
+        const result = await query(dataQuery, params);
+        const pageCount = (count.length + size - 1) / size;
+        const hasNextPage = page < pageCount;
+        const hasPreviousPage = page > 1;
+
+        return {
+            data: result,
+            hasNextPage: hasNextPage,
+            hasPreviousPage: hasPreviousPage
+        };
     },
 
     getById: async user_id => {
         const result = await query(
-            'SELECT * FROM users WHERE user_id = $1 LIMIT 1',
+            'SELECT ' +
+                ' u.*,' +
+                ' ARRAY(SELECT r.name FROM user_roles ur INNER JOIN roles r ON r.role_id = ur.role_id WHERE ur.user_id = u.user_id) AS roles' +
+                ' FROM users u' +
+                ' WHERE u.user_id = $1' +
+                ' LIMIT 1',
             [user_id]
         );
 
@@ -42,7 +79,12 @@ export const userRepository = {
 
     getByEmailAddress: async email_address => {
         const result = await query(
-            'SELECT * FROM users WHERE email_address ILIKE $1 LIMIT 1',
+            'SELECT ' +
+                ' u.*,' +
+                ' ARRAY(SELECT r.name FROM user_roles ur INNER JOIN roles r ON r.role_id = ur.role_id WHERE ur.user_id = u.user_id) AS roles' +
+                ' FROM users u' +
+                ' WHERE u.email_address ILIKE $1' +
+                ' LIMIT 1',
             [email_address]
         );
 

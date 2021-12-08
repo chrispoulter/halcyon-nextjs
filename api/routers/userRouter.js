@@ -30,13 +30,8 @@ userRouter.get(
             size: Yup.number().label('Size')
         }
     }),
-    asyncMiddleware(async ({ body }, res) => {
-        const result = await userRepository.search({
-            search: body.search,
-            sort: body.sort,
-            page: body.page,
-            size: body.size
-        });
+    asyncMiddleware(async ({ query }, res) => {
+        const result = await userRepository.search(query);
 
         return res.json({
             data: {
@@ -49,8 +44,8 @@ userRouter.get(
                     isLockedOut: user.is_locked_out,
                     roles: user.roles
                 })),
-                hasNextPage: result.has_next_page,
-                hasPreviousPage: result.has_previous_page
+                hasNextPage: result.hasNextPage,
+                hasPreviousPage: result.hasPreviousPage
             }
         });
     })

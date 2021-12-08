@@ -63,4 +63,12 @@ SELECT * FROM users;
 SELECT * FROM roles;
 SELECT * FROM user_roles;
 
-SELECT * FROM users WHERE (first_name || ' ' || last_name || ' ' || email_address) ILIKE '%' || 'system' || '%'
+DELETE FROM users;
+
+SELECT 
+	u.*,
+ 	ARRAY(SELECT r.name FROM user_roles ur INNER JOIN roles r ON r.role_id = ur.role_id WHERE ur.user_id = u.user_id) AS roles
+FROM 
+	users u
+WHERE 
+	(u.email_address || ' ' || u.first_name || ' ' || u.last_name) ILIKE '%' || 'system' || '%'
