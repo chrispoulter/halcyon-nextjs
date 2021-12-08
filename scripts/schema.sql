@@ -63,7 +63,7 @@ SELECT * FROM users;
 SELECT * FROM roles;
 SELECT * FROM user_roles;
 
-DELETE FROM users;
+DELETE FROM user_roles;
 
 SELECT 
 	u.*,
@@ -72,5 +72,14 @@ FROM
 	users u
 WHERE 
 	(u.email_address || ' ' || u.first_name || ' ' || u.last_name) ILIKE '%' || 'system' || '%'
-	
-SELECT true AS connected
+
+DELETE FROM user_roles ur
+USING roles r
+WHERE ur.role_id = r.role_id 
+AND ur.user_id = 1
+AND r.name NOT IN ('USER_ADMINISTRATOR');
+
+INSERT INTO user_roles (user_id, role_id)
+SELECT 1, r.role_id FROM roles r 
+WHERE r.name IN ('SYSTEM_ADMINISTRATOR')
+ON CONFLICT ON CONSTRAINT user_roles_pkey DO NOTHING;

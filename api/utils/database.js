@@ -6,7 +6,8 @@ const pool = new Pool({
     port: config.DB_PORT,
     user: config.DB_USER,
     password: config.DB_PASSWORD,
-    database: config.DB_DATABASE
+    database: config.DB_DATABASE,
+    ssl: config.DB_SSL
 });
 
 export const query = async (query, params) => {

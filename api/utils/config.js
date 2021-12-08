@@ -9,6 +9,7 @@ export const config = {
     DB_USER: process.env.DB_USER || 'postgres',
     DB_PASSWORD: process.env.DB_PASSWORD || 'example',
     DB_DATABASE: process.env.DB_DATABASE || 'halcyon',
+    DB_SSL: process.env.DB_SSL === 'true',
 
     JWT_SECURITY_KEY: process.env.JWT_SECURITY_KEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',

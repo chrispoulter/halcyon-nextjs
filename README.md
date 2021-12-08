@@ -23,6 +23,7 @@ DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=example
 DB_DATABASE=halcyon
+DB_SSL=false
 
 JWT_SECURITY_KEY=change-me-1234567890
 JWT_ISSUER=HalcyonApi
