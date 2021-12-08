@@ -84,7 +84,6 @@ userRouter.post(
             first_name: body.firstName,
             last_name: body.lastName,
             date_of_birth: body.dateOfBirth,
-            is_locked_out: false,
             roles: body.roles
         });
 

@@ -40,8 +40,7 @@ accountRouter.post(
             password: await generateHash(body.password),
             first_name: body.firstName,
             last_name: body.lastName,
-            date_of_birth: body.dateOfBirth,
-            is_locked_out: false
+            date_of_birth: body.dateOfBirth
         });
 
         return res.json({

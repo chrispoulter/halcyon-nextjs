@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
 	password_reset_token VARCHAR NULL,
 	first_name VARCHAR NOT NULL,
 	last_name VARCHAR NOT NULL,
-	date_of_birth DATE NOT NULL,
+	date_of_birth TIMESTAMP WITH TIME ZONE NOT NULL,
 	is_locked_out BOOL NOT NULL DEFAULT FALSE
 );
 
@@ -72,3 +72,5 @@ FROM
 	users u
 WHERE 
 	(u.email_address || ' ' || u.first_name || ' ' || u.last_name) ILIKE '%' || 'system' || '%'
+	
+SELECT true AS connected
