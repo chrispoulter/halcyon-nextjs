@@ -16,8 +16,6 @@ A web application template.
 Create a `.env` file in the web project directory.
 
 ```
-## Api #############################################
-
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
@@ -38,8 +36,4 @@ EMAIL_NO_REPLY_ADDRESS=noreply@chrispoulter.com
 
 SEED_EMAIL_ADDRESS=
 SEED_PASSWORD=
-
-## Front End #######################################
-
-REACT_APP_GA_MEASUREMENT_ID=
 ```

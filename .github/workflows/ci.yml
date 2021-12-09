@@ -44,7 +44,6 @@ jobs:
             - name: Build
               env:
                   EXTEND_ESLINT: true
-                  GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
               run: |
                   yarn
                   yarn lint
