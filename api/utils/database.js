@@ -20,14 +20,12 @@ const pool = new Pool({
 });
 
 export const query = async (query, params) => {
-    console.log('query', query, params);
+    // console.log('query', query, params);
     const { rows } = await pool.query(query, params);
     return rows;
 };
 
 export const createDatabase = async () => {
-    console.log('createDatabase');
-
     const { rows } = await pgPool.query(
         `SELECT true AS exists FROM pg_database WHERE datname = '${config.DB_DATABASE}'`
     );

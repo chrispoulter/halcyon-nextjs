@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from 'morgan'
 import { errorMiddleware } from './middleware';
 import {
     accountRouter,
@@ -9,6 +10,8 @@ import {
 } from './routers';
 
 const app = express();
+
+app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
