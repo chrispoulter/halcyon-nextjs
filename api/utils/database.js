@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+import { logger } from './logger';
 import { config } from './config';
 
 const pgPool = new Pool({
@@ -20,7 +21,11 @@ const pool = new Pool({
 });
 
 export const query = async (query, params) => {
-    // console.log('query', query, params);
+    logger.debug('query executed', {
+        query: query.replace(/\s\s+/g, ' '),
+        params
+    });
+
     const { rows } = await pool.query(query, params);
     return rows;
 };

@@ -1,5 +1,7 @@
+import { logger } from '../utils/logger';
+
 export const errorMiddleware = (err, _, res, __) => {
-    console.error(err.stack);
+    logger.error(err);
 
     return res.status(500).json({
         code: 'INTERNAL_SERVER_ERROR',

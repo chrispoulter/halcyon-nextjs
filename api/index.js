@@ -1,5 +1,5 @@
 import express from 'express';
-import logger from 'morgan'
+import morgan from 'morgan';
 import { errorMiddleware } from './middleware';
 import {
     accountRouter,
@@ -8,10 +8,11 @@ import {
     tokenRouter,
     userRouter
 } from './routers';
+import { logger } from './utils/logger';
 
 const app = express();
 
-app.use(logger('dev'));
+app.use(morgan('tiny', { stream: logger.stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -24,4 +25,6 @@ app.use('/api/user', userRouter);
 
 app.use(errorMiddleware);
 
-app.listen(3001, () => console.log('App listening on port 3001'));
+const port = 3001;
+
+app.listen(port, () => logger.info(`App listening on port ${port}`));
