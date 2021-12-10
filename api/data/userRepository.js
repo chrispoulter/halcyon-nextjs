@@ -1,6 +1,6 @@
 import { query } from '../utils/database';
 
-const userRoles = `ARRAY(SELECT r.name FROM user_roles ur INNER JOIN roles r ON r.role_id = ur.role_id WHERE ur.user_id = u.user_id) AS roles`;
+const rolesSql = `ARRAY(SELECT r.name FROM user_roles ur INNER JOIN roles r ON r.role_id = ur.role_id WHERE ur.user_id = u.user_id) AS roles`;
 
 export const search = async model => {
     const search = model.search;
@@ -10,10 +10,10 @@ export const search = async model => {
 
     const params = [];
 
-    let searchQuery = '';
+    let searchSql = '';
 
     if (search) {
-        searchQuery = `WHERE (u.email_address || ' ' || u.first_name || ' ' || u.last_name) ILIKE  '%' || $${
+        searchSql = `WHERE (u.email_address || ' ' || u.first_name || ' ' || u.last_name) ILIKE  '%' || $${
             params.length + 1
         } || '%'`;
         params.push(search);
@@ -24,28 +24,28 @@ export const search = async model => {
             1 
         FROM 
             users u
-        ${searchQuery}`,
+        ${searchSql}`,
         params
     );
 
-    let sortQuery = '';
+    let sortSql = '';
 
     switch (sort) {
         case 'EMAIL_ADDRESS_ASC':
-            sortQuery = `ORDER BY LOWER(u.email_address) ASC`;
+            sortSql = `ORDER BY LOWER(u.email_address) ASC`;
             break;
         case 'EMAIL_ADDRESS_DESC':
-            sortQuery = `ORDER BY LOWER(u.email_address) DESC`;
+            sortSql = `ORDER BY LOWER(u.email_address) DESC`;
             break;
         case 'NAME_DESC':
-            sortQuery = `ORDER BY LOWER(u.first_name) DESC, LOWER(u.last_name) DESC`;
+            sortSql = `ORDER BY LOWER(u.first_name) DESC, LOWER(u.last_name) DESC`;
             break;
         default:
-            sortQuery = `ORDER BY LOWER(u.first_name) ASC, LOWER(u.last_name) ASC`;
+            sortSql = `ORDER BY LOWER(u.first_name) ASC, LOWER(u.last_name) ASC`;
             break;
     }
 
-    const offsetQuery = `OFFSET $${params.length + 1} LIMIT $${
+    const offsetSql = `OFFSET $${params.length + 1} LIMIT $${
         params.length + 2
     }`;
 
@@ -55,12 +55,12 @@ export const search = async model => {
     const result = await query(
         `SELECT
             u.*,
-            ${userRoles}
+            ${rolesSql}
         FROM
             users u
-        ${searchQuery} 
-        ${sortQuery} 
-        ${offsetQuery}`,
+        ${searchSql} 
+        ${sortSql} 
+        ${offsetSql}`,
         params
     );
 
@@ -79,7 +79,7 @@ export const getById = async user_id => {
     const result = await query(
         `SELECT
             u.*,
-            ${userRoles}
+            ${rolesSql}
         FROM
             users u
         WHERE
@@ -95,7 +95,7 @@ export const getByEmailAddress = async email_address => {
     const result = await query(
         `SELECT
             u.*,
-            ${userRoles}
+            ${rolesSql}
         FROM
             users u
         WHERE
