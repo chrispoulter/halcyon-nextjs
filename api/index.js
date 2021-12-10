@@ -17,7 +17,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/health', healthRouter);
-
 app.use('/api/account', accountRouter);
 app.use('/api/manage', manageRouter);
 app.use('/api/token', tokenRouter);
@@ -25,6 +24,6 @@ app.use('/api/user', userRouter);
 
 app.use(errorMiddleware);
 
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 app.listen(port, () => logger.info(`App listening on port ${port}`));
