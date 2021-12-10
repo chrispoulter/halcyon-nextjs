@@ -12,9 +12,7 @@ export const logger = winston.createLogger({
         winston.format.printf(
             ({ timestamp, level, message, metadata }) =>
                 `${timestamp} ${level}: ${message} ${
-                    Object.keys(metadata).length
-                        ? JSON.stringify(metadata)
-                        : ''
+                    Object.keys(metadata).length ? JSON.stringify(metadata) : ''
                 }`
         )
     ),
