@@ -58,15 +58,18 @@ jobs:
                   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
                   DB_DATABASE: ${{ secrets.DB_DATABASE }}
                   DB_SSL: ${{ secrets.DB_SSL }}
+
                   JWT_SECURITY_KEY: ${{ secrets.JWT_SECURITY_KEY }}
                   JWT_AUDIENCE: ${{ secrets.JWT_AUDIENCE }}
                   JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
                   JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+
                   EMAIL_SMTP_SERVER: ${{ secrets.EMAIL_SMTP_SERVER }}
                   EMAIL_SMTP_PORT: ${{ secrets.EMAIL_SMTP_PORT }}
                   EMAIL_SMTP_USERNAME: ${{ secrets.EMAIL_SMTP_USERNAME }}
                   EMAIL_SMTP_PASSWORD: ${{ secrets.EMAIL_SMTP_PASSWORD }}
                   EMAIL_NO_REPLY_ADDRESS: ${{ secrets.EMAIL_NO_REPLY_ADDRESS }}
+
                   SEED_EMAIL_ADDRESS: ${{secrets.SEED_EMAIL_ADDRESS }}
                   SEED_PASSWORD: ${{ secrets.SEED_PASSWORD }}
               run: |
