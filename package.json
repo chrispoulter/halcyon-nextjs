@@ -9,7 +9,6 @@
         "postclient:build": "yarn client:workbox",
         "client:workbox": "workbox injectManifest workbox-config.js",
         "api:start": "nodemon --exec babel-node api/index.js",
-        "db:migrate": "babel-node scripts/migrate.js",
         "db:seed": "babel-node scripts/seed.js",
         "db:populate": "babel-node scripts/populate.js",
         "lint": "eslint \"**/*.{js,jsx}\"",

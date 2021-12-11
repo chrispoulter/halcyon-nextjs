@@ -1,3 +1,4 @@
+import { migrate } from 'postgres-migrations';
 import {
     userRepository,
     templateRepository,
@@ -12,6 +13,20 @@ import resetPassword from './templates/resetPassword.html';
 const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
 
 (async () => {
+    await migrate(
+        {
+            host: config.DB_HOST,
+            port: config.DB_PORT,
+            user: config.DB_USER,
+            password: config.DB_PASSWORD,
+            database: config.DB_DATABASE,
+            ssl: config.DB_SSL,
+            ensureDatabaseExists: true,
+            defaultDatabase: 'postgres'
+        },
+        './scripts/migrations'
+    );
+
     await templateRepository.upsert({
         key: 'RESET_PASSWORD',
         subject: subjectRegEx.exec(resetPassword)[1],
