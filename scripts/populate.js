@@ -34,15 +34,13 @@ const lastNames = [
         const first_name = firstNames[firstNameIndex];
         const last_name = lastNames[lastNameIndex];
         const email_address = `${first_name.toLowerCase()}.${last_name.toLowerCase()}.${emailAddressIndex}@chrispoulter.com`;
-        const date_of_birth = new Date(1970, 0, 1).toISOString();
-        const is_locked_out = Math.random() < 0.5;
+        const date_of_birth = '1970-01-01T00:00:00.000Z';
 
         await userRepository.upsert({
             email_address,
             first_name,
             last_name,
-            date_of_birth,
-            is_locked_out
+            date_of_birth
         });
     }
 
