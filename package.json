@@ -4,11 +4,12 @@
     "private": true,
     "scripts": {
         "start": "concurrently \"yarn:api:start\" \"yarn:client:start\"",
+        "build": "concurrently \"yarn:api:build\" \"yarn:client:build\"",
         "client:start": "react-scripts start",
         "client:build": "react-scripts build",
-        "postclient:build": "yarn client:workbox",
-        "client:workbox": "workbox injectManifest workbox-config.js",
+        "postclient:build": "workbox injectManifest workbox-config.js",
         "api:start": "nodemon --exec babel-node api/index.js",
+        "api:build": "babel api --out-dir dist",
         "db:seed": "babel-node scripts/seed.js",
         "db:populate": "babel-node scripts/populate.js",
         "lint": "eslint \"**/*.{js,jsx}\"",
@@ -35,6 +36,7 @@
         "yup": "0.32.9"
     },
     "devDependencies": {
+        "@babel/cli": "7.14.8",
         "@babel/core": "7.14.0",
         "@babel/node": "7.13.13",
         "@babel/plugin-proposal-class-properties": "7.13.0",
