@@ -9,7 +9,7 @@
         "client:build": "react-scripts build",
         "postclient:build": "workbox injectManifest workbox-config.js",
         "api:start": "nodemon --exec babel-node api/index.js",
-        "api:build": "babel api --out-dir dist",
+        "api:build": "babel api --out-dir dist --source-maps",
         "db:seed": "babel-node scripts/seed.js",
         "db:populate": "babel-node scripts/populate.js",
         "lint": "eslint \"**/*.{js,jsx}\"",
