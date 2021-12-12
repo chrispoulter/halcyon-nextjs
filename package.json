@@ -12,6 +12,10 @@
         "api:build": "babel api --out-dir dist --source-maps",
         "db:seed": "babel-node scripts/seed.js",
         "db:populate": "babel-node scripts/populate.js",
+        "docker:build": "docker build -t chrispoulter/halcyon .",
+        "docker:run": "docker run --name halcyon --env-file .env -p 3001:3001 chrispoulter/halcyon",
+        "docker:exec": "docker exec -it halcyon /bin/sh",
+        "serve": "node dist/index.js",
         "lint": "eslint \"**/*.{js,jsx}\"",
         "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\""
     },
