@@ -111,7 +111,7 @@
                 "name": "[variables('web')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('plan'))]",
                 "siteConfig": {
-                    "linuxFxVersion": "[resourceId('DOCKER|', parameters('image'))]"
+                    "linuxFxVersion": "[concat('DOCKER|', parameters('image'))]"
                 }
             }
         },
