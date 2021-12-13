@@ -1,0 +1,145 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "stage": {
+            "type": "string",
+            "defaultValue": "main"
+        },
+        "dbHost": {
+            "type": "string"
+        },
+        "dbPort": {
+            "type": "string",
+            "defaultValue": "5432"
+        },
+        "dbUser": {
+            "type": "string"
+        },
+        "dbPassword": {
+            "type": "secureString"
+        },
+        "dbDatabase": {
+            "type": "string"
+        },
+        "dbSSL": {
+            "type": "string",
+            "defaultValue": "true"
+        },
+        "emailSmtpServer": {
+            "type": "string",
+            "defaultValue": "smtp.mailgun.org"
+        },
+        "emailSmtpPort": {
+            "type": "string",
+            "defaultValue": "587"
+        },
+        "emailSmtpUserName": {
+            "type": "secureString"
+        },
+        "emailSmtpPassword": {
+            "type": "secureString"
+        },
+        "emailNoReplyAddress": {
+            "type": "string",
+            "defaultValue": "noreply@chrispoulter.com"
+        },
+        "jwtSecurityKey": {
+            "type": "secureString",
+            "defaultValue": "change-me-1234567890"
+        },
+        "jwtIssuer": {
+            "type": "string",
+            "defaultValue": "HalcyonApi"
+        },
+        "jwtAudience": {
+            "type": "string",
+            "defaultValue": "HalcyonClient"
+        },
+        "jwtExpiresIn": {
+            "type": "string",
+            "defaultValue": "3600"
+        },
+        "seedEmailAddress": {
+            "type": "secureString"
+        },
+        "seedPassword": {
+            "type": "secureString"
+        }
+    },
+    "variables": {
+        "prefix": "[concat('halcyon-', parameters('stage'))]",
+        "plan": "[concat(variables('prefix'), '-plan')]",
+        "web": "[concat(variables('prefix'), '-web')]"
+    },
+    "resources": [
+        {
+            "name": "[variables('plan')]",
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-02-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "linux",
+            "properties": {
+                "perSiteScaling": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0
+            }
+        },
+        {
+            "name": "[variables('web')]",
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('plan'))]"
+            ],
+            "kind": "app,linux",
+            "properties": {
+                "name": "[variables('web')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('plan'))]",
+                "siteConfig": {
+                    "linuxFxVersion": "DOTNETCORE|5.0"
+                }
+            }
+        },
+        {
+            "name": "[concat(variables('web'), '/appsettings')]",
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2020-12-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('web'))]"
+            ],
+            "properties": {
+                "DB_HOST": "[parameters('dbHost')]",
+                "DB_PORT": "[parameters('dbPort')]",
+                "DB_USER": "[parameters('dbUser')]",
+                "DB_PASSWORD": "[parameters('dbPassword')]",
+                "DB_DATABASE": "[parameters('dbDatabase')]",
+                "DB_SSL": "[parameters('dbSSL')]",
+                "Email_SmtpServer": "[parameters('emailSmtpServer')]",
+                "Email_SmtpPort": "[parameters('emailSmtpPort')]",
+                "Email_SmtpUserName": "[parameters('emailSmtpUserName')]",
+                "Email_SmtpPassword": "[parameters('emailSmtpPassword')]",
+                "Email_NoReplyAddress": "[parameters('emailNoReplyAddress')]",
+                "Jwt_SecurityKey": "[parameters('jwtSecurityKey')]",
+                "Jwt_Issuer": "[parameters('jwtIssuer')]",
+                "Jwt_Audience": "[parameters('jwtAudience')]",
+                "Jwt_ExpiresIn": "[parameters('jwtExpiresIn')]",
+                "Seed_EmailAddress": "[parameters('seedEmailAddress')]",
+                "Seed_Password": "[parameters('seedPassword')]"
+            }
+        }
+    ]
+}

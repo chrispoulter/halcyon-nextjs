@@ -12,9 +12,6 @@ on:
 jobs:
     build-and-deploy:
         runs-on: ubuntu-latest
-        env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         steps:
             - name: Checkout
               uses: actions/checkout@v2
@@ -38,40 +35,63 @@ jobs:
 
             - name: Set Environment Variables
               run: |
-                  echo "VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
-                  echo "STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
+                  echo "REACT_APP_VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
+                  echo "REACT_APP_STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
+
+            - name: Docker Login
+              uses: azure/docker-login@v1
+              with:
+                  login-server: halcyon.azurecr.io
+                  username: ${{ secrets.REGISTRY_USERNAME }}
+                  password: ${{ secrets.REGISTRY_PASSWORD }}
 
             - name: Build
-              env:
-                  EXTEND_ESLINT: true
               run: |
-                  yarn
-                  yarn lint
-                  yarn version --new-version ${{ env.VERSION }} --no-git-tag-version
-                  yarn serverless:build --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
+                  yarn version --new-version ${{ env.REACT_APP_VERSION }} --no-git-tag-version
+                  docker build . -t halcyon.azurecr.io/halcyon:${{ env.REACT_APP_VERSION }}
+                  docker push halcyon.azurecr.io/halcyon:${{ env.REACT_APP_VERSION }}
+
+            - name: Azure Login
+              uses: azure/login@v1
+              with:
+                  creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+            - name: Create Resource Group
+              run: |
+                  az group create \
+                    --name "halcyon-${{ env.REACT_APP_STAGE }}" \
+                    --location "${{ secrets.AZURE_LOCATION }}"
+
+            - name: Deploy ARM Template
+              uses: azure/arm-deploy@v1
+              with:
+                  resourceGroupName: halcyon-${{ env.REACT_APP_STAGE }}
+                  template: ./azuredeploy.json
+                  parameters: stage="${{ env.REACT_APP_STAGE }}"
+                      dbhost="${{ secrets.DB_HOST }}"
+                      dbUser="${{ secrets.DB_USER }}"
+                      dbPassword="${{ secrets.DB_PASSWORD }}"
+                      dbDatabase="halcyon-${{ secrets.REACT_APP_STAGE }}-db"
+                      emailSmtpServer="${{ secrets.EMAIL_SMTP_SERVER }}"
+                      emailSmtpPort="${{ secrets.EMAIL_SMTP_PORT }}"
+                      emailSmtpUserName="${{ secrets.EMAIL_SMTP_USERNAME }}"
+                      emailSmtpPassword="${{ secrets.EMAIL_SMTP_PASSWORD }}"
+                      emailNoReplyAddress="${{ secrets.EMAIL_NO_REPLY_ADDRESS }}"
+                      jwtSecurityKey="${{ secrets.JWT_SECURITY_KEY }}"
+                      jwtIssuer="${{ secrets.JWT_ISSUER }}"
+                      jwtAudience="${{ secrets.JWT_AUDIENCE }}"
+                      jwtExpiresIn="${{ secrets.JWT_EXPIRES_IN }}"
+                      seedEmailAddress="${{ secrets.SEED_EMAIL_ADDRESS }}"
+                      seedPassword="${{ secrets.SEED_PASSWORD }}"
 
             - name: Deploy
-              env:
-                  DB_HOST: ${{ secrets.DB_HOST }}
-                  DB_PORT: ${{ secrets.DB_PORT }}
-                  DB_USER: ${{ secrets.DB_USER }}
-                  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-                  DB_DATABASE: ${{ secrets.DB_DATABASE }}
-                  DB_SSL: ${{ secrets.DB_SSL }}
+              uses: azure/webapps-deploy@v2
+              with:
+                  app-name: halcyon-${{ env.REACT_APP_STAGE }}-web
+                  images: 'halcyon.azurecr.io/halcyon:${{ env.REACT_APP_VERSION }}'
 
-                  JWT_SECURITY_KEY: ${{ secrets.JWT_SECURITY_KEY }}
-                  JWT_AUDIENCE: ${{ secrets.JWT_AUDIENCE }}
-                  JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
-                  JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
-
-                  EMAIL_SMTP_SERVER: ${{ secrets.EMAIL_SMTP_SERVER }}
-                  EMAIL_SMTP_PORT: ${{ secrets.EMAIL_SMTP_PORT }}
-                  EMAIL_SMTP_USERNAME: ${{ secrets.EMAIL_SMTP_USERNAME }}
-                  EMAIL_SMTP_PASSWORD: ${{ secrets.EMAIL_SMTP_PASSWORD }}
-                  EMAIL_NO_REPLY_ADDRESS: ${{ secrets.EMAIL_NO_REPLY_ADDRESS }}
-
-                  SEED_EMAIL_ADDRESS: ${{secrets.SEED_EMAIL_ADDRESS }}
-                  SEED_PASSWORD: ${{ secrets.SEED_PASSWORD }}
+            - name: Azure Logout
               run: |
-                  yarn serverless:deploy --stage ${{ env.STAGE }} --region ${{ secrets.AWS_REGION }}
-                  yarn db:seed
+                  az logout
+                  az cache purge
+                  az account clear

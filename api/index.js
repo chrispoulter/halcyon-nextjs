@@ -14,7 +14,7 @@ import { logger } from './utils/logger';
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(morgan("tiny", { stream: logger.stream }));
+app.use(morgan('tiny', { stream: logger.stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
