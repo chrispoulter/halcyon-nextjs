@@ -6,6 +6,9 @@
             "type": "string",
             "defaultValue": "main"
         },
+        "image": {
+            "type": "string"
+        },
         "dbHost": {
             "type": "string"
         },
@@ -18,9 +21,6 @@
         },
         "dbPassword": {
             "type": "secureString"
-        },
-        "dbDatabase": {
-            "type": "string"
         },
         "dbSSL": {
             "type": "string",
@@ -69,6 +69,7 @@
     },
     "variables": {
         "prefix": "[concat('halcyon-', parameters('stage'))]",
+        "db": "[concat(variables('prefix'), '-db')]",
         "plan": "[concat(variables('prefix'), '-plan')]",
         "web": "[concat(variables('prefix'), '-web')]"
     },
@@ -110,7 +111,7 @@
                 "name": "[variables('web')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('plan'))]",
                 "siteConfig": {
-                    "linuxFxVersion": "DOTNETCORE|5.0"
+                    "linuxFxVersion": "[resourceId('DOCKER|', parameters('image'))]"
                 }
             }
         },
@@ -126,7 +127,7 @@
                 "DB_PORT": "[parameters('dbPort')]",
                 "DB_USER": "[parameters('dbUser')]",
                 "DB_PASSWORD": "[parameters('dbPassword')]",
-                "DB_DATABASE": "[parameters('dbDatabase')]",
+                "DB_DATABASE": "[variables('db')]",
                 "DB_SSL": "[parameters('dbSSL')]",
                 "Email_SmtpServer": "[parameters('emailSmtpServer')]",
                 "Email_SmtpPort": "[parameters('emailSmtpPort')]",

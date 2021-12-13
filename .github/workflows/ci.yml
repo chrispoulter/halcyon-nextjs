@@ -68,10 +68,10 @@ jobs:
                   resourceGroupName: halcyon-${{ env.REACT_APP_STAGE }}
                   template: ./azuredeploy.json
                   parameters: stage="${{ env.REACT_APP_STAGE }}"
-                      dbhost="${{ secrets.DB_HOST }}"
+                      image="halcyon.azurecr.io/halcyon:${{ env.REACT_APP_VERSION }}"
+                      dbHost="${{ secrets.DB_HOST }}"
                       dbUser="${{ secrets.DB_USER }}"
                       dbPassword="${{ secrets.DB_PASSWORD }}"
-                      dbDatabase="halcyon-${{ secrets.REACT_APP_STAGE }}-db"
                       emailSmtpServer="${{ secrets.EMAIL_SMTP_SERVER }}"
                       emailSmtpPort="${{ secrets.EMAIL_SMTP_PORT }}"
                       emailSmtpUserName="${{ secrets.EMAIL_SMTP_USERNAME }}"
