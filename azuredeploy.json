@@ -6,9 +6,6 @@
             "type": "string",
             "defaultValue": "main"
         },
-        "image": {
-            "type": "string"
-        },
         "dbHost": {
             "type": "string"
         },
@@ -109,10 +106,7 @@
             "kind": "app,linux",
             "properties": {
                 "name": "[variables('web')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('plan'))]",
-                "siteConfig": {
-                    "linuxFxVersion": "[concat('DOCKER|', parameters('image'))]"
-                }
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('plan'))]"
             }
         },
         {
