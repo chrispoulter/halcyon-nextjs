@@ -123,17 +123,17 @@
                 "DB_PASSWORD": "[parameters('dbPassword')]",
                 "DB_DATABASE": "[variables('db')]",
                 "DB_SSL": "[parameters('dbSSL')]",
-                "Email_SmtpServer": "[parameters('emailSmtpServer')]",
-                "Email_SmtpPort": "[parameters('emailSmtpPort')]",
-                "Email_SmtpUserName": "[parameters('emailSmtpUserName')]",
-                "Email_SmtpPassword": "[parameters('emailSmtpPassword')]",
-                "Email_NoReplyAddress": "[parameters('emailNoReplyAddress')]",
-                "Jwt_SecurityKey": "[parameters('jwtSecurityKey')]",
-                "Jwt_Issuer": "[parameters('jwtIssuer')]",
-                "Jwt_Audience": "[parameters('jwtAudience')]",
-                "Jwt_ExpiresIn": "[parameters('jwtExpiresIn')]",
-                "Seed_EmailAddress": "[parameters('seedEmailAddress')]",
-                "Seed_Password": "[parameters('seedPassword')]"
+                "EMAIL_SMTP_SERVER": "[parameters('emailSmtpServer')]",
+                "EMAIL_SMTP_PORT": "[parameters('emailSmtpPort')]",
+                "EMAIL_SMTP_USERNAME": "[parameters('emailSmtpUserName')]",
+                "EMAIL_SMTP_PASSWORD": "[parameters('emailSmtpPassword')]",
+                "EMAIL_NO_REPLY_ADDRESS": "[parameters('emailNoReplyAddress')]",
+                "JWT_SECURITY_KEY": "[parameters('jwtSecurityKey')]",
+                "JWT_ISSUER": "[parameters('jwtIssuer')]",
+                "JWT_AUDIENCE": "[parameters('jwtAudience')]",
+                "JWT_EXPIRES_IN": "[parameters('jwtExpiresIn')]",
+                "SEED_EMAIL_ADDRESS": "[parameters('seedEmailAddress')]",
+                "SEED_PASSWORD": "[parameters('seedPassword')]"
             }
         }
     ]
