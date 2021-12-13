@@ -6,6 +6,15 @@
             "type": "string",
             "defaultValue": "main"
         },
+        "registryUrl": {
+            "type": "string"
+        },
+        "registryUserName": {
+            "type": "string"
+        },
+        "registryPassword": {
+            "type": "string"
+        },
         "dbHost": {
             "type": "string"
         },
@@ -117,6 +126,9 @@
                 "[resourceId('Microsoft.Web/sites', variables('web'))]"
             ],
             "properties": {
+                "DOCKER_REGISTRY_SERVER_URL": "[parameters('registryUrl')]",
+                "DOCKER_REGISTRY_SERVER_USERNAME": "[parameters('registryUsername')]",
+                "DOCKER_REGISTRY_SERVER_PASSWORD": "[parameters('registryPassword')]",
                 "DB_HOST": "[parameters('dbHost')]",
                 "DB_PORT": "[parameters('dbPort')]",
                 "DB_USER": "[parameters('dbUser')]",
