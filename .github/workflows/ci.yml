@@ -48,7 +48,7 @@ jobs:
             - name: Build
               run: |
                   yarn version --new-version ${{ env.VERSION }} --no-git-tag-version
-                  docker build . -t ${{ secrets.REGISTRY_URL }}/halcyon:${{ env.VERSION }} --build-arg VERSION=${{ env.VERSION }} STAGE=${{ env.STAGE }}
+                  docker build . -t ${{ secrets.REGISTRY_URL }}/halcyon:${{ env.VERSION }} --build-arg VERSION=${{ env.VERSION }} --build-arg STAGE=${{ env.STAGE }}
                   docker push ${{ secrets.REGISTRY_URL }}/halcyon:${{ env.VERSION }}
 
             - name: Azure Login
