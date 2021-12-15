@@ -1,6 +1,12 @@
 FROM node:14-alpine AS base
 WORKDIR /app
 
+ARG VERSION
+ENV REACT_APP_VERSION=$VERSION
+
+ARG STAGE
+ENV REACT_APP_STAGE=$STAGE
+
 FROM base AS build
 COPY ["package.json", "yarn.lock", "./"]
 RUN yarn install --frozen-lockfile
