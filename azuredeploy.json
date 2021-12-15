@@ -30,7 +30,7 @@
         },
         "dbSSL": {
             "type": "string",
-            "defaultValue": "true"
+            "defaultValue": "false"
         },
         "emailSmtpServer": {
             "type": "string",
