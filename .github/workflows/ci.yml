@@ -74,6 +74,8 @@ jobs:
                       dbHost="${{ secrets.DB_HOST }}"
                       dbUser="${{ secrets.DB_USER }}"
                       dbPassword="${{ secrets.DB_PASSWORD }}"
+                      dbDatabase="halcyon-${{ env.REACT_APP_STAGE }}-db"
+                      dbSSL="${{ secrets.DB_SSL }}"
                       emailSmtpServer="${{ secrets.EMAIL_SMTP_SERVER }}"
                       emailSmtpPort="${{ secrets.EMAIL_SMTP_PORT }}"
                       emailSmtpUserName="${{ secrets.EMAIL_SMTP_USERNAME }}"

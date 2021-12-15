@@ -28,6 +28,9 @@
         "dbPassword": {
             "type": "secureString"
         },
+        "dbDatabase": {
+            "type": "string"
+        },
         "dbSSL": {
             "type": "string",
             "defaultValue": "false"
@@ -75,7 +78,6 @@
     },
     "variables": {
         "prefix": "[concat('halcyon-', parameters('stage'))]",
-        "db": "[concat(variables('prefix'), '-db')]",
         "plan": "[concat(variables('prefix'), '-plan')]",
         "web": "[concat(variables('prefix'), '-web')]"
     },
@@ -133,7 +135,7 @@
                 "DB_PORT": "[parameters('dbPort')]",
                 "DB_USER": "[parameters('dbUser')]",
                 "DB_PASSWORD": "[parameters('dbPassword')]",
-                "DB_DATABASE": "[variables('db')]",
+                "DB_DATABASE": "[parameters('dbDatabase')]",
                 "DB_SSL": "[parameters('dbSSL')]",
                 "EMAIL_SMTP_SERVER": "[parameters('emailSmtpServer')]",
                 "EMAIL_SMTP_PORT": "[parameters('emailSmtpPort')]",
