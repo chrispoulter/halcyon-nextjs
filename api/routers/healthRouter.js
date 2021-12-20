@@ -8,14 +8,12 @@ export const healthRouter = Router();
 healthRouter.get(
     '/',
     asyncMiddleware(async (_, res) => {
-        const status = await healthRepository.getStatus();
+        const database = await healthRepository.getStatus();
 
         return res.json({
-            data: {
-                version: config.VERSION,
-                stage: config.STAGE,
-                status
-            }
+            version: config.VERSION,
+            stage: config.STAGE,
+            database
         });
     })
 );
