@@ -1,4 +1,5 @@
 import { migrate } from 'postgres-migrations';
+import path from 'path';
 import {
     userRepository,
     templateRepository,
@@ -24,7 +25,7 @@ const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
             ensureDatabaseExists: true,
             defaultDatabase: 'postgres'
         },
-        './scripts/migrations'
+        path.join(__dirname, 'migrations')
     );
 
     await templateRepository.upsert({
