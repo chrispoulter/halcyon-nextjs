@@ -117,7 +117,8 @@
             "kind": "app,linux",
             "properties": {
                 "name": "[variables('web')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('plan'))]"
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('plan'))]",
+                "healthCheckPath": "/health"
             }
         },
         {
