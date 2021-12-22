@@ -18,7 +18,7 @@ app.use(morgan('tiny', { stream: logger.stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, '..', 'build')));
+app.use(express.static(path.join(__dirname, '..', '..', 'build')));
 
 app.use('/health', healthRouter);
 app.use('/api/account', accountRouter);
@@ -27,7 +27,7 @@ app.use('/api/token', tokenRouter);
 app.use('/api/user', userRouter);
 
 app.get('*', (_, res) =>
-    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'))
+    res.sendFile(path.join(__dirname, '..', '..', 'build', 'index.html'))
 );
 
 app.use(errorMiddleware);
