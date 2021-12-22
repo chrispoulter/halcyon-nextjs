@@ -117,7 +117,17 @@
             "kind": "app,linux",
             "properties": {
                 "name": "[variables('web')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('plan'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('plan'))]"
+            }
+        },
+        {
+            "name": "[concat(variables('web'), '/web')]",
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2020-12-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('web'))]"
+            ],
+            "properties": {
                 "healthCheckPath": "/health"
             }
         },
