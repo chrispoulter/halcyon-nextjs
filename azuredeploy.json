@@ -2,10 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "stage": {
-            "type": "string",
-            "defaultValue": "main"
-        },
         "registryUrl": {
             "type": "string"
         },
@@ -77,7 +73,7 @@
         }
     },
     "variables": {
-        "prefix": "[concat('halcyon-', parameters('stage'))]",
+        "prefix": "[resourceGroup().name]",
         "plan": "[concat(variables('prefix'), '-plan')]",
         "web": "[concat(variables('prefix'), '-web')]"
     },

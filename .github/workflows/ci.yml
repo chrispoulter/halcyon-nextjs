@@ -48,8 +48,8 @@ jobs:
             - name: Build
               run: |
                   yarn version --new-version ${{ env.VERSION }} --no-git-tag-version
-                  docker build . -t ${{ secrets.REGISTRY_URL }}/halcyon:${{ env.VERSION }} --build-arg VERSION=${{ env.VERSION }} --build-arg STAGE=${{ env.STAGE }}
-                  docker push ${{ secrets.REGISTRY_URL }}/halcyon:${{ env.VERSION }}
+                  docker build . -t ${{ secrets.REGISTRY_URL }}/halcyon-node:${{ env.VERSION }} --build-arg VERSION=${{ env.VERSION }} --build-arg STAGE=${{ env.STAGE }}
+                  docker push ${{ secrets.REGISTRY_URL }}/halcyon-node:${{ env.VERSION }}
 
             - name: Azure Login
               uses: azure/login@v1
@@ -59,22 +59,21 @@ jobs:
             - name: Create Resource Group
               run: |
                   az group create \
-                    --name "halcyon-${{ env.STAGE }}" \
+                    --name "halcyon-node-${{ env.STAGE }}" \
                     --location "${{ secrets.AZURE_LOCATION }}"
 
             - name: Deploy ARM Template
               uses: azure/arm-deploy@v1
               with:
-                  resourceGroupName: halcyon-${{ env.STAGE }}
+                  resourceGroupName: halcyon-node-${{ env.STAGE }}
                   template: ./azuredeploy.json
-                  parameters: stage="${{ env.STAGE }}"
-                      registryUrl="${{ secrets.REGISTRY_URL }}"
+                  parameters: registryUrl="${{ secrets.REGISTRY_URL }}"
                       registryUserName="${{ secrets.REGISTRY_USERNAME }}"
                       registryPassword="${{ secrets.REGISTRY_PASSWORD }}"
                       dbHost="${{ secrets.DB_HOST }}"
                       dbUser="${{ secrets.DB_USER }}"
                       dbPassword="${{ secrets.DB_PASSWORD }}"
-                      dbDatabase="halcyon-${{ env.STAGE }}-db"
+                      dbDatabase="halcyon-node-${{ env.STAGE }}"
                       dbSSL="${{ secrets.DB_SSL }}"
                       emailSmtpServer="${{ secrets.EMAIL_SMTP_SERVER }}"
                       emailSmtpPort="${{ secrets.EMAIL_SMTP_PORT }}"
@@ -91,8 +90,8 @@ jobs:
             - name: Deploy
               uses: azure/webapps-deploy@v2
               with:
-                  app-name: halcyon-${{ env.STAGE }}-web
-                  images: '${{ secrets.REGISTRY_URL }}/halcyon:${{ env.VERSION }}'
+                  app-name: halcyon-node-${{ env.STAGE }}-web
+                  images: '${{ secrets.REGISTRY_URL }}/halcyon-node:${{ env.VERSION }}'
 
             - name: Azure Logout
               run: |
