@@ -153,7 +153,8 @@
                 "JWT_AUDIENCE": "[parameters('jwtAudience')]",
                 "JWT_EXPIRES_IN": "[parameters('jwtExpiresIn')]",
                 "SEED_EMAIL_ADDRESS": "[parameters('seedEmailAddress')]",
-                "SEED_PASSWORD": "[parameters('seedPassword')]"
+                "SEED_PASSWORD": "[parameters('seedPassword')]",
+                "WEBSITES_PORT": "3001"
             }
         }
     ]
