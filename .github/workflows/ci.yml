@@ -67,8 +67,7 @@ jobs:
               with:
                   resourceGroupName: halcyon-${{ env.STAGE }}
                   template: ./azuredeploy.json
-                  parameters: version="${{ env.VERSION }}"
-                      stage="${{ env.STAGE }}"
+                  parameters: stage="${{ env.STAGE }}"
                       registryUrl="${{ secrets.REGISTRY_URL }}"
                       registryUserName="${{ secrets.REGISTRY_USERNAME }}"
                       registryPassword="${{ secrets.REGISTRY_PASSWORD }}"

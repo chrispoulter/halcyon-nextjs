@@ -2,10 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "version": {
-            "type": "string",
-            "defaultValue": "1.0.0"
-        },
         "stage": {
             "type": "string",
             "defaultValue": "main"
@@ -132,8 +128,7 @@
                 "[resourceId('Microsoft.Web/sites', variables('web'))]"
             ],
             "properties": {
-                "VERSION": "[parameters('version')]",
-                "STAGE": "[parameters('stage')]",
+                "WEBSITES_PORT": "3001",
                 "DOCKER_REGISTRY_SERVER_URL": "[parameters('registryUrl')]",
                 "DOCKER_REGISTRY_SERVER_USERNAME": "[parameters('registryUsername')]",
                 "DOCKER_REGISTRY_SERVER_PASSWORD": "[parameters('registryPassword')]",
@@ -153,8 +148,7 @@
                 "JWT_AUDIENCE": "[parameters('jwtAudience')]",
                 "JWT_EXPIRES_IN": "[parameters('jwtExpiresIn')]",
                 "SEED_EMAIL_ADDRESS": "[parameters('seedEmailAddress')]",
-                "SEED_PASSWORD": "[parameters('seedPassword')]",
-                "WEBSITES_PORT": "3001"
+                "SEED_PASSWORD": "[parameters('seedPassword')]"
             }
         }
     ]
