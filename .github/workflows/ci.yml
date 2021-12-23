@@ -9,6 +9,8 @@ on:
             - '**'
     workflow_dispatch:
 
+concurrency: ci-${{ github.ref }}
+
 env:
     PREFIX: halcyon-node
 
