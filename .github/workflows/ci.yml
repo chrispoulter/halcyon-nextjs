@@ -23,11 +23,6 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Setup Node
-              uses: actions/setup-node@v1
-              with:
-                  node-version: 14.x
-
             - name: Install GitVersion
               uses: gittools/actions/gitversion/setup@v0.9.7
               with:
