@@ -5,8 +5,7 @@
             "type": "npm",
             "script": "install",
             "problemMatcher": [],
-            "label": "npm: install",
-            "detail": "install dependencies from package"
+            "label": "npm: install"
         },
         {
             "type": "npm",
@@ -17,8 +16,7 @@
             },
 			"dependsOn": "npm: install",
             "problemMatcher": [],
-            "label": "npm: build",
-            "detail": "build project"
+            "label": "npm: build"
         }
     ]
 }
