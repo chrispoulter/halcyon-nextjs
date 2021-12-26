@@ -23,6 +23,10 @@
             }
         ],
         [
+            "@babel/plugin-proposal-private-property-in-object",
+            { "loose": true }
+        ],
+        [
             "babel-plugin-inline-import",
             {
                 "extensions": [".html"]

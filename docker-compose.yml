@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+    db:
+        image: postgres:12.6-alpine
+        container_name: halcyon-node-db
+        restart: always
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=example
+        ports:
+            - 5432:5432
+        volumes:
+            - db:/var/lib/postgresql/data
+volumes:
+    db:
+        driver: local

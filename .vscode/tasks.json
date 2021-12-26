@@ -14,7 +14,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-			"dependsOn": "npm: install",
+            "dependsOn": "npm: install",
             "problemMatcher": [],
             "label": "npm: build"
         }
