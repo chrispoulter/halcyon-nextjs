@@ -24,7 +24,7 @@ export const Header = () => {
             variant="dark"
             className="mb-3"
             expanded={expanded}
-            onToggle={value => setExpanded(value)}
+            onToggle={setExpanded}
             onSelect={handleClose}
         >
             <Container>
