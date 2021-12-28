@@ -12,9 +12,9 @@ export const Header = () => {
 
     const [expanded, setExpanded] = useState(false);
 
-    const handleClose = () => setExpanded(false);
+    const onClose = () => setExpanded(false);
 
-    useOnClickOutside(ref, handleClose);
+    useOnClickOutside(ref, onClose);
 
     return (
         <Navbar
@@ -25,10 +25,10 @@ export const Header = () => {
             className="mb-3"
             expanded={expanded}
             onToggle={setExpanded}
-            onSelect={handleClose}
+            onSelect={onClose}
         >
             <Container>
-                <Navbar.Brand onClick={handleClose} to="/" as={Link}>
+                <Navbar.Brand onClick={onClose} to="/" as={Link}>
                     Halcyon
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
