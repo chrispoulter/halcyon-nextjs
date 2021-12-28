@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import { useOnClickOutside } from '../../hooks';
-import { HasPermission, UserProfile } from '../user';
+import { HasPermission, UserProfile } from '../auth';
 import { USER_ADMINISTRATOR_ROLES } from '../../utils/auth';
 
 export const Header = () => {
