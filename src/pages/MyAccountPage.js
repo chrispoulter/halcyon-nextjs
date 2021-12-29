@@ -1,26 +1,29 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { useDispatch } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { Button, Spinner } from '../components';
-import { useModal, useAuth, useToast } from '../contexts';
-import { useGetProfile, useDeleteAccount } from '../services';
+import { useModal, useToast } from '../contexts';
+import { removeToken } from '../features';
+import { useGetProfileQuery, useDeleteAccountMutation } from '../services';
 
 export const MyAccountPage = () => {
     const navigate = useNavigate();
 
-    const { removeToken } = useAuth();
+    const dispatch = useDispatch();
 
     const { showModal } = useModal();
 
     const toast = useToast();
 
-    const { loading, data } = useGetProfile();
+    const { isLoading, data } = useGetProfileQuery();
 
-    const { request: deleteAccount, loading: isDeleting } = useDeleteAccount();
+    const [deleteAccount, { isLoading: isDeleting }] =
+        useDeleteAccountMutation();
 
-    if (loading) {
+    if (isLoading) {
         return <Spinner />;
     }
 
@@ -39,9 +42,11 @@ export const MyAccountPage = () => {
             onOk: async () => {
                 const result = await deleteAccount();
 
-                if (result.ok) {
+                if (result.data) {
                     toast.success(result.message);
-                    removeToken();
+
+                    dispatch(removeToken());
+
                     navigate('/');
                 }
             }

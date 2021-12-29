@@ -1,13 +1,15 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import { Header, Footer, Spinner, Meta, ErrorBoundary } from './components';
-import { AuthProvider, ModalProvider, ToastProvider } from './contexts';
+import { ModalProvider, ToastProvider } from './contexts';
 import { Router } from './Router';
+import { store } from './store';
 
 export const App = () => (
     <Suspense fallback={<Spinner />}>
         <BrowserRouter>
-            <AuthProvider>
+            <Provider store={store}>
                 <ModalProvider>
                     <ToastProvider>
                         <Meta />
@@ -18,7 +20,7 @@ export const App = () => (
                         <Footer />
                     </ToastProvider>
                 </ModalProvider>
-            </AuthProvider>
+            </Provider>
         </BrowserRouter>
     </Suspense>
 );

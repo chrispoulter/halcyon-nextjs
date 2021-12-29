@@ -14,11 +14,11 @@ import {
 } from '../components';
 import { useModal, useToast } from '../contexts';
 import {
-    useGetUser,
-    useUpdateUser,
-    useLockUser,
-    useUnlockUser,
-    useDeleteUser
+    useGetUserQuery,
+    useUpdateUserMutation,
+    useLockUserMutation,
+    useUnlockUserMutation,
+    useDeleteUserMutation
 } from '../services';
 import { ALL_ROLES } from '../utils/auth';
 
@@ -31,17 +31,17 @@ export const UpdateUserPage = () => {
 
     const toast = useToast();
 
-    const { request, loading, data } = useGetUser(id);
+    const { isLoading, data, refetch } = useGetUserQuery(id);
 
-    const { request: updateUser } = useUpdateUser(id);
+    const [updateUser] = useUpdateUserMutation(id);
 
-    const { request: lockUser, loading: isLocking } = useLockUser(id);
+    const [lockUser, { isLoading: isLocking }] = useLockUserMutation(id);
 
-    const { request: unlockUser, loading: isUnlocking } = useUnlockUser(id);
+    const [unlockUser, { isLoading: isUnlocking }] = useUnlockUserMutation(id);
 
-    const { request: deleteUser, loading: isDeleting } = useDeleteUser(id);
+    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation(id);
 
-    if (loading) {
+    if (isLoading) {
         return <Spinner />;
     }
 
@@ -56,7 +56,7 @@ export const UpdateUserPage = () => {
     const onSubmit = async variables => {
         const result = await updateUser(variables);
 
-        if (result.ok) {
+        if (result.data) {
             toast.success(result.message);
             navigate('/user');
         }
@@ -76,9 +76,10 @@ export const UpdateUserPage = () => {
             ),
             onOk: async () => {
                 const result = await lockUser();
-                if (result.ok) {
-                    await request();
+
+                if (result.data) {
                     toast.success(result.message);
+                    refetch();
                 }
             }
         });
@@ -97,9 +98,10 @@ export const UpdateUserPage = () => {
             ),
             onOk: async () => {
                 const result = await unlockUser();
-                if (result.ok) {
-                    await request();
+
+                if (result.data) {
                     toast.success(result.message);
+                    refetch();
                 }
             }
         });
@@ -118,7 +120,8 @@ export const UpdateUserPage = () => {
             ),
             onOk: async () => {
                 const result = await deleteUser();
-                if (result.ok) {
+
+                if (result.data) {
                     toast.success(result.message);
                     navigate('/user');
                 }

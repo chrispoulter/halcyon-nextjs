@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router';
-import { useAuth } from '../../contexts';
+import { useAuth } from '../../hooks';
 import { AccessDeniedPage } from '../../pages';
 import { isAuthorized } from '../../utils/auth';
 

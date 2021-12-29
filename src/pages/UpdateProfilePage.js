@@ -7,18 +7,18 @@ import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { Spinner, TextInput, DateInput, Button } from '../components';
 import { useToast } from '../contexts';
-import { useGetProfile, useUpdateProfile } from '../services';
+import { useGetProfileQuery, useUpdateProfileMutation } from '../services';
 
 export const UpdateProfilePage = () => {
     const navigate = useNavigate();
 
     const toast = useToast();
 
-    const { loading, data } = useGetProfile();
+    const { isLoading, data } = useGetProfileQuery();
 
-    const { request: updateProfile } = useUpdateProfile();
+    const [updateProfile] = useUpdateProfileMutation();
 
-    if (loading) {
+    if (isLoading) {
         return <Spinner />;
     }
 
@@ -33,7 +33,7 @@ export const UpdateProfilePage = () => {
     const onSubmit = async variables => {
         const result = await updateProfile(variables);
 
-        if (result.ok) {
+        if (result.data) {
             toast.success(result.message);
             navigate('/my-account');
         }

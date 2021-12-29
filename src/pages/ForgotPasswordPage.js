@@ -6,20 +6,20 @@ import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, Button } from '../components';
 import { useToast } from '../contexts';
-import { useForgotPassword } from '../services';
+import { useForgotPasswordMutation } from '../services';
 
 export const ForgotPasswordPage = () => {
     const navigate = useNavigate();
 
     const toast = useToast();
 
-    const { request: forgotPassword } = useForgotPassword();
+    const [forgotPassword] = useForgotPasswordMutation();
 
     const onSubmit = async variables => {
         const result = await forgotPassword(variables);
 
-        if (result.ok) {
-            toast.success(result.message);
+        if (result.data) {
+            toast.success(result.data.message);
             navigate('/login');
         }
     };

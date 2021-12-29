@@ -1,17 +1,22 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { useAuth } from '../../contexts';
+import { useAuth } from '../../hooks';
+import { removeToken } from '../../features';
 import { HasPermission } from './HasPermission';
 
 export const UserProfile = () => {
     const navigate = useNavigate();
 
-    const { currentUser, removeToken } = useAuth();
+    const dispatch = useDispatch();
+
+    const { currentUser } = useAuth();
 
     const logout = () => {
-        removeToken();
+        dispatch(removeToken());
+
         navigate('/');
     };
 

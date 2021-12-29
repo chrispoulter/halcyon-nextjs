@@ -11,7 +11,7 @@ import {
     Button
 } from '../components';
 import { useToast } from '../contexts';
-import { useCreateUser } from '../services';
+import { useCreateUserMutation } from '../services';
 import { ALL_ROLES } from '../utils/auth';
 
 export const CreateUserPage = () => {
@@ -19,12 +19,12 @@ export const CreateUserPage = () => {
 
     const toast = useToast();
 
-    const { request: createUser } = useCreateUser();
+    const [createUser] = useCreateUserMutation();
 
     const onSubmit = async variables => {
         const result = await createUser(variables);
 
-        if (result.ok) {
+        if (result.data) {
             toast.success(result.message);
             navigate('/user');
         }

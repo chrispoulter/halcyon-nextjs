@@ -11,7 +11,7 @@ import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 import { Button, Spinner, Pager } from '../components';
-import { useSearchUsers } from '../services';
+import { useSearchUsersQuery } from '../services';
 import { ALL_ROLES } from '../utils/auth';
 
 const SORT_OPTIONS = {
@@ -31,9 +31,9 @@ export const UserPage = () => {
         sort: searchParams.get('sort') || 'NAME_ASC'
     };
 
-    const { loading, data } = useSearchUsers(filter);
+    const { isLoading, data } = useSearchUsersQuery(filter);
 
-    if (loading) {
+    if (isLoading) {
         return <Spinner />;
     }
 

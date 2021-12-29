@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, Button } from '../components';
 import { useToast } from '../contexts';
-import { useResetPassword } from '../services';
+import { useResetPasswordMutation } from '../services';
 
 export const ResetPasswordPage = () => {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ export const ResetPasswordPage = () => {
 
     const toast = useToast();
 
-    const { request: resetPassword } = useResetPassword();
+    const [resetPassword] = useResetPasswordMutation();
 
     const onSubmit = async variables => {
         const result = await resetPassword({
@@ -23,7 +23,7 @@ export const ResetPasswordPage = () => {
             ...variables
         });
 
-        if (result.ok) {
+        if (result.data) {
             toast.success(result.message);
             navigate('/login');
         }

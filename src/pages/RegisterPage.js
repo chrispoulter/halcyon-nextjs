@@ -1,30 +1,36 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { useDispatch } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, DateInput, Button } from '../components';
-import { useAuth } from '../contexts';
-import { useRegister, useCreateToken } from '../services';
+import { setToken } from '../features';
+import { useRegisterMutation, useCreateTokenMutation } from '../services';
 
 export const RegisterPage = () => {
     const navigate = useNavigate();
 
-    const { setToken } = useAuth();
+    const dispatch = useDispatch();
 
-    const { request: register } = useRegister();
+    const [register] = useRegisterMutation();
 
-    const { request: createToken } = useCreateToken();
+    const [createToken] = useCreateTokenMutation();
 
     const onSubmit = async variables => {
         let result = await register(variables);
 
-        if (result.ok) {
+        if (result.data) {
             result = await createToken(variables);
 
-            if (result.ok) {
-                setToken(result.data.accessToken);
+            if (result.data) {
+                dispatch(
+                    setToken({
+                        accessToken: result.data.accessToken
+                    })
+                );
+
                 navigate('/');
             }
         }
