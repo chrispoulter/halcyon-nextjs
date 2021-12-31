@@ -1,17 +1,18 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { useDispatch } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, Button } from '../components';
-import { useToast } from '../contexts';
+import { toast } from '../features';
 import { useChangePasswordMutation } from '../services';
 
 export const ChangePasswordPage = () => {
     const navigate = useNavigate();
 
-    const toast = useToast();
+    const dispatch = useDispatch();
 
     const [changePassword] = useChangePasswordMutation();
 
@@ -19,7 +20,13 @@ export const ChangePasswordPage = () => {
         const result = await changePassword(variables);
 
         if (result.data) {
-            toast.success(result.message);
+            dispatch(
+                toast({
+                    variant: 'success',
+                    message: result.data.message
+                })
+            );
+
             navigate('/my-account');
         }
     };

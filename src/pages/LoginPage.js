@@ -17,13 +17,12 @@ export const LoginPage = () => {
     const [createToken] = useCreateTokenMutation();
 
     const onSubmit = async variables => {
-        const { data } = await createToken(variables);
+        const result = await createToken(variables);
 
-        if (data) {
-            console.log('data', data);
+        if (result.data) {
             dispatch(
                 setToken({
-                    accessToken: data.accessToken,
+                    accessToken: result.data.data.accessToken,
                     persist: variables.rememberMe
                 })
             );

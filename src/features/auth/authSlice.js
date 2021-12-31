@@ -25,13 +25,11 @@ const slice = createSlice({
     initialState: getInitialState(),
     reducers: {
         setToken: (state, { payload: { accessToken, persist } }) => {
-            console.log('setToken', accessToken, persist);
             state.accessToken = accessToken;
             state.currentUser = jwtDecode(accessToken);
             setItem('accessToken', accessToken, persist);
         },
         removeToken: state => {
-            console.log('removeToken');
             state.accessToken = undefined;
             state.currentUser = undefined;
             removeItem('accessToken');

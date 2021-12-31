@@ -27,7 +27,7 @@ export const RegisterPage = () => {
             if (result.data) {
                 dispatch(
                     setToken({
-                        accessToken: result.data.accessToken
+                        accessToken: result.data.data.accessToken
                     })
                 );
 

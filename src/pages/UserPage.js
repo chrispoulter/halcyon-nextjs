@@ -107,11 +107,11 @@ export const UserPage = () => {
                 )}
             </Formik>
 
-            {!data?.items.length ? (
+            {!data?.data?.items.length ? (
                 <Alert variant="info">No users could be found.</Alert>
             ) : (
                 <>
-                    {data.items.map(user => (
+                    {data.data.items.map(user => (
                         <Card
                             key={user.id}
                             to={`/user/${user.id}`}

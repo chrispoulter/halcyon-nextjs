@@ -1,34 +1,20 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { config } from '../utils/config';
 
-const baseQuery = fetchBaseQuery({
-    baseUrl: config.API_URL,
-    prepareHeaders: (headers, { getState }) => {
-        const { accessToken } = getState().auth;
-
-        if (accessToken) {
-            headers.set('authorization', `Bearer ${accessToken}`);
-        }
-
-        return headers;
-    }
-});
-
 export const halcyonApi = createApi({
     reducerPath: 'halcyonApi',
-    baseQuery: async (...args) => {
-        console.log(args);
+    baseQuery: fetchBaseQuery({
+        baseUrl: config.API_URL,
+        prepareHeaders: (headers, { getState }) => {
+            const { accessToken } = getState().auth;
 
-        const result = await baseQuery(...args);
+            if (accessToken) {
+                headers.set('authorization', `Bearer ${accessToken}`);
+            }
 
-        if (result.data) {
-            console.log('result.data', result.data);
-            return result.data;
+            return headers;
         }
-
-        console.log('result', result);
-        return result;
-    },
+    }),
     endpoints: builder => ({
         register: builder.mutation({
             query: body => ({
@@ -98,7 +84,7 @@ export const halcyonApi = createApi({
             query: id => `/user/${id}`
         }),
         updateUser: builder.mutation({
-            query: ({ id, ...body }) => ({
+            query: (id, body) => ({
                 url: `/user/${id}`,
                 method: 'PUT',
                 body
