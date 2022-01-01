@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { halcyonApi } from './services';
+import { halcyonApi, rtkQueryErrorLogger } from './services';
 import { authReducer, modalReducer, toastReducer } from './features';
 
 export const store = configureStore({
@@ -13,7 +13,7 @@ export const store = configureStore({
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
             serializableCheck: false
-        }).concat(halcyonApi.middleware)
+        }).concat(halcyonApi.middleware, rtkQueryErrorLogger)
 });
 
 setupListeners(store.dispatch);

@@ -22,7 +22,7 @@ export const halcyonApi = createApi({
                 method: 'POST',
                 body
             }),
-            invalidatesTags: ['Users']
+            invalidatesTags: [{ type: 'Users', id: 'PARTIAL-LIST' }]
         }),
         forgotPassword: builder.mutation({
             query: body => ({
@@ -47,7 +47,7 @@ export const halcyonApi = createApi({
         }),
         getProfile: builder.query({
             query: () => '/manage',
-            providesTags: result => [{ type: 'User', id: result.data.id }]
+            providesTags: result => [{ type: 'Users', id: result.data.id }]
         }),
         updateProfile: builder.mutation({
             query: body => ({
@@ -55,7 +55,7 @@ export const halcyonApi = createApi({
                 method: 'PUT',
                 body
             }),
-            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
+            invalidatesTags: result => [{ type: 'Users', id: result.data.id }]
         }),
         changePassword: builder.mutation({
             query: body => ({
@@ -63,7 +63,7 @@ export const halcyonApi = createApi({
                 method: 'PUT',
                 body
             }),
-            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
+            invalidatesTags: result => [{ type: 'Users', id: result.data.id }]
         }),
         deleteAccount: builder.mutation({
             query: () => ({
@@ -71,8 +71,8 @@ export const halcyonApi = createApi({
                 method: 'DELETE'
             }),
             invalidatesTags: result => [
-                'Users',
-                { type: 'User', id: result.data.id }
+                { type: 'Users', id: 'PARTIAL-LIST' },
+                { type: 'Users', id: result.data.id }
             ]
         }),
         searchUsers: builder.query({
@@ -81,9 +81,9 @@ export const halcyonApi = createApi({
                 params
             }),
             providesTags: result => [
-                'Users',
+                { type: 'Users', id: 'PARTIAL-LIST' },
                 ...result.data.items.map(user => ({
-                    type: 'User',
+                    type: 'Users',
                     id: user.id
                 }))
             ]
@@ -94,11 +94,11 @@ export const halcyonApi = createApi({
                 method: 'POST',
                 body
             }),
-            invalidatesTags: ['Users']
+            invalidatesTags: [{ type: 'Users', id: 'PARTIAL-LIST' }]
         }),
         getUser: builder.query({
             query: id => `/user/${id}`,
-            providesTags: result => [{ type: 'User', id: result.data.id }]
+            providesTags: result => [{ type: 'Users', id: result.data.id }]
         }),
         updateUser: builder.mutation({
             query: ({ id, body }) => ({
@@ -106,21 +106,21 @@ export const halcyonApi = createApi({
                 method: 'PUT',
                 body
             }),
-            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
+            invalidatesTags: result => [{ type: 'Users', id: result.data.id }]
         }),
         lockUser: builder.mutation({
             query: id => ({
                 url: `/user/${id}/lock`,
                 method: 'PUT'
             }),
-            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
+            invalidatesTags: result => [{ type: 'Users', id: result.data.id }]
         }),
         unlockUser: builder.mutation({
             query: id => ({
                 url: `/user/${id}/unlock`,
                 method: 'PUT'
             }),
-            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
+            invalidatesTags: result => [{ type: 'Users', id: result.data.id }]
         }),
         deleteUser: builder.mutation({
             query: id => ({
@@ -128,8 +128,8 @@ export const halcyonApi = createApi({
                 method: 'DELETE'
             }),
             invalidatesTags: result => [
-                'Users',
-                { type: 'User', id: result.data.id }
+                { type: 'Users', id: 'PARTIAL-LIST' },
+                { type: 'Users', id: result.data.id }
             ]
         })
     })
