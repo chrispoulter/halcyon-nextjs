@@ -53,7 +53,7 @@ export const UpdateUserPage = () => {
     }
 
     const onSubmit = async variables => {
-        const result = await updateUser(id, variables);
+        const result = await updateUser({ id, body: variables });
 
         if (result.data) {
             dispatch(
@@ -245,7 +245,7 @@ export const UpdateUserPage = () => {
                             >
                                 Cancel
                             </Button>
-                            {data.isLockedOut ? (
+                            {data.data.isLockedOut ? (
                                 <Button
                                     variant="warning"
                                     className="me-1"

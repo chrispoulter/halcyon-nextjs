@@ -84,7 +84,7 @@ export const halcyonApi = createApi({
             query: id => `/user/${id}`
         }),
         updateUser: builder.mutation({
-            query: (id, body) => ({
+            query: ({ id, body }) => ({
                 url: `/user/${id}`,
                 method: 'PUT',
                 body
