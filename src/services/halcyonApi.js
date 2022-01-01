@@ -35,7 +35,8 @@ export const halcyonApi = createApi({
                 url: '/account/resetpassword',
                 method: 'PUT',
                 body
-            })
+            }),
+            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
         }),
         createToken: builder.mutation({
             query: body => ({
@@ -45,33 +46,42 @@ export const halcyonApi = createApi({
             })
         }),
         getProfile: builder.query({
-            query: () => '/manage'
+            query: () => '/manage',
+            providesTags: result => [{ type: 'User', id: result.data.id }]
         }),
         updateProfile: builder.mutation({
             query: body => ({
                 url: '/manage',
                 method: 'PUT',
                 body
-            })
+            }),
+            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
         }),
         changePassword: builder.mutation({
             query: body => ({
                 url: '/manage/changepassword',
                 method: 'PUT',
                 body
-            })
+            }),
+            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
         }),
         deleteAccount: builder.mutation({
-            query: {
+            query: () => ({
                 url: '/manage',
                 method: 'DELETE'
-            }
+            }),
+            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
         }),
         searchUsers: builder.query({
             query: params => ({
                 url: `/user`,
                 params
-            })
+            }),
+            providesTags: result =>
+                result.data.items.map(user => ({
+                    type: 'User',
+                    id: user.id
+                }))
         }),
         createUser: builder.mutation({
             query: body => ({
@@ -81,32 +91,37 @@ export const halcyonApi = createApi({
             })
         }),
         getUser: builder.query({
-            query: id => `/user/${id}`
+            query: id => `/user/${id}`,
+            providesTags: result => [{ type: 'User', id: result.data.id }]
         }),
         updateUser: builder.mutation({
             query: ({ id, body }) => ({
                 url: `/user/${id}`,
                 method: 'PUT',
                 body
-            })
+            }),
+            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
         }),
         lockUser: builder.mutation({
             query: id => ({
                 url: `/user/${id}/lock`,
                 method: 'PUT'
-            })
+            }),
+            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
         }),
         unlockUser: builder.mutation({
             query: id => ({
                 url: `/user/${id}/unlock`,
                 method: 'PUT'
-            })
+            }),
+            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
         }),
         deleteUser: builder.mutation({
             query: id => ({
                 url: `/user/${id}`,
                 method: 'DELETE'
-            })
+            }),
+            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
         })
     })
 });

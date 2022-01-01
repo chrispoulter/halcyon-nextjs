@@ -146,8 +146,8 @@ export const UserPage = () => {
                     ))}
 
                     <Pager
-                        hasNextPage={data.hasNextPage}
-                        hasPreviousPage={data.hasPreviousPage}
+                        hasNextPage={data.data.hasNextPage}
+                        hasPreviousPage={data.data.hasPreviousPage}
                         onNextPage={onNextPage}
                         onPreviousPage={onPreviousPage}
                     />
