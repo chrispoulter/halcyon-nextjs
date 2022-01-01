@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { Spinner, TextInput, DateInput, Button } from '../components';
-import { toast } from '../features';
+import { showToast } from '../features';
 import { useGetProfileQuery, useUpdateProfileMutation } from '../services';
 
 export const UpdateProfilePage = () => {
@@ -36,7 +36,7 @@ export const UpdateProfilePage = () => {
 
         if (result.data) {
             dispatch(
-                toast({
+                showToast({
                     variant: 'success',
                     message: result.data.message
                 })

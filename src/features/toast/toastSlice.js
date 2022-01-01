@@ -7,14 +7,18 @@ const slice = createSlice({
         message: undefined
     },
     reducers: {
-        toast: (state, { payload: { variant, message } }) => {
+        showToast: (state, { payload: { variant, message } }) => {
             state.variant = variant;
             state.message = message;
+        },
+        hideToast: state => {
+            state.variant = undefined;
+            state.message = undefined;
         }
     }
 });
 
-export const { toast } = slice.actions;
+export const { showToast, hideToast } = slice.actions;
 
 export const toastReducer = slice.reducer;
 

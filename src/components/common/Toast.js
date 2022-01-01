@@ -3,27 +3,20 @@ import { useDispatch } from 'react-redux';
 import BootstrapToast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import { useToast } from '../../hooks';
-import { toast } from '../../features';
+import { hideToast } from '../../features';
 
 export const Toast = () => {
     const dispatch = useDispatch();
 
     const { variant, message } = useToast();
-    console.log({ variant, message });
 
-    const hideToast = () =>
-        dispatch(
-            toast({
-                variant: undefined,
-                message: undefined
-            })
-        );
+    const onClose = () => dispatch(hideToast());
 
     return (
         <ToastContainer position="bottom-end" className="p-3">
             <BootstrapToast
                 bg={variant}
-                onClose={() => hideToast()}
+                onClose={onClose}
                 show={!!message}
                 delay={5000}
                 autohide
@@ -32,7 +25,7 @@ export const Toast = () => {
                     <div className="text-white">{message}</div>
                     <button
                         type="button"
-                        onClick={() => hideToast()}
+                        onClick={onClose}
                         className="btn-close btn-close-white me-2 m-auto"
                     />
                 </BootstrapToast.Body>

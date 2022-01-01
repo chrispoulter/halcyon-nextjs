@@ -11,7 +11,7 @@ import {
     CheckboxGroupInput,
     Button
 } from '../components';
-import { toast } from '../features';
+import { showToast } from '../features';
 import { useCreateUserMutation } from '../services';
 import { ALL_ROLES } from '../utils/auth';
 
@@ -27,7 +27,7 @@ export const CreateUserPage = () => {
 
         if (result.data) {
             dispatch(
-                toast({
+                showToast({
                     variant: 'success',
                     message: result.data.message
                 })

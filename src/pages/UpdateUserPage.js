@@ -13,7 +13,7 @@ import {
     CheckboxGroupInput,
     Button
 } from '../components';
-import { toast, showModal } from '../features';
+import { showToast, showModal } from '../features';
 import {
     useGetUserQuery,
     useUpdateUserMutation,
@@ -57,7 +57,7 @@ export const UpdateUserPage = () => {
 
         if (result.data) {
             dispatch(
-                toast({
+                showToast({
                     variant: 'success',
                     message: result.data.message
                 })
@@ -85,7 +85,7 @@ export const UpdateUserPage = () => {
 
                     if (result.data) {
                         dispatch(
-                            toast({
+                            showToast({
                                 variant: 'success',
                                 message: result.data.message
                             })
@@ -115,7 +115,7 @@ export const UpdateUserPage = () => {
 
                     if (result.data) {
                         dispatch(
-                            toast({
+                            showToast({
                                 variant: 'success',
                                 message: result.data.message
                             })
@@ -145,7 +145,7 @@ export const UpdateUserPage = () => {
 
                     if (result.data) {
                         dispatch(
-                            toast({
+                            showToast({
                                 variant: 'success',
                                 message: result.data.message
                             })

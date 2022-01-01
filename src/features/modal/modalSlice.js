@@ -12,11 +12,16 @@ const slice = createSlice({
             state.title = title;
             state.body = body;
             state.onOk = onOk;
+        },
+        hideModal: state => {
+            state.title = undefined;
+            state.body = undefined;
+            state.onOk = undefined;
         }
     }
 });
 
-export const { showModal } = slice.actions;
+export const { showModal, hideModal } = slice.actions;
 
 export const modalReducer = slice.reducer;
 

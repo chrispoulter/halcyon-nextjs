@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { Button, Spinner } from '../components';
-import { toast, showModal, removeToken } from '../features';
+import { showToast, showModal, removeToken } from '../features';
 import { useGetProfileQuery, useDeleteAccountMutation } from '../services';
 
 export const MyAccountPage = () => {
@@ -40,7 +40,7 @@ export const MyAccountPage = () => {
 
                     if (result.data) {
                         dispatch(
-                            toast({
+                            showToast({
                                 variant: 'success',
                                 message: result.data.message
                             })

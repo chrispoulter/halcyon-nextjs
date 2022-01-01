@@ -6,7 +6,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, Button } from '../components';
-import { toast } from '../features';
+import { showToast } from '../features';
 import { useChangePasswordMutation } from '../services';
 
 export const ChangePasswordPage = () => {
@@ -21,7 +21,7 @@ export const ChangePasswordPage = () => {
 
         if (result.data) {
             dispatch(
-                toast({
+                showToast({
                     variant: 'success',
                     message: result.data.message
                 })
