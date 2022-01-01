@@ -21,7 +21,8 @@ export const halcyonApi = createApi({
                 url: '/account/register',
                 method: 'POST',
                 body
-            })
+            }),
+            invalidatesTags: ['Users']
         }),
         forgotPassword: builder.mutation({
             query: body => ({
@@ -35,8 +36,7 @@ export const halcyonApi = createApi({
                 url: '/account/resetpassword',
                 method: 'PUT',
                 body
-            }),
-            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
+            })
         }),
         createToken: builder.mutation({
             query: body => ({
@@ -70,25 +70,31 @@ export const halcyonApi = createApi({
                 url: '/manage',
                 method: 'DELETE'
             }),
-            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
+            invalidatesTags: result => [
+                'Users',
+                { type: 'User', id: result.data.id }
+            ]
         }),
         searchUsers: builder.query({
             query: params => ({
                 url: `/user`,
                 params
             }),
-            providesTags: result =>
-                result.data.items.map(user => ({
+            providesTags: result => [
+                'Users',
+                ...result.data.items.map(user => ({
                     type: 'User',
                     id: user.id
                 }))
+            ]
         }),
         createUser: builder.mutation({
             query: body => ({
                 url: '/user',
                 method: 'POST',
                 body
-            })
+            }),
+            invalidatesTags: ['Users']
         }),
         getUser: builder.query({
             query: id => `/user/${id}`,
@@ -121,7 +127,10 @@ export const halcyonApi = createApi({
                 url: `/user/${id}`,
                 method: 'DELETE'
             }),
-            invalidatesTags: result => [{ type: 'User', id: result.data.id }]
+            invalidatesTags: result => [
+                'Users',
+                { type: 'User', id: result.data.id }
+            ]
         })
     })
 });
