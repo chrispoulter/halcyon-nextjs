@@ -11,7 +11,9 @@ export const rtkQueryErrorLogger =
                     dispatch(
                         showToast({
                             variant: 'danger',
-                            message: action.payload.data.message
+                            message:
+                                action.payload.data?.message ||
+                                'Sorry, the current request is invalid.'
                         })
                     );
                     break;
@@ -23,8 +25,10 @@ export const rtkQueryErrorLogger =
                 case 403:
                     dispatch(
                         showToast({
-                            variant: 'warn',
-                            message: action.payload.data.message
+                            variant: 'warning',
+                            message:
+                                action.payload.data?.message ||
+                                'Sorry, you do not have access to this resource.'
                         })
                     );
                     break;
@@ -38,7 +42,7 @@ export const rtkQueryErrorLogger =
                         showToast({
                             variant: 'danger',
                             message:
-                                action.payload.data.message ||
+                                action.payload.data?.message ||
                                 'An unknown error has occurred whilst communicating with the server.'
                         })
                     );

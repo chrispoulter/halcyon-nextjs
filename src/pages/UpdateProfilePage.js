@@ -23,7 +23,7 @@ export const UpdateProfilePage = () => {
         return <Spinner />;
     }
 
-    if (!data.data) {
+    if (!data?.data) {
         return (
             <Container>
                 <Alert variant="info">Profile could not be found.</Alert>

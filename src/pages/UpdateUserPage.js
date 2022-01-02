@@ -44,7 +44,7 @@ export const UpdateUserPage = () => {
         return <Spinner />;
     }
 
-    if (!data.data) {
+    if (!data?.data) {
         return (
             <Container>
                 <Alert variant="info">User could not be found.</Alert>
