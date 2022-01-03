@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+    variant: undefined,
+    message: undefined
+};
+
 const slice = createSlice({
     name: 'toast',
-    initialState: {
-        variant: undefined,
-        message: undefined
-    },
+    initialState,
     reducers: {
         showToast: (state, { payload: { variant, message } }) => {
             state.variant = variant;

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import jwtDecode from 'jwt-decode';
 import { getItem, setItem, removeItem } from '../../utils/storage';
 
-const getInitialState = () => {
+const initialState = () => {
     const accessToken = getItem('accessToken');
 
     if (!accessToken) {
@@ -22,7 +22,7 @@ const getInitialState = () => {
 
 const slice = createSlice({
     name: 'auth',
-    initialState: getInitialState(),
+    initialState,
     reducers: {
         setToken: (state, { payload: { accessToken, persist } }) => {
             state.accessToken = accessToken;

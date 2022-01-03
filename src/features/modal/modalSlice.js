@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+    title: undefined,
+    body: undefined,
+    onOk: undefined
+};
+
 const slice = createSlice({
     name: 'modal',
-    initialState: {
-        title: undefined,
-        body: undefined,
-        onOk: undefined
-    },
+    initialState,
     reducers: {
         showModal: (state, { payload: { title, body, onOk } }) => {
             state.title = title;
