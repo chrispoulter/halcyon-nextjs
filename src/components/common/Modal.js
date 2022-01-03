@@ -1,14 +1,13 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BoostrapModal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { useModal } from '../../hooks';
-import { hideModal } from '../../features';
+import { selectModal, hideModal } from '../../features';
 
 export const Modal = () => {
     const dispatch = useDispatch();
 
-    const { title, body, onOk } = useModal();
+    const { title, body, onOk } = useSelector(selectModal);;
 
     const onCancel = () => dispatch(hideModal());
 

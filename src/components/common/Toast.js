@@ -1,14 +1,13 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BootstrapToast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
-import { useToast } from '../../hooks';
-import { hideToast } from '../../features';
+import { hideToast, selectToast } from '../../features';
 
 export const Toast = () => {
     const dispatch = useDispatch();
 
-    const { variant, message } = useToast();
+    const { variant, message } = useSelector(selectToast);
 
     const onClose = () => dispatch(hideToast());
 
