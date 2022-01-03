@@ -13,9 +13,8 @@ export const Modal = () => {
     const onCancel = () => dispatch(hideModal());
 
     const onConfirm = async () => {
-        await onOk();
-
         dispatch(hideModal());
+        await onOk();
     };
 
     return (
