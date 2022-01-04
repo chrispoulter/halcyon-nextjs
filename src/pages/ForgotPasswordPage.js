@@ -17,13 +17,13 @@ export const ForgotPasswordPage = () => {
     const [forgotPassword] = useForgotPasswordMutation();
 
     const onSubmit = async variables => {
-        const result = await forgotPassword(variables);
+        const { data: result } = await forgotPassword(variables);
 
-        if (result.data) {
+        if (result) {
             dispatch(
                 showToast({
                     variant: 'success',
-                    message: result.data.message
+                    message: result.message
                 })
             );
 

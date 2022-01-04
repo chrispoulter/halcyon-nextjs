@@ -19,15 +19,15 @@ export const RegisterPage = () => {
     const [createToken] = useCreateTokenMutation();
 
     const onSubmit = async variables => {
-        let result = await register(variables);
+        const { data: result } = await register(variables);
 
-        if (result.data) {
-            result = await createToken(variables);
+        if (result) {
+            const { data: result } = await createToken(variables);
 
-            if (result.data) {
+            if (result) {
                 dispatch(
                     setToken({
-                        accessToken: result.data.data.accessToken
+                        accessToken: result.data.accessToken
                     })
                 );
 

@@ -36,13 +36,13 @@ export const MyAccountPage = () => {
                 title: 'Confirm',
                 body: 'Are you sure you want to delete your account?',
                 onOk: async () => {
-                    const result = await deleteAccount();
+                    const { data: result } = await deleteAccount();
 
-                    if (result.data) {
+                    if (result) {
                         dispatch(
                             showToast({
                                 variant: 'success',
-                                message: result.data.message
+                                message: result.message
                             })
                         );
 

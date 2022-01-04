@@ -32,13 +32,13 @@ export const UpdateProfilePage = () => {
     }
 
     const onSubmit = async variables => {
-        const result = await updateProfile(variables);
+        const { data: result } = await updateProfile(variables);
 
-        if (result.data) {
+        if (result) {
             dispatch(
                 showToast({
                     variant: 'success',
-                    message: result.data.message
+                    message: result.message
                 })
             );
 

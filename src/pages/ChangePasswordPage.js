@@ -17,13 +17,13 @@ export const ChangePasswordPage = () => {
     const [changePassword] = useChangePasswordMutation();
 
     const onSubmit = async variables => {
-        const result = await changePassword(variables);
+        const { data: result } = await changePassword(variables);
 
-        if (result.data) {
+        if (result) {
             dispatch(
                 showToast({
                     variant: 'success',
-                    message: result.data.message
+                    message: result.message
                 })
             );
 

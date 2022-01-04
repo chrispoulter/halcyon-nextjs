@@ -19,16 +19,16 @@ export const ResetPasswordPage = () => {
     const [resetPassword] = useResetPasswordMutation();
 
     const onSubmit = async variables => {
-        const result = await resetPassword({
+        const { data: result } = await resetPassword({
             token,
             ...variables
         });
 
-        if (result.data) {
+        if (result) {
             dispatch(
                 showToast({
                     variant: 'success',
-                    message: result.data.message
+                    message: result.message
                 })
             );
 

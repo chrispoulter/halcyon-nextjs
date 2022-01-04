@@ -23,13 +23,13 @@ export const CreateUserPage = () => {
     const [createUser] = useCreateUserMutation();
 
     const onSubmit = async variables => {
-        const result = await createUser(variables);
+        const { data: result } = await createUser(variables);
 
-        if (result.data) {
+        if (result) {
             dispatch(
                 showToast({
                     variant: 'success',
-                    message: result.data.message
+                    message: result.message
                 })
             );
 

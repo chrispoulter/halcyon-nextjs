@@ -53,13 +53,13 @@ export const UpdateUserPage = () => {
     }
 
     const onSubmit = async variables => {
-        const result = await updateUser({ id, body: variables });
+        const { data: result } = await updateUser({ id, body: variables });
 
-        if (result.data) {
+        if (result) {
             dispatch(
                 showToast({
                     variant: 'success',
-                    message: result.data.message
+                    message: result.message
                 })
             );
 
@@ -81,13 +81,13 @@ export const UpdateUserPage = () => {
                     </>
                 ),
                 onOk: async () => {
-                    const result = await lockUser(id);
+                    const { data: result } = await lockUser(id);
 
-                    if (result.data) {
+                    if (result) {
                         dispatch(
                             showToast({
                                 variant: 'success',
-                                message: result.data.message
+                                message: result.message
                             })
                         );
 
@@ -111,13 +111,13 @@ export const UpdateUserPage = () => {
                     </>
                 ),
                 onOk: async () => {
-                    const result = await unlockUser(id);
+                    const { data: result } = await unlockUser(id);
 
-                    if (result.data) {
+                    if (result) {
                         dispatch(
                             showToast({
                                 variant: 'success',
-                                message: result.data.message
+                                message: result.message
                             })
                         );
 
@@ -141,13 +141,13 @@ export const UpdateUserPage = () => {
                     </>
                 ),
                 onOk: async () => {
-                    const result = await deleteUser(id);
+                    const { data: result } = await deleteUser(id);
 
-                    if (result.data) {
+                    if (result) {
                         dispatch(
                             showToast({
                                 variant: 'success',
-                                message: result.data.message
+                                message: result.message
                             })
                         );
 
