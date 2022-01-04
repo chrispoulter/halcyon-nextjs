@@ -15,7 +15,6 @@ export const UserProfile = () => {
 
     const logout = () => {
         dispatch(removeToken());
-
         navigate('/');
     };
 
