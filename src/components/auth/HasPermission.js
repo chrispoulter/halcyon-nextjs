@@ -4,7 +4,7 @@ import { selectCurrentUser } from '../../features';
 import { isAuthorized } from '../../utils/auth';
 
 export const HasPermission = ({ requiredRoles, fallback, children }) => {
-    const currentUser = useSelector(selectCurrentUser)
+    const currentUser = useSelector(selectCurrentUser);
 
     const isAuthenticated = isAuthorized(currentUser, requiredRoles);
     if (!isAuthenticated) {

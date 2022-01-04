@@ -7,7 +7,7 @@ import { selectModal, hideModal } from '../../features';
 export const Modal = () => {
     const dispatch = useDispatch();
 
-    const { title, body, onOk } = useSelector(selectModal);;
+    const { title, body, onOk } = useSelector(selectModal);
 
     const onCancel = () => dispatch(hideModal());
 

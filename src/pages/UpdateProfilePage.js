@@ -15,11 +15,11 @@ export const UpdateProfilePage = () => {
 
     const dispatch = useDispatch();
 
-    const { isLoading, data } = useGetProfileQuery();
+    const { isFetching, data } = useGetProfileQuery();
 
     const [updateProfile] = useUpdateProfileMutation();
 
-    if (isLoading) {
+    if (isFetching) {
         return <Spinner />;
     }
 

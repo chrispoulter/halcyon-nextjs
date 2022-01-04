@@ -30,17 +30,17 @@ export const UpdateUserPage = () => {
 
     const dispatch = useDispatch();
 
-    const { isLoading, data, refetch } = useGetUserQuery(id);
+    const { isFetching, data, refetch } = useGetUserQuery(id);
 
     const [updateUser] = useUpdateUserMutation();
 
-    const [lockUser, { isLoading: isLocking }] = useLockUserMutation();
+    const [lockUser, { isFetching: isLocking }] = useLockUserMutation();
 
-    const [unlockUser, { isLoading: isUnlocking }] = useUnlockUserMutation();
+    const [unlockUser, { isFetching: isUnlocking }] = useUnlockUserMutation();
 
-    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+    const [deleteUser, { isFetching: isDeleting }] = useDeleteUserMutation();
 
-    if (isLoading) {
+    if (isFetching) {
         return <Spinner />;
     }
 

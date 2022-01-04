@@ -6,7 +6,7 @@ import { AccessDeniedPage } from '../../pages';
 import { isAuthorized } from '../../utils/auth';
 
 export const RequireAuth = ({ children, requiredRoles }) => {
-    const currentUser = useSelector(selectCurrentUser)
+    const currentUser = useSelector(selectCurrentUser);
 
     if (!isAuthorized(currentUser)) {
         return <Navigate to="/login" />;

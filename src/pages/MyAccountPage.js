@@ -13,12 +13,12 @@ export const MyAccountPage = () => {
 
     const dispatch = useDispatch();
 
-    const { isLoading, data } = useGetProfileQuery();
+    const { isFetching, data } = useGetProfileQuery();
 
-    const [deleteAccount, { isLoading: isDeleting }] =
+    const [deleteAccount, { isFetching: isDeleting }] =
         useDeleteAccountMutation();
 
-    if (isLoading) {
+    if (isFetching) {
         return <Spinner />;
     }
 

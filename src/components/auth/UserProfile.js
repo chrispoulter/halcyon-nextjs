@@ -11,7 +11,7 @@ export const UserProfile = () => {
 
     const dispatch = useDispatch();
 
-    const currentUser = useSelector(selectCurrentUser)
+    const currentUser = useSelector(selectCurrentUser);
 
     const logout = () => {
         dispatch(removeToken());

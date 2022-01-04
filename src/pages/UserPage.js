@@ -31,9 +31,9 @@ export const UserPage = () => {
         sort: searchParams.get('sort') || 'NAME_ASC'
     };
 
-    const { isLoading, data } = useSearchUsersQuery(filter);
+    const { isFetching, data } = useSearchUsersQuery(filter);
 
-    if (isLoading) {
+    if (isFetching) {
         return <Spinner />;
     }
 
