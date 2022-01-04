@@ -15,7 +15,7 @@ export const UpdateProfilePage = () => {
 
     const dispatch = useDispatch();
 
-    const { isFetching, data } = useGetProfileQuery();
+    const { isFetching, data: profile } = useGetProfileQuery();
 
     const [updateProfile] = useUpdateProfileMutation();
 
@@ -23,7 +23,7 @@ export const UpdateProfilePage = () => {
         return <Spinner />;
     }
 
-    if (!data?.data) {
+    if (!profile?.data) {
         return (
             <Container>
                 <Alert variant="info">Profile could not be found.</Alert>
@@ -57,7 +57,7 @@ export const UpdateProfilePage = () => {
 
             <Formik
                 enableReinitialize={true}
-                initialValues={data.data}
+                initialValues={profile.data}
                 validationSchema={Yup.object({
                     emailAddress: Yup.string()
                         .label('Email Address')

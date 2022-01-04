@@ -13,7 +13,7 @@ export const MyAccountPage = () => {
 
     const dispatch = useDispatch();
 
-    const { isFetching, data } = useGetProfileQuery();
+    const { isFetching, data: profile } = useGetProfileQuery();
 
     const [deleteAccount, { isFetching: isDeleting }] =
         useDeleteAccountMutation();
@@ -22,7 +22,7 @@ export const MyAccountPage = () => {
         return <Spinner />;
     }
 
-    if (!data?.data) {
+    if (!profile?.data) {
         return (
             <Container>
                 <Alert variant="info">Profile could not be found.</Alert>
@@ -74,7 +74,7 @@ export const MyAccountPage = () => {
             <p>
                 <span className="text-muted">Email Address</span>
                 <br />
-                {data.data.emailAddress}
+                {profile.data.emailAddress}
             </p>
 
             <p>
@@ -88,13 +88,13 @@ export const MyAccountPage = () => {
             <p>
                 <span className="text-muted">Name</span>
                 <br />
-                {data.data.firstName} {data.data.lastName}
+                {profile.data.firstName} {profile.data.lastName}
             </p>
 
             <p>
                 <span className="text-muted">Date Of Birth</span>
                 <br />
-                {new Date(data.data.dateOfBirth).toLocaleDateString('en', {
+                {new Date(profile.data.dateOfBirth).toLocaleDateString('en', {
                     day: '2-digit',
                     month: 'long',
                     year: 'numeric'

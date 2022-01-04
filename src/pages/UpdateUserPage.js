@@ -30,7 +30,7 @@ export const UpdateUserPage = () => {
 
     const dispatch = useDispatch();
 
-    const { isFetching, data, refetch } = useGetUserQuery(id);
+    const { isFetching, refetch, data: user } = useGetUserQuery(id);
 
     const [updateUser] = useUpdateUserMutation();
 
@@ -44,7 +44,7 @@ export const UpdateUserPage = () => {
         return <Spinner />;
     }
 
-    if (!data?.data) {
+    if (!user?.data) {
         return (
             <Container>
                 <Alert variant="info">User could not be found.</Alert>
@@ -75,7 +75,7 @@ export const UpdateUserPage = () => {
                     <>
                         Are you sure you want to lock{' '}
                         <strong>
-                            {data.data.firstName} {data.data.lastName}
+                            {user.data.firstName} {user.data.lastName}
                         </strong>
                         ?
                     </>
@@ -105,7 +105,7 @@ export const UpdateUserPage = () => {
                     <>
                         Are you sure you want to unlock{' '}
                         <strong>
-                            {data.data.firstName} {data.data.lastName}
+                            {user.data.firstName} {user.data.lastName}
                         </strong>
                         ?
                     </>
@@ -135,7 +135,7 @@ export const UpdateUserPage = () => {
                     <>
                         Are you sure you want to delete{' '}
                         <strong>
-                            {data.data.firstName} {data.data.lastName}
+                            {user.data.firstName} {user.data.lastName}
                         </strong>
                         ?
                     </>
@@ -172,7 +172,7 @@ export const UpdateUserPage = () => {
 
             <Formik
                 enableReinitialize={true}
-                initialValues={data.data}
+                initialValues={user.data}
                 validationSchema={Yup.object({
                     emailAddress: Yup.string()
                         .label('Email Address')
@@ -245,7 +245,7 @@ export const UpdateUserPage = () => {
                             >
                                 Cancel
                             </Button>
-                            {data.data.isLockedOut ? (
+                            {user.data.isLockedOut ? (
                                 <Button
                                     variant="warning"
                                     className="me-1"
