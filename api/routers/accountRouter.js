@@ -3,8 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as Yup from 'yup';
 import { asyncMiddleware, validationMiddleware } from '../middleware';
 import { userRepository } from '../data';
-import { sendEmail } from '../utils/email';
-import { generateHash } from '../utils/hash';
+import { emailService, hashService } from '../services';
 
 export const accountRouter = Router();
 
@@ -37,7 +36,7 @@ accountRouter.post(
 
         const result = await userRepository.create({
             email_address: body.emailAddress,
-            password: await generateHash(body.password),
+            password: await hashService.generateHash(body.password),
             first_name: body.firstName,
             last_name: body.lastName,
             date_of_birth: body.dateOfBirth
@@ -75,7 +74,7 @@ accountRouter.put(
 
             const siteUrl = `${req.protocol}://${req.get('host')}`;
 
-            await sendEmail({
+            await emailService.sendEmail({
                 to: user.email_address,
                 template: 'RESET_PASSWORD',
                 context: {
@@ -120,7 +119,7 @@ accountRouter.put(
             });
         }
 
-        user.password = await generateHash(body.newPassword);
+        user.password = await hashService.generateHash(body.newPassword);
         user.password_reset_token = undefined;
         await userRepository.update(user);
 

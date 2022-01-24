@@ -2,8 +2,7 @@ import { Router } from 'express';
 import * as Yup from 'yup';
 import { asyncMiddleware, validationMiddleware } from '../middleware';
 import { userRepository } from '../data';
-import { verifyHash } from '../utils/hash';
-import { generateToken } from '../utils/jwt';
+import { hashService, jwtService } from '../services';
 
 export const tokenRouter = Router();
 
@@ -28,7 +27,10 @@ tokenRouter.post(
             });
         }
 
-        const verified = await verifyHash(body.password, user.password);
+        const verified = await hashService.verifyHash(
+            body.password,
+            user.password
+        );
 
         if (!verified) {
             return res.status(400).json({
@@ -46,7 +48,7 @@ tokenRouter.post(
         }
 
         return res.json({
-            data: generateToken(user)
+            data: jwtService.generateToken(user)
         });
     })
 );

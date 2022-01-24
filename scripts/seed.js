@@ -5,7 +5,7 @@ import {
     templateRepository,
     roleRepository
 } from '../api/data';
-import { generateHash } from '../api/utils/hash';
+import { hashService } from '../api/services';
 import { ALL_ROLES } from '../api/utils/auth';
 import { config } from '../api/utils/config';
 
@@ -44,7 +44,7 @@ const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
 
     await userRepository.upsert({
         email_address: config.SEED_EMAIL_ADDRESS,
-        password: await generateHash(config.SEED_PASSWORD),
+        password: await hashService.generateHash(config.SEED_PASSWORD),
         first_name: 'System',
         last_name: 'Administrator',
         date_of_birth: new Date(1970, 0, 1).toISOString(),

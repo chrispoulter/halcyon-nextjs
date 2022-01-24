@@ -1,5 +1,5 @@
 import { sign, verify } from 'jsonwebtoken';
-import { config } from './config';
+import { config } from '../utils/config';
 
 export const verifyToken = async token => {
     try {

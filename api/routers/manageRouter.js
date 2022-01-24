@@ -6,7 +6,7 @@ import {
     validationMiddleware
 } from '../middleware';
 import { userRepository } from '../data';
-import { verifyHash, generateHash } from '../utils/hash';
+import { hashService } from '../services';
 
 export const manageRouter = Router();
 
@@ -111,7 +111,10 @@ manageRouter.put(
             });
         }
 
-        const verified = await verifyHash(body.currentPassword, user.password);
+        const verified = await hashService.verifyHash(
+            body.currentPassword,
+            user.password
+        );
 
         if (!verified) {
             return res.status(400).json({
@@ -120,7 +123,7 @@ manageRouter.put(
             });
         }
 
-        user.password = await generateHash(body.newPassword);
+        user.password = await hashService.generateHash(body.newPassword);
         user.password_reset_token = undefined;
         await userRepository.update(user);
 
