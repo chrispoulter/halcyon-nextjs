@@ -1,14 +1,11 @@
 import nodemailer from 'nodemailer';
 import { templateRepository } from '../data';
-import { format } from './string';
-import { config } from './config';
+import { format } from '../utils/string';
+import { logger } from '../utils/logger';
+import { config } from '../utils/config';
 
 export const sendEmail = async message => {
     const template = await templateRepository.getByKey(message.template);
-
-    if (!template) {
-        throw new Error(`Unknown email template: ${message.template}`);
-    }
 
     const transporter = nodemailer.createTransport({
         host: config.EMAIL_SMTP_SERVER,
@@ -19,10 +16,14 @@ export const sendEmail = async message => {
         }
     });
 
-    await transporter.sendMail({
-        from: config.EMAIL_NO_REPLY_ADDRESS,
-        to: message.to,
-        subject: format(template.subject, message.context),
-        html: format(template.html, message.context)
-    });
+    try {
+        await transporter.sendMail({
+            from: config.EMAIL_NO_REPLY_ADDRESS,
+            to: message.to,
+            subject: format(template.subject, message.context),
+            html: format(template.html, message.context)
+        });
+    } catch (error) {
+        logger.error('Email Send Failed', error);
+    }
 };

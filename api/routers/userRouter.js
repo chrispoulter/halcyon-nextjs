@@ -6,8 +6,8 @@ import {
     validationMiddleware
 } from '../middleware';
 import { userRepository } from '../data';
+import { hashService } from '../services';
 import { USER_ADMINISTRATOR_ROLES } from '../utils/auth';
-import { generateHash } from '../utils/hash';
 
 export const userRouter = Router();
 
@@ -80,7 +80,7 @@ userRouter.post(
 
         const result = await userRepository.create({
             email_address: body.emailAddress,
-            password: await generateHash(body.password),
+            password: await hashService.generateHash(body.password),
             first_name: body.firstName,
             last_name: body.lastName,
             date_of_birth: body.dateOfBirth,
