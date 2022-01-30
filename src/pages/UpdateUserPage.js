@@ -34,11 +34,11 @@ export const UpdateUserPage = () => {
 
     const [updateUser] = useUpdateUserMutation();
 
-    const [lockUser, { isFetching: isLocking }] = useLockUserMutation();
+    const [lockUser, { isLoading: isLocking }] = useLockUserMutation();
 
-    const [unlockUser, { isFetching: isUnlocking }] = useUnlockUserMutation();
+    const [unlockUser, { isLoading: isUnlocking }] = useUnlockUserMutation();
 
-    const [deleteUser, { isFetching: isDeleting }] = useDeleteUserMutation();
+    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
     if (isFetching) {
         return <Spinner />;

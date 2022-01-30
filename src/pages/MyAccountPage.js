@@ -15,7 +15,7 @@ export const MyAccountPage = () => {
 
     const { isFetching, data: profile } = useGetProfileQuery();
 
-    const [deleteAccount, { isFetching: isDeleting }] =
+    const [deleteAccount, { isLoading: isDeleting }] =
         useDeleteAccountMutation();
 
     if (isFetching) {
