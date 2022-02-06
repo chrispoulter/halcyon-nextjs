@@ -20,7 +20,7 @@ import {
     useLockUserMutation,
     useUnlockUserMutation,
     useDeleteUserMutation
-} from '../services';
+} from '../redux';
 import { ALL_ROLES } from '../utils/auth';
 
 export const UpdateUserPage = () => {

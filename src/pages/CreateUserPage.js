@@ -12,7 +12,7 @@ import {
     Button
 } from '../components';
 import { showToast } from '../features';
-import { useCreateUserMutation } from '../services';
+import { useCreateUserMutation } from '../redux';
 import { ALL_ROLES } from '../utils/auth';
 
 export const CreateUserPage = () => {

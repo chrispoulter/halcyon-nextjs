@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, Button } from '../components';
 import { showToast } from '../features';
-import { useResetPasswordMutation } from '../services';
+import { useResetPasswordMutation } from '../redux';
 
 export const ResetPasswordPage = () => {
     const navigate = useNavigate();

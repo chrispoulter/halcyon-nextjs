@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, CheckboxInput, Button } from '../components';
 import { setToken } from '../features';
-import { useCreateTokenMutation } from '../services';
+import { useCreateTokenMutation } from '../redux';
 
 export const LoginPage = () => {
     const navigate = useNavigate();

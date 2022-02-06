@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { Button, Spinner } from '../components';
 import { showToast, showModal, removeToken } from '../features';
-import { useGetProfileQuery, useDeleteAccountMutation } from '../services';
+import { useGetProfileQuery, useDeleteAccountMutation } from '../redux';
 
 export const MyAccountPage = () => {
     const navigate = useNavigate();

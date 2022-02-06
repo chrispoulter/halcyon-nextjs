@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, DateInput, Button } from '../components';
 import { setToken } from '../features';
-import { useRegisterMutation, useCreateTokenMutation } from '../services';
+import { useRegisterMutation, useCreateTokenMutation } from '../redux';
 
 export const RegisterPage = () => {
     const navigate = useNavigate();

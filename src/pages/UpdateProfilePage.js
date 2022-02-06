@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { Spinner, TextInput, DateInput, Button } from '../components';
 import { showToast } from '../features';
-import { useGetProfileQuery, useUpdateProfileMutation } from '../services';
+import { useGetProfileQuery, useUpdateProfileMutation } from '../redux';
 
 export const UpdateProfilePage = () => {
     const navigate = useNavigate();

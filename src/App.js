@@ -10,8 +10,8 @@ import {
     Modal,
     Toast
 } from './components';
+import { store } from './redux';
 import { Router } from './Router';
-import { store } from './store';
 
 export const App = () => (
     <Suspense fallback={<Spinner />}>
