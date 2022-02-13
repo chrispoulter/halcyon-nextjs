@@ -1,3 +1,3 @@
-export * from './auth';
-export * from './modal';
-export * from './toast';
+export * from './authSlice';
+export * from './modalSlice';
+export * from './toastSlice';
