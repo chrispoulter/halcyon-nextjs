@@ -24,6 +24,6 @@ export const sendEmail = async message => {
             html: format(template.html, message.context)
         });
     } catch (error) {
-        logger.error('Email Send Failed', error);
+        logger.error('Email send failed', error);
     }
 };
