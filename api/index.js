@@ -39,9 +39,9 @@ const server = app.listen(port, () =>
 
 const killProcess = signal => {
     logger.info(`Received signal to terminate ${signal}`);
-    server.close(() => {
+    return server.close(() => {
         logger.debug('Http server closed');
-        shutdown().then(() => process.exit(0));
+        return shutdown().then(() => process.exit(0));
     });
 };
 
