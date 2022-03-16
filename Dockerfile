@@ -1,6 +1,8 @@
 FROM node:16-alpine AS base
 WORKDIR /app
 
+ENV NODE_ENV production
+
 ARG VERSION=1.0.0
 ENV VERSION=$VERSION
 
