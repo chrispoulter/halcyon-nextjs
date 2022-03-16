@@ -9,6 +9,7 @@ import {
     tokenRouter,
     userRouter
 } from './routers';
+import { shutdown } from './utils/database';
 import { logger } from './utils/logger';
 
 const app = express();
@@ -32,4 +33,25 @@ app.get('*', (_, res) =>
 
 app.use(errorMiddleware);
 
-app.listen(port, () => logger.info(`App listening on port ${port}`));
+const server = app.listen(port, () =>
+    logger.info(`App listening on port ${port}`)
+);
+
+const killProcess = signal => {
+    logger.info(`Received signal to terminate ${signal}`);
+    server.close(() => {
+        logger.debug('Http server closed');
+        shutdown().then(() => process.exit(0));
+    });
+};
+
+[
+    'exit',
+    'SIGINT',
+    'SIGUSR1',
+    'SIGUSR2',
+    'uncaughtException',
+    'SIGTERM'
+].forEach(eventType =>
+    process.on(eventType, killProcess.bind(null, eventType))
+);
