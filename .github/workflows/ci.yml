@@ -20,23 +20,23 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-              with:
-                  fetch-depth: 0
+              # with:
+              #     fetch-depth: 0
 
-            - name: Install GitVersion
-              uses: gittools/actions/gitversion/setup@v0.9.7
-              with:
-                  versionSpec: 5.x
+            # - name: Install GitVersion
+            #   uses: gittools/actions/gitversion/setup@v0.9.7
+            #   with:
+            #       versionSpec: 5.x
 
-            - name: Determine Version
-              uses: gittools/actions/gitversion/execute@v0.9.7
-              with:
-                  useConfigFile: true
+            # - name: Determine Version
+            #   uses: gittools/actions/gitversion/execute@v0.9.7
+            #   with:
+            #       useConfigFile: true
 
-            - name: Set Environment Variables
-              run: |
-                  echo "VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
-                  echo "STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
+            # - name: Set Environment Variables
+            #   run: |
+            #       echo "VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
+            #       echo "STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
 
             # - name: Docker Login
             #   uses: azure/docker-login@v1
