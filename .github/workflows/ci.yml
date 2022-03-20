@@ -11,6 +11,9 @@ on:
 
 concurrency: ci-${{ github.ref }}
 
+env:
+    IMAGE_NAME: halcyon-node
+
 jobs:
     build-and-deploy:
         runs-on: ubuntu-latest
@@ -35,12 +38,12 @@ jobs:
                   echo "VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
                   echo "STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
 
-            - name: Docker Login
-              uses: azure/docker-login@v1
-              with:
-                  login-server: ${{ secrets.REGISTRY_URL }}
-                  username: ${{ secrets.REGISTRY_USERNAME }}
-                  password: ${{ secrets.REGISTRY_PASSWORD }}
+            # - name: Docker Login
+            #   uses: azure/docker-login@v1
+            #   with:
+            #       login-server: ${{ secrets.REGISTRY_URL }}
+            #       username: ${{ secrets.REGISTRY_USERNAME }}
+            #       password: ${{ secrets.REGISTRY_PASSWORD }}
 
             - name: Build Image
               run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
