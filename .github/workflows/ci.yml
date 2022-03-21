@@ -57,6 +57,7 @@ jobs:
                       registryUserName="${{ secrets.REGISTRY_USERNAME }}"
                       registryPassword="${{ secrets.REGISTRY_PASSWORD }}"
                       dbHost="${{ secrets.DB_HOST }}"
+                      dbPort="${{ secrets.DB_PORT }}"
                       dbUser="${{ secrets.DB_USER }}"
                       dbPassword="${{ secrets.DB_PASSWORD }}"
                       dbDatabase="halcyon-node-${{ env.GITVERSION_ESCAPEDBRANCHNAME }}"
