@@ -33,11 +33,6 @@ jobs:
               with:
                   useConfigFile: true
 
-            - name: Set Environment Variables
-              run: |
-                  echo "VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
-                  echo "STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
-
             - name: Docker Login
               run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ secrets.REGISTRY_URL }} -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
 
