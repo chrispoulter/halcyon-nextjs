@@ -53,14 +53,14 @@ jobs:
             #       [ "$VERSION" == "master" ] && VERSION=latest
             #       echo IMAGE_ID=$IMAGE_ID
             #       echo VERSION=$VERSION
-            #       docker build . --file Dockerfile --tag halcyon-node --build-arg VERSION=${{ env.VERSION }} --build-arg STAGE=${{ env.STAGE }}
+            #       docker build . --file Dockerfile --tag halcyon-node --build-arg VERSION=${{ env.GITVERSION_SEMVER }} --build-arg STAGE=${{ env.GITVERSION_ESCAPEDBRANCHNAME }}
             #       docker tag halcyon-node $IMAGE_ID:$VERSION
             #       docker push $IMAGE_ID:$VERSION
 
             - name: Build
               run: |
-                  docker build . -t ghcr.io/halcyon-node:${{ env.VERSION }} --build-arg VERSION=${{ env.VERSION }} --build-arg STAGE=${{ env.STAGE }}
-                  docker push ghcr.io/halcyon-node:${{ env.VERSION }}
+                  docker build . -t ghcr.io/${{ github.repository_owner }}/halcyon-node:${{ env.GITVERSION_SEMVER }} --build-arg VERSION=${{ env.GITVERSION_SEMVER }} --build-arg STAGE=${{ env.GITVERSION_ESCAPEDBRANCHNAME }}
+                  docker push ghcr.io/${{ github.repository_owner }}/halcyon-node:${{ env.GITVERSION_SEMVER }}
 
             # - name: Azure Login
             #   uses: azure/login@v1
@@ -73,14 +73,14 @@ jobs:
             #       resourceGroupName: halcyon
             #       template: ./azuredeploy.json
             #       parameters: plan="halcyon-plan"
-            #           web="halcyon-node-${{ env.STAGE }}-web"
+            #           web="halcyon-node-${{ env.GITVERSION_ESCAPEDBRANCHNAME }}-web"
             #           registryUrl="https://ghcr.io"
             #           registryUserName="${{ github.actor }}"
             #           registryPassword="${{ github.token }}"
             #           dbHost="${{ secrets.DB_HOST }}"
             #           dbUser="${{ secrets.DB_USER }}"
             #           dbPassword="${{ secrets.DB_PASSWORD }}"
-            #           dbDatabase="halcyon-node-${{ env.STAGE }}"
+            #           dbDatabase="halcyon-node-${{ env.GITVERSION_ESCAPEDBRANCHNAME }}"
             #           dbSSL="${{ secrets.DB_SSL }}"
             #           emailSmtpServer="${{ secrets.EMAIL_SMTP_SERVER }}"
             #           emailSmtpPort="${{ secrets.EMAIL_SMTP_PORT }}"
@@ -97,8 +97,8 @@ jobs:
             # - name: Deploy
             #   uses: azure/webapps-deploy@v2
             #   with:
-            #       app-name: halcyon-node-${{ env.STAGE }}-web
-            #       images: ${{ secrets.REGISTRY_URL }}/halcyon-node:${{ env.VERSION }}
+            #       app-name: halcyon-node-${{ env.GITVERSION_ESCAPEDBRANCHNAME }}-web
+            #       images: ${{ secrets.REGISTRY_URL }}/halcyon-node:${{ env.GITVERSION_SEMVER }}
 
             # - name: Azure Logout
             #   run: |
