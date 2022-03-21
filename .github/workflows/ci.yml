@@ -20,53 +20,47 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-              # with:
-              #     fetch-depth: 0
+              with:
+                  fetch-depth: 0
 
-            # - name: Install GitVersion
-            #   uses: gittools/actions/gitversion/setup@v0.9.7
-            #   with:
-            #       versionSpec: 5.x
+            - name: Install GitVersion
+              uses: gittools/actions/gitversion/setup@v0.9.7
+              with:
+                  versionSpec: 5.x
 
-            # - name: Determine Version
-            #   uses: gittools/actions/gitversion/execute@v0.9.7
-            #   with:
-            #       useConfigFile: true
+            - name: Determine Version
+              uses: gittools/actions/gitversion/execute@v0.9.7
+              with:
+                  useConfigFile: true
 
-            # - name: Set Environment Variables
-            #   run: |
-            #       echo "VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
-            #       echo "STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
+            - name: Set Environment Variables
+              run: |
+                  echo "VERSION=$(echo ${{ env.GITVERSION_SEMVER }})" >> $GITHUB_ENV
+                  echo "STAGE=$(echo ${{ env.GITVERSION_ESCAPEDBRANCHNAME }})" >> $GITHUB_ENV
 
-            # - name: Docker Login
-            #   uses: azure/docker-login@v1
-            #   with:
-            #       login-server: ${{ secrets.REGISTRY_URL }}
-            #       username: ${{ secrets.REGISTRY_USERNAME }}
-            #       password: ${{ secrets.REGISTRY_PASSWORD }}
-
-            - name: Build Image
-              run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+            # - name: Build Image
+            #   run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
 
             - name: Registry Login
-              run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-            - name: Push Image
-              run: |
-                  IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-                  IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-                  VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-                  [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-                  [ "$VERSION" == "master" ] && VERSION=latest
-                  echo IMAGE_ID=$IMAGE_ID
-                  echo VERSION=$VERSION
-                  docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-                  docker push $IMAGE_ID:$VERSION
+              run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             # - name: Build
             #   run: |
-            #       docker build . -t ${{ secrets.REGISTRY_URL }}/halcyon-node:${{ env.VERSION }} --build-arg VERSION=${{ env.VERSION }} --build-arg STAGE=${{ env.STAGE }}
-            #       docker push ${{ secrets.REGISTRY_URL }}/halcyon-node:${{ env.VERSION }}
+            #       IMAGE_ID=ghcr.io/${{ github.repository_owner }}/halcyon-node
+            #       IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+            #       VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+            #       [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+            #       [ "$VERSION" == "master" ] && VERSION=latest
+            #       echo IMAGE_ID=$IMAGE_ID
+            #       echo VERSION=$VERSION
+            #       docker build . --file Dockerfile --tag halcyon-node --build-arg VERSION=${{ env.VERSION }} --build-arg STAGE=${{ env.STAGE }}
+            #       docker tag halcyon-node $IMAGE_ID:$VERSION
+            #       docker push $IMAGE_ID:$VERSION
+
+            - name: Build
+              run: |
+                  docker build . -t ghcr.io/halcyon-node:${{ env.VERSION }} --build-arg VERSION=${{ env.VERSION }} --build-arg STAGE=${{ env.STAGE }}
+                  docker push ghcr.io/halcyon-node:${{ env.VERSION }}
 
             # - name: Azure Login
             #   uses: azure/login@v1
@@ -80,9 +74,9 @@ jobs:
             #       template: ./azuredeploy.json
             #       parameters: plan="halcyon-plan"
             #           web="halcyon-node-${{ env.STAGE }}-web"
-            #           registryUrl="${{ secrets.REGISTRY_URL }}"
-            #           registryUserName="${{ secrets.REGISTRY_USERNAME }}"
-            #           registryPassword="${{ secrets.REGISTRY_PASSWORD }}"
+            #           registryUrl="https://ghcr.io"
+            #           registryUserName="${{ github.actor }}"
+            #           registryPassword="${{ github.token }}"
             #           dbHost="${{ secrets.DB_HOST }}"
             #           dbUser="${{ secrets.DB_USER }}"
             #           dbPassword="${{ secrets.DB_PASSWORD }}"
