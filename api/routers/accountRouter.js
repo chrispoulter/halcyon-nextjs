@@ -53,7 +53,7 @@ accountRouter.post(
 );
 
 accountRouter.put(
-    '/forgotpassword',
+    '/forgot-password',
     validationMiddleware({
         body: {
             emailAddress: Yup.string()
@@ -93,7 +93,7 @@ accountRouter.put(
 );
 
 accountRouter.put(
-    '/resetpassword',
+    '/reset-password',
     validationMiddleware({
         body: {
             token: Yup.string().label('Token').required(),

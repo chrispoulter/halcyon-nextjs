@@ -90,7 +90,7 @@ manageRouter.put(
 );
 
 manageRouter.put(
-    '/changepassword',
+    '/change-password',
     validationMiddleware({
         body: {
             currentPassword: Yup.string().label('Current Password').required(),
