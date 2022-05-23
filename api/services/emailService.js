@@ -14,7 +14,7 @@ export const sendEmail = async message => {
 
     if (config.EMAIL_SMTP_USERNAME && config.EMAIL_SMTP_PASSWORD) {
         transport.auth = {
-            user: config.EMAIL_SMTP_USERNAM,
+            user: config.EMAIL_SMTP_USERNAME,
             pass: config.EMAIL_SMTP_PASSWORD
         };
     }
