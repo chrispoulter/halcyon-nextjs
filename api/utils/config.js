@@ -16,8 +16,8 @@ export const config = {
     JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient',
     JWT_EXPIRES_IN: parseInt(process.env.JWT_EXPIRES_IN || '3600'),
 
-    EMAIL_SMTP_SERVER: process.env.EMAIL_SMTP_SERVER || 'smtp.mailgun.org',
-    EMAIL_SMTP_PORT: parseInt(process.env.EMAIL_SMTP_PORT || '587'),
+    EMAIL_SMTP_SERVER: process.env.EMAIL_SMTP_SERVER || 'localhost',
+    EMAIL_SMTP_PORT: parseInt(process.env.EMAIL_SMTP_PORT || '1025'),
     EMAIL_SMTP_USERNAME: process.env.EMAIL_SMTP_USERNAME,
     EMAIL_SMTP_PASSWORD: process.env.EMAIL_SMTP_PASSWORD,
     EMAIL_NO_REPLY_ADDRESS:
