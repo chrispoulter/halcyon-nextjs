@@ -1,4 +1,4 @@
-# Halcyon Next.js
+# Halcyon
 
 A web application template.
 
