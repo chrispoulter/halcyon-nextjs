@@ -1,18 +1,20 @@
 import React from 'react';
-import { Navigate } from 'react-router';
+import { useRouter } from 'next/router';
 import { useAuth } from '../../contexts';
-import { AccessDeniedPage } from '../../pages';
+import AccessDenied from '../../pages/403';
 import { isAuthorized } from '../../utils/auth';
 
 export const RequireAuth = ({ children, requiredRoles }) => {
     const { currentUser } = useAuth();
 
+    const router = useRouter();
+
     if (!isAuthorized(currentUser)) {
-        return <Navigate to="/login" />;
+        return router.push('/login');
     }
 
     if (!isAuthorized(currentUser, requiredRoles)) {
-        return <AccessDeniedPage />;
+        return <AccessDenied />;
     }
 
     return children;

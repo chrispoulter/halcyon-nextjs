@@ -1,17 +1,32 @@
-export const getItem = key =>
-    sessionStorage.getItem(key) || localStorage.getItem(key);
+export const getItem = key => {
+    if (typeof window === 'undefined') {
+        return undefined;
+    }
+
+    return (
+        window.sessionStorage.getItem(key) || window.localStorage.getItem(key)
+    );
+};
 
 export const setItem = (key, value, persist) => {
+    if (typeof window === 'undefined') {
+        return;
+    }
+
     if (persist) {
-        sessionStorage.removeItem(key);
-        localStorage.setItem(key, value);
+        window.sessionStorage.removeItem(key);
+        window.localStorage.setItem(key, value);
     } else {
-        localStorage.removeItem(key);
-        sessionStorage.setItem(key, value);
+        window.localStorage.removeItem(key);
+        window.sessionStorage.setItem(key, value);
     }
 };
 
 export const removeItem = key => {
-    sessionStorage.removeItem(key);
-    localStorage.removeItem(key);
+    if (typeof window === 'undefined') {
+        return;
+    }
+
+    window.sessionStorage.removeItem(key);
+    window.localStorage.removeItem(key);
 };

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
 import { getItem, setItem, removeItem } from '../utils/storage';
 
@@ -24,6 +25,8 @@ export const AuthContext = React.createContext({});
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+    const router = useRouter();
+
     const initialState = getInitialState();
 
     const [state, setState] = useState(initialState);
@@ -46,6 +49,8 @@ export const AuthProvider = ({ children }) => {
             accessToken: undefined,
             currentUser: undefined
         });
+
+        router.push('/');
     };
 
     return (

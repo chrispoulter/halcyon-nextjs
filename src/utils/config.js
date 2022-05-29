@@ -1,5 +1,5 @@
 export const config = {
-    VERSION: process.env.REACT_APP_VERSION || '1.0.0',
-    STAGE: process.env.REACT_APP_STAGE || 'local',
-    API_URL: process.env.REACT_APP_API_URL || '/api'
+    VERSION: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA || '1.0.0',
+    STAGE: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF || 'local',
+    API_URL: process.env.NEXT_PUBLIC_API_URL || '/api'
 };

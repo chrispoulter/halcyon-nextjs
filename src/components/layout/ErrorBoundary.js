@@ -1,8 +1,8 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import Button from 'react-bootstrap/Button';
-import { Hero } from '../common/Hero';
+import { Hero } from '../common';
+import { Meta } from './Meta';
 
 export class ErrorBoundary extends React.Component {
     state = { hasError: false };
@@ -22,9 +22,7 @@ export class ErrorBoundary extends React.Component {
 
         return (
             <>
-                <Helmet>
-                    <title>Error</title>
-                </Helmet>
+                <Meta title="Error" />
 
                 <Hero>
                     <h1 className="display-3">Error</h1>
@@ -33,9 +31,11 @@ export class ErrorBoundary extends React.Component {
                         Sorry, something went wrong. Please try again later.
                     </p>
                     <p className="text-end">
-                        <Button to="/" as={Link} variant="primary" size="lg">
-                            Home
-                        </Button>
+                        <Link href="/" passHref>
+                            <Button variant="primary" size="lg">
+                                Home
+                            </Button>
+                        </Link>
                     </p>
                 </Hero>
             </>

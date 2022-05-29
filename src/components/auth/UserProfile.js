@@ -1,31 +1,39 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useAuth } from '../../contexts';
+import { useIsSSR } from '../../hooks';
 import { HasPermission } from './HasPermission';
 
 export const UserProfile = () => {
-    const navigate = useNavigate();
+    const router = useRouter();
 
     const { currentUser, removeToken } = useAuth();
 
+    const isSSR = useIsSSR();
+
     const logout = () => {
         removeToken();
-        navigate('/');
+        router.push('/');
     };
+
+    if (isSSR) {
+        return <></>;
+    }
 
     return (
         <Nav>
             <HasPermission
                 fallback={
                     <>
-                        <Nav.Link eventKey="login" to="/login" as={Link}>
-                            Login
-                        </Nav.Link>
-                        <Nav.Link eventKey="register" to="/register" as={Link}>
-                            Register
-                        </Nav.Link>
+                        <Link href="/login" passHref>
+                            <Nav.Link eventKey="login">Login</Nav.Link>
+                        </Link>
+                        <Link href="/register" passHref>
+                            <Nav.Link eventKey="register">Register</Nav.Link>
+                        </Link>
                     </>
                 }
             >
@@ -33,13 +41,11 @@ export const UserProfile = () => {
                     id="collasible-nav-authenticated"
                     title={`${currentUser?.given_name} ${currentUser?.family_name} `}
                 >
-                    <NavDropdown.Item
-                        eventKey="my-account"
-                        to="/my-account"
-                        as={Link}
-                    >
-                        My Account
-                    </NavDropdown.Item>
+                    <Link href="/my-account" passHref>
+                        <NavDropdown.Item eventKey="my-account">
+                            My Account
+                        </NavDropdown.Item>
+                    </Link>
                     <NavDropdown.Item eventKey="logout" onClick={logout}>
                         Logout
                     </NavDropdown.Item>

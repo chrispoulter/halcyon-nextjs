@@ -1,73 +1,44 @@
 {
-    "name": "@halcyon/halcyon",
+    "name": "halcyon-nextjs",
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "prestart": "yarn db:seed",
-        "start": "concurrently \"yarn:api:start\" \"yarn:client:start\"",
-        "build": "concurrently \"yarn:api:build\" \"yarn:db:build\" \"yarn:client:build\"",
-        "client:start": "react-scripts start",
-        "client:build": "react-scripts build",
-        "postclient:build": "workbox injectManifest workbox-config.js",
-        "api:start": "nodemon --exec babel-node api/index.js",
-        "api:build": "babel api --out-dir dist/api --source-maps",
+        "dev": "next dev",
+        "build": "next build",
+        "export": "next export",
+        "start": "next start",
+        "lint": "next lint",
         "db:seed": "babel-node scripts/seed.js",
         "db:populate": "babel-node scripts/populate.js",
         "db:build": "babel scripts --out-dir dist/scripts --source-maps --copy-files",
         "docker:build": "docker build . -t chrispoulter/halcyon-node",
         "docker:run": "docker run --name halcyon-node --env-file .env -p 3001:3001 chrispoulter/halcyon-node",
         "docker:exec": "docker exec -it halcyon-node /bin/sh",
-        "preserve": "node dist/scripts/seed.js",
-        "serve": "node dist/api/index.js",
-        "lint": "eslint \"**/*.{js,jsx}\"",
         "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\""
     },
     "dependencies": {
         "bcryptjs": "2.4.3",
-        "dotenv": "16.0.1",
-        "express": "4.18.1",
+        "bootstrap": "5.1.3",
+        "bootswatch": "5.1.3",
+        "formik": "2.2.9",
         "jsonwebtoken": "8.5.1",
-        "morgan": "1.10.0",
+        "jwt-decode": "3.1.2",
+        "next": "12.1.6",
+        "next-connect": "0.12.2",
         "nodemailer": "6.7.5",
         "pg": "8.7.3",
         "postgres-migrations": "5.3.0",
-        "uuid": "8.3.2",
-        "winston": "3.7.2",
-        "yup": "0.32.11"
-    },
-    "devDependencies": {
-        "@babel/cli": "7.17.10",
-        "@babel/core": "7.18.0",
-        "@babel/node": "7.17.10",
-        "@babel/preset-env": "7.18.0",
-        "babel-plugin-inline-import": "3.0.0",
-        "bootstrap": "5.1.3",
-        "bootswatch": "5.1.3",
-        "concurrently": "7.2.1",
-        "formik": "2.2.9",
-        "jwt-decode": "3.1.2",
-        "node-sass": "7.0.1",
-        "nodemon": "2.0.16",
-        "prettier": "2.6.2",
         "react": "18.1.0",
         "react-bootstrap": "2.4.0",
         "react-dom": "18.1.0",
-        "react-helmet": "6.1.0",
-        "react-router-dom": "6.3.0",
-        "react-scripts": "5.0.1",
-        "workbox-cli": "6.5.3"
+        "sass": "1.52.1",
+        "uuid": "8.3.2",
+        "yup": "0.32.11"
     },
-    "proxy": "http://localhost:3001",
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
+    "devDependencies": {
+        "eslint": "8.16.0",
+        "eslint-config-next": "12.1.6",
+        "eslint-config-prettier": "8.5.0",
+        "prettier": "2.6.2"
     }
 }
