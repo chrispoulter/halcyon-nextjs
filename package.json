@@ -8,7 +8,6 @@
         "build": "concurrently \"yarn:api:build\" \"yarn:db:build\" \"yarn:client:build\"",
         "client:start": "react-scripts start",
         "client:build": "react-scripts build",
-        "postclient:build": "workbox injectManifest workbox-config.js",
         "api:start": "nodemon --exec babel-node api/index.js",
         "api:build": "babel api --out-dir dist/api --source-maps",
         "db:seed": "babel-node scripts/seed.js",
@@ -54,8 +53,7 @@
         "react-dom": "18.1.0",
         "react-helmet": "6.1.0",
         "react-router-dom": "6.3.0",
-        "react-scripts": "5.0.1",
-        "workbox-cli": "6.5.3"
+        "react-scripts": "5.0.1"
     },
     "proxy": "http://localhost:3001",
     "browserslist": {
