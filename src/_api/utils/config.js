@@ -2,6 +2,8 @@ export const config = {
     VERSION: process.env.NEXT_PUBLIC_VERSION || '1.0.0',
     STAGE: process.env.NEXT_PUBLIC_STAGE || 'local',
 
+    LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
+
     DB_HOST: process.env.DB_HOST || 'localhost',
     DB_PORT: parseInt(process.env.DB_PORT || '5432'),
     DB_USER: process.env.DB_USER || 'postgres',

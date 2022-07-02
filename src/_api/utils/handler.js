@@ -1,5 +1,5 @@
 import nextConnect from 'next-connect';
-import * as logger from './logger';
+import { logger } from './logger';
 
 export const getHandler = () =>
     nextConnect({

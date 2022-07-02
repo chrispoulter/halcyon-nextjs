@@ -17,6 +17,9 @@
         "registryPassword": {
             "type": "string"
         },
+        "logLevel": {
+            "type": "string"
+        },
         "dbHost": {
             "type": "string"
         },
@@ -27,7 +30,7 @@
             "type": "string"
         },
         "dbPassword": {
-            "type": "secureString"
+            "type": "securestring"
         },
         "dbDatabase": {
             "type": "string"
@@ -42,16 +45,16 @@
             "type": "string"
         },
         "emailSmtpUserName": {
-            "type": "secureString"
+            "type": "securestring"
         },
         "emailSmtpPassword": {
-            "type": "secureString"
+            "type": "securestring"
         },
         "emailNoReplyAddress": {
             "type": "string"
         },
         "jwtSecurityKey": {
-            "type": "secureString"
+            "type": "securestring"
         },
         "jwtIssuer": {
             "type": "string"
@@ -63,10 +66,10 @@
             "type": "string"
         },
         "seedEmailAddress": {
-            "type": "secureString"
+            "type": "securestring"
         },
         "seedPassword": {
-            "type": "secureString"
+            "type": "securestring"
         }
     },
     "resources": [
@@ -104,6 +107,7 @@
                 "DOCKER_REGISTRY_SERVER_URL": "[parameters('registryUrl')]",
                 "DOCKER_REGISTRY_SERVER_USERNAME": "[parameters('registryUsername')]",
                 "DOCKER_REGISTRY_SERVER_PASSWORD": "[parameters('registryPassword')]",
+                "LOG_LEVEL": "[parameters('logLevel')]",
                 "DB_HOST": "[parameters('dbHost')]",
                 "DB_PORT": "[parameters('dbPort')]",
                 "DB_USER": "[parameters('dbUser')]",

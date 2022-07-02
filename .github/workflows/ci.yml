@@ -53,6 +53,7 @@ jobs:
                       registryUrl="${{ secrets.REGISTRY_URL }}"
                       registryUserName="${{ secrets.REGISTRY_USERNAME }}"
                       registryPassword="${{ secrets.REGISTRY_PASSWORD }}"
+                      logLevel="${{ secrets.LOG_LEVEL }}"
                       dbHost="${{ secrets.DB_HOST }}"
                       dbPort="${{ secrets.DB_PORT }}"
                       dbUser="${{ secrets.DB_USER }}"

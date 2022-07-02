@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import * as templateRepository from '../data/templateRepository';
 import { format } from '../utils/string';
-import * as logger from '../utils/logger';
+import { logger } from '../utils/logger';
 import { config } from '../utils/config';
 
 export const sendEmail = async message => {
