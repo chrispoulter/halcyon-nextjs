@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, Button, Meta } from '../../components';
@@ -60,32 +60,29 @@ const ResetPasswordPage = () => {
             >
                 {({ isSubmitting }) => (
                     <Form noValidate>
-                        <Field
+                        <TextInput
                             name="emailAddress"
                             type="email"
                             label="Email Address"
                             required
                             maxLength={254}
                             autoComplete="username"
-                            component={TextInput}
                         />
-                        <Field
+                        <TextInput
                             name="newPassword"
                             type="password"
                             label="New Password"
                             required
                             maxLength={50}
                             autoComplete="new-password"
-                            component={TextInput}
                         />
-                        <Field
+                        <TextInput
                             name="confirmNewPassword"
                             type="password"
                             label="Confirm New Password"
                             required
                             maxLength={50}
                             autoComplete="new-password"
-                            component={TextInput}
                         />
 
                         <div className="mb-3 text-end">
