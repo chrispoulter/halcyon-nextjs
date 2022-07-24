@@ -3,35 +3,22 @@ WORKDIR /app
 
 ARG VERSION=1.0.0
 ENV NEXT_PUBLIC_VERSION=$VERSION
-
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
-
-FROM base AS builder
 ENV NEXT_TELEMETRY_DISABLED 1
 
-COPY --from=deps /app/node_modules ./node_modules
+FROM base AS build
+COPY ["package.json", "yarn.lock", "./"]
+RUN yarn install --frozen-lockfile
 COPY . .
-
 RUN yarn lint
 RUN yarn build
 
-FROM base AS runner
+FROM base AS final
 ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+COPY --chown=node:node --from=build ["/app/public", "./public"]
+COPY --chown=node:node --from=build ["/app/package.json", "./package.json"]
+COPY --chown=node:node --from=build ["/app/.next/standalone", "./"]
+COPY --chown=node:node --from=build ["/app/.next/static", "./.next/static"]
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./package.json
-
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
+USER node
 EXPOSE 3000
-ENV PORT 3000
-CMD ["node", "server.js"]
+ENTRYPOINT ["node", "server.js"]
