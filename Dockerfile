@@ -3,13 +3,9 @@ WORKDIR /app
 
 ARG VERSION=1.0.0
 ENV VERSION=$VERSION
-
-ARG STAGE=local
-ENV STAGE=$STAGE
+ENV REACT_APP_VERSION=$VERSION
 
 FROM base AS build
-ENV REACT_APP_VERSION=$VERSION
-ENV REACT_APP_STAGE=$STAGE
 COPY ["package.json", "yarn.lock", "./"]
 RUN yarn install --frozen-lockfile
 COPY . .

@@ -10,7 +10,11 @@ export const TextInput = ({ label, ...rest }) => {
     return (
         <Form.Group controlId={name} className="mb-3">
             <Form.Label>{label}</Form.Label>
-            <Form.Control {...field} {...rest} isInvalid={!!touched && !!error} />
+            <Form.Control
+                {...field}
+                {...rest}
+                isInvalid={!!touched && !!error}
+            />
             <Form.Control.Feedback type="invalid">
                 {error}
             </Form.Control.Feedback>
