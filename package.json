@@ -1,6 +1,6 @@
 {
     "name": "@halcyon/halcyon",
-    "version": "2.0.0-bugfix1",
+    "version": "1.0.0",
     "private": true,
     "scripts": {
         "prestart": "yarn db:seed",
