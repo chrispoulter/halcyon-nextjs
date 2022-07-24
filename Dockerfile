@@ -4,9 +4,6 @@ WORKDIR /app
 ARG VERSION=1.0.0
 ENV NEXT_PUBLIC_VERSION=$VERSION
 
-ARG STAGE=local
-ENV NEXT_PUBLIC_STAGE=$STAGE
-
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 COPY package.json yarn.lock ./

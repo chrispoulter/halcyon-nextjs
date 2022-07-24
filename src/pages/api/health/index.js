@@ -9,7 +9,6 @@ handler.get(async (_, res) => {
 
     return res.json({
         version: config.VERSION,
-        stage: config.STAGE,
         database
     });
 });

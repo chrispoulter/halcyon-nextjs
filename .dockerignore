@@ -11,3 +11,4 @@ azuredeploy.json
 Dockerfile
 GitVersion.yml
 README.md
+yarn-error.log

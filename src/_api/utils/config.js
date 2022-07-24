@@ -1,6 +1,5 @@
 export const config = {
     VERSION: process.env.NEXT_PUBLIC_VERSION || '1.0.0',
-    STAGE: process.env.NEXT_PUBLIC_STAGE || 'local',
 
     LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
 
