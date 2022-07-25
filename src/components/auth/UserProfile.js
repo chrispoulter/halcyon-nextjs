@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useAuth } from '../../contexts';
-import { useIsSSR } from '../../hooks';
 import { HasPermission } from './HasPermission';
 
 export const UserProfile = () => {
@@ -12,16 +11,10 @@ export const UserProfile = () => {
 
     const { currentUser, removeToken } = useAuth();
 
-    const isSSR = useIsSSR();
-
     const logout = () => {
         removeToken();
         router.push('/');
     };
-
-    if (isSSR) {
-        return <></>;
-    }
 
     return (
         <Nav>
