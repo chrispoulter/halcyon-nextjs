@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
 import * as userRepository from '../data/userRepository';
-import * as userRepository from '../data/userRepository';
 import { validationMiddleware } from '../middleware/validationMiddleware';
 import * as emailService from '../services/emailService';
 import { getHandler } from '../utils/handler';
