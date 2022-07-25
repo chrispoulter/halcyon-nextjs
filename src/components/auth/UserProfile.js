@@ -22,10 +22,10 @@ export const UserProfile = () => {
                 fallback={
                     <>
                         <Link href="/login" passHref>
-                            <Nav.Link eventKey="login">Login</Nav.Link>
+                            <Nav.Link>Login</Nav.Link>
                         </Link>
                         <Link href="/register" passHref>
-                            <Nav.Link eventKey="register">Register</Nav.Link>
+                            <Nav.Link>Register</Nav.Link>
                         </Link>
                     </>
                 }
@@ -35,13 +35,9 @@ export const UserProfile = () => {
                     title={`${currentUser?.given_name} ${currentUser?.family_name} `}
                 >
                     <Link href="/my-account" passHref>
-                        <NavDropdown.Item eventKey="my-account">
-                            My Account
-                        </NavDropdown.Item>
+                        <NavDropdown.Item>My Account</NavDropdown.Item>
                     </Link>
-                    <NavDropdown.Item eventKey="logout" onClick={logout}>
-                        Logout
-                    </NavDropdown.Item>
+                    <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                 </NavDropdown>
             </HasPermission>
         </Nav>

@@ -36,7 +36,7 @@ export const Header = () => {
                     <Nav className="me-auto">
                         <HasPermission requiredRoles={USER_ADMINISTRATOR_ROLES}>
                             <Link href="/user" passHref>
-                                <Nav.Link eventKey="users">Users</Nav.Link>
+                                <Nav.Link>Users</Nav.Link>
                             </Link>
                         </HasPermission>
                     </Nav>
