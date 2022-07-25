@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
-import * as userRepository from '../../../_api/data/userRepository';
-import { authMiddleware } from '../../../_api/middleware/authMiddleware';
-import { validationMiddleware } from '../../../_api/middleware/validationMiddleware';
-import * as hashService from '../../../_api/services/hashService';
-import { getHandler } from '../../../_api/utils/handler';
+import * as userRepository from '../data/userRepository';
+import { authMiddleware } from '../middleware/authMiddleware';
+import { validationMiddleware } from '../middleware/validationMiddleware';
+import * as hashService from '../services/hashService';
+import { getHandler } from '../utils/handler';
 
 const handler = getHandler();
 

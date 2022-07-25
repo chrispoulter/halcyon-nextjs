@@ -1,6 +1,6 @@
-import * as healthRepository from '../../../_api/data/healthRepository';
-import { getHandler } from '../../../_api/utils/handler';
-import { config } from '../../../_api/utils/config';
+import * as healthRepository from '../data/healthRepository';
+import { getHandler } from '../utils/handler';
+import { config } from '../utils/config';
 
 const handler = getHandler();
 

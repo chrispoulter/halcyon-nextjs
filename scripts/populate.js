@@ -1,4 +1,4 @@
-import { userRepository } from '../api/data';
+import { userRepository } from '../src/pages/api/data';
 
 const firstNames = [
     'Amelia',

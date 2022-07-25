@@ -1,7 +1,7 @@
-import * as userRepository from '../../../../_api/data/userRepository';
-import { authMiddleware } from '../../../../_api/middleware/authMiddleware';
-import { getHandler } from '../../../../_api/utils/handler';
-import { USER_ADMINISTRATOR_ROLES } from '../../../../_api/utils/auth';
+import * as userRepository from '../../data/userRepository';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { getHandler } from '../../utils/handler';
+import { USER_ADMINISTRATOR_ROLES } from '../../utils/auth';
 
 const handler = getHandler();
 
