@@ -12,7 +12,7 @@ const pool = new Pool({
 });
 
 export const query = async (query, params) => {
-    logger.debug('Db query executed', {
+    logger.debug('db query executed', {
         query: query.replace(/\s\s+/g, ' '),
         params
     });
@@ -22,6 +22,6 @@ export const query = async (query, params) => {
 };
 
 export const shutdown = () => {
-    logger.debug('Db shut down');
+    logger.debug('db shut down');
     return pool.end();
 };
