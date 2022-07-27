@@ -4,9 +4,6 @@ import { config } from './config';
 export const logger = pino({
     level: config.LOG_LEVEL,
     useLevel: 'debug',
-    base: {
-        version: config.VERSION
-    },
     transport:
         process.env.NODE_ENV !== 'production'
             ? {
