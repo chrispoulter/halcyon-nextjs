@@ -12,10 +12,13 @@ const pool = new Pool({
 });
 
 export const query = async (query, params) => {
-    logger.debug('db query executed', {
-        query: query.replace(/\s\s+/g, ' '),
-        params
-    });
+    logger.debug(
+        {
+            query: query.replace(/\s\s+/g, ' '),
+            params
+        },
+        'db query executed'
+    );
 
     const { rows } = await pool.query(query, params);
     return rows;

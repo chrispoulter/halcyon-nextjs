@@ -3,7 +3,6 @@ import { config } from './config';
 
 export const logger = pino({
     level: config.LOG_LEVEL,
-    useLevel: 'debug',
     transport:
         process.env.NODE_ENV !== 'production'
             ? {
