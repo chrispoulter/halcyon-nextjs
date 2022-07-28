@@ -24,5 +24,5 @@ export const authMiddleware = requiredRoles => async (req, res, next) => {
 
     req.payload = payload;
 
-    return next();
+    return await next();
 };

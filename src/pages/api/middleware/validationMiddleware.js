@@ -15,5 +15,5 @@ export const validationMiddleware =
             });
         }
 
-        return next();
+        return await next();
     };

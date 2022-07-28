@@ -1,8 +1,9 @@
-import pino from 'pino';
+import pino from 'pino-http';
 import { config } from './config';
 
-export const logger = pino({
+export const httpLogger = pino({
     level: config.LOG_LEVEL,
+    useLevel: 'debug',
     transport:
         process.env.NODE_ENV !== 'production'
             ? {
@@ -13,3 +14,5 @@ export const logger = pino({
               }
             : undefined
 });
+
+export const logger = httpLogger.logger;

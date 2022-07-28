@@ -1,5 +1,5 @@
 import nextConnect from 'next-connect';
-import { logger } from './logger';
+import { httpLogger, logger } from './logger';
 
 export const getHandler = () =>
     nextConnect({
@@ -12,4 +12,4 @@ export const getHandler = () =>
             });
         },
         onNoMatch: (_, res) => res.status(404).end()
-    });
+    }).use(httpLogger);
