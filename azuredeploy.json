@@ -92,7 +92,7 @@
                 "[resourceId('Microsoft.Web/sites', parameters('web'))]"
             ],
             "properties": {
-                "healthCheckPath": "/health"
+                "healthCheckPath": "/api/health"
             }
         },
         {
