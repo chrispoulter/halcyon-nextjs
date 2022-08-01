@@ -14,7 +14,7 @@ import {
 } from '../../components';
 import { showToast } from '../../features';
 import { useCreateUserMutation } from '../../redux';
-import { ALL_ROLES } from '../../utils/auth';
+import { ROLE_OPTIONS } from '../../utils/auth';
 
 const CreateUserPage = () => {
     const router = useRouter();
@@ -141,7 +141,7 @@ const CreateUserPage = () => {
                         <CheckboxGroupInput
                             name="roles"
                             label="Roles"
-                            options={ALL_ROLES}
+                            options={ROLE_OPTIONS}
                         />
 
                         <div className="mb-3 text-end">

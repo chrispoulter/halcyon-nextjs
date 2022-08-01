@@ -12,7 +12,7 @@ import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 import { Button, Spinner, Pager, Meta } from '../../components';
 import { useSearchUsersQuery } from '../../redux';
-import { ALL_ROLES } from '../../utils/auth';
+import { ROLE_OPTIONS } from '../../utils/auth';
 
 const SORT_OPTIONS = {
     NAME_ASC: 'Name A-Z',
@@ -144,7 +144,7 @@ const UserPage = () => {
                                             bg="primary"
                                             className="me-1"
                                         >
-                                            {ALL_ROLES[role]}
+                                            {ROLE_OPTIONS[role]}
                                         </Badge>
                                     ))}
                                 </div>

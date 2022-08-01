@@ -4,10 +4,10 @@ import {
     userRepository,
     templateRepository,
     roleRepository
-} from '../src/pages/api/data';
-import { hashService } from '../src/pages/api/services';
-import { ALL_ROLES } from '../src/pages/api/utils/auth';
-import { config } from '../src/pages/api/utils/config';
+} from '../src/data';
+import { hashService } from '../src/services';
+import { ALL_ROLES } from '../src/utils/auth';
+import { config } from '../src/utils/config';
 
 import resetPassword from './templates/resetPassword.html';
 

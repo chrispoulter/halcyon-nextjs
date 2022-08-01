@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -21,9 +22,11 @@ import {
     useUnlockUserMutation,
     useDeleteUserMutation
 } from '../../../redux';
-import { ALL_ROLES } from '../../../utils/auth';
+import { ROLE_OPTIONS } from '../../../utils/auth';
 
 const UpdateUserPage = ({ params }) => {
+    const router = useRouter();
+
     const dispatch = useDispatch();
 
     const { isFetching, refetch, data: user } = useGetUserQuery(params.id);
@@ -49,7 +52,10 @@ const UpdateUserPage = ({ params }) => {
     }
 
     const onSubmit = async variables => {
-        const { data: result } = await updateUser({ id, body: variables });
+        const { data: result } = await updateUser({
+            id: params.id,
+            body: variables
+        });
 
         if (result) {
             dispatch(
@@ -222,7 +228,7 @@ const UpdateUserPage = ({ params }) => {
                         <CheckboxGroupInput
                             name="roles"
                             label="Roles"
-                            options={ALL_ROLES}
+                            options={ROLE_OPTIONS}
                         />
 
                         <div className="mb-3 text-end">

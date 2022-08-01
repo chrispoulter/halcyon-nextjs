@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
-import * as userRepository from '../data/userRepository';
-import { validationMiddleware } from '../middleware/validationMiddleware';
-import * as jwtService from '../services/jwtService';
-import * as hashService from '../services/hashService';
-import { getHandler } from '../utils/handler';
+import * as userRepository from '../../../data/userRepository';
+import { validationMiddleware } from '../../../middleware/validationMiddleware';
+import * as jwtService from '../../../services/jwtService';
+import * as hashService from '../../../services/hashService';
+import { getHandler } from '../../../utils/handler';
 
 const handler = getHandler();
 
