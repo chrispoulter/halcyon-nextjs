@@ -1,25 +1,32 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, CheckboxInput, Button, Meta } from '../../components';
-import { useAuth } from '../../contexts';
-import { useCreateToken } from '../../services';
+import { setToken } from '../../features';
+import { useCreateTokenMutation } from '../../redux';
 
 const LoginPage = () => {
     const router = useRouter();
 
-    const { setToken } = useAuth();
+    const dispatch = useDispatch();
 
-    const { request: createToken } = useCreateToken();
+    const [createToken] = useCreateTokenMutation();
 
     const onSubmit = async variables => {
-        const result = await createToken(variables);
+        const { data: result } = await createToken(variables);
 
-        if (result.ok) {
-            setToken(result.data.accessToken, variables.rememberMe);
+        if (result) {
+            dispatch(
+                setToken({
+                    accessToken: result.data.accessToken,
+                    persist: variables.rememberMe
+                })
+            );
+
             router.push('/');
         }
     };

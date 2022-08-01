@@ -1,24 +1,29 @@
 import React, { Suspense } from 'react';
-import { Header, Footer, Spinner, Meta, ErrorBoundary } from '../components';
-import { AuthProvider, ModalProvider, ToastProvider } from '../contexts';
+import { Provider } from 'react-redux';
+import {
+    Header,
+    Footer,
+    Spinner,
+    Meta,
+    ErrorBoundary,
+    Modal,
+    Toast
+} from '../components';
+import { wrapper } from '../redux';
 
 import '../styles/index.scss';
 
 const App = ({ Component, pageProps }) => (
     <Suspense fallback={<Spinner />}>
-        <AuthProvider>
-            <ModalProvider>
-                <ToastProvider>
-                    <Meta />
-                    <Header />
-                    <ErrorBoundary>
-                        <Component {...pageProps} />
-                    </ErrorBoundary>
-                    <Footer />
-                </ToastProvider>
-            </ModalProvider>
-        </AuthProvider>
+        <Meta />
+        <Header />
+        <ErrorBoundary>
+            <Component {...pageProps} />
+        </ErrorBoundary>
+        <Footer />
+        <Modal />
+        <Toast />
     </Suspense>
 );
 
-export default App;
+export default wrapper.withRedux(App);

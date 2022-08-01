@@ -1,25 +1,32 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, Button, Meta } from '../../components';
-import { useToast } from '../../contexts';
-import { useChangePassword } from '../../services';
+import { showToast } from '../../features';
+import { useChangePasswordMutation } from '../../redux';
 
 const ChangePasswordPage = () => {
     const router = useRouter();
 
-    const toast = useToast();
+    const dispatch = useDispatch();
 
-    const { request: changePassword } = useChangePassword();
+    const [changePassword] = useChangePasswordMutation();
 
     const onSubmit = async variables => {
-        const result = await changePassword(variables);
+        const { data: result } = await changePassword(variables);
 
-        if (result.ok) {
-            toast.success(result.message);
+        if (result) {
+            dispatch(
+                showToast({
+                    variant: 'success',
+                    message: result.message
+                })
+            );
+
             router.push('/my-account');
         }
     };

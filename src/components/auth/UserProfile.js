@@ -1,18 +1,21 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { useAuth } from '../../contexts';
+import { selectCurrentUser, removeToken } from '../../features';
 import { HasPermission } from './HasPermission';
 
 export const UserProfile = () => {
     const router = useRouter();
 
-    const { currentUser, removeToken } = useAuth();
+    const dispatch = useDispatch();
+
+    const currentUser = useSelector(selectCurrentUser);
 
     const logout = () => {
-        removeToken();
+        dispatch(removeToken());
         router.push('/');
     };
 

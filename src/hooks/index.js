@@ -1,3 +1,2 @@
-export * from './useFetch';
-export * from './useOnClickOutside';
 export * from './useIsSSR';
+export * from './useOnClickOutside';
