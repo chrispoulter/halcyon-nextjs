@@ -1,8 +1,8 @@
 .github
 .vscode
 node_modules
-build
-dist
+.next
+out
 .dockerignore
 .eslintcache
 .env

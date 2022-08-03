@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
@@ -28,16 +28,16 @@ export const Header = () => {
             onSelect={onClose}
         >
             <Container>
-                <Navbar.Brand onClick={onClose} to="/" as={Link}>
-                    Halcyon
-                </Navbar.Brand>
+                <Link href="/" passHref>
+                    <Navbar.Brand onClick={onClose}>Halcyon</Navbar.Brand>
+                </Link>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <HasPermission requiredRoles={USER_ADMINISTRATOR_ROLES}>
-                            <Nav.Link eventKey="users" to="/user" as={Link}>
-                                Users
-                            </Nav.Link>
+                            <Link href="/user" passHref>
+                                <Nav.Link>Users</Nav.Link>
+                            </Link>
                         </HasPermission>
                     </Nav>
                     <UserProfile />

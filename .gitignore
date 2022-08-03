@@ -1,6 +1,6 @@
 node_modules
-build
-dist
+.next
+out
 .eslintcache
 .env
 yarn-error.log

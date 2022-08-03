@@ -6,8 +6,8 @@ A web application template.
 
 -   React
     [https://reactjs.org](https://reactjs.org)
--   Express
-    [https://expressjs.com/](https://expressjs.com/)
+-   Next.js
+    [https://nextjs.org/](https://nextjs.org/)
 -   PostgreSQL
     [https://www.postgresql.org/](https://www.postgresql.org/)
 

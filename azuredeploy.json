@@ -92,7 +92,7 @@
                 "[resourceId('Microsoft.Web/sites', parameters('web'))]"
             ],
             "properties": {
-                "healthCheckPath": "/health"
+                "healthCheckPath": "/api/health"
             }
         },
         {
@@ -103,7 +103,7 @@
                 "[resourceId('Microsoft.Web/sites', parameters('web'))]"
             ],
             "properties": {
-                "WEBSITES_PORT": "3001",
+                "WEBSITES_PORT": "3000",
                 "DOCKER_REGISTRY_SERVER_URL": "[parameters('registryUrl')]",
                 "DOCKER_REGISTRY_SERVER_USERNAME": "[parameters('registryUsername')]",
                 "DOCKER_REGISTRY_SERVER_PASSWORD": "[parameters('registryPassword')]",

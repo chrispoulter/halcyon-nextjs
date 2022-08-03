@@ -1,9 +1,11 @@
+export const ALL_ROLES = ['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'];
+
 export const USER_ADMINISTRATOR_ROLES = [
     'SYSTEM_ADMINISTRATOR',
     'USER_ADMINISTRATOR'
 ];
 
-export const ALL_ROLES = {
+export const ROLE_OPTIONS = {
     SYSTEM_ADMINISTRATOR: 'System Administrator',
     USER_ADMINISTRATOR: 'User Administrator'
 };
@@ -22,6 +24,7 @@ export const isAuthorized = (user, requiredRoles) => {
     }
 
     const userRoles = user.role || [];
+
     if (!requiredRoles.some(value => userRoles.includes(value))) {
         return false;
     }
