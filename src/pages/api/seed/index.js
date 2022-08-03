@@ -1,19 +1,15 @@
-import { migrate } from 'postgres-migrations';
 import path from 'path';
-import {
-    userRepository,
-    templateRepository,
-    roleRepository
-} from '../src/data';
-import { hashService } from '../src/services';
-import { ALL_ROLES } from '../src/utils/auth';
-import { config } from '../src/utils/config';
+import { migrate } from 'postgres-migrations';
+import * as roleRepository from '../../../data/roleRepository';
+import * as userRepository from '../../../data/userRepository';
+import * as hashService from '../../../services/hashService';
+import { getHandler } from '../../../utils/handler';
+import { ALL_ROLES } from '../../../utils/auth';
+import { config } from '../../../utils/config';
 
-import resetPassword from './templates/resetPassword.html';
+const handler = getHandler();
 
-const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
-
-(async () => {
+handler.get(async (_, res) => {
     await migrate(
         {
             host: config.DB_HOST,
@@ -25,14 +21,8 @@ const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
             ensureDatabaseExists: true,
             defaultDatabase: 'postgres'
         },
-        path.join(__dirname, 'migrations')
+        path.join(process.cwd(), 'src', 'migrations')
     );
-
-    await templateRepository.upsert({
-        key: 'RESET_PASSWORD',
-        subject: subjectRegEx.exec(resetPassword)[1],
-        html: resetPassword
-    });
 
     await Promise.all(
         ALL_ROLES.map(name =>
@@ -51,5 +41,7 @@ const subjectRegEx = new RegExp(/<title>\s*(.+?)\s*<\/title>/);
         roles: ALL_ROLES
     });
 
-    process.exit(0);
-})();
+    return res.send();
+});
+
+export default handler;
