@@ -5,8 +5,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, Button, Meta } from '../../components';
-import { showToast } from '../../features';
-import { useResetPasswordMutation } from '../../redux';
+import { useResetPasswordMutation, showToast } from '../../redux';
 
 const ResetPasswordPage = () => {
     const router = useRouter();

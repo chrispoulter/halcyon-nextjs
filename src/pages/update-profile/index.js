@@ -7,8 +7,11 @@ import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
 import { Spinner, TextInput, DateInput, Button, Meta } from '../../components';
-import { showToast } from '../../features';
-import { useGetProfileQuery, useUpdateProfileMutation } from '../../redux';
+import {
+    useGetProfileQuery,
+    useUpdateProfileMutation,
+    showToast
+} from '../../redux';
 
 const UpdateProfilePage = () => {
     const router = useRouter();

@@ -2,7 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { halcyonApi, rtkQueryErrorLogger } from './services';
-import { authReducer, modalReducer, toastReducer } from '../features';
+import { authReducer, modalReducer, toastReducer } from './features';
 
 const combinedReducer = combineReducers({
     [halcyonApi.reducerPath]: halcyonApi.reducer,

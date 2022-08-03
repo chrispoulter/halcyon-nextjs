@@ -6,8 +6,11 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, DateInput, Button, Meta } from '../../components';
-import { setToken } from '../../features';
-import { useRegisterMutation, useCreateTokenMutation } from '../../redux';
+import {
+    useRegisterMutation,
+    useCreateTokenMutation,
+    setToken
+} from '../../redux';
 
 const RegisterPage = () => {
     const router = useRouter();

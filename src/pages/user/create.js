@@ -12,8 +12,7 @@ import {
     Button,
     Meta
 } from '../../components';
-import { showToast } from '../../features';
-import { useCreateUserMutation } from '../../redux';
+import { useCreateUserMutation, showToast } from '../../redux';
 import { ROLE_OPTIONS } from '../../utils/auth';
 
 const CreateUserPage = () => {

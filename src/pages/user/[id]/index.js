@@ -14,13 +14,14 @@ import {
     Button,
     Meta
 } from '../../../components';
-import { showToast, showModal } from '../../../features';
 import {
     useGetUserQuery,
     useUpdateUserMutation,
     useLockUserMutation,
     useUnlockUserMutation,
-    useDeleteUserMutation
+    useDeleteUserMutation,
+    showToast,
+    showModal
 } from '../../../redux';
 import { ROLE_OPTIONS } from '../../../utils/auth';
 

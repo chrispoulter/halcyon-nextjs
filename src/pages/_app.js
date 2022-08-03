@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import { Provider } from 'react-redux';
 import {
     Header,
     Footer,
