@@ -13,7 +13,7 @@ import {
     CheckboxGroupInput,
     Button
 } from '../components';
-import { showToast, showModal } from '../features';
+import { showToast, showModal } from '../redux';
 import {
     useGetUserQuery,
     useUpdateUserMutation,

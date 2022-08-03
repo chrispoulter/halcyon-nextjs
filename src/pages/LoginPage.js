@@ -6,7 +6,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import { TextInput, CheckboxInput, Button } from '../components';
-import { setToken } from '../features';
+import { setToken } from '../redux';
 import { useCreateTokenMutation } from '../redux';
 
 export const LoginPage = () => {

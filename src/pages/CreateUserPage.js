@@ -11,7 +11,7 @@ import {
     CheckboxGroupInput,
     Button
 } from '../components';
-import { showToast } from '../features';
+import { showToast } from '../redux';
 import { useCreateUserMutation } from '../redux';
 import { ALL_ROLES } from '../utils/auth';
 
