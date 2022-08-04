@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { selectCurrentUser, removeToken } from '../../redux';
+import { selectCurrentUser, removeToken } from '../redux';
 import { HasPermission } from './HasPermission';
 
 export const UserProfile = () => {

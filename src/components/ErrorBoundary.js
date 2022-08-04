@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Button from 'react-bootstrap/Button';
-import { Hero } from '../common';
+import { Hero } from './Hero';
 import { Meta } from './Meta';
 
 export class ErrorBoundary extends React.Component {
