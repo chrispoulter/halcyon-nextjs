@@ -41,7 +41,10 @@ handler.get(async (_, res) => {
         roles: ALL_ROLES
     });
 
-    return res.send();
+    return res.json({
+        code: 'ENVIRONMENT_SEEDED',
+        message: 'Environment seeded.'
+    });
 });
 
 export default handler;
