@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
+import { selectAccessToken } from '../features';
 import { config } from '../../utils/config';
 
 export const halcyonApi = createApi({
@@ -7,7 +8,7 @@ export const halcyonApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_URL,
         prepareHeaders: (headers, { getState }) => {
-            const { accessToken } = getState().auth;
+            const accessToken = selectAccessToken(getState());
 
             if (accessToken) {
                 headers.set('authorization', `Bearer ${accessToken}`);
