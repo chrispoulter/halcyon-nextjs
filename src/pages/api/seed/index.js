@@ -2,7 +2,7 @@ import path from 'path';
 import { migrate } from 'postgres-migrations';
 import * as roleRepository from '../../../data/roleRepository';
 import * as userRepository from '../../../data/userRepository';
-import * as hashService from '../../../services/hashService';
+import { generateHash } from '../../../utils/hash';
 import { getHandler } from '../../../utils/handler';
 import { ALL_ROLES } from '../../../utils/auth';
 import { config } from '../../../utils/config';
@@ -34,7 +34,7 @@ handler.get(async (_, res) => {
 
     await userRepository.upsert({
         email_address: config.SEED_EMAIL_ADDRESS,
-        password: await hashService.generateHash(config.SEED_PASSWORD),
+        password: await generateHash(config.SEED_PASSWORD),
         first_name: 'System',
         last_name: 'Administrator',
         date_of_birth: new Date(1970, 0, 1).toISOString(),

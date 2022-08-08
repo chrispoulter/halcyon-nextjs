@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import * as userRepository from '../../../data/userRepository';
 import { authMiddleware } from '../../../middleware/authMiddleware';
 import { validationMiddleware } from '../../../middleware/validationMiddleware';
-import * as hashService from '../../../services/hashService';
+import { generateHash } from '../../../utils/hash';
 import { getHandler } from '../../../utils/handler';
 import { USER_ADMINISTRATOR_ROLES } from '../../../utils/auth';
 
@@ -75,7 +75,7 @@ handler.post(
 
         const result = await userRepository.create({
             email_address: body.emailAddress,
-            password: await hashService.generateHash(body.password),
+            password: await generateHash(body.password),
             first_name: body.firstName,
             last_name: body.lastName,
             date_of_birth: body.dateOfBirth,

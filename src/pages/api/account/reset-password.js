@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import * as userRepository from '../../../data/userRepository';
 import { validationMiddleware } from '../../../middleware/validationMiddleware';
-import * as hashService from '../../../services/hashService';
+import { generateHash } from '../../../utils/hash';
 import { getHandler } from '../../../utils/handler';
 
 const handler = getHandler();
@@ -32,7 +32,7 @@ handler.put(
             });
         }
 
-        user.password = await hashService.generateHash(body.newPassword);
+        user.password = await generateHash(body.newPassword);
         user.password_reset_token = undefined;
         await userRepository.update(user);
 

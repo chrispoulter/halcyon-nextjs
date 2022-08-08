@@ -1,4 +1,4 @@
-import * as jwtService from '../services/jwtService';
+import { verifyToken } from '../utils/jwt';
 import { isAuthorized } from '../utils/auth';
 
 export const authMiddleware = requiredRoles => async (req, res, next) => {
@@ -11,7 +11,7 @@ export const authMiddleware = requiredRoles => async (req, res, next) => {
         return res.status(401).end();
     }
 
-    const payload = await jwtService.verifyToken(token);
+    const payload = await verifyToken(token);
 
     if (!payload) {
         return res.status(401).end();

@@ -1,8 +1,8 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 import nodemailer from 'nodemailer';
-import { logger } from '../utils/logger';
-import { config } from '../utils/config';
+import { logger } from './logger';
+import { config } from './config';
 
 export const sendEmail = async message => {
     const template = await readResource(message.template);

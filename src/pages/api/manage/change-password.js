@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import * as userRepository from '../../../data/userRepository';
 import { authMiddleware } from '../../../middleware/authMiddleware';
 import { validationMiddleware } from '../../../middleware/validationMiddleware';
-import * as hashService from '../../../services/hashService';
+import { verifyHash, generateHash } from '../../../utils/hash';
 import { getHandler } from '../../../utils/handler';
 
 const handler = getHandler();
@@ -30,10 +30,7 @@ handler.put(
             });
         }
 
-        const verified = await hashService.verifyHash(
-            body.currentPassword,
-            user.password
-        );
+        const verified = await verifyHash(body.currentPassword, user.password);
 
         if (!verified) {
             return res.status(400).json({
@@ -42,7 +39,7 @@ handler.put(
             });
         }
 
-        user.password = await hashService.generateHash(body.newPassword);
+        user.password = await generateHash(body.newPassword);
         user.password_reset_token = undefined;
         await userRepository.update(user);
 

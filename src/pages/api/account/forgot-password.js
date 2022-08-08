@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
 import * as userRepository from '../../../data/userRepository';
 import { validationMiddleware } from '../../../middleware/validationMiddleware';
-import * as emailService from '../../../services/emailService';
+import { sendEmail } from '../../../utils/email';
 import { getHandler } from '../../../utils/handler';
 
 const handler = getHandler();
@@ -30,7 +30,7 @@ handler.put(
             const host = req.headers.host;
             const siteUrl = `${protocol}://${host}`;
 
-            await emailService.sendEmail({
+            await sendEmail({
                 to: user.email_address,
                 template: 'RESET_PASSWORD',
                 context: {

@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 import * as userRepository from '../../../data/userRepository';
 import { validationMiddleware } from '../../../middleware/validationMiddleware';
-import * as jwtService from '../../../services/jwtService';
-import * as hashService from '../../../services/hashService';
+import { generateToken } from '../../../utils/jwt';
+import { verifyHash } from '../../../utils/hash';
 import { getHandler } from '../../../utils/handler';
 
 const handler = getHandler();
@@ -27,10 +27,7 @@ handler.post(
             });
         }
 
-        const verified = await hashService.verifyHash(
-            body.password,
-            user.password
-        );
+        const verified = await verifyHash(body.password, user.password);
 
         if (!verified) {
             return res.status(400).json({
@@ -48,7 +45,7 @@ handler.post(
         }
 
         return res.json({
-            data: jwtService.generateToken(user)
+            data: generateToken(user)
         });
     }
 );
