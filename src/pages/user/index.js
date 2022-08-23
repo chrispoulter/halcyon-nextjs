@@ -21,10 +21,10 @@ const SORT_OPTIONS = {
     EMAIL_ADDRESS_DESC: 'Email Address Z-A'
 };
 
-const UserPage = () => {
-    const router = useRouter();
+const UserPage = ({ query }) => {
+    const { page, size, search, sort } = query;
 
-    const { page, size, search, sort } = router.query;
+    const router = useRouter();
 
     const filter = {
         page: parseInt(page || '1'),
@@ -163,5 +163,9 @@ const UserPage = () => {
         </Container>
     );
 };
+
+export const getServerSideProps = async context => ({
+    props: { query: context.query }
+});
 
 export default UserPage;

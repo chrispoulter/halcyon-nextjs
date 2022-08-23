@@ -7,10 +7,10 @@ import Container from 'react-bootstrap/Container';
 import { TextInput, Button, Meta } from '../../components';
 import { useResetPasswordMutation, showToast } from '../../redux';
 
-const ResetPasswordPage = () => {
-    const router = useRouter();
+const ResetPasswordPage = ({ params }) => {
+    const { token } = params;
 
-    const { token } = router.query;
+    const router = useRouter();
 
     const dispatch = useDispatch();
 
@@ -106,5 +106,9 @@ const ResetPasswordPage = () => {
         </Container>
     );
 };
+
+export const getServerSideProps = async context => ({
+    props: { params: context.params }
+});
 
 export default ResetPasswordPage;

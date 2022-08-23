@@ -26,11 +26,13 @@ import {
 import { ROLE_OPTIONS } from '../../../utils/auth';
 
 const UpdateUserPage = ({ params }) => {
+    const { id } = params;
+
     const router = useRouter();
 
     const dispatch = useDispatch();
 
-    const { isFetching, refetch, data: user } = useGetUserQuery(params.id);
+    const { isFetching, refetch, data: user } = useGetUserQuery(id);
 
     const [updateUser] = useUpdateUserMutation();
 
@@ -54,7 +56,7 @@ const UpdateUserPage = ({ params }) => {
 
     const onSubmit = async variables => {
         const { data: result } = await updateUser({
-            id: params.id,
+            id,
             body: variables
         });
 
@@ -84,7 +86,7 @@ const UpdateUserPage = ({ params }) => {
                     </>
                 ),
                 onOk: async () => {
-                    const { data: result } = await lockUser(params.id);
+                    const { data: result } = await lockUser(id);
 
                     if (result) {
                         dispatch(
@@ -114,7 +116,7 @@ const UpdateUserPage = ({ params }) => {
                     </>
                 ),
                 onOk: async () => {
-                    const { data: result } = await unlockUser(params.id);
+                    const { data: result } = await unlockUser(id);
 
                     if (result) {
                         dispatch(
@@ -144,7 +146,7 @@ const UpdateUserPage = ({ params }) => {
                     </>
                 ),
                 onOk: async () => {
-                    const { data: result } = await deleteUser(params.id);
+                    const { data: result } = await deleteUser(id);
 
                     if (result) {
                         dispatch(
