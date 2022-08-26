@@ -107,8 +107,8 @@ const ResetPasswordPage = ({ params }) => {
     );
 };
 
-export const getServerSideProps = async context => ({
-    props: { params: context.params }
+export const getServerSideProps = async ({ params }) => ({
+    props: { params }
 });
 
 export default ResetPasswordPage;

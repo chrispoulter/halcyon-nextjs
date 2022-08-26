@@ -164,8 +164,8 @@ const UserPage = ({ query }) => {
     );
 };
 
-export const getServerSideProps = async context => ({
-    props: { query: context.query }
+export const getServerSideProps = async ({ query }) => ({
+    props: { query }
 });
 
 export default UserPage;
