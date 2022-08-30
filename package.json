@@ -8,10 +8,10 @@
         "export": "next export",
         "start": "next start",
         "lint": "next lint",
+        "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\"",
         "docker:build": "docker build . -t chrispoulter/halcyon-node",
         "docker:run": "docker run --name halcyon-node --env-file .env -p 3000:3000 chrispoulter/halcyon-node",
-        "docker:exec": "docker exec -it halcyon-node /bin/sh",
-        "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\""
+        "docker:exec": "docker exec -it halcyon-node /bin/sh"
     },
     "dependencies": {
         "@reduxjs/toolkit": "1.8.5",
