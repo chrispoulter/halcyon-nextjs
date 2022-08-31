@@ -25,14 +25,18 @@ import {
 } from '../../../redux';
 import { ROLE_OPTIONS } from '../../../utils/auth';
 
-const UpdateUserPage = ({ params }) => {
-    const { id } = params;
-
+const UpdateUserPage = () => {
     const router = useRouter();
+
+    const { id } = router.query;
 
     const dispatch = useDispatch();
 
-    const { isFetching, refetch, data: user } = useGetUserQuery(id);
+    const {
+        isFetching,
+        refetch,
+        data: user
+    } = useGetUserQuery(id, { skip: !router.isReady });
 
     const [updateUser] = useUpdateUserMutation();
 
@@ -42,7 +46,7 @@ const UpdateUserPage = ({ params }) => {
 
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
-    if (isFetching) {
+    if (isFetching || !router.isReady) {
         return <Spinner />;
     }
 
@@ -295,9 +299,5 @@ const UpdateUserPage = ({ params }) => {
         </Container>
     );
 };
-
-export const getServerSideProps = async ({ params }) => ({
-    props: { params }
-});
 
 export default UpdateUserPage;

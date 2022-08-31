@@ -21,10 +21,10 @@ const SORT_OPTIONS = {
     EMAIL_ADDRESS_DESC: 'Email Address Z-A'
 };
 
-const UserPage = ({ query }) => {
-    const { page, size, search, sort } = query;
-
+const UserPage = () => {
     const router = useRouter();
+
+    const { page, size, search, sort } = router.query;
 
     const filter = {
         page: parseInt(page || '1'),
@@ -33,9 +33,11 @@ const UserPage = ({ query }) => {
         sort: sort || 'NAME_ASC'
     };
 
-    const { isFetching, data: users } = useSearchUsersQuery(filter);
+    const { isFetching, data: users } = useSearchUsersQuery(filter, {
+        skip: !router.isReady
+    });
 
-    if (isFetching) {
+    if (isFetching || !router.isReady) {
         return <Spinner />;
     }
 
@@ -163,9 +165,5 @@ const UserPage = ({ query }) => {
         </Container>
     );
 };
-
-export const getServerSideProps = async ({ query }) => ({
-    props: { query }
-});
 
 export default UserPage;
