@@ -112,6 +112,6 @@ const ChangePasswordPage = () => {
     );
 };
 
-AdminDashboard.auth = {};
+ChangePasswordPage.auth = {};
 
 export default ChangePasswordPage;
