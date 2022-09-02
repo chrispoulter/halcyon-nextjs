@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
-import { TextInput, Button, Meta, PrivatePage } from '../../components';
+import { TextInput, Button, Meta } from '../../components';
 import { useChangePasswordMutation, showToast } from '../../redux';
 
 const ChangePasswordPage = () => {
@@ -112,4 +112,6 @@ const ChangePasswordPage = () => {
     );
 };
 
-export default PrivatePage(ChangePasswordPage);
+AdminDashboard.auth = true;
+
+export default ChangePasswordPage;

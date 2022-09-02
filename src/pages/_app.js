@@ -6,7 +6,8 @@ import {
     Meta,
     ErrorBoundary,
     Modal,
-    Toast
+    Toast,
+    Auth
 } from '../components';
 import { wrapper } from '../redux';
 
@@ -17,7 +18,13 @@ const App = ({ Component, pageProps }) => (
         <Meta />
         <Header />
         <ErrorBoundary>
-            <Component {...pageProps} />
+            {Component.auth ? (
+                <Auth requiredRoles={Component.requiredRoles}>
+                    <Component {...pageProps} />
+                </Auth>
+            ) : (
+                <Component {...pageProps} />
+            )}
         </ErrorBoundary>
         <Footer />
         <Modal />

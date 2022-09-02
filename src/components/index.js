@@ -1,5 +1,5 @@
 export * from './HasPermission';
-export * from './PrivatePage';
+export * from './Auth';
 export * from './UserProfile';
 export * from './Hero';
 export * from './Modal';

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import { Button, Spinner, Meta, PrivatePage } from '../../components';
+import { Button, Spinner, Meta } from '../../components';
 import {
     useGetProfileQuery,
     useDeleteAccountMutation,
@@ -123,4 +123,6 @@ export const MyAccountPage = () => {
     );
 };
 
-export default PrivatePage(MyAccountPage);
+MyAccountPage.auth = true;
+
+export default MyAccountPage;

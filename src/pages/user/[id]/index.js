@@ -12,8 +12,7 @@ import {
     DateInput,
     CheckboxGroupInput,
     Button,
-    Meta,
-    PrivatePage
+    Meta
 } from '../../../components';
 import {
     useGetUserQuery,
@@ -301,4 +300,7 @@ const UpdateUserPage = () => {
     );
 };
 
-export default PrivatePage(UpdateUserPage, USER_ADMINISTRATOR_ROLES);
+UpdateUserPage.auth = true;
+UpdateUserPage.requiredRoles = USER_ADMINISTRATOR_ROLES;
+
+export default UpdateUserPage;
