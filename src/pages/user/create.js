@@ -10,10 +10,11 @@ import {
     DateInput,
     CheckboxGroupInput,
     Button,
-    Meta
+    Meta,
+    PrivatePage
 } from '../../components';
 import { useCreateUserMutation, showToast } from '../../redux';
-import { ROLE_OPTIONS } from '../../utils/auth';
+import { ROLE_OPTIONS, USER_ADMINISTRATOR_ROLES } from '../../utils/auth';
 
 const CreateUserPage = () => {
     const router = useRouter();
@@ -164,4 +165,4 @@ const CreateUserPage = () => {
     );
 };
 
-export default CreateUserPage;
+export default PrivatePage(CreateUserPage, USER_ADMINISTRATOR_ROLES);

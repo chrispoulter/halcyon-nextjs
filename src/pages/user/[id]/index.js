@@ -12,7 +12,8 @@ import {
     DateInput,
     CheckboxGroupInput,
     Button,
-    Meta
+    Meta,
+    PrivatePage
 } from '../../../components';
 import {
     useGetUserQuery,
@@ -23,7 +24,7 @@ import {
     showToast,
     showModal
 } from '../../../redux';
-import { ROLE_OPTIONS } from '../../../utils/auth';
+import { ROLE_OPTIONS, USER_ADMINISTRATOR_ROLES } from '../../../utils/auth';
 
 const UpdateUserPage = () => {
     const router = useRouter();
@@ -300,4 +301,4 @@ const UpdateUserPage = () => {
     );
 };
 
-export default UpdateUserPage;
+export default PrivatePage(UpdateUserPage, USER_ADMINISTRATOR_ROLES);

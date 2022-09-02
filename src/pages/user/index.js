@@ -10,9 +10,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
-import { Button, Spinner, Pager, Meta } from '../../components';
+import { Button, Spinner, Pager, Meta, PrivatePage } from '../../components';
 import { useSearchUsersQuery } from '../../redux';
-import { ROLE_OPTIONS } from '../../utils/auth';
+import { ROLE_OPTIONS, USER_ADMINISTRATOR_ROLES } from '../../utils/auth';
 
 const SORT_OPTIONS = {
     NAME_ASC: 'Name A-Z',
@@ -166,4 +166,4 @@ const UserPage = () => {
     );
 };
 
-export default UserPage;
+export default PrivatePage(UserPage, USER_ADMINISTRATOR_ROLES);
