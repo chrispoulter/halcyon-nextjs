@@ -164,7 +164,6 @@ const CreateUserPage = () => {
     );
 };
 
-CreateUserPage.auth = true;
-CreateUserPage.requiredRoles = USER_ADMINISTRATOR_ROLES;
+CreateUserPage.auth = { requiredRoles: USER_ADMINISTRATOR_ROLES };
 
 export default CreateUserPage;

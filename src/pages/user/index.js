@@ -166,7 +166,6 @@ const UserPage = () => {
     );
 };
 
-UserPage.auth = true;
-UserPage.requiredRoles = USER_ADMINISTRATOR_ROLES;
+UserPage.auth = { requiredRoles: USER_ADMINISTRATOR_ROLES };
 
 export default UserPage;

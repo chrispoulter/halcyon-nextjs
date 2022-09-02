@@ -19,7 +19,7 @@ const App = ({ Component, pageProps }) => (
         <Header />
         <ErrorBoundary>
             {Component.auth ? (
-                <Auth requiredRoles={Component.requiredRoles}>
+                <Auth requiredRoles={Component.auth.requiredRoles}>
                     <Component {...pageProps} />
                 </Auth>
             ) : (

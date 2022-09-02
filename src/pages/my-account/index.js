@@ -123,6 +123,6 @@ export const MyAccountPage = () => {
     );
 };
 
-MyAccountPage.auth = true;
+MyAccountPage.auth = {};
 
 export default MyAccountPage;

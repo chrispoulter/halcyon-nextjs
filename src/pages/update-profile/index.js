@@ -132,6 +132,6 @@ const UpdateProfilePage = () => {
     );
 };
 
-UpdateProfilePage.auth = true;
+UpdateProfilePage.auth = {};
 
 export default UpdateProfilePage;

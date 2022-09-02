@@ -300,7 +300,6 @@ const UpdateUserPage = () => {
     );
 };
 
-UpdateUserPage.auth = true;
-UpdateUserPage.requiredRoles = USER_ADMINISTRATOR_ROLES;
+UpdateUserPage.auth = { requiredRoles: USER_ADMINISTRATOR_ROLES };
 
 export default UpdateUserPage;
