@@ -35,9 +35,6 @@
         "dbDatabase": {
             "type": "string"
         },
-        "dbSSL": {
-            "type": "string"
-        },
         "emailSmtpServer": {
             "type": "string"
         },
@@ -108,12 +105,7 @@
                 "DOCKER_REGISTRY_SERVER_USERNAME": "[parameters('registryUsername')]",
                 "DOCKER_REGISTRY_SERVER_PASSWORD": "[parameters('registryPassword')]",
                 "LOG_LEVEL": "[parameters('logLevel')]",
-                "DB_HOST": "[parameters('dbHost')]",
-                "DB_PORT": "[parameters('dbPort')]",
-                "DB_USER": "[parameters('dbUser')]",
-                "DB_PASSWORD": "[parameters('dbPassword')]",
-                "DB_DATABASE": "[parameters('dbDatabase')]",
-                "DB_SSL": "[parameters('dbSSL')]",
+                "DATABASE_URL": "[concat('postgres://', parameters('dbUser'), ':', parameters('dbPassword'), '@', parameters('dbHost'), ':', parameters('dbPort'), '/', parameters('dbDatabase'), '?sslmode=require')]",
                 "EMAIL_SMTP_SERVER": "[parameters('emailSmtpServer')]",
                 "EMAIL_SMTP_PORT": "[parameters('emailSmtpPort')]",
                 "EMAIL_SMTP_USERNAME": "[parameters('emailSmtpUserName')]",

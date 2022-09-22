@@ -2,6 +2,7 @@ import path from 'path';
 import { migrate } from 'postgres-migrations';
 import * as roleRepository from '../../../data/roleRepository';
 import * as userRepository from '../../../data/userRepository';
+import { pool } from '../../../utils/database';
 import { generateHash } from '../../../utils/hash';
 import { getHandler } from '../../../utils/handler';
 import { ALL_ROLES } from '../../../utils/auth';
@@ -12,14 +13,7 @@ const handler = getHandler();
 handler.get(async (_, res) => {
     await migrate(
         {
-            host: config.DB_HOST,
-            port: config.DB_PORT,
-            user: config.DB_USER,
-            password: config.DB_PASSWORD,
-            database: config.DB_DATABASE,
-            ssl: config.DB_SSL,
-            ensureDatabaseExists: true,
-            defaultDatabase: 'postgres'
+            client: pool
         },
         path.join(process.cwd(), 'src', 'migrations')
     );

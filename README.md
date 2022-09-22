@@ -16,12 +16,7 @@ A web application template.
 Create a `.env` file in the web project directory.
 
 ```
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=example
-DB_DATABASE=halcyon
-DB_SSL=false
+DATABASE_URL=postgres://postgres:example@localhost/halcyon
 
 JWT_SECURITY_KEY=change-me-1234567890
 JWT_ISSUER=HalcyonApi

@@ -4,12 +4,9 @@ export const config = {
 
     LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
 
-    DB_HOST: process.env.DB_HOST || 'localhost',
-    DB_PORT: parseInt(process.env.DB_PORT || '5432'),
-    DB_USER: process.env.DB_USER || 'postgres',
-    DB_PASSWORD: process.env.DB_PASSWORD || 'example',
-    DB_DATABASE: process.env.DB_DATABASE || 'halcyon',
-    DB_SSL: process.env.DB_SSL === 'true',
+    DATABASE_URL:
+        process.env.DATABASE_URL ||
+        'postgres://postgres:example@localhost/halcyon',
 
     JWT_SECURITY_KEY: process.env.JWT_SECURITY_KEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
