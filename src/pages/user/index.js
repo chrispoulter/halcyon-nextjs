@@ -121,7 +121,12 @@ const UserPage = () => {
             ) : (
                 <>
                     {users.data.items.map(user => (
-                        <Link key={user.id} href={`/user/${user.id}`} passHref>
+                        <Link
+                            key={user.id}
+                            href={`/user/${user.id}`}
+                            legacyBehavior
+                            passHref
+                        >
                             <Card
                                 body
                                 className="text-decoration-none mb-2"

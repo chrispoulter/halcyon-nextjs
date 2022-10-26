@@ -29,14 +29,14 @@ export const Header = () => {
             onSelect={onClose}
         >
             <Container>
-                <Link href="/" passHref>
+                <Link href="/" legacyBehavior passHref>
                     <Navbar.Brand onClick={onClose}>Halcyon</Navbar.Brand>
                 </Link>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <HasPermission requiredRoles={USER_ADMINISTRATOR_ROLES}>
-                            <Link href="/user" passHref>
+                            <Link href="/user" legacyBehavior passHref>
                                 <Nav.Link>Users</Nav.Link>
                             </Link>
                         </HasPermission>

@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { Provider } from 'react-redux';
 import {
     Header,
     Footer,
@@ -13,23 +14,29 @@ import { wrapper } from '../redux';
 
 import '../styles/index.scss';
 
-const App = ({ Component, pageProps }) => (
-    <Suspense fallback={<Spinner />}>
-        <Meta />
-        <Header />
-        <ErrorBoundary>
-            {Component.auth ? (
-                <Auth requiredRoles={Component.auth.requiredRoles}>
-                    <Component {...pageProps} />
-                </Auth>
-            ) : (
-                <Component {...pageProps} />
-            )}
-        </ErrorBoundary>
-        <Footer />
-        <Modal />
-        <Toast />
-    </Suspense>
-);
+const App = ({ Component, ...rest }) => {
+    const { store, props } = wrapper.useWrappedStore(rest);
 
-export default wrapper.withRedux(App);
+    return (
+        <Suspense fallback={<Spinner />}>
+            <Provider store={store}>
+                <Meta />
+                <Header />
+                <ErrorBoundary>
+                    {Component.auth ? (
+                        <Auth requiredRoles={Component.auth.requiredRoles}>
+                            <Component {...props.pageProps} />
+                        </Auth>
+                    ) : (
+                        <Component {...props.pageProps} />
+                    )}
+                </ErrorBoundary>
+                <Footer />
+                <Modal />
+                <Toast />
+            </Provider>
+        </Suspense>
+    );
+};
+
+export default App;
