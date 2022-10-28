@@ -1,9 +1,8 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import {
     Header,
     Footer,
-    Spinner,
     Meta,
     ErrorBoundary,
     Modal,
@@ -18,24 +17,22 @@ const App = ({ Component, ...rest }) => {
     const { store, props } = wrapper.useWrappedStore(rest);
 
     return (
-        <Suspense fallback={<Spinner />}>
-            <Provider store={store}>
-                <Meta />
-                <Header />
-                <ErrorBoundary>
-                    {Component.auth ? (
-                        <Auth requiredRoles={Component.auth.requiredRoles}>
-                            <Component {...props.pageProps} />
-                        </Auth>
-                    ) : (
+        <Provider store={store}>
+            <Meta />
+            <Header />
+            <ErrorBoundary>
+                {Component.auth ? (
+                    <Auth requiredRoles={Component.auth.requiredRoles}>
                         <Component {...props.pageProps} />
-                    )}
-                </ErrorBoundary>
-                <Footer />
-                <Modal />
-                <Toast />
-            </Provider>
-        </Suspense>
+                    </Auth>
+                ) : (
+                    <Component {...props.pageProps} />
+                )}
+            </ErrorBoundary>
+            <Footer />
+            <Modal />
+            <Toast />
+        </Provider>
     );
 };
 
