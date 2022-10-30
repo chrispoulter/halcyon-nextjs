@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
-import * as userRepository from '../../../data/userRepository';
-import { validationMiddleware } from '../../../middleware/validationMiddleware';
-import { generateToken } from '../../../utils/jwt';
-import { verifyHash } from '../../../utils/hash';
-import { getHandler } from '../../../utils/handler';
+import * as userRepository from '@/data/userRepository';
+import { validationMiddleware } from '@/middleware/validationMiddleware';
+import { generateToken } from '@/utils/jwt';
+import { verifyHash } from '@/utils/hash';
+import { getHandler } from '@/utils/handler';
 
 const handler = getHandler();
 

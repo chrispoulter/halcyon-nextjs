@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
-import * as userRepository from '../../../data/userRepository';
-import { authMiddleware } from '../../../middleware/authMiddleware';
-import { validationMiddleware } from '../../../middleware/validationMiddleware';
-import { getHandler } from '../../../utils/handler';
+import * as userRepository from '@/data/userRepository';
+import { authMiddleware } from '@/middleware/authMiddleware';
+import { validationMiddleware } from '@/middleware/validationMiddleware';
+import { getHandler } from '@/utils/handler';
 
 const handler = getHandler();
 

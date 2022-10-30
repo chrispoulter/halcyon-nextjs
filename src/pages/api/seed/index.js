@@ -1,12 +1,12 @@
 import path from 'path';
 import { migrate } from 'postgres-migrations';
-import * as roleRepository from '../../../data/roleRepository';
-import * as userRepository from '../../../data/userRepository';
-import { pool } from '../../../utils/database';
-import { generateHash } from '../../../utils/hash';
-import { getHandler } from '../../../utils/handler';
-import { ALL_ROLES } from '../../../utils/auth';
-import { config } from '../../../utils/config';
+import * as roleRepository from '@/data/roleRepository';
+import * as userRepository from '@/data/userRepository';
+import { pool } from '@/utils/database';
+import { generateHash } from '@/utils/hash';
+import { getHandler } from '@/utils/handler';
+import { ALL_ROLES } from '@/utils/auth';
+import { config } from '@/utils/config';
 
 const handler = getHandler();
 

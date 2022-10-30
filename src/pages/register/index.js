@@ -5,12 +5,8 @@ import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
-import { TextInput, DateInput, Button, Meta } from '../../components';
-import {
-    useRegisterMutation,
-    useCreateTokenMutation,
-    setToken
-} from '../../redux';
+import { TextInput, DateInput, Button, Meta } from '@/components';
+import { useRegisterMutation, useCreateTokenMutation, setToken } from '@/redux';
 
 const RegisterPage = () => {
     const router = useRouter();

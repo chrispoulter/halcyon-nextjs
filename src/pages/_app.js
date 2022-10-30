@@ -8,10 +8,10 @@ import {
     Modal,
     Toast,
     Auth
-} from '../components';
-import { wrapper } from '../redux';
+} from '@/components';
+import { wrapper } from '@/redux';
 
-import '../styles/index.scss';
+import '@/styles/index.scss';
 
 const App = ({ Component, ...rest }) => {
     const { store, props } = wrapper.useWrappedStore(rest);

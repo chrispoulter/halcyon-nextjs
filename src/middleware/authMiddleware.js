@@ -1,5 +1,5 @@
-import { verifyToken } from '../utils/jwt';
-import { isAuthorized } from '../utils/auth';
+import { verifyToken } from '@/utils/jwt';
+import { isAuthorized } from '@/utils/auth';
 
 export const authMiddleware = requiredRoles => async (req, res, next) => {
     const authorization =

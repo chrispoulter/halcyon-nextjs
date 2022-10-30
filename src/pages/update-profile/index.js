@@ -6,12 +6,12 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Container from 'react-bootstrap/Container';
 import Alert from 'react-bootstrap/Alert';
-import { Spinner, TextInput, DateInput, Button, Meta } from '../../components';
+import { Spinner, TextInput, DateInput, Button, Meta } from '@/components';
 import {
     useGetProfileQuery,
     useUpdateProfileMutation,
     showToast
-} from '../../redux';
+} from '@/redux';
 
 const UpdateProfilePage = () => {
     const router = useRouter();

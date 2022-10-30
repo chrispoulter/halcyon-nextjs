@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Hero, Button, Meta } from '../components';
+import { Hero, Button, Meta } from '@/components';
 
 const ErrorPage = () => (
     <>

@@ -11,9 +11,9 @@ import {
     CheckboxGroupInput,
     Button,
     Meta
-} from '../../components';
-import { useCreateUserMutation, showToast } from '../../redux';
-import { ROLE_OPTIONS, USER_ADMINISTRATOR_ROLES } from '../../utils/auth';
+} from '@/components';
+import { useCreateUserMutation, showToast } from '@/redux';
+import { ROLE_OPTIONS, USER_ADMINISTRATOR_ROLES } from '@/utils/auth';
 
 const CreateUserPage = () => {
     const router = useRouter();

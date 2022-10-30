@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../redux';
-import { useIsSSR } from '../hooks';
-import { isAuthorized } from '../utils/auth';
+import { selectCurrentUser } from '@/redux';
+import { useIsSSR } from '@/hooks';
+import { isAuthorized } from '@/utils/auth';
 
 export const HasPermission = ({ requiredRoles, fallback, children }) => {
     const currentUser = useSelector(selectCurrentUser);

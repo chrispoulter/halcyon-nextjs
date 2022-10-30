@@ -1,4 +1,4 @@
-import { query } from '../utils/database';
+import { query } from '@/utils/database';
 
 const rolesSql = `ARRAY(SELECT r.name FROM user_roles ur INNER JOIN roles r ON r.role_id = ur.role_id WHERE ur.user_id = u.user_id) AS roles`;
 

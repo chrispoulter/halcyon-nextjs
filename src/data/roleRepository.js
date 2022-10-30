@@ -1,4 +1,4 @@
-import { query } from '../utils/database';
+import { query } from '@/utils/database';
 
 export const upsert = async ({ name }) => {
     const result = await query(

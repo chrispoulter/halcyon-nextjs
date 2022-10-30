@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
-import * as userRepository from '../../../data/userRepository';
-import { authMiddleware } from '../../../middleware/authMiddleware';
-import { validationMiddleware } from '../../../middleware/validationMiddleware';
-import { generateHash } from '../../../utils/hash';
-import { getHandler } from '../../../utils/handler';
-import { USER_ADMINISTRATOR_ROLES } from '../../../utils/auth';
+import * as userRepository from '@/data/userRepository';
+import { authMiddleware } from '@/middleware/authMiddleware';
+import { validationMiddleware } from '@/middleware/validationMiddleware';
+import { generateHash } from '@/utils/hash';
+import { getHandler } from '@/utils/handler';
+import { USER_ADMINISTRATOR_ROLES } from '@/utils/auth';
 
 const handler = getHandler();
 

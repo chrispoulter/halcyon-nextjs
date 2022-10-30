@@ -13,7 +13,7 @@ import {
     CheckboxGroupInput,
     Button,
     Meta
-} from '../../../components';
+} from '@/components';
 import {
     useGetUserQuery,
     useUpdateUserMutation,
@@ -22,8 +22,8 @@ import {
     useDeleteUserMutation,
     showToast,
     showModal
-} from '../../../redux';
-import { ROLE_OPTIONS, USER_ADMINISTRATOR_ROLES } from '../../../utils/auth';
+} from '@/redux';
+import { ROLE_OPTIONS, USER_ADMINISTRATOR_ROLES } from '@/utils/auth';
 
 const UpdateUserPage = () => {
     const router = useRouter();
