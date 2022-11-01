@@ -1,15 +1,19 @@
 import * as Yup from 'yup';
-import * as userRepository from '@/data/userRepository';
 import { authMiddleware } from '@/middleware/authMiddleware';
 import { validationMiddleware } from '@/middleware/validationMiddleware';
 import { getHandler } from '@/utils/handler';
+import prisma from '@/utils/prisma';
 
 const handler = getHandler();
 
 handler.use(authMiddleware());
 
 handler.get(async ({ payload }, res) => {
-    const user = await userRepository.getById(payload.sub);
+    const user = await prisma.users.findUnique({
+        where: {
+            user_id: payload.sub
+        }
+    });
 
     if (!user || user.is_locked_out) {
         return res.status(404).json({
@@ -43,7 +47,11 @@ handler.put(
         }
     }),
     async ({ payload, body }, res) => {
-        const user = await userRepository.getById(payload.sub);
+        const user = await prisma.users.findUnique({
+            where: {
+                user_id: payload.sub
+            }
+        });
 
         if (!user) {
             return res.status(404).json({
@@ -53,9 +61,11 @@ handler.put(
         }
 
         if (user.email_address !== body.emailAddress) {
-            const existing = await userRepository.getByEmailAddress(
-                body.emailAddress
-            );
+            const existing = await prisma.users.findUnique({
+                where: {
+                    email_address: body.emailAddress
+                }
+            });
 
             if (existing) {
                 return res.status(400).json({
@@ -65,11 +75,17 @@ handler.put(
             }
         }
 
-        user.email_address = body.emailAddress;
-        user.first_name = body.firstName;
-        user.last_name = body.lastName;
-        user.date_of_birth = body.dateOfBirth;
-        await userRepository.update(user);
+        await prisma.users.update({
+            where: {
+                user_id: user.user_id
+            },
+            data: {
+                email_address: body.emailAddress,
+                first_name: body.firstName,
+                last_name: body.lastName,
+                date_of_birth: body.dateOfBirth
+            }
+        });
 
         return res.json({
             code: 'PROFILE_UPDATED',
@@ -82,7 +98,11 @@ handler.put(
 );
 
 handler.delete(async ({ payload }, res) => {
-    const user = await userRepository.getById(payload.sub);
+    const user = await prisma.users.findUnique({
+        where: {
+            user_id: payload.sub
+        }
+    });
 
     if (!user) {
         return res.status(404).json({
@@ -91,7 +111,11 @@ handler.delete(async ({ payload }, res) => {
         });
     }
 
-    await userRepository.remove(user);
+    await prisma.users.delete({
+        where: {
+            user_id: user.user_id
+        }
+    });
 
     return res.json({
         code: 'ACCOUNT_DELETED',

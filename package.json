@@ -9,11 +9,14 @@
         "start": "next start",
         "lint": "next lint",
         "format": "prettier --write \"**/*.{js,jsx,json,scss,md,yml,html}\"",
+        "prisma:generate": "prisma generate",
+        "prisma:migrate:deploy": "prisma migrate deploy",
         "docker:build": "docker build . -t chrispoulter/halcyon",
         "docker:run": "docker run --name halcyon --env-file .env -p 3000:3000 chrispoulter/halcyon",
         "docker:exec": "docker exec -it halcyon /bin/sh"
     },
     "dependencies": {
+        "@prisma/client": "4.5.0",
         "@reduxjs/toolkit": "1.8.6",
         "bcryptjs": "2.4.3",
         "bootstrap": "5.2.2",
@@ -28,7 +31,6 @@
         "pg": "8.8.0",
         "pino-http": "8.2.1",
         "pino-pretty": "9.1.1",
-        "postgres-migrations": "5.3.0",
         "react": "18.2.0",
         "react-bootstrap": "2.5.0",
         "react-dom": "18.2.0",
@@ -41,6 +43,7 @@
         "eslint": "8.26.0",
         "eslint-config-next": "13.0.0",
         "eslint-config-prettier": "8.5.0",
-        "prettier": "2.7.1"
+        "prettier": "2.7.1",
+        "prisma": "4.5.0"
     }
 }

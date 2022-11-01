@@ -19,7 +19,7 @@ export const generateToken = user => {
         email: user.email_address,
         given_name: user.first_name,
         family_name: user.last_name,
-        role: (user.roles || []).join()
+        role: (user.user_roles || []).map(ur => ur.roles.name).join()
     };
 
     const expiresIn = config.JWT_EXPIRES_IN;
