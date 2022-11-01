@@ -10,6 +10,7 @@ COPY ["package.json", "yarn.lock", "./"]
 RUN yarn install --frozen-lockfile
 COPY . .
 RUN yarn lint
+RUN yarn prisma:generate
 RUN yarn build
 
 FROM base AS final

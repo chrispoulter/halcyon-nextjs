@@ -3,6 +3,7 @@ import { validationMiddleware } from '@/middleware/validationMiddleware';
 import { generateToken } from '@/utils/jwt';
 import { verifyHash } from '@/utils/hash';
 import { getHandler } from '@/utils/handler';
+import prisma from '@/utils/prisma';
 
 const handler = getHandler();
 

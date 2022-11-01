@@ -13,6 +13,7 @@
         "prisma:migrate:deploy": "prisma migrate deploy",
         "docker:build": "docker build . -t chrispoulter/halcyon",
         "docker:run": "docker run --name halcyon --env-file .env -p 3000:3000 chrispoulter/halcyon",
+        "docker:stop": "docker container rm halcyon --force",
         "docker:exec": "docker exec -it halcyon /bin/sh"
     },
     "dependencies": {
