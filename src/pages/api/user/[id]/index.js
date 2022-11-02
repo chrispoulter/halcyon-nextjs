@@ -1,16 +1,31 @@
 import * as Yup from 'yup';
-import * as userRepository from '@/data/userRepository';
 import { authMiddleware } from '@/middleware/authMiddleware';
 import { validationMiddleware } from '@/middleware/validationMiddleware';
 import { getHandler } from '@/utils/handler';
 import { USER_ADMINISTRATOR_ROLES } from '@/utils/auth';
+import prisma from '@/utils/prisma';
 
 const handler = getHandler();
 
 handler.use(authMiddleware(USER_ADMINISTRATOR_ROLES));
 
 handler.get(async ({ query }, res) => {
-    const user = await userRepository.getById(query.id);
+    const user = await prisma.users.findUnique({
+        where: {
+            user_id: parseInt(query.id)
+        },
+        include: {
+            user_roles: {
+                select: {
+                    roles: {
+                        select: {
+                            name: true
+                        }
+                    }
+                }
+            }
+        }
+    });
 
     if (!user) {
         return res.status(404).json({
@@ -27,7 +42,7 @@ handler.get(async ({ query }, res) => {
             lastName: user.last_name,
             dateOfBirth: user.date_of_birth.toISOString(),
             isLockedOut: user.is_locked_out,
-            roles: user.roles
+            roles: (user.user_roles || []).map(ur => ur.roles.name)
         }
     });
 });
@@ -46,7 +61,11 @@ handler.put(
         }
     }),
     async ({ query, body }, res) => {
-        const user = await userRepository.getById(query.id);
+        const user = await prisma.users.findUnique({
+            where: {
+                user_id: parseInt(query.id)
+            }
+        });
 
         if (!user) {
             return res.status(404).json({
@@ -56,9 +75,11 @@ handler.put(
         }
 
         if (user.email_address !== body.emailAddress) {
-            const existing = await userRepository.getByEmailAddress(
-                body.emailAddress
-            );
+            const existing = await prisma.users.findUnique({
+                where: {
+                    email_address: body.emailAddress
+                }
+            });
 
             if (existing) {
                 return res.status(400).json({
@@ -68,12 +89,36 @@ handler.put(
             }
         }
 
-        user.email_address = body.emailAddress;
-        user.first_name = body.firstName;
-        user.last_name = body.lastName;
-        user.date_of_birth = body.dateOfBirth;
-        user.roles = body.roles;
-        await userRepository.update(user);
+        await prisma.users.update({
+            where: {
+                user_id: user.user_id
+            },
+            data: {
+                email_address: body.emailAddress,
+                first_name: body.firstName,
+                last_name: body.lastName,
+                date_of_birth: body.dateOfBirth
+            }
+        });
+
+        const roles = await prisma.roles.findMany({
+            where: {
+                name: { in: body.roles }
+            }
+        });
+
+        await prisma.user_roles.deleteMany({
+            where: {
+                user_id: user.user_id
+            }
+        });
+
+        await prisma.user_roles.createMany({
+            data: roles.map(role => ({
+                role_id: role.role_id,
+                user_id: user.user_id
+            }))
+        });
 
         return res.json({
             code: 'USER_UPDATED',
@@ -86,7 +131,11 @@ handler.put(
 );
 
 handler.delete(async ({ payload, query }, res) => {
-    const user = await userRepository.getById(query.id);
+    const user = await prisma.users.findUnique({
+        where: {
+            user_id: parseInt(query.id)
+        }
+    });
 
     if (!user) {
         return res.status(404).json({
@@ -102,7 +151,11 @@ handler.delete(async ({ payload, query }, res) => {
         });
     }
 
-    await userRepository.remove(user);
+    await prisma.users.delete({
+        where: {
+            user_id: user.user_id
+        }
+    });
 
     return res.json({
         code: 'USER_DELETED',

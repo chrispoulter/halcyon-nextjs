@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
-import * as userRepository from '@/data/userRepository';
 import { validationMiddleware } from '@/middleware/validationMiddleware';
 import { generateToken } from '@/utils/jwt';
 import { verifyHash } from '@/utils/hash';
 import { getHandler } from '@/utils/handler';
+import prisma from '@/utils/prisma';
 
 const handler = getHandler();
 
@@ -18,7 +18,22 @@ handler.post(
         }
     }),
     async ({ body }, res) => {
-        const user = await userRepository.getByEmailAddress(body.emailAddress);
+        const user = await prisma.users.findUnique({
+            where: {
+                email_address: body.emailAddress
+            },
+            include: {
+                user_roles: {
+                    select: {
+                        roles: {
+                            select: {
+                                name: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
         if (!user || !user.password) {
             return res.status(400).json({

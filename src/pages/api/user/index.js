@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
-import * as userRepository from '@/data/userRepository';
 import { authMiddleware } from '@/middleware/authMiddleware';
 import { validationMiddleware } from '@/middleware/validationMiddleware';
 import { generateHash } from '@/utils/hash';
 import { getHandler } from '@/utils/handler';
 import { USER_ADMINISTRATOR_ROLES } from '@/utils/auth';
+import prisma from '@/utils/prisma';
 
 const handler = getHandler();
 
@@ -27,21 +27,98 @@ handler.get(
         }
     }),
     async ({ query }, res) => {
-        const result = await userRepository.search(query);
+        const search = query.search;
+        const sort = query.sort || 'NAME_ASC';
+        const page = Math.max(query.page || 1, 1);
+        const take = Math.min(query.size || 50, 50);
+
+        let where;
+
+        if (search) {
+            where = {
+                OR: [
+                    {
+                        email_address: {
+                            contains: search,
+                            mode: 'insensitive'
+                        }
+                    },
+                    {
+                        first_name: {
+                            contains: search,
+                            mode: 'insensitive'
+                        }
+                    },
+                    {
+                        last_name: {
+                            contains: search,
+                            mode: 'insensitive'
+                        }
+                    }
+                ]
+            };
+        }
+
+        const count = await prisma.users.count({ where });
+
+        let orderBy;
+
+        switch (sort) {
+            case 'EMAIL_ADDRESS_ASC':
+                orderBy = {
+                    email_address: 'asc'
+                };
+                break;
+            case 'EMAIL_ADDRESS_DESC':
+                orderBy = {
+                    email_address: 'desc'
+                };
+                break;
+            case 'NAME_DESC':
+                orderBy = [{ first_name: 'desc' }, { last_name: 'desc' }];
+                break;
+            default:
+                orderBy = [{ first_name: 'asc' }, { last_name: 'asc' }];
+                break;
+        }
+
+        const skip = (page - 1) * take;
+
+        const users = await prisma.users.findMany({
+            where,
+            include: {
+                user_roles: {
+                    select: {
+                        roles: {
+                            select: {
+                                name: true
+                            }
+                        }
+                    }
+                }
+            },
+            orderBy,
+            skip,
+            take
+        });
+
+        const pageCount = Math.floor((count + take - 1) / take);
+        const hasNextPage = page < pageCount;
+        const hasPreviousPage = page > 1;
 
         return res.json({
             data: {
-                items: result.data.map(user => ({
+                items: users.map(user => ({
                     id: user.user_id,
                     emailAddress: user.email_address,
                     firstName: user.first_name,
                     lastName: user.last_name,
                     dateOfBirth: user.date_of_birth.toISOString(),
                     isLockedOut: user.is_locked_out,
-                    roles: user.roles
+                    roles: (user.user_roles || []).map(ur => ur.roles.name)
                 })),
-                hasNextPage: result.hasNextPage,
-                hasPreviousPage: result.hasPreviousPage
+                hasNextPage,
+                hasPreviousPage
             }
         });
     }
@@ -62,9 +139,11 @@ handler.post(
         }
     }),
     async ({ body }, res) => {
-        const existing = await userRepository.getByEmailAddress(
-            body.emailAddress
-        );
+        const existing = await prisma.users.findUnique({
+            where: {
+                email_address: body.emailAddress
+            }
+        });
 
         if (existing) {
             return res.status(400).json({
@@ -73,13 +152,33 @@ handler.post(
             });
         }
 
-        const result = await userRepository.create({
-            email_address: body.emailAddress,
-            password: await generateHash(body.password),
-            first_name: body.firstName,
-            last_name: body.lastName,
-            date_of_birth: body.dateOfBirth,
-            roles: body.roles
+        const result = await prisma.users.create({
+            data: {
+                email_address: body.emailAddress,
+                password: await generateHash(body.password),
+                first_name: body.firstName,
+                last_name: body.lastName,
+                date_of_birth: body.dateOfBirth
+            }
+        });
+
+        const roles = await prisma.roles.findMany({
+            where: {
+                name: { in: body.roles }
+            }
+        });
+
+        await prisma.user_roles.deleteMany({
+            where: {
+                user_id: result.user_id
+            }
+        });
+
+        await prisma.user_roles.createMany({
+            data: roles.map(role => ({
+                role_id: role.role_id,
+                user_id: result.user_id
+            }))
         });
 
         return res.json({

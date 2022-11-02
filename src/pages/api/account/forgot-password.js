@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
-import * as userRepository from '@/data/userRepository';
 import { validationMiddleware } from '@/middleware/validationMiddleware';
 import { sendEmail } from '@/utils/email';
 import { getHandler } from '@/utils/handler';
+import prisma from '@/utils/prisma';
 
 const handler = getHandler();
 
@@ -18,13 +18,23 @@ handler.put(
         }
     }),
     async (req, res) => {
-        const user = await userRepository.getByEmailAddress(
-            req.body.emailAddress
-        );
+        const user = await prisma.users.findUnique({
+            where: {
+                email_address: body.emailAddress
+            }
+        });
 
         if (user) {
-            user.password_reset_token = uuidv4();
-            await userRepository.update(user);
+            const token = uuidv4();
+
+            await prisma.users.update({
+                where: {
+                    user_id: user.user_id
+                },
+                data: {
+                    password_reset_token: token
+                }
+            });
 
             const protocol = req.headers.referer?.split('://')[0];
             const host = req.headers.host;
@@ -35,7 +45,7 @@ handler.put(
                 template: 'RESET_PASSWORD',
                 context: {
                     siteUrl,
-                    passwordResetUrl: `${siteUrl}/reset-password/${user.password_reset_token}`
+                    passwordResetUrl: `${siteUrl}/reset-password/${token}`
                 }
             });
         }

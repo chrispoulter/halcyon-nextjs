@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
-import * as userRepository from '@/data/userRepository';
 import { validationMiddleware } from '@/middleware/validationMiddleware';
 import { generateHash } from '@/utils/hash';
 import { getHandler } from '@/utils/handler';
+import prisma from '@/utils/prisma';
 
 const handler = getHandler();
 
@@ -23,7 +23,11 @@ handler.put(
         }
     }),
     async ({ body }, res) => {
-        const user = await userRepository.getByEmailAddress(body.emailAddress);
+        const user = await prisma.users.findUnique({
+            where: {
+                email_address: body.emailAddress
+            }
+        });
 
         if (!user || user.password_reset_token !== body.token) {
             return res.status(400).json({
@@ -32,9 +36,15 @@ handler.put(
             });
         }
 
-        user.password = await generateHash(body.newPassword);
-        user.password_reset_token = undefined;
-        await userRepository.update(user);
+        await prisma.users.update({
+            where: {
+                user_id: user.user_id
+            },
+            data: {
+                password: await generateHash(body.newPassword),
+                password_reset_token: null
+            }
+        });
 
         return res.json({
             code: 'PASSWORD_RESET',

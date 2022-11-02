@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
-import * as userRepository from '@/data/userRepository';
 import { authMiddleware } from '@/middleware/authMiddleware';
 import { validationMiddleware } from '@/middleware/validationMiddleware';
 import { verifyHash, generateHash } from '@/utils/hash';
 import { getHandler } from '@/utils/handler';
+import prisma from '@/utils/prisma';
 
 const handler = getHandler();
 
@@ -21,7 +21,11 @@ handler.put(
         }
     }),
     async ({ payload, body }, res) => {
-        const user = await userRepository.getById(payload.sub);
+        const user = await prisma.users.findUnique({
+            where: {
+                user_id: payload.sub
+            }
+        });
 
         if (!user) {
             return res.status(404).json({
@@ -39,9 +43,15 @@ handler.put(
             });
         }
 
-        user.password = await generateHash(body.newPassword);
-        user.password_reset_token = undefined;
-        await userRepository.update(user);
+        await prisma.users.update({
+            where: {
+                user_id: user.user_id
+            },
+            data: {
+                password: await generateHash(body.newPassword),
+                password_reset_token: null
+            }
+        });
 
         return res.json({
             code: 'PASSWORD_CHANGED',

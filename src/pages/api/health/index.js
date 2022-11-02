@@ -1,15 +1,15 @@
-import * as healthRepository from '@/data/healthRepository';
 import { getHandler } from '@/utils/handler';
 import { config } from '@/utils/config';
+import prisma from '@/utils/prisma';
 
 const handler = getHandler();
 
 handler.get(async (_, res) => {
-    const database = await healthRepository.getStatus();
+    const result = await prisma.$queryRaw`SELECT true AS connected`;
 
     return res.json({
         version: config.VERSION,
-        database
+        database: result[0]
     });
 });
 

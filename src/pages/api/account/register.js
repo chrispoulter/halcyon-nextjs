@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import * as userRepository from '@/data/userRepository';
 import { validationMiddleware } from '@/middleware/validationMiddleware';
 import { generateHash } from '@/utils/hash';
 import { getHandler } from '@/utils/handler';
@@ -21,9 +20,11 @@ handler.post(
         }
     }),
     async ({ body }, res) => {
-        const existing = await userRepository.getByEmailAddress(
-            body.emailAddress
-        );
+        const existing = await prisma.users.findUnique({
+            where: {
+                email_address: body.emailAddress
+            }
+        });
 
         if (existing) {
             return res.status(400).json({
@@ -32,12 +33,14 @@ handler.post(
             });
         }
 
-        const result = await userRepository.create({
-            email_address: body.emailAddress,
-            password: await generateHash(body.password),
-            first_name: body.firstName,
-            last_name: body.lastName,
-            date_of_birth: body.dateOfBirth
+        const result = await prisma.users.create({
+            data: {
+                email_address: body.emailAddress,
+                password: await generateHash(body.password),
+                first_name: body.firstName,
+                last_name: body.lastName,
+                date_of_birth: body.dateOfBirth
+            }
         });
 
         return res.json({
