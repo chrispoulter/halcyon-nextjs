@@ -15,11 +15,14 @@ RUN yarn build
 
 FROM base AS final
 ENV NODE_ENV production
+RUN yarn global add prisma
 COPY --chown=node:node --from=build ["/app/public", "./public"]
+COPY --chown=node:node --from=build ["/app/prisma", "./prisma"]
 COPY --chown=node:node --from=build ["/app/package.json", "./package.json"]
+COPY --chown=node:node --from=build ["/app/entrypoint.sh", "./entrypoint.sh"]
 COPY --chown=node:node --from=build ["/app/.next/standalone", "./"]
 COPY --chown=node:node --from=build ["/app/.next/static", "./.next/static"]
 
 USER node
 EXPOSE 3000
-ENTRYPOINT ["node", "server.js"]
+ENTRYPOINT ["/app/entrypoint.sh"]
