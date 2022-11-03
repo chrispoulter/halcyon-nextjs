@@ -23,6 +23,8 @@ COPY --chown=node:node --from=build ["/app/entrypoint.sh", "./entrypoint.sh"]
 COPY --chown=node:node --from=build ["/app/.next/standalone", "./"]
 COPY --chown=node:node --from=build ["/app/.next/static", "./.next/static"]
 
+RUN ["chmod", "755", "/app/entrypoint.sh"]
+
 USER node
 EXPOSE 3000
 ENTRYPOINT ["/app/entrypoint.sh"]
