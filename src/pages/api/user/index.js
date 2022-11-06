@@ -168,12 +168,6 @@ handler.post(
             }
         });
 
-        await prisma.user_roles.deleteMany({
-            where: {
-                user_id: result.user_id
-            }
-        });
-
         await prisma.user_roles.createMany({
             data: roles.map(role => ({
                 role_id: role.role_id,

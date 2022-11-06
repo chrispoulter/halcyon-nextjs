@@ -20,7 +20,7 @@ handler.put(
     async (req, res) => {
         const user = await prisma.users.findUnique({
             where: {
-                email_address: body.emailAddress
+                email_address: req.body.emailAddress
             }
         });
 
