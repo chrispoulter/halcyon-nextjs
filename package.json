@@ -17,15 +17,15 @@
         "docker:exec": "docker exec -it halcyon /bin/sh"
     },
     "dependencies": {
-        "@prisma/client": "4.5.0",
-        "@reduxjs/toolkit": "1.8.6",
+        "@prisma/client": "4.7.1",
+        "@reduxjs/toolkit": "1.9.1",
         "bcryptjs": "2.4.3",
-        "bootstrap": "5.2.2",
+        "bootstrap": "5.2.3",
         "bootswatch": "5.2.2",
         "formik": "2.2.9",
         "jsonwebtoken": "8.5.1",
         "jwt-decode": "3.1.2",
-        "next": "13.0.0",
+        "next": "13.0.6",
         "next-connect": "0.13.0",
         "next-redux-wrapper": "8.0.0",
         "nodemailer": "6.8.0",
@@ -33,18 +33,18 @@
         "pino-http": "8.2.1",
         "pino-pretty": "9.1.1",
         "react": "18.2.0",
-        "react-bootstrap": "2.5.0",
+        "react-bootstrap": "2.6.0",
         "react-dom": "18.2.0",
-        "react-redux": "8.0.4",
-        "sass": "1.55.0",
+        "react-redux": "8.0.5",
+        "sass": "1.56.1",
         "uuid": "9.0.0",
         "yup": "0.32.11"
     },
     "devDependencies": {
-        "eslint": "8.26.0",
-        "eslint-config-next": "13.0.0",
+        "eslint": "8.29.0",
+        "eslint-config-next": "13.0.6",
         "eslint-config-prettier": "8.5.0",
-        "prettier": "2.7.1",
-        "prisma": "4.5.0"
+        "prettier": "2.8.0",
+        "prisma": "4.7.1"
     }
 }
