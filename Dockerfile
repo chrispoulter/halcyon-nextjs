@@ -1,6 +1,8 @@
 FROM node:16-alpine AS base
 WORKDIR /app
 
+RUN apk add --update --no-cache openssl1.1-compat
+
 ARG VERSION=1.0.0
 ENV NEXT_PUBLIC_VERSION=$VERSION
 ENV NEXT_TELEMETRY_DISABLED 1
