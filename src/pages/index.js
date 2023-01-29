@@ -27,7 +27,7 @@ const HomePage = () => (
         </Hero>
 
         <Container className="mb-3">
-            <Row className="gx-5">
+            <Row className="gx-2">
                 <Col lg>
                     <div className="mb-3">
                         <h3>Fusce condimentum</h3>
