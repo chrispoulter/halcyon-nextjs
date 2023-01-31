@@ -1,4 +1,5 @@
 import nextConnect from 'next-connect';
+import { delayMiddleware } from '@/middleware/delayMiddleware';
 import { httpLogger, logger } from './logger';
 
 export const getHandler = () =>
@@ -12,4 +13,6 @@ export const getHandler = () =>
             });
         },
         onNoMatch: (_, res) => res.status(404).end()
-    }).use(httpLogger);
+    })
+        .use(delayMiddleware)
+        .use(httpLogger);
