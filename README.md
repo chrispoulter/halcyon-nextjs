@@ -5,7 +5,7 @@ A web application template.
 **Technologies used:**
 
 -   React
-    [https://reactjs.org](https://reactjs.org)
+    [https://reactjs.org/](https://reactjs.org/)
 -   Next.js
     [https://nextjs.org/](https://nextjs.org/)
 -   PostgreSQL
