@@ -1,18 +1,37 @@
 import React from 'react';
+import { Router } from 'next/router';
 import Link from 'next/link';
 import Button from 'react-bootstrap/Button';
 import { Hero } from './Hero';
 import { Meta } from './Meta';
 
 export class ErrorBoundary extends React.Component {
-    state = { hasError: false };
+    constructor(props) {
+        super(props);
+
+        this.state = { hasError: false };
+
+        this.handleRouteChange = this.handleRouteChange.bind(this);
+    }
+
+    handleRouteChange() {
+        this.setState({ hasError: false });
+    }
+
+    componentDidMount() {
+        Router.events.on('routeChangeComplete', this.handleRouteChange);
+    }
+
+    componentWillUnmount() {
+        Router.events.off('routeChangeComplete', this.handleRouteChange);
+    }
 
     static getDerivedStateFromError() {
         return { hasError: true };
     }
 
-    componentDidCatch(error, errorInfo) {
-        console.error(error, errorInfo);
+    componentDidCatch() {
+        // console.error(error, errorInfo);
     }
 
     render() {
