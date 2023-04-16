@@ -25,11 +25,11 @@ handler.put(
     async ({ body }, res) => {
         const user = await prisma.users.findUnique({
             where: {
-                email_address: body.emailAddress
+                emailAddress: body.emailAddress
             }
         });
 
-        if (!user || user.password_reset_token !== body.token) {
+        if (!user || user.passwordResetToken !== body.token) {
             return res.status(400).json({
                 code: 'INVALID_TOKEN',
                 message: 'Invalid token.'
@@ -38,11 +38,11 @@ handler.put(
 
         await prisma.users.update({
             where: {
-                user_id: user.user_id
+                id: user.id
             },
             data: {
                 password: await generateHash(body.newPassword),
-                password_reset_token: null
+                passwordResetToken: null
             }
         });
 
@@ -50,7 +50,7 @@ handler.put(
             code: 'PASSWORD_RESET',
             message: 'Your password has been reset.',
             data: {
-                id: user.user_id
+                id: user.id
             }
         });
     }

@@ -7,44 +7,21 @@ import { config } from '@/utils/config';
 const handler = getHandler();
 
 handler.get(async (_, res) => {
-    await prisma.roles.createMany({
-        data: ALL_ROLES.map(name => ({ name })),
-        skipDuplicates: true
-    });
-
     const seedUser = {
-        email_address: config.SEED_EMAIL_ADDRESS,
+        emailAddress: config.SEED_EMAIL_ADDRESS,
         password: await generateHash(config.SEED_PASSWORD),
-        password_reset_token: null,
-        first_name: 'System',
-        last_name: 'Administrator',
-        date_of_birth: new Date(1970, 0, 1).toISOString(),
-        is_locked_out: false
+        passwordResetToken: null,
+        firstName: 'System',
+        lastName: 'Administrator',
+        dateOfBirth: new Date(1970, 0, 1).toISOString(),
+        isLockedOut: false,
+        roles: ALL_ROLES
     };
 
-    const user = await prisma.users.upsert({
-        where: { email_address: seedUser.email_address },
+    await prisma.users.upsert({
+        where: { emailAddress: seedUser.emailAddress },
         update: seedUser,
         create: seedUser
-    });
-
-    const roles = await prisma.roles.findMany({
-        where: {
-            name: { in: ALL_ROLES }
-        }
-    });
-
-    await prisma.user_roles.deleteMany({
-        where: {
-            user_id: user.user_id
-        }
-    });
-
-    await prisma.user_roles.createMany({
-        data: roles.map(role => ({
-            role_id: role.role_id,
-            user_id: user.user_id
-        }))
     });
 
     return res.json({

@@ -22,7 +22,7 @@ handler.post(
     async ({ body }, res) => {
         const existing = await prisma.users.findUnique({
             where: {
-                email_address: body.emailAddress
+                emailAddress: body.emailAddress
             }
         });
 
@@ -35,11 +35,11 @@ handler.post(
 
         const result = await prisma.users.create({
             data: {
-                email_address: body.emailAddress,
+                emailAddress: body.emailAddress,
                 password: await generateHash(body.password),
-                first_name: body.firstName,
-                last_name: body.lastName,
-                date_of_birth: body.dateOfBirth
+                firstName: body.firstName,
+                lastName: body.lastName,
+                dateOfBirth: body.dateOfBirth
             }
         });
 
@@ -47,7 +47,7 @@ handler.post(
             code: 'USER_REGISTERED',
             message: 'User successfully registered.',
             data: {
-                id: result.user_id
+                id: result.id
             }
         });
     }

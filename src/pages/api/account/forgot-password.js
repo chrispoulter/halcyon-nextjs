@@ -20,7 +20,7 @@ handler.put(
     async (req, res) => {
         const user = await prisma.users.findUnique({
             where: {
-                email_address: req.body.emailAddress
+                emailAddress: req.body.emailAddress
             }
         });
 
@@ -29,10 +29,10 @@ handler.put(
 
             await prisma.users.update({
                 where: {
-                    user_id: user.user_id
+                    id: user.id
                 },
                 data: {
-                    password_reset_token: token
+                    passwordResetToken: token
                 }
             });
 
@@ -41,7 +41,7 @@ handler.put(
             const siteUrl = `${protocol}://${host}`;
 
             await sendEmail({
-                to: user.email_address,
+                to: user.emailAddress,
                 template: 'RESET_PASSWORD',
                 context: {
                     siteUrl,

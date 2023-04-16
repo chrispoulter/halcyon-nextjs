@@ -11,11 +11,11 @@ handler.use(authMiddleware());
 handler.get(async ({ payload }, res) => {
     const user = await prisma.users.findUnique({
         where: {
-            user_id: payload.sub
+            id: payload.sub
         }
     });
 
-    if (!user || user.is_locked_out) {
+    if (!user || user.isLockedOut) {
         return res.status(404).json({
             code: 'USER_NOT_FOUND',
             message: 'User not found.'
@@ -24,11 +24,11 @@ handler.get(async ({ payload }, res) => {
 
     return res.json({
         data: {
-            id: user.user_id,
-            emailAddress: user.email_address,
-            firstName: user.first_name,
-            lastName: user.last_name,
-            dateOfBirth: user.date_of_birth.toISOString()
+            id: user.id,
+            emailAddress: user.emailAddress,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            dateOfBirth: user.dateOfBirth.toISOString()
         }
     });
 });
@@ -49,7 +49,7 @@ handler.put(
     async ({ payload, body }, res) => {
         const user = await prisma.users.findUnique({
             where: {
-                user_id: payload.sub
+                id: payload.sub
             }
         });
 
@@ -60,10 +60,10 @@ handler.put(
             });
         }
 
-        if (user.email_address !== body.emailAddress) {
+        if (user.emailAddress !== body.emailAddress) {
             const existing = await prisma.users.findUnique({
                 where: {
-                    email_address: body.emailAddress
+                    emailAddress: body.emailAddress
                 }
             });
 
@@ -77,13 +77,13 @@ handler.put(
 
         await prisma.users.update({
             where: {
-                user_id: user.user_id
+                id: user.id
             },
             data: {
-                email_address: body.emailAddress,
-                first_name: body.firstName,
-                last_name: body.lastName,
-                date_of_birth: body.dateOfBirth
+                emailAddress: body.emailAddress,
+                firstName: body.firstName,
+                lastName: body.lastName,
+                dateOfBirth: body.dateOfBirth
             }
         });
 
@@ -91,7 +91,7 @@ handler.put(
             code: 'PROFILE_UPDATED',
             message: 'Your profile has been updated.',
             data: {
-                id: user.user_id
+                id: user.id
             }
         });
     }
@@ -100,7 +100,7 @@ handler.put(
 handler.delete(async ({ payload }, res) => {
     const user = await prisma.users.findUnique({
         where: {
-            user_id: payload.sub
+            id: payload.sub
         }
     });
 
@@ -113,7 +113,7 @@ handler.delete(async ({ payload }, res) => {
 
     await prisma.users.delete({
         where: {
-            user_id: user.user_id
+            id: user.id
         }
     });
 
@@ -121,7 +121,7 @@ handler.delete(async ({ payload }, res) => {
         code: 'ACCOUNT_DELETED',
         message: 'Your account has been deleted.',
         data: {
-            id: user.user_id
+            id: user.id
         }
     });
 });

@@ -23,7 +23,7 @@ handler.put(
     async ({ payload, body }, res) => {
         const user = await prisma.users.findUnique({
             where: {
-                user_id: payload.sub
+                id: payload.sub
             }
         });
 
@@ -45,11 +45,11 @@ handler.put(
 
         await prisma.users.update({
             where: {
-                user_id: user.user_id
+                id: user.id
             },
             data: {
                 password: await generateHash(body.newPassword),
-                password_reset_token: null
+                passwordResetToken: null
             }
         });
 
@@ -57,7 +57,7 @@ handler.put(
             code: 'PASSWORD_CHANGED',
             message: 'Your password has been changed.',
             data: {
-                id: user.user_id
+                id: user.id
             }
         });
     }

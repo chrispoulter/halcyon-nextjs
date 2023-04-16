@@ -20,18 +20,7 @@ handler.post(
     async ({ body }, res) => {
         const user = await prisma.users.findUnique({
             where: {
-                email_address: body.emailAddress
-            },
-            include: {
-                user_roles: {
-                    select: {
-                        roles: {
-                            select: {
-                                name: true
-                            }
-                        }
-                    }
-                }
+                emailAddress: body.emailAddress
             }
         });
 
@@ -51,7 +40,7 @@ handler.post(
             });
         }
 
-        if (user.is_locked_out) {
+        if (user.isLockedOut) {
             return res.status(400).json({
                 code: 'USER_LOCKED_OUT',
                 message:

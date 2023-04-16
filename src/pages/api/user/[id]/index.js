@@ -12,18 +12,7 @@ handler.use(authMiddleware(USER_ADMINISTRATOR_ROLES));
 handler.get(async ({ query }, res) => {
     const user = await prisma.users.findUnique({
         where: {
-            user_id: parseInt(query.id)
-        },
-        include: {
-            user_roles: {
-                select: {
-                    roles: {
-                        select: {
-                            name: true
-                        }
-                    }
-                }
-            }
+            id: parseInt(query.id)
         }
     });
 
@@ -36,13 +25,13 @@ handler.get(async ({ query }, res) => {
 
     return res.json({
         data: {
-            id: user.user_id,
-            emailAddress: user.email_address,
-            firstName: user.first_name,
-            lastName: user.last_name,
-            dateOfBirth: user.date_of_birth.toISOString(),
-            isLockedOut: user.is_locked_out,
-            roles: (user.user_roles || []).map(ur => ur.roles.name)
+            id: user.id,
+            emailAddress: user.emailAddress,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            dateOfBirth: user.dateOfBirth.toISOString(),
+            isLockedOut: user.isLockedOut,
+            roles: user.roles
         }
     });
 });
@@ -63,7 +52,7 @@ handler.put(
     async ({ query, body }, res) => {
         const user = await prisma.users.findUnique({
             where: {
-                user_id: parseInt(query.id)
+                id: parseInt(query.id)
             }
         });
 
@@ -74,10 +63,10 @@ handler.put(
             });
         }
 
-        if (user.email_address !== body.emailAddress) {
+        if (user.emailAddress !== body.emailAddress) {
             const existing = await prisma.users.findUnique({
                 where: {
-                    email_address: body.emailAddress
+                    emailAddress: body.emailAddress
                 }
             });
 
@@ -91,40 +80,22 @@ handler.put(
 
         await prisma.users.update({
             where: {
-                user_id: user.user_id
+                id: user.id
             },
             data: {
-                email_address: body.emailAddress,
-                first_name: body.firstName,
-                last_name: body.lastName,
-                date_of_birth: body.dateOfBirth
+                emailAddress: body.emailAddress,
+                firstName: body.firstName,
+                lastName: body.lastName,
+                dateOfBirth: body.dateOfBirth,
+                roles: body.roles
             }
-        });
-
-        const roles = await prisma.roles.findMany({
-            where: {
-                name: { in: body.roles }
-            }
-        });
-
-        await prisma.user_roles.deleteMany({
-            where: {
-                user_id: user.user_id
-            }
-        });
-
-        await prisma.user_roles.createMany({
-            data: roles.map(role => ({
-                role_id: role.role_id,
-                user_id: user.user_id
-            }))
         });
 
         return res.json({
             code: 'USER_UPDATED',
             message: 'User successfully updated.',
             data: {
-                id: user.user_id
+                id: user.id
             }
         });
     }
@@ -133,7 +104,7 @@ handler.put(
 handler.delete(async ({ payload, query }, res) => {
     const user = await prisma.users.findUnique({
         where: {
-            user_id: parseInt(query.id)
+            id: parseInt(query.id)
         }
     });
 
@@ -144,7 +115,7 @@ handler.delete(async ({ payload, query }, res) => {
         });
     }
 
-    if (user.user_id === payload.sub) {
+    if (user.id === payload.sub) {
         return res.status(400).json({
             code: 'DELETE_CURRENT_USER',
             message: 'Cannot delete currently logged in user.'
@@ -153,7 +124,7 @@ handler.delete(async ({ payload, query }, res) => {
 
     await prisma.users.delete({
         where: {
-            user_id: user.user_id
+            id: user.id
         }
     });
 
@@ -161,7 +132,7 @@ handler.delete(async ({ payload, query }, res) => {
         code: 'USER_DELETED',
         message: 'User successfully deleted.',
         data: {
-            id: user.user_id
+            id: user.id
         }
     });
 });

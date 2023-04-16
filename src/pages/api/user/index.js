@@ -38,19 +38,19 @@ handler.get(
             where = {
                 OR: [
                     {
-                        email_address: {
+                        emailAddress: {
                             contains: search,
                             mode: 'insensitive'
                         }
                     },
                     {
-                        first_name: {
+                        firstName: {
                             contains: search,
                             mode: 'insensitive'
                         }
                     },
                     {
-                        last_name: {
+                        lastName: {
                             contains: search,
                             mode: 'insensitive'
                         }
@@ -66,19 +66,19 @@ handler.get(
         switch (sort) {
             case 'EMAIL_ADDRESS_ASC':
                 orderBy = {
-                    email_address: 'asc'
+                    emailAddress: 'asc'
                 };
                 break;
             case 'EMAIL_ADDRESS_DESC':
                 orderBy = {
-                    email_address: 'desc'
+                    emailAddress: 'desc'
                 };
                 break;
             case 'NAME_DESC':
-                orderBy = [{ first_name: 'desc' }, { last_name: 'desc' }];
+                orderBy = [{ firstName: 'desc' }, { lastName: 'desc' }];
                 break;
             default:
-                orderBy = [{ first_name: 'asc' }, { last_name: 'asc' }];
+                orderBy = [{ firstName: 'asc' }, { lastName: 'asc' }];
                 break;
         }
 
@@ -86,17 +86,6 @@ handler.get(
 
         const users = await prisma.users.findMany({
             where,
-            include: {
-                user_roles: {
-                    select: {
-                        roles: {
-                            select: {
-                                name: true
-                            }
-                        }
-                    }
-                }
-            },
             orderBy,
             skip,
             take
@@ -109,13 +98,13 @@ handler.get(
         return res.json({
             data: {
                 items: users.map(user => ({
-                    id: user.user_id,
-                    emailAddress: user.email_address,
-                    firstName: user.first_name,
-                    lastName: user.last_name,
-                    dateOfBirth: user.date_of_birth.toISOString(),
-                    isLockedOut: user.is_locked_out,
-                    roles: (user.user_roles || []).map(ur => ur.roles.name)
+                    id: user.id,
+                    emailAddress: user.emailAddress,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    dateOfBirth: user.dateOfBirth.toISOString(),
+                    isLockedOut: user.isLockedOut,
+                    roles: user.roles
                 })),
                 hasNextPage,
                 hasPreviousPage
@@ -141,7 +130,7 @@ handler.post(
     async ({ body }, res) => {
         const existing = await prisma.users.findUnique({
             where: {
-                email_address: body.emailAddress
+                emailAddress: body.emailAddress
             }
         });
 
@@ -154,32 +143,20 @@ handler.post(
 
         const result = await prisma.users.create({
             data: {
-                email_address: body.emailAddress,
+                emailAddress: body.emailAddress,
                 password: await generateHash(body.password),
-                first_name: body.firstName,
-                last_name: body.lastName,
-                date_of_birth: body.dateOfBirth
+                firstName: body.firstName,
+                lastName: body.lastName,
+                dateOfBirth: body.dateOfBirth,
+                roles: body.roles
             }
-        });
-
-        const roles = await prisma.roles.findMany({
-            where: {
-                name: { in: body.roles }
-            }
-        });
-
-        await prisma.user_roles.createMany({
-            data: roles.map(role => ({
-                role_id: role.role_id,
-                user_id: result.user_id
-            }))
         });
 
         return res.json({
             code: 'USER_CREATED',
             message: 'User successfully created.',
             data: {
-                id: result.user_id
+                id: result.id
             }
         });
     }

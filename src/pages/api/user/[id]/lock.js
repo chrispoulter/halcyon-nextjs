@@ -10,7 +10,7 @@ handler.use(authMiddleware(USER_ADMINISTRATOR_ROLES));
 handler.put(async ({ payload, query }, res) => {
     const user = await prisma.users.findUnique({
         where: {
-            user_id: parseInt(query.id)
+            id: parseInt(query.id)
         }
     });
 
@@ -21,7 +21,7 @@ handler.put(async ({ payload, query }, res) => {
         });
     }
 
-    if (user.user_id === payload.sub) {
+    if (user.id === payload.sub) {
         return res.status(400).json({
             code: 'LOCK_CURRENT_USER',
             message: 'Cannot lock currently logged in user.'
@@ -30,10 +30,10 @@ handler.put(async ({ payload, query }, res) => {
 
     await prisma.users.update({
         where: {
-            user_id: user.user_id
+            id: user.id
         },
         data: {
-            is_locked_out: true
+            isLockedOut: true
         }
     });
 
@@ -41,7 +41,7 @@ handler.put(async ({ payload, query }, res) => {
         code: 'USER_LOCKED',
         message: 'User successfully locked.',
         data: {
-            id: user.user_id
+            id: user.id
         }
     });
 });

@@ -7,29 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model roles {
-  role_id    Int          @id @default(autoincrement())
-  name       String       @unique @db.VarChar
-  user_roles user_roles[]
-}
-
-model user_roles {
-  user_id Int
-  role_id Int
-  roles   roles @relation(fields: [role_id], references: [role_id], onDelete: Cascade, onUpdate: NoAction)
-  users   users @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@id([user_id, role_id])
-}
-
-model users {
-  user_id              Int          @id @default(autoincrement())
-  email_address        String       @unique @db.VarChar
-  password             String?      @db.VarChar
-  password_reset_token String?      @db.VarChar
-  first_name           String       @db.VarChar
-  last_name            String       @db.VarChar
-  date_of_birth        DateTime     @db.Timestamptz(6)
-  is_locked_out        Boolean      @default(false)
-  user_roles           user_roles[]
+model Users {
+  id             Int      @id @default(autoincrement())
+  emailAddress       String   @unique
+  password           String?
+  passwordResetToken String?
+  firstName          String
+  lastName           String
+  dateOfBirth        DateTime @db.Timestamptz(6)
+  isLockedOut        Boolean  @default(false)
+  roles              String[]
 }

@@ -10,7 +10,7 @@ handler.use(authMiddleware(USER_ADMINISTRATOR_ROLES));
 handler.put(async ({ query }, res) => {
     const user = await prisma.users.findUnique({
         where: {
-            user_id: parseInt(query.id)
+            id: parseInt(query.id)
         }
     });
 
@@ -23,10 +23,10 @@ handler.put(async ({ query }, res) => {
 
     await prisma.users.update({
         where: {
-            user_id: user.user_id
+            id: user.id
         },
         data: {
-            is_locked_out: false
+            isLockedOut: false
         }
     });
 
@@ -34,7 +34,7 @@ handler.put(async ({ query }, res) => {
         code: 'USER_UNLOCKED',
         message: 'User successfully unlocked.',
         data: {
-            id: user.user_id
+            id: user.id
         }
     });
 });

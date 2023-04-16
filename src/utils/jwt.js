@@ -15,11 +15,11 @@ export const verifyToken = async token => {
 
 export const generateToken = user => {
     const payload = {
-        sub: user.user_id,
-        email: user.email_address,
-        given_name: user.first_name,
-        family_name: user.last_name,
-        role: (user.user_roles || []).map(ur => ur.roles.name).join()
+        sub: user.id,
+        email: user.emailAddress,
+        given_name: user.firstName,
+        family_name: user.lastName,
+        role: user.roles.join()
     };
 
     const expiresIn = config.JWT_EXPIRES_IN;
