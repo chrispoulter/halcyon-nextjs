@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import { validationMiddleware } from '@/middleware/validationMiddleware';
 import { generateHash } from '@/utils/hash';
 import { getHandler } from '@/utils/handler';
+import prisma from '@/utils/prisma';
 
 const handler = getHandler();
 
