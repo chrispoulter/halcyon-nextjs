@@ -1,14 +1,8 @@
 ﻿<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://halcyon.chrispoulter.com/</loc>
-  </url>
-  <url>
-    <loc>https://halcyon.chrispoulter.com/login</loc>
-  </url>
-  <url>
-    <loc>https://halcyon.chrispoulter.com/register</loc>
-  </url>
-  <url>
-    <loc>https://halcyon.chrispoulter.com/forgot-password</loc>
+    <loc>https://www.chrispoulter.com</loc>
+    <lastmod>2017-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
   </url>
 </urlset>

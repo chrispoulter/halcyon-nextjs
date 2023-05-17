@@ -2,7 +2,13 @@
     "files.exclude": {
         "**/node_modules": true,
         "**/.next": true,
-        "**/out": true,
-        "**/.eslintcache": true
-    }
+        "**/.swc": true,
+        "**/out": true
+    },
+    "css.lint.unknownAtRules": "ignore",
+    "tailwindCSS.experimental.classRegex": [
+        ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    ],
+    "jest.jestCommandLine": "yarn test:ci",
+    "jest.rootPath": "./"
 }
