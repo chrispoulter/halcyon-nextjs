@@ -16,7 +16,19 @@
             },
             "dependsOn": "npm: install",
             "problemMatcher": [],
-            "label": "npm: build"
+            "label": "npm: build",
+            "detail": "next build"
+        },
+        {
+            "type": "npm",
+            "script": "test:ci",
+            "problemMatcher": [],
+            "label": "npm: test:ci",
+            "detail": "jest --ci",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         }
     ]
 }

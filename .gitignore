@@ -1,6 +1,5 @@
 node_modules
 .next
+dist
 out
-.eslintcache
 .env
-yarn-error.log

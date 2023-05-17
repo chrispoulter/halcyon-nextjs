@@ -1,4 +1,4 @@
-# Halcyon
+# Halcyon Next.js
 
 A web application template.
 
@@ -18,11 +18,6 @@ Create a `.env` file in the web project directory.
 ```
 DATABASE_URL=postgres://postgres:example@localhost/halcyon
 
-JWT_SECURITY_KEY=change-me-1234567890
-JWT_ISSUER=HalcyonApi
-JWT_AUDIENCE=HalcyonClient
-JWT_EXPIRES_IN=3600
-
 EMAIL_SMTP_SERVER=localhost
 EMAIL_SMTP_PORT=1025
 EMAIL_SMTP_USERNAME=
@@ -31,4 +26,8 @@ EMAIL_NO_REPLY_ADDRESS=noreply@chrispoulter.com
 
 SEED_EMAIL_ADDRESS=
 SEED_PASSWORD=
+
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=change-me-1234567890
+NEXTAUTH_SESSION_MAXAGE=3600
 ```
