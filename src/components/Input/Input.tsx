@@ -25,7 +25,7 @@ const transformers: InputValueTransform = {
                 ? new Date(e.currentTarget.value).toISOString()
                 : e.currentTarget.value
     },
-    default: {
+    text: {
         input: value => value,
         output: e => e.currentTarget.value
     }
@@ -48,7 +48,7 @@ export const Input = ({
         control
     });
 
-    const transform = transformers[props.type || ''] || transformers['default'];
+    const transform = transformers[props.type || ''] || transformers.text;
 
     const onClearInput = () => {
         field.onChange('');
