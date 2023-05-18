@@ -1,4 +1,5 @@
-import { Formik, Form } from 'formik';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
@@ -12,43 +13,52 @@ export type SearchUserFormValues = Yup.InferType<typeof schema>;
 
 type SearchUserFormProps = {
     isLoading?: boolean;
-    initialValues: SearchUserFormValues;
+    defaultValues: SearchUserFormValues;
     onSubmit: (values: SearchUserFormValues) => void;
 };
 
 export const SearchUserForm = ({
     onSubmit,
-    initialValues,
+    defaultValues,
     isLoading
-}: SearchUserFormProps) => (
-    <Formik
-        initialValues={initialValues}
-        validationSchema={schema}
-        onSubmit={onSubmit}
-    >
-        {({ isSubmitting, handleSubmit }) => (
-            <Form noValidate className="flex w-full gap-1">
-                <Input
-                    label="Search Term"
-                    name="search"
-                    type="search"
-                    placeholder="Search Users..."
-                    disabled={isSubmitting || isLoading}
-                    hideLabel={true}
-                    onClear={handleSubmit}
-                />
-                <div>
-                    <Button
-                        type="submit"
-                        variant="secondary"
-                        aria-label="Search"
-                        disabled={isLoading}
-                        loading={isSubmitting}
-                    >
-                        <SearchIcon className="h-4 w-4" />
-                    </Button>
-                </div>
-            </Form>
-        )}
-    </Formik>
-);
+}: SearchUserFormProps) => {
+    const {
+        handleSubmit,
+        reset,
+        control,
+        formState: { isSubmitting }
+    } = useForm<SearchUserFormValues>({
+        defaultValues,
+        resolver: yupResolver(schema)
+    });
+
+    return (
+        <form
+            noValidate
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex w-full gap-1"
+        >
+            <Input
+                label="Search Term"
+                hideLabel={true}
+                name="search"
+                type="search"
+                placeholder="Search Users..."
+                disabled={isLoading}
+                control={control}
+                onClear={reset}
+            />
+            <div>
+                <Button
+                    type="submit"
+                    variant="secondary"
+                    aria-label="Search"
+                    disabled={isLoading}
+                    loading={isSubmitting}
+                >
+                    <SearchIcon className="h-4 w-4" />
+                </Button>
+            </div>
+        </form>
+    );
+};

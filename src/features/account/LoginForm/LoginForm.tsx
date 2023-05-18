@@ -1,4 +1,5 @@
-import { Formik, Form } from 'formik';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
@@ -13,7 +14,7 @@ const schema = Yup.object({
     password: Yup.string().label('Password').default('').required()
 });
 
-const initialValues = schema.getDefault();
+const defaultValues = schema.getDefault();
 
 export type LoginFormValues = Yup.InferType<typeof schema>;
 
@@ -22,40 +23,47 @@ type LoginFormProps = {
     className?: string;
 };
 
-export const LoginForm = ({ onSubmit, className }: LoginFormProps) => (
-    <Formik
-        initialValues={initialValues}
-        validationSchema={schema}
-        onSubmit={onSubmit}
-    >
-        {({ isSubmitting }) => (
-            <Form noValidate className={className}>
-                <Input
-                    label="Email Address"
-                    name="emailAddress"
-                    type="email"
-                    maxLength={254}
-                    autoComplete="username"
-                    required
-                    disabled={isSubmitting}
-                    className="mb-3"
-                />
-                <Input
-                    label="Password"
-                    name="password"
-                    type="password"
-                    maxLength={50}
-                    autoComplete="current-password"
-                    required
-                    disabled={isSubmitting}
-                    className="mb-5"
-                />
-                <ButtonGroup>
-                    <Button type="submit" loading={isSubmitting}>
-                        Submit
-                    </Button>
-                </ButtonGroup>
-            </Form>
-        )}
-    </Formik>
-);
+export const LoginForm = ({ onSubmit, className }: LoginFormProps) => {
+    const {
+        handleSubmit,
+        control,
+        formState: { isSubmitting }
+    } = useForm<LoginFormValues>({
+        defaultValues,
+        resolver: yupResolver(schema)
+    });
+
+    return (
+        <form
+            noValidate
+            onSubmit={handleSubmit(onSubmit)}
+            className={className}
+        >
+            <Input
+                label="Email Address"
+                name="emailAddress"
+                type="email"
+                maxLength={254}
+                autoComplete="username"
+                required
+                control={control}
+                className="mb-3"
+            />
+            <Input
+                label="Password"
+                name="password"
+                type="password"
+                maxLength={50}
+                autoComplete="current-password"
+                required
+                control={control}
+                className="mb-5"
+            />
+            <ButtonGroup>
+                <Button type="submit" loading={isSubmitting}>
+                    Submit
+                </Button>
+            </ButtonGroup>
+        </form>
+    );
+};

@@ -1,4 +1,5 @@
-import { Formik, Form } from 'formik';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
@@ -21,16 +22,25 @@ export type UpdateProfileFormValues = Yup.InferType<typeof schema>;
 
 type UpdateProfileFormProps = {
     options?: JSX.Element;
-    initialValues?: UpdateProfileFormValues;
+    defaultValues?: UpdateProfileFormValues;
     onSubmit: (values: UpdateProfileFormValues) => void;
 };
 
 export const UpdateProfileForm = ({
-    initialValues,
+    defaultValues,
     onSubmit,
     options
 }: UpdateProfileFormProps) => {
-    if (!initialValues) {
+    const {
+        handleSubmit,
+        control,
+        formState: { isSubmitting }
+    } = useForm<UpdateProfileFormValues>({
+        defaultValues,
+        resolver: yupResolver(schema)
+    });
+
+    if (!defaultValues) {
         return (
             <FormSkeleton>
                 <InputSkeleton className="mb-3" />
@@ -44,62 +54,54 @@ export const UpdateProfileForm = ({
     }
 
     return (
-        <Formik
-            initialValues={initialValues}
-            validationSchema={schema}
-            onSubmit={onSubmit}
-        >
-            {({ isSubmitting }) => (
-                <Form noValidate>
-                    <Input
-                        label="Email Address"
-                        name="emailAddress"
-                        type="email"
-                        maxLength={254}
-                        autoComplete="username"
-                        required
-                        disabled={isSubmitting}
-                        className="mb-3"
-                    />
-                    <div className="sm:flex sm:gap-3">
-                        <Input
-                            label="First Name"
-                            name="firstName"
-                            type="text"
-                            maxLength={50}
-                            autoComplete="given-name"
-                            required
-                            disabled={isSubmitting}
-                            className="mb-3 sm:flex-1"
-                        />
-                        <Input
-                            label="Last Name"
-                            name="lastName"
-                            type="text"
-                            maxLength={50}
-                            autoComplete="family-name"
-                            required
-                            disabled={isSubmitting}
-                            className="mb-3 sm:flex-1"
-                        />
-                    </div>
-                    <Input
-                        label="Date Of Birth"
-                        name="dateOfBirth"
-                        type="date"
-                        autoComplete="bday"
-                        required
-                        disabled={isSubmitting}
-                        className="mb-5"
-                    />
-                    <ButtonGroup>
-                        {options}
-                        <Button type="submit" loading={isSubmitting}>
-                            Submit
-                        </Button>
-                    </ButtonGroup>
-                </Form>
-            )}
-        </Formik>
+        <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <Input
+                label="Email Address"
+                name="emailAddress"
+                type="email"
+                maxLength={254}
+                autoComplete="username"
+                required
+                control={control}
+                className="mb-3"
+            />
+            <div className="sm:flex sm:gap-3">
+                <Input
+                    label="First Name"
+                    name="firstName"
+                    type="text"
+                    maxLength={50}
+                    autoComplete="given-name"
+                    required
+                    control={control}
+                    className="mb-3 sm:flex-1"
+                />
+                <Input
+                    label="Last Name"
+                    name="lastName"
+                    type="text"
+                    maxLength={50}
+                    autoComplete="family-name"
+                    required
+                    control={control}
+                    className="mb-3 sm:flex-1"
+                />
+            </div>
+            <Input
+                label="Date Of Birth"
+                name="dateOfBirth"
+                type="date"
+                autoComplete="bday"
+                required
+                control={control}
+                className="mb-5"
+            />
+            <ButtonGroup>
+                {options}
+                <Button type="submit" loading={isSubmitting}>
+                    Submit
+                </Button>
+            </ButtonGroup>
+        </form>
     );
 };

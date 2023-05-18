@@ -26,7 +26,7 @@ const UpdateProfile = () => {
             <PageTitle>Update Profile</PageTitle>
 
             <UpdateProfileForm
-                initialValues={profile}
+                defaultValues={profile}
                 onSubmit={onSubmit}
                 options={
                     <ButtonLink href="/my-account" variant="secondary">
