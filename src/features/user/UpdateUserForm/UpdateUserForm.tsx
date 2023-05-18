@@ -43,7 +43,7 @@ type UpdateUserFormProps = {
     onSubmit: (values: UpdateUserFormValues) => void;
 };
 
-export const UpdateUserForm = ({
+export const UpdateUserFormInternal = ({
     defaultValues,
     isDisabled,
     onSubmit,
@@ -57,20 +57,6 @@ export const UpdateUserForm = ({
         defaultValues,
         resolver: yupResolver(schema)
     });
-
-    if (!defaultValues) {
-        return (
-            <FormSkeleton>
-                <InputSkeleton className="mb-3" />
-                <div className="sm:flex sm:gap-3">
-                    <InputSkeleton className="mb-3 sm:flex-1" />
-                    <InputSkeleton className="mb-3 sm:flex-1" />
-                </div>
-                <InputSkeleton className="mb-3" />
-                <ToggleGroupSkeleton className="mb-5" />
-            </FormSkeleton>
-        );
-    }
 
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -136,5 +122,35 @@ export const UpdateUserForm = ({
                 </Button>
             </ButtonGroup>
         </form>
+    );
+};
+
+export const UpdateUserForm = ({
+    defaultValues,
+    isDisabled,
+    onSubmit,
+    options
+}: UpdateUserFormProps) => {
+    if (!defaultValues) {
+        return (
+            <FormSkeleton>
+                <InputSkeleton className="mb-3" />
+                <div className="sm:flex sm:gap-3">
+                    <InputSkeleton className="mb-3 sm:flex-1" />
+                    <InputSkeleton className="mb-3 sm:flex-1" />
+                </div>
+                <InputSkeleton className="mb-3" />
+                <ToggleGroupSkeleton className="mb-5" />
+            </FormSkeleton>
+        );
+    }
+
+    return (
+        <UpdateUserFormInternal
+            defaultValues={defaultValues}
+            isDisabled={isDisabled}
+            onSubmit={onSubmit}
+            options={options}
+        />
     );
 };

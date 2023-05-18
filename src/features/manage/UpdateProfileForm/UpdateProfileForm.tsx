@@ -26,7 +26,7 @@ type UpdateProfileFormProps = {
     onSubmit: (values: UpdateProfileFormValues) => void;
 };
 
-export const UpdateProfileForm = ({
+const UpdateProfileFormInternal = ({
     defaultValues,
     onSubmit,
     options
@@ -40,18 +40,7 @@ export const UpdateProfileForm = ({
         resolver: yupResolver(schema)
     });
 
-    if (!defaultValues) {
-        return (
-            <FormSkeleton>
-                <InputSkeleton className="mb-3" />
-                <div className="sm:flex sm:gap-3">
-                    <InputSkeleton className="mb-3 sm:flex-1" />
-                    <InputSkeleton className="mb-3 sm:flex-1" />
-                </div>
-                <InputSkeleton className="mb-5" />
-            </FormSkeleton>
-        );
-    }
+    console.log('defaultValues', defaultValues);
 
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -103,5 +92,32 @@ export const UpdateProfileForm = ({
                 </Button>
             </ButtonGroup>
         </form>
+    );
+};
+
+export const UpdateProfileForm = ({
+    defaultValues,
+    onSubmit,
+    options
+}: UpdateProfileFormProps) => {
+    if (!defaultValues) {
+        return (
+            <FormSkeleton>
+                <InputSkeleton className="mb-3" />
+                <div className="sm:flex sm:gap-3">
+                    <InputSkeleton className="mb-3 sm:flex-1" />
+                    <InputSkeleton className="mb-3 sm:flex-1" />
+                </div>
+                <InputSkeleton className="mb-5" />
+            </FormSkeleton>
+        );
+    }
+
+    return (
+        <UpdateProfileFormInternal
+            defaultValues={defaultValues}
+            onSubmit={onSubmit}
+            options={options}
+        />
     );
 };
