@@ -26,6 +26,17 @@ type UpdateProfileFormProps = {
     onSubmit: (values: UpdateProfileFormValues) => void;
 };
 
+const UpdateProfileFormLoading = () => (
+    <FormSkeleton>
+        <InputSkeleton className="mb-3" />
+        <div className="sm:flex sm:gap-3">
+            <InputSkeleton className="mb-3 sm:flex-1" />
+            <InputSkeleton className="mb-3 sm:flex-1" />
+        </div>
+        <InputSkeleton className="mb-5" />
+    </FormSkeleton>
+);
+
 const UpdateProfileFormInternal = ({
     defaultValues,
     onSubmit,
@@ -99,16 +110,7 @@ export const UpdateProfileForm = ({
     options
 }: UpdateProfileFormProps) => {
     if (!defaultValues) {
-        return (
-            <FormSkeleton>
-                <InputSkeleton className="mb-3" />
-                <div className="sm:flex sm:gap-3">
-                    <InputSkeleton className="mb-3 sm:flex-1" />
-                    <InputSkeleton className="mb-3 sm:flex-1" />
-                </div>
-                <InputSkeleton className="mb-5" />
-            </FormSkeleton>
-        );
+        return <UpdateProfileFormLoading />;
     }
 
     return (

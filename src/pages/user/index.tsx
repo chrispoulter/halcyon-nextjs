@@ -58,7 +58,7 @@ const Users = () => {
             <UserList isLoading={isLoading} users={users} />
 
             <Pager
-                isLoading={isLoading}
+                isLoading={isLoading || isFetching}
                 hasMore={hasMore}
                 onLoadMore={onLoadMore}
             />

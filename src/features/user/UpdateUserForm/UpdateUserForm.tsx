@@ -43,6 +43,18 @@ type UpdateUserFormProps = {
     onSubmit: (values: UpdateUserFormValues) => void;
 };
 
+const UpdateUserFormLoading = () => (
+    <FormSkeleton>
+        <InputSkeleton className="mb-3" />
+        <div className="sm:flex sm:gap-3">
+            <InputSkeleton className="mb-3 sm:flex-1" />
+            <InputSkeleton className="mb-3 sm:flex-1" />
+        </div>
+        <InputSkeleton className="mb-3" />
+        <ToggleGroupSkeleton className="mb-5" />
+    </FormSkeleton>
+);
+
 export const UpdateUserFormInternal = ({
     defaultValues,
     isDisabled,
@@ -132,17 +144,7 @@ export const UpdateUserForm = ({
     options
 }: UpdateUserFormProps) => {
     if (!defaultValues) {
-        return (
-            <FormSkeleton>
-                <InputSkeleton className="mb-3" />
-                <div className="sm:flex sm:gap-3">
-                    <InputSkeleton className="mb-3 sm:flex-1" />
-                    <InputSkeleton className="mb-3 sm:flex-1" />
-                </div>
-                <InputSkeleton className="mb-3" />
-                <ToggleGroupSkeleton className="mb-5" />
-            </FormSkeleton>
-        );
+        return <UpdateUserFormLoading />;
     }
 
     return (

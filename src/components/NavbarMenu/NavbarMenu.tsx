@@ -6,23 +6,25 @@ import { Popover } from '@headlessui/react';
 import { MenuIcon } from '@/components/Icons/MenuIcon';
 import { isAuthorized, isUserAdministrator } from '@/utils/auth';
 
+const NavbarMenuOptionsLoading = () => (
+    <>
+        <div role="status" className="animate-pulse p-2">
+            <div className="h-3 bg-zinc-700 sm:w-14" />
+        </div>
+        <div role="status" className="animate-pulse p-2">
+            <div className="h-3 bg-zinc-700 sm:w-14" />
+        </div>
+        <span className="sr-only">Loading...</span>
+    </>
+);
+
 const NavbarMenuOptions = () => {
     const { data: session, status } = useSession();
 
     const isLoading = status === 'loading';
 
     if (isLoading) {
-        return (
-            <>
-                <div role="status" className="animate-pulse p-2">
-                    <div className="h-3 bg-zinc-700 sm:w-14" />
-                </div>
-                <div role="status" className="animate-pulse p-2">
-                    <div className="h-3 bg-zinc-700 sm:w-14" />
-                </div>
-                <span className="sr-only">Loading...</span>
-            </>
-        );
+        return <NavbarMenuOptionsLoading />;
     }
 
     const options: { href: string; label: string }[] = [];
