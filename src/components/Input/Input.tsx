@@ -78,6 +78,7 @@ export const Input = ({
                     id={field.name}
                     value={value}
                     disabled={props.disabled || isSubmitting}
+                    aria-invalid={!!error}
                     onChange={onChange}
                     className={clsx(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
@@ -103,7 +104,7 @@ export const Input = ({
             </div>
 
             {error && (
-                <span className="mt-2 text-sm text-red-600">
+                <span role="alert" className="mt-2 text-sm text-red-600">
                     {error.message}
                 </span>
             )}
