@@ -10,6 +10,27 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     onClear?: () => void;
 };
 
+type InputValueTransform = {
+    [key: string]: {
+        input: (value: string) => string;
+        output: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    };
+};
+
+const transformers: InputValueTransform = {
+    date: {
+        input: value => value.split('T')[0],
+        output: e =>
+            e.currentTarget.value
+                ? new Date(e.currentTarget.value).toISOString()
+                : e.currentTarget.value
+    },
+    default: {
+        input: value => value,
+        output: e => e.currentTarget.value
+    }
+};
+
 export const Input = ({
     control,
     label,
@@ -27,34 +48,19 @@ export const Input = ({
         control
     });
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        switch (props.type) {
-            case 'date':
-                return field.onChange(
-                    e.currentTarget.value
-                        ? new Date(e.currentTarget.value).toISOString()
-                        : e.currentTarget.value
-                );
-
-            default:
-                return field.onChange(e.currentTarget.value);
-        }
-    };
+    const transform = transformers[props.type || ''] || transformers['default'];
 
     const onClearInput = () => {
         field.onChange('');
         onClear && onClear();
     };
 
-    let value = field.value;
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+        field.onChange(transform.output(e));
 
-    switch (props.type) {
-        case 'date':
-            value = field.value.split('T')[0];
-            break;
-    }
+    const value = transform.input(field.value);
 
-    const showClear = props.type === 'search' && field.value;
+    const showClear = props.type === 'search' && value;
 
     return (
         <div className={clsx('w-full', className)}>
