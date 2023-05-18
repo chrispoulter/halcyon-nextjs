@@ -40,8 +40,6 @@ const UpdateProfileFormInternal = ({
         resolver: yupResolver(schema)
     });
 
-    console.log('defaultValues', defaultValues);
-
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <Input
