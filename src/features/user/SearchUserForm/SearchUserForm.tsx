@@ -24,7 +24,6 @@ export const SearchUserForm = ({
 }: SearchUserFormProps) => {
     const {
         handleSubmit,
-        reset,
         control,
         formState: { isSubmitting }
     } = useForm<SearchUserFormValues>({
@@ -46,7 +45,7 @@ export const SearchUserForm = ({
                 placeholder="Search Users..."
                 disabled={isLoading}
                 control={control}
-                onClear={reset}
+                onClear={handleSubmit(onSubmit)}
             />
             <div>
                 <Button

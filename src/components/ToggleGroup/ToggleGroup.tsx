@@ -52,7 +52,8 @@ export const ToggleGroup = ({
                         className={clsx(
                             'mb-2 flex w-full items-center justify-between gap-5 border px-5 py-3 text-left focus:outline-none focus:ring-1 focus:ring-cyan-500 sm:py-2',
                             {
-                                'cursor-not-allowed opacity-50': disabled
+                                'cursor-not-allowed opacity-50':
+                                    disabled || isSubmitting
                             }
                         )}
                     >
