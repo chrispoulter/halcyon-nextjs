@@ -21,9 +21,9 @@ const schema = Yup.object({
 export type UpdateProfileFormValues = Yup.InferType<typeof schema>;
 
 type UpdateProfileFormProps = {
-    options?: JSX.Element;
-    defaultValues?: UpdateProfileFormValues;
+    profile?: UpdateProfileFormValues;
     onSubmit: (values: UpdateProfileFormValues) => void;
+    options?: JSX.Element;
 };
 
 const UpdateProfileFormLoading = () => (
@@ -38,7 +38,7 @@ const UpdateProfileFormLoading = () => (
 );
 
 const UpdateProfileFormInternal = ({
-    defaultValues,
+    profile,
     onSubmit,
     options
 }: UpdateProfileFormProps) => {
@@ -47,7 +47,7 @@ const UpdateProfileFormInternal = ({
         control,
         formState: { isSubmitting }
     } = useForm<UpdateProfileFormValues>({
-        defaultValues,
+        defaultValues: profile,
         resolver: yupResolver(schema)
     });
 
@@ -105,17 +105,17 @@ const UpdateProfileFormInternal = ({
 };
 
 export const UpdateProfileForm = ({
-    defaultValues,
+    profile,
     onSubmit,
     options
 }: UpdateProfileFormProps) => {
-    if (!defaultValues) {
+    if (!profile) {
         return <UpdateProfileFormLoading />;
     }
 
     return (
         <UpdateProfileFormInternal
-            defaultValues={defaultValues}
+            profile={profile}
             onSubmit={onSubmit}
             options={options}
         />

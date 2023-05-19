@@ -95,7 +95,7 @@ const UpdateUser = () => {
             </PageTitle>
 
             <UpdateUserForm
-                defaultValues={user}
+                user={user}
                 isDisabled={isUnlocking || isLocking || isDeleting}
                 onSubmit={onSubmit}
                 options={options}

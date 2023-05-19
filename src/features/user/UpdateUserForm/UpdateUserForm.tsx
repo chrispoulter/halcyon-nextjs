@@ -37,10 +37,10 @@ export type UpdateUserFormValues = Yup.InferType<typeof schema>;
 export type UpdateUserFormState = { isSubmitting: boolean };
 
 type UpdateUserFormProps = {
-    options?: (state: UpdateUserFormState) => JSX.Element;
-    defaultValues?: UpdateUserFormValues;
+    user?: UpdateUserFormValues;
     isDisabled?: boolean;
     onSubmit: (values: UpdateUserFormValues) => void;
+    options?: (state: UpdateUserFormState) => JSX.Element;
 };
 
 const UpdateUserFormLoading = () => (
@@ -56,7 +56,7 @@ const UpdateUserFormLoading = () => (
 );
 
 export const UpdateUserFormInternal = ({
-    defaultValues,
+    user,
     isDisabled,
     onSubmit,
     options
@@ -66,7 +66,7 @@ export const UpdateUserFormInternal = ({
         control,
         formState: { isSubmitting }
     } = useForm<UpdateUserFormValues>({
-        defaultValues,
+        defaultValues: user,
         resolver: yupResolver(schema)
     });
 
@@ -138,18 +138,18 @@ export const UpdateUserFormInternal = ({
 };
 
 export const UpdateUserForm = ({
-    defaultValues,
+    user,
     isDisabled,
     onSubmit,
     options
 }: UpdateUserFormProps) => {
-    if (!defaultValues) {
+    if (!user) {
         return <UpdateUserFormLoading />;
     }
 
     return (
         <UpdateUserFormInternal
-            defaultValues={defaultValues}
+            user={user}
             isDisabled={isDisabled}
             onSubmit={onSubmit}
             options={options}
