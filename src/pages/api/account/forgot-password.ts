@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { forgotPasswordSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler } from '@/utils/handler';
@@ -14,7 +13,7 @@ const forgotPasswordHandler: Handler = async (req, res) => {
     });
 
     if (user) {
-        const token = uuidv4();
+        const token = crypto.randomUUID();
 
         await prisma.users.update({
             where: {
