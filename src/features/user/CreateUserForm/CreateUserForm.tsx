@@ -42,8 +42,8 @@ const defaultValues = schema.getDefault();
 export type CreateUserFormValues = Yup.InferType<typeof schema>;
 
 type CreateUserFormProps = {
-    options?: JSX.Element;
     onSubmit: (values: CreateUserFormValues) => void;
+    options?: JSX.Element;
 };
 
 export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {

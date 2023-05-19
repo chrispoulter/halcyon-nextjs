@@ -19,8 +19,8 @@ const defaultValues = schema.getDefault();
 export type ChangePasswordFormValues = Yup.InferType<typeof schema>;
 
 type ChangePasswordFormProps = {
-    options?: JSX.Element;
     onSubmit: (values: ChangePasswordFormValues) => void;
+    options?: JSX.Element;
     className?: string;
 };
 
