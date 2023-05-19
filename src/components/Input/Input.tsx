@@ -1,12 +1,15 @@
 import { Control, useController } from 'react-hook-form';
 import clsx from 'clsx';
 import { CloseIcon } from '@/components/Icons/CloseIcon';
+import { parseForInput, formatForInput } from '@/utils/dates';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     control: Control<any, any>;
     name: string;
     label: string;
     hideLabel?: boolean;
+    minDate?: Date;
+    maxDate?: Date;
     onClear?: () => void;
 };
 
@@ -19,10 +22,10 @@ type InputValueTransform = {
 
 const transformers: InputValueTransform = {
     date: {
-        input: value => (value ? value.slice(0, 10) : ''),
+        input: value => (value ? formatForInput(value) : ''),
         output: e =>
             e.currentTarget.value
-                ? new Date(e.currentTarget.value).toISOString()
+                ? parseForInput(e.currentTarget.value)
                 : undefined
     },
     text: {
@@ -62,6 +65,14 @@ export const Input = ({
 
     const value = transform.input(field.value);
 
+    const min =
+        props.min ||
+        (props.minDate ? formatForInput(props.minDate) : undefined);
+
+    const max =
+        props.max ||
+        (props.maxDate ? formatForInput(props.maxDate) : undefined);
+
     const isSearch = type === 'search' && value;
 
     return (
@@ -89,6 +100,8 @@ export const Input = ({
                     value={value}
                     disabled={props.disabled || isSubmitting}
                     aria-invalid={!!error}
+                    min={min}
+                    max={max}
                     onChange={onChange}
                     className={clsx(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',

@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { minDateOfBirth, maxDateOfBirth, format } from '@/utils/dates';
+import { minDateOfBirth, maxDateOfBirth } from '@/utils/dates';
 
 const schema = Yup.object({
     emailAddress: Yup.string()
@@ -111,8 +111,8 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                 type="date"
                 autoComplete="bday"
                 required
-                min={format(minDateOfBirth)}
-                max={format(maxDateOfBirth)}
+                minDate={minDateOfBirth}
+                maxDate={maxDateOfBirth}
                 control={control}
                 className="mb-5"
             />

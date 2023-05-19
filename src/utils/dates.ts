@@ -1,15 +1,26 @@
-const addYears = (date: Date, years: number) => {
-    const dateCopy = new Date(date);
-    dateCopy.setFullYear(dateCopy.getFullYear() + years);
-    return dateCopy;
-};
+import {
+    startOfToday,
+    endOfToday,
+    format,
+    parseISO,
+    subYears,
+    getYear
+} from 'date-fns';
 
-export const format = (date: Date) => date.toISOString().slice(0, 10);
+const todayStart = startOfToday();
 
-const currentDateTime = new Date();
+const todayEnd = endOfToday();
 
-const currentDate = new Date(format(currentDateTime));
+export const currentYear = getYear(todayStart);
 
-export const minDateOfBirth = addYears(currentDate, -120);
+export const minDateOfBirth = subYears(todayStart, 120);
 
-export const maxDateOfBirth = currentDate;
+export const maxDateOfBirth = subYears(todayEnd, 18);
+
+export const parseForInput = (date: string) => parseISO(date);
+
+export const formatForInput = (date: string | Date) =>
+    format(date instanceof Date ? date : parseISO(date), 'yyyy-MM-dd');
+
+export const formatForDisplay = (date: string | Date) =>
+    format(date instanceof Date ? date : parseISO(date), 'PP');

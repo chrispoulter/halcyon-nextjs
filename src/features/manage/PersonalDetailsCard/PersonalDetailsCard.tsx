@@ -3,6 +3,7 @@ import { Card, CardTitle } from '@/components/Card/Card';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { CardSkeleton } from '@/components/Skeleton/Skeleton';
+import { formatForDisplay } from '@/utils/dates';
 
 type PersonalDetailsCardProps = {
     profile?: GetProfileResponse;
@@ -50,11 +51,7 @@ export const PersonalDetailsCard = ({
                 Date Of Birth
             </p>
             <p className="mb-3 text-sm text-gray-500">
-                {new Date(profile.dateOfBirth).toLocaleDateString('en', {
-                    day: '2-digit',
-                    month: 'long',
-                    year: 'numeric'
-                })}
+                {formatForDisplay(profile.dateOfBirth)}
             </p>
 
             <ButtonGroup align="left">

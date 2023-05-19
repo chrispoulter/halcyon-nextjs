@@ -1,7 +1,6 @@
 import { BodyLink } from '@/components/BodyLink/BodyLink';
 import { config } from '@/utils/config';
-
-const currentYear = new Date().getFullYear();
+import { currentYear } from '@/utils/dates';
 
 export const Footer = () => (
     <footer className="container mx-auto mb-3 mt-8 flex max-w-screen-md justify-between border-t p-3 text-sm text-gray-400">

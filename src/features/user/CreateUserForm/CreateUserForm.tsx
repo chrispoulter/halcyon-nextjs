@@ -6,7 +6,7 @@ import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Role, roleOptions } from '@/utils/auth';
-import { minDateOfBirth, maxDateOfBirth, format } from '@/utils/dates';
+import { minDateOfBirth, maxDateOfBirth } from '@/utils/dates';
 
 const schema = Yup.object({
     emailAddress: Yup.string()
@@ -118,8 +118,8 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                 type="date"
                 autoComplete="bday"
                 required
-                min={format(minDateOfBirth)}
-                max={format(maxDateOfBirth)}
+                minDate={minDateOfBirth}
+                maxDate={maxDateOfBirth}
                 control={control}
                 className="mb-3"
             />

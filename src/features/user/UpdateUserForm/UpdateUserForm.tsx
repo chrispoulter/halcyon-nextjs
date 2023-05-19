@@ -11,7 +11,7 @@ import {
     ToggleGroupSkeleton
 } from '@/components/Skeleton/Skeleton';
 import { Role, roleOptions } from '@/utils/auth';
-import { format, maxDateOfBirth, minDateOfBirth } from '@/utils/dates';
+import { maxDateOfBirth, minDateOfBirth } from '@/utils/dates';
 
 const schema = Yup.object({
     emailAddress: Yup.string()
@@ -114,8 +114,8 @@ export const UpdateUserFormInternal = ({
                 type="date"
                 autoComplete="bday"
                 required
-                min={format(minDateOfBirth)}
-                max={format(maxDateOfBirth)}
+                minDate={minDateOfBirth}
+                maxDate={maxDateOfBirth}
                 control={control}
                 className="mb-3"
             />

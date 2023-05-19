@@ -5,7 +5,7 @@ import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { InputSkeleton, FormSkeleton } from '@/components/Skeleton/Skeleton';
-import { format, maxDateOfBirth, minDateOfBirth } from '@/utils/dates';
+import { maxDateOfBirth, minDateOfBirth } from '@/utils/dates';
 
 const schema = Yup.object({
     emailAddress: Yup.string()
@@ -95,8 +95,8 @@ const UpdateProfileFormInternal = ({
                 type="date"
                 autoComplete="bday"
                 required
-                min={format(minDateOfBirth)}
-                max={format(maxDateOfBirth)}
+                minDate={minDateOfBirth}
+                maxDate={maxDateOfBirth}
                 control={control}
                 className="mb-5"
             />
