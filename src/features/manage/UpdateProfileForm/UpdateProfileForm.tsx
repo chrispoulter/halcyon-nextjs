@@ -95,8 +95,8 @@ const UpdateProfileFormInternal = ({
                 type="date"
                 autoComplete="bday"
                 required
-                minDate={minDateOfBirth}
-                maxDate={maxDateOfBirth}
+                min={minDateOfBirth}
+                max={maxDateOfBirth}
                 control={control}
                 className="mb-5"
             />

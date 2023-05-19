@@ -3,13 +3,16 @@ import clsx from 'clsx';
 import { CloseIcon } from '@/components/Icons/CloseIcon';
 import { parseForInput, formatForInput } from '@/utils/dates';
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+type InputProps = Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    'name' | 'min' | 'max'
+> & {
     control: Control<any, any>;
     name: string;
     label: string;
     hideLabel?: boolean;
-    minDate?: Date;
-    maxDate?: Date;
+    min?: number | string | Date;
+    max?: number | string | Date;
     onClear?: () => void;
 };
 
@@ -66,12 +69,10 @@ export const Input = ({
     const value = transform.input(field.value);
 
     const min =
-        props.min ||
-        (props.minDate ? formatForInput(props.minDate) : undefined);
+        props.min instanceof Date ? formatForInput(props.min) : props.min;
 
     const max =
-        props.max ||
-        (props.maxDate ? formatForInput(props.maxDate) : undefined);
+        props.max instanceof Date ? formatForInput(props.max) : props.max;
 
     const isSearch = type === 'search' && value;
 

@@ -118,8 +118,8 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                 type="date"
                 autoComplete="bday"
                 required
-                minDate={minDateOfBirth}
-                maxDate={maxDateOfBirth}
+                min={minDateOfBirth}
+                max={maxDateOfBirth}
                 control={control}
                 className="mb-3"
             />
