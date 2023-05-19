@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { minDateOfBirth, maxDateOfBirth } from '@/utils/dates';
+import { today } from '@/utils/dates';
 
 const schema = Yup.object({
     emailAddress: Yup.string()
@@ -19,11 +19,7 @@ const schema = Yup.object({
         .oneOf([Yup.ref('password')], 'Passwords do not match'),
     firstName: Yup.string().label('First Name').max(50).required(),
     lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date()
-        .label('Date Of Birth')
-        .min(minDateOfBirth)
-        .max(maxDateOfBirth)
-        .required()
+    dateOfBirth: Yup.date().label('Date Of Birth').max(today).required()
 });
 
 const defaultValues = schema.getDefault();
@@ -111,8 +107,7 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                 type="date"
                 autoComplete="bday"
                 required
-                min={minDateOfBirth}
-                max={maxDateOfBirth}
+                max={today}
                 control={control}
                 className="mb-5"
             />

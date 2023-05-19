@@ -1,21 +1,8 @@
-import {
-    startOfToday,
-    endOfToday,
-    format,
-    parseISO,
-    subYears,
-    getYear
-} from 'date-fns';
+import { endOfToday, format, parseISO, getYear } from 'date-fns';
 
-const todayStart = startOfToday();
+export const today = endOfToday();
 
-const todayEnd = endOfToday();
-
-export const currentYear = getYear(todayStart);
-
-export const minDateOfBirth = subYears(todayStart, 120);
-
-export const maxDateOfBirth = subYears(todayEnd, 18);
+export const currentYear = getYear(today);
 
 export const parseForOutput = (date: string) => parseISO(date);
 

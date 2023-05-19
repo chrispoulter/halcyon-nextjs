@@ -6,7 +6,7 @@ import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Role, roleOptions } from '@/utils/auth';
-import { minDateOfBirth, maxDateOfBirth } from '@/utils/dates';
+import { today } from '@/utils/dates';
 
 const schema = Yup.object({
     emailAddress: Yup.string()
@@ -21,11 +21,7 @@ const schema = Yup.object({
         .oneOf([Yup.ref('password')], 'Passwords do not match'),
     firstName: Yup.string().label('First Name').max(50).required(),
     lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date()
-        .label('Date Of Birth')
-        .min(minDateOfBirth)
-        .max(maxDateOfBirth)
-        .required(),
+    dateOfBirth: Yup.date().label('Date Of Birth').max(today).required(),
     roles: Yup.array()
         .of(
             Yup.string<Role>()
@@ -118,8 +114,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                 type="date"
                 autoComplete="bday"
                 required
-                min={minDateOfBirth}
-                max={maxDateOfBirth}
+                max={today}
                 control={control}
                 className="mb-3"
             />

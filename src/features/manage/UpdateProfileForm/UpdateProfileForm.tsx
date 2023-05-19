@@ -5,7 +5,7 @@ import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { InputSkeleton, FormSkeleton } from '@/components/Skeleton/Skeleton';
-import { maxDateOfBirth, minDateOfBirth } from '@/utils/dates';
+import { today } from '@/utils/dates';
 
 const schema = Yup.object({
     emailAddress: Yup.string()
@@ -15,11 +15,7 @@ const schema = Yup.object({
         .required(),
     firstName: Yup.string().label('First Name').max(50).required(),
     lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date()
-        .label('Date Of Birth')
-        .min(minDateOfBirth)
-        .max(maxDateOfBirth)
-        .required()
+    dateOfBirth: Yup.date().label('Date Of Birth').max(today).required()
 });
 
 export type UpdateProfileFormValues = Yup.InferType<typeof schema>;
@@ -95,8 +91,7 @@ const UpdateProfileFormInternal = ({
                 type="date"
                 autoComplete="bday"
                 required
-                min={minDateOfBirth}
-                max={maxDateOfBirth}
+                max={today}
                 control={control}
                 className="mb-5"
             />
