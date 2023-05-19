@@ -1,11 +1,12 @@
 import * as Yup from 'yup';
+import { minDateOfBirth, maxDateOfBirth } from '@/utils/dates';
 
 export type GetProfileResponse = {
     id: number;
     emailAddress: string;
     firstName: string;
     lastName: string;
-    dateOfBirth: string;
+    dateOfBirth: Date;
 };
 
 export const updateProfileSchema = Yup.object().shape({
@@ -16,7 +17,11 @@ export const updateProfileSchema = Yup.object().shape({
         .required(),
     firstName: Yup.string().label('First Name').max(50).required(),
     lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.string().label('Date Of Birth').required()
+    dateOfBirth: Yup.date()
+        .label('Date Of Birth')
+        .min(minDateOfBirth)
+        .max(maxDateOfBirth)
+        .required()
 });
 
 export type UpdateProfileRequest = Yup.InferType<typeof updateProfileSchema>;

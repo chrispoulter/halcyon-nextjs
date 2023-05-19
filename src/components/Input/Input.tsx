@@ -19,15 +19,15 @@ type InputValueTransform = {
 
 const transformers: InputValueTransform = {
     date: {
-        input: value => value.split('T')[0],
+        input: value => (value ? value.split('T')[0] : ''),
         output: e =>
             e.currentTarget.value
                 ? new Date(e.currentTarget.value).toISOString()
-                : e.currentTarget.value
+                : undefined
     },
     text: {
-        input: value => value,
-        output: e => e.currentTarget.value
+        input: value => value || '',
+        output: e => (e.currentTarget.value ? e.currentTarget.value : undefined)
     }
 };
 

@@ -26,7 +26,7 @@ const getProfileHandler: Handler<GetProfileResponse> = async (
             emailAddress: user.emailAddress,
             firstName: user.firstName,
             lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth.toISOString()
+            dateOfBirth: user.dateOfBirth
         }
     });
 };
