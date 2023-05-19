@@ -1,5 +1,5 @@
+import { Control, useController } from 'react-hook-form';
 import clsx from 'clsx';
-import { useField } from 'formik';
 import { Switch } from '@headlessui/react';
 
 type ToggleGroupOption = {
@@ -9,25 +9,34 @@ type ToggleGroupOption = {
 };
 
 type ToggleGroupProps = {
+    control: Control<any, any>;
     name: string;
     options: ToggleGroupOption[];
     disabled?: boolean;
 };
 
-export const ToggleGroup = ({ name, options, disabled }: ToggleGroupProps) => {
-    const [field] = useField<any[] | undefined>(name);
+export const ToggleGroup = ({
+    control,
+    name,
+    options,
+    disabled
+}: ToggleGroupProps) => {
+    const {
+        field,
+        formState: { isSubmitting }
+    } = useController({
+        name,
+        control
+    });
 
-    const currentValues = field.value ?? [];
+    const currentValues: any[] = field.value ?? [];
 
     const onChange = (value: any, checked: boolean) =>
-        field.onChange({
-            target: {
-                name,
-                value: checked
-                    ? [value, ...currentValues]
-                    : currentValues.filter(v => v !== value)
-            }
-        });
+        field.onChange(
+            checked
+                ? [value, ...currentValues]
+                : currentValues.filter(v => v !== value)
+        );
 
     return (
         <>
@@ -39,11 +48,12 @@ export const ToggleGroup = ({ name, options, disabled }: ToggleGroupProps) => {
                         key={`${name}.${option.value}`}
                         checked={isChecked}
                         onChange={checked => onChange(option.value, checked)}
-                        disabled={disabled}
+                        disabled={disabled || isSubmitting}
                         className={clsx(
                             'mb-2 flex w-full items-center justify-between gap-5 border px-5 py-3 text-left focus:outline-none focus:ring-1 focus:ring-cyan-500 sm:py-2',
                             {
-                                'cursor-not-allowed opacity-50': disabled
+                                'cursor-not-allowed opacity-50':
+                                    disabled || isSubmitting
                             }
                         )}
                     >

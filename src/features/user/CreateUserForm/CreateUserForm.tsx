@@ -1,4 +1,5 @@
-import { Formik, Form } from 'formik';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
@@ -38,7 +39,7 @@ const schema = Yup.object({
         .default([])
 });
 
-const initialValues = schema.getDefault();
+const defaultValues = schema.getDefault();
 
 export type CreateUserFormValues = Yup.InferType<typeof schema>;
 
@@ -47,94 +48,97 @@ type CreateUserFormProps = {
     onSubmit: (values: CreateUserFormValues) => void;
 };
 
-export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => (
-    <Formik
-        initialValues={initialValues}
-        validationSchema={schema}
-        onSubmit={onSubmit}
-    >
-        {({ isSubmitting }) => (
-            <Form noValidate>
+export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
+    const {
+        handleSubmit,
+        control,
+        formState: { isSubmitting }
+    } = useForm<CreateUserFormValues>({
+        defaultValues,
+        resolver: yupResolver(schema)
+    });
+
+    return (
+        <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <Input
+                label="Email Address"
+                name="emailAddress"
+                type="email"
+                maxLength={254}
+                autoComplete="username"
+                required
+                control={control}
+                className="mb-3"
+            />
+            <div className="sm:flex sm:gap-3">
                 <Input
-                    label="Email Address"
-                    name="emailAddress"
-                    type="email"
-                    maxLength={254}
-                    autoComplete="username"
+                    label="Password"
+                    name="password"
+                    type="password"
+                    maxLength={50}
+                    autoComplete="new-password"
                     required
-                    disabled={isSubmitting}
-                    className="mb-3"
+                    control={control}
+                    className="mb-3 sm:flex-1"
                 />
-                <div className="sm:flex sm:gap-3">
-                    <Input
-                        label="Password"
-                        name="password"
-                        type="password"
-                        maxLength={50}
-                        autoComplete="new-password"
-                        required
-                        disabled={isSubmitting}
-                        className="mb-3 sm:flex-1"
-                    />
-                    <Input
-                        label="Confirm Password"
-                        name="confirmPassword"
-                        type="password"
-                        maxLength={50}
-                        autoComplete="new-password"
-                        required
-                        disabled={isSubmitting}
-                        className="mb-3 sm:flex-1"
-                    />
-                </div>
-                <div className="sm:flex sm:gap-3">
-                    <Input
-                        label="First Name"
-                        name="firstName"
-                        type="text"
-                        maxLength={50}
-                        autoComplete="given-name"
-                        required
-                        disabled={isSubmitting}
-                        className="mb-3 sm:flex-1"
-                    />
-                    <Input
-                        label="Last Name"
-                        name="lastName"
-                        type="text"
-                        maxLength={50}
-                        autoComplete="family-name"
-                        required
-                        disabled={isSubmitting}
-                        className="mb-3 sm:flex-1"
-                    />
-                </div>
                 <Input
-                    label="Date Of Birth"
-                    name="dateOfBirth"
-                    type="date"
-                    autoComplete="bday"
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    type="password"
+                    maxLength={50}
+                    autoComplete="new-password"
                     required
-                    disabled={isSubmitting}
-                    className="mb-3"
+                    control={control}
+                    className="mb-3 sm:flex-1"
                 />
-                <div className="mb-5">
-                    <span className="mb-2 block text-sm font-medium text-gray-800">
-                        Roles
-                    </span>
-                    <ToggleGroup
-                        name="roles"
-                        options={roleOptions}
-                        disabled={isSubmitting}
-                    />
-                </div>
-                <ButtonGroup>
-                    {options}
-                    <Button type="submit" loading={isSubmitting}>
-                        Submit
-                    </Button>
-                </ButtonGroup>
-            </Form>
-        )}
-    </Formik>
-);
+            </div>
+            <div className="sm:flex sm:gap-3">
+                <Input
+                    label="First Name"
+                    name="firstName"
+                    type="text"
+                    maxLength={50}
+                    autoComplete="given-name"
+                    required
+                    control={control}
+                    className="mb-3 sm:flex-1"
+                />
+                <Input
+                    label="Last Name"
+                    name="lastName"
+                    type="text"
+                    maxLength={50}
+                    autoComplete="family-name"
+                    required
+                    control={control}
+                    className="mb-3 sm:flex-1"
+                />
+            </div>
+            <Input
+                label="Date Of Birth"
+                name="dateOfBirth"
+                type="date"
+                autoComplete="bday"
+                required
+                control={control}
+                className="mb-3"
+            />
+            <div className="mb-5">
+                <span className="mb-2 block text-sm font-medium text-gray-800">
+                    Roles
+                </span>
+                <ToggleGroup
+                    name="roles"
+                    options={roleOptions}
+                    control={control}
+                />
+            </div>
+            <ButtonGroup>
+                {options}
+                <Button type="submit" loading={isSubmitting}>
+                    Submit
+                </Button>
+            </ButtonGroup>
+        </form>
+    );
+};

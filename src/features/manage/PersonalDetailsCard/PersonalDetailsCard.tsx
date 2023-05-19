@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import { GetProfileResponse } from '@/models/manage.types';
 import { Card, CardTitle } from '@/components/Card/Card';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
@@ -10,21 +9,25 @@ type PersonalDetailsCardProps = {
     className?: string;
 };
 
+export const PersonalDetailsCardLoading = ({
+    className
+}: PersonalDetailsCardProps) => (
+    <CardSkeleton className={className}>
+        <div className="mb-2 h-5 w-4/12 bg-gray-200" />
+        <div className="mb-3 h-5 w-6/12 bg-gray-100" />
+        <div className="mb-2 h-5 w-4/12 bg-gray-200" />
+        <div className="mb-3 h-5 w-6/12 bg-gray-100" />
+        <div className="mb-2 h-5 w-4/12 bg-gray-200" />
+        <div className="mb-3 h-5 w-6/12 bg-gray-100" />
+    </CardSkeleton>
+);
+
 export const PersonalDetailsCard = ({
     profile,
     className
 }: PersonalDetailsCardProps) => {
     if (!profile) {
-        return (
-            <CardSkeleton className={className}>
-                <div className="mb-2 h-5 w-4/12 bg-gray-200" />
-                <div className="mb-3 h-5 w-6/12 bg-gray-100" />
-                <div className="mb-2 h-5 w-4/12 bg-gray-200" />
-                <div className="mb-3 h-5 w-6/12 bg-gray-100" />
-                <div className="mb-2 h-5 w-4/12 bg-gray-200" />
-                <div className="mb-3 h-5 w-6/12 bg-gray-100" />
-            </CardSkeleton>
-        );
+        return <PersonalDetailsCardLoading className={className} />;
     }
 
     return (

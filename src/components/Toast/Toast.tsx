@@ -16,6 +16,7 @@ export const Toaster = () => {
                 .map(toast => (
                     <div
                         key={toast.id}
+                        role="alert"
                         className={clsx(
                             'pointer-events-auto flex w-full items-center justify-between border px-5 py-3 text-sm font-normal shadow sm:max-w-sm',
                             {

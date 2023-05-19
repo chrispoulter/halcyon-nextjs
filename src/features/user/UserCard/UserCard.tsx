@@ -7,16 +7,18 @@ type UserCardProps = {
     user?: GetUserResponse;
 };
 
+const UserCardLoading = () => (
+    <div className="border p-5">
+        <div className="w-full">
+            <div className="mb-2 h-6 w-4/12 bg-gray-200" />
+            <div className="h-5 w-6/12 bg-gray-100" />
+        </div>
+    </div>
+);
+
 export const UserCard = ({ user }: UserCardProps) => {
     if (!user) {
-        return (
-            <div className="border p-5">
-                <div className="w-full">
-                    <div className="mb-2 h-6 w-4/12 bg-gray-200" />
-                    <div className="h-5 w-6/12 bg-gray-100" />
-                </div>
-            </div>
-        );
+        return <UserCardLoading />;
     }
 
     return (

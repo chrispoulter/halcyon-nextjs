@@ -1,62 +1,66 @@
+import { Control, useController } from 'react-hook-form';
 import clsx from 'clsx';
-import { useField } from 'formik';
 import { CloseIcon } from '@/components/Icons/CloseIcon';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+    control: Control<any, any>;
     name: string;
     label: string;
-    error?: string | false;
     hideLabel?: boolean;
-    onClear?: (e?: React.FormEvent<HTMLFormElement>) => void;
+    onClear?: () => void;
+};
+
+type InputValueTransform = {
+    [key: string]: {
+        input: (value: string) => string;
+        output: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    };
+};
+
+const transformers: InputValueTransform = {
+    date: {
+        input: value => value.split('T')[0],
+        output: e =>
+            e.currentTarget.value
+                ? new Date(e.currentTarget.value).toISOString()
+                : e.currentTarget.value
+    },
+    text: {
+        input: value => value,
+        output: e => e.currentTarget.value
+    }
 };
 
 export const Input = ({
+    control,
     label,
     hideLabel,
     className,
     onClear,
     ...props
 }: InputProps) => {
-    const [field, meta] = useField(props);
-    const error = meta.touched && meta.error;
+    const {
+        field,
+        fieldState: { error },
+        formState: { isSubmitting }
+    } = useController({
+        name: props.name,
+        control
+    });
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        switch (props.type) {
-            case 'date':
-                return field.onChange({
-                    target: {
-                        name: field.name,
-                        value: e.currentTarget.value
-                            ? new Date(e.currentTarget.value).toISOString()
-                            : e.currentTarget.value
-                    }
-                });
-
-            default:
-                return field.onChange(e);
-        }
-    };
+    const transform = transformers[props.type || ''] || transformers.text;
 
     const onClearInput = () => {
-        field.onChange({
-            target: {
-                name: field.name,
-                value: ''
-            }
-        });
-
+        field.onChange('');
         onClear && onClear();
     };
 
-    let value = field.value;
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+        field.onChange(transform.output(e));
 
-    switch (props.type) {
-        case 'date':
-            value = field.value.split('T')[0];
-            break;
-    }
+    const value = transform.input(field.value);
 
-    const showClear = props.type === 'search' && field.value;
+    const showClear = props.type === 'search' && value;
 
     return (
         <div className={clsx('w-full', className)}>
@@ -79,6 +83,8 @@ export const Input = ({
                     {...props}
                     id={field.name}
                     value={value}
+                    disabled={props.disabled || isSubmitting}
+                    aria-invalid={!!error}
                     onChange={onChange}
                     className={clsx(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
@@ -104,7 +110,9 @@ export const Input = ({
             </div>
 
             {error && (
-                <span className="mt-2 text-sm text-red-600">{error}</span>
+                <span role="alert" className="mt-2 text-sm text-red-600">
+                    {error.message}
+                </span>
             )}
         </div>
     );

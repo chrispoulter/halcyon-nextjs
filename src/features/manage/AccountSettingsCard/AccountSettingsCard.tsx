@@ -11,17 +11,19 @@ type AccountSettingsCardProps = {
     onDelete: () => void;
 };
 
+const AccountSettingsCardLoading = () => (
+    <CardSkeleton>
+        <div className="h-5 w-full bg-gray-100" />
+    </CardSkeleton>
+);
+
 export const AccountSettingsCard = ({
     profile,
     isDeleting,
     onDelete
 }: AccountSettingsCardProps) => {
     if (!profile) {
-        return (
-            <CardSkeleton>
-                <div className="h-5 w-full bg-gray-100" />
-            </CardSkeleton>
-        );
+        return <AccountSettingsCardLoading />;
     }
 
     return (
