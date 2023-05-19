@@ -80,7 +80,19 @@ export const PageSkeleton = () => (
         <div className="mb-1 h-5 w-full bg-gray-100" />
         <div className="mb-3 h-5 w-7/12 bg-gray-100" />
         <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className=" h-5 w-7/12 bg-gray-100" />
+        <div className="mb-1 h-5 w-full bg-gray-100" />
+        <div className="mb-3 h-5 w-7/12 bg-gray-100" />
+        <div className="mb-1 h-5 w-full bg-gray-100" />
+        <div className="mb-1 h-5 w-full bg-gray-100" />
+        <div className="mb-3 h-5 w-7/12 bg-gray-100" />
+        <div className="mb-1 h-5 w-full bg-gray-100" />
+        <div className="mb-1 h-5 w-full bg-gray-100" />
+        <div className="mb-3 h-5 w-7/12 bg-gray-100" />
+        <div className="mb-1 h-5 w-full bg-gray-100" />
+        <div className="mb-1 h-5 w-full bg-gray-100" />
+        <div className="mb-3 h-5 w-7/12 bg-gray-100" />
+        <div className="mb-1 h-5 w-full bg-gray-100" />
+        <div className="h-5 w-7/12 bg-gray-100" />
         <span className="sr-only">Loading...</span>
     </Container>
 );
