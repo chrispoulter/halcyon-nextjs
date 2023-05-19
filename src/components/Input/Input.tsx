@@ -33,6 +33,8 @@ const transformers: InputValueTransform = {
 
 export const Input = ({
     control,
+    name,
+    type = 'text',
     label,
     hideLabel,
     className,
@@ -44,11 +46,11 @@ export const Input = ({
         fieldState: { error },
         formState: { isSubmitting }
     } = useController({
-        name: props.name,
+        name,
         control
     });
 
-    const transform = transformers[props.type || ''] || transformers.text;
+    const transform = transformers[type] || transformers.text;
 
     const onClearInput = () => {
         field.onChange('');
@@ -60,7 +62,7 @@ export const Input = ({
 
     const value = transform.input(field.value);
 
-    const showClear = props.type === 'search' && value;
+    const isSearch = type === 'search' && value;
 
     return (
         <div className={clsx('w-full', className)}>
@@ -82,6 +84,8 @@ export const Input = ({
                     {...field}
                     {...props}
                     id={field.name}
+                    name={field.name}
+                    type={type}
                     value={value}
                     disabled={props.disabled || isSubmitting}
                     aria-invalid={!!error}
@@ -91,12 +95,12 @@ export const Input = ({
                         {
                             'border-red-600 bg-red-50 focus:border-red-600 focus:ring-red-500':
                                 error,
-                            'pr-8': showClear
+                            'pr-8': isSearch
                         }
                     )}
                 />
 
-                {showClear && (
+                {isSearch && (
                     <button
                         type="button"
                         aria-label="Clear"
