@@ -8,24 +8,17 @@ import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 const schema = Yup.object({
     emailAddress: Yup.string()
         .label('Email Address')
-        .default('')
         .max(254)
         .email()
         .required(),
-    password: Yup.string()
-        .label('Password')
-        .default('')
-        .min(8)
-        .max(50)
-        .required(),
+    password: Yup.string().label('Password').min(8).max(50).required(),
     confirmPassword: Yup.string()
         .label('Confirm Password')
-        .default('')
         .required()
         .oneOf([Yup.ref('password')], 'Passwords do not match'),
-    firstName: Yup.string().label('First Name').default('').max(50).required(),
-    lastName: Yup.string().label('Last Name').default('').max(50).required(),
-    dateOfBirth: Yup.string().label('Date Of Birth').default('').required()
+    firstName: Yup.string().label('First Name').max(50).required(),
+    lastName: Yup.string().label('Last Name').max(50).required(),
+    dateOfBirth: Yup.date().label('Date Of Birth').required()
 });
 
 const defaultValues = schema.getDefault();

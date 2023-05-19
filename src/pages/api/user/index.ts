@@ -89,7 +89,7 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
                 emailAddress: user.emailAddress,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                dateOfBirth: user.dateOfBirth.toISOString(),
+                dateOfBirth: user.dateOfBirth,
                 isLockedOut: user.isLockedOut,
                 roles: user.roles.map(r => r as Role)
             })),

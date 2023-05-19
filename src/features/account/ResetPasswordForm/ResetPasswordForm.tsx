@@ -6,20 +6,10 @@ import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 
 const schema = Yup.object({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .default('')
-        .email()
-        .required(),
-    newPassword: Yup.string()
-        .label('New Password')
-        .default('')
-        .min(8)
-        .max(50)
-        .required(),
+    emailAddress: Yup.string().label('Email Address').email().required(),
+    newPassword: Yup.string().label('New Password').min(8).max(50).required(),
     confirmNewPassword: Yup.string()
         .label('Confirm New Password')
-        .default('')
         .required()
         .oneOf([Yup.ref('newPassword')], 'Passwords do not match')
 });

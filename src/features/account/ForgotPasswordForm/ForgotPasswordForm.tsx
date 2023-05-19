@@ -6,11 +6,7 @@ import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 
 const schema = Yup.object({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .default('')
-        .email()
-        .required()
+    emailAddress: Yup.string().label('Email Address').email().required()
 });
 
 const defaultValues = schema.getDefault();

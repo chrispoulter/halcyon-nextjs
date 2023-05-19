@@ -35,7 +35,7 @@ export const createUserSchema = Yup.object().shape({
     password: Yup.string().label('Password').min(8).max(50).required(),
     firstName: Yup.string().label('First Name').max(50).required(),
     lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.string().label('Date Of Birth').required(),
+    dateOfBirth: Yup.date().label('Date Of Birth').required(),
     roles: Yup.array()
         .of(
             Yup.string<Role>()
@@ -57,7 +57,7 @@ export type GetUserResponse = {
     emailAddress: string;
     firstName: string;
     lastName: string;
-    dateOfBirth: string;
+    dateOfBirth: Date;
     isLockedOut?: boolean;
     roles?: Role[];
 };
@@ -70,7 +70,7 @@ export const updateUserSchema = Yup.object().shape({
         .required(),
     firstName: Yup.string().label('First Name').max(50).required(),
     lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.string().label('Date Of Birth').required(),
+    dateOfBirth: Yup.date().label('Date Of Birth').required(),
     roles: Yup.array()
         .of(
             Yup.string<Role>()

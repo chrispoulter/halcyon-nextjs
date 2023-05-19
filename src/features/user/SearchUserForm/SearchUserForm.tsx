@@ -6,7 +6,7 @@ import { Button } from '@/components/Button/Button';
 import { SearchIcon } from '@/components/Icons/SearchIcon';
 
 const schema = Yup.object({
-    search: Yup.string().label('Search').default('')
+    search: Yup.string().label('Search')
 });
 
 export type SearchUserFormValues = Yup.InferType<typeof schema>;

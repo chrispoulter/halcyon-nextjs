@@ -9,13 +9,12 @@ import { InputSkeleton, FormSkeleton } from '@/components/Skeleton/Skeleton';
 const schema = Yup.object({
     emailAddress: Yup.string()
         .label('Email Address')
-        .default('')
         .max(254)
         .email()
         .required(),
-    firstName: Yup.string().label('First Name').default('').max(50).required(),
-    lastName: Yup.string().label('Last Name').default('').max(50).required(),
-    dateOfBirth: Yup.string().label('Date Of Birth').default('').required()
+    firstName: Yup.string().label('First Name').max(50).required(),
+    lastName: Yup.string().label('Last Name').max(50).required(),
+    dateOfBirth: Yup.date().label('Date Of Birth').required()
 });
 
 export type UpdateProfileFormValues = Yup.InferType<typeof schema>;
