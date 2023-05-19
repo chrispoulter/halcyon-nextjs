@@ -1,7 +1,7 @@
 import { Control, useController } from 'react-hook-form';
 import clsx from 'clsx';
 import { CloseIcon } from '@/components/Icons/CloseIcon';
-import { parseForInput, formatForInput } from '@/utils/dates';
+import { parseForOutput, formatForInput } from '@/utils/dates';
 
 type InputProps = Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -28,7 +28,7 @@ const transformers: InputValueTransform = {
         input: value => (value ? formatForInput(value) : ''),
         output: e =>
             e.currentTarget.value
-                ? parseForInput(e.currentTarget.value)
+                ? parseForOutput(e.currentTarget.value)
                 : undefined
     },
     text: {
