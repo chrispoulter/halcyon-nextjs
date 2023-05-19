@@ -104,7 +104,7 @@ export const Input = ({
                     <button
                         type="button"
                         aria-label="Clear"
-                        disabled={props.disabled}
+                        disabled={props.disabled || isSubmitting}
                         onClick={onClearInput}
                         className="absolute right-0 top-0 h-full px-2 py-1 text-gray-800 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-1 focus:ring-cyan-500"
                     >
