@@ -1,9 +1,14 @@
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 import { GetProfileResponse } from '@/models/manage.types';
-import { HandlerResponse } from '@/utils/handler';
+import { fetcher } from '@/utils/fetch';
+
+export const getProfile = () => fetcher<GetProfileResponse>('/api/manage');
 
 export const useGetProfile = () => {
-    const { data } = useSWR<HandlerResponse<GetProfileResponse>>('/api/manage');
+    const { data } = useQuery({
+        queryKey: ['profile'],
+        queryFn: getProfile
+    });
 
     return { profile: data?.data };
 };

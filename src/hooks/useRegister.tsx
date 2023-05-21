@@ -1,12 +1,15 @@
-import useSWRMutation from 'swr/mutation';
+import { useMutation } from '@tanstack/react-query';
 import { RegisterRequest } from '@/models/account.types';
 import { fetcher } from '@/utils/fetch';
+import { UpdatedResponse } from '@/utils/handler';
 
-const register = async (url: string, { arg }: { arg: RegisterRequest }) =>
-    fetcher(url, 'POST', arg);
+export const register = (request: RegisterRequest) =>
+    fetcher<UpdatedResponse>('/api/account/register', 'POST', request);
 
 export const useRegister = () => {
-    const { trigger } = useSWRMutation('/api/account/register', register);
+    const { mutateAsync } = useMutation({
+        mutationFn: register
+    });
 
-    return { register: trigger };
+    return { register: mutateAsync };
 };

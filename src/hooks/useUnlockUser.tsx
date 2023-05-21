@@ -1,22 +1,20 @@
-import { mutate } from 'swr';
-import useSWRMutation from 'swr/mutation';
-import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetcher } from '@/utils/fetch';
-import { HandlerResponse } from '@/utils/handler';
+import { UpdatedResponse } from '@/utils/handler';
 
-const unlockUser = async (url: string) => fetcher(url, 'PUT');
+export const unlockUser = (id: string) =>
+    fetcher<UpdatedResponse>(`/api/user/${id}/unlock`, 'PUT');
 
 export const useUnlockUser = (id: string) => {
-    const { trigger, isMutating } = useSWRMutation<HandlerResponse>(
-        `/api/user/${id}/unlock`,
-        unlockUser,
-        {
-            onSuccess: data => {
-                toast.success(data.message!);
-                mutate(`/api/user/${id}`);
-            }
-        }
-    );
+    const queryClient = useQueryClient();
 
-    return { unlockUser: trigger, isUnlocking: isMutating };
+    const { mutateAsync, isLoading } = useMutation({
+        mutationFn: () => unlockUser(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+            queryClient.invalidateQueries({ queryKey: ['user', id] });
+        }
+    });
+
+    return { unlockUser: mutateAsync, isUnlocking: isLoading };
 };

@@ -1,12 +1,18 @@
-import useSWRMutation from 'swr/mutation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CreateUserRequest } from '@/models/user.types';
 import { fetcher } from '@/utils/fetch';
+import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
-const createUser = async (url: string, { arg }: { arg: CreateUserRequest }) =>
-    fetcher(url, 'POST', arg);
+export const createUser = (request: CreateUserRequest) =>
+    fetcher<UpdatedResponse>('/api/user', 'POST', request);
 
 export const useCreateUser = () => {
-    const { trigger } = useSWRMutation('/api/user', createUser);
+    const queryClient = useQueryClient();
 
-    return { createUser: trigger };
+    const { mutateAsync } = useMutation({
+        mutationFn: createUser,
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] })
+    });
+
+    return { createUser: mutateAsync };
 };

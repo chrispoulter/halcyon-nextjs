@@ -12,10 +12,10 @@ class FetchError extends Error {
     }
 }
 
-export const fetcher = async <T = unknown>(
+export const fetcher = async <TResponse = void, TBody = unknown>(
     url: string,
-    method: string,
-    body?: T
+    method: string = 'GET',
+    body?: TBody
 ) => {
     const result = await fetch(url, {
         method,
@@ -25,7 +25,7 @@ export const fetcher = async <T = unknown>(
         body: body && JSON.stringify(body)
     });
 
-    let response: any;
+    let response;
 
     try {
         response = await result.json();
@@ -35,5 +35,5 @@ export const fetcher = async <T = unknown>(
         throw new FetchError(result.status, response);
     }
 
-    return response;
+    return response as HandlerResponse<TResponse>;
 };

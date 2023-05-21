@@ -1,12 +1,21 @@
-import useSWRMutation from 'swr/mutation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdateUserRequest } from '@/models/user.types';
 import { fetcher } from '@/utils/fetch';
+import { UpdatedResponse } from '@/utils/handler';
 
-const updateUser = async (url: string, { arg }: { arg: UpdateUserRequest }) =>
-    fetcher(url, 'PUT', arg);
+export const updateUser = (id: string, request: UpdateUserRequest) =>
+    fetcher<UpdatedResponse>(`/api/user/${id}`, 'PUT', request);
 
 export const useUpdateUser = (id: string) => {
-    const { trigger } = useSWRMutation(`/api/user/${id}`, updateUser);
+    const queryClient = useQueryClient();
 
-    return { updateUser: trigger };
+    const { mutateAsync } = useMutation({
+        mutationFn: (request: UpdateUserRequest) => updateUser(id, request),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+            queryClient.invalidateQueries({ queryKey: ['user', id] });
+        }
+    });
+
+    return { updateUser: mutateAsync };
 };
