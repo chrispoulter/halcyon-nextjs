@@ -3,6 +3,7 @@ import { Card, CardTitle } from '@/components/Card/Card';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { CardSkeleton } from '@/components/Skeleton/Skeleton';
+import { formatForDisplay } from '@/utils/date';
 
 type PersonalDetailsCardProps = {
     profile?: GetProfileResponse;
@@ -30,8 +31,6 @@ export const PersonalDetailsCard = ({
         return <PersonalDetailsCardLoading className={className} />;
     }
 
-    const dob = new Date(profile.dateOfBirth);
-
     return (
         <Card className={className}>
             <CardTitle>Personal Details</CardTitle>
@@ -52,8 +51,7 @@ export const PersonalDetailsCard = ({
                 Date Of Birth
             </p>
             <p className="mb-3 text-sm text-gray-500">
-                {dob.getUTCFullYear()} / {dob.getUTCMonth() + 1} /{' '}
-                {dob.getUTCDate()}
+                {formatForDisplay(profile.dateOfBirth)}
             </p>
 
             <ButtonGroup align="left">
