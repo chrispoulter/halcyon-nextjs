@@ -12,7 +12,7 @@ class FetchError extends Error {
     }
 }
 
-export const fetcher = async <TResponse = void, TBody = unknown>(
+export const fetcher = async <TResponse = unknown, TBody = unknown>(
     url: string,
     method: string = 'GET',
     body?: TBody

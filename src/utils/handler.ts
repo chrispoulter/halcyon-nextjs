@@ -6,7 +6,7 @@ import { config } from '@/utils/config';
 
 export type UpdatedResponse = { id: number };
 
-export type HandlerResponse<T = void> = {
+export type HandlerResponse<T = unknown> = {
     code?: string;
     message?: string;
     data?: T;
@@ -16,7 +16,7 @@ type HandlerContext = {
     currentUserId?: number;
 };
 
-export type Handler<TResponse = void> = (
+export type Handler<TResponse = unknown> = (
     req: NextApiRequest,
     res: NextApiResponse<HandlerResponse<TResponse>>,
     context: HandlerContext
