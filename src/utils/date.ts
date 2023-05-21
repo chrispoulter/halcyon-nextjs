@@ -1,3 +1,7 @@
+export const today = new Date();
+
+export const currentYear = today.getUTCFullYear();
+
 export const formatForDisplay = (value: string | Date) => {
     const date = value instanceof Date ? value : new Date(value);
 
