@@ -1,6 +1,7 @@
 import { Control, useController } from 'react-hook-form';
 import clsx from 'clsx';
 import { CloseIcon } from '@/components/Icons/CloseIcon';
+import { formatForInput, parseForOutput } from '@/utils/date';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     control: Control<any, any>;
@@ -19,10 +20,10 @@ type InputValueTransform = {
 
 const transformers: InputValueTransform = {
     date: {
-        input: value => (value ? value.split('T')[0] : ''),
+        input: value => (value ? formatForInput(value) : ''),
         output: e =>
             e.currentTarget.value
-                ? new Date(e.currentTarget.value).toISOString()
+                ? parseForOutput(e.currentTarget.value)
                 : undefined
     },
     text: {
