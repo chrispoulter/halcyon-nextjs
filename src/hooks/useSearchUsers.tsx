@@ -4,43 +4,36 @@ import { fetcher } from '@/utils/fetch';
 
 type UseSearchUsersProps = Omit<SearchUsersRequest, 'page' | 'size'>;
 
-const searchUsers = (page = 1, request: UseSearchUsersProps) => {
+const searchUsers = (request: SearchUsersRequest) => {
     const params = Object.entries(request)
         .map(pair => pair.map(encodeURIComponent).join('='))
         .join('&');
 
-    return fetcher<SearchUsersResponse>(
-        `/api/user?${params}&page=${page}&size=5`
-    );
+    return fetcher<SearchUsersResponse>(`/api/user?${params}`);
 };
 
 export const useSearchUsers = (request: UseSearchUsersProps) => {
     const { data, error, fetchNextPage, isLoading, isFetching } =
         useInfiniteQuery({
             queryKey: ['users', request],
-            queryFn: ({ pageParam }) => searchUsers(pageParam, request)
+            queryFn: ({ pageParam = 1 }) =>
+                searchUsers({ ...request, page: pageParam, size: 5 })
         });
 
-    const lastResponse = data?.pages[data?.pages.length - 1];
+    const users = data?.pages
+        ?.map(response => response.data?.items || [])
+        .flat();
 
-    const mergedData = {
-        code: lastResponse?.code,
-        message: lastResponse?.message,
-        data: {
-            items: data?.pages
-                ?.map(response => response.data?.items || [])
-                .flat(),
-            hasNextPage: lastResponse?.data?.hasNextPage
-        }
-    };
+    const hasMore = data?.pages[data?.pages?.length - 1]?.data?.hasNextPage;
 
-    const nextPageParam = (data?.pages.length || 0) + 1;
+    const loadMore = () =>
+        fetchNextPage({ pageParam: (data?.pages?.length || 0) + 1 });
 
     return {
         isLoading: isLoading || !!error,
         isFetching,
-        users: mergedData?.data?.items,
-        hasMore: mergedData?.data?.hasNextPage,
-        loadMore: () => fetchNextPage({ pageParam: nextPageParam })
+        users,
+        hasMore,
+        loadMore
     };
 };
