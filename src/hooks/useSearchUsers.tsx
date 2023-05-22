@@ -9,8 +9,8 @@ export const useSearchUsers = (request: UseSearchUsersProps) => {
         .map(pair => pair.map(encodeURIComponent).join('='))
         .join('&');
 
-    const getKey = (pageIndex: number) =>
-        `/api/user?${params}&page=${pageIndex + 1}&size=5`;
+    const getKey = (index: number) =>
+        `/api/user?${params}&page=${index + 1}&size=5`;
 
     const {
         data = [],
@@ -20,7 +20,8 @@ export const useSearchUsers = (request: UseSearchUsersProps) => {
         setSize,
         error
     } = useSWRInfinite<HandlerResponse<SearchUsersResponse>>(getKey, {
-        revalidateAll: true
+        revalidateAll: true,
+        parallel: true
     });
 
     const users = data?.map(response => response.data?.items || []).flat();
