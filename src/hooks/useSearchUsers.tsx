@@ -23,22 +23,17 @@ export const useSearchUsers = (request: UseSearchUsersProps) => {
         revalidateAll: true
     });
 
-    const lastResponse = data[data.length - 1];
+    const users = data?.map(response => response.data?.items || []).flat();
 
-    const mergedData = {
-        code: lastResponse?.code,
-        message: lastResponse?.message,
-        data: {
-            items: data?.map(response => response.data?.items || []).flat(),
-            hasNextPage: lastResponse?.data?.hasNextPage
-        }
-    };
+    const hasMore = data[data.length - 1]?.data?.hasNextPage;
+
+    const loadMore = () => setSize(size + 1);
 
     return {
         isLoading: isLoading || !!error,
         isFetching: isValidating,
-        users: mergedData?.data?.items,
-        hasMore: mergedData?.data?.hasNextPage,
-        loadMore: () => setSize(size + 1)
+        users,
+        hasMore,
+        loadMore
     };
 };
