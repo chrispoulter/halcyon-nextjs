@@ -5,7 +5,11 @@ import { fetcher } from '@/utils/fetch';
 const changePassword = async (
     url: string,
     { arg }: { arg: ChangePasswordRequest }
-) => fetcher(url, 'PUT', arg);
+) =>
+    fetcher(url, {
+        method: 'PUT',
+        body: JSON.stringify(arg)
+    });
 
 export const useChangePassword = () => {
     const { trigger } = useSWRMutation(

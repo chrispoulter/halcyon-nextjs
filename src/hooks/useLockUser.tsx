@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { fetcher } from '@/utils/fetch';
 import { HandlerResponse } from '@/utils/handler';
 
-const lockUser = async (url: string) => fetcher(url, 'PUT');
+const lockUser = async (url: string) => fetcher(url, { method: 'PUT' });
 
 export const useLockUser = (id: string) => {
     const { trigger, isMutating } = useSWRMutation<HandlerResponse>(

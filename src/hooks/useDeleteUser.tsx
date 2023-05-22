@@ -1,7 +1,7 @@
 import useSWRMutation from 'swr/mutation';
 import { fetcher } from '@/utils/fetch';
 
-const deleteUser = async (url: string) => fetcher(url, 'DELETE');
+const deleteUser = async (url: string) => fetcher(url, { method: 'DELETE' });
 
 export const useDeleteUser = (id: string) => {
     const { trigger, isMutating } = useSWRMutation(

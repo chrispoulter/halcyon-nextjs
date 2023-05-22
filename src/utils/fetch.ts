@@ -2,9 +2,9 @@ import { HandlerResponse } from '@/utils/handler';
 
 class FetchError extends Error {
     status: number;
-    response: HandlerResponse;
+    response?: HandlerResponse;
 
-    constructor(status: number, response: HandlerResponse) {
+    constructor(status: number, response?: HandlerResponse) {
         super('An error has occurred whilst communicating with the server.');
         this.name = 'FetchError';
         this.status = status;
@@ -12,20 +12,19 @@ class FetchError extends Error {
     }
 }
 
-export const fetcher = async <T = unknown>(
+export const fetcher = async <TResponse = HandlerResponse>(
     url: string,
-    method: string,
-    body?: T
+    init?: RequestInit
 ) => {
     const result = await fetch(url, {
-        method,
+        ...init,
         headers: {
-            'Content-Type': 'application/json'
-        },
-        body: body && JSON.stringify(body)
+            'Content-Type': 'application/json',
+            ...init?.headers
+        }
     });
 
-    let response: any;
+    let response: HandlerResponse | undefined = undefined;
 
     try {
         response = await result.json();
@@ -35,5 +34,5 @@ export const fetcher = async <T = unknown>(
         throw new FetchError(result.status, response);
     }
 
-    return response;
+    return response as HandlerResponse<TResponse>;
 };

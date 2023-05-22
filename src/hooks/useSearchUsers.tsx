@@ -1,6 +1,6 @@
 import useSWRInfinite from 'swr/infinite';
 import { SearchUsersRequest, SearchUsersResponse } from '@/models/user.types';
-import { HandlerResponse } from '@/utils/handler';
+import { fetcher } from '@/utils/fetch';
 
 type UseSearchUsersProps = Omit<SearchUsersRequest, 'page' | 'size'>;
 
@@ -19,7 +19,7 @@ export const useSearchUsers = (request: UseSearchUsersProps) => {
         size,
         setSize,
         error
-    } = useSWRInfinite<HandlerResponse<SearchUsersResponse>>(getKey, {
+    } = useSWRInfinite(getKey, url => fetcher<SearchUsersResponse>(url), {
         revalidateAll: true,
         parallel: true
     });

@@ -10,7 +10,6 @@ import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
 import { Auth } from '@/components/Auth/Auth';
 import { Footer } from '@/components/Footer/Footer';
 import { Toaster } from '@/components/Toast/Toast';
-import { fetcher } from '@/utils/fetch';
 
 import '@/styles/globals.css';
 
@@ -38,7 +37,6 @@ const App = ({
             <SessionProvider session={session}>
                 <SWRConfig
                     value={{
-                        fetcher,
                         fallback,
                         onSuccess: data => {
                             if (data.message) {

@@ -5,7 +5,11 @@ import { fetcher } from '@/utils/fetch';
 const updateProfile = async (
     url: string,
     { arg }: { arg: UpdateProfileRequest }
-) => fetcher(url, 'PUT', arg);
+) =>
+    fetcher(url, {
+        method: 'PUT',
+        body: JSON.stringify(arg)
+    });
 
 export const useUpdateProfile = () => {
     const { trigger } = useSWRMutation('/api/manage', updateProfile);

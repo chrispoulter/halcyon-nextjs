@@ -3,7 +3,10 @@ import { UpdateUserRequest } from '@/models/user.types';
 import { fetcher } from '@/utils/fetch';
 
 const updateUser = async (url: string, { arg }: { arg: UpdateUserRequest }) =>
-    fetcher(url, 'PUT', arg);
+    fetcher(url, {
+        method: 'PUT',
+        body: JSON.stringify(arg)
+    });
 
 export const useUpdateUser = (id: string) => {
     const { trigger } = useSWRMutation(`/api/user/${id}`, updateUser);
