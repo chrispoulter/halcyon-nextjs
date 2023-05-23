@@ -5,7 +5,7 @@ import { EmailTemplate, sendEmail } from '@/utils/email';
 import { getBaseUrl } from '@/utils/url';
 
 const forgotPasswordHandler: Handler = async (req, res) => {
-    const body = await forgotPasswordSchema.validate(req.body);
+    const body = await forgotPasswordSchema.parseAsync(req.body);
 
     const user = await prisma.users.findUnique({
         where: {

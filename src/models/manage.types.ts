@@ -1,4 +1,4 @@
-import * as Yup from 'yup';
+import { z } from 'zod';
 
 export type GetProfileResponse = {
     id: number;
@@ -8,22 +8,18 @@ export type GetProfileResponse = {
     dateOfBirth: Date;
 };
 
-export const updateProfileSchema = Yup.object().shape({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .max(254)
-        .email()
-        .required(),
-    firstName: Yup.string().label('First Name').max(50).required(),
-    lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date().label('Date Of Birth').required()
+export const updateProfileSchema = z.object({
+    emailAddress: z.string().max(254).email(),
+    firstName: z.string().max(50),
+    lastName: z.string().max(50),
+    dateOfBirth: z.coerce.date()
 });
 
-export type UpdateProfileRequest = Yup.InferType<typeof updateProfileSchema>;
+export type UpdateProfileRequest = z.infer<typeof updateProfileSchema>;
 
-export const changePasswordSchema = Yup.object().shape({
-    currentPassword: Yup.string().label('Current Password').required(),
-    newPassword: Yup.string().label('New Password').min(8).max(50).required()
+export const changePasswordSchema = z.object({
+    currentPassword: z.string(),
+    newPassword: z.string().min(8).max(50)
 });
 
-export type ChangePasswordRequest = Yup.InferType<typeof changePasswordSchema>;
+export type ChangePasswordRequest = z.infer<typeof changePasswordSchema>;
