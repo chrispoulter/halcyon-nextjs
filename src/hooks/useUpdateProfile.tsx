@@ -4,7 +4,10 @@ import { fetcher } from '@/utils/fetch';
 import { UpdatedResponse } from '@/utils/handler';
 
 const updateProfile = (request: UpdateProfileRequest) =>
-    fetcher<UpdatedResponse>('/api/manage', 'PUT', request);
+    fetcher<UpdatedResponse>('/api/manage', {
+        method: 'PUT',
+        body: JSON.stringify(request)
+    });
 
 export const useUpdateProfile = () => {
     const queryClient = useQueryClient();

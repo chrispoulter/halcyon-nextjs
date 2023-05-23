@@ -3,7 +3,10 @@ import { ForgotPasswordRequest } from '@/models/account.types';
 import { fetcher } from '@/utils/fetch';
 
 export const forgotPassword = (request: ForgotPasswordRequest) =>
-    fetcher('/api/account/forgot-password', 'PUT', request);
+    fetcher('/api/account/forgot-password', {
+        method: 'PUT',
+        body: JSON.stringify(request)
+    });
 
 export const useForgotPassword = () => {
     const { mutateAsync } = useMutation({

@@ -3,7 +3,7 @@ import { fetcher } from '@/utils/fetch';
 import { UpdatedResponse } from '@/utils/handler';
 
 export const deleteUser = (id: string) =>
-    fetcher<UpdatedResponse>(`/api/user/${id}`, 'DELETE');
+    fetcher<UpdatedResponse>(`/api/user/${id}`, { method: 'DELETE' });
 
 export const useDeleteUser = (id: string) => {
     const queryClient = useQueryClient();

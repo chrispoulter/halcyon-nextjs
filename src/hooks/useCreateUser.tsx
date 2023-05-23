@@ -4,7 +4,10 @@ import { fetcher } from '@/utils/fetch';
 import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 export const createUser = (request: CreateUserRequest) =>
-    fetcher<UpdatedResponse>('/api/user', 'POST', request);
+    fetcher<UpdatedResponse>('/api/user', {
+        method: 'POST',
+        body: JSON.stringify(request)
+    });
 
 export const useCreateUser = () => {
     const queryClient = useQueryClient();

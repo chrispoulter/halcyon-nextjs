@@ -4,7 +4,10 @@ import { fetcher } from '@/utils/fetch';
 import { UpdatedResponse } from '@/utils/handler';
 
 export const changePassword = (request: ChangePasswordRequest) =>
-    fetcher<UpdatedResponse>('/api/manage/change-password', 'PUT', request);
+    fetcher<UpdatedResponse>('/api/manage/change-password', {
+        method: 'PUT',
+        body: JSON.stringify(request)
+    });
 
 export const useChangePassword = () => {
     const { mutateAsync } = useMutation({

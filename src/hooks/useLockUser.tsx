@@ -3,7 +3,7 @@ import { fetcher } from '@/utils/fetch';
 import { UpdatedResponse } from '@/utils/handler';
 
 export const lockUser = (id: string) =>
-    fetcher<UpdatedResponse>(`/api/user/${id}/lock`, 'PUT');
+    fetcher<UpdatedResponse>(`/api/user/${id}/lock`, { method: 'PUT' });
 
 export const useLockUser = (id: string) => {
     const queryClient = useQueryClient();
