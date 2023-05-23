@@ -21,6 +21,7 @@ import { useDeleteUser } from '@/hooks/useDeleteUser';
 import { useLockUser } from '@/hooks/useLockUser';
 import { useUnlockUser } from '@/hooks/useUnlockUser';
 import { isUserAdministrator } from '@/utils/auth';
+import { getBaseUrl } from '@/utils/url';
 
 const UpdateUser = () => {
     const router = useRouter();
@@ -108,32 +109,38 @@ const UpdateUser = () => {
     );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({
-//     req,
-//     res,
-//     params
-// }) => {
-//     const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async ({
+    req,
+    res,
+    params
+}) => {
+    const session = await getServerSession(req, res, authOptions);
 
-//     const id = params?.id as string;
+    const id = params?.id as string;
 
-//     const queryClient = new QueryClient();
+    const queryClient = new QueryClient();
 
-//     await queryClient.prefetchQuery(['user', id], () =>
-//         getUser(id, {
-//             headers: {
-//                 cookie: req.headers.cookie!
-//             }
-//         })
-//     );
+    const baseUrl = getBaseUrl(req);
 
-//     return {
-//         props: {
-//             session,
-//             dehydratedState: dehydrate(queryClient)
-//         }
-//     };
-// };
+    await queryClient.prefetchQuery(['user', id], () =>
+        getUser(
+            id,
+            {
+                headers: {
+                    cookie: req.headers.cookie!
+                }
+            },
+            baseUrl
+        )
+    );
+
+    return {
+        props: {
+            session,
+            dehydratedState: dehydrate(queryClient)
+        }
+    };
+};
 
 UpdateUser.meta = {
     title: 'Update User'

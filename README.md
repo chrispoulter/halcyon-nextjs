@@ -16,8 +16,6 @@ A web application template.
 Create a `.env` file in the web project directory.
 
 ```
-SITE_URL=http://localhost:3000
-
 DATABASE_URL=postgres://postgres:example@localhost/halcyon
 
 EMAIL_SMTP_SERVER=localhost

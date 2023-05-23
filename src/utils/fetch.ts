@@ -1,5 +1,4 @@
 import { HandlerResponse } from '@/utils/handler';
-import { config } from '@/utils/config';
 
 class FetchError extends Error {
     status: number;
@@ -17,7 +16,7 @@ export const fetcher = async <TResponse = HandlerResponse>(
     url: string,
     init?: RequestInit
 ) => {
-    const result = await fetch(`${config.SITE_URL}${url}`, {
+    const result = await fetch(url, {
         ...init,
         headers: {
             'Content-Type': 'application/json',

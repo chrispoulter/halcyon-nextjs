@@ -17,6 +17,7 @@ import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropd
 import { UserList } from '@/features/user/UserList/UserList';
 import { searchUsers, useSearchUsers } from '@/hooks/useSearchUsers';
 import { isUserAdministrator } from '@/utils/auth';
+import { getBaseUrl } from '@/utils/url';
 
 const Users = () => {
     const [request, setRequest] = useState({
@@ -71,42 +72,45 @@ const Users = () => {
     );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//     const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const session = await getServerSession(req, res, authOptions);
 
-//     const queryClient = new QueryClient();
+    const queryClient = new QueryClient();
 
-//     const request = {
-//         search: '',
-//         sort: UserSort.NAME_ASC
-//     };
+    const baseUrl = getBaseUrl(req);
 
-//     await queryClient.prefetchInfiniteQuery(
-//         ['users', request],
-//         ({ pageParam = 1 }) =>
-//             searchUsers(
-//                 { ...request, page: pageParam, size: 5 },
-//                 {
-//                     headers: {
-//                         cookie: req.headers.cookie!
-//                     }
-//                 }
-//             )
-//     );
+    const request = {
+        search: '',
+        sort: UserSort.NAME_ASC
+    };
 
-//     // next ssr hack!
-//     queryClient.setQueryData(['users', request], (data: any) => ({
-//         ...data,
-//         pageParams: []
-//     }));
+    await queryClient.prefetchInfiniteQuery(
+        ['users', request],
+        ({ pageParam = 1 }) =>
+            searchUsers(
+                { ...request, page: pageParam, size: 5 },
+                {
+                    headers: {
+                        cookie: req.headers.cookie!
+                    }
+                },
+                baseUrl
+            )
+    );
 
-//     return {
-//         props: {
-//             session,
-//             dehydratedState: dehydrate(queryClient)
-//         }
-//     };
-// };
+    // next ssr hack!
+    queryClient.setQueryData(['users', request], (data: any) => ({
+        ...data,
+        pageParams: []
+    }));
+
+    return {
+        props: {
+            session,
+            dehydratedState: dehydrate(queryClient)
+        }
+    };
+};
 
 Users.meta = {
     title: 'Users'

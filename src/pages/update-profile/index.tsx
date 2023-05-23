@@ -12,6 +12,7 @@ import {
 } from '@/features/manage/UpdateProfileForm/UpdateProfileForm';
 import { getProfile, useGetProfile } from '@/hooks/useGetProfile';
 import { useUpdateProfile } from '@/hooks/useUpdateProfile';
+import { getBaseUrl } from '@/utils/url';
 
 const UpdateProfile = () => {
     const router = useRouter();
@@ -42,26 +43,29 @@ const UpdateProfile = () => {
     );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//     const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const session = await getServerSession(req, res, authOptions);
 
-//     const queryClient = new QueryClient();
+    const queryClient = new QueryClient();
 
-//     await queryClient.prefetchQuery(['profile'], () =>
-//         getProfile({
-//             headers: {
-//                 cookie: req.headers.cookie!
-//             }
-//         })
-//     );
+    const baseUrl = getBaseUrl(req);
 
-//     return {
-//         props: {
-//             session,
-//             dehydratedState: dehydrate(queryClient)
-//         }
-//     };
-// };
+    await queryClient.prefetchQuery(['profile'], () =>
+        getProfile({
+            headers: {
+                cookie: req.headers.cookie!
+            }
+        },
+        baseUrl)
+    );
+
+    return {
+        props: {
+            session,
+            dehydratedState: dehydrate(queryClient)
+        }
+    };
+};
 
 UpdateProfile.meta = {
     title: 'Update Profile'

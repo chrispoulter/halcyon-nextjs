@@ -6,13 +6,14 @@ const PAGE_SIZE = 5;
 
 export const searchUsers = (
     request: SearchUsersRequest,
-    init?: RequestInit
+    init?: RequestInit,
+    baseUrl = ''
 ) => {
     const params = Object.entries(request)
         .map(pair => pair.map(encodeURIComponent).join('='))
         .join('&');
 
-    return fetcher<SearchUsersResponse>(`/api/user?${params}`, init);
+    return fetcher<SearchUsersResponse>(`${baseUrl}/api/user?${params}`, init);
 };
 
 type UseSearchUsersProps = Omit<SearchUsersRequest, 'page' | 'size'>;

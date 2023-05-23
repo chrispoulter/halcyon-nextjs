@@ -1,6 +1,5 @@
 export const config = {
     VERSION: process.env.NEXT_PUBLIC_GITVERSION_SEMVER || '1.0.0',
-    SITE_URL: process.env.SITE_URL || '',
 
     DATABASE_URL: process.env.DATABASE_URL!,
 
