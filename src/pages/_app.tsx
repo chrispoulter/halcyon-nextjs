@@ -3,6 +3,7 @@ import { Open_Sans } from 'next/font/google';
 import { useRouter } from 'next/router';
 import { SessionProvider, signOut } from 'next-auth/react';
 import {
+    Hydrate,
     MutationCache,
     QueryCache,
     QueryClient,
@@ -25,7 +26,7 @@ const font = Open_Sans({
 
 const App = ({
     Component,
-    pageProps: { session, fallback = {}, ...pageProps }
+    pageProps: { session, dehydratedState = {}, ...pageProps }
 }: AppProps) => {
     const router = useRouter();
 
@@ -72,19 +73,21 @@ const App = ({
 
             <SessionProvider session={session}>
                 <QueryClientProvider client={queryClient}>
-                    <Header />
-                    <main>
-                        <ErrorBoundary>
-                            {Component.auth ? (
-                                <Auth auth={Component.auth}>
+                    <Hydrate state={dehydratedState}>
+                        <Header />
+                        <main>
+                            <ErrorBoundary>
+                                {Component.auth ? (
+                                    <Auth auth={Component.auth}>
+                                        <Component {...pageProps} />
+                                    </Auth>
+                                ) : (
                                     <Component {...pageProps} />
-                                </Auth>
-                            ) : (
-                                <Component {...pageProps} />
-                            )}
-                        </ErrorBoundary>
-                    </main>
-                    <Footer />
+                                )}
+                            </ErrorBoundary>
+                        </main>
+                        <Footer />
+                    </Hydrate>
                 </QueryClientProvider>
             </SessionProvider>
             <Toaster />
