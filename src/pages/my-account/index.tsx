@@ -37,31 +37,31 @@ const MyAccount = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    const session = await getServerSession(req, res, authOptions);
+// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+//     const session = await getServerSession(req, res, authOptions);
 
-    const queryClient = new QueryClient();
+//     const queryClient = new QueryClient();
 
-    const baseUrl = getBaseUrl(req);
+//     const baseUrl = getBaseUrl(req);
 
-    await queryClient.prefetchQuery(['profile'], () =>
-        getProfile(
-            {
-                headers: {
-                    cookie: req.headers.cookie!
-                }
-            },
-            baseUrl
-        )
-    );
+//     await queryClient.prefetchQuery(['profile'], () =>
+//         getProfile(
+//             {
+//                 headers: {
+//                     cookie: req.headers.cookie!
+//                 }
+//             },
+//             baseUrl
+//         )
+//     );
 
-    return {
-        props: {
-            session,
-            dehydratedState: dehydrate(queryClient)
-        }
-    };
-};
+//     return {
+//         props: {
+//             session,
+//             dehydratedState: dehydrate(queryClient)
+//         }
+//     };
+// };
 
 MyAccount.meta = {
     title: 'My Account'

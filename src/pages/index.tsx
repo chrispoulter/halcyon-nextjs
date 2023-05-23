@@ -1,6 +1,3 @@
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import {
     Jumbotron,
     JumbotronBody,
@@ -70,11 +67,5 @@ const Home = () => (
         </Container>
     </>
 );
-
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => ({
-    props: {
-        session: await getServerSession(req, res, authOptions)
-    }
-});
 
 export default Home;

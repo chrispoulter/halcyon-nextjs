@@ -72,45 +72,45 @@ const Users = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    const session = await getServerSession(req, res, authOptions);
+// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+//     const session = await getServerSession(req, res, authOptions);
 
-    const queryClient = new QueryClient();
+//     const queryClient = new QueryClient();
 
-    const baseUrl = getBaseUrl(req);
+//     const baseUrl = getBaseUrl(req);
 
-    const request = {
-        search: '',
-        sort: UserSort.NAME_ASC
-    };
+//     const request = {
+//         search: '',
+//         sort: UserSort.NAME_ASC
+//     };
 
-    await queryClient.prefetchInfiniteQuery(
-        ['users', request],
-        ({ pageParam = 1 }) =>
-            searchUsers(
-                { ...request, page: pageParam, size: 5 },
-                {
-                    headers: {
-                        cookie: req.headers.cookie!
-                    }
-                },
-                baseUrl
-            )
-    );
+//     await queryClient.prefetchInfiniteQuery(
+//         ['users', request],
+//         ({ pageParam = 1 }) =>
+//             searchUsers(
+//                 { ...request, page: pageParam, size: 5 },
+//                 {
+//                     headers: {
+//                         cookie: req.headers.cookie!
+//                     }
+//                 },
+//                 baseUrl
+//             )
+//     );
 
-    // next ssr hack!
-    queryClient.setQueryData(['users', request], (data: any) => ({
-        ...data,
-        pageParams: []
-    }));
+//     // next ssr hack!
+//     queryClient.setQueryData(['users', request], (data: any) => ({
+//         ...data,
+//         pageParams: []
+//     }));
 
-    return {
-        props: {
-            session,
-            dehydratedState: dehydrate(queryClient)
-        }
-    };
-};
+//     return {
+//         props: {
+//             session,
+//             dehydratedState: dehydrate(queryClient)
+//         }
+//     };
+// };
 
 Users.meta = {
     title: 'Users'

@@ -109,38 +109,38 @@ const UpdateUser = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-    req,
-    res,
-    params
-}) => {
-    const session = await getServerSession(req, res, authOptions);
+// export const getServerSideProps: GetServerSideProps = async ({
+//     req,
+//     res,
+//     params
+// }) => {
+//     const session = await getServerSession(req, res, authOptions);
 
-    const id = params?.id as string;
+//     const id = params?.id as string;
 
-    const queryClient = new QueryClient();
+//     const queryClient = new QueryClient();
 
-    const baseUrl = getBaseUrl(req);
+//     const baseUrl = getBaseUrl(req);
 
-    await queryClient.prefetchQuery(['user', id], () =>
-        getUser(
-            id,
-            {
-                headers: {
-                    cookie: req.headers.cookie!
-                }
-            },
-            baseUrl
-        )
-    );
+//     await queryClient.prefetchQuery(['user', id], () =>
+//         getUser(
+//             id,
+//             {
+//                 headers: {
+//                     cookie: req.headers.cookie!
+//                 }
+//             },
+//             baseUrl
+//         )
+//     );
 
-    return {
-        props: {
-            session,
-            dehydratedState: dehydrate(queryClient)
-        }
-    };
-};
+//     return {
+//         props: {
+//             session,
+//             dehydratedState: dehydrate(queryClient)
+//         }
+//     };
+// };
 
 UpdateUser.meta = {
     title: 'Update User'
