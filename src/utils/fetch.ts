@@ -17,7 +17,7 @@ export const fetcher = async <TResponse = HandlerResponse>(
     url: string,
     init?: RequestInit
 ) => {
-    const result = await fetch(`${config.NEXT_AUTH_URL}${url}`, {
+    const result = await fetch(`${config.SITE_URL}${url}`, {
         ...init,
         headers: {
             'Content-Type': 'application/json',
