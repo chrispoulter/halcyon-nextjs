@@ -1,4 +1,8 @@
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Container } from '@/components/Container/Container';
 import { PageSubTitle, PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -11,7 +15,7 @@ import {
     UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
-import { useGetUser } from '@/hooks/useGetUser';
+import { getUser, useGetUser } from '@/hooks/useGetUser';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import { useDeleteUser } from '@/hooks/useDeleteUser';
 import { useLockUser } from '@/hooks/useLockUser';
@@ -103,6 +107,33 @@ const UpdateUser = () => {
         </Container>
     );
 };
+
+// export const getServerSideProps: GetServerSideProps = async ({
+//     req,
+//     res,
+//     params
+// }) => {
+//     const session = await getServerSession(req, res, authOptions);
+
+//     const id = params?.id as string;
+
+//     const queryClient = new QueryClient();
+
+//     await queryClient.prefetchQuery(['user', id], () =>
+//         getUser(id, {
+//             headers: {
+//                 cookie: req.headers.cookie!
+//             }
+//         })
+//     );
+
+//     return {
+//         props: {
+//             session,
+//             dehydratedState: dehydrate(queryClient)
+//         }
+//     };
+// };
 
 UpdateUser.meta = {
     title: 'Update User'

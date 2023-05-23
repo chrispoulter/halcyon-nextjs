@@ -1,4 +1,8 @@
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -6,7 +10,7 @@ import {
     UpdateProfileForm,
     UpdateProfileFormValues
 } from '@/features/manage/UpdateProfileForm/UpdateProfileForm';
-import { useGetProfile } from '@/hooks/useGetProfile';
+import { getProfile, useGetProfile } from '@/hooks/useGetProfile';
 import { useUpdateProfile } from '@/hooks/useUpdateProfile';
 
 const UpdateProfile = () => {
@@ -37,6 +41,27 @@ const UpdateProfile = () => {
         </Container>
     );
 };
+
+// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+//     const session = await getServerSession(req, res, authOptions);
+
+//     const queryClient = new QueryClient();
+
+//     await queryClient.prefetchQuery(['profile'], () =>
+//         getProfile({
+//             headers: {
+//                 cookie: req.headers.cookie!
+//             }
+//         })
+//     );
+
+//     return {
+//         props: {
+//             session,
+//             dehydratedState: dehydrate(queryClient)
+//         }
+//     };
+// };
 
 UpdateProfile.meta = {
     title: 'Update Profile'
