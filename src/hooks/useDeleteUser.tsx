@@ -1,16 +1,20 @@
-import useSWRMutation from 'swr/mutation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetcher } from '@/utils/fetch';
+import { UpdatedResponse } from '@/utils/handler';
 
-const deleteUser = async (url: string) => fetcher(url, { method: 'DELETE' });
+const deleteUser = (id: string) =>
+    fetcher<UpdatedResponse>(`/api/user/${id}`, { method: 'DELETE' });
 
 export const useDeleteUser = (id: string) => {
-    const { trigger, isMutating } = useSWRMutation(
-        `/api/user/${id}`,
-        deleteUser,
-        {
-            revalidate: false
-        }
-    );
+    const queryClient = useQueryClient();
 
-    return { deleteUser: trigger, isDeleting: isMutating };
+    const { mutateAsync, isLoading } = useMutation({
+        mutationFn: () => deleteUser(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+            queryClient.invalidateQueries({ queryKey: ['user', id] });
+        }
+    });
+
+    return { deleteUser: mutateAsync, isDeleting: isLoading };
 };

@@ -14,7 +14,7 @@ declare module 'next/app' {
         __N_SSP?: boolean;
         pageProps: P & {
             session?: Session;
-            fallback?: { [key: string]: any };
+            dehydratedState?: unknown;
         };
     };
 }

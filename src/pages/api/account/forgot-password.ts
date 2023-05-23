@@ -2,6 +2,7 @@ import { forgotPasswordSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler } from '@/utils/handler';
 import { EmailTemplate, sendEmail } from '@/utils/email';
+import { getBaseUrl } from '@/utils/url';
 
 const forgotPasswordHandler: Handler = async (req, res) => {
     const body = await forgotPasswordSchema.validate(req.body);
@@ -24,16 +25,14 @@ const forgotPasswordHandler: Handler = async (req, res) => {
             }
         });
 
-        const protocol = req.headers.referer?.split('://')[0] || 'http';
-        const host = req.headers.host;
-        const siteUrl = `${protocol}://${host}`;
+        const baseUrl = getBaseUrl(req);
 
         await sendEmail({
             to: user.emailAddress,
             template: EmailTemplate.ResetPassword,
             context: {
-                siteUrl,
-                passwordResetUrl: `${siteUrl}/reset-password/${token}`
+                siteUrl: baseUrl,
+                passwordResetUrl: `${baseUrl}/reset-password/${token}`
             }
         });
     }

@@ -1,11 +1,16 @@
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 import { GetUserResponse } from '@/models/user.types';
 import { fetcher } from '@/utils/fetch';
 
+export const getUser = (id: string, init?: RequestInit, baseUrl = '') =>
+    fetcher<GetUserResponse>(`${baseUrl}/api/user/${id}`, init);
+
 export const useGetUser = (id: string) => {
-    const { data } = useSWR(id ? `/api/user/${id}` : null, url =>
-        fetcher<GetUserResponse>(url)
-    );
+    const { data } = useQuery({
+        queryKey: ['user', id],
+        queryFn: () => getUser(id),
+        enabled: !!id
+    });
 
     return { user: data?.data };
 };
