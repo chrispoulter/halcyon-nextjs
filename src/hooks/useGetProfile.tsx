@@ -8,7 +8,7 @@ export const getProfile = (init?: RequestInit, baseUrl = '') =>
 export const useGetProfile = () => {
     const { data } = useQuery({
         queryKey: ['profile'],
-        queryFn: getProfile
+        queryFn: () => getProfile()
     });
 
     return { profile: data?.data };
