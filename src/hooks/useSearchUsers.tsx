@@ -1,7 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { SearchUsersRequest, SearchUsersResponse } from '@/models/user.types';
 import { fetcher } from '@/utils/fetch';
-import { config } from '@/utils/config';
 
 const PAGE_SIZE = 5;
 
@@ -13,10 +12,7 @@ export const searchUsers = (
         .map(pair => pair.map(encodeURIComponent).join('='))
         .join('&');
 
-    return fetcher<SearchUsersResponse>(
-        `${config.NEXT_AUTH_URL}/api/user?${params}`,
-        init
-    );
+    return fetcher<SearchUsersResponse>(`/api/user?${params}`, init);
 };
 
 type UseSearchUsersProps = Omit<SearchUsersRequest, 'page' | 'size'>;
