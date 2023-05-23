@@ -9,6 +9,7 @@ import {
     QueryClient,
     QueryClientProvider
 } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import toast from 'react-hot-toast';
 import { Meta } from '@/components/Meta/Meta';
 import { Header } from '@/components/Header/Header';
@@ -88,6 +89,7 @@ const App = ({
                         </main>
                         <Footer />
                     </Hydrate>
+                    <ReactQueryDevtools initialIsOpen={false} />
                 </QueryClientProvider>
             </SessionProvider>
             <Toaster />
