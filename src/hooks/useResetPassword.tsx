@@ -3,7 +3,7 @@ import { ResetPasswordRequest } from '@/models/account.types';
 import { fetcher } from '@/utils/fetch';
 import { UpdatedResponse } from '@/utils/handler';
 
-resetPassword = (request: ResetPasswordRequest) =>
+const resetPassword = (request: ResetPasswordRequest) =>
     fetcher<UpdatedResponse>('/api/account/reset-password', {
         method: 'PUT',
         body: JSON.stringify(request)
