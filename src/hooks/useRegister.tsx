@@ -3,7 +3,7 @@ import { RegisterRequest } from '@/models/account.types';
 import { fetcher } from '@/utils/fetch';
 import { UpdatedResponse } from '@/utils/handler';
 
-export const register = (request: RegisterRequest) =>
+const register = (request: RegisterRequest) =>
     fetcher<UpdatedResponse>('/api/account/register', {
         method: 'POST',
         body: JSON.stringify(request)

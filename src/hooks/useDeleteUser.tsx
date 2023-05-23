@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetcher } from '@/utils/fetch';
 import { UpdatedResponse } from '@/utils/handler';
 
-export const deleteUser = (id: string) =>
+const deleteUser = (id: string) =>
     fetcher<UpdatedResponse>(`/api/user/${id}`, { method: 'DELETE' });
 
 export const useDeleteUser = (id: string) => {

@@ -3,7 +3,7 @@ import { UpdateUserRequest } from '@/models/user.types';
 import { fetcher } from '@/utils/fetch';
 import { UpdatedResponse } from '@/utils/handler';
 
-export const updateUser = (id: string, request: UpdateUserRequest) =>
+const updateUser = (id: string, request: UpdateUserRequest) =>
     fetcher<UpdatedResponse>(`/api/user/${id}`, {
         method: 'PUT',
         body: JSON.stringify(request)

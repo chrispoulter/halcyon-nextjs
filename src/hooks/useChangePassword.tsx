@@ -3,7 +3,7 @@ import { ChangePasswordRequest } from '@/models/manage.types';
 import { fetcher } from '@/utils/fetch';
 import { UpdatedResponse } from '@/utils/handler';
 
-export const changePassword = (request: ChangePasswordRequest) =>
+const changePassword = (request: ChangePasswordRequest) =>
     fetcher<UpdatedResponse>('/api/manage/change-password', {
         method: 'PUT',
         body: JSON.stringify(request)

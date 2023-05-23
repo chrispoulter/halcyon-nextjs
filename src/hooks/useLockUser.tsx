@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetcher } from '@/utils/fetch';
 import { UpdatedResponse } from '@/utils/handler';
 
-export const lockUser = (id: string) =>
+const lockUser = (id: string) =>
     fetcher<UpdatedResponse>(`/api/user/${id}/lock`, { method: 'PUT' });
 
 export const useLockUser = (id: string) => {
