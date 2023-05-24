@@ -11,7 +11,7 @@ export const searchUsers = (
     prefixUrl = ''
 ) =>
     ky
-        .get('/api/user', { prefixUrl, searchParams, ...options })
+        .get('api/user', { prefixUrl, searchParams, ...options })
         .json<HandlerResponse<SearchUsersResponse>>();
 
 type UseSearchUsersProps = Omit<SearchUsersRequest, 'page' | 'size'>;

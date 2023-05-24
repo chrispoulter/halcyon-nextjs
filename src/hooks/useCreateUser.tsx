@@ -4,7 +4,7 @@ import { CreateUserRequest } from '@/models/user.types';
 import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 const createUser = (json: CreateUserRequest) =>
-    ky.post('/api/user', { json }).json<HandlerResponse<UpdatedResponse>>();
+    ky.post('api/user', { json }).json<HandlerResponse<UpdatedResponse>>();
 
 export const useCreateUser = () => {
     const queryClient = useQueryClient();

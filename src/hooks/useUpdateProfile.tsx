@@ -4,7 +4,7 @@ import { UpdateProfileRequest } from '@/models/manage.types';
 import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 const updateProfile = (json: UpdateProfileRequest) =>
-    ky.put('/api/manage', { json }).json<HandlerResponse<UpdatedResponse>>();
+    ky.put('api/manage', { json }).json<HandlerResponse<UpdatedResponse>>();
 
 export const useUpdateProfile = () => {
     const queryClient = useQueryClient();

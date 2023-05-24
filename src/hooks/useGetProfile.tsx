@@ -5,7 +5,7 @@ import { HandlerResponse } from '@/utils/handler';
 
 export const getProfile = (options?: Options, prefixUrl = '') =>
     ky
-        .get('/api/manage', { prefixUrl, ...options })
+        .get('api/manage', { prefixUrl, ...options })
         .json<HandlerResponse<GetProfileResponse>>();
 
 export const useGetProfile = () => {

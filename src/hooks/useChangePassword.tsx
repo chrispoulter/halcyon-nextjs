@@ -5,7 +5,7 @@ import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 const changePassword = (json: ChangePasswordRequest) =>
     ky
-        .put('/api/manage/change-password', { json })
+        .put('api/manage/change-password', { json })
         .json<HandlerResponse<UpdatedResponse>>();
 
 export const useChangePassword = () => {
