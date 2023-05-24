@@ -11,7 +11,10 @@ export const useDeleteAccount = () => {
     const { mutateAsync, isLoading } = useMutation({
         mutationFn: deleteAccount,
         onSuccess: () =>
-            queryClient.invalidateQueries({ queryKey: ['profile'] })
+            queryClient.invalidateQueries({
+                queryKey: ['profile'],
+                refetchType: 'none'
+            })
     });
 
     return { deleteAccount: mutateAsync, isDeleting: isLoading };
