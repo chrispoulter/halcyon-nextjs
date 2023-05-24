@@ -33,8 +33,6 @@ const schema = Yup.object({
         .default([])
 });
 
-const defaultValues = schema.getDefault();
-
 export type CreateUserFormValues = Yup.InferType<typeof schema>;
 
 type CreateUserFormProps = {
@@ -48,7 +46,6 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
         control,
         formState: { isSubmitting }
     } = useForm<CreateUserFormValues>({
-        defaultValues,
         resolver: yupResolver(schema)
     });
 

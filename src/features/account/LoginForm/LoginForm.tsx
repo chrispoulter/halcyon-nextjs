@@ -10,8 +10,6 @@ const schema = Yup.object({
     password: Yup.string().label('Password').required()
 });
 
-const defaultValues = schema.getDefault();
-
 export type LoginFormValues = Yup.InferType<typeof schema>;
 
 type LoginFormProps = {
@@ -25,7 +23,6 @@ export const LoginForm = ({ onSubmit, className }: LoginFormProps) => {
         control,
         formState: { isSubmitting }
     } = useForm<LoginFormValues>({
-        defaultValues,
         resolver: yupResolver(schema)
     });
 

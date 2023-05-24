@@ -14,8 +14,6 @@ const schema = Yup.object({
         .oneOf([Yup.ref('newPassword')], 'Passwords do not match')
 });
 
-const defaultValues = schema.getDefault();
-
 export type ResetPasswordFormValues = Yup.InferType<typeof schema>;
 
 type ResetPasswordFormProps = {
@@ -28,7 +26,6 @@ export const ResetPasswordForm = ({ onSubmit }: ResetPasswordFormProps) => {
         control,
         formState: { isSubmitting }
     } = useForm<ResetPasswordFormValues>({
-        defaultValues,
         resolver: yupResolver(schema)
     });
 

@@ -21,8 +21,6 @@ const schema = Yup.object({
     dateOfBirth: Yup.date().label('Date Of Birth').required()
 });
 
-const defaultValues = schema.getDefault();
-
 export type RegisterFormValues = Yup.InferType<typeof schema>;
 
 type RegisterFormProps = {
@@ -36,7 +34,6 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
         control,
         formState: { isSubmitting }
     } = useForm<RegisterFormValues>({
-        defaultValues,
         resolver: yupResolver(schema)
     });
 

@@ -9,8 +9,6 @@ const schema = Yup.object({
     emailAddress: Yup.string().label('Email Address').email().required()
 });
 
-const defaultValues = schema.getDefault();
-
 export type ForgotPasswordFormValues = Yup.InferType<typeof schema>;
 
 type ForgotPasswordFormProps = {
@@ -23,7 +21,6 @@ export const ForgotPasswordForm = ({ onSubmit }: ForgotPasswordFormProps) => {
         control,
         formState: { isSubmitting }
     } = useForm<ForgotPasswordFormValues>({
-        defaultValues,
         resolver: yupResolver(schema)
     });
 
