@@ -11,9 +11,9 @@ const schema = z
     .object({
         emailAddress: z.string().max(254).email(),
         password: z.string().min(8).max(50),
-        confirmPassword: z.string(),
-        firstName: z.string().max(50),
-        lastName: z.string().max(50),
+        confirmPassword: z.string().nonempty(),
+        firstName: z.string().max(50).nonempty(),
+        lastName: z.string().max(50).nonempty(),
         dateOfBirth: z.coerce.date(),
         roles: z.array(z.nativeEnum(Role)).optional()
     })
