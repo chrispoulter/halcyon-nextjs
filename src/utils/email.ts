@@ -1,7 +1,6 @@
 import path from 'path';
+import { SMTPClient } from 'emailjs';
 import { promises as fs } from 'fs';
-import nodemailer from 'nodemailer';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { config } from '@/utils/config';
 
 export enum EmailTemplate {
@@ -17,28 +16,30 @@ type EmailMessage = {
 
 export const sendEmail = async (message: EmailMessage) => {
     const template = await readResource(message.template);
+    const html = replaceData(template, message.context);
+
     const title = getTitle(template);
+    const subject = replaceData(title, message.context);
 
-    const transport: SMTPTransport.Options = {
+    const client = new SMTPClient({
         host: config.EMAIL_SMTP_SERVER,
-        port: config.EMAIL_SMTP_PORT
-    };
-
-    if (config.EMAIL_SMTP_USERNAME && config.EMAIL_SMTP_PASSWORD) {
-        transport.auth = {
-            user: config.EMAIL_SMTP_USERNAME,
-            pass: config.EMAIL_SMTP_PASSWORD
-        };
-    }
-
-    const transporter = nodemailer.createTransport(transport);
+        port: config.EMAIL_SMTP_PORT,
+        user: config.EMAIL_SMTP_USERNAME,
+        password: config.EMAIL_SMTP_PASSWORD
+    });
 
     try {
-        await transporter.sendMail({
+        await client.sendAsync({
             from: message.from || config.EMAIL_NO_REPLY_ADDRESS,
             to: message.to,
-            subject: replaceData(title, message.context),
-            html: replaceData(template, message.context)
+            subject,
+            text: html,
+            attachment: [
+                {
+                    data: html,
+                    alternative: true
+                }
+            ]
         });
     } catch (error) {
         console.error('email error', error);
