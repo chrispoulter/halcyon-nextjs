@@ -12,7 +12,7 @@ export const searchUsersSchema = z.object({
     search: z.string().optional(),
     sort: z.nativeEnum(UserSort).default(UserSort.NAME_ASC),
     page: z.coerce.number().min(1).default(1),
-    size: z.coerce.number().min(1).max(50).default(50)
+    size: z.coerce.number().min(1).max(50).default(10)
 });
 
 export type SearchUsersRequest = z.infer<typeof searchUsersSchema>;
@@ -35,7 +35,7 @@ export const createUserSchema = z.object({
 export type CreateUserRequest = z.infer<typeof createUserSchema>;
 
 export const getUserSchema = z.object({
-    id: z.number()
+    id: z.coerce.number()
 });
 
 export type GetUserResponse = {
