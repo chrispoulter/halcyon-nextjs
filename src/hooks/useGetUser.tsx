@@ -1,9 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
+import ky, { Options } from 'ky';
 import { GetUserResponse } from '@/models/user.types';
-import { fetcher } from '@/utils/fetch';
+import { HandlerResponse } from '@/utils/handler';
 
-export const getUser = (id: string, init?: RequestInit, baseUrl = '') =>
-    fetcher<GetUserResponse>(`${baseUrl}/api/user/${id}`, init);
+export const getUser = (id: string, options?: Options, baseUrl = '') =>
+    ky
+        .get(`user/${id}`, { ...options, prefixUrl: `${baseUrl}/api` })
+        .json<HandlerResponse<GetUserResponse>>();
 
 export const useGetUser = (id: string) => {
     const { data } = useQuery({

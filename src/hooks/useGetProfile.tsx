@@ -1,9 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
+import ky, { Options } from 'ky';
 import { GetProfileResponse } from '@/models/manage.types';
-import { fetcher } from '@/utils/fetch';
+import { HandlerResponse } from '@/utils/handler';
 
-export const getProfile = (init?: RequestInit, baseUrl = '') =>
-    fetcher<GetProfileResponse>(`${baseUrl}/api/manage`, init);
+export const getProfile = (options?: Options, baseUrl = '') =>
+    ky
+        .get('manage', { ...options, prefixUrl: `${baseUrl}/api` })
+        .json<HandlerResponse<GetProfileResponse>>();
 
 export const useGetProfile = () => {
     const { data } = useQuery({
