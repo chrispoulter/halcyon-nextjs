@@ -22,8 +22,15 @@ const UpdateProfile = () => {
     const { updateProfile } = useUpdateProfile();
 
     const onSubmit = async (values: UpdateProfileFormValues) => {
-        await updateProfile(values);
-        await router.push('/my-account');
+        try {
+            await updateProfile(values);
+            await router.push('/my-account');
+        } catch (error) {
+            console.warn(
+                'An unhandled error was caught from onSubmit()',
+                error
+            );
+        }
     };
 
     return (
