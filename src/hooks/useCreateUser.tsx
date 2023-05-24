@@ -1,13 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ky from 'ky';
 import { CreateUserRequest } from '@/models/user.types';
-import { fetcher } from '@/utils/fetch';
-import { UpdatedResponse } from '@/utils/handler';
+import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
-const createUser = (request: CreateUserRequest) =>
-    fetcher<UpdatedResponse>('/api/user', {
-        method: 'POST',
-        body: JSON.stringify(request)
-    });
+const createUser = (json: CreateUserRequest) =>
+    ky.post('/api/user', { json }).json<HandlerResponse<UpdatedResponse>>();
 
 export const useCreateUser = () => {
     const queryClient = useQueryClient();

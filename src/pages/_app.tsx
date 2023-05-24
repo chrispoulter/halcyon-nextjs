@@ -37,7 +37,7 @@ const App = ({
         }
     };
 
-    const onError = (error: any) => {
+    const onError = async (error: any) => {
         switch (error.status) {
             case 401:
                 signOut({ callbackUrl: '/' });
@@ -48,7 +48,15 @@ const App = ({
                 break;
 
             default:
-                toast.error(error.response?.message || error.message);
+                const isJson = error.response.headers
+                    .get('content-type')
+                    ?.includes('application/json');
+
+                const response = isJson
+                    ? await error.response.json()
+                    : undefined;
+
+                toast.error(response?.message || error.message);
         }
     };
 

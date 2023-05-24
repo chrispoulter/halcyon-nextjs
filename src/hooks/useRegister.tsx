@@ -1,13 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
+import ky from 'ky';
 import { RegisterRequest } from '@/models/account.types';
-import { fetcher } from '@/utils/fetch';
-import { UpdatedResponse } from '@/utils/handler';
+import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
-const register = (request: RegisterRequest) =>
-    fetcher<UpdatedResponse>('/api/account/register', {
-        method: 'POST',
-        body: JSON.stringify(request)
-    });
+const register = (json: RegisterRequest) =>
+    ky
+        .post('/api/account/register', { json })
+        .json<HandlerResponse<UpdatedResponse>>();
 
 export const useRegister = () => {
     const { mutateAsync } = useMutation({
