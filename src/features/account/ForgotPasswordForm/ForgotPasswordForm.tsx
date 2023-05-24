@@ -1,15 +1,15 @@
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 
-const schema = Yup.object({
-    emailAddress: Yup.string().label('Email Address').email().required()
+const schema = z.object({
+    emailAddress: z.string().email()
 });
 
-export type ForgotPasswordFormValues = Yup.InferType<typeof schema>;
+export type ForgotPasswordFormValues = z.infer<typeof schema>;
 
 type ForgotPasswordFormProps = {
     onSubmit: (values: ForgotPasswordFormValues) => void;
@@ -21,7 +21,7 @@ export const ForgotPasswordForm = ({ onSubmit }: ForgotPasswordFormProps) => {
         control,
         formState: { isSubmitting }
     } = useForm<ForgotPasswordFormValues>({
-        resolver: yupResolver(schema)
+        resolver: zodResolver(schema)
     });
 
     return (

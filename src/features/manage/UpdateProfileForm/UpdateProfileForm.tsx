@@ -1,23 +1,19 @@
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { InputSkeleton, FormSkeleton } from '@/components/Skeleton/Skeleton';
 
-const schema = Yup.object({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .max(254)
-        .email()
-        .required(),
-    firstName: Yup.string().label('First Name').max(50).required(),
-    lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date().label('Date Of Birth').required()
+const schema = z.object({
+    emailAddress: z.string().max(254).email(),
+    firstName: z.string().max(50).nonempty(),
+    lastName: z.string().max(50).nonempty(),
+    dateOfBirth: z.coerce.date()
 });
 
-export type UpdateProfileFormValues = Yup.InferType<typeof schema>;
+export type UpdateProfileFormValues = z.infer<typeof schema>;
 
 type UpdateProfileFormProps = {
     profile?: UpdateProfileFormValues;
@@ -47,7 +43,7 @@ const UpdateProfileFormInternal = ({
         formState: { isSubmitting }
     } = useForm<UpdateProfileFormValues>({
         defaultValues: profile,
-        resolver: yupResolver(schema)
+        resolver: zodResolver(schema)
     });
 
     return (

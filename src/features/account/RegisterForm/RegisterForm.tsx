@@ -1,27 +1,25 @@
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 
-const schema = Yup.object({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .max(254)
-        .email()
-        .required(),
-    password: Yup.string().label('Password').min(8).max(50).required(),
-    confirmPassword: Yup.string()
-        .label('Confirm Password')
-        .required()
-        .oneOf([Yup.ref('password')], 'Passwords do not match'),
-    firstName: Yup.string().label('First Name').max(50).required(),
-    lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date().label('Date Of Birth').required()
-});
+const schema = z
+    .object({
+        emailAddress: z.string().max(254).email(),
+        password: z.string().min(8).max(50),
+        confirmPassword: z.string(),
+        firstName: z.string().max(50).nonempty(),
+        lastName: z.string().max(50).nonempty(),
+        dateOfBirth: z.coerce.date()
+    })
+    .refine(data => data.password === data.confirmPassword, {
+        message: 'Passwords do not match',
+        path: ['confirmPassword']
+    });
 
-export type RegisterFormValues = Yup.InferType<typeof schema>;
+export type RegisterFormValues = z.infer<typeof schema>;
 
 type RegisterFormProps = {
     onSubmit: (values: RegisterFormValues) => void;
@@ -34,7 +32,7 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
         control,
         formState: { isSubmitting }
     } = useForm<RegisterFormValues>({
-        resolver: yupResolver(schema)
+        resolver: zodResolver(schema)
     });
 
     return (

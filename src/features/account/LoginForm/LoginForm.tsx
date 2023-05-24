@@ -1,16 +1,16 @@
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 
-const schema = Yup.object({
-    emailAddress: Yup.string().label('Email Address').email().required(),
-    password: Yup.string().label('Password').required()
+const schema = z.object({
+    emailAddress: z.string().email(),
+    password: z.string()
 });
 
-export type LoginFormValues = Yup.InferType<typeof schema>;
+export type LoginFormValues = z.infer<typeof schema>;
 
 type LoginFormProps = {
     onSubmit: (values: LoginFormValues) => void;
@@ -23,7 +23,7 @@ export const LoginForm = ({ onSubmit, className }: LoginFormProps) => {
         control,
         formState: { isSubmitting }
     } = useForm<LoginFormValues>({
-        resolver: yupResolver(schema)
+        resolver: zodResolver(schema)
     });
 
     return (

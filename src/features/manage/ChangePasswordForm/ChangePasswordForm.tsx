@@ -1,20 +1,22 @@
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 
-const schema = Yup.object({
-    currentPassword: Yup.string().label('Current Password').required(),
-    newPassword: Yup.string().label('New Password').min(8).max(50).required(),
-    confirmNewPassword: Yup.string()
-        .label('Confirm New Password')
-        .required()
-        .oneOf([Yup.ref('newPassword')], 'Passwords do not match')
-});
+const schema = z
+    .object({
+        currentPassword: z.string(),
+        newPassword: z.string().min(8).max(50),
+        confirmNewPassword: z.string()
+    })
+    .refine(data => data.newPassword === data.confirmNewPassword, {
+        message: 'Passwords do not match',
+        path: ['confirmNewPassword']
+    });
 
-export type ChangePasswordFormValues = Yup.InferType<typeof schema>;
+export type ChangePasswordFormValues = z.infer<typeof schema>;
 
 type ChangePasswordFormProps = {
     options?: JSX.Element;
@@ -32,7 +34,7 @@ export const ChangePasswordForm = ({
         control,
         formState: { isSubmitting }
     } = useForm<ChangePasswordFormValues>({
-        resolver: yupResolver(schema)
+        resolver: zodResolver(schema)
     });
 
     return (

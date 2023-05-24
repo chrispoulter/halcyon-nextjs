@@ -1,15 +1,15 @@
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { SearchIcon } from '@/components/Icons/SearchIcon';
 
-const schema = Yup.object({
-    search: Yup.string().label('Search')
+const schema = z.object({
+    search: z.string().optional()
 });
 
-export type SearchUserFormValues = Yup.InferType<typeof schema>;
+export type SearchUserFormValues = z.infer<typeof schema>;
 
 type SearchUserFormProps = {
     isLoading?: boolean;
@@ -28,7 +28,7 @@ export const SearchUserForm = ({
         formState: { isSubmitting }
     } = useForm<SearchUserFormValues>({
         defaultValues,
-        resolver: yupResolver(schema)
+        resolver: zodResolver(schema)
     });
 
     return (
