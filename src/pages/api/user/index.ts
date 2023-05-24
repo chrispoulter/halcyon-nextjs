@@ -11,7 +11,7 @@ import { generateHash } from '@/utils/hash';
 import { isUserAdministrator, Role } from '@/utils/auth';
 
 const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
-    const query = await searchUsersSchema.validate(req.query);
+    const query = await searchUsersSchema.parseAsync(req.query);
 
     let where: Prisma.UsersWhereInput | undefined;
 
@@ -100,7 +100,7 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
 };
 
 const createUserHandler: Handler<UpdatedResponse> = async (req, res) => {
-    const body = await createUserSchema.validate(req.body);
+    const body = await createUserSchema.parseAsync(req.body);
 
     const existing = await prisma.users.findUnique({
         where: {

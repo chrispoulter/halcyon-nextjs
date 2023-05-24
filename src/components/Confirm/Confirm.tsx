@@ -14,15 +14,7 @@ export const Confirm = ({ children, onConfirm, content }: ConfirmProps) => {
 
     const onOk = async () => {
         onClose();
-
-        try {
-            await onConfirm();
-        } catch (error) {
-            console.warn(
-                'An unhandled error was caught from onConfirm()',
-                error
-            );
-        }
+        onConfirm();
     };
 
     const onOpen = () => setIsOpen(true);

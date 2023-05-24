@@ -1,4 +1,8 @@
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Container } from '@/components/Container/Container';
 import { PageSubTitle, PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -11,12 +15,13 @@ import {
     UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
-import { useGetUser } from '@/hooks/useGetUser';
+import { getUser, useGetUser } from '@/hooks/useGetUser';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import { useDeleteUser } from '@/hooks/useDeleteUser';
 import { useLockUser } from '@/hooks/useLockUser';
 import { useUnlockUser } from '@/hooks/useUnlockUser';
 import { isUserAdministrator } from '@/utils/auth';
+import { getBaseUrl } from '@/utils/url';
 
 const UpdateUser = () => {
     const router = useRouter();
@@ -34,18 +39,47 @@ const UpdateUser = () => {
     const { unlockUser, isUnlocking } = useUnlockUser(id);
 
     const onSubmit = async (values: UpdateUserFormValues) => {
-        await updateUser(values);
-        await router.push('/user');
+        try {
+            await updateUser(values);
+            await router.push('/user');
+        } catch (error) {
+            console.warn(
+                'An unhandled error was caught from onSubmit()',
+                error
+            );
+        }
     };
 
     const onDelete = async () => {
-        await deleteUser();
-        await router.push('/user');
+        try {
+            await deleteUser();
+            await router.push('/user');
+        } catch (error) {
+            console.warn(
+                'An unhandled error was caught from onDelete()',
+                error
+            );
+        }
     };
 
-    const onLock = () => lockUser();
+    const onLock = async () => {
+        try {
+            await lockUser();
+        } catch (error) {
+            console.warn('An unhandled error was caught from onLock()', error);
+        }
+    };
 
-    const onUnlock = () => unlockUser();
+    const onUnlock = async () => {
+        try {
+            await unlockUser();
+        } catch (error) {
+            console.warn(
+                'An unhandled error was caught from onUnlock()',
+                error
+            );
+        }
+    };
 
     const options = ({ isSubmitting }: UpdateUserFormState) => (
         <>
@@ -103,6 +137,39 @@ const UpdateUser = () => {
         </Container>
     );
 };
+
+// export const getServerSideProps: GetServerSideProps = async ({
+//     req,
+//     res,
+//     params
+// }) => {
+//     const session = await getServerSession(req, res, authOptions);
+
+//     const id = params?.id as string;
+
+//     const queryClient = new QueryClient();
+
+//     const baseUrl = getBaseUrl(req);
+
+//     await queryClient.prefetchQuery(['user', id], () =>
+//         getUser(
+//             id,
+//             {
+//                 headers: {
+//                     cookie: req.headers.cookie!
+//                 }
+//             },
+//             baseUrl
+//         )
+//     );
+
+//     return {
+//         props: {
+//             session,
+//             dehydratedState: dehydrate(queryClient)
+//         }
+//     };
+// };
 
 UpdateUser.meta = {
     title: 'Update User'

@@ -1,14 +1,21 @@
-import useSWRMutation from 'swr/mutation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ky from 'ky';
 import { UpdateProfileRequest } from '@/models/manage.types';
-import { fetcher } from '@/utils/fetch';
+import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
-const updateProfile = async (
-    url: string,
-    { arg }: { arg: UpdateProfileRequest }
-) => fetcher(url, 'PUT', arg);
+const updateProfile = (json: UpdateProfileRequest) =>
+    ky
+        .put('manage', { prefixUrl: '/api', json })
+        .json<HandlerResponse<UpdatedResponse>>();
 
 export const useUpdateProfile = () => {
-    const { trigger } = useSWRMutation('/api/manage', updateProfile);
+    const queryClient = useQueryClient();
 
-    return { updateProfile: trigger };
+    const { mutateAsync } = useMutation({
+        mutationFn: updateProfile,
+        onSuccess: () =>
+            queryClient.invalidateQueries({ queryKey: ['profile'] })
+    });
+
+    return { updateProfile: mutateAsync };
 };

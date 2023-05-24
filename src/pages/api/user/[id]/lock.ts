@@ -8,7 +8,7 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
     res,
     { currentUserId }
 ) => {
-    const query = await getUserSchema.validate(req.query);
+    const query = await getUserSchema.parseAsync(req.query);
 
     const user = await prisma.users.findUnique({
         where: {

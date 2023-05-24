@@ -3,7 +3,7 @@ import { Card, CardTitle } from '@/components/Card/Card';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { CardSkeleton } from '@/components/Skeleton/Skeleton';
-import { formatForDisplay } from '@/utils/dates';
+import { formatForDisplay } from '@/utils/date';
 
 type PersonalDetailsCardProps = {
     profile?: GetProfileResponse;

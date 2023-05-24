@@ -1,7 +1,7 @@
 import { Control, useController } from 'react-hook-form';
 import clsx from 'clsx';
 import { CloseIcon } from '@/components/Icons/CloseIcon';
-import { parseForOutput, formatForInput } from '@/utils/dates';
+import { formatForInput, parseForOutput } from '@/utils/date';
 
 type InputProps = Omit<
     React.InputHTMLAttributes<HTMLInputElement>,

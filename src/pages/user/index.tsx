@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { UserSort } from '@/models/user.types';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
@@ -11,8 +15,9 @@ import {
 } from '@/features/user/SearchUserForm/SearchUserForm';
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
-import { useSearchUsers } from '@/hooks/useSearchUsers';
+import { searchUsers, useSearchUsers } from '@/hooks/useSearchUsers';
 import { isUserAdministrator } from '@/utils/auth';
+import { getBaseUrl } from '@/utils/url';
 
 const Users = () => {
     const [request, setRequest] = useState({
@@ -66,6 +71,46 @@ const Users = () => {
         </Container>
     );
 };
+
+// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+//     const session = await getServerSession(req, res, authOptions);
+
+//     const queryClient = new QueryClient();
+
+//     const baseUrl = getBaseUrl(req);
+
+//     const request = {
+//         search: '',
+//         sort: UserSort.NAME_ASC
+//     };
+
+//     await queryClient.prefetchInfiniteQuery(
+//         ['users', request],
+//         ({ pageParam = 1 }) =>
+//             searchUsers(
+//                 { ...request, page: pageParam, size: 5 },
+//                 {
+//                     headers: {
+//                         cookie: req.headers.cookie!
+//                     }
+//                 },
+//                 baseUrl
+//             )
+//     );
+
+//     // next ssr hack!
+//     queryClient.setQueryData(['users', request], (data: any) => ({
+//         ...data,
+//         pageParams: []
+//     }));
+
+//     return {
+//         props: {
+//             session,
+//             dehydratedState: dehydrate(queryClient)
+//         }
+//     };
+// };
 
 Users.meta = {
     title: 'Users'

@@ -15,8 +15,15 @@ const ChangePassword = () => {
     const { changePassword } = useChangePassword();
 
     const onSubmit = async (values: ChangePasswordFormValues) => {
-        await changePassword(values);
-        await router.push('/my-account');
+        try {
+            await changePassword(values);
+            await router.push('/my-account');
+        } catch (error) {
+            console.warn(
+                'An unhandled error was caught from onSubmit()',
+                error
+            );
+        }
     };
 
     return (

@@ -1,17 +1,17 @@
-import useSWRMutation from 'swr/mutation';
+import { useMutation } from '@tanstack/react-query';
+import ky from 'ky';
 import { ForgotPasswordRequest } from '@/models/account.types';
-import { fetcher } from '@/utils/fetch';
+import { HandlerResponse } from '@/utils/handler';
 
-const forgotPassword = async (
-    url: string,
-    { arg }: { arg: ForgotPasswordRequest }
-) => fetcher(url, 'PUT', arg);
+export const forgotPassword = (json: ForgotPasswordRequest) =>
+    ky
+        .put('account/forgot-password', { prefixUrl: '/api', json })
+        .json<HandlerResponse>();
 
 export const useForgotPassword = () => {
-    const { trigger } = useSWRMutation(
-        '/api/account/forgot-password',
-        forgotPassword
-    );
+    const { mutateAsync } = useMutation({
+        mutationFn: forgotPassword
+    });
 
-    return { forgotPassword: trigger };
+    return { forgotPassword: mutateAsync };
 };

@@ -13,8 +13,15 @@ const ForgotPassword = () => {
     const { forgotPassword } = useForgotPassword();
 
     const onSubmit = async (values: ForgotPasswordFormValues) => {
-        await forgotPassword(values);
-        await router.push('/login');
+        try {
+            await forgotPassword(values);
+            await router.push('/login');
+        } catch (error) {
+            console.warn(
+                'An unhandled error was caught from onSubmit()',
+                error
+            );
+        }
     };
 
     return (

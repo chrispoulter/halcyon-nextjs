@@ -1,22 +1,22 @@
-import { mutate } from 'swr';
-import useSWRMutation from 'swr/mutation';
-import toast from 'react-hot-toast';
-import { fetcher } from '@/utils/fetch';
-import { HandlerResponse } from '@/utils/handler';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ky from 'ky';
+import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
-const lockUser = async (url: string) => fetcher(url, 'PUT');
+export const lockUser = (id: string) =>
+    ky
+        .put(`user/${id}/lock`, { prefixUrl: '/api' })
+        .json<HandlerResponse<UpdatedResponse>>();
 
 export const useLockUser = (id: string) => {
-    const { trigger, isMutating } = useSWRMutation<HandlerResponse>(
-        `/api/user/${id}/lock`,
-        lockUser,
-        {
-            onSuccess: data => {
-                toast.success(data.message!);
-                mutate(`/api/user/${id}`);
-            }
-        }
-    );
+    const queryClient = useQueryClient();
 
-    return { lockUser: trigger, isLocking: isMutating };
+    const { mutateAsync, isLoading } = useMutation({
+        mutationFn: () => lockUser(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+            queryClient.invalidateQueries({ queryKey: ['user', id] });
+        }
+    });
+
+    return { lockUser: mutateAsync, isLocking: isLoading };
 };

@@ -1,6 +1,6 @@
-import * as Yup from 'yup';
-import { today } from '@/utils/dates';
+import { z } from 'zod';
 import { Role } from '@/utils/auth';
+import { today } from '@/utils/date';
 
 export enum UserSort {
     EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
@@ -9,17 +9,14 @@ export enum UserSort {
     NAME_DESC = 'NAME_DESC'
 }
 
-export const searchUsersSchema = Yup.object().shape({
-    search: Yup.string().label('Search'),
-    sort: Yup.string<UserSort>()
-        .label('Sort')
-        .oneOf(Object.values(UserSort))
-        .default(UserSort.NAME_ASC),
-    page: Yup.number().label('Page').min(1).default(1),
-    size: Yup.number().label('Size').min(1).max(50).default(50)
+export const searchUsersSchema = z.object({
+    search: z.string().optional(),
+    sort: z.nativeEnum(UserSort).default(UserSort.NAME_ASC),
+    page: z.coerce.number().min(1).default(1),
+    size: z.coerce.number().min(1).max(50).default(10)
 });
 
-export type SearchUsersRequest = Yup.InferType<typeof searchUsersSchema>;
+export type SearchUsersRequest = z.infer<typeof searchUsersSchema>;
 
 export type SearchUsersResponse = {
     items?: GetUserResponse[];
@@ -27,30 +24,19 @@ export type SearchUsersResponse = {
     hasPreviousPage?: boolean;
 };
 
-export const createUserSchema = Yup.object().shape({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .max(254)
-        .email()
-        .required(),
-    password: Yup.string().label('Password').min(8).max(50).required(),
-    firstName: Yup.string().label('First Name').max(50).required(),
-    lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date().label('Date Of Birth').max(today).required(),
-    roles: Yup.array()
-        .of(
-            Yup.string<Role>()
-                .label('Role')
-                .oneOf(Object.values(Role))
-                .required()
-        )
-        .label('Roles')
+export const createUserSchema = z.object({
+    emailAddress: z.string().max(254).email(),
+    password: z.string().min(8).max(50),
+    firstName: z.string().max(50).nonempty(),
+    lastName: z.string().max(50).nonempty(),
+    dateOfBirth: z.coerce.date().max(today),
+    roles: z.array(z.nativeEnum(Role)).optional()
 });
 
-export type CreateUserRequest = Yup.InferType<typeof createUserSchema>;
+export type CreateUserRequest = z.infer<typeof createUserSchema>;
 
-export const getUserSchema = Yup.object().shape({
-    id: Yup.number().label('Id').required()
+export const getUserSchema = z.object({
+    id: z.coerce.number()
 });
 
 export type GetUserResponse = {
@@ -63,23 +49,12 @@ export type GetUserResponse = {
     roles?: Role[];
 };
 
-export const updateUserSchema = Yup.object().shape({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .max(254)
-        .email()
-        .required(),
-    firstName: Yup.string().label('First Name').max(50).required(),
-    lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date().label('Date Of Birth').max(today).required(),
-    roles: Yup.array()
-        .of(
-            Yup.string<Role>()
-                .label('Role')
-                .oneOf(Object.values(Role))
-                .required()
-        )
-        .label('Roles')
+export const updateUserSchema = z.object({
+    emailAddress: z.string().max(254).email(),
+    firstName: z.string().max(50).nonempty(),
+    lastName: z.string().max(50).nonempty(),
+    dateOfBirth: z.coerce.date().max(today),
+    roles: z.array(z.nativeEnum(Role)).optional()
 });
 
-export type UpdateUserRequest = Yup.InferType<typeof updateUserSchema>;
+export type UpdateUserRequest = z.infer<typeof updateUserSchema>;

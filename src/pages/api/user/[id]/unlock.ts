@@ -4,7 +4,7 @@ import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
 const unlockUserHandler: Handler<UpdatedResponse> = async (req, res) => {
-    const query = await getUserSchema.validate(req.query);
+    const query = await getUserSchema.parseAsync(req.query);
 
     const user = await prisma.users.findUnique({
         where: {

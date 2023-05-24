@@ -3,7 +3,7 @@ import Head from 'next/head';
 export type MetaProps = {
     app?: string;
     title?: string;
-    seperator?: string;
+    separator?: string;
     description?: string;
     keywords?: string;
 };
@@ -11,12 +11,12 @@ export type MetaProps = {
 export const Meta = ({
     app = 'Halcyon',
     title,
-    seperator = ' // ',
+    separator = ' // ',
     description = 'A web application template.',
     keywords = 'react, nextjs, postgressql'
 }: MetaProps) => (
     <Head>
-        <title>{[title, app].filter(v => !!v).join(seperator)}</title>
+        <title>{[title, app].filter(v => !!v).join(separator)}</title>
         <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />
 

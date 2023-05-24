@@ -15,12 +15,19 @@ const ResetPassword = () => {
     const { resetPassword } = useResetPassword();
 
     const onSubmit = async (values: ResetPasswordFormValues) => {
-        await resetPassword({
-            token,
-            ...values
-        });
+        try {
+            await resetPassword({
+                token,
+                ...values
+            });
 
-        await router.push('/login');
+            await router.push('/login');
+        } catch (error) {
+            console.warn(
+                'An unhandled error was caught from onSubmit()',
+                error
+            );
+        }
     };
 
     return (

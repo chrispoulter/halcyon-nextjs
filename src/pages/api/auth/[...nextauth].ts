@@ -15,7 +15,7 @@ export const authOptions: AuthOptions = {
                 password: { label: 'Password', type: 'password' }
             },
             async authorize(credentials) {
-                const body = await createTokenSchema.validate(credentials);
+                const body = await createTokenSchema.parseAsync(credentials);
 
                 const user = await prisma.users.findUnique({
                     where: {

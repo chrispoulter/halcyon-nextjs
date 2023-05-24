@@ -1,17 +1,17 @@
-import useSWRMutation from 'swr/mutation';
+import { useMutation } from '@tanstack/react-query';
+import ky from 'ky';
 import { ChangePasswordRequest } from '@/models/manage.types';
-import { fetcher } from '@/utils/fetch';
+import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
-const changePassword = async (
-    url: string,
-    { arg }: { arg: ChangePasswordRequest }
-) => fetcher(url, 'PUT', arg);
+const changePassword = (json: ChangePasswordRequest) =>
+    ky
+        .put('manage/change-password', { prefixUrl: '/api', json })
+        .json<HandlerResponse<UpdatedResponse>>();
 
 export const useChangePassword = () => {
-    const { trigger } = useSWRMutation(
-        '/api/manage/change-password',
-        changePassword
-    );
+    const { mutateAsync } = useMutation({
+        mutationFn: changePassword
+    });
 
-    return { changePassword: trigger };
+    return { changePassword: mutateAsync };
 };

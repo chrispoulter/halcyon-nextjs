@@ -2,7 +2,14 @@ import type { AppProps } from 'next/app';
 import { Open_Sans } from 'next/font/google';
 import { useRouter } from 'next/router';
 import { SessionProvider, signOut } from 'next-auth/react';
-import { SWRConfig } from 'swr';
+import {
+    Hydrate,
+    MutationCache,
+    QueryCache,
+    QueryClient,
+    QueryClientProvider
+} from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import toast from 'react-hot-toast';
 import { setLocale } from 'yup';
 import { Meta } from '@/components/Meta/Meta';
@@ -11,8 +18,6 @@ import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
 import { Auth } from '@/components/Auth/Auth';
 import { Footer } from '@/components/Footer/Footer';
 import { Toaster } from '@/components/Toast/Toast';
-import { formatForDisplay } from '@/utils/dates';
-import { fetcher } from '@/utils/fetch';
 
 import '@/styles/globals.css';
 
@@ -21,22 +26,50 @@ const font = Open_Sans({
     display: 'swap'
 });
 
-setLocale({
-    date: {
-        min: ({ label, min }) =>
-            `${label} must be greater than or equal to ${formatForDisplay(
-                min
-            )}`,
-        max: ({ label, max }) =>
-            `${label} must be less than or equal to ${formatForDisplay(max)}`
-    }
-});
-
 const App = ({
     Component,
-    pageProps: { session, fallback = {}, ...pageProps }
+    pageProps: { session, dehydratedState = {}, ...pageProps }
 }: AppProps) => {
     const router = useRouter();
+
+    const onSuccess = (data: any) => {
+        if (data.message) {
+            toast.success(data.message);
+        }
+    };
+
+    const onError = async (error: any) => {
+        switch (error.status) {
+            case 401:
+                signOut({ callbackUrl: '/' });
+                break;
+
+            case 403:
+                router.push('/403', router.asPath);
+                break;
+
+            default:
+                const isJson = error.response.headers
+                    .get('content-type')
+                    ?.includes('application/json');
+
+                const response = isJson
+                    ? await error.response.json()
+                    : undefined;
+
+                toast.error(response?.message || error.message);
+        }
+    };
+
+    const queryClient = new QueryClient({
+        queryCache: new QueryCache({
+            onError
+        }),
+        mutationCache: new MutationCache({
+            onSuccess,
+            onError
+        })
+    });
 
     return (
         <>
@@ -49,47 +82,24 @@ const App = ({
             `}</style>
 
             <SessionProvider session={session}>
-                <SWRConfig
-                    value={{
-                        fetcher,
-                        fallback,
-                        onSuccess: data => {
-                            if (data.message) {
-                                toast.success(data.message);
-                            }
-                        },
-                        onError: error => {
-                            switch (error.status) {
-                                case 401:
-                                    signOut({ callbackUrl: '/' });
-                                    break;
-
-                                case 403:
-                                    router.push('/403', router.asPath);
-                                    break;
-
-                                default:
-                                    toast.error(
-                                        error.response?.message || error.message
-                                    );
-                            }
-                        }
-                    }}
-                >
-                    <Header />
-                    <main>
-                        <ErrorBoundary>
-                            {Component.auth ? (
-                                <Auth auth={Component.auth}>
+                <QueryClientProvider client={queryClient}>
+                    <Hydrate state={dehydratedState}>
+                        <Header />
+                        <main>
+                            <ErrorBoundary>
+                                {Component.auth ? (
+                                    <Auth auth={Component.auth}>
+                                        <Component {...pageProps} />
+                                    </Auth>
+                                ) : (
                                     <Component {...pageProps} />
-                                </Auth>
-                            ) : (
-                                <Component {...pageProps} />
-                            )}
-                        </ErrorBoundary>
-                    </main>
-                    <Footer />
-                </SWRConfig>
+                                )}
+                            </ErrorBoundary>
+                        </main>
+                        <Footer />
+                    </Hydrate>
+                    <ReactQueryDevtools initialIsOpen={false} />
+                </QueryClientProvider>
             </SessionProvider>
             <Toaster />
         </>
