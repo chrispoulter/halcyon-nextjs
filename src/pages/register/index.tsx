@@ -12,8 +12,15 @@ const Register = () => {
     const { register } = useRegister();
 
     const onSubmit = async (values: RegisterFormValues) => {
-        await register(values);
-        signIn('credentials', { ...values, callbackUrl: '/' });
+        try {
+            await register(values);
+            signIn('credentials', { ...values, callbackUrl: '/' });
+        } catch (error) {
+            console.warn(
+                'An unhandled error was caught from onSubmit()',
+                error
+            );
+        }
     };
 
     return (

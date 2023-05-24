@@ -15,8 +15,15 @@ const CreateUser = () => {
     const { createUser } = useCreateUser();
 
     const onSubmit = async (values: CreateUserFormValues) => {
-        await createUser(values);
-        await router.push('/user');
+        try {
+            await createUser(values);
+            await router.push('/user');
+        } catch (error) {
+            console.warn(
+                'An unhandled error was caught from onSubmit()',
+                error
+            );
+        }
     };
 
     return (
