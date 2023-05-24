@@ -16,10 +16,10 @@ type EmailMessage = {
 
 export const sendEmail = async (message: EmailMessage) => {
     const template = await readResource(message.template);
-    const html = replaceData(template, message.context);
-
     const title = getTitle(template);
+
     const subject = replaceData(title, message.context);
+    const body = replaceData(template, message.context);
 
     const client = new SMTPClient({
         host: config.EMAIL_SMTP_SERVER,
@@ -33,10 +33,10 @@ export const sendEmail = async (message: EmailMessage) => {
             from: message.from || config.EMAIL_NO_REPLY_ADDRESS,
             to: message.to,
             subject,
-            text: html,
+            text: body,
             attachment: [
                 {
-                    data: html,
+                    data: body,
                     alternative: true
                 }
             ]
