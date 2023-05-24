@@ -11,8 +11,8 @@ export enum UserSort {
 export const searchUsersSchema = z.object({
     search: z.string().optional(),
     sort: z.nativeEnum(UserSort).default(UserSort.NAME_ASC),
-    page: z.number().min(1).default(1),
-    size: z.number().min(1).max(50).default(50)
+    page: z.coerce.number().min(1).default(1),
+    size: z.coerce.number().min(1).max(50).default(50)
 });
 
 export type SearchUsersRequest = z.infer<typeof searchUsersSchema>;
