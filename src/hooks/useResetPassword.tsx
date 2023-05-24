@@ -5,7 +5,7 @@ import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 const resetPassword = (json: ResetPasswordRequest) =>
     ky
-        .put('api/account/reset-password', { json })
+        .put('account/reset-password', { prefixUrl: '/api', json })
         .json<HandlerResponse<UpdatedResponse>>();
 
 export const useResetPassword = () => {

@@ -8,10 +8,14 @@ const PAGE_SIZE = 5;
 export const searchUsers = (
     searchParams: SearchUsersRequest,
     options?: Options,
-    prefixUrl = ''
+    baseUrl = ''
 ) =>
     ky
-        .get('api/user', { prefixUrl, searchParams, ...options })
+        .get('user', {
+            ...options,
+            prefixUrl: `${baseUrl}/api`,
+            searchParams
+        })
         .json<HandlerResponse<SearchUsersResponse>>();
 
 type UseSearchUsersProps = Omit<SearchUsersRequest, 'page' | 'size'>;

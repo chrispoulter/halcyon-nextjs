@@ -3,9 +3,9 @@ import ky, { Options } from 'ky';
 import { GetProfileResponse } from '@/models/manage.types';
 import { HandlerResponse } from '@/utils/handler';
 
-export const getProfile = (options?: Options, prefixUrl = '') =>
+export const getProfile = (options?: Options, baseUrl = '') =>
     ky
-        .get('api/manage', { prefixUrl, ...options })
+        .get('manage', { ...options, prefixUrl: `${baseUrl}/api` })
         .json<HandlerResponse<GetProfileResponse>>();
 
 export const useGetProfile = () => {

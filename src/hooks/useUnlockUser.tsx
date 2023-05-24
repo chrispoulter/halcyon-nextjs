@@ -3,7 +3,9 @@ import ky from 'ky';
 import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 export const unlockUser = (id: string) =>
-    ky.put(`/api/user/${id}/unlock`).json<HandlerResponse<UpdatedResponse>>();
+    ky
+        .put(`user/${id}/unlock`, { prefixUrl: '/api' })
+        .json<HandlerResponse<UpdatedResponse>>();
 
 export const useUnlockUser = (id: string) => {
     const queryClient = useQueryClient();

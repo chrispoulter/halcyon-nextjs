@@ -3,7 +3,9 @@ import ky from 'ky';
 import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 const deleteUser = (id: string) =>
-    ky.delete(`/api/user/${id}`).json<HandlerResponse<UpdatedResponse>>();
+    ky
+        .delete(`user/${id}`, { prefixUrl: '/api' })
+        .json<HandlerResponse<UpdatedResponse>>();
 
 export const useDeleteUser = (id: string) => {
     const queryClient = useQueryClient();

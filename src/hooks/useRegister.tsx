@@ -5,7 +5,7 @@ import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 const register = (json: RegisterRequest) =>
     ky
-        .post('api/account/register', { json })
+        .post('account/register', { prefixUrl: '/api', json })
         .json<HandlerResponse<UpdatedResponse>>();
 
 export const useRegister = () => {

@@ -3,9 +3,9 @@ import ky, { Options } from 'ky';
 import { GetUserResponse } from '@/models/user.types';
 import { HandlerResponse } from '@/utils/handler';
 
-export const getUser = (id: string, options?: Options, prefixUrl = '') =>
+export const getUser = (id: string, options?: Options, baseUrl = '') =>
     ky
-        .get(`/api/user/${id}`, { prefixUrl, ...options })
+        .get(`user/${id}`, { ...options, prefixUrl: `${baseUrl}/api` })
         .json<HandlerResponse<GetUserResponse>>();
 
 export const useGetUser = (id: string) => {

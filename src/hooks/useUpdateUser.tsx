@@ -5,7 +5,7 @@ import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 const updateUser = (id: string, json: UpdateUserRequest) =>
     ky
-        .put(`/api/user/${id}`, { json })
+        .put(`user/${id}`, { prefixUrl: '/api', json })
         .json<HandlerResponse<UpdatedResponse>>();
 
 export const useUpdateUser = (id: string) => {
