@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Url } from 'url';
 
 type BodyLinkProps = React.PropsWithChildren<{
     href: string;

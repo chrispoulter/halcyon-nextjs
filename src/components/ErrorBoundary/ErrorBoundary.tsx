@@ -31,7 +31,7 @@ class ErrorBoundaryInner extends React.Component<
         }
     }
 
-    componentDidCatch(error: Error, info: ErrorInfo) {
+    componentDidCatch(_: Error, __: ErrorInfo) {
         // console.error('client error', { error, info });
         this.props.setHasError(true);
     }

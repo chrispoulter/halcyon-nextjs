@@ -8,7 +8,7 @@ import { ConfirmDeleteAccount } from '@/features/manage/ConfirmDeleteAccount/Con
 type AccountSettingsCardProps = {
     profile?: GetProfileResponse;
     isDeleting: boolean;
-    onDelete: () => void;
+    onDelete: () => Promise<void>;
 };
 
 const AccountSettingsCardLoading = () => (

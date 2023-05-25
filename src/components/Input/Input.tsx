@@ -27,13 +27,11 @@ const transformers: InputValueTransform = {
     date: {
         input: value => (value ? formatForInput(value) : ''),
         output: e =>
-            e.currentTarget.value
-                ? parseForOutput(e.currentTarget.value)
-                : undefined
+            e.currentTarget.value ? parseForOutput(e.currentTarget.value) : ''
     },
     text: {
         input: value => value || '',
-        output: e => (e.currentTarget.value ? e.currentTarget.value : undefined)
+        output: e => e.currentTarget.value
     }
 };
 
