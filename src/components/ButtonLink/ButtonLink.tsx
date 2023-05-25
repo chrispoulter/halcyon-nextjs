@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import Link, { LinkProps } from 'next/link';
+import Link from 'next/link';
 
 type ButtonLinkProps = React.PropsWithChildren<{
     href: string;

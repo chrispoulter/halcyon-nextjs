@@ -1,4 +1,4 @@
-import NextAuth, { DefaultUser } from 'next-auth';
+import { DefaultUser } from 'next-auth';
 import { Role } from '@/utils/auth';
 
 declare module 'next-auth' {
