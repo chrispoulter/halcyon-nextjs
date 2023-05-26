@@ -6,7 +6,7 @@ import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Role, roleOptions } from '@/utils/auth';
-import { isLessThanOrEqualToday } from '@/utils/date';
+import { isLessThanOrEqualToday, getToday } from '@/utils/date';
 
 const schema = z
     .object({
@@ -103,7 +103,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                 type="date"
                 autoComplete="bday"
                 required
-                max={today}
+                max={getToday()}
                 control={control}
                 className="mb-3"
             />

@@ -11,7 +11,7 @@ import {
     ToggleGroupSkeleton
 } from '@/components/Skeleton/Skeleton';
 import { Role, roleOptions } from '@/utils/auth';
-import { isLessThanOrEqualToday } from '@/utils/date';
+import { isLessThanOrEqualToday, getToday } from '@/utils/date';
 
 const schema = z.object({
     emailAddress: z.string().max(254).email(),
@@ -101,7 +101,7 @@ export const UpdateUserFormInternal = ({
                 type="date"
                 autoComplete="bday"
                 required
-                max={today}
+                max={getToday()}
                 control={control}
                 className="mb-3"
             />

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { isLessThanOrEqualToday } from '@/utils/date';
+import { isLessThanOrEqualToday, getToday } from '@/utils/date';
 
 const schema = z
     .object({
@@ -104,7 +104,7 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                 type="date"
                 autoComplete="bday"
                 required
-                max={today}
+                max={getToday()}
                 control={control}
                 className="mb-5"
             />

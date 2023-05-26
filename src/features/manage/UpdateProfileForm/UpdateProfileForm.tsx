@@ -5,7 +5,7 @@ import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { InputSkeleton, FormSkeleton } from '@/components/Skeleton/Skeleton';
-import { isLessThanOrEqualToday } from '@/utils/date';
+import { isLessThanOrEqualToday, getToday } from '@/utils/date';
 
 const schema = z.object({
     emailAddress: z.string().max(254).email(),
@@ -89,7 +89,7 @@ const UpdateProfileFormInternal = ({
                 type="date"
                 autoComplete="bday"
                 required
-                max={today}
+                max={getToday()}
                 control={control}
                 className="mb-5"
             />
