@@ -15,7 +15,7 @@ model Users {
     passwordResetToken String?
     firstName          String
     lastName           String
-    dateOfBirth        DateTime @db.Timestamptz(6)
+    dateOfBirth        DateTime @db.Date
     isLockedOut        Boolean  @default(false)
     roles              String[]
 }

@@ -1,19 +1,21 @@
 import { z } from 'zod';
-import { today } from '@/utils/date';
+import { isLessThanOrEqualToday } from '@/utils/date';
 
 export type GetProfileResponse = {
     id: number;
     emailAddress: string;
     firstName: string;
     lastName: string;
-    dateOfBirth: Date;
+    dateOfBirth: string;
 };
 
 export const updateProfileSchema = z.object({
     emailAddress: z.string().max(254).email(),
     firstName: z.string().max(50).nonempty(),
     lastName: z.string().max(50).nonempty(),
-    dateOfBirth: z.coerce.date().max(today)
+    dateOfBirth: z.coerce.date().refine(isLessThanOrEqualToday, {
+        message: 'The field must be a date on or before today'
+    })
 });
 
 export type UpdateProfileRequest = z.infer<typeof updateProfileSchema>;

@@ -1,12 +1,14 @@
 import { z } from 'zod';
-import { today } from '@/utils/date';
+import { isLessThanOrEqualToday } from '@/utils/date';
 
 export const registerSchema = z.object({
     emailAddress: z.string().max(254).email(),
     password: z.string().min(8).max(50),
     firstName: z.string().max(50).nonempty(),
     lastName: z.string().max(50).nonempty(),
-    dateOfBirth: z.coerce.date().max(today)
+    dateOfBirth: z.coerce.date().refine(isLessThanOrEqualToday, {
+        message: 'The field must be a date on or before today'
+    })
 });
 
 export type RegisterRequest = z.infer<typeof registerSchema>;

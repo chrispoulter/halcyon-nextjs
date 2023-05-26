@@ -1,6 +1,7 @@
 import { GetProfileResponse, updateProfileSchema } from '@/models/manage.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { toDateString } from '@/utils/date';
 
 const getProfileHandler: Handler<GetProfileResponse> = async (
     _,
@@ -26,7 +27,7 @@ const getProfileHandler: Handler<GetProfileResponse> = async (
             emailAddress: user.emailAddress,
             firstName: user.firstName,
             lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth
+            dateOfBirth: toDateString(user.dateOfBirth)
         }
     });
 };

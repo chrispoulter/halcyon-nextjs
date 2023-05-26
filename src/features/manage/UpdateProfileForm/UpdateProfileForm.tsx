@@ -5,13 +5,15 @@ import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { InputSkeleton, FormSkeleton } from '@/components/Skeleton/Skeleton';
-import { today } from '@/utils/date';
+import { isLessThanOrEqualToday } from '@/utils/date';
 
 const schema = z.object({
     emailAddress: z.string().max(254).email(),
     firstName: z.string().max(50).nonempty(),
     lastName: z.string().max(50).nonempty(),
-    dateOfBirth: z.coerce.date().max(today)
+    dateOfBirth: z.coerce.date().refine(isLessThanOrEqualToday, {
+        message: 'The field must be a date on or before today'
+    })
 });
 
 export type UpdateProfileFormValues = z.infer<typeof schema>;

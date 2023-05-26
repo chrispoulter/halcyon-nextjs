@@ -1,14 +1,23 @@
-import { endOfToday, format, parseISO, getYear } from 'date-fns';
+export const getToday = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today;
+};
 
-export const today = endOfToday();
+export const getCurrentYear = () => getToday().getFullYear();
 
-export const currentYear = getYear(today);
+export const toDateString = (value: string | Date) => {
+    const date = value instanceof Date ? value : new Date(value);
+    return date.toISOString().split('T')[0];
+};
 
-export const parseForOutput = (date: string) =>
-    parseISO(`${date}T00:00:00.000Z`);
+export const toDisplayString = (value: string | Date) => {
+    const date = value instanceof Date ? value : new Date(value);
+    return date.toISOString().split('T')[0].split('-').join(' / ');
+};
 
-export const formatForInput = (date: string | Date) =>
-    format(date instanceof Date ? date : parseISO(date), 'yyyy-MM-dd');
-
-export const formatForDisplay = (date: string | Date) =>
-    format(date instanceof Date ? date : parseISO(date), 'PP');
+export const isLessThanOrEqualToday = (value: string | Date) => {
+    const date = value instanceof Date ? value : new Date(value);
+    console.log(date, getToday());
+    return date <= getToday();
+};

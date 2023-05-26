@@ -6,6 +6,7 @@ import {
 import prisma from '@/utils/prisma';
 import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 import { Role, isUserAdministrator } from '@/utils/auth';
+import { toDateString } from '@/utils/date';
 
 const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
     const query = await getUserSchema.parseAsync(req.query);
@@ -29,7 +30,7 @@ const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
             emailAddress: user.emailAddress,
             firstName: user.firstName,
             lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth,
+            dateOfBirth: toDateString(user.dateOfBirth),
             isLockedOut: user.isLockedOut,
             roles: user.roles.map(r => r as Role)
         }

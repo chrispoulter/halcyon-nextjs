@@ -6,7 +6,7 @@ CREATE TABLE "Users" (
     "passwordResetToken" TEXT,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
-    "dateOfBirth" TIMESTAMPTZ(6) NOT NULL,
+    "dateOfBirth" DATE NOT NULL,
     "isLockedOut" BOOLEAN NOT NULL DEFAULT false,
     "roles" TEXT[],
 

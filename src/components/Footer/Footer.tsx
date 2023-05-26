@@ -1,5 +1,5 @@
 import { BodyLink } from '@/components/BodyLink/BodyLink';
-import { currentYear } from '@/utils/date';
+import { getCurrentYear } from '@/utils/date';
 import { config } from '@/utils/config';
 
 export const Footer = () => (
@@ -9,7 +9,7 @@ export const Footer = () => (
             <BodyLink href="https://www.chrispoulter.com">
                 Chris Poulter
             </BodyLink>{' '}
-            {currentYear}
+            {getCurrentYear()}
         </p>
         <p>v{config.VERSION}</p>
     </footer>

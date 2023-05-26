@@ -9,6 +9,7 @@ import prisma from '@/utils/prisma';
 import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 import { generateHash } from '@/utils/hash';
 import { isUserAdministrator, Role } from '@/utils/auth';
+import { toDateString } from '@/utils/date';
 
 const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     const query = await searchUsersSchema.parseAsync(req.query);
@@ -89,7 +90,7 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
                 emailAddress: user.emailAddress,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                dateOfBirth: user.dateOfBirth,
+                dateOfBirth: toDateString(user.dateOfBirth),
                 isLockedOut: user.isLockedOut,
                 roles: user.roles.map(r => r as Role)
             })),

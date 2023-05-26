@@ -1,7 +1,7 @@
 import { Control, useController } from 'react-hook-form';
 import clsx from 'clsx';
 import { CloseIcon } from '@/components/Icons/CloseIcon';
-import { formatForInput, parseForOutput } from '@/utils/date';
+import { toDateString } from '@/utils/date';
 
 type InputProps = Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -25,9 +25,9 @@ type InputValueTransform = {
 
 const transformers: InputValueTransform = {
     date: {
-        input: value => (value ? formatForInput(value) : ''),
+        input: value => (value ? toDateString(value) : ''),
         output: e =>
-            e.currentTarget.value ? parseForOutput(e.currentTarget.value) : ''
+            e.currentTarget.value ? toDateString(e.currentTarget.value) : ''
     },
     text: {
         input: value => value || '',
@@ -66,11 +66,9 @@ export const Input = ({
 
     const value = transform.input(field.value);
 
-    const min =
-        props.min instanceof Date ? formatForInput(props.min) : props.min;
+    const min = props.min instanceof Date ? toDateString(props.min) : props.min;
 
-    const max =
-        props.max instanceof Date ? formatForInput(props.max) : props.max;
+    const max = props.max instanceof Date ? toDateString(props.max) : props.max;
 
     const isSearch = type === 'search' && value;
 
@@ -98,6 +96,8 @@ export const Input = ({
                     type={type}
                     value={value}
                     disabled={props.disabled || isSubmitting}
+                    min={min}
+                    max={max}
                     aria-invalid={!!error}
                     min={min}
                     max={max}

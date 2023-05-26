@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { today } from '@/utils/date';
+import { isLessThanOrEqualToday } from '@/utils/date';
 
 const schema = z
     .object({
@@ -13,7 +13,9 @@ const schema = z
         confirmPassword: z.string(),
         firstName: z.string().max(50).nonempty(),
         lastName: z.string().max(50).nonempty(),
-        dateOfBirth: z.coerce.date().max(today)
+        dateOfBirth: z.coerce.date().refine(isLessThanOrEqualToday, {
+            message: 'The field must be a date on or before today'
+        })
     })
     .refine(data => data.password === data.confirmPassword, {
         message: 'Passwords do not match',

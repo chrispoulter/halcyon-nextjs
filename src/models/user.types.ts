@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Role } from '@/utils/auth';
-import { today } from '@/utils/date';
+import { isLessThanOrEqualToday } from '@/utils/date';
 
 export enum UserSort {
     EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
@@ -29,7 +29,9 @@ export const createUserSchema = z.object({
     password: z.string().min(8).max(50),
     firstName: z.string().max(50).nonempty(),
     lastName: z.string().max(50).nonempty(),
-    dateOfBirth: z.coerce.date().max(today),
+    dateOfBirth: z.coerce.date().refine(isLessThanOrEqualToday, {
+        message: 'The field must be a date on or before today'
+    }),
     roles: z.array(z.nativeEnum(Role)).optional()
 });
 
@@ -44,7 +46,7 @@ export type GetUserResponse = {
     emailAddress: string;
     firstName: string;
     lastName: string;
-    dateOfBirth: Date;
+    dateOfBirth: string;
     isLockedOut?: boolean;
     roles?: Role[];
 };
@@ -53,7 +55,9 @@ export const updateUserSchema = z.object({
     emailAddress: z.string().max(254).email(),
     firstName: z.string().max(50).nonempty(),
     lastName: z.string().max(50).nonempty(),
-    dateOfBirth: z.coerce.date().max(today),
+    dateOfBirth: z.coerce.date().refine(isLessThanOrEqualToday, {
+        message: 'The field must be a date on or before today'
+    }),
     roles: z.array(z.nativeEnum(Role)).optional()
 });
 

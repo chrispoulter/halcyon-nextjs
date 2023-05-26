@@ -6,7 +6,7 @@ import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Role, roleOptions } from '@/utils/auth';
-import { today } from '@/utils/date';
+import { isLessThanOrEqualToday } from '@/utils/date';
 
 const schema = z
     .object({
@@ -15,7 +15,9 @@ const schema = z
         confirmPassword: z.string().nonempty(),
         firstName: z.string().max(50).nonempty(),
         lastName: z.string().max(50).nonempty(),
-        dateOfBirth: z.coerce.date().max(today),
+        dateOfBirth: z.coerce.date().refine(isLessThanOrEqualToday, {
+            message: 'The field must be a date on or before today'
+        }),
         roles: z.array(z.nativeEnum(Role)).optional()
     })
     .refine(data => data.password === data.confirmPassword, {
