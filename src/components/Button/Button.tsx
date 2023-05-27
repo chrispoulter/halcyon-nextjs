@@ -7,7 +7,6 @@ type ButtonProps = React.PropsWithChildren<{
     loading?: boolean;
     disabled?: boolean;
     onClick?: () => void;
-    dataTestId?: string;
 }>;
 
 export const Button = ({
@@ -15,7 +14,6 @@ export const Button = ({
     type = 'button',
     loading,
     disabled,
-    dataTestId,
     children,
     ...props
 }: ButtonProps) => (
@@ -23,7 +21,6 @@ export const Button = ({
         {...props}
         type={type}
         disabled={loading || disabled}
-        data-testid={dataTestId}
         className={clsx(
             'relative h-full w-full bg-cyan-600 px-5 py-2 font-light focus:outline-none focus:ring-1 sm:w-auto sm:py-1',
             {

@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+    cleanup,
+    fireEvent,
+    render,
+    screen,
+    waitFor
+} from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ky from 'ky-universal';
 import { signIn } from 'next-auth/react';
@@ -34,7 +40,7 @@ const createWrapper = () => {
 };
 
 describe('<Register />', () => {
-    beforeEach(jest.clearAllMocks);
+    beforeEach(cleanup);
 
     it('renders a heading', () => {
         render(<Register />, { wrapper: createWrapper() });
@@ -46,7 +52,7 @@ describe('<Register />', () => {
         expect(heading).toBeInTheDocument();
     });
 
-    it('renders a form', async () => {
+    it('handles form validation error', async () => {
         render(<Register />, { wrapper: createWrapper() });
 
         const emailInput = screen.getByLabelText(/email address/i);
@@ -66,17 +72,17 @@ describe('<Register />', () => {
         const lastNameInput = screen.getByLabelText(/last name/i);
         fireEvent.change(lastNameInput, { target: { value: 'Smith' } });
 
-        const dateOfBirthInput = screen.getByLabelText(/date of birth/i);
-        fireEvent.change(dateOfBirthInput, { target: { value: '1970-01-01' } });
-
-        const registerButton = screen.getByTestId('register-button');
+        const registerButton = screen.getByRole('button', { name: /submit/i });
         fireEvent.click(registerButton);
 
-        await waitFor(() => expect(ky.post).toHaveBeenCalledTimes(1));
-        await waitFor(() => expect(signIn).toHaveBeenCalledTimes(1));
+        const dateOfBirthInput = screen.getByLabelText(/date of birth/i);
+        await waitFor(() => expect(dateOfBirthInput).toBeInvalid());
+
+        await waitFor(() => expect(ky.post).toHaveBeenCalledTimes(0));
+        await waitFor(() => expect(signIn).toHaveBeenCalledTimes(0));
     });
 
-    it('renders a form 2', async () => {
+    it('handles form submission', async () => {
         render(<Register />, { wrapper: createWrapper() });
 
         const emailInput = screen.getByLabelText(/email address/i);
@@ -99,7 +105,7 @@ describe('<Register />', () => {
         const dateOfBirthInput = screen.getByLabelText(/date of birth/i);
         fireEvent.change(dateOfBirthInput, { target: { value: '1970-01-01' } });
 
-        const registerButton = screen.getByTestId('register-button');
+        const registerButton = screen.getByRole('button', { name: /submit/i });
         fireEvent.click(registerButton);
 
         await waitFor(() => expect(ky.post).toHaveBeenCalledTimes(1));

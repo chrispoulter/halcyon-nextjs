@@ -24,7 +24,7 @@ describe('<Home />', () => {
     it('renders a register link', () => {
         render(<Home />, { wrapper: MemoryRouterProvider });
 
-        const registerLink = screen.getByTestId('register-link');
+        const registerLink = screen.getByRole('link', { name: /get started/i });
         fireEvent.click(registerLink);
 
         expect(mockRouter.asPath).toEqual('/register');

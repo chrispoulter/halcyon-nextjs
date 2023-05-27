@@ -22,11 +22,7 @@ const Home = () => (
                 dui porta orci, quis semper odio felis ut quam.
             </JumbotronBody>
             <ButtonGroup>
-                <ButtonLink
-                    href="/register"
-                    size="lg"
-                    dataTestId="register-link"
-                >
+                <ButtonLink href="/register" size="lg">
                     Get Started
                 </ButtonLink>
             </ButtonGroup>
