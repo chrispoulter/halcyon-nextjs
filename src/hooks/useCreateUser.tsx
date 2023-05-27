@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import ky from 'ky';
+import ky from 'ky-universal';
 import { CreateUserRequest } from '@/models/user.types';
 import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 

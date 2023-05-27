@@ -1,11 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import mockRouter from 'next-router-mock';
+import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider';
 import Home from '@/pages/index';
-
-jest.mock('next-auth', () => ({
-    __esModule: true,
-    default: jest.fn(),
-    getServerSession: jest.fn()
-}));
 
 describe('<Home />', () => {
     it('renders a heading', () => {
@@ -16,5 +12,14 @@ describe('<Home />', () => {
         });
 
         expect(heading).toBeInTheDocument();
+    });
+
+    it('renders a register link', () => {
+        render(<Home />, { wrapper: MemoryRouterProvider });
+
+        const registerLink = screen.getByTestId('register-link');
+        fireEvent.click(registerLink);
+
+        expect(mockRouter.asPath).toEqual('/register');
     });
 });

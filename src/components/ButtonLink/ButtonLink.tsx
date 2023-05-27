@@ -5,16 +5,19 @@ type ButtonLinkProps = React.PropsWithChildren<{
     href: string;
     variant?: 'primary' | 'secondary';
     size?: 'lg';
+    dataTestId?: string;
 }>;
 
 export const ButtonLink = ({
     href,
     variant = 'primary',
     size,
+    dataTestId,
     children
 }: ButtonLinkProps) => (
     <Link
         href={href}
+        data-testid={dataTestId}
         className={clsx(
             'block px-5 py-2 text-center font-light focus:outline-none focus:ring-1 sm:py-1',
             {

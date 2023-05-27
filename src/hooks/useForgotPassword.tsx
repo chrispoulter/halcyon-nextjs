@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import ky from 'ky';
+import ky from 'ky-universal';
 import { ForgotPasswordRequest } from '@/models/account.types';
 import { HandlerResponse } from '@/utils/handler';
 

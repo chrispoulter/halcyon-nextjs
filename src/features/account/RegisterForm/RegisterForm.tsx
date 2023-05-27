@@ -105,7 +105,11 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                 className="mb-5"
             />
             <ButtonGroup>
-                <Button type="submit" loading={isSubmitting}>
+                <Button
+                    type="submit"
+                    loading={isSubmitting}
+                    dataTestId="register-button"
+                >
                     Submit
                 </Button>
             </ButtonGroup>

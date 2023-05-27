@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import ky, { Options } from 'ky';
+import ky, { Options } from 'ky-universal';
 import { SearchUsersRequest, SearchUsersResponse } from '@/models/user.types';
 import { HandlerResponse } from '@/utils/handler';
 

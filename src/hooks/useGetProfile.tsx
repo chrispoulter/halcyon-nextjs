@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import ky, { Options } from 'ky';
+import ky, { Options } from 'ky-universal';
 import { GetProfileResponse } from '@/models/manage.types';
 import { HandlerResponse } from '@/utils/handler';
 
