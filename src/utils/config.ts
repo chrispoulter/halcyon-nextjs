@@ -1,19 +1,22 @@
-import { z } from 'zod';
+export const config = {
+    NODE_ENV: process.env.NODE_ENV,
+    VERSION: process.env.NEXT_PUBLIC_GITVERSION_SEMVER || '1.0.0',
 
-const schema = z.object({
-    NODE_ENV: z.string().default('development'),
-    NEXT_PUBLIC_GITVERSION_SEMVER: z.string().default('1.0.0'),
-    DATABASE_URL: z.string(),
-    EMAIL_SMTP_SERVER: z.string().default('localhost'),
-    EMAIL_SMTP_PORT: z.coerce.number().default(1025),
-    EMAIL_SMTP_USERNAME: z.string().optional(),
-    EMAIL_SMTP_PASSWORD: z.string().optional(),
-    EMAIL_NO_REPLY_ADDRESS: z.string().default('noreply@chrispoulter.com'),
-    SEED_EMAIL_ADDRESS: z.string(),
-    SEED_PASSWORD: z.string(),
-    NEXT_AUTH_URL: z.string().default('http://localhost:3000'),
-    NEXTAUTH_SECRET: z.string().default('change-me-1234567890'),
-    NEXTAUTH_SESSION_MAXAGE: z.coerce.number().default(3600)
-});
+    DATABASE_URL: process.env.DATABASE_URL!,
 
-export const config = schema.parse(process.env);
+    EMAIL_SMTP_SERVER: process.env.EMAIL_SMTP_SERVER || 'localhost',
+    EMAIL_SMTP_PORT: parseInt(process.env.EMAIL_SMTP_PORT || '1025'),
+    EMAIL_SMTP_USERNAME: process.env.EMAIL_SMTP_USERNAME,
+    EMAIL_SMTP_PASSWORD: process.env.EMAIL_SMTP_PASSWORD,
+    EMAIL_NO_REPLY_ADDRESS:
+        process.env.EMAIL_NO_REPLY_ADDRESS || 'noreply@chrispoulter.com',
+
+    SEED_EMAIL_ADDRESS: process.env.SEED_EMAIL_ADDRESS!,
+    SEED_PASSWORD: process.env.SEED_PASSWORD!,
+
+    NEXT_AUTH_URL: process.env.NEXT_AUTH_URL || 'http://localhost:3000',
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'change-me-1234567890',
+    NEXTAUTH_SESSION_MAXAGE: parseInt(
+        process.env.NEXTAUTH_SESSION_MAXAGE || '3600'
+    )
+};
