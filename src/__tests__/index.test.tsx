@@ -3,6 +3,13 @@ import mockRouter from 'next-router-mock';
 import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider';
 import Home from '@/pages/index';
 
+jest.mock('next/router', () => require('next-router-mock'));
+
+jest.mock('next-auth', () => ({
+    __esModule: true,
+    default: jest.fn()
+}));
+
 describe('<Home />', () => {
     it('renders a heading', () => {
         render(<Home />);
