@@ -5,10 +5,10 @@ import {
     screen,
     waitFor
 } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ky from 'ky-universal';
 import { signIn } from 'next-auth/react';
 import Register from '@/pages/register';
+import { queryWrapper } from '@/utils/test-utils';
 
 jest.mock('next-auth/react', () => ({
     __esModule: true,
@@ -22,28 +22,11 @@ jest.mock('ky-universal', () => ({
     }
 }));
 
-const createWrapper = () => {
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                retry: false
-            }
-        }
-    });
-
-    // eslint-disable-next-line react/display-name
-    return ({ children }: any) => (
-        <QueryClientProvider client={queryClient}>
-            {children}
-        </QueryClientProvider>
-    );
-};
-
 describe('<Register />', () => {
     beforeEach(cleanup);
 
     it('renders a heading', () => {
-        render(<Register />, { wrapper: createWrapper() });
+        render(<Register />, { wrapper: queryWrapper });
 
         const heading = screen.getByRole('heading', {
             name: /register/i
@@ -53,7 +36,7 @@ describe('<Register />', () => {
     });
 
     it('handles form validation error', async () => {
-        render(<Register />, { wrapper: createWrapper() });
+        render(<Register />, { wrapper: queryWrapper });
 
         const emailInput = screen.getByLabelText(/email address/i);
         fireEvent.change(emailInput, { target: { value: 'test@test.com' } });
@@ -83,7 +66,7 @@ describe('<Register />', () => {
     });
 
     it('handles form submission', async () => {
-        render(<Register />, { wrapper: createWrapper() });
+        render(<Register />, { wrapper: queryWrapper });
 
         const emailInput = screen.getByLabelText(/email address/i);
         fireEvent.change(emailInput, { target: { value: 'test@test.com' } });
