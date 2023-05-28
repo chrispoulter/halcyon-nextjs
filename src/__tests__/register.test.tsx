@@ -1,10 +1,4 @@
-import {
-    cleanup,
-    fireEvent,
-    render,
-    screen,
-    waitFor
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ky from 'ky-universal';
 import { signIn } from 'next-auth/react';
 import Register from '@/pages/register';
@@ -23,7 +17,7 @@ jest.mock('ky-universal', () => ({
 }));
 
 describe('<Register />', () => {
-    beforeEach(cleanup);
+    beforeEach(jest.clearAllMocks);
 
     it('renders a heading', () => {
         render(<Register />, { wrapper: queryWrapper });
@@ -61,8 +55,8 @@ describe('<Register />', () => {
         const dateOfBirthInput = screen.getByLabelText(/date of birth/i);
         await waitFor(() => expect(dateOfBirthInput).toBeInvalid());
 
-        await waitFor(() => expect(ky.post).toHaveBeenCalledTimes(0));
-        await waitFor(() => expect(signIn).toHaveBeenCalledTimes(0));
+        expect(ky.post).toHaveBeenCalledTimes(0);
+        expect(signIn).toHaveBeenCalledTimes(0);
     });
 
     it('handles form submission', async () => {
@@ -92,6 +86,6 @@ describe('<Register />', () => {
         fireEvent.click(registerButton);
 
         await waitFor(() => expect(ky.post).toHaveBeenCalledTimes(1));
-        await waitFor(() => expect(signIn).toHaveBeenCalledTimes(1));
+        expect(signIn).toHaveBeenCalledTimes(1);
     });
 });
