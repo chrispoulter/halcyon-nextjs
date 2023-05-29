@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
-import ky from 'ky-universal';
 import { ForgotPasswordRequest } from '@/models/account.types';
-import { HandlerResponse } from '@/utils/handler';
+import { fetcher } from '@/utils/fetch';
 
-export const forgotPassword = (json: ForgotPasswordRequest) =>
-    ky
-        .put('account/forgot-password', { prefixUrl: '/api', json })
-        .json<HandlerResponse>();
+export const forgotPassword = (request: ForgotPasswordRequest) =>
+    fetcher('/api/account/forgot-password', {
+        method: 'PUT',
+        body: JSON.stringify(request)
+    });
 
 export const useForgotPassword = () => {
     const { mutateAsync } = useMutation({

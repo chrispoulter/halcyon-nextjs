@@ -1,12 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
-import ky from 'ky-universal';
 import { ResetPasswordRequest } from '@/models/account.types';
-import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
+import { fetcher } from '@/utils/fetch';
+import { UpdatedResponse } from '@/utils/handler';
 
-const resetPassword = (json: ResetPasswordRequest) =>
-    ky
-        .put('account/reset-password', { prefixUrl: '/api', json })
-        .json<HandlerResponse<UpdatedResponse>>();
+const resetPassword = (request: ResetPasswordRequest) =>
+    fetcher<UpdatedResponse>('/api/account/reset-password', {
+        method: 'PUT',
+        body: JSON.stringify(request)
+    });
 
 export const useResetPassword = () => {
     const { mutateAsync } = useMutation({

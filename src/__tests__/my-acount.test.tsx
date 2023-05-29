@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { GetProfileResponse } from '@/models/manage.types';
 import MyAccount from '@/pages/my-account';
 import { HandlerResponse } from '@/utils/handler';
+import { fetcher } from '@/utils/fetch';
 import { queryWrapper } from '@/utils/test-utils';
 
 const response: HandlerResponse<GetProfileResponse> = {
@@ -14,13 +15,8 @@ const response: HandlerResponse<GetProfileResponse> = {
     }
 };
 
-const responseMock = jest.fn().mockResolvedValue(response);
-
-jest.mock('ky-universal', () => ({
-    __esModule: true,
-    default: {
-        get: jest.fn(() => ({ json: responseMock }))
-    }
+jest.mock('@/utils/fetch', () => ({
+    fetcher: jest.fn().mockImplementation(() => response)
 }));
 
 describe('<MyAccount />', () => {
@@ -39,7 +35,7 @@ describe('<MyAccount />', () => {
     it('renders personal details', async () => {
         render(<MyAccount />, { wrapper: queryWrapper });
 
-        await waitFor(() => expect(responseMock).toBeCalledTimes(1));
+        await waitFor(() => expect(fetcher).toBeCalledTimes(1));
 
         const emailAddress = screen.getByText(response.data?.emailAddress!);
         expect(emailAddress).toBeInTheDocument();

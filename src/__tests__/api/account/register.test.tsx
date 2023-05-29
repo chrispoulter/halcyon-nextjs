@@ -21,13 +21,7 @@ describe('/api/account/register', () => {
 
     it('handles model validation error', async () => {
         const { req, res } = createMocks({
-            method: 'POST',
-            body: {
-                emailAddress: 'test@test.com',
-                password: 'Testing123!',
-                firstName: 'John',
-                lastName: 'Smith'
-            }
+            method: 'POST'
         });
 
         await handler(req, res);
@@ -66,7 +60,7 @@ describe('/api/account/register', () => {
         (prisma.users.findUnique as jest.Mock).mockResolvedValue(null);
 
         (prisma.users.create as jest.Mock).mockResolvedValue({
-            id: 1,
+            id: 1
         });
 
         const { req, res } = createMocks({

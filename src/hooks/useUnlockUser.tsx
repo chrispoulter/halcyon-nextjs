@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import ky from 'ky-universal';
-import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
+import { fetcher } from '@/utils/fetch';
+import { UpdatedResponse } from '@/utils/handler';
 
-export const unlockUser = (id: string) =>
-    ky
-        .put(`user/${id}/unlock`, { prefixUrl: '/api' })
-        .json<HandlerResponse<UpdatedResponse>>();
+const unlockUser = (id: string) =>
+    fetcher<UpdatedResponse>(`/api/user/${id}/unlock`, { method: 'PUT' });
 
 export const useUnlockUser = (id: string) => {
     const queryClient = useQueryClient();

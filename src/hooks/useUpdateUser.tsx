@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import ky from 'ky-universal';
 import { UpdateUserRequest } from '@/models/user.types';
-import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
+import { fetcher } from '@/utils/fetch';
+import { UpdatedResponse } from '@/utils/handler';
 
-const updateUser = (id: string, json: UpdateUserRequest) =>
-    ky
-        .put(`user/${id}`, { prefixUrl: '/api', json })
-        .json<HandlerResponse<UpdatedResponse>>();
+const updateUser = (id: string, request: UpdateUserRequest) =>
+    fetcher<UpdatedResponse>(`/api/user/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(request)
+    });
 
 export const useUpdateUser = (id: string) => {
     const queryClient = useQueryClient();
