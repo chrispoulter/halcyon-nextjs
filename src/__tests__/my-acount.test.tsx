@@ -1,7 +1,6 @@
 import {
     render,
     screen,
-    waitFor,
     waitForElementToBeRemoved
 } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
@@ -24,11 +23,13 @@ describe('<MyAccount />', () => {
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 
-    it('renders a heading', async () => {
+    beforeEach(() =>
         fetchMock.mockResponse(JSON.stringify(response), {
             headers: { 'content-type': 'application/json' }
-        });
+        })
+    );
 
+    it('renders a heading', () => {
         render(<MyAccount />, { wrapper: queryWrapper });
 
         const heading = screen.getByRole('heading', {
@@ -39,16 +40,12 @@ describe('<MyAccount />', () => {
     });
 
     it('renders personal details', async () => {
-        fetchMock.mockResponse(JSON.stringify(response), {
-            headers: { 'content-type': 'application/json' }
-        });
-
         render(<MyAccount />, { wrapper: queryWrapper });
 
         const loading = screen.getAllByText(/loading/i);
         await waitForElementToBeRemoved(loading);
 
         const emailAddress = screen.getByText(response.data?.emailAddress!);
-        await waitFor(() => expect(emailAddress).toBeInTheDocument());
+        expect(emailAddress).toBeInTheDocument();
     });
 });
