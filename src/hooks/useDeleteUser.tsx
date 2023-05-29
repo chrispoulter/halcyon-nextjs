@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import ky from 'ky';
-import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
+import { fetcher } from '@/utils/fetch';
+import { UpdatedResponse } from '@/utils/handler';
 
 const deleteUser = (id: string) =>
-    ky
-        .delete(`user/${id}`, { prefixUrl: '/api' })
-        .json<HandlerResponse<UpdatedResponse>>();
+    fetcher<UpdatedResponse>(`/api/user/${id}`, { method: 'DELETE' });
 
 export const useDeleteUser = (id: string) => {
     const queryClient = useQueryClient();

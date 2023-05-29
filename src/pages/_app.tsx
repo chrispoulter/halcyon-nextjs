@@ -48,15 +48,7 @@ const App = ({
                 break;
 
             default:
-                const isJson = error.response.headers
-                    .get('content-type')
-                    ?.includes('application/json');
-
-                const response = isJson
-                    ? await error.response.json()
-                    : undefined;
-
-                toast.error(response?.message || error.message);
+                toast.error(error.response?.message || error.message);
         }
     };
 
