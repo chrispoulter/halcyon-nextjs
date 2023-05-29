@@ -1,20 +1,18 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import fetchMock from 'jest-fetch-mock';
 import { signIn } from 'next-auth/react';
 import Register from '@/pages/register';
-import { fetcher } from '@/utils/fetch';
 import { queryWrapper } from '@/utils/test-utils';
+import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 jest.mock('next-auth/react', () => ({
     __esModule: true,
     signIn: jest.fn()
 }));
 
-jest.mock('@/utils/fetch', () => ({
-    fetcher: jest.fn()
-}));
-
 describe('<Register />', () => {
     beforeEach(jest.clearAllMocks);
+    beforeEach(fetchMock.resetMocks);
 
     it('renders a heading', () => {
         render(<Register />, { wrapper: queryWrapper });
@@ -27,6 +25,12 @@ describe('<Register />', () => {
     });
 
     it('handles form submission', async () => {
+        const response: HandlerResponse<UpdatedResponse> = { data: { id: 1 } };
+
+        fetchMock.mockResponse(JSON.stringify(response), {
+            headers: { 'content-type': 'application/json' }
+        });
+
         render(<Register />, { wrapper: queryWrapper });
 
         const emailInput = screen.getByLabelText(/email address/i);
@@ -52,7 +56,7 @@ describe('<Register />', () => {
         const registerButton = screen.getByRole('button', { name: /submit/i });
         fireEvent.click(registerButton);
 
-        await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1));
+        await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
         expect(signIn).toHaveBeenCalledTimes(1);
     });
 });

@@ -1,8 +1,13 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+    render,
+    screen,
+    waitFor,
+    waitForElementToBeRemoved
+} from '@testing-library/react';
+import fetchMock from 'jest-fetch-mock';
 import { GetProfileResponse } from '@/models/manage.types';
 import MyAccount from '@/pages/my-account';
 import { HandlerResponse } from '@/utils/handler';
-import { fetcher } from '@/utils/fetch';
 import { queryWrapper } from '@/utils/test-utils';
 
 const response: HandlerResponse<GetProfileResponse> = {
@@ -15,14 +20,15 @@ const response: HandlerResponse<GetProfileResponse> = {
     }
 };
 
-jest.mock('@/utils/fetch', () => ({
-    fetcher: jest.fn().mockImplementation(() => response)
-}));
-
 describe('<MyAccount />', () => {
     beforeEach(jest.clearAllMocks);
+    beforeEach(fetchMock.resetMocks);
 
     it('renders a heading', async () => {
+        fetchMock.mockResponse(JSON.stringify(response), {
+            headers: { 'content-type': 'application/json' }
+        });
+
         render(<MyAccount />, { wrapper: queryWrapper });
 
         const heading = screen.getByRole('heading', {
@@ -33,11 +39,16 @@ describe('<MyAccount />', () => {
     });
 
     it('renders personal details', async () => {
+        fetchMock.mockResponse(JSON.stringify(response), {
+            headers: { 'content-type': 'application/json' }
+        });
+
         render(<MyAccount />, { wrapper: queryWrapper });
 
-        await waitFor(() => expect(fetcher).toBeCalledTimes(1));
+        const loading = screen.getAllByText(/loading/i);
+        await waitForElementToBeRemoved(loading);
 
         const emailAddress = screen.getByText(response.data?.emailAddress!);
-        expect(emailAddress).toBeInTheDocument();
+        await waitFor(() => expect(emailAddress).toBeInTheDocument());
     });
 });
