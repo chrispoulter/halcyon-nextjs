@@ -1,4 +1,5 @@
 import { createMocks } from 'node-mocks-http';
+import { Users } from '@prisma/client';
 import handler from '@/pages/api/account/register';
 import prisma from '@/utils/prisma';
 
@@ -6,15 +7,17 @@ jest.mock('next-auth/jwt', () => ({
     getToken: jest.fn()
 }));
 
-jest.mock('@/utils/prisma', () => ({
-    __esModule: true,
-    default: {
-        users: {
-            findUnique: jest.fn(),
-            create: jest.fn()
-        }
-    }
-}));
+const user: Users = {
+    id: 1,
+    emailAddress: 'test@test.com',
+    password: 'Testing123!',
+    passwordResetToken: null,
+    firstName: 'John',
+    lastName: 'Smith',
+    dateOfBirth: new Date(1970, 0, 1),
+    isLockedOut: false,
+    roles: []
+};
 
 describe('/api/account/register', () => {
     beforeEach(jest.clearAllMocks);
@@ -34,7 +37,7 @@ describe('/api/account/register', () => {
     });
 
     it('handles duplicate email address', async () => {
-        (prisma.users.findUnique as jest.Mock).mockResolvedValue({});
+        jest.spyOn(prisma.users, 'findUnique').mockResolvedValue(user);
 
         const { req, res } = createMocks({
             method: 'POST',
@@ -57,11 +60,8 @@ describe('/api/account/register', () => {
     });
 
     it('creates new user', async () => {
-        (prisma.users.findUnique as jest.Mock).mockResolvedValue(null);
-
-        (prisma.users.create as jest.Mock).mockResolvedValue({
-            id: 1
-        });
+        jest.spyOn(prisma.users, 'findUnique').mockResolvedValue(null);
+        jest.spyOn(prisma.users, 'create').mockResolvedValue(user);
 
         const { req, res } = createMocks({
             method: 'POST',
