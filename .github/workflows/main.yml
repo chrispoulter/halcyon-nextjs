@@ -41,7 +41,6 @@ jobs:
                   NEXT_TELEMETRY_DISABLED: 1
               run: |
                   yarn install --frozen-lockfile
-                  yarn prisma:generate
                   yarn lint
                   yarn build
                   yarn test:ci

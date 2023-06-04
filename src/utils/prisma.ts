@@ -36,4 +36,4 @@ if (config.NODE_ENV === 'development') {
     global.prisma = prisma;
 }
 
-export default prisma;
+export default prisma!;
