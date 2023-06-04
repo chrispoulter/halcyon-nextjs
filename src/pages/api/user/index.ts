@@ -17,26 +17,10 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
 
     if (query.search) {
         where = {
-            OR: [
-                {
-                    emailAddress: {
-                        contains: query.search,
-                        mode: Prisma.QueryMode.insensitive
-                    }
-                },
-                {
-                    firstName: {
-                        contains: query.search,
-                        mode: Prisma.QueryMode.insensitive
-                    }
-                },
-                {
-                    lastName: {
-                        contains: query.search,
-                        mode: Prisma.QueryMode.insensitive
-                    }
-                }
-            ]
+            search: {
+                contains: query.search,
+                mode: Prisma.QueryMode.insensitive
+            }
         };
     }
 
