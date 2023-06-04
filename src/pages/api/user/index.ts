@@ -16,9 +16,11 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     let where: Prisma.UsersWhereInput | undefined;
 
     if (query.search) {
+        const searchTerm = query.search.toLocaleLowerCase();
+
         where = {
             search: {
-                contains: query.search,
+                contains: searchTerm,
                 mode: Prisma.QueryMode.insensitive
             }
         };

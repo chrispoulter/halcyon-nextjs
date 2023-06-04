@@ -13,7 +13,7 @@ if (config.NODE_ENV === 'development') {
 
 const computeUserColumns = (user: Users) => {
     user.search =
-        `${user.emailAddress} ${user.firstName} ${user.lastName}`.toLowerCase();
+        `${user.emailAddress} ${user.firstName} ${user.lastName}`.toLocaleLowerCase();
 };
 
 prisma.$use(async (params, next) => {
