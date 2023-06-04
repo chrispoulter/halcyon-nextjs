@@ -9,6 +9,7 @@ CREATE TABLE "Users" (
     "dateOfBirth" TIMESTAMPTZ(6) NOT NULL,
     "isLockedOut" BOOLEAN NOT NULL DEFAULT false,
     "roles" TEXT[],
+    "search" TEXT,
 
     CONSTRAINT "Users_pkey" PRIMARY KEY ("id")
 );

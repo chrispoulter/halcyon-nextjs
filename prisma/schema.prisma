@@ -18,4 +18,5 @@ model Users {
     dateOfBirth        DateTime @db.Timestamptz(6)
     isLockedOut        Boolean  @default(false)
     roles              String[]
+    search             String?
 }
