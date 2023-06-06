@@ -28,7 +28,10 @@ const userMiddleware: Prisma.Middleware = async (params, next) => {
 var prisma = global.prisma;
 
 if (!prisma) {
-    prisma = new PrismaClient();
+    prisma = new PrismaClient({
+        log: ['query']
+    });
+
     prisma.$use(userMiddleware);
 }
 
