@@ -45,9 +45,9 @@ export const DatePicker = ({
 
     if (field.value) {
         const date = new Date(field.value);
-        dateValue.year = date.getFullYear();
-        dateValue.month = date.getMonth();
-        dateValue.date = date.getDate();
+        dateValue.year = date.getUTCFullYear();
+        dateValue.month = date.getUTCMonth();
+        dateValue.date = date.getUTCDate();
     }
 
     const [state, setState] = useState(dateValue);
@@ -68,8 +68,8 @@ export const DatePicker = ({
             input.year > -1 && input.month > -1 && input.date > -1;
 
         const value = isDateSet
-            ? new Date(input.year, input.month, input.date).toISOString() || ''
-            : '';
+            ? new Date(Date.UTC(input.year, input.month, input.date))
+            : undefined;
 
         field.onChange(value);
     };
