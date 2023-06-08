@@ -1,4 +1,3 @@
-import React from 'react';
 import Link from 'next/link';
 import { NavbarMenu } from '@/components/NavbarMenu/NavbarMenu';
 import { ProfileDropdown } from '@/components/ProfileDropdown/ProfileDropdown';

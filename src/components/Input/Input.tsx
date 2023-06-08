@@ -1,7 +1,6 @@
 import { Control, useController } from 'react-hook-form';
 import clsx from 'clsx';
 import { CloseIcon } from '@/components/Icons/CloseIcon';
-import { formatForInput, parseForOutput } from '@/utils/date';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     control: Control<any, any>;
@@ -9,25 +8,6 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     label: string;
     hideLabel?: boolean;
     onClear?: () => void;
-};
-
-type InputValueTransform = {
-    [key: string]: {
-        input: (value: string) => string;
-        output: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    };
-};
-
-const transformers: InputValueTransform = {
-    date: {
-        input: value => (value ? formatForInput(value) : ''),
-        output: e =>
-            e.currentTarget.value ? parseForOutput(e.currentTarget.value) : ''
-    },
-    text: {
-        input: value => value || '',
-        output: e => e.currentTarget.value
-    }
 };
 
 export const Input = ({
@@ -49,17 +29,15 @@ export const Input = ({
         control
     });
 
-    const transform = transformers[type] || transformers.text;
-
     const onClearInput = () => {
         field.onChange('');
         onClear && onClear();
     };
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-        field.onChange(transform.output(e));
+        field.onChange(e.currentTarget.value);
 
-    const value = transform.input(field.value);
+    const value = field.value || '';
 
     const isSearch = type === 'search' && value;
 
