@@ -99,6 +99,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                 label="Date Of Birth"
                 name="dateOfBirth"
                 required
+                autoComplete={['bday-day', 'bday-month', 'bday-year']}
                 control={control}
                 className="mb-3"
             />
