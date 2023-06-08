@@ -1,3 +1,5 @@
+export const currentYear = new Date().getUTCFullYear();
+
 export const monthNames = [
     'January',
     'February',
@@ -13,14 +15,12 @@ export const monthNames = [
     'December'
 ];
 
-export const currentYear = new Date().getUTCFullYear();
-
 export const formatForDisplay = (value: string | Date) => {
     const date = value instanceof Date ? value : new Date(value);
 
-    return date.toLocaleDateString('en', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-    });
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth();
+    const day = date.getUTCDate();
+
+    return `${day} ${monthNames[month]} ${year}`;
 };
