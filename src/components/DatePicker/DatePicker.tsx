@@ -106,9 +106,7 @@ export const DatePicker = ({
                         }
                     )}
                 >
-                    <option className="text-gray-300" value={-1}>
-                        Day...
-                    </option>
+                    <option value={-1}>Day...</option>
                     {Array.from({ length: 31 }).map((_, index) => (
                         <option key={index}>{index + 1}</option>
                     ))}
@@ -130,9 +128,7 @@ export const DatePicker = ({
                         }
                     )}
                 >
-                    <option className="text-gray-300" value={-1}>
-                        Month...
-                    </option>
+                    <option value={-1}>Month...</option>
                     {Array.from({ length: 12 }).map((_, index) => (
                         <option key={index} value={index}>
                             {monthNames[index]}
@@ -156,9 +152,7 @@ export const DatePicker = ({
                         }
                     )}
                 >
-                    <option className="text-gray-300" value={-1}>
-                        Year...
-                    </option>
+                    <option value={-1}>Year...</option>
                     {Array.from({ length: 120 }).map((_, index) => (
                         <option key={index}>{currentYear - index}</option>
                     ))}
