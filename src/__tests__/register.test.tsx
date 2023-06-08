@@ -50,8 +50,14 @@ describe('<Register />', () => {
         const lastNameInput = screen.getByLabelText(/last name/i);
         fireEvent.change(lastNameInput, { target: { value: 'Smith' } });
 
-        const dateOfBirthInput = screen.getByLabelText(/date of birth/i);
-        fireEvent.change(dateOfBirthInput, { target: { value: '1970-01-01' } });
+        const dobDateSelect = screen.getByLabelText(/date of birth date/i);
+        fireEvent.change(dobDateSelect, { target: { value: '1' } });
+
+        const dobMonthSelect = screen.getByLabelText(/date of birth month/i);
+        fireEvent.change(dobMonthSelect, { target: { value: '0' } });
+
+        const dobYearSelect = screen.getByLabelText(/date of birth year/i);
+        fireEvent.change(dobYearSelect, { target: { value: '1970' } });
 
         const registerButton = screen.getByRole('button', { name: /submit/i });
         fireEvent.click(registerButton);
