@@ -87,6 +87,7 @@ export const DatePicker = ({
                     id={`${name}.date`}
                     value={state.date}
                     disabled={props.disabled || isSubmitting}
+                    aria-label={`${label} Date`}
                     aria-invalid={!!error}
                     onChange={event => handleDay(event.target.value)}
                     className={clsx(
@@ -106,6 +107,7 @@ export const DatePicker = ({
                     id={`${name}.month`}
                     value={state.month}
                     disabled={props.disabled || isSubmitting}
+                    aria-label={`${label} Month`}
                     aria-invalid={!!error}
                     onChange={event => handleMonth(event.target.value)}
                     className={clsx(
@@ -127,6 +129,7 @@ export const DatePicker = ({
                     id={`${name}.year`}
                     value={state.year}
                     disabled={props.disabled || isSubmitting}
+                    aria-label={`${label} Year`}
                     aria-invalid={!!error}
                     onChange={event => handleYear(event.target.value)}
                     className={clsx(
