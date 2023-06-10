@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Input } from '@/components/Input/Input';
+import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 
@@ -95,12 +96,11 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                     className="mb-3 sm:flex-1"
                 />
             </div>
-            <Input
+            <DatePicker
                 label="Date Of Birth"
                 name="dateOfBirth"
-                type="date"
-                autoComplete="bday"
                 required
+                autoComplete={['bday-day', 'bday-month', 'bday-year']}
                 control={control}
                 className="mb-5"
             />
