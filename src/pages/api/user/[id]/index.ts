@@ -31,7 +31,8 @@ const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
             lastName: user.lastName,
             dateOfBirth: user.dateOfBirth,
             isLockedOut: user.isLockedOut,
-            roles: user.roles.map(r => r as Role)
+            roles: user.roles.map(r => r as Role),
+            version: user.version
         }
     });
 };
@@ -78,7 +79,8 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
             firstName: body.firstName,
             lastName: body.lastName,
             dateOfBirth: body.dateOfBirth,
-            roles: body.roles
+            roles: body.roles,
+            version: crypto.randomUUID()
         }
     });
 

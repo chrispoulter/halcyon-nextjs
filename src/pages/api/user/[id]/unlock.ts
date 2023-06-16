@@ -24,7 +24,8 @@ const unlockUserHandler: Handler<UpdatedResponse> = async (req, res) => {
             id: user.id
         },
         data: {
-            isLockedOut: false
+            isLockedOut: false,
+            version: crypto.randomUUID()
         }
     });
 

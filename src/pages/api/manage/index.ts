@@ -26,7 +26,8 @@ const getProfileHandler: Handler<GetProfileResponse> = async (
             emailAddress: user.emailAddress,
             firstName: user.firstName,
             lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth
+            dateOfBirth: user.dateOfBirth,
+            version: user.version
         }
     });
 };
@@ -74,7 +75,8 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
             emailAddress: body.emailAddress,
             firstName: body.firstName,
             lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth
+            dateOfBirth: body.dateOfBirth,
+            version: crypto.randomUUID()
         }
     });
 

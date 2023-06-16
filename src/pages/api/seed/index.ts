@@ -13,7 +13,8 @@ const seedHandler: Handler = async (_, res) => {
         lastName: 'Administrator',
         dateOfBirth: new Date(Date.UTC(1970, 0, 1)),
         isLockedOut: false,
-        roles: Object.values(Role)
+        roles: Object.values(Role),
+        version: crypto.randomUUID()
     };
 
     await prisma.users.upsert({

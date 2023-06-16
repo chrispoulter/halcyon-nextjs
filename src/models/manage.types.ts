@@ -6,13 +6,15 @@ export type GetProfileResponse = {
     firstName: string;
     lastName: string;
     dateOfBirth: Date;
+    version: string;
 };
 
 export const updateProfileSchema = z.object({
     emailAddress: z.string().max(254).email(),
     firstName: z.string().max(50).nonempty(),
     lastName: z.string().max(50).nonempty(),
-    dateOfBirth: z.coerce.date()
+    dateOfBirth: z.coerce.date(),
+    version: z.string().uuid()
 });
 
 export type UpdateProfileRequest = z.infer<typeof updateProfileSchema>;

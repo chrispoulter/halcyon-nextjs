@@ -12,11 +12,12 @@ model Users {
     id                 Int      @id @default(autoincrement())
     emailAddress       String   @unique
     password           String?
-    passwordResetToken String?
+    passwordResetToken String?  @db.Uuid
     firstName          String
     lastName           String
     dateOfBirth        DateTime @db.Timestamptz(6)
     isLockedOut        Boolean  @default(false)
     roles              String[]
     search             String?
+    version            String   @db.Uuid
 }

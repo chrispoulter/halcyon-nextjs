@@ -17,8 +17,17 @@ export const searchUsersSchema = z.object({
 
 export type SearchUsersRequest = z.infer<typeof searchUsersSchema>;
 
+export type SearchUserResponse = {
+    id: number;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    isLockedOut?: boolean;
+    roles?: Role[];
+};
+
 export type SearchUsersResponse = {
-    items?: GetUserResponse[];
+    items?: SearchUserResponse[];
     hasNextPage?: boolean;
     hasPreviousPage?: boolean;
 };
@@ -46,6 +55,7 @@ export type GetUserResponse = {
     dateOfBirth: Date;
     isLockedOut?: boolean;
     roles?: Role[];
+    version: string;
 };
 
 export const updateUserSchema = z.object({
@@ -53,7 +63,20 @@ export const updateUserSchema = z.object({
     firstName: z.string().max(50).nonempty(),
     lastName: z.string().max(50).nonempty(),
     dateOfBirth: z.coerce.date(),
-    roles: z.array(z.nativeEnum(Role)).optional()
+    roles: z.array(z.nativeEnum(Role)).optional(),
+    version: z.string().uuid()
 });
 
 export type UpdateUserRequest = z.infer<typeof updateUserSchema>;
+
+export const lockUserSchema = z.object({
+    version: z.string().uuid()
+});
+
+export type LockUserRequest = z.infer<typeof lockUserSchema>;
+
+export const unlockUserSchema = z.object({
+    version: z.string().uuid()
+});
+
+export type UnlockUserRequest = z.infer<typeof unlockUserSchema>;

@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { GetUserResponse } from '@/models/user.types';
+import { SearchUserResponse } from '@/models/user.types';
 import { Badge } from '@/components/Badge/Badge';
 import { roles } from '@/utils/auth';
 
 type UserCardProps = {
-    user?: GetUserResponse;
+    user?: SearchUserResponse;
 };
 
 const UserCardLoading = () => (

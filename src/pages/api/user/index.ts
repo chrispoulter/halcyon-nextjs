@@ -106,7 +106,8 @@ const createUserHandler: Handler<UpdatedResponse> = async (req, res) => {
             firstName: body.firstName,
             lastName: body.lastName,
             dateOfBirth: body.dateOfBirth,
-            roles: body.roles
+            roles: body.roles,
+            version: crypto.randomUUID()
         }
     });
 

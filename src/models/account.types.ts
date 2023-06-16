@@ -17,7 +17,7 @@ export const forgotPasswordSchema = z.object({
 export type ForgotPasswordRequest = z.infer<typeof forgotPasswordSchema>;
 
 export const resetPasswordSchema = z.object({
-    token: z.string(),
+    token: z.string().uuid(),
     emailAddress: z.string().max(254).email(),
     newPassword: z.string().min(8).max(50)
 });

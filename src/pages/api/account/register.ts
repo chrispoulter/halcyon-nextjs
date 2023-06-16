@@ -25,7 +25,8 @@ const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
             password: await generateHash(body.password),
             firstName: body.firstName,
             lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth
+            dateOfBirth: body.dateOfBirth,
+            version: crypto.randomUUID()
         }
     });
 
