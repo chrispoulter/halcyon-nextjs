@@ -55,6 +55,14 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     const body = await updateUserSchema.parseAsync(req.body);
 
+    if (user.version !== body.version) {
+        return res.status(409).json({
+            code: 'CONFLICT',
+            message:
+                'Data has been modified or deleted since entities were loaded.'
+        });
+    }
+
     if (user.emailAddress !== body.emailAddress) {
         const existing = await prisma.users.findUnique({
             where: {

@@ -1,4 +1,4 @@
-import { getUserSchema } from '@/models/user.types';
+import { getUserSchema, unlockUserSchema } from '@/models/user.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
@@ -16,6 +16,16 @@ const unlockUserHandler: Handler<UpdatedResponse> = async (req, res) => {
         return res.status(404).json({
             code: 'USER_NOT_FOUND',
             message: 'User not found.'
+        });
+    }
+
+    const body = await unlockUserSchema.parseAsync(req.body);
+
+    if (user.version !== body.version) {
+        return res.status(409).json({
+            code: 'CONFLICT',
+            message:
+                'Data has been modified or deleted since entities were loaded.'
         });
     }
 
