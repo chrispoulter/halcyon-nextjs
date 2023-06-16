@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { GetProfileResponse, updateProfileSchema } from '@/models/manage.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler, UpdatedResponse } from '@/utils/handler';

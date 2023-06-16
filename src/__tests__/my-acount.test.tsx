@@ -15,7 +15,8 @@ const response: HandlerResponse<GetProfileResponse> = {
         emailAddress: 'test@test.com',
         firstName: 'John',
         lastName: 'Smith',
-        dateOfBirth: new Date(1970, 1, 1)
+        dateOfBirth: new Date(1970, 1, 1),
+        version: '1234'
     }
 };
 

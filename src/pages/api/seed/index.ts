@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { generateHash } from '@/utils/hash';
 import { handler, Handler } from '@/utils/handler';
 import { Role } from '@/utils/auth';

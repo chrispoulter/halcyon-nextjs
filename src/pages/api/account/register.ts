@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { registerSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler, UpdatedResponse } from '@/utils/handler';
