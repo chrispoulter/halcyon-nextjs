@@ -1,5 +1,9 @@
 import crypto from 'crypto';
-import { GetProfileResponse, updateProfileSchema } from '@/models/manage.types';
+import {
+    GetProfileResponse,
+    deleteAccountSchema,
+    updateProfileSchema
+} from '@/models/manage.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 
@@ -53,6 +57,10 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
         });
     }
 
+
+    console.log('user.version', user.version);
+    console.log('body.version', body.version);
+
     if (user.version !== body.version) {
         return res.status(409).json({
             code: 'CONFLICT',
@@ -99,7 +107,7 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
 };
 
 const deleteProfileHandler: Handler<UpdatedResponse> = async (
-    _,
+    req,
     res,
     { currentUserId }
 ) => {
@@ -113,6 +121,16 @@ const deleteProfileHandler: Handler<UpdatedResponse> = async (
         return res.status(404).json({
             code: 'USER_NOT_FOUND',
             message: 'User not found.'
+        });
+    }
+
+    const body = await deleteAccountSchema.parseAsync(req.body);
+
+    if (user.version !== body.version) {
+        return res.status(409).json({
+            code: 'CONFLICT',
+            message:
+                'Data has been modified or deleted since entities were loaded.'
         });
     }
 

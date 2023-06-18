@@ -23,6 +23,14 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
         });
     }
 
+    if (user.version !== body.version) {
+        return res.status(409).json({
+            code: 'CONFLICT',
+            message:
+                'Data has been modified or deleted since entities were loaded.'
+        });
+    }
+
     if (!user.password) {
         return res.status(400).json({
             code: 'INCORRECT_PASSWORD',

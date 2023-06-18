@@ -52,7 +52,7 @@ const UpdateUser = () => {
 
     const onDelete = async () => {
         try {
-            await deleteUser();
+            await deleteUser({ version: user!.version });
             await router.push('/user');
         } catch (error) {
             console.warn(

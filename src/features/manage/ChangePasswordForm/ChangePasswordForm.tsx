@@ -1,9 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { GetProfileResponse } from '@/models/manage.types';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
+import { FormSkeleton, InputSkeleton } from '@/components/Skeleton/Skeleton';
 
 const schema = z
     .object({
@@ -19,12 +21,23 @@ const schema = z
 export type ChangePasswordFormValues = z.infer<typeof schema>;
 
 type ChangePasswordFormProps = {
+    profile?: GetProfileResponse;
     options?: JSX.Element;
     onSubmit: (values: ChangePasswordFormValues) => void;
     className?: string;
 };
 
-export const ChangePasswordForm = ({
+const ChangePasswordFormLoading = () => (
+    <FormSkeleton>
+        <InputSkeleton className="mb-3" />
+        <div className="sm:flex sm:gap-3">
+            <InputSkeleton className="mb-3 sm:flex-1" />
+            <InputSkeleton className="mb-5 sm:flex-1" />
+        </div>
+    </FormSkeleton>
+);
+
+export const ChangePasswordFormInternal = ({
     onSubmit,
     options,
     className
@@ -82,5 +95,23 @@ export const ChangePasswordForm = ({
                 </Button>
             </ButtonGroup>
         </form>
+    );
+};
+
+export const ChangePasswordForm = ({
+    profile,
+    onSubmit,
+    options
+}: ChangePasswordFormProps) => {
+    if (!profile) {
+        return <ChangePasswordFormLoading />;
+    }
+
+    return (
+        <ChangePasswordFormInternal
+            profile={profile}
+            onSubmit={onSubmit}
+            options={options}
+        />
     );
 };

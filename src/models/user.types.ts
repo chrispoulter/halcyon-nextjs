@@ -80,3 +80,9 @@ export const unlockUserSchema = z.object({
 });
 
 export type UnlockUserRequest = z.infer<typeof unlockUserSchema>;
+
+export const deleteUserSchema = z.object({
+    version: z.string().uuid()
+});
+
+export type DeleteUserRequest = z.infer<typeof deleteUserSchema>;

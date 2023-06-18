@@ -21,7 +21,14 @@ export type UpdateProfileRequest = z.infer<typeof updateProfileSchema>;
 
 export const changePasswordSchema = z.object({
     currentPassword: z.string(),
-    newPassword: z.string().min(8).max(50)
+    newPassword: z.string().min(8).max(50),
+    version: z.string().uuid()
 });
 
 export type ChangePasswordRequest = z.infer<typeof changePasswordSchema>;
+
+export const deleteAccountSchema = z.object({
+    version: z.string().uuid()
+});
+
+export type DeleteAccountRequst = z.infer<typeof deleteAccountSchema>;

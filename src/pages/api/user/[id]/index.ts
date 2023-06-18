@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import {
     GetUserResponse,
+    deleteUserSchema,
     getUserSchema,
     updateUserSchema
 } from '@/models/user.types';
@@ -119,6 +120,16 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
         return res.status(404).json({
             code: 'USER_NOT_FOUND',
             message: 'User not found.'
+        });
+    }
+
+    const body = await deleteUserSchema.parseAsync(req.body);
+
+    if (user.version !== body.version) {
+        return res.status(409).json({
+            code: 'CONFLICT',
+            message:
+                'Data has been modified or deleted since entities were loaded.'
         });
     }
 

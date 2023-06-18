@@ -18,7 +18,7 @@ const MyAccount = () => {
     const { deleteAccount, isDeleting } = useDeleteAccount();
 
     const onDelete = async () => {
-        await deleteAccount();
+        await deleteAccount({ version: profile!.version });
         signOut({ callbackUrl: '/' });
     };
 
