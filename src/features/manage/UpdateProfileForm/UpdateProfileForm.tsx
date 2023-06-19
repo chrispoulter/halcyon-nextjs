@@ -43,7 +43,7 @@ const UpdateProfileFormInternal = ({
         control,
         formState: { isSubmitting }
     } = useForm<UpdateProfileFormValues>({
-        defaultValues: profile,
+        values: profile,
         resolver: zodResolver(schema)
     });
 

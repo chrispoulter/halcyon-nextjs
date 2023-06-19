@@ -57,10 +57,6 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
         });
     }
 
-
-    console.log('user.version', user.version);
-    console.log('body.version', body.version);
-
     if (user.version !== body.version) {
         return res.status(409).json({
             code: 'CONFLICT',

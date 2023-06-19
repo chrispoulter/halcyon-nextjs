@@ -43,7 +43,7 @@ const Users = () => {
 
             <div className="mb-3 flex gap-1">
                 <SearchUserForm
-                    defaultValues={request}
+                    values={request}
                     onSubmit={onSubmit}
                     isLoading={isLoading || isFetching}
                 />
