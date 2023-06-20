@@ -23,7 +23,7 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
         });
     }
 
-    if (user.version !== body.version) {
+    if (body.version && user.version !== body.version) {
         return res.status(409).json({
             code: 'CONFLICT',
             message:

@@ -64,25 +64,25 @@ export const updateUserSchema = z.object({
     lastName: z.string().max(50).nonempty(),
     dateOfBirth: z.coerce.date(),
     roles: z.array(z.nativeEnum(Role)).optional(),
-    version: z.string().uuid()
+    version: z.string().uuid().optional()
 });
 
 export type UpdateUserRequest = z.infer<typeof updateUserSchema>;
 
 export const lockUserSchema = z.object({
-    version: z.string().uuid()
+    version: z.string().uuid().optional()
 });
 
 export type LockUserRequest = z.infer<typeof lockUserSchema>;
 
 export const unlockUserSchema = z.object({
-    version: z.string().uuid()
+    version: z.string().uuid().optional()
 });
 
 export type UnlockUserRequest = z.infer<typeof unlockUserSchema>;
 
 export const deleteUserSchema = z.object({
-    version: z.string().uuid()
+    version: z.string().uuid().optional()
 });
 
 export type DeleteUserRequest = z.infer<typeof deleteUserSchema>;

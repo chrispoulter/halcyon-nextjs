@@ -57,7 +57,7 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
         });
     }
 
-    if (user.version !== body.version) {
+    if (body.version && user.version !== body.version) {
         return res.status(409).json({
             code: 'CONFLICT',
             message:
@@ -122,7 +122,7 @@ const deleteProfileHandler: Handler<UpdatedResponse> = async (
 
     const body = await deleteAccountSchema.parseAsync(req.body);
 
-    if (user.version !== body.version) {
+    if (body.version && user.version !== body.version) {
         return res.status(409).json({
             code: 'CONFLICT',
             message:

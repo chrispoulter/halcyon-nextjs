@@ -57,7 +57,7 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     const body = await updateUserSchema.parseAsync(req.body);
 
-    if (user.version !== body.version) {
+    if (body.version && user.version !== body.version) {
         return res.status(409).json({
             code: 'CONFLICT',
             message:
@@ -125,7 +125,7 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
 
     const body = await deleteUserSchema.parseAsync(req.body);
 
-    if (user.version !== body.version) {
+    if (body.version && user.version !== body.version) {
         return res.status(409).json({
             code: 'CONFLICT',
             message:
