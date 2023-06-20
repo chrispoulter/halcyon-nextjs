@@ -26,7 +26,7 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
 
     const body = await lockUserSchema.parseAsync(req.body);
 
-    if (body.version && user.version !== body.version) {
+    if (body.version && body.version !== user.version) {
         return res.status(409).json({
             code: 'CONFLICT',
             message:
