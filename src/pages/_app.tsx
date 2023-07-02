@@ -53,6 +53,20 @@ const App = ({
     };
 
     const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                refetchOnWindowFocus: false,
+                refetchOnMount: false,
+                refetchOnReconnect: false,
+                retry: false,
+                staleTime: Infinity,
+                cacheTime: Infinity
+            },
+            mutations: {
+                retry: false,
+                cacheTime: Infinity
+            }
+        },
         queryCache: new QueryCache({
             onError
         }),

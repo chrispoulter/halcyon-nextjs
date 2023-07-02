@@ -1,4 +1,9 @@
-import { GetProfileResponse, updateProfileSchema } from '@/models/manage.types';
+import crypto from 'crypto';
+import {
+    GetProfileResponse,
+    deleteAccountSchema,
+    updateProfileSchema
+} from '@/models/manage.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 
@@ -26,7 +31,8 @@ const getProfileHandler: Handler<GetProfileResponse> = async (
             emailAddress: user.emailAddress,
             firstName: user.firstName,
             lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth
+            dateOfBirth: user.dateOfBirth,
+            version: user.version
         }
     });
 };
@@ -48,6 +54,14 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
         return res.status(404).json({
             code: 'USER_NOT_FOUND',
             message: 'User not found.'
+        });
+    }
+
+    if (body.version && body.version !== user.version) {
+        return res.status(409).json({
+            code: 'CONFLICT',
+            message:
+                'Data has been modified or deleted since entities were loaded.'
         });
     }
 
@@ -74,7 +88,8 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
             emailAddress: body.emailAddress,
             firstName: body.firstName,
             lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth
+            dateOfBirth: body.dateOfBirth,
+            version: crypto.randomUUID()
         }
     });
 
@@ -88,7 +103,7 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
 };
 
 const deleteProfileHandler: Handler<UpdatedResponse> = async (
-    _,
+    req,
     res,
     { currentUserId }
 ) => {
@@ -102,6 +117,16 @@ const deleteProfileHandler: Handler<UpdatedResponse> = async (
         return res.status(404).json({
             code: 'USER_NOT_FOUND',
             message: 'User not found.'
+        });
+    }
+
+    const body = await deleteAccountSchema.parseAsync(req.body);
+
+    if (body.version && body.version !== user.version) {
+        return res.status(409).json({
+            code: 'CONFLICT',
+            message:
+                'Data has been modified or deleted since entities were loaded.'
         });
     }
 

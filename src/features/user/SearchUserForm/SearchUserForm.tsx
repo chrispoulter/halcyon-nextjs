@@ -13,13 +13,13 @@ export type SearchUserFormValues = z.infer<typeof schema>;
 
 type SearchUserFormProps = {
     isLoading?: boolean;
-    defaultValues: SearchUserFormValues;
+    values: SearchUserFormValues;
     onSubmit: (values: SearchUserFormValues) => void;
 };
 
 export const SearchUserForm = ({
     onSubmit,
-    defaultValues,
+    values,
     isLoading
 }: SearchUserFormProps) => {
     const {
@@ -27,7 +27,7 @@ export const SearchUserForm = ({
         control,
         formState: { isSubmitting }
     } = useForm<SearchUserFormValues>({
-        defaultValues,
+        values,
         resolver: zodResolver(schema)
     });
 

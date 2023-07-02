@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { registerSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler, UpdatedResponse } from '@/utils/handler';
@@ -25,7 +26,8 @@ const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
             password: await generateHash(body.password),
             firstName: body.firstName,
             lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth
+            dateOfBirth: body.dateOfBirth,
+            version: crypto.randomUUID()
         }
     });
 

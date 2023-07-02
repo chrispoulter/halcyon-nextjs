@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { forgotPasswordSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler } from '@/utils/handler';

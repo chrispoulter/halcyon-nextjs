@@ -1,10 +1,10 @@
-import { GetUserResponse } from '@/models/user.types';
+import { SearchUserResponse } from '@/models/user.types';
 import { UserCard } from '@/features/user/UserCard/UserCard';
 import { BodyLink } from '@/components/BodyLink/BodyLink';
 
 type UserListProps = {
     isLoading?: boolean;
-    users?: GetUserResponse[];
+    users?: SearchUserResponse[];
 };
 
 const UserListLoading = () => (

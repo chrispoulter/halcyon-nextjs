@@ -1,4 +1,5 @@
-import { getUserSchema } from '@/models/user.types';
+import crypto from 'crypto';
+import { getUserSchema, unlockUserSchema } from '@/models/user.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
@@ -19,12 +20,23 @@ const unlockUserHandler: Handler<UpdatedResponse> = async (req, res) => {
         });
     }
 
+    const body = await unlockUserSchema.parseAsync(req.body);
+
+    if (body.version && body.version !== user.version) {
+        return res.status(409).json({
+            code: 'CONFLICT',
+            message:
+                'Data has been modified or deleted since entities were loaded.'
+        });
+    }
+
     await prisma.users.update({
         where: {
             id: user.id
         },
         data: {
-            isLockedOut: false
+            isLockedOut: false,
+            version: crypto.randomUUID()
         }
     });
 

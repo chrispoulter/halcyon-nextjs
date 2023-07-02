@@ -40,7 +40,7 @@ const UpdateUser = () => {
 
     const onSubmit = async (values: UpdateUserFormValues) => {
         try {
-            await updateUser(values);
+            await updateUser({ ...values, version: user!.version });
             await router.push('/user');
         } catch (error) {
             console.warn(
@@ -52,7 +52,7 @@ const UpdateUser = () => {
 
     const onDelete = async () => {
         try {
-            await deleteUser();
+            await deleteUser({ version: user!.version });
             await router.push('/user');
         } catch (error) {
             console.warn(
@@ -64,7 +64,7 @@ const UpdateUser = () => {
 
     const onLock = async () => {
         try {
-            await lockUser();
+            await lockUser({ version: user!.version });
         } catch (error) {
             console.warn('An unhandled error was caught from onLock()', error);
         }
@@ -72,7 +72,7 @@ const UpdateUser = () => {
 
     const onUnlock = async () => {
         try {
-            await unlockUser();
+            await unlockUser({ version: user!.version });
         } catch (error) {
             console.warn(
                 'An unhandled error was caught from onUnlock()',

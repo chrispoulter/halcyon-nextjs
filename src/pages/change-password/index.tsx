@@ -8,15 +8,18 @@ import {
     ChangePasswordFormValues
 } from '@/features/manage/ChangePasswordForm/ChangePasswordForm';
 import { useChangePassword } from '@/hooks/useChangePassword';
+import { useGetProfile } from '@/hooks/useGetProfile';
 
 const ChangePassword = () => {
     const router = useRouter();
+
+    const { profile } = useGetProfile();
 
     const { changePassword } = useChangePassword();
 
     const onSubmit = async (values: ChangePasswordFormValues) => {
         try {
-            await changePassword(values);
+            await changePassword({ ...values, version: profile!.version });
             await router.push('/my-account');
         } catch (error) {
             console.warn(
@@ -31,6 +34,7 @@ const ChangePassword = () => {
             <PageTitle>Change Password</PageTitle>
 
             <ChangePasswordForm
+                profile={profile}
                 onSubmit={onSubmit}
                 options={
                     <ButtonLink href="/my-account" variant="secondary">

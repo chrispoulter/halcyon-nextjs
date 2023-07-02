@@ -7,6 +7,10 @@ jest.mock('next-auth/jwt', () => ({
     getToken: jest.fn()
 }));
 
+jest.mock('crypto', () => ({
+    randomUUID: jest.fn()
+}));
+
 const user: Users = {
     id: 1,
     emailAddress: 'test@test.com',
@@ -16,7 +20,9 @@ const user: Users = {
     lastName: 'Smith',
     dateOfBirth: new Date(1970, 0, 1),
     isLockedOut: false,
-    roles: []
+    roles: [],
+    search: 'John Smith',
+    version: '1234'
 };
 
 describe('/api/account/register', () => {

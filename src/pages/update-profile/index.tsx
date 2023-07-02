@@ -23,7 +23,7 @@ const UpdateProfile = () => {
 
     const onSubmit = async (values: UpdateProfileFormValues) => {
         try {
-            await updateProfile(values);
+            await updateProfile({ ...values, version: profile!.version });
             await router.push('/my-account');
         } catch (error) {
             console.warn(

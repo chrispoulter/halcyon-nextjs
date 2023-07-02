@@ -1,5 +1,7 @@
+import crypto from 'crypto';
 import {
     GetUserResponse,
+    deleteUserSchema,
     getUserSchema,
     updateUserSchema
 } from '@/models/user.types';
@@ -31,7 +33,8 @@ const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
             lastName: user.lastName,
             dateOfBirth: user.dateOfBirth,
             isLockedOut: user.isLockedOut,
-            roles: user.roles.map(r => r as Role)
+            roles: user.roles.map(r => r as Role),
+            version: user.version
         }
     });
 };
@@ -53,6 +56,14 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
     }
 
     const body = await updateUserSchema.parseAsync(req.body);
+
+    if (body.version && body.version !== user.version) {
+        return res.status(409).json({
+            code: 'CONFLICT',
+            message:
+                'Data has been modified or deleted since entities were loaded.'
+        });
+    }
 
     if (user.emailAddress !== body.emailAddress) {
         const existing = await prisma.users.findUnique({
@@ -78,7 +89,8 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
             firstName: body.firstName,
             lastName: body.lastName,
             dateOfBirth: body.dateOfBirth,
-            roles: body.roles
+            roles: body.roles,
+            version: crypto.randomUUID()
         }
     });
 
@@ -108,6 +120,16 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
         return res.status(404).json({
             code: 'USER_NOT_FOUND',
             message: 'User not found.'
+        });
+    }
+
+    const body = await deleteUserSchema.parseAsync(req.body);
+
+    if (body.version && body.version !== user.version) {
+        return res.status(409).json({
+            code: 'CONFLICT',
+            message:
+                'Data has been modified or deleted since entities were loaded.'
         });
     }
 

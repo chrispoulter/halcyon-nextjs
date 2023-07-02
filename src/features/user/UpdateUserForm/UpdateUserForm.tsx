@@ -55,7 +55,7 @@ export const UpdateUserFormInternal = ({
         control,
         formState: { isSubmitting }
     } = useForm<UpdateUserFormValues>({
-        defaultValues: user,
+        values: user,
         resolver: zodResolver(schema)
     });
 
