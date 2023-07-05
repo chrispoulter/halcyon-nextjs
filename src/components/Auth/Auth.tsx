@@ -14,7 +14,7 @@ export const Auth = ({ auth, children }: AuthProps) => {
         return <PageSkeleton />;
     }
 
-    if (auth instanceof Array<Role> && !isAuthorized(session?.user, auth)) {
+    if (auth instanceof Array && !isAuthorized(session?.user, auth)) {
         return <Forbidden />;
     }
 

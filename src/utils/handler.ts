@@ -64,7 +64,7 @@ export const handler =
                     throw new HandlerError(401);
                 }
 
-                if (options.auth instanceof Array<Role>) {
+                if (options.auth instanceof Array) {
                     const authorized = isAuthorized(token, options.auth);
 
                     if (!authorized) {
