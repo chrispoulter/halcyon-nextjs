@@ -24,16 +24,13 @@ export const Input = ({
     const onClearInput = () => {
         field.onChange({
             target: {
-                name,
+                name: field.name,
                 value: ''
             }
         });
 
         onClear && onClear();
     };
-
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-        field.onChange(e);
 
     const value = field.value || '';
 
@@ -62,7 +59,6 @@ export const Input = ({
                     type={type}
                     value={value}
                     aria-invalid={!!error}
-                    onChange={onChange}
                     className={clsx(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
                         {

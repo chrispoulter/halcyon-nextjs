@@ -22,7 +22,7 @@ export const ToggleGroup = ({ name, options, disabled }: ToggleGroupProps) => {
     const onChange = (value: any, checked: boolean) =>
         field.onChange({
             target: {
-                name,
+                name: field.name,
                 value: checked
                     ? [value, ...currentValues]
                     : currentValues.filter(v => v !== value)
