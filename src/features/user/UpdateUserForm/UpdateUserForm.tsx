@@ -74,7 +74,7 @@ export const UpdateUserFormInternal = ({
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isDisabled}
                     className="mb-3"
                 />
                 <div className="sm:flex sm:gap-3">
@@ -85,7 +85,7 @@ export const UpdateUserFormInternal = ({
                         maxLength={50}
                         autoComplete="given-name"
                         required
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isDisabled}
                         className="mb-3 sm:flex-1"
                     />
                     <Input
@@ -95,7 +95,7 @@ export const UpdateUserFormInternal = ({
                         maxLength={50}
                         autoComplete="family-name"
                         required
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isDisabled}
                         className="mb-3 sm:flex-1"
                     />
                 </div>
@@ -104,7 +104,7 @@ export const UpdateUserFormInternal = ({
                     name="dateOfBirth"
                     required
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isDisabled}
                     className="mb-3"
                 />
                 <div className="mb-5">
@@ -114,7 +114,7 @@ export const UpdateUserFormInternal = ({
                     <ToggleGroup
                         name="roles"
                         options={roleOptions}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isDisabled}
                     />
                 </div>
                 <ButtonGroup>
