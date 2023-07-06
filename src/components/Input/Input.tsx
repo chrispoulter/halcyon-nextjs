@@ -59,10 +59,8 @@ export const Input = ({
                     {...field}
                     {...props}
                     id={field.name}
-                    name={field.name}
                     type={type}
                     value={value}
-                    disabled={props.disabled}
                     aria-invalid={!!error}
                     onChange={onChange}
                     className={clsx(
