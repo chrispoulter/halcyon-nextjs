@@ -4,7 +4,7 @@ import { createWrapper } from 'next-redux-wrapper';
 import { api } from './api';
 import { logger } from './logger';
 
-const makeStore = () => {
+export const makeStore = () => {
     const store = configureStore({
         reducer: {
             [api.reducerPath]: api.reducer

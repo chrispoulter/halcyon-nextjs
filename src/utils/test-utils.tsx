@@ -1,17 +1,7 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Provider } from 'react-redux';
+import { makeStore } from '@/redux/store';
 
 export const queryWrapper = ({ children }: { children: React.ReactNode }) => {
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                retry: false
-            }
-        }
-    });
-
-    return (
-        <QueryClientProvider client={queryClient}>
-            {children}
-        </QueryClientProvider>
-    );
+    const store = makeStore();
+    return <Provider store={store}>{children}</Provider>;
 };
