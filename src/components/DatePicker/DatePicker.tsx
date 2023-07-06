@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import clsx from 'clsx';
-import { Control, useController } from 'react-hook-form';
+import { useField } from 'formik';
 import { currentYear, monthNames } from '@/utils/date';
 
 type DatePickerProps = {
-    control: Control<any, any>;
     name: string;
     label: string;
     required?: boolean;
@@ -20,7 +19,6 @@ type DatePickerState = {
 };
 
 export const DatePicker = ({
-    control,
     name,
     label,
     required,
@@ -28,14 +26,8 @@ export const DatePicker = ({
     autoComplete,
     className
 }: DatePickerProps) => {
-    const {
-        field,
-        fieldState: { error },
-        formState: { isSubmitting }
-    } = useController({
-        name,
-        control
-    });
+    const [field, meta] = useField(name);
+    const error = meta.touched && meta.error;
 
     const dateValue: DatePickerState = {
         year: -1,
@@ -71,7 +63,12 @@ export const DatePicker = ({
             ? new Date(Date.UTC(input.year, input.month, input.date))
             : undefined;
 
-        field.onChange(value);
+        field.onChange({
+            target: {
+                name: field.name,
+                value
+            }
+        });
     };
 
     return (
@@ -93,11 +90,12 @@ export const DatePicker = ({
                     id={`${name}.date`}
                     value={state.date}
                     required={required}
-                    disabled={disabled || isSubmitting}
+                    disabled={disabled}
                     aria-label={`${label} Date`}
                     aria-invalid={!!error}
                     autoComplete={autoComplete && autoComplete[0]}
                     onChange={event => handleDay(event.target.value)}
+                    onBlur={field.onBlur}
                     className={clsx(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
                         {
@@ -115,11 +113,12 @@ export const DatePicker = ({
                     id={`${name}.month`}
                     value={state.month}
                     required={required}
-                    disabled={disabled || isSubmitting}
+                    disabled={disabled}
                     aria-label={`${label} Month`}
                     aria-invalid={!!error}
                     autoComplete={autoComplete && autoComplete[1]}
                     onChange={event => handleMonth(event.target.value)}
+                    onBlur={field.onBlur}
                     className={clsx(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
                         {
@@ -139,11 +138,12 @@ export const DatePicker = ({
                     id={`${name}.year`}
                     value={state.year}
                     required={required}
-                    disabled={disabled || isSubmitting}
+                    disabled={disabled}
                     aria-label={`${label} Year`}
                     aria-invalid={!!error}
                     autoComplete={autoComplete && autoComplete[2]}
                     onChange={event => handleYear(event.target.value)}
+                    onBlur={field.onBlur}
                     className={clsx(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
                         {
@@ -161,7 +161,7 @@ export const DatePicker = ({
 
             {error && (
                 <span role="alert" className="mt-2 text-sm text-red-600">
-                    {error.message}
+                    {error}
                 </span>
             )}
         </div>

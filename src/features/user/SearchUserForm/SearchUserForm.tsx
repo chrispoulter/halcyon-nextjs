@@ -1,5 +1,4 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
@@ -21,43 +20,35 @@ export const SearchUserForm = ({
     onSubmit,
     values,
     isLoading
-}: SearchUserFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<SearchUserFormValues>({
-        values,
-        resolver: yupResolver<SearchUserFormValues>(schema)
-    });
-
-    return (
-        <form
-            noValidate
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex w-full gap-1"
-        >
-            <Input
-                label="Search Term"
-                hideLabel={true}
-                name="search"
-                type="search"
-                placeholder="Search Users..."
-                disabled={isLoading}
-                control={control}
-                onClear={handleSubmit(onSubmit)}
-            />
-            <div>
-                <Button
-                    type="submit"
-                    variant="secondary"
-                    aria-label="Search"
-                    disabled={isLoading}
-                    loading={isSubmitting}
-                >
-                    <SearchIcon className="h-4 w-4" />
-                </Button>
-            </div>
-        </form>
-    );
-};
+}: SearchUserFormProps) => (
+    <Formik
+        initialValues={values as any}
+        validationSchema={schema}
+        onSubmit={onSubmit}
+    >
+        {({ isSubmitting, handleSubmit }) => (
+            <Form noValidate className="flex w-full gap-1">
+                <Input
+                    label="Search Term"
+                    name="search"
+                    type="search"
+                    placeholder="Search Users..."
+                    disabled={isSubmitting || isLoading}
+                    hideLabel={true}
+                    onClear={handleSubmit}
+                />
+                <div>
+                    <Button
+                        type="submit"
+                        variant="secondary"
+                        aria-label="Search"
+                        disabled={isLoading}
+                        loading={isSubmitting}
+                    >
+                        <SearchIcon className="h-4 w-4" />
+                    </Button>
+                </div>
+            </Form>
+        )}
+    </Formik>
+);

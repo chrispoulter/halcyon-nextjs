@@ -1,5 +1,4 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
@@ -41,67 +40,64 @@ const UpdateProfileFormInternal = ({
     profile,
     onSubmit,
     options
-}: UpdateProfileFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<UpdateProfileFormValues>({
-        values: profile,
-        resolver: yupResolver(schema)
-    });
-
-    return (
-        <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <Input
-                label="Email Address"
-                name="emailAddress"
-                type="email"
-                maxLength={254}
-                autoComplete="username"
-                required
-                control={control}
-                className="mb-3"
-            />
-            <div className="sm:flex sm:gap-3">
+}: UpdateProfileFormProps) => (
+    <Formik
+        initialValues={profile as any}
+        validationSchema={schema}
+        onSubmit={onSubmit}
+    >
+        {({ isSubmitting }) => (
+            <Form noValidate>
                 <Input
-                    label="First Name"
-                    name="firstName"
-                    type="text"
-                    maxLength={50}
-                    autoComplete="given-name"
+                    label="Email Address"
+                    name="emailAddress"
+                    type="email"
+                    maxLength={254}
+                    autoComplete="username"
                     required
-                    control={control}
-                    className="mb-3 sm:flex-1"
+                    disabled={isSubmitting}
+                    className="mb-3"
                 />
-                <Input
-                    label="Last Name"
-                    name="lastName"
-                    type="text"
-                    maxLength={50}
-                    autoComplete="family-name"
+                <div className="sm:flex sm:gap-3">
+                    <Input
+                        label="First Name"
+                        name="firstName"
+                        type="text"
+                        maxLength={50}
+                        autoComplete="given-name"
+                        required
+                        disabled={isSubmitting}
+                        className="mb-3 sm:flex-1"
+                    />
+                    <Input
+                        label="Last Name"
+                        name="lastName"
+                        type="text"
+                        maxLength={50}
+                        autoComplete="family-name"
+                        required
+                        disabled={isSubmitting}
+                        className="mb-3 sm:flex-1"
+                    />
+                </div>
+                <DatePicker
+                    label="Date Of Birth"
+                    name="dateOfBirth"
+                    autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
-                    control={control}
-                    className="mb-3 sm:flex-1"
+                    disabled={isSubmitting}
+                    className="mb-5"
                 />
-            </div>
-            <DatePicker
-                label="Date Of Birth"
-                name="dateOfBirth"
-                required
-                autoComplete={['bday-day', 'bday-month', 'bday-year']}
-                control={control}
-                className="mb-5"
-            />
-            <ButtonGroup>
-                {options}
-                <Button type="submit" loading={isSubmitting}>
-                    Submit
-                </Button>
-            </ButtonGroup>
-        </form>
-    );
-};
+                <ButtonGroup>
+                    {options}
+                    <Button type="submit" loading={isSubmitting}>
+                        Submit
+                    </Button>
+                </ButtonGroup>
+            </Form>
+        )}
+    </Formik>
+);
 
 export const UpdateProfileForm = ({
     profile,

@@ -1,5 +1,4 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { GetProfileResponse } from '@/models/manage.types';
 import { Input } from '@/components/Input/Input';
@@ -15,6 +14,8 @@ const schema = Yup.object({
         .required()
         .oneOf([Yup.ref('newPassword')], 'Passwords do not match')
 });
+
+const initialValues = schema.getDefault();
 
 export type ChangePasswordFormValues = Yup.InferType<typeof schema>;
 
@@ -39,62 +40,56 @@ export const ChangePasswordFormInternal = ({
     onSubmit,
     options,
     className
-}: ChangePasswordFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<ChangePasswordFormValues>({
-        resolver: yupResolver(schema)
-    });
-
-    return (
-        <form
-            noValidate
-            onSubmit={handleSubmit(onSubmit)}
-            className={className}
-        >
-            <Input
-                label="Current Password"
-                name="currentPassword"
-                type="password"
-                maxLength={50}
-                autoComplete="current-password"
-                required
-                control={control}
-                className="mb-3"
-            />
-            <div className="sm:flex sm:gap-3">
+}: ChangePasswordFormProps) => (
+    <Formik
+        initialValues={initialValues as any}
+        validationSchema={schema}
+        onSubmit={onSubmit}
+    >
+        {({ isSubmitting }) => (
+            <Form noValidate className={className}>
                 <Input
-                    label="New Password"
-                    name="newPassword"
+                    label="Current Password"
+                    name="currentPassword"
                     type="password"
                     maxLength={50}
-                    autoComplete="new-password"
+                    autoComplete="current-password"
                     required
-                    control={control}
-                    className="mb-5 sm:flex-1"
+                    disabled={isSubmitting}
+                    className="mb-3"
                 />
-                <Input
-                    label="Confirm New Password"
-                    name="confirmNewPassword"
-                    type="password"
-                    maxLength={50}
-                    autoComplete="new-password"
-                    required
-                    control={control}
-                    className="mb-5 sm:flex-1"
-                />
-            </div>
-            <ButtonGroup>
-                {options}
-                <Button type="submit" loading={isSubmitting}>
-                    Submit
-                </Button>
-            </ButtonGroup>
-        </form>
-    );
-};
+                <div className="sm:flex sm:gap-3">
+                    <Input
+                        label="New Password"
+                        name="newPassword"
+                        type="password"
+                        maxLength={50}
+                        autoComplete="new-password"
+                        required
+                        disabled={isSubmitting}
+                        className="mb-5 sm:flex-1"
+                    />
+                    <Input
+                        label="Confirm New Password"
+                        name="confirmNewPassword"
+                        type="password"
+                        maxLength={50}
+                        autoComplete="new-password"
+                        required
+                        disabled={isSubmitting}
+                        className="mb-5 sm:flex-1"
+                    />
+                </div>
+                <ButtonGroup>
+                    {options}
+                    <Button type="submit" loading={isSubmitting}>
+                        Submit
+                    </Button>
+                </ButtonGroup>
+            </Form>
+        )}
+    </Formik>
+);
 
 export const ChangePasswordForm = ({
     profile,
@@ -105,11 +100,5 @@ export const ChangePasswordForm = ({
         return <ChangePasswordFormLoading />;
     }
 
-    return (
-        <ChangePasswordFormInternal
-            profile={profile}
-            onSubmit={onSubmit}
-            options={options}
-        />
-    );
+    return <ChangePasswordFormInternal onSubmit={onSubmit} options={options} />;
 };
