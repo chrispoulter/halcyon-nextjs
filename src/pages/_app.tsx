@@ -1,16 +1,8 @@
 import type { AppProps } from 'next/app';
 import { Open_Sans } from 'next/font/google';
-import { useRouter } from 'next/router';
-import { SessionProvider, signOut } from 'next-auth/react';
-import {
-    Hydrate,
-    MutationCache,
-    QueryCache,
-    QueryClient,
-    QueryClientProvider
-} from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import toast from 'react-hot-toast';
+import { SessionProvider } from 'next-auth/react';
+import { Provider } from 'react-redux';
+import { wrapper } from '@/redux/store';
 import { Meta } from '@/components/Meta/Meta';
 import { Header } from '@/components/Header/Header';
 import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
@@ -26,55 +18,9 @@ const font = Open_Sans({
 });
 
 const App = ({
-    Component,
-    pageProps: { session, dehydratedState = {}, ...pageProps }
+    Component, ...rest
 }: AppProps) => {
-    const router = useRouter();
-
-    const onSuccess = (data: any) => {
-        if (data.message) {
-            toast.success(data.message);
-        }
-    };
-
-    const onError = async (error: any) => {
-        switch (error.status) {
-            case 401:
-                signOut({ callbackUrl: '/' });
-                break;
-
-            case 403:
-                router.push('/403', router.asPath);
-                break;
-
-            default:
-                toast.error(error.response?.message || error.message);
-        }
-    };
-
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                refetchOnWindowFocus: false,
-                refetchOnMount: false,
-                refetchOnReconnect: false,
-                retry: false,
-                staleTime: Infinity,
-                cacheTime: Infinity
-            },
-            mutations: {
-                retry: false,
-                cacheTime: Infinity
-            }
-        },
-        queryCache: new QueryCache({
-            onError
-        }),
-        mutationCache: new MutationCache({
-            onSuccess,
-            onError
-        })
-    });
+    const { store, props } = wrapper.useWrappedStore(rest);
 
     return (
         <>
@@ -86,25 +32,22 @@ const App = ({
                 }
             `}</style>
 
-            <SessionProvider session={session}>
-                <QueryClientProvider client={queryClient}>
-                    <Hydrate state={dehydratedState}>
-                        <Header />
-                        <main>
-                            <ErrorBoundary>
-                                {Component.auth ? (
-                                    <Auth auth={Component.auth}>
-                                        <Component {...pageProps} />
-                                    </Auth>
-                                ) : (
-                                    <Component {...pageProps} />
-                                )}
-                            </ErrorBoundary>
-                        </main>
-                        <Footer />
-                    </Hydrate>
-                    <ReactQueryDevtools initialIsOpen={false} />
-                </QueryClientProvider>
+            <SessionProvider session={props.pageProps.session}>
+                <Provider store={store}>
+                    <Header />
+                    <main>
+                        <ErrorBoundary>
+                            {Component.auth ? (
+                                <Auth auth={Component.auth}>
+                                    <Component {...props.pageProps} />
+                                </Auth>
+                            ) : (
+                                <Component {...props.pageProps} />
+                            )}
+                        </ErrorBoundary>
+                    </main>
+                    <Footer />
+                </Provider>
             </SessionProvider>
             <Toaster />
         </>

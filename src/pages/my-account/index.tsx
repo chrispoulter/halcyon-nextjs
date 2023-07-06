@@ -1,35 +1,33 @@
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
 import { signOut } from 'next-auth/react';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import {
+    useDeleteAccountMutation,
+    useGetProfileQuery
+} from '@/redux/halcyonApi';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/PersonalDetailsCard';
 import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
 import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
-import { getProfile, useGetProfile } from '@/hooks/useGetProfile';
-import { useDeleteAccount } from '@/hooks/useDeleteAccount';
-import { getBaseUrl } from '@/utils/url';
 
 const MyAccount = () => {
-    const { profile } = useGetProfile();
+    const { data: profile } = useGetProfileQuery();
 
-    const { deleteAccount, isDeleting } = useDeleteAccount();
+    const [deleteAccount, { isLoading: isDeleting }] =
+        useDeleteAccountMutation();
 
     const onDelete = async () => {
-        await deleteAccount({ version: profile!.version });
+        await deleteAccount({ version: profile?.data?.version });
         signOut({ callbackUrl: '/' });
     };
 
     return (
         <Container>
             <PageTitle>My Account</PageTitle>
-            <PersonalDetailsCard profile={profile} className="mb-5" />
-            <LoginDetailsCard profile={profile} className="mb-5" />
+            <PersonalDetailsCard profile={profile?.data} className="mb-5" />
+            <LoginDetailsCard profile={profile?.data} className="mb-5" />
 
             <AccountSettingsCard
-                profile={profile}
+                profile={profile?.data}
                 isDeleting={isDeleting}
                 onDelete={onDelete}
             />

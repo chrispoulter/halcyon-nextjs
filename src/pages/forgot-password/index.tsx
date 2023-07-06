@@ -1,27 +1,20 @@
 import { useRouter } from 'next/router';
+import { useForgotPasswordMutation } from '@/redux/halcyonApi';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import {
     ForgotPasswordForm,
     ForgotPasswordFormValues
 } from '@/features/account/ForgotPasswordForm/ForgotPasswordForm';
-import { useForgotPassword } from '@/hooks/useForgotPassword';
 
 const ForgotPassword = () => {
     const router = useRouter();
 
-    const { forgotPassword } = useForgotPassword();
+    const [forgotPassword] = useForgotPasswordMutation();
 
     const onSubmit = async (values: ForgotPasswordFormValues) => {
-        try {
-            await forgotPassword(values);
-            await router.push('/login');
-        } catch (error) {
-            console.warn(
-                'An unhandled error was caught from onSubmit()',
-                error
-            );
-        }
+        await forgotPassword(values);
+        await router.push('/login');
     };
 
     return (

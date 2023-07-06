@@ -1,7 +1,8 @@
 import crypto from 'crypto';
+import { UpdatedResponse } from '@/models/base.types';
 import { registerSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { handler, Handler } from '@/utils/handler';
 import { generateHash } from '@/utils/hash';
 
 const registerHandler: Handler<UpdatedResponse> = async (req, res) => {

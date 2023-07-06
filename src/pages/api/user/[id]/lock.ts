@@ -1,7 +1,8 @@
 import crypto from 'crypto';
+import { UpdatedResponse } from '@/models/base.types';
 import { getUserSchema, lockUserSchema } from '@/models/user.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { handler, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
 const lockUserHandler: Handler<UpdatedResponse> = async (

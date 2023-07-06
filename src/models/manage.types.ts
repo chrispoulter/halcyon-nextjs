@@ -26,7 +26,7 @@ export type UpdateProfileRequest = Yup.InferType<typeof updateProfileSchema>;
 export const changePasswordSchema = Yup.object().shape({
     currentPassword: Yup.string().label('Current Password').required(),
     newPassword: Yup.string().label('New Password').min(8).max(50).required(),
-    version: Yup.string().label('Version').uuid().required()
+    version: Yup.string().label('Version').uuid()
 });
 
 export type ChangePasswordRequest = Yup.InferType<typeof changePasswordSchema>;

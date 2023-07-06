@@ -1,6 +1,7 @@
+import { UpdatedResponse } from '@/models/base.types';
 import { resetPasswordSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { handler, Handler } from '@/utils/handler';
 import { generateHash } from '@/utils/hash';
 
 const resetPasswordHandler: Handler<UpdatedResponse> = async (req, res) => {

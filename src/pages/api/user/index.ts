@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { UpdatedResponse } from '@/models/base.types';
 import {
     createUserSchema,
     SearchUsersResponse,
@@ -7,7 +8,7 @@ import {
 } from '@/models/user.types';
 import { Prisma } from '@prisma/client';
 import prisma from '@/utils/prisma';
-import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { handler, Handler } from '@/utils/handler';
 import { generateHash } from '@/utils/hash';
 import { isUserAdministrator, Role } from '@/utils/auth';
 

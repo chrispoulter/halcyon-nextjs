@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { UpdatedResponse } from '@/models/base.types';
 import {
     GetUserResponse,
     deleteUserSchema,
@@ -6,7 +7,7 @@ import {
     updateUserSchema
 } from '@/models/user.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { handler, Handler } from '@/utils/handler';
 import { Role, isUserAdministrator } from '@/utils/auth';
 
 const getUserHandler: Handler<GetUserResponse> = async (req, res) => {

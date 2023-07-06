@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useCreateUserMutation } from '@/redux/halcyonApi';
 import { Container } from '@/components/Container/Container';
 import { PageTitle, PageSubTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -6,24 +7,16 @@ import {
     CreateUserForm,
     CreateUserFormValues
 } from '@/features/user/CreateUserForm/CreateUserForm';
-import { useCreateUser } from '@/hooks/useCreateUser';
 import { isUserAdministrator } from '@/utils/auth';
 
 const CreateUser = () => {
     const router = useRouter();
 
-    const { createUser } = useCreateUser();
+    const [createUser] = useCreateUserMutation();
 
     const onSubmit = async (values: CreateUserFormValues) => {
-        try {
-            await createUser(values);
-            await router.push('/user');
-        } catch (error) {
-            console.warn(
-                'An unhandled error was caught from onSubmit()',
-                error
-            );
-        }
+        await createUser(values);
+        await router.push('/user');
     };
 
     return (

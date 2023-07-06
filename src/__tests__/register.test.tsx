@@ -1,10 +1,10 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
 import { signIn } from 'next-auth/react';
+import { HandlerResponse, UpdatedResponse } from '@/models/base.types';
 import Register from '@/pages/register';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
 import { queryWrapper } from '@/utils/test-utils';
-import { HandlerResponse, UpdatedResponse } from '@/utils/handler';
 
 jest.mock('next-auth/react', () => ({
     __esModule: true,

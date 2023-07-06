@@ -1,8 +1,11 @@
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import {
+    useDeleteUserMutation,
+    useGetUserQuery,
+    useLockUserMutation,
+    useUnlockUserMutation,
+    useUpdateUserMutation
+} from '@/redux/halcyonApi';
 import { Container } from '@/components/Container/Container';
 import { PageSubTitle, PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -15,44 +18,35 @@ import {
     UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
-import { getUser, useGetUser } from '@/hooks/useGetUser';
-import { useUpdateUser } from '@/hooks/useUpdateUser';
-import { useDeleteUser } from '@/hooks/useDeleteUser';
-import { useLockUser } from '@/hooks/useLockUser';
-import { useUnlockUser } from '@/hooks/useUnlockUser';
 import { isUserAdministrator } from '@/utils/auth';
-import { getBaseUrl } from '@/utils/url';
 
 const UpdateUser = () => {
     const router = useRouter();
 
     const id = router.query.id as string;
 
-    const { user } = useGetUser(id);
+    const { data: user } = useGetUserQuery(id, { skip: !router.isReady });
 
-    const { updateUser } = useUpdateUser(id);
+    const [updateUser] = useUpdateUserMutation();
 
-    const { deleteUser, isDeleting } = useDeleteUser(id);
+    const [lockUser, { isLoading: isLocking }] = useLockUserMutation();
 
-    const { lockUser, isLocking } = useLockUser(id);
+    const [unlockUser, { isLoading: isUnlocking }] = useUnlockUserMutation();
 
-    const { unlockUser, isUnlocking } = useUnlockUser(id);
+    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
     const onSubmit = async (values: UpdateUserFormValues) => {
-        try {
-            await updateUser({ ...values, version: user!.version });
-            await router.push('/user');
-        } catch (error) {
-            console.warn(
-                'An unhandled error was caught from onSubmit()',
-                error
-            );
-        }
+        await updateUser({
+            id,
+            body: { ...values, version: user?.data?.version }
+        });
+
+        await router.push('/user');
     };
 
     const onDelete = async () => {
         try {
-            await deleteUser({ version: user!.version });
+            await deleteUser({ id, body: { version: user?.data?.version } });
             await router.push('/user');
         } catch (error) {
             console.warn(
@@ -64,7 +58,7 @@ const UpdateUser = () => {
 
     const onLock = async () => {
         try {
-            await lockUser({ version: user!.version });
+            await lockUser({ id, body: { version: user?.data?.version } });
         } catch (error) {
             console.warn('An unhandled error was caught from onLock()', error);
         }
@@ -72,7 +66,7 @@ const UpdateUser = () => {
 
     const onUnlock = async () => {
         try {
-            await unlockUser({ version: user!.version });
+            await unlockUser({ id, body: { version: user?.data?.version } });
         } catch (error) {
             console.warn(
                 'An unhandled error was caught from onUnlock()',
@@ -87,7 +81,7 @@ const UpdateUser = () => {
                 Cancel
             </ButtonLink>
 
-            {user?.isLockedOut ? (
+            {user?.data?.isLockedOut ? (
                 <ConfirmUnlockUser onConfirm={onUnlock}>
                     <Button
                         variant="warning"
@@ -129,7 +123,7 @@ const UpdateUser = () => {
             </PageTitle>
 
             <UpdateUserForm
-                user={user}
+                user={user?.data}
                 isDisabled={isUnlocking || isLocking || isDeleting}
                 onSubmit={onSubmit}
                 options={options}

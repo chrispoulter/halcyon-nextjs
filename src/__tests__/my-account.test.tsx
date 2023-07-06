@@ -4,9 +4,9 @@ import {
     waitForElementToBeRemoved
 } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
+import { HandlerResponse } from '@/models/base.types';
 import { GetProfileResponse } from '@/models/manage.types';
 import MyAccount from '@/pages/my-account';
-import { HandlerResponse } from '@/utils/handler';
 import { queryWrapper } from '@/utils/test-utils';
 
 const response: HandlerResponse<GetProfileResponse> = {
