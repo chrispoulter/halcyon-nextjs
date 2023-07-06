@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
@@ -8,22 +8,33 @@ import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Role, roleOptions } from '@/utils/auth';
 
-const schema = z
-    .object({
-        emailAddress: z.string().max(254).email(),
-        password: z.string().min(8).max(50),
-        confirmPassword: z.string().nonempty(),
-        firstName: z.string().max(50).nonempty(),
-        lastName: z.string().max(50).nonempty(),
-        dateOfBirth: z.coerce.date(),
-        roles: z.array(z.nativeEnum(Role)).optional()
-    })
-    .refine(data => data.password === data.confirmPassword, {
-        message: 'Passwords do not match',
-        path: ['confirmPassword']
-    });
+const schema = Yup.object({
+    emailAddress: Yup.string()
+        .label('Email Address')
+        .max(254)
+        .email()
+        .required(),
+    password: Yup.string().label('Password').min(8).max(50).required(),
+    confirmPassword: Yup.string()
+        .label('Confirm Password')
 
-export type CreateUserFormValues = z.infer<typeof schema>;
+        .required()
+        .oneOf([Yup.ref('password')], 'Passwords do not match'),
+    firstName: Yup.string().label('First Name').max(50).required(),
+    lastName: Yup.string().label('Last Name').max(50).required(),
+    dateOfBirth: Yup.date().label('Date Of Birth').required(),
+    roles: Yup.array()
+        .of(
+            Yup.string<Role>()
+                .label('Role')
+                .oneOf(Object.values(Role))
+                .required()
+        )
+        .label('Roles')
+        .default([])
+});
+
+export type CreateUserFormValues = Yup.InferType<typeof schema>;
 
 type CreateUserFormProps = {
     options?: JSX.Element;
@@ -36,7 +47,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
         control,
         formState: { isSubmitting }
     } = useForm<CreateUserFormValues>({
-        resolver: zodResolver(schema)
+        resolver: yupResolver(schema)
     });
 
     return (

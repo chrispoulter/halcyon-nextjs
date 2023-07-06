@@ -10,7 +10,7 @@ import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 import { Role, isUserAdministrator } from '@/utils/auth';
 
 const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
-    const query = await getUserSchema.parseAsync(req.query);
+    const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
         where: {
@@ -40,7 +40,7 @@ const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
 };
 
 const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
-    const query = await getUserSchema.parseAsync(req.query);
+    const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
         where: {
@@ -55,7 +55,7 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
         });
     }
 
-    const body = await updateUserSchema.parseAsync(req.body);
+    const body = await updateUserSchema.validate(req.body);
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
@@ -108,7 +108,7 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
     res,
     { currentUserId }
 ) => {
-    const query = await getUserSchema.parseAsync(req.query);
+    const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
         where: {
@@ -123,7 +123,7 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
         });
     }
 
-    const body = await deleteUserSchema.parseAsync(req.body);
+    const body = await deleteUserSchema.validate(req.body);
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({

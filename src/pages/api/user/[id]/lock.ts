@@ -9,7 +9,7 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
     res,
     { currentUserId }
 ) => {
-    const query = await getUserSchema.parseAsync(req.query);
+    const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
         where: {
@@ -24,7 +24,7 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
         });
     }
 
-    const body = await lockUserSchema.parseAsync(req.body);
+    const body = await lockUserSchema.validate(req.body);
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({

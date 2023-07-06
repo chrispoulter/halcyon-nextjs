@@ -42,7 +42,7 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
     res,
     { currentUserId }
 ) => {
-    const body = await updateProfileSchema.parseAsync(req.body);
+    const body = await updateProfileSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
         where: {
@@ -120,7 +120,7 @@ const deleteProfileHandler: Handler<UpdatedResponse> = async (
         });
     }
 
-    const body = await deleteAccountSchema.parseAsync(req.body);
+    const body = await deleteAccountSchema.validate(req.body);
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({

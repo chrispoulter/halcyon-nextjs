@@ -1,6 +1,6 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
-import { z } from 'zod';
+import * as Yup from 'yup';
 import { Role, isAuthorized } from '@/utils/auth';
 import { config } from '@/utils/config';
 
@@ -81,7 +81,7 @@ export const handler =
                 return res.status(error.status).end();
             }
 
-            if (error instanceof z.ZodError) {
+            if (error instanceof Yup.ValidationError) {
                 return res.status(400).json({
                     code: 'INVALID_REQUEST',
                     message: 'Request is invalid.',

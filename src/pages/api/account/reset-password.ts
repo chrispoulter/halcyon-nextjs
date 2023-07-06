@@ -4,7 +4,7 @@ import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 import { generateHash } from '@/utils/hash';
 
 const resetPasswordHandler: Handler<UpdatedResponse> = async (req, res) => {
-    const body = await resetPasswordSchema.parseAsync(req.body);
+    const body = await resetPasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
         where: {

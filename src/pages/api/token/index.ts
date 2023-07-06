@@ -5,7 +5,7 @@ import { verifyHash } from '@/utils/hash';
 import { generateToken } from '@/utils/jwt';
 
 const createTokenHandler: Handler<string> = async (req, res) => {
-    const body = await createTokenSchema.parseAsync(req.body);
+    const body = await createTokenSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
         where: {

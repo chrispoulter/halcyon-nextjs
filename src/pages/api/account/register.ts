@@ -5,7 +5,7 @@ import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 import { generateHash } from '@/utils/hash';
 
 const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
-    const body = await registerSchema.parseAsync(req.body);
+    const body = await registerSchema.validate(req.body);
 
     const existing = await prisma.users.findUnique({
         where: {

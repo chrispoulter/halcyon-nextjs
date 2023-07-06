@@ -1,8 +1,8 @@
-import { z } from 'zod';
+import * as Yup from 'yup';
 
-export const createTokenSchema = z.object({
-    emailAddress: z.string().email(),
-    password: z.string().nonempty()
+export const createTokenSchema = Yup.object().shape({
+    emailAddress: Yup.string().label('Email Address').email().required(),
+    password: Yup.string().label('Password').required()
 });
 
-export type CreateTokenRequest = z.infer<typeof createTokenSchema>;
+export type CreateTokenRequest = Yup.InferType<typeof createTokenSchema>;

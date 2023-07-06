@@ -8,7 +8,7 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
     res,
     { currentUserId }
 ) => {
-    const body = await changePasswordSchema.parseAsync(req.body);
+    const body = await changePasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
         where: {

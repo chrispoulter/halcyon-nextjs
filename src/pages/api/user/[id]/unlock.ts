@@ -5,7 +5,7 @@ import { handler, Handler, UpdatedResponse } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
 const unlockUserHandler: Handler<UpdatedResponse> = async (req, res) => {
-    const query = await getUserSchema.parseAsync(req.query);
+    const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
         where: {
@@ -20,7 +20,7 @@ const unlockUserHandler: Handler<UpdatedResponse> = async (req, res) => {
         });
     }
 
-    const body = await unlockUserSchema.parseAsync(req.body);
+    const body = await unlockUserSchema.validate(req.body);
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
