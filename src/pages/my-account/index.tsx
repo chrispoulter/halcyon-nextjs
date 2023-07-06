@@ -1,8 +1,6 @@
 import { signOut } from 'next-auth/react';
-import {
-    useDeleteAccountMutation,
-    useGetProfileQuery
-} from '@/redux/halcyonApi';
+import toast from 'react-hot-toast';
+import { useDeleteAccountMutation, useGetProfileQuery } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/PersonalDetailsCard';
@@ -15,9 +13,19 @@ const MyAccount = () => {
     const [deleteAccount, { isLoading: isDeleting }] =
         useDeleteAccountMutation();
 
+    const version = profile?.data?.version;
+
     const onDelete = async () => {
-        await deleteAccount({ version: profile?.data?.version });
-        signOut({ callbackUrl: '/' });
+        try {
+            const result = await deleteAccount({ version }).unwrap();
+            toast.success(result.message!);
+            await signOut({ callbackUrl: '/' });
+        } catch (error) {
+            console.warn(
+                'An unhandled error was caught from onDelete()',
+                error
+            );
+        }
     };
 
     return (

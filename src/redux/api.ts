@@ -23,19 +23,10 @@ import {
     UpdateUserRequest
 } from '@/models/user.types';
 
-export const halcyonApi = createApi({
-    reducerPath: 'halcyonApi',
+export const api = createApi({
+    reducerPath: 'api',
     baseQuery: fetchBaseQuery({
         baseUrl: '/api'
-        // prepareHeaders: (headers, { getState }) => {
-        //     const accessToken = selectAccessToken(getState());
-
-        //     if (accessToken) {
-        //         headers.set('authorization', `Bearer ${accessToken}`);
-        //     }
-
-        //     return headers;
-        // }
     }),
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) {
@@ -208,4 +199,4 @@ export const {
     useLockUserMutation,
     useUnlockUserMutation,
     useDeleteUserMutation
-} = halcyonApi;
+} = api;

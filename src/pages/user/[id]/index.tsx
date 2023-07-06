@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import {
     useDeleteUserMutation,
     useGetUserQuery,
     useLockUserMutation,
     useUnlockUserMutation,
     useUpdateUserMutation
-} from '@/redux/halcyonApi';
+} from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageSubTitle, PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -35,18 +36,26 @@ const UpdateUser = () => {
 
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
-    const onSubmit = async (values: UpdateUserFormValues) => {
-        await updateUser({
-            id,
-            body: { ...values, version: user?.data?.version }
-        });
+    const version = user?.data?.version;
 
+    const onSubmit = async (values: UpdateUserFormValues) => {
+        const result = await updateUser({
+            id,
+            body: { ...values, version }
+        }).unwrap();
+
+        toast.success(result.message!);
         await router.push('/user');
     };
 
     const onDelete = async () => {
         try {
-            await deleteUser({ id, body: { version: user?.data?.version } });
+            const result = await deleteUser({
+                id,
+                body: { version }
+            }).unwrap();
+
+            toast.success(result.message!);
             await router.push('/user');
         } catch (error) {
             console.warn(
@@ -58,7 +67,12 @@ const UpdateUser = () => {
 
     const onLock = async () => {
         try {
-            await lockUser({ id, body: { version: user?.data?.version } });
+            const result = await lockUser({
+                id,
+                body: { version }
+            }).unwrap();
+
+            toast.success(result.message!);
         } catch (error) {
             console.warn('An unhandled error was caught from onLock()', error);
         }
@@ -66,7 +80,12 @@ const UpdateUser = () => {
 
     const onUnlock = async () => {
         try {
-            await unlockUser({ id, body: { version: user?.data?.version } });
+            const result = await unlockUser({
+                id,
+                body: { version }
+            }).unwrap();
+
+            toast.success(result.message!);
         } catch (error) {
             console.warn(
                 'An unhandled error was caught from onUnlock()',

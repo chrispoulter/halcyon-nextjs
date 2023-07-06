@@ -1,5 +1,5 @@
 import { signIn } from 'next-auth/react';
-import { useRegisterMutation } from '@/redux/halcyonApi';
+import { useRegisterMutation } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { BodyLink } from '@/components/BodyLink/BodyLink';
@@ -12,7 +12,7 @@ const Register = () => {
     const [register] = useRegisterMutation();
 
     const onSubmit = async (values: RegisterFormValues) => {
-        await register(values);
+        await register(values).unwrap();
         await signIn('credentials', { ...values, callbackUrl: '/' });
     };
 

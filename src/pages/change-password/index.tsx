@@ -1,8 +1,6 @@
 import { useRouter } from 'next/router';
-import {
-    useChangePasswordMutation,
-    useGetProfileQuery
-} from '@/redux/halcyonApi';
+import toast from 'react-hot-toast';
+import { useChangePasswordMutation, useGetProfileQuery } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { BodyLink } from '@/components/BodyLink/BodyLink';
@@ -19,11 +17,15 @@ const ChangePassword = () => {
 
     const [changePassword] = useChangePasswordMutation();
 
+    const version = profile?.data?.version;
+
     const onSubmit = async (values: ChangePasswordFormValues) => {
-        await changePassword({
+        const result = await changePassword({
             ...values,
-            version: profile?.data?.version
-        });
+            version
+        }).unwrap();
+
+        toast.success(result.message!);
         await router.push('/my-account');
     };
 

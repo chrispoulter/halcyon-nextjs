@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { useForgotPasswordMutation } from '@/redux/halcyonApi';
+import toast from 'react-hot-toast';
+import { useForgotPasswordMutation } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import {
@@ -13,7 +14,8 @@ const ForgotPassword = () => {
     const [forgotPassword] = useForgotPasswordMutation();
 
     const onSubmit = async (values: ForgotPasswordFormValues) => {
-        await forgotPassword(values);
+        const result = await forgotPassword(values).unwrap();
+        toast.success(result.message!);
         await router.push('/login');
     };
 

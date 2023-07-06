@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { useResetPasswordMutation } from '@/redux/halcyonApi';
+import toast from 'react-hot-toast';
+import { useResetPasswordMutation } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import {
@@ -15,11 +16,12 @@ const ResetPassword = () => {
     const [resetPassword] = useResetPasswordMutation();
 
     const onSubmit = async (values: ResetPasswordFormValues) => {
-        await resetPassword({
+        const result = await resetPassword({
             token,
             ...values
-        });
+        }).unwrap();
 
+        toast.success(result.message!);
         await router.push('/login');
     };
 

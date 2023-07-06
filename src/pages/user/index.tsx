@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { UserSort } from '@/models/user.types';
+import { useSearchUsersQuery } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -12,7 +13,6 @@ import {
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
 import { isUserAdministrator } from '@/utils/auth';
-import { useSearchUsersQuery } from '@/redux/halcyonApi';
 
 const Users = () => {
     const [request, setRequest] = useState({
@@ -24,8 +24,10 @@ const Users = () => {
 
     const { data: users, isLoading, isFetching } = useSearchUsersQuery(request);
 
-    const onSubmit = (values: SearchUserFormValues) =>
+    const onSubmit = (values: SearchUserFormValues) => {
         setRequest({ ...request, ...values });
+        return true;
+    };
 
     const onNextPage = () => setRequest({ ...request, page: request.page + 1 });
 

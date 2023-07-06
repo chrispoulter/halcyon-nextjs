@@ -17,9 +17,7 @@ const font = Open_Sans({
     display: 'swap'
 });
 
-const App = ({
-    Component, ...rest
-}: AppProps) => {
+const App = ({ Component, ...rest }: AppProps) => {
     const { store, props } = wrapper.useWrappedStore(rest);
 
     return (

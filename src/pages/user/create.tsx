@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { useCreateUserMutation } from '@/redux/halcyonApi';
+import toast from 'react-hot-toast';
+import { useCreateUserMutation } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle, PageSubTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -15,7 +16,8 @@ const CreateUser = () => {
     const [createUser] = useCreateUserMutation();
 
     const onSubmit = async (values: CreateUserFormValues) => {
-        await createUser(values);
+        const result = await createUser(values).unwrap();
+        toast.success(result.message!);
         await router.push('/user');
     };
 

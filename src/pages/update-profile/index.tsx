@@ -1,8 +1,6 @@
 import { useRouter } from 'next/router';
-import {
-    useGetProfileQuery,
-    useUpdateProfileMutation
-} from '@/redux/halcyonApi';
+import toast from 'react-hot-toast';
+import { useGetProfileQuery, useUpdateProfileMutation } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -18,8 +16,11 @@ const UpdateProfile = () => {
 
     const [updateProfile] = useUpdateProfileMutation();
 
+    const version = profile?.data?.version;
+
     const onSubmit = async (values: UpdateProfileFormValues) => {
-        await updateProfile({ ...values, version: profile?.data?.version });
+        const result = await updateProfile({ ...values, version }).unwrap();
+        toast.success(result.message!);
         await router.push('/my-account');
     };
 
