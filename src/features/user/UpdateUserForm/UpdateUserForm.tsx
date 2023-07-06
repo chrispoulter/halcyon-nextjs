@@ -42,6 +42,10 @@ type UpdateUserFormProps = {
     options?: (state: UpdateUserFormState) => JSX.Element;
 };
 
+type UpdateUserFormInternalProps = UpdateUserFormProps & {
+    user: UpdateUserFormValues;
+};
+
 const UpdateUserFormLoading = () => (
     <FormSkeleton>
         <InputSkeleton className="mb-3" />
@@ -59,12 +63,8 @@ export const UpdateUserFormInternal = ({
     isDisabled,
     onSubmit,
     options
-}: UpdateUserFormProps) => (
-    <Formik
-        initialValues={user as any}
-        validationSchema={schema}
-        onSubmit={onSubmit}
-    >
+}: UpdateUserFormInternalProps) => (
+    <Formik initialValues={user} validationSchema={schema} onSubmit={onSubmit}>
         {({ isSubmitting }) => (
             <Form noValidate>
                 <Input

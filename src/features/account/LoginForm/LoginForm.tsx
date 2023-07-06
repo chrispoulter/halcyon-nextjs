@@ -9,9 +9,9 @@ const schema = Yup.object({
     password: Yup.string().label('Password').required()
 });
 
-const initialValues = schema.getDefault();
-
 export type LoginFormValues = Yup.InferType<typeof schema>;
+
+const initialValues = {} as LoginFormValues;
 
 type LoginFormProps = {
     onSubmit: (values: LoginFormValues) => void;
@@ -20,7 +20,7 @@ type LoginFormProps = {
 
 export const LoginForm = ({ onSubmit, className }: LoginFormProps) => (
     <Formik
-        initialValues={initialValues as any}
+        initialValues={initialValues}
         validationSchema={schema}
         onSubmit={onSubmit}
     >

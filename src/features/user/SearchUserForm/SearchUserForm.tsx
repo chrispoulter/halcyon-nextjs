@@ -22,7 +22,7 @@ export const SearchUserForm = ({
     isLoading
 }: SearchUserFormProps) => (
     <Formik
-        initialValues={values as any}
+        initialValues={values}
         validationSchema={schema}
         onSubmit={onSubmit}
     >

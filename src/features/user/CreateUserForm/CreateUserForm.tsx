@@ -33,9 +33,9 @@ const schema = Yup.object({
         .default([])
 });
 
-const initialValues = schema.getDefault();
-
 export type CreateUserFormValues = Yup.InferType<typeof schema>;
+
+const initialValues = {} as CreateUserFormValues;
 
 type CreateUserFormProps = {
     options?: JSX.Element;
@@ -44,7 +44,7 @@ type CreateUserFormProps = {
 
 export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => (
     <Formik
-        initialValues={initialValues as any}
+        initialValues={initialValues}
         validationSchema={schema}
         onSubmit={onSubmit}
     >

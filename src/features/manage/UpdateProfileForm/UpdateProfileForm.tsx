@@ -25,6 +25,10 @@ type UpdateProfileFormProps = {
     options?: JSX.Element;
 };
 
+type UpdateProfileFormInternalProps = UpdateProfileFormProps & {
+    profile: UpdateProfileFormValues;
+};
+
 const UpdateProfileFormLoading = () => (
     <FormSkeleton>
         <InputSkeleton className="mb-3" />
@@ -40,9 +44,9 @@ const UpdateProfileFormInternal = ({
     profile,
     onSubmit,
     options
-}: UpdateProfileFormProps) => (
+}: UpdateProfileFormInternalProps) => (
     <Formik
-        initialValues={profile as any}
+        initialValues={profile}
         validationSchema={schema}
         onSubmit={onSubmit}
     >

@@ -21,9 +21,9 @@ const schema = Yup.object({
     dateOfBirth: Yup.date().label('Date Of Birth').required()
 });
 
-const initialValues = schema.getDefault();
-
 export type RegisterFormValues = Yup.InferType<typeof schema>;
+
+const initialValues = {} as RegisterFormValues;
 
 type RegisterFormProps = {
     onSubmit: (values: RegisterFormValues) => void;
@@ -32,7 +32,7 @@ type RegisterFormProps = {
 
 export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => (
     <Formik
-        initialValues={initialValues as any}
+        initialValues={initialValues}
         validationSchema={schema}
         onSubmit={onSubmit}
     >

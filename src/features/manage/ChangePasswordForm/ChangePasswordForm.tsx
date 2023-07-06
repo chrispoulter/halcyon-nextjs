@@ -15,9 +15,9 @@ const schema = Yup.object({
         .oneOf([Yup.ref('newPassword')], 'Passwords do not match')
 });
 
-const initialValues = schema.getDefault();
-
 export type ChangePasswordFormValues = Yup.InferType<typeof schema>;
+
+const initialValues = {} as ChangePasswordFormValues;
 
 type ChangePasswordFormProps = {
     profile?: GetProfileResponse;
@@ -42,7 +42,7 @@ export const ChangePasswordFormInternal = ({
     className
 }: ChangePasswordFormProps) => (
     <Formik
-        initialValues={initialValues as any}
+        initialValues={initialValues}
         validationSchema={schema}
         onSubmit={onSubmit}
     >
