@@ -79,6 +79,6 @@ jobs:
               id: deploy-to-webapp
               uses: azure/webapps-deploy@v2
               with:
-                  app-name: halcyon
+                  app-name: ${{ secrets.AZUREAPPSERVICE_APPSERVICE_MAIN }}
                   publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_MAIN }}
                   package: ./standalone.zip

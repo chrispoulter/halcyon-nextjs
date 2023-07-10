@@ -79,6 +79,6 @@ jobs:
               id: deploy-to-webapp
               uses: azure/webapps-deploy@v2
               with:
-                  app-name: halcyon-preview
+                  app-name: ${{ secrets.AZUREAPPSERVICE_APPSERVICE_PREVIEW }}
                   publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_PREVIEW }}
                   package: ./standalone.zip
