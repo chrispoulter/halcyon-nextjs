@@ -26,7 +26,9 @@ const UpdateUser = () => {
 
     const id = router.query.id as string;
 
-    const { data: user } = useGetUserQuery(id, { skip: !router.isReady });
+    const { data: user, isFetching } = useGetUserQuery(id, {
+        skip: !router.isReady
+    });
 
     const [updateUser] = useUpdateUserMutation();
 
@@ -105,7 +107,12 @@ const UpdateUser = () => {
                     <Button
                         variant="warning"
                         loading={isUnlocking}
-                        disabled={isDeleting || isLocking || isSubmitting}
+                        disabled={
+                            isDeleting ||
+                            isLocking ||
+                            isSubmitting ||
+                            isFetching
+                        }
                     >
                         Unlock
                     </Button>
@@ -115,7 +122,12 @@ const UpdateUser = () => {
                     <Button
                         variant="warning"
                         loading={isLocking}
-                        disabled={isDeleting || isUnlocking || isSubmitting}
+                        disabled={
+                            isDeleting ||
+                            isUnlocking ||
+                            isSubmitting ||
+                            isFetching
+                        }
                     >
                         Lock
                     </Button>
@@ -126,7 +138,9 @@ const UpdateUser = () => {
                 <Button
                     variant="danger"
                     loading={isDeleting}
-                    disabled={isUnlocking || isLocking || isSubmitting}
+                    disabled={
+                        isUnlocking || isLocking || isSubmitting || isFetching
+                    }
                 >
                     Delete
                 </Button>
@@ -143,7 +157,9 @@ const UpdateUser = () => {
 
             <UpdateUserForm
                 user={user?.data}
-                isDisabled={isUnlocking || isLocking || isDeleting}
+                isDisabled={
+                    isUnlocking || isLocking || isDeleting || isFetching
+                }
                 onSubmit={onSubmit}
                 options={options}
             />
