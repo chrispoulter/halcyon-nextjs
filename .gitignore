@@ -3,3 +3,4 @@ node_modules
 dist
 out
 .env
+yarn-error.log
