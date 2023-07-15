@@ -66,8 +66,8 @@ jobs:
         runs-on: ubuntu-latest
         needs: build
         environment:
-            name: 'Production'
-            url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+            name: Production
+            url: ${{ vars.URL }}
 
         steps:
             - name: Download artifact from build job
@@ -76,8 +76,7 @@ jobs:
                   name: halcyon-web
 
             - name: Deploy to Azure Web App
-              id: deploy-to-webapp
-              uses: azure/webapps-deploy@85270a1854658d167ab239bce43949edb336fa7c
+              uses: azure/webapps-deploy@v2
               with:
                   app-name: ${{ secrets.AZUREAPPSERVICE_APPSERVICE_MAIN }}
                   publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_MAIN }}
