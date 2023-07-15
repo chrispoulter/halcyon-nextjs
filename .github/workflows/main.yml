@@ -78,6 +78,6 @@ jobs:
             - name: Deploy to Azure Web App
               uses: azure/webapps-deploy@v2
               with:
-                  app-name: ${{ secrets.AZUREAPPSERVICE_APPSERVICE_MAIN }}
-                  publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_MAIN }}
+                  app-name: ${{ secrets.AZUREAPPSERVICE_APPNAME }}
+                  publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
                   package: ./standalone.zip
