@@ -6,11 +6,11 @@ export const getUser = (id: string, init?: RequestInit, baseUrl = '') =>
     fetcher<GetUserResponse>(`${baseUrl}/api/user/${id}`, init);
 
 export const useGetUser = (id: string) => {
-    const { data } = useQuery({
+    const { data, isFetching } = useQuery({
         queryKey: ['user', id],
         queryFn: () => getUser(id),
         enabled: !!id
     });
 
-    return { user: data?.data };
+    return { user: data?.data, isFetching };
 };

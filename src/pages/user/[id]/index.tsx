@@ -28,7 +28,7 @@ const UpdateUser = () => {
 
     const id = router.query.id as string;
 
-    const { user } = useGetUser(id);
+    const { user, isFetching } = useGetUser(id);
 
     const { updateUser } = useUpdateUser(id);
 
@@ -92,7 +92,12 @@ const UpdateUser = () => {
                     <Button
                         variant="warning"
                         loading={isUnlocking}
-                        disabled={isDeleting || isLocking || isSubmitting}
+                        disabled={
+                            isDeleting ||
+                            isLocking ||
+                            isSubmitting ||
+                            isFetching
+                        }
                     >
                         Unlock
                     </Button>
@@ -102,7 +107,12 @@ const UpdateUser = () => {
                     <Button
                         variant="warning"
                         loading={isLocking}
-                        disabled={isDeleting || isUnlocking || isSubmitting}
+                        disabled={
+                            isDeleting ||
+                            isUnlocking ||
+                            isSubmitting ||
+                            isFetching
+                        }
                     >
                         Lock
                     </Button>
@@ -113,7 +123,9 @@ const UpdateUser = () => {
                 <Button
                     variant="danger"
                     loading={isDeleting}
-                    disabled={isUnlocking || isLocking || isSubmitting}
+                    disabled={
+                        isUnlocking || isLocking || isSubmitting || isFetching
+                    }
                 >
                     Delete
                 </Button>
@@ -130,7 +142,9 @@ const UpdateUser = () => {
 
             <UpdateUserForm
                 user={user}
-                isDisabled={isUnlocking || isLocking || isDeleting}
+                isDisabled={
+                    isUnlocking || isLocking || isDeleting || isFetching
+                }
                 onSubmit={onSubmit}
                 options={options}
             />
