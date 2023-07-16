@@ -17,7 +17,7 @@ const schema = Yup.object({
 
 export type ChangePasswordFormValues = Yup.InferType<typeof schema>;
 
-const initialValues = {} as ChangePasswordFormValues;
+const initialValues = schema.getDefault() as any;
 
 type ChangePasswordFormProps = {
     profile?: GetProfileResponse;

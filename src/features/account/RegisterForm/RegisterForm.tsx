@@ -23,7 +23,7 @@ const schema = Yup.object({
 
 export type RegisterFormValues = Yup.InferType<typeof schema>;
 
-const initialValues = {} as RegisterFormValues;
+const initialValues = schema.getDefault() as any;
 
 type RegisterFormProps = {
     onSubmit: (values: RegisterFormValues) => void;

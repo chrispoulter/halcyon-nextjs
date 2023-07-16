@@ -35,7 +35,7 @@ const schema = Yup.object({
 
 export type CreateUserFormValues = Yup.InferType<typeof schema>;
 
-const initialValues = {} as CreateUserFormValues;
+const initialValues = schema.getDefault() as any;
 
 type CreateUserFormProps = {
     options?: JSX.Element;

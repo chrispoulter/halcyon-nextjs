@@ -11,7 +11,7 @@ const schema = Yup.object({
 
 export type LoginFormValues = Yup.InferType<typeof schema>;
 
-const initialValues = {} as LoginFormValues;
+const initialValues = schema.getDefault() as any;
 
 type LoginFormProps = {
     onSubmit: (values: LoginFormValues) => void;

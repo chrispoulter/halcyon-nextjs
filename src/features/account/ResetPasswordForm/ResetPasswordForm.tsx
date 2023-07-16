@@ -15,7 +15,7 @@ const schema = Yup.object({
 
 export type ResetPasswordFormValues = Yup.InferType<typeof schema>;
 
-const initialValues = {} as ResetPasswordFormValues;
+const initialValues = schema.getDefault() as any;
 
 type ResetPasswordFormProps = {
     onSubmit: (values: ResetPasswordFormValues) => void;
