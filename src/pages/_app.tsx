@@ -40,7 +40,7 @@ const App = ({
     const onError = async (error: any) => {
         switch (error.status) {
             case 401:
-                signOut({ callbackUrl: '/' });
+                signOut({ callbackUrl: router.asPath });
                 break;
 
             case 403:
