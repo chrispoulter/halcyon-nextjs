@@ -8,9 +8,9 @@ import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 
 const NotFound = () => (
     <Jumbotron>
-        <JumbotronTitle>Page Not Found</JumbotronTitle>
+        <JumbotronTitle>Not Found</JumbotronTitle>
         <JumbotronBody>
-            Sorry, the Page you were looking for could not be found.
+            Sorry, the resource you were looking for could not be found.
         </JumbotronBody>
         <ButtonGroup>
             <ButtonLink href="/" size="lg">
@@ -21,7 +21,7 @@ const NotFound = () => (
 );
 
 NotFound.meta = {
-    title: 'Page Not Found'
+    title: 'Not Found'
 };
 
 export default NotFound;

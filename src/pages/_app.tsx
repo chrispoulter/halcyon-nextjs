@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app';
 import { Open_Sans } from 'next/font/google';
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import { SessionProvider, signOut } from 'next-auth/react';
 import {
     Hydrate,
@@ -25,90 +25,99 @@ const font = Open_Sans({
     display: 'swap'
 });
 
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            refetchOnReconnect: false,
+            retry: false,
+            staleTime: Infinity,
+            cacheTime: Infinity
+        },
+        mutations: {
+            retry: false,
+            cacheTime: Infinity
+        }
+    },
+    queryCache: new QueryCache({
+        onError: async (error: any) => {
+            switch (error.status) {
+                case 401:
+                    await signOut({ callbackUrl: router.asPath });
+                    break;
+
+                case 403:
+                    router.push('/403', router.asPath);
+                    break;
+
+                case 404:
+                    router.push('/404', router.asPath);
+                    break;
+
+                default:
+                    router.push('/500', router.asPath);
+                    break;
+            }
+        }
+    }),
+    mutationCache: new MutationCache({
+        onSuccess: (data: any) => {
+            if (data.message) {
+                toast.success(data.message);
+            }
+        },
+        onError: async (error: any) => {
+            const message = error.response?.message || error.message;
+
+            switch (error.status) {
+                case 401:
+                    await signOut({ callbackUrl: router.asPath });
+                    break;
+
+                default:
+                    toast.error(message);
+                    break;
+            }
+        }
+    })
+});
+
 const App = ({
     Component,
     pageProps: { session, dehydratedState = {}, ...pageProps }
-}: AppProps) => {
-    const router = useRouter();
+}: AppProps) => (
+    <>
+        <Meta {...Component.meta} />
 
-    const onSuccess = (data: any) => {
-        if (data.message) {
-            toast.success(data.message);
-        }
-    };
-
-    const onError = async (error: any) => {
-        switch (error.status) {
-            case 401:
-                signOut({ callbackUrl: router.asPath });
-                break;
-
-            case 403:
-                router.push('/403', router.asPath);
-                break;
-
-            default:
-                toast.error(error.response?.message || error.message);
-        }
-    };
-
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                refetchOnWindowFocus: false,
-                refetchOnMount: false,
-                refetchOnReconnect: false,
-                retry: false,
-                staleTime: Infinity,
-                cacheTime: Infinity
-            },
-            mutations: {
-                retry: false,
-                cacheTime: Infinity
+        <style jsx global>{`
+            :root {
+                --base-font: ${font.style.fontFamily};
             }
-        },
-        queryCache: new QueryCache({
-            onError
-        }),
-        mutationCache: new MutationCache({
-            onSuccess,
-            onError
-        })
-    });
+        `}</style>
 
-    return (
-        <>
-            <Meta {...Component.meta} />
-
-            <style jsx global>{`
-                :root {
-                    --base-font: ${font.style.fontFamily};
-                }
-            `}</style>
-
-            <SessionProvider session={session}>
-                <QueryClientProvider client={queryClient}>
-                    <Hydrate state={dehydratedState}>
-                        <Header />
-                        <main>
-                            <ErrorBoundary>
-                                {Component.auth ? (
-                                    <Auth auth={Component.auth}>
-                                        <Component {...pageProps} />
-                                    </Auth>
-                                ) : (
+        <SessionProvider session={session}>
+            <QueryClientProvider client={queryClient}>
+                <Hydrate state={dehydratedState}>
+                    <Header />
+                    <main>
+                        <ErrorBoundary>
+                            {Component.auth ? (
+                                <Auth auth={Component.auth}>
                                     <Component {...pageProps} />
-                                )}
-                            </ErrorBoundary>
-                        </main>
-                        <Footer />
-                    </Hydrate>
-                    <ReactQueryDevtools initialIsOpen={false} />
-                </QueryClientProvider>
-            </SessionProvider>
-            <Toaster />
-        </>
-    );
-};
+                                </Auth>
+                            ) : (
+                                <Component {...pageProps} />
+                            )}
+                        </ErrorBoundary>
+                    </main>
+                    <Footer />
+                </Hydrate>
+                <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+        </SessionProvider>
+        <Toaster />
+    </>
+);
 
 export default App;
