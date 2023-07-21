@@ -46,7 +46,7 @@ describe('<MyAccount />', () => {
         const loading = screen.getAllByText(/loading/i);
         await waitForElementToBeRemoved(loading);
 
-        const emailAddress = screen.getByText(response.data?.emailAddress!);
+        const emailAddress = screen.getByText(response.data!.emailAddress);
         expect(emailAddress).toBeInTheDocument();
     });
 });
