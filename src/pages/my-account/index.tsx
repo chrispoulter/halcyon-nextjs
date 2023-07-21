@@ -1,16 +1,18 @@
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
 import { signOut } from 'next-auth/react';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/PersonalDetailsCard';
 import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
 import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
-import { getProfile, useGetProfile } from '@/hooks/useGetProfile';
+import { useGetProfile } from '@/hooks/useGetProfile';
 import { useDeleteAccount } from '@/hooks/useDeleteAccount';
-import { getBaseUrl } from '@/utils/url';
+
+// import { GetServerSideProps } from 'next';
+// import { getServerSession } from 'next-auth';
+// import { QueryClient, dehydrate } from '@tanstack/react-query';
+// import { authOptions } from '@/pages/api/auth/[...nextauth]';
+// import { getProfile } from '@/hooks/useGetProfile';
+// import { getBaseUrl } from '@/utils/url';
 
 const MyAccount = () => {
     const { profile } = useGetProfile();

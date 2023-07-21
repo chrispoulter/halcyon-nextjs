@@ -22,7 +22,7 @@ const Login = () => {
         });
 
         if (!result?.ok) {
-            toast.error(result?.error!);
+            toast.error(result?.error || 'An error has occurred.');
             return;
         }
 
