@@ -1,14 +1,17 @@
 {
     "root": true,
     "extends": ["next/core-web-vitals", "prettier"],
-    "plugins": ["testing-library"],
     "overrides": [
         {
             "files": [
                 "**/__tests__/**/*.[jt]s?(x)",
                 "**/?(*.)+(spec|test).[jt]s?(x)"
             ],
-            "extends": ["plugin:testing-library/react"]
+            "plugins": ["jest", "testing-library"],
+            "extends": [
+                "plugin:jest/recommended",
+                "plugin:testing-library/react"
+            ]
         }
     ]
 }

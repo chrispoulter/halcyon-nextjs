@@ -27,6 +27,6 @@ describe('<Home />', () => {
         const registerLink = screen.getByRole('link', { name: /get started/i });
         fireEvent.click(registerLink);
 
-        expect(mockRouter.asPath).toEqual('/register');
+        expect(mockRouter.asPath).toBe('/register');
     });
 });
