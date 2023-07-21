@@ -1,8 +1,4 @@
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -10,9 +6,15 @@ import {
     UpdateProfileForm,
     UpdateProfileFormValues
 } from '@/features/manage/UpdateProfileForm/UpdateProfileForm';
-import { getProfile, useGetProfile } from '@/hooks/useGetProfile';
+import { useGetProfile } from '@/hooks/useGetProfile';
 import { useUpdateProfile } from '@/hooks/useUpdateProfile';
-import { getBaseUrl } from '@/utils/url';
+
+// import { GetServerSideProps } from 'next';
+// import { getServerSession } from 'next-auth';
+// import { QueryClient, dehydrate } from '@tanstack/react-query';
+// import { authOptions } from '@/pages/api/auth/[...nextauth]';
+// import { getProfile } from '@/hooks/useGetProfile';
+// import { getBaseUrl } from '@/utils/url';
 
 const UpdateProfile = () => {
     const router = useRouter();

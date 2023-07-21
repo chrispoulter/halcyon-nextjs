@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+
 import { UserSort } from '@/models/user.types';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
@@ -15,9 +12,15 @@ import {
 } from '@/features/user/SearchUserForm/SearchUserForm';
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
-import { searchUsers, useSearchUsers } from '@/hooks/useSearchUsers';
+import { useSearchUsers } from '@/hooks/useSearchUsers';
 import { isUserAdministrator } from '@/utils/auth';
-import { getBaseUrl } from '@/utils/url';
+
+// import { searchUsers } from '@/hooks/useSearchUsers';
+// import { GetServerSideProps } from 'next';
+// import { getServerSession } from 'next-auth';
+// import { QueryClient, dehydrate } from '@tanstack/react-query';
+// import { authOptions } from '@/pages/api/auth/[...nextauth]';
+// import { getBaseUrl } from '@/utils/url';
 
 const Users = () => {
     const [request, setRequest] = useState({

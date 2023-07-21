@@ -1,8 +1,4 @@
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Container } from '@/components/Container/Container';
 import { PageSubTitle, PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -15,13 +11,19 @@ import {
     UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
-import { getUser, useGetUser } from '@/hooks/useGetUser';
+import { useGetUser } from '@/hooks/useGetUser';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import { useDeleteUser } from '@/hooks/useDeleteUser';
 import { useLockUser } from '@/hooks/useLockUser';
 import { useUnlockUser } from '@/hooks/useUnlockUser';
 import { isUserAdministrator } from '@/utils/auth';
-import { getBaseUrl } from '@/utils/url';
+
+// import { GetServerSideProps } from 'next';
+// import { getServerSession } from 'next-auth';
+// import { QueryClient, dehydrate } from '@tanstack/react-query';
+// import { authOptions } from '@/pages/api/auth/[...nextauth]';
+// import { getUser } from '@/hooks/useGetUser';
+// import { getBaseUrl } from '@/utils/url';
 
 const UpdateUser = () => {
     const router = useRouter();

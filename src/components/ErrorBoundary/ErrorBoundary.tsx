@@ -1,4 +1,4 @@
-import React, { ErrorInfo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Error from '@/pages/500';
 
@@ -21,7 +21,7 @@ class ErrorBoundaryInner extends React.Component<
         this.state = { hasError: false };
     }
 
-    static getDerivedStateFromError(_: Error) {
+    static getDerivedStateFromError() {
         return { hasError: true };
     }
 
@@ -31,7 +31,7 @@ class ErrorBoundaryInner extends React.Component<
         }
     }
 
-    componentDidCatch(_: Error, __: ErrorInfo) {
+    componentDidCatch() {
         // console.error('client error', { error, info });
         this.props.setHasError(true);
     }
