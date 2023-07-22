@@ -7,7 +7,7 @@ import fetchMock from 'jest-fetch-mock';
 import { HandlerResponse } from '@/models/base.types';
 import { GetProfileResponse } from '@/models/manage.types';
 import MyAccount from '@/pages/my-account';
-import { queryWrapper } from '@/utils/test-utils';
+import { storeWrapper } from '@/utils/test-utils';
 
 const response: HandlerResponse<GetProfileResponse> = {
     data: {
@@ -31,7 +31,7 @@ describe('<MyAccount />', () => {
     );
 
     it('renders a heading', () => {
-        render(<MyAccount />, { wrapper: queryWrapper });
+        render(<MyAccount />, { wrapper: storeWrapper });
 
         const heading = screen.getByRole('heading', {
             name: /my account/i
@@ -41,7 +41,7 @@ describe('<MyAccount />', () => {
     });
 
     it('renders personal details', async () => {
-        render(<MyAccount />, { wrapper: queryWrapper });
+        render(<MyAccount />, { wrapper: storeWrapper });
 
         const loading = screen.getAllByText(/loading/i);
         await waitForElementToBeRemoved(loading);
