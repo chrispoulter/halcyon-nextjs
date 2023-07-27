@@ -38,8 +38,23 @@ export const logger: Middleware = () => next => action => {
                         signOut({ callbackUrl: router.asPath });
                         break;
 
+                    case 403:
+                        toast.error(
+                            'Sorry, you do not have access to this resource.'
+                        );
+                        break;
+
+                    case 404:
+                        toast.error(
+                            'Sorry, the resource you were looking for could not be found.'
+                        );
+                        break;
+
                     default:
-                        toast.error(message || 'An error has occurred.');
+                        toast.error(
+                            message ||
+                                'Sorry, something went wrong. Please try again later.'
+                        );
                         break;
                 }
                 break;
