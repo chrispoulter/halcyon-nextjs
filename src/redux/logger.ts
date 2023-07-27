@@ -5,9 +5,10 @@ import toast from 'react-hot-toast';
 
 export const logger: Middleware = () => next => action => {
     if (isRejectedWithValue(action)) {
-        const method = action.meta.baseQueryMeta.request.method;
-        const status = action.meta.baseQueryMeta.response.status;
-        const message = action.payload.data.message;
+        const { request, response } = action.meta.baseQueryMeta;
+        const method = request.method;
+        const status = response.status;
+        const message = action.payload.data?.message;
 
         switch (method) {
             case 'GET':
@@ -38,7 +39,7 @@ export const logger: Middleware = () => next => action => {
                         break;
 
                     default:
-                        toast.error(message);
+                        toast.error(message || 'An error has occurred.');
                         break;
                 }
                 break;
