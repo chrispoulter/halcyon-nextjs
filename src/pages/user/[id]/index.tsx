@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
 import {
     useDeleteUserMutation,
     useGetUserQuery,
@@ -41,23 +40,21 @@ const UpdateUser = () => {
     const version = user?.data?.version;
 
     const onSubmit = async (values: UpdateUserFormValues) => {
-        const result = await updateUser({
+        await updateUser({
             id,
             body: { ...values, version }
-        }).unwrap();
+        });
 
-        toast.success(result.message!);
         await router.push('/user');
     };
 
     const onDelete = async () => {
         try {
-            const result = await deleteUser({
+            await deleteUser({
                 id,
                 body: { version }
-            }).unwrap();
+            });
 
-            toast.success(result.message!);
             await router.push('/user');
         } catch (error) {
             console.warn(
@@ -69,12 +66,10 @@ const UpdateUser = () => {
 
     const onLock = async () => {
         try {
-            const result = await lockUser({
+            await lockUser({
                 id,
                 body: { version }
-            }).unwrap();
-
-            toast.success(result.message!);
+            });
         } catch (error) {
             console.warn('An unhandled error was caught from onLock()', error);
         }
@@ -82,12 +77,10 @@ const UpdateUser = () => {
 
     const onUnlock = async () => {
         try {
-            const result = await unlockUser({
+            await unlockUser({
                 id,
                 body: { version }
-            }).unwrap();
-
-            toast.success(result.message!);
+            });
         } catch (error) {
             console.warn(
                 'An unhandled error was caught from onUnlock()',

@@ -1,38 +1,55 @@
-import { Middleware, isRejectedWithValue } from '@reduxjs/toolkit';
-import { toast } from 'react-hot-toast';
+import { Middleware, isFulfilled, isRejectedWithValue } from '@reduxjs/toolkit';
+import router from 'next/router';
+import { signOut } from 'next-auth/react';
+import toast from 'react-hot-toast';
 
 export const logger: Middleware = () => next => action => {
     if (isRejectedWithValue(action)) {
-        switch (action.payload.status) {
-            case 400:
-                toast.error(
-                    action.payload.data?.message ||
-                        'Sorry, the current request is invalid.'
-                );
-                break;
+        const method = action.meta.baseQueryMeta.request.method;
+        const status = action.meta.baseQueryMeta.response.status;
+        const message = action.payload.data.message;
 
-            case 401:
-                // dispatch(removeToken());
-                // window.location.href = '/login';
-                break;
+        switch (method) {
+            case 'GET':
+                switch (status) {
+                    case 401:
+                        signOut({ callbackUrl: router.asPath });
+                        break;
 
-            case 403:
-                toast.error(
-                    action.payload.data?.message ||
-                        'Sorry, you do not have access to this resource.'
-                );
-                break;
+                    case 403:
+                        router.push('/403', router.asPath);
+                        break;
 
-            case 404:
-            case 200:
+                    case 404:
+                        router.push('/404', router.asPath);
+                        break;
+
+                    default:
+                        router.push('/500', router.asPath);
+                        break;
+                }
+
                 break;
 
             default:
-                toast.error(
-                    action.payload.data?.message ||
-                        'An unknown error has occurred whilst communicating with the server.'
-                );
+                switch (status) {
+                    case 401:
+                        signOut({ callbackUrl: router.asPath });
+                        break;
+
+                    default:
+                        toast.error(message);
+                        break;
+                }
                 break;
+        }
+    }
+
+    if (isFulfilled(action)) {
+        const message = action.payload?.message;
+
+        if (message) {
+            toast.success(message);
         }
     }
 

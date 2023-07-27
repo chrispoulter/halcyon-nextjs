@@ -1,5 +1,4 @@
 import { signOut } from 'next-auth/react';
-import toast from 'react-hot-toast';
 import { useDeleteAccountMutation, useGetProfileQuery } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
@@ -17,8 +16,7 @@ const MyAccount = () => {
 
     const onDelete = async () => {
         try {
-            const result = await deleteAccount({ version }).unwrap();
-            toast.success(result.message!);
+            await deleteAccount({ version });
             await signOut({ callbackUrl: '/' });
         } catch (error) {
             console.warn(

@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
 import { useChangePasswordMutation, useGetProfileQuery } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
@@ -20,12 +19,11 @@ const ChangePassword = () => {
     const version = profile?.data?.version;
 
     const onSubmit = async (values: ChangePasswordFormValues) => {
-        const result = await changePassword({
+        await changePassword({
             ...values,
             version
-        }).unwrap();
+        });
 
-        toast.success(result.message!);
         await router.push('/my-account');
     };
 

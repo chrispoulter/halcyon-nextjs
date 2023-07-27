@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
 import { useCreateUserMutation } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle, PageSubTitle } from '@/components/PageTitle/PageTitle';
@@ -16,8 +15,7 @@ const CreateUser = () => {
     const [createUser] = useCreateUserMutation();
 
     const onSubmit = async (values: CreateUserFormValues) => {
-        const result = await createUser(values).unwrap();
-        toast.success(result.message!);
+        await createUser(values);
         await router.push('/user');
     };
 

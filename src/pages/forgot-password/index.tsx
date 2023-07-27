@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
 import { useForgotPasswordMutation } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
@@ -14,8 +13,7 @@ const ForgotPassword = () => {
     const [forgotPassword] = useForgotPasswordMutation();
 
     const onSubmit = async (values: ForgotPasswordFormValues) => {
-        const result = await forgotPassword(values).unwrap();
-        toast.success(result.message!);
+        await forgotPassword(values);
         await router.push('/login');
     };
 

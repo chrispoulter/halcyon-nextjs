@@ -176,10 +176,7 @@ export const api = createApi({
                 method: 'DELETE',
                 body
             }),
-            invalidatesTags: result => [
-                { type: 'User', id: 'PARTIAL-LIST' },
-                { type: 'User', id: result?.data?.id }
-            ]
+            invalidatesTags: [{ type: 'User', id: 'PARTIAL-LIST' }]
         })
     })
 });
