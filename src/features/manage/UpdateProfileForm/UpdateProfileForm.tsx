@@ -49,6 +49,7 @@ const UpdateProfileFormInternal = ({
         initialValues={profile}
         validationSchema={schema}
         onSubmit={onSubmit}
+        enableReinitialize
     >
         {({ isSubmitting }) => (
             <Form noValidate>

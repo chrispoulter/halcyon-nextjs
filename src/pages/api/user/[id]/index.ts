@@ -61,8 +61,7 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
             code: 'CONFLICT',
-            message:
-                'Data has been modified or deleted since entities were loaded.'
+            message: 'Data has been modified since resource was loaded.'
         });
     }
 
@@ -129,8 +128,7 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
             code: 'CONFLICT',
-            message:
-                'Data has been modified or deleted since entities were loaded.'
+            message: 'Data has been modified since resource was loaded.'
         });
     }
 

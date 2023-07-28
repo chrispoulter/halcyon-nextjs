@@ -64,7 +64,12 @@ export const UpdateUserFormInternal = ({
     onSubmit,
     options
 }: UpdateUserFormInternalProps) => (
-    <Formik initialValues={user} validationSchema={schema} onSubmit={onSubmit}>
+    <Formik
+        initialValues={user}
+        validationSchema={schema}
+        onSubmit={onSubmit}
+        enableReinitialize
+    >
         {({ isSubmitting }) => (
             <Form noValidate>
                 <Input
