@@ -1,4 +1,5 @@
 import { signIn } from 'next-auth/react';
+import { useRegisterMutation } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { BodyLink } from '@/components/BodyLink/BodyLink';
@@ -6,21 +7,13 @@ import {
     RegisterForm,
     RegisterFormValues
 } from '@/features/account/RegisterForm/RegisterForm';
-import { useRegister } from '@/hooks/useRegister';
 
 const Register = () => {
-    const { register } = useRegister();
+    const [register] = useRegisterMutation();
 
     const onSubmit = async (values: RegisterFormValues) => {
-        try {
-            await register(values);
-            signIn('credentials', { ...values, callbackUrl: '/' });
-        } catch (error) {
-            console.warn(
-                'An unhandled error was caught from onSubmit()',
-                error
-            );
-        }
+        await register(values).unwrap();
+        await signIn('credentials', { ...values, callbackUrl: '/' });
     };
 
     return (

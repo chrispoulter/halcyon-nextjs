@@ -1,6 +1,6 @@
 import { useState } from 'react';
-
 import { UserSort } from '@/models/user.types';
+import { useSearchUsersQuery } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -12,31 +12,27 @@ import {
 } from '@/features/user/SearchUserForm/SearchUserForm';
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
-import { useSearchUsers } from '@/hooks/useSearchUsers';
 import { isUserAdministrator } from '@/utils/auth';
-
-// import { searchUsers } from '@/hooks/useSearchUsers';
-// import { GetServerSideProps } from 'next';
-// import { getServerSession } from 'next-auth';
-// import { QueryClient, dehydrate } from '@tanstack/react-query';
-// import { authOptions } from '@/pages/api/auth/[...nextauth]';
-// import { getBaseUrl } from '@/utils/url';
 
 const Users = () => {
     const [request, setRequest] = useState({
         search: '',
-        sort: UserSort.NAME_ASC
+        sort: UserSort.NAME_ASC,
+        page: 1,
+        size: 5
     });
 
-    const { users, isLoading, isFetching, loadMore, hasMore } =
-        useSearchUsers(request);
+    const { data: users, isLoading, isFetching } = useSearchUsersQuery(request);
 
     const onSubmit = (values: SearchUserFormValues) => {
         setRequest({ ...request, ...values });
         return true;
     };
 
-    const onLoadMore = () => loadMore();
+    const onNextPage = () => setRequest({ ...request, page: request.page + 1 });
+
+    const onPreviousPage = () =>
+        setRequest({ ...request, page: request.page - 1 });
 
     const onSort = (sort: UserSort) => setRequest({ ...request, sort });
 
@@ -63,13 +59,15 @@ const Users = () => {
                 </ButtonLink>
             </ButtonGroup>
 
-            <UserList isLoading={isLoading} users={users} />
+            <UserList isLoading={isLoading} users={users?.data?.items} />
 
             <Pager
                 isLoading={isLoading}
                 isFetching={isFetching}
-                hasMore={hasMore}
-                onLoadMore={onLoadMore}
+                hasNextPage={users?.data?.hasNextPage}
+                hasPreviousPage={users?.data?.hasPreviousPage}
+                onNextPage={onNextPage}
+                onPreviousPage={onPreviousPage}
             />
         </Container>
     );

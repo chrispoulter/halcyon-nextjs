@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as Yup from 'yup';
 
 export type GetProfileResponse = {
     id: number;
@@ -9,26 +9,30 @@ export type GetProfileResponse = {
     version: string;
 };
 
-export const updateProfileSchema = z.object({
-    emailAddress: z.string().max(254).email(),
-    firstName: z.string().max(50).nonempty(),
-    lastName: z.string().max(50).nonempty(),
-    dateOfBirth: z.coerce.date(),
-    version: z.string().uuid().optional()
+export const updateProfileSchema = Yup.object().shape({
+    emailAddress: Yup.string()
+        .label('Email Address')
+        .max(254)
+        .email()
+        .required(),
+    firstName: Yup.string().label('First Name').max(50).required(),
+    lastName: Yup.string().label('Last Name').max(50).required(),
+    dateOfBirth: Yup.date().label('Date Of Birth').required(),
+    version: Yup.string().label('Version').uuid()
 });
 
-export type UpdateProfileRequest = z.infer<typeof updateProfileSchema>;
+export type UpdateProfileRequest = Yup.InferType<typeof updateProfileSchema>;
 
-export const changePasswordSchema = z.object({
-    currentPassword: z.string(),
-    newPassword: z.string().min(8).max(50),
-    version: z.string().uuid().optional()
+export const changePasswordSchema = Yup.object().shape({
+    currentPassword: Yup.string().label('Current Password').required(),
+    newPassword: Yup.string().label('New Password').min(8).max(50).required(),
+    version: Yup.string().label('Version').uuid()
 });
 
-export type ChangePasswordRequest = z.infer<typeof changePasswordSchema>;
+export type ChangePasswordRequest = Yup.InferType<typeof changePasswordSchema>;
 
-export const deleteAccountSchema = z.object({
-    version: z.string().uuid().optional()
+export const deleteAccountSchema = Yup.object().shape({
+    version: Yup.string().label('Version').uuid()
 });
 
-export type DeleteAccountRequst = z.infer<typeof deleteAccountSchema>;
+export type DeleteAccountRequst = Yup.InferType<typeof deleteAccountSchema>;

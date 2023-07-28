@@ -1,10 +1,11 @@
+import { UpdatedResponse } from '@/models/base.types';
 import { resetPasswordSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { handler, Handler } from '@/utils/handler';
 import { generateHash } from '@/utils/hash';
 
 const resetPasswordHandler: Handler<UpdatedResponse> = async (req, res) => {
-    const body = await resetPasswordSchema.parseAsync(req.body);
+    const body = await resetPasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
         where: {

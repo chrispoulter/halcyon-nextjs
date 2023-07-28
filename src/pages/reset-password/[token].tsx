@@ -1,33 +1,26 @@
 import { useRouter } from 'next/router';
+import { useResetPasswordMutation } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import {
     ResetPasswordForm,
     ResetPasswordFormValues
 } from '@/features/account/ResetPasswordForm/ResetPasswordForm';
-import { useResetPassword } from '@/hooks/useResetPassword';
 
 const ResetPassword = () => {
     const router = useRouter();
 
     const token = router.query.token as string;
 
-    const { resetPassword } = useResetPassword();
+    const [resetPassword] = useResetPasswordMutation();
 
     const onSubmit = async (values: ResetPasswordFormValues) => {
-        try {
-            await resetPassword({
-                token,
-                ...values
-            });
+        await resetPassword({
+            token,
+            ...values
+        }).unwrap();
 
-            await router.push('/login');
-        } catch (error) {
-            console.warn(
-                'An unhandled error was caught from onSubmit()',
-                error
-            );
-        }
+        await router.push('/login');
     };
 
     return (

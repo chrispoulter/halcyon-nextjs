@@ -1,6 +1,7 @@
+import { UpdatedResponse } from '@/models/base.types';
 import { changePasswordSchema } from '@/models/manage.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { handler, Handler } from '@/utils/handler';
 import { generateHash, verifyHash } from '@/utils/hash';
 
 const changePasswordHandler: Handler<UpdatedResponse> = async (
@@ -8,7 +9,7 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
     res,
     { currentUserId }
 ) => {
-    const body = await changePasswordSchema.parseAsync(req.body);
+    const body = await changePasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
         where: {
@@ -26,8 +27,7 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
             code: 'CONFLICT',
-            message:
-                'Data has been modified or deleted since entities were loaded.'
+            message: 'Data has been modified since resource was loaded.'
         });
     }
 

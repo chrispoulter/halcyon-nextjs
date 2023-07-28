@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useChangePasswordMutation, useGetProfileQuery } from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { BodyLink } from '@/components/BodyLink/BodyLink';
@@ -7,26 +8,23 @@ import {
     ChangePasswordForm,
     ChangePasswordFormValues
 } from '@/features/manage/ChangePasswordForm/ChangePasswordForm';
-import { useChangePassword } from '@/hooks/useChangePassword';
-import { useGetProfile } from '@/hooks/useGetProfile';
 
 const ChangePassword = () => {
     const router = useRouter();
 
-    const { profile } = useGetProfile();
+    const { data: profile } = useGetProfileQuery();
 
-    const { changePassword } = useChangePassword();
+    const [changePassword] = useChangePasswordMutation();
+
+    const version = profile?.data?.version;
 
     const onSubmit = async (values: ChangePasswordFormValues) => {
-        try {
-            await changePassword({ ...values, version: profile!.version });
-            await router.push('/my-account');
-        } catch (error) {
-            console.warn(
-                'An unhandled error was caught from onSubmit()',
-                error
-            );
-        }
+        await changePassword({
+            ...values,
+            version
+        }).unwrap();
+
+        await router.push('/my-account');
     };
 
     return (
@@ -34,7 +32,7 @@ const ChangePassword = () => {
             <PageTitle>Change Password</PageTitle>
 
             <ChangePasswordForm
-                profile={profile}
+                profile={profile?.data}
                 onSubmit={onSubmit}
                 options={
                     <ButtonLink href="/my-account" variant="secondary">

@@ -1,7 +1,8 @@
 import crypto from 'crypto';
+import { UpdatedResponse } from '@/models/base.types';
 import { getUserSchema, lockUserSchema } from '@/models/user.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { handler, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
 const lockUserHandler: Handler<UpdatedResponse> = async (
@@ -9,7 +10,7 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
     res,
     { currentUserId }
 ) => {
-    const query = await getUserSchema.parseAsync(req.query);
+    const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
         where: {
@@ -24,13 +25,12 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
         });
     }
 
-    const body = await lockUserSchema.parseAsync(req.body);
+    const body = await lockUserSchema.validate(req.body);
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
             code: 'CONFLICT',
-            message:
-                'Data has been modified or deleted since entities were loaded.'
+            message: 'Data has been modified since resource was loaded.'
         });
     }
 

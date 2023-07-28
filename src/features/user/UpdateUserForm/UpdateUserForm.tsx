@@ -1,6 +1,5 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
@@ -13,15 +12,26 @@ import {
 } from '@/components/Skeleton/Skeleton';
 import { Role, roleOptions } from '@/utils/auth';
 
-const schema = z.object({
-    emailAddress: z.string().max(254).email(),
-    firstName: z.string().max(50).nonempty(),
-    lastName: z.string().max(50).nonempty(),
-    dateOfBirth: z.coerce.date(),
-    roles: z.array(z.nativeEnum(Role)).optional()
+const schema = Yup.object({
+    emailAddress: Yup.string()
+        .label('Email Address')
+        .max(254)
+        .email()
+        .required(),
+    firstName: Yup.string().label('First Name').max(50).required(),
+    lastName: Yup.string().label('Last Name').max(50).required(),
+    dateOfBirth: Yup.date().label('Date Of Birth').required(),
+    roles: Yup.array()
+        .of(
+            Yup.string<Role>()
+                .label('Role')
+                .oneOf(Object.values(Role))
+                .required()
+        )
+        .label('Roles')
 });
 
-export type UpdateUserFormValues = z.infer<typeof schema>;
+export type UpdateUserFormValues = Yup.InferType<typeof schema>;
 
 export type UpdateUserFormState = { isSubmitting: boolean };
 
@@ -30,6 +40,10 @@ type UpdateUserFormProps = {
     isDisabled?: boolean;
     onSubmit: (values: UpdateUserFormValues) => void;
     options?: (state: UpdateUserFormState) => JSX.Element;
+};
+
+type UpdateUserFormInternalProps = UpdateUserFormProps & {
+    user: UpdateUserFormValues;
 };
 
 const UpdateUserFormLoading = () => (
@@ -49,81 +63,79 @@ export const UpdateUserFormInternal = ({
     isDisabled,
     onSubmit,
     options
-}: UpdateUserFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<UpdateUserFormValues>({
-        values: user,
-        resolver: zodResolver(schema)
-    });
-
-    return (
-        <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <Input
-                label="Email Address"
-                name="emailAddress"
-                type="email"
-                maxLength={254}
-                autoComplete="username"
-                required
-                control={control}
-                className="mb-3"
-            />
-            <div className="sm:flex sm:gap-3">
+}: UpdateUserFormInternalProps) => (
+    <Formik
+        initialValues={user}
+        validationSchema={schema}
+        onSubmit={onSubmit}
+        enableReinitialize
+    >
+        {({ isSubmitting }) => (
+            <Form noValidate>
                 <Input
-                    label="First Name"
-                    name="firstName"
-                    type="text"
-                    maxLength={50}
-                    autoComplete="given-name"
+                    label="Email Address"
+                    name="emailAddress"
+                    type="email"
+                    maxLength={254}
+                    autoComplete="username"
                     required
-                    control={control}
-                    className="mb-3 sm:flex-1"
+                    disabled={isSubmitting || isDisabled}
+                    className="mb-3"
                 />
-                <Input
-                    label="Last Name"
-                    name="lastName"
-                    type="text"
-                    maxLength={50}
-                    autoComplete="family-name"
+                <div className="sm:flex sm:gap-3">
+                    <Input
+                        label="First Name"
+                        name="firstName"
+                        type="text"
+                        maxLength={50}
+                        autoComplete="given-name"
+                        required
+                        disabled={isSubmitting || isDisabled}
+                        className="mb-3 sm:flex-1"
+                    />
+                    <Input
+                        label="Last Name"
+                        name="lastName"
+                        type="text"
+                        maxLength={50}
+                        autoComplete="family-name"
+                        required
+                        disabled={isSubmitting || isDisabled}
+                        className="mb-3 sm:flex-1"
+                    />
+                </div>
+                <DatePicker
+                    label="Date Of Birth"
+                    name="dateOfBirth"
                     required
-                    control={control}
-                    className="mb-3 sm:flex-1"
+                    autoComplete={['bday-day', 'bday-month', 'bday-year']}
+                    disabled={isSubmitting || isDisabled}
+                    className="mb-3"
                 />
-            </div>
-            <DatePicker
-                label="Date Of Birth"
-                name="dateOfBirth"
-                required
-                autoComplete={['bday-day', 'bday-month', 'bday-year']}
-                control={control}
-                className="mb-3"
-            />
-            <div className="mb-5">
-                <span className="mb-2 block text-sm font-medium text-gray-800">
-                    Roles
-                </span>
-                <ToggleGroup
-                    name="roles"
-                    options={roleOptions}
-                    control={control}
-                />
-            </div>
-            <ButtonGroup>
-                {options && options({ isSubmitting })}
-                <Button
-                    type="submit"
-                    loading={isSubmitting}
-                    disabled={isDisabled}
-                >
-                    Submit
-                </Button>
-            </ButtonGroup>
-        </form>
-    );
-};
+                <div className="mb-5">
+                    <span className="mb-2 block text-sm font-medium text-gray-800">
+                        Roles
+                    </span>
+                    <ToggleGroup
+                        name="roles"
+                        options={roleOptions}
+                        disabled={isSubmitting || isDisabled}
+                    />
+                </div>
+                <ButtonGroup>
+                    {options && options({ isSubmitting })}
+                    <Button
+                        type="submit"
+                        loading={isSubmitting}
+                        disabled={isDisabled}
+                    >
+                        Submit
+                    </Button>
+                </ButtonGroup>
+            </Form>
+        )}
+    </Formik>
+);
 
 export const UpdateUserForm = ({
     user,

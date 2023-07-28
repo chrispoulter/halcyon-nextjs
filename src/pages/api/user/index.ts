@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { UpdatedResponse } from '@/models/base.types';
 import {
     createUserSchema,
     SearchUsersResponse,
@@ -7,12 +8,12 @@ import {
 } from '@/models/user.types';
 import { Prisma } from '@prisma/client';
 import prisma from '@/utils/prisma';
-import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { handler, Handler } from '@/utils/handler';
 import { generateHash } from '@/utils/hash';
 import { isUserAdministrator, Role } from '@/utils/auth';
 
 const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
-    const query = await searchUsersSchema.parseAsync(req.query);
+    const query = await searchUsersSchema.validate(req.query);
 
     let where: Prisma.UsersWhereInput | undefined;
 
@@ -85,7 +86,7 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
 };
 
 const createUserHandler: Handler<UpdatedResponse> = async (req, res) => {
-    const body = await createUserSchema.parseAsync(req.body);
+    const body = await createUserSchema.validate(req.body);
 
     const existing = await prisma.users.findUnique({
         where: {

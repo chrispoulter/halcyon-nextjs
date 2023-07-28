@@ -1,25 +1,37 @@
-import { z } from 'zod';
+import * as Yup from 'yup';
 
-export const registerSchema = z.object({
-    emailAddress: z.string().max(254).email(),
-    password: z.string().min(8).max(50),
-    firstName: z.string().max(50).nonempty(),
-    lastName: z.string().max(50).nonempty(),
-    dateOfBirth: z.coerce.date()
+export const registerSchema = Yup.object().shape({
+    emailAddress: Yup.string()
+        .label('Email Address')
+        .max(254)
+        .email()
+        .required(),
+    password: Yup.string().label('Password').min(8).max(50).required(),
+    firstName: Yup.string().label('First Name').max(50).required(),
+    lastName: Yup.string().label('Last Name').max(50).required(),
+    dateOfBirth: Yup.date().label('Date Of Birth').required()
 });
 
-export type RegisterRequest = z.infer<typeof registerSchema>;
+export type RegisterRequest = Yup.InferType<typeof registerSchema>;
 
-export const forgotPasswordSchema = z.object({
-    emailAddress: z.string().max(254).email()
+export const forgotPasswordSchema = Yup.object().shape({
+    emailAddress: Yup.string()
+        .label('Email Address')
+        .max(254)
+        .email()
+        .required()
 });
 
-export type ForgotPasswordRequest = z.infer<typeof forgotPasswordSchema>;
+export type ForgotPasswordRequest = Yup.InferType<typeof forgotPasswordSchema>;
 
-export const resetPasswordSchema = z.object({
-    token: z.string().uuid(),
-    emailAddress: z.string().max(254).email(),
-    newPassword: z.string().min(8).max(50)
+export const resetPasswordSchema = Yup.object().shape({
+    token: Yup.string().label('Token').uuid().required(),
+    emailAddress: Yup.string()
+        .label('Email Address')
+        .max(254)
+        .email()
+        .required(),
+    newPassword: Yup.string().label('New Password').min(8).max(50).required()
 });
 
-export type ResetPasswordRequest = z.infer<typeof resetPasswordSchema>;
+export type ResetPasswordRequest = Yup.InferType<typeof resetPasswordSchema>;

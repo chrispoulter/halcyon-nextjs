@@ -1,5 +1,5 @@
-import { Control, useController } from 'react-hook-form';
 import clsx from 'clsx';
+import { useField } from 'formik';
 import { Switch } from '@headlessui/react';
 
 type ToggleGroupOption = {
@@ -9,34 +9,25 @@ type ToggleGroupOption = {
 };
 
 type ToggleGroupProps = {
-    control: Control<any, any>;
     name: string;
     options: ToggleGroupOption[];
     disabled?: boolean;
 };
 
-export const ToggleGroup = ({
-    control,
-    name,
-    options,
-    disabled
-}: ToggleGroupProps) => {
-    const {
-        field,
-        formState: { isSubmitting }
-    } = useController({
-        name,
-        control
-    });
+export const ToggleGroup = ({ name, options, disabled }: ToggleGroupProps) => {
+    const [field] = useField(name);
 
     const currentValues: any[] = field.value ?? [];
 
     const onChange = (value: any, checked: boolean) =>
-        field.onChange(
-            checked
-                ? [value, ...currentValues]
-                : currentValues.filter(v => v !== value)
-        );
+        field.onChange({
+            target: {
+                name: field.name,
+                value: checked
+                    ? [value, ...currentValues]
+                    : currentValues.filter(v => v !== value)
+            }
+        });
 
     return (
         <>
@@ -48,12 +39,12 @@ export const ToggleGroup = ({
                         key={`${name}.${option.value}`}
                         checked={isChecked}
                         onChange={checked => onChange(option.value, checked)}
-                        disabled={disabled || isSubmitting}
+                        onBlur={field.onBlur}
+                        disabled={disabled}
                         className={clsx(
                             'mb-2 flex w-full items-center justify-between gap-5 border px-5 py-3 text-left focus:outline-none focus:ring-1 focus:ring-cyan-500 sm:py-2',
                             {
-                                'cursor-not-allowed opacity-50':
-                                    disabled || isSubmitting
+                                'cursor-not-allowed opacity-50': disabled
                             }
                         )}
                     >

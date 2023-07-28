@@ -1,75 +1,72 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 
-const schema = z
-    .object({
-        emailAddress: z.string().email(),
-        newPassword: z.string().min(8).max(50),
-        confirmNewPassword: z.string()
-    })
-    .refine(data => data.newPassword === data.confirmNewPassword, {
-        message: 'Passwords do not match',
-        path: ['confirmNewPassword']
-    });
+const schema = Yup.object({
+    emailAddress: Yup.string().label('Email Address').email().required(),
+    newPassword: Yup.string().label('New Password').min(8).max(50).required(),
+    confirmNewPassword: Yup.string()
+        .label('Confirm New Password')
+        .required()
+        .oneOf([Yup.ref('newPassword')], 'Passwords do not match')
+});
 
-export type ResetPasswordFormValues = z.infer<typeof schema>;
+export type ResetPasswordFormValues = Yup.InferType<typeof schema>;
+
+const initialValues = schema.getDefault() as any;
 
 type ResetPasswordFormProps = {
     onSubmit: (values: ResetPasswordFormValues) => void;
 };
 
-export const ResetPasswordForm = ({ onSubmit }: ResetPasswordFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<ResetPasswordFormValues>({
-        resolver: zodResolver(schema)
-    });
-
-    return (
-        <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <Input
-                label="Email Address"
-                name="emailAddress"
-                type="email"
-                maxLength={254}
-                autoComplete="username"
-                required
-                control={control}
-                className="mb-3"
-            />
-            <div className="sm:flex sm:gap-3">
+export const ResetPasswordForm = ({ onSubmit }: ResetPasswordFormProps) => (
+    <Formik
+        initialValues={initialValues}
+        validationSchema={schema}
+        onSubmit={onSubmit}
+    >
+        {({ isSubmitting }) => (
+            <Form noValidate>
                 <Input
-                    label="New Password"
-                    name="newPassword"
-                    type="password"
-                    maxLength={50}
-                    autoComplete="new-password"
+                    label="Email Address"
+                    name="emailAddress"
+                    type="email"
+                    maxLength={254}
+                    autoComplete="username"
                     required
-                    control={control}
-                    className="mb-5 sm:flex-1"
+                    disabled={isSubmitting}
+                    className="mb-3"
                 />
-                <Input
-                    label="Confirm New Password"
-                    name="confirmNewPassword"
-                    type="password"
-                    maxLength={50}
-                    autoComplete="new-password"
-                    required
-                    control={control}
-                    className="mb-5 sm:flex-1"
-                />
-            </div>
-            <ButtonGroup>
-                <Button type="submit" loading={isSubmitting}>
-                    Submit
-                </Button>
-            </ButtonGroup>
-        </form>
-    );
-};
+                <div className="sm:flex sm:gap-3">
+                    <Input
+                        label="New Password"
+                        name="newPassword"
+                        type="password"
+                        maxLength={50}
+                        autoComplete="new-password"
+                        required
+                        disabled={isSubmitting}
+                        className="mb-5 sm:flex-1"
+                    />
+                    <Input
+                        label="Confirm New Password"
+                        name="confirmNewPassword"
+                        type="password"
+                        maxLength={50}
+                        autoComplete="new-password"
+                        required
+                        disabled={isSubmitting}
+                        className="mb-5 sm:flex-1"
+                    />
+                </div>
+                <ButtonGroup>
+                    <Button type="submit" loading={isSubmitting}>
+                        Submit
+                    </Button>
+                </ButtonGroup>
+            </Form>
+        )}
+    </Formik>
+);

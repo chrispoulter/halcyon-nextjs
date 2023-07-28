@@ -1,25 +1,32 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import { Input } from '@/components/Input/Input';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { InputSkeleton, FormSkeleton } from '@/components/Skeleton/Skeleton';
 
-const schema = z.object({
-    emailAddress: z.string().max(254).email(),
-    firstName: z.string().max(50).nonempty(),
-    lastName: z.string().max(50).nonempty(),
-    dateOfBirth: z.coerce.date()
+const schema = Yup.object({
+    emailAddress: Yup.string()
+        .label('Email Address')
+        .max(254)
+        .email()
+        .required(),
+    firstName: Yup.string().label('First Name').max(50).required(),
+    lastName: Yup.string().label('Last Name').max(50).required(),
+    dateOfBirth: Yup.date().label('Date Of Birth').required()
 });
 
-export type UpdateProfileFormValues = z.infer<typeof schema>;
+export type UpdateProfileFormValues = Yup.InferType<typeof schema>;
 
 type UpdateProfileFormProps = {
     profile?: UpdateProfileFormValues;
     onSubmit: (values: UpdateProfileFormValues) => void;
     options?: JSX.Element;
+};
+
+type UpdateProfileFormInternalProps = UpdateProfileFormProps & {
+    profile: UpdateProfileFormValues;
 };
 
 const UpdateProfileFormLoading = () => (
@@ -37,67 +44,65 @@ const UpdateProfileFormInternal = ({
     profile,
     onSubmit,
     options
-}: UpdateProfileFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<UpdateProfileFormValues>({
-        values: profile,
-        resolver: zodResolver(schema)
-    });
-
-    return (
-        <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <Input
-                label="Email Address"
-                name="emailAddress"
-                type="email"
-                maxLength={254}
-                autoComplete="username"
-                required
-                control={control}
-                className="mb-3"
-            />
-            <div className="sm:flex sm:gap-3">
+}: UpdateProfileFormInternalProps) => (
+    <Formik
+        initialValues={profile}
+        validationSchema={schema}
+        onSubmit={onSubmit}
+        enableReinitialize
+    >
+        {({ isSubmitting }) => (
+            <Form noValidate>
                 <Input
-                    label="First Name"
-                    name="firstName"
-                    type="text"
-                    maxLength={50}
-                    autoComplete="given-name"
+                    label="Email Address"
+                    name="emailAddress"
+                    type="email"
+                    maxLength={254}
+                    autoComplete="username"
                     required
-                    control={control}
-                    className="mb-3 sm:flex-1"
+                    disabled={isSubmitting}
+                    className="mb-3"
                 />
-                <Input
-                    label="Last Name"
-                    name="lastName"
-                    type="text"
-                    maxLength={50}
-                    autoComplete="family-name"
+                <div className="sm:flex sm:gap-3">
+                    <Input
+                        label="First Name"
+                        name="firstName"
+                        type="text"
+                        maxLength={50}
+                        autoComplete="given-name"
+                        required
+                        disabled={isSubmitting}
+                        className="mb-3 sm:flex-1"
+                    />
+                    <Input
+                        label="Last Name"
+                        name="lastName"
+                        type="text"
+                        maxLength={50}
+                        autoComplete="family-name"
+                        required
+                        disabled={isSubmitting}
+                        className="mb-3 sm:flex-1"
+                    />
+                </div>
+                <DatePicker
+                    label="Date Of Birth"
+                    name="dateOfBirth"
+                    autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
-                    control={control}
-                    className="mb-3 sm:flex-1"
+                    disabled={isSubmitting}
+                    className="mb-5"
                 />
-            </div>
-            <DatePicker
-                label="Date Of Birth"
-                name="dateOfBirth"
-                required
-                autoComplete={['bday-day', 'bday-month', 'bday-year']}
-                control={control}
-                className="mb-5"
-            />
-            <ButtonGroup>
-                {options}
-                <Button type="submit" loading={isSubmitting}>
-                    Submit
-                </Button>
-            </ButtonGroup>
-        </form>
-    );
-};
+                <ButtonGroup>
+                    {options}
+                    <Button type="submit" loading={isSubmitting}>
+                        Submit
+                    </Button>
+                </ButtonGroup>
+            </Form>
+        )}
+    </Formik>
+);
 
 export const UpdateProfileForm = ({
     profile,

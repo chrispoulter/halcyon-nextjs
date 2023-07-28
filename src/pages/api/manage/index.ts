@@ -1,11 +1,12 @@
 import crypto from 'crypto';
+import { UpdatedResponse } from '@/models/base.types';
 import {
     GetProfileResponse,
     deleteAccountSchema,
     updateProfileSchema
 } from '@/models/manage.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler, UpdatedResponse } from '@/utils/handler';
+import { handler, Handler } from '@/utils/handler';
 
 const getProfileHandler: Handler<GetProfileResponse> = async (
     _,
@@ -42,7 +43,7 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
     res,
     { currentUserId }
 ) => {
-    const body = await updateProfileSchema.parseAsync(req.body);
+    const body = await updateProfileSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
         where: {
@@ -60,8 +61,7 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
             code: 'CONFLICT',
-            message:
-                'Data has been modified or deleted since entities were loaded.'
+            message: 'Data has been modified since resource was loaded.'
         });
     }
 
@@ -120,13 +120,12 @@ const deleteProfileHandler: Handler<UpdatedResponse> = async (
         });
     }
 
-    const body = await deleteAccountSchema.parseAsync(req.body);
+    const body = await deleteAccountSchema.validate(req.body);
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
             code: 'CONFLICT',
-            message:
-                'Data has been modified or deleted since entities were loaded.'
+            message: 'Data has been modified since resource was loaded.'
         });
     }
 
