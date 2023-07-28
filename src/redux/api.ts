@@ -44,7 +44,8 @@ export const api = createApi({
                 method: 'POST',
                 body
             }),
-            invalidatesTags: [{ type: 'User', id: 'PARTIAL-LIST' }]
+            invalidatesTags: (_, error) =>
+                error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]
         }),
         forgotPassword: builder.mutation<
             HandlerResponse,
@@ -79,7 +80,8 @@ export const api = createApi({
                 method: 'PUT',
                 body
             }),
-            invalidatesTags: result => [{ type: 'User', id: result?.data?.id }]
+            invalidatesTags: (result, error) =>
+                error ? [] : [{ type: 'User', id: result?.data?.id }]
         }),
         changePassword: builder.mutation<
             HandlerResponse<UpdatedResponse>,
@@ -90,7 +92,8 @@ export const api = createApi({
                 method: 'PUT',
                 body
             }),
-            invalidatesTags: result => [{ type: 'User', id: result?.data?.id }]
+            invalidatesTags: (result, error) =>
+                error ? [] : [{ type: 'User', id: result?.data?.id }]
         }),
         deleteAccount: builder.mutation<
             HandlerResponse<UpdatedResponse>,
@@ -101,7 +104,8 @@ export const api = createApi({
                 method: 'DELETE',
                 body
             }),
-            invalidatesTags: [{ type: 'User', id: 'PARTIAL-LIST' }]
+            invalidatesTags: (_, error) =>
+                error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]
         }),
         searchUsers: builder.query<
             HandlerResponse<SearchUsersResponse>,
@@ -128,7 +132,8 @@ export const api = createApi({
                 method: 'POST',
                 body
             }),
-            invalidatesTags: [{ type: 'User', id: 'PARTIAL-LIST' }]
+            invalidatesTags: (_, error) =>
+                error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]
         }),
         getUser: builder.query<HandlerResponse<GetUserResponse>, string>({
             query: id => `/user/${id}`,
@@ -143,7 +148,8 @@ export const api = createApi({
                 method: 'PUT',
                 body
             }),
-            invalidatesTags: result => [{ type: 'User', id: result?.data?.id }]
+            invalidatesTags: (result, error) =>
+                error ? [] : [{ type: 'User', id: result?.data?.id }]
         }),
         lockUser: builder.mutation<
             HandlerResponse<UpdatedResponse>,
@@ -154,7 +160,8 @@ export const api = createApi({
                 method: 'PUT',
                 body
             }),
-            invalidatesTags: result => [{ type: 'User', id: result?.data?.id }]
+            invalidatesTags: (result, error) =>
+                error ? [] : [{ type: 'User', id: result?.data?.id }]
         }),
         unlockUser: builder.mutation<
             HandlerResponse<UpdatedResponse>,
@@ -165,7 +172,8 @@ export const api = createApi({
                 method: 'PUT',
                 body
             }),
-            invalidatesTags: result => [{ type: 'User', id: result?.data?.id }]
+            invalidatesTags: (result, error) =>
+                error ? [] : [{ type: 'User', id: result?.data?.id }]
         }),
         deleteUser: builder.mutation<
             HandlerResponse<UpdatedResponse>,
@@ -176,7 +184,8 @@ export const api = createApi({
                 method: 'DELETE',
                 body
             }),
-            invalidatesTags: [{ type: 'User', id: 'PARTIAL-LIST' }]
+            invalidatesTags: (_, error) =>
+                error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]
         })
     })
 });
