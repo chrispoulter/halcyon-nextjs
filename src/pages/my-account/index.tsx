@@ -15,15 +15,8 @@ const MyAccount = () => {
     const version = profile?.data?.version;
 
     const onDelete = async () => {
-        try {
-            await deleteAccount({ version });
-            await signOut({ callbackUrl: '/' });
-        } catch (error) {
-            console.warn(
-                'An unhandled error was caught from onDelete()',
-                error
-            );
-        }
+        await deleteAccount({ version }).unwrap();
+        await signOut({ callbackUrl: '/' });
     };
 
     return (
