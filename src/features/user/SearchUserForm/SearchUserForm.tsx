@@ -1,14 +1,14 @@
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { InferType, object, string } from 'yup';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { SearchIcon } from '@/components/Icons/SearchIcon';
 
-const schema = Yup.object({
-    search: Yup.string().label('Search')
+const schema = object({
+    search: string().label('Search')
 });
 
-export type SearchUserFormValues = Yup.InferType<typeof schema>;
+export type SearchUserFormValues = InferType<typeof schema>;
 
 type SearchUserFormProps = {
     isLoading?: boolean;

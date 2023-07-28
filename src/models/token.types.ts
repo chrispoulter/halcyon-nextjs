@@ -1,8 +1,8 @@
-import * as Yup from 'yup';
+import { InferType, object, string } from 'yup';
 
-export const createTokenSchema = Yup.object().shape({
-    emailAddress: Yup.string().label('Email Address').email().required(),
-    password: Yup.string().label('Password').required()
+export const createTokenSchema = object().shape({
+    emailAddress: string().label('Email Address').email().required(),
+    password: string().label('Password').required()
 });
 
-export type CreateTokenRequest = Yup.InferType<typeof createTokenSchema>;
+export type CreateTokenRequest = InferType<typeof createTokenSchema>;

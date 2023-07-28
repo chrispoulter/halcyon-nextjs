@@ -204,5 +204,8 @@ export const {
     useUpdateUserMutation,
     useLockUserMutation,
     useUnlockUserMutation,
-    useDeleteUserMutation
+    useDeleteUserMutation,
+    util: { getRunningQueriesThunk }
 } = api;
+
+export const { getProfile, getUser, searchUsers } = api.endpoints;

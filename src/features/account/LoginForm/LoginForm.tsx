@@ -1,15 +1,15 @@
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { InferType, object, string } from 'yup';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 
-const schema = Yup.object({
-    emailAddress: Yup.string().label('Email Address').email().required(),
-    password: Yup.string().label('Password').required()
+const schema = object({
+    emailAddress: string().label('Email Address').email().required(),
+    password: string().label('Password').required()
 });
 
-export type LoginFormValues = Yup.InferType<typeof schema>;
+export type LoginFormValues = InferType<typeof schema>;
 
 const initialValues = schema.getDefault() as any;
 

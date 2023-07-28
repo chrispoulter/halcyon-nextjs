@@ -1,4 +1,4 @@
-import * as Yup from 'yup';
+import { InferType, array, date, number, object, string } from 'yup';
 import { Role } from '@/utils/auth';
 
 export enum UserSort {
@@ -8,17 +8,17 @@ export enum UserSort {
     NAME_DESC = 'NAME_DESC'
 }
 
-export const searchUsersSchema = Yup.object().shape({
-    search: Yup.string().label('Search'),
-    sort: Yup.string<UserSort>()
+export const searchUsersSchema = object().shape({
+    search: string().label('Search'),
+    sort: string<UserSort>()
         .label('Sort')
         .oneOf(Object.values(UserSort))
         .default(UserSort.NAME_ASC),
-    page: Yup.number().label('Page').min(1).default(1),
-    size: Yup.number().label('Size').min(1).max(50).default(50)
+    page: number().label('Page').min(1).default(1),
+    size: number().label('Size').min(1).max(50).default(50)
 });
 
-export type SearchUsersRequest = Yup.InferType<typeof searchUsersSchema>;
+export type SearchUsersRequest = InferType<typeof searchUsersSchema>;
 
 export type SearchUserResponse = {
     id: number;
@@ -35,30 +35,21 @@ export type SearchUsersResponse = {
     hasPreviousPage?: boolean;
 };
 
-export const createUserSchema = Yup.object().shape({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .max(254)
-        .email()
-        .required(),
-    password: Yup.string().label('Password').min(8).max(50).required(),
-    firstName: Yup.string().label('First Name').max(50).required(),
-    lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date().label('Date Of Birth').required(),
-    roles: Yup.array()
-        .of(
-            Yup.string<Role>()
-                .label('Role')
-                .oneOf(Object.values(Role))
-                .required()
-        )
+export const createUserSchema = object().shape({
+    emailAddress: string().label('Email Address').max(254).email().required(),
+    password: string().label('Password').min(8).max(50).required(),
+    firstName: string().label('First Name').max(50).required(),
+    lastName: string().label('Last Name').max(50).required(),
+    dateOfBirth: date().label('Date Of Birth').required(),
+    roles: array()
+        .of(string<Role>().label('Role').oneOf(Object.values(Role)).required())
         .label('Roles')
 });
 
-export type CreateUserRequest = Yup.InferType<typeof createUserSchema>;
+export type CreateUserRequest = InferType<typeof createUserSchema>;
 
-export const getUserSchema = Yup.object().shape({
-    id: Yup.number().label('Id').required()
+export const getUserSchema = object().shape({
+    id: number().label('Id').required()
 });
 
 export type GetUserResponse = {
@@ -72,42 +63,33 @@ export type GetUserResponse = {
     version: string;
 };
 
-export const updateUserSchema = Yup.object().shape({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .max(254)
-        .email()
-        .required(),
-    firstName: Yup.string().label('First Name').max(50).required(),
-    lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date().label('Date Of Birth').required(),
-    roles: Yup.array()
-        .of(
-            Yup.string<Role>()
-                .label('Role')
-                .oneOf(Object.values(Role))
-                .required()
-        )
+export const updateUserSchema = object().shape({
+    emailAddress: string().label('Email Address').max(254).email().required(),
+    firstName: string().label('First Name').max(50).required(),
+    lastName: string().label('Last Name').max(50).required(),
+    dateOfBirth: date().label('Date Of Birth').required(),
+    roles: array()
+        .of(string<Role>().label('Role').oneOf(Object.values(Role)).required())
         .label('Roles'),
-    version: Yup.string().label('Version').uuid()
+    version: string().label('Version').uuid()
 });
 
-export type UpdateUserRequest = Yup.InferType<typeof updateUserSchema>;
+export type UpdateUserRequest = InferType<typeof updateUserSchema>;
 
-export const lockUserSchema = Yup.object().shape({
-    version: Yup.string().label('Version').uuid()
+export const lockUserSchema = object().shape({
+    version: string().label('Version').uuid()
 });
 
-export type LockUserRequest = Yup.InferType<typeof lockUserSchema>;
+export type LockUserRequest = InferType<typeof lockUserSchema>;
 
-export const unlockUserSchema = Yup.object().shape({
-    version: Yup.string().label('Version').uuid()
+export const unlockUserSchema = object().shape({
+    version: string().label('Version').uuid()
 });
 
-export type UnlockUserRequest = Yup.InferType<typeof unlockUserSchema>;
+export type UnlockUserRequest = InferType<typeof unlockUserSchema>;
 
-export const deleteUserSchema = Yup.object().shape({
-    version: Yup.string().label('Version').uuid()
+export const deleteUserSchema = object().shape({
+    version: string().label('Version').uuid()
 });
 
-export type DeleteUserRequest = Yup.InferType<typeof deleteUserSchema>;
+export type DeleteUserRequest = InferType<typeof deleteUserSchema>;

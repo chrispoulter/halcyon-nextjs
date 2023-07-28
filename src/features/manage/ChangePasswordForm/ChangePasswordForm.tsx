@@ -1,21 +1,21 @@
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { InferType, object, ref, string } from 'yup';
 import { GetProfileResponse } from '@/models/manage.types';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { FormSkeleton, InputSkeleton } from '@/components/Skeleton/Skeleton';
 
-const schema = Yup.object({
-    currentPassword: Yup.string().label('Current Password').required(),
-    newPassword: Yup.string().label('New Password').min(8).max(50).required(),
-    confirmNewPassword: Yup.string()
+const schema = object({
+    currentPassword: string().label('Current Password').required(),
+    newPassword: string().label('New Password').min(8).max(50).required(),
+    confirmNewPassword: string()
         .label('Confirm New Password')
         .required()
-        .oneOf([Yup.ref('newPassword')], 'Passwords do not match')
+        .oneOf([ref('newPassword')], 'Passwords do not match')
 });
 
-export type ChangePasswordFormValues = Yup.InferType<typeof schema>;
+export type ChangePasswordFormValues = InferType<typeof schema>;
 
 const initialValues = schema.getDefault() as any;
 

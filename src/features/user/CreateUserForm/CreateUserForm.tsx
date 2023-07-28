@@ -1,5 +1,5 @@
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { InferType, array, date, object, ref, string } from 'yup';
 import { Input } from '@/components/Input/Input';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
@@ -7,33 +7,24 @@ import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Role, roleOptions } from '@/utils/auth';
 
-const schema = Yup.object({
-    emailAddress: Yup.string()
-        .label('Email Address')
-        .max(254)
-        .email()
-        .required(),
-    password: Yup.string().label('Password').min(8).max(50).required(),
-    confirmPassword: Yup.string()
+const schema = object({
+    emailAddress: string().label('Email Address').max(254).email().required(),
+    password: string().label('Password').min(8).max(50).required(),
+    confirmPassword: string()
         .label('Confirm Password')
 
         .required()
-        .oneOf([Yup.ref('password')], 'Passwords do not match'),
-    firstName: Yup.string().label('First Name').max(50).required(),
-    lastName: Yup.string().label('Last Name').max(50).required(),
-    dateOfBirth: Yup.date().label('Date Of Birth').required(),
-    roles: Yup.array()
-        .of(
-            Yup.string<Role>()
-                .label('Role')
-                .oneOf(Object.values(Role))
-                .required()
-        )
+        .oneOf([ref('password')], 'Passwords do not match'),
+    firstName: string().label('First Name').max(50).required(),
+    lastName: string().label('Last Name').max(50).required(),
+    dateOfBirth: date().label('Date Of Birth').required(),
+    roles: array()
+        .of(string<Role>().label('Role').oneOf(Object.values(Role)).required())
         .label('Roles')
         .default([])
 });
 
-export type CreateUserFormValues = Yup.InferType<typeof schema>;
+export type CreateUserFormValues = InferType<typeof schema>;
 
 const initialValues = schema.getDefault() as any;
 
