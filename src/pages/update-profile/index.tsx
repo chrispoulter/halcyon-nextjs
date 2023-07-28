@@ -18,7 +18,7 @@ const UpdateProfile = () => {
     const version = profile?.data?.version;
 
     const onSubmit = async (values: UpdateProfileFormValues) => {
-        await updateProfile({ ...values, version });
+        await updateProfile({ ...values, version }).unwrap();
         await router.push('/my-account');
     };
 

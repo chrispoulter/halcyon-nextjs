@@ -43,51 +43,31 @@ const UpdateUser = () => {
         await updateUser({
             id,
             body: { ...values, version }
-        });
+        }).unwrap();
 
         await router.push('/user');
     };
 
     const onDelete = async () => {
-        try {
-            await deleteUser({
-                id,
-                body: { version }
-            });
+        await deleteUser({
+            id,
+            body: { version }
+        }).unwrap();
 
-            await router.push('/user');
-        } catch (error) {
-            console.warn(
-                'An unhandled error was caught from onDelete()',
-                error
-            );
-        }
+        await router.push('/user');
     };
 
-    const onLock = async () => {
-        try {
-            await lockUser({
-                id,
-                body: { version }
-            });
-        } catch (error) {
-            console.warn('An unhandled error was caught from onLock()', error);
-        }
-    };
+    const onLock = () =>
+        lockUser({
+            id,
+            body: { version }
+        });
 
-    const onUnlock = async () => {
-        try {
-            await unlockUser({
-                id,
-                body: { version }
-            });
-        } catch (error) {
-            console.warn(
-                'An unhandled error was caught from onUnlock()',
-                error
-            );
-        }
-    };
+    const onUnlock = () =>
+        unlockUser({
+            id,
+            body: { version }
+        });
 
     const options = ({ isSubmitting }: UpdateUserFormState) => (
         <>

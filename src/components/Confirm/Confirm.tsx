@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export type ConfirmProps = React.PropsWithChildren<{
-    onConfirm: () => Promise<void>;
+    onConfirm: () => Promise<unknown>;
     content: (onOk: () => void, onCancel: () => void) => JSX.Element;
     children: React.ReactElement<
         { onClick: () => void },

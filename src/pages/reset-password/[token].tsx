@@ -18,7 +18,7 @@ const ResetPassword = () => {
         await resetPassword({
             token,
             ...values
-        });
+        }).unwrap();
 
         await router.push('/login');
     };

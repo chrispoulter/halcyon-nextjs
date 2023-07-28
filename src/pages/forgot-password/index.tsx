@@ -13,7 +13,7 @@ const ForgotPassword = () => {
     const [forgotPassword] = useForgotPasswordMutation();
 
     const onSubmit = async (values: ForgotPasswordFormValues) => {
-        await forgotPassword(values);
+        await forgotPassword(values).unwrap();
         await router.push('/login');
     };
 

@@ -18,15 +18,15 @@ export const logger: Middleware = () => next => async action => {
                         break;
 
                     case 403:
-                        router.push('/403', router.asPath);
+                        await router.push('/403', router.asPath);
                         break;
 
                     case 404:
-                        router.push('/404', router.asPath);
+                        await router.push('/404', router.asPath);
                         break;
 
                     default:
-                        router.push('/500', router.asPath);
+                        await router.push('/500', router.asPath);
                         break;
                 }
 

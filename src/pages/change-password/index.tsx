@@ -22,7 +22,7 @@ const ChangePassword = () => {
         await changePassword({
             ...values,
             version
-        });
+        }).unwrap();
 
         await router.push('/my-account');
     };

@@ -15,7 +15,7 @@ const CreateUser = () => {
     const [createUser] = useCreateUserMutation();
 
     const onSubmit = async (values: CreateUserFormValues) => {
-        await createUser(values);
+        await createUser(values).unwrap();
         await router.push('/user');
     };
 
