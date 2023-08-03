@@ -9,6 +9,11 @@ import { GetProfileResponse } from '@/models/manage.types';
 import MyAccount from '@/pages/my-account';
 import { storeWrapper } from '@/utils/test-utils';
 
+jest.mock('next-auth', () => ({
+    __esModule: true,
+    default: jest.fn()
+}));
+
 const response: HandlerResponse<GetProfileResponse> = {
     data: {
         id: 1,

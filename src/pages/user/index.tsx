@@ -81,7 +81,7 @@ const Users = () => {
 };
 
 export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res, params }) => {
+    wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
         if (!session?.user) {
