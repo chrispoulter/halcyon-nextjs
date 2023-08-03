@@ -14,6 +14,13 @@ import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropd
 import { UserList } from '@/features/user/UserList/UserList';
 import { isUserAdministrator } from '@/utils/auth';
 
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getRunningQueriesThunk, searchUsers } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { isAuthorized } from '@/utils/auth';
+
 const Users = () => {
     const [request, setRequest] = useState({
         search: '',
@@ -73,45 +80,48 @@ const Users = () => {
     );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//     const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res, params }) => {
+        const session = await getServerSession(req, res, authOptions);
 
-//     const queryClient = new QueryClient();
+        if (!session?.user) {
+            res.statusCode = 401;
+            return {
+                props: {
+                    session
+                }
+            };
+        }
 
-//     const baseUrl = getBaseUrl(req);
+        const canViewPage = isAuthorized(session?.user, Users.auth);
 
-//     const request = {
-//         search: '',
-//         sort: UserSort.NAME_ASC
-//     };
+        if (!canViewPage) {
+            res.statusCode = 403;
 
-//     await queryClient.prefetchInfiniteQuery(
-//         ['users', request],
-//         ({ pageParam = 1 }) =>
-//             searchUsers(
-//                 { ...request, page: pageParam, size: 5 },
-//                 {
-//                     headers: {
-//                         cookie: req.headers.cookie!
-//                     }
-//                 },
-//                 baseUrl
-//             )
-//     );
+            return {
+                props: {
+                    session
+                }
+            };
+        }
 
-//     // next ssr hack!
-//     queryClient.setQueryData(['users', request], (data: any) => ({
-//         ...data,
-//         pageParams: []
-//     }));
+        const request = {
+            search: '',
+            sort: UserSort.NAME_ASC,
+            page: 1,
+            size: 5
+        };
 
-//     return {
-//         props: {
-//             session,
-//             dehydratedState: dehydrate(queryClient)
-//         }
-//     };
-// };
+        store.dispatch(searchUsers.initiate(request));
+
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
+
+        return {
+            props: {
+                session
+            }
+        };
+    });
 
 Users.meta = {
     title: 'Users'

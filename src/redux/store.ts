@@ -1,16 +1,26 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { createWrapper } from 'next-redux-wrapper';
+import { Context, createWrapper } from 'next-redux-wrapper';
 import { api } from './api';
 import { logger } from './logger';
 
-export const makeStore = () => {
+export const makeStore = (context: Context) => {
+    let extraArgument: unknown = undefined;
+
+    if ('resolvedUrl' in context) {
+        extraArgument = { cookies: context.req.cookies };
+    }
+
     const store = configureStore({
         reducer: {
             [api.reducerPath]: api.reducer
         },
         middleware: getDefaultMiddleware =>
-            getDefaultMiddleware().concat(api.middleware, logger)
+            getDefaultMiddleware({
+                thunk: {
+                    extraArgument
+                }
+            }).concat(api.middleware, logger)
     });
 
     setupListeners(store.dispatch);

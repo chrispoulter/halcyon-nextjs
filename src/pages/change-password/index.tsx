@@ -9,6 +9,12 @@ import {
     ChangePasswordFormValues
 } from '@/features/manage/ChangePasswordForm/ChangePasswordForm';
 
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getRunningQueriesThunk, getProfile } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+
 const ChangePassword = () => {
     const router = useRouter();
 
@@ -49,6 +55,30 @@ const ChangePassword = () => {
         </Container>
     );
 };
+
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res }) => {
+        const session = await getServerSession(req, res, authOptions);
+
+        if (!session?.user) {
+            res.statusCode = 401;
+            return {
+                props: {
+                    session
+                }
+            };
+        }
+
+        store.dispatch(getProfile.initiate());
+
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
+
+        return {
+            props: {
+                session
+            }
+        };
+    });
 
 ChangePassword.meta = {
     title: 'Change Password'

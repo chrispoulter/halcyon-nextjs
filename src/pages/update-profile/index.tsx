@@ -8,6 +8,12 @@ import {
     UpdateProfileFormValues
 } from '@/features/manage/UpdateProfileForm/UpdateProfileForm';
 
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getRunningQueriesThunk, getProfile } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+
 const UpdateProfile = () => {
     const router = useRouter();
 
@@ -39,29 +45,29 @@ const UpdateProfile = () => {
     );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//     const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res }) => {
+        const session = await getServerSession(req, res, authOptions);
 
-//     const queryClient = new QueryClient();
+        if (!session?.user) {
+            res.statusCode = 401;
+            return {
+                props: {
+                    session
+                }
+            };
+        }
 
-//     const baseUrl = getBaseUrl(req);
+        store.dispatch(getProfile.initiate());
 
-//     await queryClient.prefetchQuery(['profile'], () =>
-//         getProfile({
-//             headers: {
-//                 cookie: req.headers.cookie!
-//             }
-//         },
-//         baseUrl)
-//     );
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
-//     return {
-//         props: {
-//             session,
-//             dehydratedState: dehydrate(queryClient)
-//         }
-//     };
-// };
+        return {
+            props: {
+                session
+            }
+        };
+    });
 
 UpdateProfile.meta = {
     title: 'Update Profile'

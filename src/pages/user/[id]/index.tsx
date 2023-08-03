@@ -20,6 +20,13 @@ import {
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
 import { isUserAdministrator } from '@/utils/auth';
 
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getRunningQueriesThunk, getUser } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { isAuthorized } from '@/utils/auth';
+
 const UpdateUser = () => {
     const router = useRouter();
 
@@ -140,38 +147,43 @@ const UpdateUser = () => {
     );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({
-//     req,
-//     res,
-//     params
-// }) => {
-//     const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res, params }) => {
+        const session = await getServerSession(req, res, authOptions);
 
-//     const id = params?.id as string;
+        if (!session?.user) {
+            res.statusCode = 401;
+            return {
+                props: {
+                    session
+                }
+            };
+        }
 
-//     const queryClient = new QueryClient();
+        const canViewPage = isAuthorized(session?.user, UpdateUser.auth);
 
-//     const baseUrl = getBaseUrl(req);
+        if (!canViewPage) {
+            res.statusCode = 403;
 
-//     await queryClient.prefetchQuery(['user', id], () =>
-//         getUser(
-//             id,
-//             {
-//                 headers: {
-//                     cookie: req.headers.cookie!
-//                 }
-//             },
-//             baseUrl
-//         )
-//     );
+            return {
+                props: {
+                    session
+                }
+            };
+        }
 
-//     return {
-//         props: {
-//             session,
-//             dehydratedState: dehydrate(queryClient)
-//         }
-//     };
-// };
+        const id = params?.id as string;
+
+        store.dispatch(getUser.initiate(id));
+
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
+
+        return {
+            props: {
+                session
+            }
+        };
+    });
 
 UpdateUser.meta = {
     title: 'Update User'
