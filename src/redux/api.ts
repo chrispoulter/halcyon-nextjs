@@ -26,6 +26,7 @@ import {
     UnlockUserRequest,
     UpdateUserRequest
 } from '@/models/user.types';
+import { config } from '@/utils/config';
 
 const isExtraWithCookies = (
     extra: unknown
@@ -55,7 +56,7 @@ const prepareHeaders = (
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3000/api',
+        baseUrl: config.API_URL,
         prepareHeaders
     }),
     extractRehydrationInfo(action, { reducerPath }) {
