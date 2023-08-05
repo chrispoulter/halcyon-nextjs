@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { PageSkeleton } from '@/components/Skeleton/Skeleton';
-import Forbidden from '@/pages/403';
+import ForbiddenPage from '@/pages/403';
 import { Role, isAuthorized } from '@/utils/auth';
 
 type AuthProps = React.PropsWithChildren<{
@@ -15,7 +15,7 @@ export const Auth = ({ auth, children }: AuthProps) => {
     }
 
     if (auth instanceof Array && !isAuthorized(session?.user, auth)) {
-        return <Forbidden />;
+        return <ForbiddenPage />;
     }
 
     return <>{children}</>;
