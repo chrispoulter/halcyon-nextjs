@@ -11,7 +11,7 @@ import {
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk, getProfile } from '@/redux/api';
+import { getProfile } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
@@ -61,17 +61,21 @@ export const getServerSideProps: GetServerSideProps =
         const session = await getServerSession(req, res, authOptions);
 
         if (!session?.user) {
-            res.statusCode = 401;
             return {
-                props: {
-                    session
+                redirect: {
+                    destination: '/',
+                    permanent: false
                 }
             };
         }
 
-        store.dispatch(getProfile.initiate());
+        const result = await store.dispatch(getProfile.initiate());
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
+        if (!result.data?.data) {
+            return {
+                notFound: true
+            };
+        }
 
         return {
             props: {

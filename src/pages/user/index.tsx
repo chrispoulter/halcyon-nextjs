@@ -85,22 +85,21 @@ export const getServerSideProps: GetServerSideProps =
         const session = await getServerSession(req, res, authOptions);
 
         if (!session?.user) {
-            res.statusCode = 401;
             return {
-                props: {
-                    session
+                redirect: {
+                    destination: '/',
+                    permanent: false
                 }
             };
         }
 
-        const canViewPage = isAuthorized(session?.user, Users.auth);
+        const canViewPage = isAuthorized(session?.user, isUserAdministrator);
 
         if (!canViewPage) {
-            res.statusCode = 403;
-
             return {
-                props: {
-                    session
+                redirect: {
+                    destination: '/403',
+                    permanent: false
                 }
             };
         }

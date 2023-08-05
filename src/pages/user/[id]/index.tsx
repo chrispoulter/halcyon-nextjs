@@ -22,7 +22,7 @@ import { isUserAdministrator } from '@/utils/auth';
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk, getUser } from '@/redux/api';
+import { getUser } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { isAuthorized } from '@/utils/auth';
@@ -152,31 +152,34 @@ export const getServerSideProps: GetServerSideProps =
         const session = await getServerSession(req, res, authOptions);
 
         if (!session?.user) {
-            res.statusCode = 401;
             return {
-                props: {
-                    session
+                redirect: {
+                    destination: '/',
+                    permanent: false
                 }
             };
         }
 
-        const canViewPage = isAuthorized(session?.user, UpdateUser.auth);
+        const canViewPage = isAuthorized(session?.user, isUserAdministrator);
 
         if (!canViewPage) {
-            res.statusCode = 403;
-
             return {
-                props: {
-                    session
+                redirect: {
+                    destination: '/403',
+                    permanent: false
                 }
             };
         }
 
         const id = params?.id as string;
 
-        store.dispatch(getUser.initiate(id));
+        const result = await store.dispatch(getUser.initiate(id));
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
+        if (!result.data?.data) {
+            return {
+                notFound: true
+            };
+        }
 
         return {
             props: {
