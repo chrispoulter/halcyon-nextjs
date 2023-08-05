@@ -1,5 +1,9 @@
 import { useRouter } from 'next/router';
-import { useChangePasswordMutation, useGetProfileQuery } from '@/redux/api';
+import {
+    getRunningQueriesThunk,
+    useChangePasswordMutation,
+    useGetProfileQuery
+} from '@/redux/api';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { BodyLink } from '@/components/BodyLink/BodyLink';
@@ -60,22 +64,9 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session?.user) {
-            return {
-                redirect: {
-                    destination: '/',
-                    permanent: false
-                }
-            };
-        }
+        store.dispatch(getProfile.initiate());
 
-        const result = await store.dispatch(getProfile.initiate());
-
-        if (!result.data?.data) {
-            return {
-                notFound: true
-            };
-        }
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
         return {
             props: {

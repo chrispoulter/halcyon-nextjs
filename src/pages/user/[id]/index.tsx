@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import {
+    getRunningQueriesThunk,
     useDeleteUserMutation,
     useGetUserQuery,
     useLockUserMutation,
@@ -25,7 +26,6 @@ import { getServerSession } from 'next-auth';
 import { getUser } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { isAuthorized } from '@/utils/auth';
 
 const UpdateUser = () => {
     const router = useRouter();
@@ -151,35 +151,11 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res, params }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session?.user) {
-            return {
-                redirect: {
-                    destination: '/',
-                    permanent: false
-                }
-            };
-        }
-
-        const canViewPage = isAuthorized(session?.user, isUserAdministrator);
-
-        if (!canViewPage) {
-            return {
-                redirect: {
-                    destination: '/403',
-                    permanent: false
-                }
-            };
-        }
-
         const id = params?.id as string;
 
-        const result = await store.dispatch(getUser.initiate(id));
+        store.dispatch(getUser.initiate(id));
 
-        if (!result.data?.data) {
-            return {
-                notFound: true
-            };
-        }
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
         return {
             props: {

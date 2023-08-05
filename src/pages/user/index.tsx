@@ -19,7 +19,6 @@ import { getServerSession } from 'next-auth';
 import { getRunningQueriesThunk, searchUsers } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { isAuthorized } from '@/utils/auth';
 
 const Users = () => {
     const [request, setRequest] = useState({
@@ -83,26 +82,6 @@ const Users = () => {
 export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
-
-        if (!session?.user) {
-            return {
-                redirect: {
-                    destination: '/',
-                    permanent: false
-                }
-            };
-        }
-
-        const canViewPage = isAuthorized(session?.user, isUserAdministrator);
-
-        if (!canViewPage) {
-            return {
-                redirect: {
-                    destination: '/403',
-                    permanent: false
-                }
-            };
-        }
 
         const request = {
             search: '',
