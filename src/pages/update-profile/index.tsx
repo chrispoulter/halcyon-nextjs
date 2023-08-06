@@ -4,6 +4,7 @@ import {
     useGetProfileQuery,
     useUpdateProfileMutation
 } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -33,19 +34,23 @@ const UpdateProfile = () => {
     };
 
     return (
-        <Container>
-            <PageTitle>Update Profile</PageTitle>
+        <>
+            <Meta title="Update Profile" />
 
-            <UpdateProfileForm
-                profile={profile?.data}
-                onSubmit={onSubmit}
-                options={
-                    <ButtonLink href="/my-account" variant="secondary">
-                        Cancel
-                    </ButtonLink>
-                }
-            />
-        </Container>
+            <Container>
+                <PageTitle>Update Profile</PageTitle>
+
+                <UpdateProfileForm
+                    profile={profile?.data}
+                    onSubmit={onSubmit}
+                    options={
+                        <ButtonLink href="/my-account" variant="secondary">
+                            Cancel
+                        </ButtonLink>
+                    }
+                />
+            </Container>
+        </>
     );
 };
 
@@ -63,11 +68,5 @@ export const getServerSideProps: GetServerSideProps =
             }
         };
     });
-
-UpdateProfile.meta = {
-    title: 'Update Profile'
-};
-
-UpdateProfile.auth = true;
 
 export default UpdateProfile;

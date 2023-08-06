@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { UserSort } from '@/models/user.types';
 import { useSearchUsersQuery } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -12,7 +13,6 @@ import {
 } from '@/features/user/SearchUserForm/SearchUserForm';
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
-import { isUserAdministrator } from '@/utils/auth';
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
@@ -43,39 +43,43 @@ const Users = () => {
     const onSort = (sort: UserSort) => setRequest({ ...request, sort });
 
     return (
-        <Container>
-            <PageTitle>Users</PageTitle>
+        <>
+            <Meta title="Users" />
 
-            <div className="mb-3 flex gap-1">
-                <SearchUserForm
-                    values={request}
-                    onSubmit={onSubmit}
-                    isLoading={isLoading || isFetching}
+            <Container>
+                <PageTitle>Users</PageTitle>
+
+                <div className="mb-3 flex gap-1">
+                    <SearchUserForm
+                        values={request}
+                        onSubmit={onSubmit}
+                        isLoading={isLoading || isFetching}
+                    />
+                    <SortUserDropdown
+                        selected={request.sort}
+                        onSelect={onSort}
+                        isLoading={isLoading || isFetching}
+                    />
+                </div>
+
+                <ButtonGroup className="mb-3">
+                    <ButtonLink href="/user/create" variant="primary">
+                        Create New
+                    </ButtonLink>
+                </ButtonGroup>
+
+                <UserList isLoading={isLoading} users={users?.data?.items} />
+
+                <Pager
+                    isLoading={isLoading}
+                    isFetching={isFetching}
+                    hasNextPage={users?.data?.hasNextPage}
+                    hasPreviousPage={users?.data?.hasPreviousPage}
+                    onNextPage={onNextPage}
+                    onPreviousPage={onPreviousPage}
                 />
-                <SortUserDropdown
-                    selected={request.sort}
-                    onSelect={onSort}
-                    isLoading={isLoading || isFetching}
-                />
-            </div>
-
-            <ButtonGroup className="mb-3">
-                <ButtonLink href="/user/create" variant="primary">
-                    Create New
-                </ButtonLink>
-            </ButtonGroup>
-
-            <UserList isLoading={isLoading} users={users?.data?.items} />
-
-            <Pager
-                isLoading={isLoading}
-                isFetching={isFetching}
-                hasNextPage={users?.data?.hasNextPage}
-                hasPreviousPage={users?.data?.hasPreviousPage}
-                onNextPage={onNextPage}
-                onPreviousPage={onPreviousPage}
-            />
-        </Container>
+            </Container>
+        </>
     );
 };
 
@@ -100,11 +104,5 @@ export const getServerSideProps: GetServerSideProps =
             }
         };
     });
-
-Users.meta = {
-    title: 'Users'
-};
-
-Users.auth = isUserAdministrator;
 
 export default Users;

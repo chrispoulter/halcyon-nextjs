@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useResetPasswordMutation } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import {
@@ -24,15 +25,15 @@ const ResetPassword = () => {
     };
 
     return (
-        <Container>
-            <PageTitle>Reset Password</PageTitle>
-            <ResetPasswordForm onSubmit={onSubmit} />
-        </Container>
-    );
-};
+        <>
+            <Meta title="Reset Password" />
 
-ResetPassword.meta = {
-    title: 'Reset Password'
+            <Container>
+                <PageTitle>Reset Password</PageTitle>
+                <ResetPasswordForm onSubmit={onSubmit} />
+            </Container>
+        </>
+    );
 };
 
 export default ResetPassword;

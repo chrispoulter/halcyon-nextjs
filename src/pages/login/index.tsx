@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { BodyLink } from '@/components/BodyLink/BodyLink';
@@ -33,23 +34,23 @@ const Login = () => {
     };
 
     return (
-        <Container>
-            <PageTitle>Login</PageTitle>
-            <LoginForm onSubmit={onSubmit} className="mb-5" />
+        <>
+            <Meta title="Login" />
 
-            <p className="text-sm leading-loose text-gray-600">
-                Not already a member?{' '}
-                <BodyLink href="/register">Register now</BodyLink>
-                <br />
-                Forgotten your password?{' '}
-                <BodyLink href="/forgot-password">Request reset</BodyLink>
-            </p>
-        </Container>
+            <Container>
+                <PageTitle>Login</PageTitle>
+                <LoginForm onSubmit={onSubmit} className="mb-5" />
+
+                <p className="text-sm leading-loose text-gray-600">
+                    Not already a member?{' '}
+                    <BodyLink href="/register">Register now</BodyLink>
+                    <br />
+                    Forgotten your password?{' '}
+                    <BodyLink href="/forgot-password">Request reset</BodyLink>
+                </p>
+            </Container>
+        </>
     );
-};
-
-Login.meta = {
-    title: 'Login'
 };
 
 export default Login;

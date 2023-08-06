@@ -1,3 +1,4 @@
+import { Meta } from '@/components/Meta/Meta';
 import {
     Jumbotron,
     JumbotronBody,
@@ -7,21 +8,21 @@ import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 
 const Error = () => (
-    <Jumbotron>
-        <JumbotronTitle>Error</JumbotronTitle>
-        <JumbotronBody>
-            Sorry, something went wrong. Please try again later.
-        </JumbotronBody>
-        <ButtonGroup>
-            <ButtonLink href="/" size="lg">
-                Home
-            </ButtonLink>
-        </ButtonGroup>
-    </Jumbotron>
-);
+    <>
+        <Meta title="Error" />
 
-Error.meta = {
-    title: 'Error'
-};
+        <Jumbotron>
+            <JumbotronTitle>Error</JumbotronTitle>
+            <JumbotronBody>
+                Sorry, something went wrong. Please try again later.
+            </JumbotronBody>
+            <ButtonGroup>
+                <ButtonLink href="/" size="lg">
+                    Home
+                </ButtonLink>
+            </ButtonGroup>
+        </Jumbotron>
+    </>
+);
 
 export default Error;

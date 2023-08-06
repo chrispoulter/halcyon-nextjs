@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useForgotPasswordMutation } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import {
@@ -18,15 +19,15 @@ const ForgotPassword = () => {
     };
 
     return (
-        <Container>
-            <PageTitle>Forgot Password</PageTitle>
-            <ForgotPasswordForm onSubmit={onSubmit} />
-        </Container>
-    );
-};
+        <>
+            <Meta title="Forgot Password" />
 
-ForgotPassword.meta = {
-    title: 'Forgot Password'
+            <Container>
+                <PageTitle>Forgot Password</PageTitle>
+                <ForgotPasswordForm onSubmit={onSubmit} />
+            </Container>
+        </>
+    );
 };
 
 export default ForgotPassword;

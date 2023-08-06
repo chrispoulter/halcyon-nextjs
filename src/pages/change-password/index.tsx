@@ -4,6 +4,7 @@ import {
     useChangePasswordMutation,
     useGetProfileQuery
 } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { BodyLink } from '@/components/BodyLink/BodyLink';
@@ -38,25 +39,29 @@ const ChangePassword = () => {
     };
 
     return (
-        <Container>
-            <PageTitle>Change Password</PageTitle>
+        <>
+            <Meta title="Change Password" />
 
-            <ChangePasswordForm
-                profile={profile?.data}
-                onSubmit={onSubmit}
-                options={
-                    <ButtonLink href="/my-account" variant="secondary">
-                        Cancel
-                    </ButtonLink>
-                }
-                className="mb-5"
-            />
+            <Container>
+                <PageTitle>Change Password</PageTitle>
 
-            <p className="text-sm text-gray-600">
-                Forgotten your password?{' '}
-                <BodyLink href="/forgot-password">Request reset</BodyLink>
-            </p>
-        </Container>
+                <ChangePasswordForm
+                    profile={profile?.data}
+                    onSubmit={onSubmit}
+                    options={
+                        <ButtonLink href="/my-account" variant="secondary">
+                            Cancel
+                        </ButtonLink>
+                    }
+                    className="mb-5"
+                />
+
+                <p className="text-sm text-gray-600">
+                    Forgotten your password?{' '}
+                    <BodyLink href="/forgot-password">Request reset</BodyLink>
+                </p>
+            </Container>
+        </>
     );
 };
 
@@ -74,11 +79,5 @@ export const getServerSideProps: GetServerSideProps =
             }
         };
     });
-
-ChangePassword.meta = {
-    title: 'Change Password'
-};
-
-ChangePassword.auth = true;
 
 export default ChangePassword;

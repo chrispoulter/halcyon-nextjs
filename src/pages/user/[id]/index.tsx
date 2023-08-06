@@ -7,6 +7,7 @@ import {
     useUnlockUserMutation,
     useUpdateUserMutation
 } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageSubTitle, PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -19,7 +20,6 @@ import {
     UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
-import { isUserAdministrator } from '@/utils/auth';
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
@@ -129,21 +129,25 @@ const UpdateUser = () => {
     );
 
     return (
-        <Container>
-            <PageTitle>
-                User
-                <PageSubTitle>Update</PageSubTitle>
-            </PageTitle>
+        <>
+            <Meta title="Update User" />
 
-            <UpdateUserForm
-                user={user?.data}
-                isDisabled={
-                    isUnlocking || isLocking || isDeleting || isFetching
-                }
-                onSubmit={onSubmit}
-                options={options}
-            />
-        </Container>
+            <Container>
+                <PageTitle>
+                    User
+                    <PageSubTitle>Update</PageSubTitle>
+                </PageTitle>
+
+                <UpdateUserForm
+                    user={user?.data}
+                    isDisabled={
+                        isUnlocking || isLocking || isDeleting || isFetching
+                    }
+                    onSubmit={onSubmit}
+                    options={options}
+                />
+            </Container>
+        </>
     );
 };
 
@@ -163,11 +167,5 @@ export const getServerSideProps: GetServerSideProps =
             }
         };
     });
-
-UpdateUser.meta = {
-    title: 'Update User'
-};
-
-UpdateUser.auth = isUserAdministrator;
 
 export default UpdateUser;
