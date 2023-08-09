@@ -7,7 +7,7 @@ import {
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 
-const NotFound = () => (
+const NotFoundPage = () => (
     <>
         <Meta title="Not Found" />
 
@@ -25,4 +25,4 @@ const NotFound = () => (
     </>
 );
 
-export default NotFound;
+export default NotFoundPage;

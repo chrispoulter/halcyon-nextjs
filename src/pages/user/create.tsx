@@ -9,7 +9,7 @@ import {
     CreateUserFormValues
 } from '@/features/user/CreateUserForm/CreateUserForm';
 
-const CreateUser = () => {
+const CreateUserPage = () => {
     const router = useRouter();
 
     const [createUser] = useCreateUserMutation();
@@ -42,4 +42,4 @@ const CreateUser = () => {
     );
 };
 
-export default CreateUser;
+export default CreateUserPage;

@@ -8,7 +8,7 @@ import {
     ForgotPasswordFormValues
 } from '@/features/account/ForgotPasswordForm/ForgotPasswordForm';
 
-const ForgotPassword = () => {
+const ForgotPasswordPage = () => {
     const router = useRouter();
 
     const [forgotPassword] = useForgotPasswordMutation();
@@ -30,4 +30,4 @@ const ForgotPassword = () => {
     );
 };
 
-export default ForgotPassword;
+export default ForgotPasswordPage;

@@ -45,7 +45,7 @@ const fillRegisterForm = (values: RegisterFormValues) => {
     });
 };
 
-describe('<Register />', () => {
+describe('<RegisterPage />', () => {
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 

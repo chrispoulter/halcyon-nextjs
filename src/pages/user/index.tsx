@@ -20,7 +20,7 @@ import { getRunningQueriesThunk, searchUsers } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-const Users = () => {
+const UsersPage = () => {
     const [request, setRequest] = useState({
         search: '',
         sort: UserSort.NAME_ASC,
@@ -105,4 +105,4 @@ export const getServerSideProps: GetServerSideProps =
         };
     });
 
-export default Users;
+export default UsersPage;

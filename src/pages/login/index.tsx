@@ -10,7 +10,7 @@ import {
     LoginFormValues
 } from '@/features/account/LoginForm/LoginForm';
 
-const Login = () => {
+const LoginPage = () => {
     const router = useRouter();
 
     const callbackUrl = router.query.callbackUrl as string;
@@ -53,4 +53,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginPage;

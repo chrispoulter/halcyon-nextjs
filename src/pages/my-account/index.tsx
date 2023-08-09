@@ -13,7 +13,7 @@ import { getRunningQueriesThunk, getProfile } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-const MyAccount = () => {
+const MyAccountPage = () => {
     const { data: profile } = useGetProfileQuery();
 
     const [deleteAccount, { isLoading: isDeleting }] =
@@ -60,4 +60,4 @@ export const getServerSideProps: GetServerSideProps =
         };
     });
 
-export default MyAccount;
+export default MyAccountPage;

@@ -10,7 +10,7 @@ jest.mock('next-auth', () => ({
     default: jest.fn()
 }));
 
-describe('<Home />', () => {
+describe('<HomePage />', () => {
     it('renders a heading', () => {
         render(<HomePage />);
 

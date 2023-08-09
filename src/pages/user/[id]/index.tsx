@@ -27,7 +27,7 @@ import { getUser } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-const UpdateUser = () => {
+const UpdateUserPage = () => {
     const router = useRouter();
 
     const id = router.query.id as string;
@@ -168,4 +168,4 @@ export const getServerSideProps: GetServerSideProps =
         };
     });
 
-export default UpdateUser;
+export default UpdateUserPage;

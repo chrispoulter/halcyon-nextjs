@@ -9,7 +9,7 @@ import {
     RegisterFormValues
 } from '@/features/account/RegisterForm/RegisterForm';
 
-const Register = () => {
+const RegisterPage = () => {
     const [register] = useRegisterMutation();
 
     const onSubmit = async (values: RegisterFormValues) => {
@@ -34,4 +34,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default RegisterPage;

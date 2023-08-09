@@ -7,7 +7,7 @@ import {
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 
-const Forbidden = () => (
+const ForbiddenPage = () => (
     <>
         <Meta title="Access Denied" />
 
@@ -25,4 +25,4 @@ const Forbidden = () => (
     </>
 );
 
-export default Forbidden;
+export default ForbiddenPage;

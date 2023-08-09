@@ -25,7 +25,7 @@ const response: HandlerResponse<GetProfileResponse> = {
     }
 };
 
-describe('<MyAccount />', () => {
+describe('<MyAccountPage />', () => {
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 

@@ -7,7 +7,7 @@ import {
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 
-const Error = () => (
+const ErrorPage = () => (
     <>
         <Meta title="Error" />
 
@@ -25,4 +25,4 @@ const Error = () => (
     </>
 );
 
-export default Error;
+export default ErrorPage;

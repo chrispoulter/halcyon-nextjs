@@ -10,7 +10,7 @@ import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Container } from '@/components/Container/Container';
 
-const Home = () => (
+const HomePage = () => (
     <>
         <Jumbotron>
             <JumbotronTitle>Welcome!</JumbotronTitle>
@@ -77,4 +77,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => ({
     }
 });
 
-export default Home;
+export default HomePage;

@@ -20,7 +20,7 @@ import { getProfile } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-const ChangePassword = () => {
+const ChangePasswordPage = () => {
     const router = useRouter();
 
     const { data: profile } = useGetProfileQuery();
@@ -80,4 +80,4 @@ export const getServerSideProps: GetServerSideProps =
         };
     });
 
-export default ChangePassword;
+export default ChangePasswordPage;

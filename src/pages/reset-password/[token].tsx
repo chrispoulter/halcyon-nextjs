@@ -8,7 +8,7 @@ import {
     ResetPasswordFormValues
 } from '@/features/account/ResetPasswordForm/ResetPasswordForm';
 
-const ResetPassword = () => {
+const ResetPasswordPage = () => {
     const router = useRouter();
 
     const token = router.query.token as string;
@@ -36,4 +36,4 @@ const ResetPassword = () => {
     );
 };
 
-export default ResetPassword;
+export default ResetPasswordPage;
