@@ -35,8 +35,11 @@ describe('<MyAccountPage />', () => {
         })
     );
 
-    it('renders a heading', () => {
+    it('renders a heading', async () => {
         render(<MyAccountPage />, { wrapper: storeWrapper });
+
+        const loading = screen.getAllByText(/loading/i);
+        await waitForElementToBeRemoved(loading);
 
         const heading = screen.getByRole('heading', {
             name: /my account/i
