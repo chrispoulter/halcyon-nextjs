@@ -18,7 +18,7 @@ export const logger: Middleware = () => next => async action => {
             case 'GET':
                 switch (status) {
                     case 401:
-                        await signOut({ callbackUrl: router.asPath });
+                        await signOut({ callbackUrl: '/' });
                         break;
 
                     case 403:
@@ -39,7 +39,7 @@ export const logger: Middleware = () => next => async action => {
             default:
                 switch (status) {
                     case 401:
-                        await signOut({ callbackUrl: router.asPath });
+                        await signOut({ callbackUrl: '/' });
                         break;
 
                     case 403:
