@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
 import { signIn } from 'next-auth/react';
 import { HandlerResponse, UpdatedResponse } from '@/models/base.types';
-import Register from '@/pages/register';
+import RegisterPage from '@/pages/register';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
 import { storeWrapper } from '@/utils/test-utils';
 
@@ -45,12 +45,12 @@ const fillRegisterForm = (values: RegisterFormValues) => {
     });
 };
 
-describe('<Register />', () => {
+describe('<RegisterPage />', () => {
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 
     it('renders a heading', () => {
-        render(<Register />, { wrapper: storeWrapper });
+        render(<RegisterPage />, { wrapper: storeWrapper });
 
         const heading = screen.getByRole('heading', {
             name: /register/i
@@ -66,7 +66,7 @@ describe('<Register />', () => {
             headers: { 'content-type': 'application/json' }
         });
 
-        render(<Register />, { wrapper: storeWrapper });
+        render(<RegisterPage />, { wrapper: storeWrapper });
 
         fillRegisterForm({
             emailAddress: 'test@test.com',

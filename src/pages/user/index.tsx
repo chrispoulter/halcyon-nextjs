@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { UserSort } from '@/models/user.types';
 import { useSearchUsersQuery } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -12,9 +13,14 @@ import {
 } from '@/features/user/SearchUserForm/SearchUserForm';
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
-import { isUserAdministrator } from '@/utils/auth';
 
-const Users = () => {
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getRunningQueriesThunk, searchUsers } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+
+const UsersPage = () => {
     const [request, setRequest] = useState({
         search: '',
         sort: UserSort.NAME_ASC,
@@ -37,86 +43,66 @@ const Users = () => {
     const onSort = (sort: UserSort) => setRequest({ ...request, sort });
 
     return (
-        <Container>
-            <PageTitle>Users</PageTitle>
+        <>
+            <Meta title="Users" />
 
-            <div className="mb-3 flex gap-1">
-                <SearchUserForm
-                    values={request}
-                    onSubmit={onSubmit}
-                    isLoading={isLoading || isFetching}
+            <Container>
+                <PageTitle>Users</PageTitle>
+
+                <div className="mb-3 flex gap-1">
+                    <SearchUserForm
+                        values={request}
+                        onSubmit={onSubmit}
+                        isLoading={isLoading || isFetching}
+                    />
+                    <SortUserDropdown
+                        selected={request.sort}
+                        onSelect={onSort}
+                        isLoading={isLoading || isFetching}
+                    />
+                </div>
+
+                <ButtonGroup className="mb-3">
+                    <ButtonLink href="/user/create" variant="primary">
+                        Create New
+                    </ButtonLink>
+                </ButtonGroup>
+
+                <UserList isLoading={isLoading} users={users?.data?.items} />
+
+                <Pager
+                    isLoading={isLoading}
+                    isFetching={isFetching}
+                    hasNextPage={users?.data?.hasNextPage}
+                    hasPreviousPage={users?.data?.hasPreviousPage}
+                    onNextPage={onNextPage}
+                    onPreviousPage={onPreviousPage}
                 />
-                <SortUserDropdown
-                    selected={request.sort}
-                    onSelect={onSort}
-                    isLoading={isLoading || isFetching}
-                />
-            </div>
-
-            <ButtonGroup className="mb-3">
-                <ButtonLink href="/user/create" variant="primary">
-                    Create New
-                </ButtonLink>
-            </ButtonGroup>
-
-            <UserList isLoading={isLoading} users={users?.data?.items} />
-
-            <Pager
-                isLoading={isLoading}
-                isFetching={isFetching}
-                hasNextPage={users?.data?.hasNextPage}
-                hasPreviousPage={users?.data?.hasPreviousPage}
-                onNextPage={onNextPage}
-                onPreviousPage={onPreviousPage}
-            />
-        </Container>
+            </Container>
+        </>
     );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//     const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res }) => {
+        const session = await getServerSession(req, res, authOptions);
 
-//     const queryClient = new QueryClient();
+        const request = {
+            search: '',
+            sort: UserSort.NAME_ASC,
+            page: 1,
+            size: 5
+        };
 
-//     const baseUrl = getBaseUrl(req);
+        store.dispatch(searchUsers.initiate(request));
 
-//     const request = {
-//         search: '',
-//         sort: UserSort.NAME_ASC
-//     };
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
-//     await queryClient.prefetchInfiniteQuery(
-//         ['users', request],
-//         ({ pageParam = 1 }) =>
-//             searchUsers(
-//                 { ...request, page: pageParam, size: 5 },
-//                 {
-//                     headers: {
-//                         cookie: req.headers.cookie!
-//                     }
-//                 },
-//                 baseUrl
-//             )
-//     );
+        return {
+            props: {
+                session
+            }
+        };
+    });
 
-//     // next ssr hack!
-//     queryClient.setQueryData(['users', request], (data: any) => ({
-//         ...data,
-//         pageParams: []
-//     }));
-
-//     return {
-//         props: {
-//             session,
-//             dehydratedState: dehydrate(queryClient)
-//         }
-//     };
-// };
-
-Users.meta = {
-    title: 'Users'
-};
-
-Users.auth = isUserAdministrator;
-
-export default Users;
+export default UsersPage;

@@ -1,12 +1,19 @@
 import { signOut } from 'next-auth/react';
 import { useDeleteAccountMutation, useGetProfileQuery } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/PersonalDetailsCard';
 import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
 import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
 
-const MyAccount = () => {
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getRunningQueriesThunk, getProfile } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+
+const MyAccountPage = () => {
     const { data: profile } = useGetProfileQuery();
 
     const [deleteAccount, { isLoading: isDeleting }] =
@@ -20,50 +27,37 @@ const MyAccount = () => {
     };
 
     return (
-        <Container>
-            <PageTitle>My Account</PageTitle>
-            <PersonalDetailsCard profile={profile?.data} className="mb-5" />
-            <LoginDetailsCard profile={profile?.data} className="mb-5" />
+        <>
+            <Meta title="My Account" />
 
-            <AccountSettingsCard
-                profile={profile?.data}
-                isDeleting={isDeleting}
-                onDelete={onDelete}
-            />
-        </Container>
+            <Container>
+                <PageTitle>My Account</PageTitle>
+                <PersonalDetailsCard profile={profile?.data} className="mb-5" />
+                <LoginDetailsCard profile={profile?.data} className="mb-5" />
+
+                <AccountSettingsCard
+                    profile={profile?.data}
+                    isDeleting={isDeleting}
+                    onDelete={onDelete}
+                />
+            </Container>
+        </>
     );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//     const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res }) => {
+        const session = await getServerSession(req, res, authOptions);
 
-//     const queryClient = new QueryClient();
+        store.dispatch(getProfile.initiate());
 
-//     const baseUrl = getBaseUrl(req);
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
-//     await queryClient.prefetchQuery(['profile'], () =>
-//         getProfile(
-//             {
-//                 headers: {
-//                     cookie: req.headers.cookie!
-//                 }
-//             },
-//             baseUrl
-//         )
-//     );
+        return {
+            props: {
+                session
+            }
+        };
+    });
 
-//     return {
-//         props: {
-//             session,
-//             dehydratedState: dehydrate(queryClient)
-//         }
-//     };
-// };
-
-MyAccount.meta = {
-    title: 'My Account'
-};
-
-MyAccount.auth = true;
-
-export default MyAccount;
+export default MyAccountPage;

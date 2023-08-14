@@ -1,8 +1,6 @@
 import clsx from 'clsx';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Card, CardBody, CardTitle } from '@/components/Card/Card';
-import { Container } from '@/components/Container/Container';
-import { PageTitle } from '@/components/PageTitle/PageTitle';
 
 type SkeletonProps = { className?: string };
 
@@ -66,33 +64,4 @@ export const CardSkeleton = ({ className, children }: CardSkeletonProps) => (
         </ButtonGroup>
         <span className="sr-only">Loading...</span>
     </Card>
-);
-
-export const PageSkeleton = () => (
-    <Container role="status" className="animate-pulse">
-        <PageTitle>
-            <div className="h-8 w-4/12 bg-gray-200" />
-        </PageTitle>
-
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-3 h-5 w-7/12 bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-3 h-5 w-7/12 bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-3 h-5 w-7/12 bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-3 h-5 w-7/12 bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-3 h-5 w-7/12 bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="mb-3 h-5 w-7/12 bg-gray-100" />
-        <div className="mb-1 h-5 w-full bg-gray-100" />
-        <div className="h-5 w-7/12 bg-gray-100" />
-        <span className="sr-only">Loading...</span>
-    </Container>
 );

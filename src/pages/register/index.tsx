@@ -1,5 +1,6 @@
 import { signIn } from 'next-auth/react';
 import { useRegisterMutation } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { BodyLink } from '@/components/BodyLink/BodyLink';
@@ -8,7 +9,7 @@ import {
     RegisterFormValues
 } from '@/features/account/RegisterForm/RegisterForm';
 
-const Register = () => {
+const RegisterPage = () => {
     const [register] = useRegisterMutation();
 
     const onSubmit = async (values: RegisterFormValues) => {
@@ -17,20 +18,20 @@ const Register = () => {
     };
 
     return (
-        <Container>
-            <PageTitle>Register</PageTitle>
-            <RegisterForm onSubmit={onSubmit} className="mb-5" />
+        <>
+            <Meta title="Register" />
 
-            <p className="text-sm text-gray-600">
-                Already have an account?{' '}
-                <BodyLink href="/login">Log in now</BodyLink>
-            </p>
-        </Container>
+            <Container>
+                <PageTitle>Register</PageTitle>
+                <RegisterForm onSubmit={onSubmit} className="mb-5" />
+
+                <p className="text-sm text-gray-600">
+                    Already have an account?{' '}
+                    <BodyLink href="/login">Log in now</BodyLink>
+                </p>
+            </Container>
+        </>
     );
 };
 
-Register.meta = {
-    title: 'Register'
-};
-
-export default Register;
+export default RegisterPage;

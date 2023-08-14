@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
 import {
+    getRunningQueriesThunk,
     useDeleteUserMutation,
     useGetUserQuery,
     useLockUserMutation,
     useUnlockUserMutation,
     useUpdateUserMutation
 } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageSubTitle, PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -18,9 +20,14 @@ import {
     UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
-import { isUserAdministrator } from '@/utils/auth';
 
-const UpdateUser = () => {
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getUser } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+
+const UpdateUserPage = () => {
     const router = useRouter();
 
     const id = router.query.id as string;
@@ -122,61 +129,43 @@ const UpdateUser = () => {
     );
 
     return (
-        <Container>
-            <PageTitle>
-                User
-                <PageSubTitle>Update</PageSubTitle>
-            </PageTitle>
+        <>
+            <Meta title="Update User" />
 
-            <UpdateUserForm
-                user={user?.data}
-                isDisabled={
-                    isUnlocking || isLocking || isDeleting || isFetching
-                }
-                onSubmit={onSubmit}
-                options={options}
-            />
-        </Container>
+            <Container>
+                <PageTitle>
+                    User
+                    <PageSubTitle>Update</PageSubTitle>
+                </PageTitle>
+
+                <UpdateUserForm
+                    user={user?.data}
+                    isDisabled={
+                        isUnlocking || isLocking || isDeleting || isFetching
+                    }
+                    onSubmit={onSubmit}
+                    options={options}
+                />
+            </Container>
+        </>
     );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({
-//     req,
-//     res,
-//     params
-// }) => {
-//     const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res, params }) => {
+        const session = await getServerSession(req, res, authOptions);
 
-//     const id = params?.id as string;
+        const id = params?.id as string;
 
-//     const queryClient = new QueryClient();
+        store.dispatch(getUser.initiate(id));
 
-//     const baseUrl = getBaseUrl(req);
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
-//     await queryClient.prefetchQuery(['user', id], () =>
-//         getUser(
-//             id,
-//             {
-//                 headers: {
-//                     cookie: req.headers.cookie!
-//                 }
-//             },
-//             baseUrl
-//         )
-//     );
+        return {
+            props: {
+                session
+            }
+        };
+    });
 
-//     return {
-//         props: {
-//             session,
-//             dehydratedState: dehydrate(queryClient)
-//         }
-//     };
-// };
-
-UpdateUser.meta = {
-    title: 'Update User'
-};
-
-UpdateUser.auth = isUserAdministrator;
-
-export default UpdateUser;
+export default UpdateUserPage;

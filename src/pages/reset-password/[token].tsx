@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useResetPasswordMutation } from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import {
@@ -7,7 +8,7 @@ import {
     ResetPasswordFormValues
 } from '@/features/account/ResetPasswordForm/ResetPasswordForm';
 
-const ResetPassword = () => {
+const ResetPasswordPage = () => {
     const router = useRouter();
 
     const token = router.query.token as string;
@@ -24,15 +25,15 @@ const ResetPassword = () => {
     };
 
     return (
-        <Container>
-            <PageTitle>Reset Password</PageTitle>
-            <ResetPasswordForm onSubmit={onSubmit} />
-        </Container>
+        <>
+            <Meta title="Reset Password" />
+
+            <Container>
+                <PageTitle>Reset Password</PageTitle>
+                <ResetPasswordForm onSubmit={onSubmit} />
+            </Container>
+        </>
     );
 };
 
-ResetPassword.meta = {
-    title: 'Reset Password'
-};
-
-export default ResetPassword;
+export default ResetPasswordPage;

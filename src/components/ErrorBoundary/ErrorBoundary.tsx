@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Error from '@/pages/500';
+import ErrorPage from '@/pages/500';
 
 type ErrorBoundaryProps = React.PropsWithChildren<{
     hasError: boolean;
@@ -41,7 +41,7 @@ class ErrorBoundaryInner extends React.Component<
             return this.props.children;
         }
 
-        return <Error />;
+        return <ErrorPage />;
     }
 }
 

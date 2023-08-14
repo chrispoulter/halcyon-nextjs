@@ -6,7 +6,6 @@ import { wrapper } from '@/redux/store';
 import { Meta } from '@/components/Meta/Meta';
 import { Header } from '@/components/Header/Header';
 import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
-import { Auth } from '@/components/Auth/Auth';
 import { Footer } from '@/components/Footer/Footer';
 import { Toaster } from '@/components/Toast/Toast';
 
@@ -22,7 +21,7 @@ const App = ({ Component, ...rest }: AppProps) => {
 
     return (
         <>
-            <Meta {...Component.meta} />
+            <Meta />
 
             <style jsx global>{`
                 :root {
@@ -35,13 +34,7 @@ const App = ({ Component, ...rest }: AppProps) => {
                     <Header />
                     <main>
                         <ErrorBoundary>
-                            {Component.auth ? (
-                                <Auth auth={Component.auth}>
-                                    <Component {...props.pageProps} />
-                                </Auth>
-                            ) : (
-                                <Component {...props.pageProps} />
-                            )}
+                            <Component {...props.pageProps} />
                         </ErrorBoundary>
                     </main>
                     <Footer />

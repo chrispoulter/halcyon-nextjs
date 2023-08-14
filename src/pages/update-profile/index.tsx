@@ -1,5 +1,10 @@
 import { useRouter } from 'next/router';
-import { useGetProfileQuery, useUpdateProfileMutation } from '@/redux/api';
+import {
+    getRunningQueriesThunk,
+    useGetProfileQuery,
+    useUpdateProfileMutation
+} from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
@@ -8,7 +13,13 @@ import {
     UpdateProfileFormValues
 } from '@/features/manage/UpdateProfileForm/UpdateProfileForm';
 
-const UpdateProfile = () => {
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getProfile } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+
+const UpdateProfilePage = () => {
     const router = useRouter();
 
     const { data: profile } = useGetProfileQuery();
@@ -23,50 +34,39 @@ const UpdateProfile = () => {
     };
 
     return (
-        <Container>
-            <PageTitle>Update Profile</PageTitle>
+        <>
+            <Meta title="Update Profile" />
 
-            <UpdateProfileForm
-                profile={profile?.data}
-                onSubmit={onSubmit}
-                options={
-                    <ButtonLink href="/my-account" variant="secondary">
-                        Cancel
-                    </ButtonLink>
-                }
-            />
-        </Container>
+            <Container>
+                <PageTitle>Update Profile</PageTitle>
+
+                <UpdateProfileForm
+                    profile={profile?.data}
+                    onSubmit={onSubmit}
+                    options={
+                        <ButtonLink href="/my-account" variant="secondary">
+                            Cancel
+                        </ButtonLink>
+                    }
+                />
+            </Container>
+        </>
     );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//     const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res }) => {
+        const session = await getServerSession(req, res, authOptions);
 
-//     const queryClient = new QueryClient();
+        store.dispatch(getProfile.initiate());
 
-//     const baseUrl = getBaseUrl(req);
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
-//     await queryClient.prefetchQuery(['profile'], () =>
-//         getProfile({
-//             headers: {
-//                 cookie: req.headers.cookie!
-//             }
-//         },
-//         baseUrl)
-//     );
+        return {
+            props: {
+                session
+            }
+        };
+    });
 
-//     return {
-//         props: {
-//             session,
-//             dehydratedState: dehydrate(queryClient)
-//         }
-//     };
-// };
-
-UpdateProfile.meta = {
-    title: 'Update Profile'
-};
-
-UpdateProfile.auth = true;
-
-export default UpdateProfile;
+export default UpdateProfilePage;

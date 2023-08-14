@@ -6,8 +6,13 @@ import {
 import fetchMock from 'jest-fetch-mock';
 import { HandlerResponse } from '@/models/base.types';
 import { GetProfileResponse } from '@/models/manage.types';
-import MyAccount from '@/pages/my-account';
+import MyAccountPage from '@/pages/my-account';
 import { storeWrapper } from '@/utils/test-utils';
+
+jest.mock('next-auth', () => ({
+    __esModule: true,
+    default: jest.fn()
+}));
 
 const response: HandlerResponse<GetProfileResponse> = {
     data: {
@@ -20,7 +25,7 @@ const response: HandlerResponse<GetProfileResponse> = {
     }
 };
 
-describe('<MyAccount />', () => {
+describe('<MyAccountPage />', () => {
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 
@@ -30,8 +35,11 @@ describe('<MyAccount />', () => {
         })
     );
 
-    it('renders a heading', () => {
-        render(<MyAccount />, { wrapper: storeWrapper });
+    it('renders a heading', async () => {
+        render(<MyAccountPage />, { wrapper: storeWrapper });
+
+        const loading = screen.getAllByText(/loading/i);
+        await waitForElementToBeRemoved(loading);
 
         const heading = screen.getByRole('heading', {
             name: /my account/i
@@ -41,7 +49,7 @@ describe('<MyAccount />', () => {
     });
 
     it('renders personal details', async () => {
-        render(<MyAccount />, { wrapper: storeWrapper });
+        render(<MyAccountPage />, { wrapper: storeWrapper });
 
         const loading = screen.getAllByText(/loading/i);
         await waitForElementToBeRemoved(loading);

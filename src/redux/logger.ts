@@ -4,17 +4,21 @@ import { signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
 
 export const logger: Middleware = () => next => async action => {
+    if (typeof window === 'undefined') {
+        return next(action);
+    }
+
     if (isRejectedWithValue(action)) {
         const { request, response } = action.meta.baseQueryMeta;
         const method = request.method;
-        const status = response.status;
+        const status = response?.status;
         const message = action.payload.data?.message;
 
         switch (method) {
             case 'GET':
                 switch (status) {
                     case 401:
-                        await signOut({ callbackUrl: router.asPath });
+                        await signOut({ callbackUrl: '/' });
                         break;
 
                     case 403:
@@ -35,7 +39,7 @@ export const logger: Middleware = () => next => async action => {
             default:
                 switch (status) {
                     case 401:
-                        await signOut({ callbackUrl: router.asPath });
+                        await signOut({ callbackUrl: '/' });
                         break;
 
                     case 403:

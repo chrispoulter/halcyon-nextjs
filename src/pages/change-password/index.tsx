@@ -1,5 +1,10 @@
 import { useRouter } from 'next/router';
-import { useChangePasswordMutation, useGetProfileQuery } from '@/redux/api';
+import {
+    getRunningQueriesThunk,
+    useChangePasswordMutation,
+    useGetProfileQuery
+} from '@/redux/api';
+import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
 import { BodyLink } from '@/components/BodyLink/BodyLink';
@@ -9,7 +14,13 @@ import {
     ChangePasswordFormValues
 } from '@/features/manage/ChangePasswordForm/ChangePasswordForm';
 
-const ChangePassword = () => {
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getProfile } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+
+const ChangePasswordPage = () => {
     const router = useRouter();
 
     const { data: profile } = useGetProfileQuery();
@@ -28,32 +39,45 @@ const ChangePassword = () => {
     };
 
     return (
-        <Container>
-            <PageTitle>Change Password</PageTitle>
+        <>
+            <Meta title="Change Password" />
 
-            <ChangePasswordForm
-                profile={profile?.data}
-                onSubmit={onSubmit}
-                options={
-                    <ButtonLink href="/my-account" variant="secondary">
-                        Cancel
-                    </ButtonLink>
-                }
-                className="mb-5"
-            />
+            <Container>
+                <PageTitle>Change Password</PageTitle>
 
-            <p className="text-sm text-gray-600">
-                Forgotten your password?{' '}
-                <BodyLink href="/forgot-password">Request reset</BodyLink>
-            </p>
-        </Container>
+                <ChangePasswordForm
+                    profile={profile?.data}
+                    onSubmit={onSubmit}
+                    options={
+                        <ButtonLink href="/my-account" variant="secondary">
+                            Cancel
+                        </ButtonLink>
+                    }
+                    className="mb-5"
+                />
+
+                <p className="text-sm text-gray-600">
+                    Forgotten your password?{' '}
+                    <BodyLink href="/forgot-password">Request reset</BodyLink>
+                </p>
+            </Container>
+        </>
     );
 };
 
-ChangePassword.meta = {
-    title: 'Change Password'
-};
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res }) => {
+        const session = await getServerSession(req, res, authOptions);
 
-ChangePassword.auth = true;
+        store.dispatch(getProfile.initiate());
 
-export default ChangePassword;
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
+
+        return {
+            props: {
+                session
+            }
+        };
+    });
+
+export default ChangePasswordPage;
