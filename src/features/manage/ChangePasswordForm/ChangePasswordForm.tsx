@@ -36,7 +36,7 @@ const ChangePasswordFormLoading = () => (
     </FormSkeleton>
 );
 
-export const ChangePasswordFormInternal = ({
+const ChangePasswordFormInternal = ({
     onSubmit,
     options,
     className

@@ -49,7 +49,7 @@ const UpdateUserFormLoading = () => (
     </FormSkeleton>
 );
 
-export const UpdateUserFormInternal = ({
+const UpdateUserFormInternal = ({
     user,
     isDisabled,
     onSubmit,

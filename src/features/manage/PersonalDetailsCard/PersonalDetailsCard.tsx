@@ -10,7 +10,7 @@ type PersonalDetailsCardProps = {
     className?: string;
 };
 
-export const PersonalDetailsCardLoading = ({
+const PersonalDetailsCardLoading = ({
     className
 }: PersonalDetailsCardProps) => (
     <CardSkeleton className={className}>

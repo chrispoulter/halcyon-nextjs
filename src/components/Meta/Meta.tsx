@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-export type MetaProps = {
+type MetaProps = {
     app?: string;
     title?: string;
     separator?: string;

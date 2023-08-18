@@ -22,7 +22,7 @@ const options = [
     }
 ];
 
-export type SortUserDropdownProps = {
+type SortUserDropdownProps = {
     selected?: UserSort;
     onSelect: (value: UserSort) => void;
     isLoading?: boolean;
