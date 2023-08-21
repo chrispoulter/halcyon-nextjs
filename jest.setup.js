@@ -5,4 +5,5 @@
 // Learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
-require('jest-fetch-mock').enableMocks();
+import jestFetchMock from 'jest-fetch-mock';
+jestFetchMock.enableMocks();
