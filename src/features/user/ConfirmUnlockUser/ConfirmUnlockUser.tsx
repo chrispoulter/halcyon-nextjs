@@ -1,25 +1,49 @@
-import { Confirm, ConfirmProps } from '@/components/Confirm/Confirm';
+import { useState } from 'react';
 import { Modal, ModalBody, ModalTitle } from '@/components/Modal/Modal';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Button } from '@/components/Button/Button';
 
-type ConfirmUnlockUserProps = Pick<ConfirmProps, 'children' | 'onConfirm'>;
+type ConfirmUnlockUserProps = {
+    onConfirm: () => void;
+    loading?: boolean;
+    disabled?: boolean;
+};
 
 export const ConfirmUnlockUser = ({
-    children,
-    onConfirm
-}: ConfirmUnlockUserProps) => (
-    <Confirm
-        onConfirm={onConfirm}
-        content={(onOk, onCancel) => (
-            <Modal open={true} onClose={onCancel}>
+    onConfirm,
+    loading,
+    disabled
+}: ConfirmUnlockUserProps) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const onOk = () => {
+        onClose();
+        onConfirm();
+    };
+
+    const onOpen = () => setIsOpen(true);
+
+    const onClose = () => setIsOpen(false);
+
+    return (
+        <>
+            <Button
+                onClick={onOpen}
+                variant="warning"
+                loading={loading}
+                disabled={disabled}
+            >
+                Unlock
+            </Button>
+
+            <Modal open={isOpen} onClose={onClose}>
                 <ModalTitle>Unlock User</ModalTitle>
                 <ModalBody>
                     Are you sure you want to unlock this user account? The user
                     will now be able to access the system.
                 </ModalBody>
                 <ButtonGroup>
-                    <Button variant="secondary" onClick={onCancel}>
+                    <Button variant="secondary" onClick={onClose}>
                         Cancel
                     </Button>
                     <Button variant="warning" onClick={onOk}>
@@ -27,8 +51,6 @@ export const ConfirmUnlockUser = ({
                     </Button>
                 </ButtonGroup>
             </Modal>
-        )}
-    >
-        {children}
-    </Confirm>
-);
+        </>
+    );
+};

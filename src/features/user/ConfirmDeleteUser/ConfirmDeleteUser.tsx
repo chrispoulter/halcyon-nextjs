@@ -1,18 +1,42 @@
-import { Confirm, ConfirmProps } from '@/components/Confirm/Confirm';
+import { useState } from 'react';
 import { Modal, ModalBody, ModalTitle } from '@/components/Modal/Modal';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Button } from '@/components/Button/Button';
 
-type ConfirmDeleteUserProps = Pick<ConfirmProps, 'children' | 'onConfirm'>;
+type ConfirmDeleteUserProps = {
+    onConfirm: () => void;
+    loading?: boolean;
+    disabled?: boolean;
+};
 
 export const ConfirmDeleteUser = ({
-    children,
-    onConfirm
-}: ConfirmDeleteUserProps) => (
-    <Confirm
-        onConfirm={onConfirm}
-        content={(onOk, onCancel) => (
-            <Modal open={true} onClose={onCancel}>
+    onConfirm,
+    loading,
+    disabled
+}: ConfirmDeleteUserProps) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const onOk = () => {
+        onClose();
+        onConfirm();
+    };
+
+    const onOpen = () => setIsOpen(true);
+
+    const onClose = () => setIsOpen(false);
+
+    return (
+        <>
+            <Button
+                onClick={onOpen}
+                variant="danger"
+                loading={loading}
+                disabled={disabled}
+            >
+                Delete
+            </Button>
+
+            <Modal open={isOpen} onClose={onClose}>
                 <ModalTitle>Delete User</ModalTitle>
                 <ModalBody>
                     Are you sure you want to delete this user account? All of
@@ -20,7 +44,7 @@ export const ConfirmDeleteUser = ({
                     undone.
                 </ModalBody>
                 <ButtonGroup>
-                    <Button variant="secondary" onClick={onCancel}>
+                    <Button variant="secondary" onClick={onClose}>
                         Cancel
                     </Button>
                     <Button variant="danger" onClick={onOk}>
@@ -28,8 +52,6 @@ export const ConfirmDeleteUser = ({
                     </Button>
                 </ButtonGroup>
             </Modal>
-        )}
-    >
-        {children}
-    </Confirm>
-);
+        </>
+    );
+};

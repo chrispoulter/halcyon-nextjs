@@ -11,7 +11,6 @@ import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageSubTitle, PageTitle } from '@/components/PageTitle/PageTitle';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
-import { Button } from '@/components/Button/Button';
 import { ConfirmUnlockUser } from '@/features/user/ConfirmUnlockUser/ConfirmUnlockUser';
 import { ConfirmLockUser } from '@/features/user/ConfirmLockUser/ConfirmLockUser';
 import { ConfirmDeleteUser } from '@/features/user/ConfirmDeleteUser/ConfirmDeleteUser';
@@ -83,48 +82,30 @@ const UpdateUserPage = () => {
             </ButtonLink>
 
             {user?.data?.isLockedOut ? (
-                <ConfirmUnlockUser onConfirm={onUnlock}>
-                    <Button
-                        variant="warning"
-                        loading={isUnlocking}
-                        disabled={
-                            isDeleting ||
-                            isLocking ||
-                            isSubmitting ||
-                            isFetching
-                        }
-                    >
-                        Unlock
-                    </Button>
-                </ConfirmUnlockUser>
+                <ConfirmUnlockUser
+                    onConfirm={onUnlock}
+                    loading={isUnlocking}
+                    disabled={
+                        isDeleting || isLocking || isSubmitting || isFetching
+                    }
+                />
             ) : (
-                <ConfirmLockUser onConfirm={onLock}>
-                    <Button
-                        variant="warning"
-                        loading={isLocking}
-                        disabled={
-                            isDeleting ||
-                            isUnlocking ||
-                            isSubmitting ||
-                            isFetching
-                        }
-                    >
-                        Lock
-                    </Button>
-                </ConfirmLockUser>
+                <ConfirmLockUser
+                    onConfirm={onLock}
+                    loading={isLocking}
+                    disabled={
+                        isDeleting || isUnlocking || isSubmitting || isFetching
+                    }
+                />
             )}
 
-            <ConfirmDeleteUser onConfirm={onDelete}>
-                <Button
-                    variant="danger"
-                    loading={isDeleting}
-                    disabled={
-                        isUnlocking || isLocking || isSubmitting || isFetching
-                    }
-                >
-                    Delete
-                </Button>
-            </ConfirmDeleteUser>
+            <ConfirmDeleteUser
+                onConfirm={onDelete}
+                loading={isDeleting}
+                disabled={
+                    isUnlocking || isLocking || isSubmitting || isFetching
+                }
+            />
         </>
     );
 

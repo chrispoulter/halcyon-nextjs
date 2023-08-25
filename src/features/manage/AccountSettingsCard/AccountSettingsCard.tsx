@@ -1,6 +1,5 @@
 import { GetProfileResponse } from '@/models/manage.types';
 import { Card, CardBody, CardTitle } from '@/components/Card/Card';
-import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { CardSkeleton } from '@/components/Skeleton/Skeleton';
 import { ConfirmDeleteAccount } from '@/features/manage/ConfirmDeleteAccount/ConfirmDeleteAccount';
@@ -34,11 +33,10 @@ export const AccountSettingsCard = ({
                 be removed. Please be certain.
             </CardBody>
             <ButtonGroup align="left">
-                <ConfirmDeleteAccount onConfirm={onDelete}>
-                    <Button variant="danger" loading={isDeleting}>
-                        Delete Account
-                    </Button>
-                </ConfirmDeleteAccount>
+                <ConfirmDeleteAccount
+                    onConfirm={onDelete}
+                    loading={isDeleting}
+                />
             </ButtonGroup>
         </Card>
     );
