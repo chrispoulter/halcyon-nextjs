@@ -1,9 +1,5 @@
 import { useRouter } from 'next/router';
-import {
-    getRunningQueriesThunk,
-    useGetProfileQuery,
-    useUpdateProfileMutation
-} from '@/redux/api';
+import { useGetProfileQuery, useUpdateProfileMutation } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { PageTitle } from '@/components/PageTitle/PageTitle';
@@ -15,7 +11,7 @@ import {
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getProfile } from '@/redux/api';
+import { getProfile, getRunningQueriesThunk } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 

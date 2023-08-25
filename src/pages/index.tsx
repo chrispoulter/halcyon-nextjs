@@ -1,6 +1,3 @@
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import {
     Jumbotron,
     JumbotronBody,
@@ -9,6 +6,10 @@ import {
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Container } from '@/components/Container/Container';
+
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const HomePage = () => (
     <>

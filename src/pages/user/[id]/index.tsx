@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import {
-    getRunningQueriesThunk,
     useDeleteUserMutation,
     useGetUserQuery,
     useLockUserMutation,
@@ -22,7 +21,7 @@ import {
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getUser } from '@/redux/api';
+import { getUser, getRunningQueriesThunk } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
