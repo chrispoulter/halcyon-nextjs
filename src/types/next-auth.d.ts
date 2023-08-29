@@ -1,11 +1,14 @@
 import { DefaultUser } from 'next-auth';
-import { JwtPayload } from 'jsonwebtoken';
 import { Role } from '@/utils/auth';
 
 declare module 'next-auth' {
     interface User {
         accessToken: string;
-        decodedToken: JwtPayload;
+        email: string;
+        given_name: string;
+        family_name: string;
+        accessToken: string;
+        roles?: Role[];
     }
 
     interface Session {

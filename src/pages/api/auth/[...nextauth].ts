@@ -28,7 +28,7 @@ export const authOptions: AuthOptions = {
 
                     const result = await response.json();
 
-                    const accessToken = result.accessToken;
+                    const accessToken = result.data;
 
                     const decodedToken = verify(
                         accessToken,
@@ -41,9 +41,17 @@ export const authOptions: AuthOptions = {
 
                     return {
                         accessToken,
-                        decodedToken
+                        id: decodedToken.sub!,
+                        email: decodedToken.email!,
+                        given_name: decodedToken.given_name!,
+                        family_name: decodedToken.family_name!,
+                        roles:
+                            typeof decodedToken.roles === 'string'
+                                ? [decodedToken.roles]
+                                : decodedToken.roles
                     };
-                } catch (e) {
+                } catch (error) {
+                    console.error('auth error', error);
                     return null;
                 }
             }
