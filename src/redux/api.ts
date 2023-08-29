@@ -4,6 +4,7 @@ import {
     fetchBaseQuery
 } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
+import { getSession } from 'next-auth/react';
 import { HandlerResponse, UpdatedResponse } from '@/models/base.types';
 import {
     ForgotPasswordRequest,
@@ -36,12 +37,18 @@ const isExtraWithCookies = (
     }>;
 } => typeof extra === 'object' && extra != null && 'cookies' in extra;
 
-const prepareHeaders = (
+const prepareHeaders = async (
     headers: Headers,
     {
         extra
     }: Pick<BaseQueryApi, 'getState' | 'extra' | 'endpoint' | 'type' | 'forced'>
 ) => {
+    const session = await getSession();
+
+    if (session) {
+        headers.set('Authorization', `Bearer ${session.accessToken}`);
+    }
+
     if (isExtraWithCookies(extra)) {
         const cookie = Object.entries(extra.cookies)
             .map(([key, value]) => `${key}=${value}`)

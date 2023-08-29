@@ -1,9 +1,7 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { JwtPayload, verify } from 'jsonwebtoken';
 import { createTokenSchema } from '@/models/token.types';
-import prisma from '@/utils/prisma';
-import { verifyHash } from '@/utils/hash';
-import { Role } from '@/utils/auth';
 import { config } from '@/utils/config';
 
 export const authOptions: AuthOptions = {
@@ -17,40 +15,46 @@ export const authOptions: AuthOptions = {
             async authorize(credentials) {
                 const body = await createTokenSchema.validate(credentials);
 
-                const user = await prisma.users.findUnique({
-                    where: {
-                        emailAddress: body.emailAddress
+                try {
+                    const response = await fetch(`${config.API_URL}/token`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body)
+                    });
+
+                    if (!response.ok) {
+                        return null;
                     }
-                });
 
-                if (!user || !user.password) {
-                    throw new Error('The credentials provided were invalid.');
+                    const result = await response.json();
+
+                    const accessToken = result.accessToken;
+
+                    const decodedToken = verify(
+                        accessToken,
+                        config.JWT_SECURITY_KEY,
+                        {
+                            issuer: config.JWT_ISSUER,
+                            audience: config.JWT_AUDIENCE
+                        }
+                    ) as JwtPayload;
+
+                    return {
+                        accessToken,
+                        decodedToken
+                    };
+                } catch (e) {
+                    return null;
                 }
-
-                const verified = await verifyHash(body.password, user.password);
-
-                if (!verified) {
-                    throw new Error('The credentials provided were invalid.');
-                }
-
-                if (user.isLockedOut) {
-                    throw new Error(
-                        'This account has been locked out, please try again later.'
-                    );
-                }
-
-                return {
-                    ...user,
-                    roles: user.roles?.map(r => r as Role)
-                };
             }
         })
     ],
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.email = user.emailAddress;
-                token.name = `${user.firstName} ${user.lastName}`;
+                token.accessToken = user.accessToken;
+                token.email = user.email;
+                token.name = `${user.given_name} ${user.family_name}`;
                 token.picture = null;
                 token.roles = user.roles;
             }
@@ -59,6 +63,7 @@ export const authOptions: AuthOptions = {
         },
         async session({ session, token }) {
             if (session.user) {
+                session.accessToken = token.accessToken;
                 session.user.id = token.sub!;
                 session.user.email = token.email;
                 session.user.name = token.name;
