@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
-import { PageTitle } from '@/components/PageTitle/PageTitle';
+import { Title } from '@/components/Title/Title';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import {
     UpdateProfileForm,
@@ -34,7 +34,7 @@ const UpdateProfilePage = () => {
             <Meta title="Update Profile" />
 
             <Container>
-                <PageTitle>Update Profile</PageTitle>
+                <Title>Update Profile</Title>
 
                 <UpdateProfileForm
                     profile={profile?.data}

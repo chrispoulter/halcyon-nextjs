@@ -8,7 +8,7 @@ import {
 } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
-import { PageSubTitle, PageTitle } from '@/components/PageTitle/PageTitle';
+import { SubTitle, Title } from '@/components/Title/Title';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { ConfirmUnlockUser } from '@/features/user/ConfirmUnlockUser/ConfirmUnlockUser';
 import { ConfirmLockUser } from '@/features/user/ConfirmLockUser/ConfirmLockUser';
@@ -113,10 +113,10 @@ const UpdateUserPage = () => {
             <Meta title="Update User" />
 
             <Container>
-                <PageTitle>
+                <Title>
                     User
-                    <PageSubTitle>Update</PageSubTitle>
-                </PageTitle>
+                    <SubTitle>Update</SubTitle>
+                </Title>
 
                 <UpdateUserForm
                     user={user?.data}

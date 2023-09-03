@@ -2,8 +2,8 @@ import { signIn } from 'next-auth/react';
 import { useRegisterMutation } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
-import { PageTitle } from '@/components/PageTitle/PageTitle';
-import { BodyLink } from '@/components/BodyLink/BodyLink';
+import { Title } from '@/components/Title/Title';
+import { TextLink } from '@/components/TextLink/TextLink';
 import {
     RegisterForm,
     RegisterFormValues
@@ -22,12 +22,12 @@ const RegisterPage = () => {
             <Meta title="Register" />
 
             <Container>
-                <PageTitle>Register</PageTitle>
+                <Title>Register</Title>
                 <RegisterForm onSubmit={onSubmit} className="mb-5" />
 
                 <p className="text-sm text-gray-600">
                     Already have an account?{' '}
-                    <BodyLink href="/login">Log in now</BodyLink>
+                    <TextLink href="/login">Log in now</TextLink>
                 </p>
             </Container>
         </>

@@ -3,8 +3,8 @@ import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
-import { PageTitle } from '@/components/PageTitle/PageTitle';
-import { BodyLink } from '@/components/BodyLink/BodyLink';
+import { Title } from '@/components/Title/Title';
+import { TextLink } from '@/components/TextLink/TextLink';
 import {
     LoginForm,
     LoginFormValues
@@ -38,15 +38,15 @@ const LoginPage = () => {
             <Meta title="Login" />
 
             <Container>
-                <PageTitle>Login</PageTitle>
+                <Title>Login</Title>
                 <LoginForm onSubmit={onSubmit} className="mb-5" />
 
                 <p className="text-sm leading-loose text-gray-600">
                     Not already a member?{' '}
-                    <BodyLink href="/register">Register now</BodyLink>
+                    <TextLink href="/register">Register now</TextLink>
                     <br />
                     Forgotten your password?{' '}
-                    <BodyLink href="/forgot-password">Request reset</BodyLink>
+                    <TextLink href="/forgot-password">Request reset</TextLink>
                 </p>
             </Container>
         </>

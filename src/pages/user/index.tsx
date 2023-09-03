@@ -3,7 +3,7 @@ import { UserSort } from '@/models/user.types';
 import { useSearchUsersQuery } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
-import { PageTitle } from '@/components/PageTitle/PageTitle';
+import { Title } from '@/components/Title/Title';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Pager } from '@/components/Pager/Pager';
@@ -47,7 +47,7 @@ const UsersPage = () => {
             <Meta title="Users" />
 
             <Container>
-                <PageTitle>Users</PageTitle>
+                <Title>Users</Title>
 
                 <div className="mb-3 flex gap-1">
                     <SearchUserForm

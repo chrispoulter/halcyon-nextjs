@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import { useChangePasswordMutation, useGetProfileQuery } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
-import { PageTitle } from '@/components/PageTitle/PageTitle';
-import { BodyLink } from '@/components/BodyLink/BodyLink';
+import { Title } from '@/components/Title/Title';
+import { TextLink } from '@/components/TextLink/TextLink';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import {
     ChangePasswordForm,
@@ -39,7 +39,7 @@ const ChangePasswordPage = () => {
             <Meta title="Change Password" />
 
             <Container>
-                <PageTitle>Change Password</PageTitle>
+                <Title>Change Password</Title>
 
                 <ChangePasswordForm
                     profile={profile?.data}
@@ -54,7 +54,7 @@ const ChangePasswordPage = () => {
 
                 <p className="text-sm text-gray-600">
                     Forgotten your password?{' '}
-                    <BodyLink href="/forgot-password">Request reset</BodyLink>
+                    <TextLink href="/forgot-password">Request reset</TextLink>
                 </p>
             </Container>
         </>

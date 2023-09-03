@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useForgotPasswordMutation } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
-import { PageTitle } from '@/components/PageTitle/PageTitle';
+import { Title } from '@/components/Title/Title';
 import {
     ForgotPasswordForm,
     ForgotPasswordFormValues
@@ -23,7 +23,7 @@ const ForgotPasswordPage = () => {
             <Meta title="Forgot Password" />
 
             <Container>
-                <PageTitle>Forgot Password</PageTitle>
+                <Title>Forgot Password</Title>
                 <ForgotPasswordForm onSubmit={onSubmit} />
             </Container>
         </>

@@ -1,6 +1,6 @@
 import { SearchUserResponse } from '@/models/user.types';
 import { UserCard } from '@/features/user/UserCard/UserCard';
-import { BodyLink } from '@/components/BodyLink/BodyLink';
+import { TextLink } from '@/components/TextLink/TextLink';
 
 type UserListProps = {
     isLoading?: boolean;
@@ -20,7 +20,7 @@ const UserListEmpty = () => (
     <div className="border border-dashed bg-gray-50 px-5 py-24 text-center font-normal text-gray-500">
         No users could be found.
         <br />
-        <BodyLink href="/user/create">Create a new user?</BodyLink>
+        <TextLink href="/user/create">Create a new user?</TextLink>
     </div>
 );
 
