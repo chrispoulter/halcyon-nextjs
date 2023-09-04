@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useResetPasswordMutation } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
-import { PageTitle } from '@/components/PageTitle/PageTitle';
+import { Title } from '@/components/Title/Title';
 import {
     ResetPasswordForm,
     ResetPasswordFormValues
@@ -29,7 +29,7 @@ const ResetPasswordPage = () => {
             <Meta title="Reset Password" />
 
             <Container>
-                <PageTitle>Reset Password</PageTitle>
+                <Title>Reset Password</Title>
                 <ResetPasswordForm onSubmit={onSubmit} />
             </Container>
         </>

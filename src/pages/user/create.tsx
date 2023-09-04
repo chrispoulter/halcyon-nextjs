@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useCreateUserMutation } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
-import { PageTitle, PageSubTitle } from '@/components/PageTitle/PageTitle';
+import { Title, SubTitle } from '@/components/Title/Title';
 import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import {
     CreateUserForm,
@@ -24,10 +24,10 @@ const CreateUserPage = () => {
             <Meta title="Create User" />
 
             <Container>
-                <PageTitle>
+                <Title>
                     User
-                    <PageSubTitle>Create</PageSubTitle>
-                </PageTitle>
+                    <SubTitle>Create</SubTitle>
+                </Title>
 
                 <CreateUserForm
                     onSubmit={onSubmit}

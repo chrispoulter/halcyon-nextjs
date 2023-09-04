@@ -2,7 +2,7 @@ import { signOut } from 'next-auth/react';
 import { useDeleteAccountMutation, useGetProfileQuery } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
-import { PageTitle } from '@/components/PageTitle/PageTitle';
+import { Title } from '@/components/Title/Title';
 import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/PersonalDetailsCard';
 import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
 import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
@@ -31,7 +31,7 @@ const MyAccountPage = () => {
             <Meta title="My Account" />
 
             <Container>
-                <PageTitle>My Account</PageTitle>
+                <Title>My Account</Title>
                 <PersonalDetailsCard profile={profile?.data} className="mb-5" />
                 <LoginDetailsCard profile={profile?.data} className="mb-5" />
 
