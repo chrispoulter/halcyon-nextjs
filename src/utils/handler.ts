@@ -51,14 +51,12 @@ export const handler =
                     req.headers['Authorization']) as string;
 
                 const token = authorization?.replace(/bearer /giu, '');
-                console.log('token', token);
 
                 if (!token) {
                     throw new HandlerError(401);
                 }
 
                 const payload = verifyToken(token);
-                console.log('payload', payload);
 
                 if (!payload) {
                     throw new HandlerError(401);
