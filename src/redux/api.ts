@@ -4,7 +4,9 @@ import {
     fetchBaseQuery
 } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
+import { getServerSession } from 'next-auth';
 import { getSession } from 'next-auth/react';
+import { IncomingMessage, ServerResponse } from 'http';
 import { HandlerResponse, UpdatedResponse } from '@/models/base.types';
 import {
     ForgotPasswordRequest,
@@ -27,15 +29,23 @@ import {
     UnlockUserRequest,
     UpdateUserRequest
 } from '@/models/user.types';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { config } from '@/utils/config';
 
-const isExtraWithCookies = (
+const isExtraWithContext = (
     extra: unknown
 ): extra is {
-    cookies: Partial<{
-        [key: string]: string;
-    }>;
-} => typeof extra === 'object' && extra != null && 'cookies' in extra;
+    req: IncomingMessage & {
+        cookies: Partial<{
+            [key: string]: string;
+        }>;
+    };
+    res: ServerResponse<IncomingMessage>;
+} =>
+    typeof extra === 'object' &&
+    extra != null &&
+    'req' in extra &&
+    'res' in extra;
 
 const prepareHeaders = async (
     headers: Headers,
@@ -43,18 +53,12 @@ const prepareHeaders = async (
         extra
     }: Pick<BaseQueryApi, 'getState' | 'extra' | 'endpoint' | 'type' | 'forced'>
 ) => {
-    const session = await getSession();
+    const session = isExtraWithContext(extra)
+        ? await getServerSession(extra.req, extra.res, authOptions)
+        : await getSession();
 
     if (session) {
         headers.set('Authorization', `Bearer ${session.accessToken}`);
-    }
-
-    if (isExtraWithCookies(extra)) {
-        const cookie = Object.entries(extra.cookies)
-            .map(([key, value]) => `${key}=${value}`)
-            .join('; ');
-
-        headers.set('Cookie', cookie);
     }
 
     return headers;

@@ -8,7 +8,14 @@ import { storeWrapper } from '@/utils/test-utils';
 
 jest.mock('next-auth/react', () => ({
     __esModule: true,
+    getSession: jest.fn(),
     signIn: jest.fn()
+}));
+
+jest.mock('next-auth', () => ({
+    __esModule: true,
+    getServerSession: jest.fn(),
+    default: jest.fn()
 }));
 
 const fillRegisterForm = (values: RegisterFormValues) => {

@@ -36,7 +36,7 @@ const createTokenHandler: Handler<string> = async (req, res) => {
         });
     }
 
-    const token = await generateToken(user);
+    const token = generateToken(user);
 
     return res.json({
         data: token

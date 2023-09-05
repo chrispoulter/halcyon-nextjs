@@ -1,4 +1,4 @@
-import { JWT } from 'next-auth/jwt';
+import { JwtPayload } from 'jsonwebtoken';
 
 export enum Role {
     SYSTEM_ADMINISTRATOR = 'SYSTEM_ADMINISTRATOR',
@@ -26,11 +26,8 @@ export const isUserAdministrator = [
     Role.USER_ADMINISTRATOR
 ];
 
-export const isAuthorized = (
-    token?: Pick<JWT, 'roles'>,
-    requiredRoles?: Role[]
-) => {
-    if (!token) {
+export const isAuthorized = (payload?: JwtPayload, requiredRoles?: Role[]) => {
+    if (!payload) {
         return false;
     }
 
@@ -38,11 +35,11 @@ export const isAuthorized = (
         return true;
     }
 
-    if (!token.roles) {
+    if (!payload.roles) {
         return false;
     }
 
-    const userRoles = token.roles;
+    const userRoles = payload.roles;
 
     if (!requiredRoles.some(value => userRoles.includes(value))) {
         return false;

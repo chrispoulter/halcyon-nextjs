@@ -26,5 +26,6 @@ export const config = {
 
     JWT_SECURITY_KEY: process.env.JWT_SECURITY_KEY || 'change-me-1234567890',
     JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
-    JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient'
+    JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient',
+    JWT_EXPIRES_IN: parseInt(process.env.JWT_EXPIRES_IN || '3600')
 };

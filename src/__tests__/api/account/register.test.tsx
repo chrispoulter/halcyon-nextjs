@@ -3,13 +3,7 @@ import { Users } from '@prisma/client';
 import handler from '@/pages/api/account/register';
 import prisma from '@/utils/prisma';
 
-jest.mock('next-auth/jwt', () => ({
-    getToken: jest.fn()
-}));
 
-jest.mock('crypto', () => ({
-    randomUUID: jest.fn()
-}));
 
 const user: Users = {
     id: 1,

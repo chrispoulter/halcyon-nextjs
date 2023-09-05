@@ -1,9 +1,8 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import { getToken } from 'next-auth/jwt';
 import { ValidationError } from 'yup';
 import { HandlerResponse } from '@/models/base.types';
+import { verifyToken } from '@/utils/jwt';
 import { Role, isAuthorized } from '@/utils/auth';
-import { config } from '@/utils/config';
 
 type HandlerContext = {
     currentUserId?: number;
@@ -48,43 +47,53 @@ export const handler =
             const context: HandlerContext = {};
 
             if (options?.auth) {
-                const token = await getToken({
-                    req,
-                    secret: config.NEXTAUTH_SECRET
-                });
+                const authorization = (req.headers['authorization'] ||
+                    req.headers['Authorization']) as string;
+
+                const token = authorization?.replace(/bearer /giu, '');
+                console.log('token', token);
 
                 if (!token) {
                     throw new HandlerError(401);
                 }
 
+                const payload = verifyToken(token);
+                console.log('payload', payload);
+
+                if (!payload) {
+                    throw new HandlerError(401);
+                }
+
                 if (options.auth instanceof Array) {
-                    const authorized = isAuthorized(token, options.auth);
+                    const authorized = isAuthorized(payload, options.auth);
 
                     if (!authorized) {
                         throw new HandlerError(403);
                     }
                 }
 
-                context.currentUserId = parseInt(token.sub!);
+                context.currentUserId = parseInt(payload.sub!);
             }
 
             await handler(req, res, context);
         } catch (error) {
             if (error instanceof HandlerError) {
-                return res.status(error.status).end();
+                res.status(error.status).end();
+                return;
             }
 
             if (error instanceof ValidationError) {
-                return res.status(400).json({
+                res.status(400).json({
                     code: 'INVALID_REQUEST',
                     message: 'Request is invalid.',
                     data: error.errors
                 });
+                return;
             }
 
             console.error('api error', error);
 
-            return res.status(500).json({
+            res.status(500).json({
                 code: 'INTERNAL_SERVER_ERROR',
                 message:
                     error instanceof Error

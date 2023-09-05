@@ -48,7 +48,7 @@ export const authOptions: AuthOptions = {
                         roles:
                             typeof decodedToken.roles === 'string'
                                 ? [decodedToken.roles]
-                                : decodedToken.roles
+                                : decodedToken.roles || []
                     };
                 } catch (error) {
                     console.error('auth error', error);
