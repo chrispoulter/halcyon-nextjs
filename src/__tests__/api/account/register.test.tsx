@@ -3,8 +3,6 @@ import { Users } from '@prisma/client';
 import handler from '@/pages/api/account/register';
 import prisma from '@/utils/prisma';
 
-
-
 const user: Users = {
     id: 1,
     emailAddress: 'test@test.com',
