@@ -81,17 +81,16 @@ export const handler =
             }
 
             if (error instanceof ValidationError) {
-                res.status(400).json({
+                return res.status(400).json({
                     code: 'INVALID_REQUEST',
                     message: 'Request is invalid.',
                     data: error.errors
                 });
-                return;
             }
 
             console.error('api error', error);
 
-            res.status(500).json({
+            return res.status(500).json({
                 code: 'INTERNAL_SERVER_ERROR',
                 message:
                     error instanceof Error
