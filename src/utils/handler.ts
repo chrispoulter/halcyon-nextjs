@@ -71,7 +71,8 @@ export const handler =
             await handler(req, res, context);
         } catch (error) {
             if (error instanceof HandlerError) {
-                return res.status(error.status).end();
+                res.status(error.status).end();
+                return;
             }
 
             if (error instanceof ValidationError) {
