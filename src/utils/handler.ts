@@ -47,8 +47,7 @@ export const handler =
             const context: HandlerContext = {};
 
             if (options?.auth) {
-                const authorization = (req.headers['authorization'] ||
-                    req.headers['Authorization']) as string;
+                const authorization = req.headers['authorization'] as string;
 
                 const token = authorization?.replace(/bearer /giu, '');
 
