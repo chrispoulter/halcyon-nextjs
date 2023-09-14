@@ -7,6 +7,7 @@ import {
     ForgotPasswordForm,
     ForgotPasswordFormValues
 } from '@/features/account/ForgotPasswordForm/ForgotPasswordForm';
+import { config } from '@/utils/config';
 
 const ForgotPasswordPage = () => {
     const router = useRouter();
@@ -14,7 +15,11 @@ const ForgotPasswordPage = () => {
     const [forgotPassword] = useForgotPasswordMutation();
 
     const onSubmit = async (values: ForgotPasswordFormValues) => {
-        await forgotPassword(values).unwrap();
+        await forgotPassword({
+            ...values,
+            siteUrl: config.NEXTAUTH_URL
+        }).unwrap();
+
         await router.push('/login');
     };
 
