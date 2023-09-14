@@ -1,6 +1,7 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { JwtPayload, verify } from 'jsonwebtoken';
+import { HandlerResponse } from '@/models/base.types';
 import { createTokenSchema } from '@/models/token.types';
 import { config } from '@/utils/config';
 
@@ -15,45 +16,40 @@ export const authOptions: AuthOptions = {
             async authorize(credentials) {
                 const body = await createTokenSchema.validate(credentials);
 
-                try {
-                    const response = await fetch(`${config.API_URL}/token`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(body)
-                    });
+                const response = await fetch(`${config.API_URL}/token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
 
-                    if (!response.ok) {
-                        return null;
-                    }
+                const result: HandlerResponse<string> = await response.json();
 
-                    const result = await response.json();
-
-                    const accessToken = result.data;
-
-                    const decodedToken = verify(
-                        accessToken,
-                        config.JWT_SECURITY_KEY,
-                        {
-                            issuer: config.JWT_ISSUER,
-                            audience: config.JWT_AUDIENCE
-                        }
-                    ) as JwtPayload;
-
-                    return {
-                        accessToken,
-                        id: decodedToken.sub!,
-                        email: decodedToken.email!,
-                        given_name: decodedToken.given_name!,
-                        family_name: decodedToken.family_name!,
-                        roles:
-                            typeof decodedToken.roles === 'string'
-                                ? [decodedToken.roles]
-                                : decodedToken.roles || []
-                    };
-                } catch (error) {
-                    console.error('auth error', error);
-                    return null;
+                if (!result.data) {
+                    throw new Error(result.message);
                 }
+
+                const accessToken = result.data;
+
+                const decodedToken = verify(
+                    accessToken,
+                    config.JWT_SECURITY_KEY,
+                    {
+                        issuer: config.JWT_ISSUER,
+                        audience: config.JWT_AUDIENCE
+                    }
+                ) as JwtPayload;
+
+                return {
+                    accessToken,
+                    id: decodedToken.sub!,
+                    email: decodedToken.email!,
+                    given_name: decodedToken.given_name!,
+                    family_name: decodedToken.family_name!,
+                    roles:
+                        typeof decodedToken.roles === 'string'
+                            ? [decodedToken.roles]
+                            : decodedToken.roles || []
+                };
             }
         })
     ],
