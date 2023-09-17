@@ -8,15 +8,17 @@ datasource db {
 }
 
 model Users {
-    id                 Int      @id @default(autoincrement())
-    emailAddress       String   @unique
-    password           String?
-    passwordResetToken String?  @db.Uuid
-    firstName          String
-    lastName           String
-    dateOfBirth        DateTime @db.Timestamptz(6)
-    isLockedOut        Boolean  @default(false)
-    roles              String[]
-    search             String?
-    version            String   @db.Uuid
+    id                 Int      @id(map: "pk_users") @default(autoincrement()) @map("id")
+    emailAddress       String   @unique(map: "ix_users_email_address") @map("email_address")
+    password           String?  @map("password")
+    passwordResetToken String?  @map("password_reset_token") @db.Uuid
+    firstName          String   @map("first_name")
+    lastName           String   @map("last_name")
+    dateOfBirth        DateTime @map("date_of_birth") @db.Timestamptz
+    isLockedOut        Boolean  @default(false) @map("is_locked_out")
+    roles              String[] @map("roles")
+    version            String   @map("version") @db.Uuid
+    search             String?  @map("search")
+
+    @@map("users")
 }
