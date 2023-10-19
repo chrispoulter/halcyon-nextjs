@@ -4,7 +4,6 @@ import {
     waitForElementToBeRemoved
 } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
-import { HandlerResponse } from '@/models/base.types';
 import { GetProfileResponse } from '@/models/manage.types';
 import MyAccountPage from '@/pages/my-account';
 import { storeWrapper } from '@/utils/test-utils';
@@ -14,15 +13,13 @@ jest.mock('next-auth', () => ({
     default: jest.fn()
 }));
 
-const response: HandlerResponse<GetProfileResponse> = {
-    data: {
-        id: 1,
-        emailAddress: 'test@test.com',
-        firstName: 'John',
-        lastName: 'Smith',
-        dateOfBirth: new Date(1970, 1, 1),
-        version: '1234'
-    }
+const response: GetProfileResponse = {
+    id: 1,
+    emailAddress: 'test@test.com',
+    firstName: 'John',
+    lastName: 'Smith',
+    dateOfBirth: new Date(1970, 1, 1),
+    version: '1234'
 };
 
 describe('<MyAccountPage />', () => {
@@ -54,7 +51,7 @@ describe('<MyAccountPage />', () => {
         const loading = screen.getAllByText(/loading/i);
         await waitForElementToBeRemoved(loading);
 
-        const emailAddress = screen.getByText(response.data!.emailAddress);
+        const emailAddress = screen.getByText(response.emailAddress);
         expect(emailAddress).toBeInTheDocument();
     });
 });

@@ -22,7 +22,7 @@ const UpdateProfilePage = () => {
 
     const [updateProfile] = useUpdateProfileMutation();
 
-    const version = profile?.data?.version;
+    const version = profile?.version;
 
     const onSubmit = async (values: UpdateProfileFormValues) => {
         await updateProfile({ ...values, version }).unwrap();
@@ -37,7 +37,7 @@ const UpdateProfilePage = () => {
                 <Title>Update Profile</Title>
 
                 <UpdateProfileForm
-                    profile={profile?.data}
+                    profile={profile}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">

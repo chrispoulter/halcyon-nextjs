@@ -24,10 +24,7 @@ const seedHandler: Handler = async (_, res) => {
         create: seedUser
     });
 
-    return res.json({
-        code: 'ENVIRONMENT_SEEDED',
-        message: 'Environment seeded.'
-    });
+    return res.send('Environment seeded.');
 };
 
 export default mapHandlers({

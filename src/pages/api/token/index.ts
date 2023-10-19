@@ -15,8 +15,8 @@ const createTokenHandler: Handler<string> = async (req, res) => {
 
     if (!user || !user.password) {
         return res.status(400).json({
-            code: 'CREDENTIALS_INVALID',
-            message: 'The credentials provided were invalid.'
+            title: 'The credentials provided were invalid.',
+            status: 400
         });
     }
 
@@ -24,23 +24,21 @@ const createTokenHandler: Handler<string> = async (req, res) => {
 
     if (!verified) {
         return res.status(400).json({
-            code: 'CREDENTIALS_INVALID',
-            message: 'The credentials provided were invalid.'
+            title: 'The credentials provided were invalid.',
+            status: 400
         });
     }
 
     if (user.isLockedOut) {
         return res.status(400).json({
-            code: 'USER_LOCKED_OUT',
-            message: 'This account has been locked out, please try again later.'
+            title: 'This account has been locked out, please try again later.',
+            status: 400
         });
     }
 
     const token = await generateJwtToken(user);
 
-    return res.json({
-        data: token
-    });
+    return res.send(token);
 };
 
 export default mapHandlers({

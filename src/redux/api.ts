@@ -4,7 +4,7 @@ import {
     fetchBaseQuery
 } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
-import { HandlerResponse, UpdatedResponse } from '@/models/base.types';
+import { UpdatedResponse } from '@/models/base.types';
 import {
     ForgotPasswordRequest,
     RegisterRequest,
@@ -66,10 +66,7 @@ export const api = createApi({
     },
     tagTypes: ['User'],
     endpoints: builder => ({
-        register: builder.mutation<
-            HandlerResponse<UpdatedResponse>,
-            RegisterRequest
-        >({
+        register: builder.mutation<UpdatedResponse, RegisterRequest>({
             query: body => ({
                 url: '/account/register',
                 method: 'POST',
@@ -78,44 +75,35 @@ export const api = createApi({
             invalidatesTags: (_, error) =>
                 error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]
         }),
-        forgotPassword: builder.mutation<
-            HandlerResponse,
-            ForgotPasswordRequest
-        >({
+        forgotPassword: builder.mutation<void, ForgotPasswordRequest>({
             query: body => ({
                 url: '/account/forgot-password',
                 method: 'PUT',
                 body
             })
         }),
-        resetPassword: builder.mutation<
-            HandlerResponse<UpdatedResponse>,
-            ResetPasswordRequest
-        >({
+        resetPassword: builder.mutation<UpdatedResponse, ResetPasswordRequest>({
             query: body => ({
                 url: '/account/reset-password',
                 method: 'PUT',
                 body
             })
         }),
-        getProfile: builder.query<HandlerResponse<GetProfileResponse>, void>({
+        getProfile: builder.query<GetProfileResponse, void>({
             query: () => '/manage',
-            providesTags: result => [{ type: 'User', id: result?.data?.id }]
+            providesTags: result => [{ type: 'User', id: result?.id }]
         }),
-        updateProfile: builder.mutation<
-            HandlerResponse<UpdatedResponse>,
-            UpdateProfileRequest
-        >({
+        updateProfile: builder.mutation<UpdatedResponse, UpdateProfileRequest>({
             query: body => ({
                 url: '/manage',
                 method: 'PUT',
                 body
             }),
             invalidatesTags: (result, error) =>
-                error ? [] : [{ type: 'User', id: result?.data?.id }]
+                error ? [] : [{ type: 'User', id: result?.id }]
         }),
         changePassword: builder.mutation<
-            HandlerResponse<UpdatedResponse>,
+            UpdatedResponse,
             ChangePasswordRequest
         >({
             query: body => ({
@@ -124,12 +112,9 @@ export const api = createApi({
                 body
             }),
             invalidatesTags: (result, error) =>
-                error ? [] : [{ type: 'User', id: result?.data?.id }]
+                error ? [] : [{ type: 'User', id: result?.id }]
         }),
-        deleteAccount: builder.mutation<
-            HandlerResponse<UpdatedResponse>,
-            DeleteAccountRequst
-        >({
+        deleteAccount: builder.mutation<UpdatedResponse, DeleteAccountRequst>({
             query: body => ({
                 url: '/manage',
                 method: 'DELETE',
@@ -138,26 +123,20 @@ export const api = createApi({
             invalidatesTags: (_, error) =>
                 error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]
         }),
-        searchUsers: builder.query<
-            HandlerResponse<SearchUsersResponse>,
-            SearchUsersRequest
-        >({
+        searchUsers: builder.query<SearchUsersResponse, SearchUsersRequest>({
             query: params => ({
                 url: `/user`,
                 params
             }),
             providesTags: result => [
                 { type: 'User', id: 'PARTIAL-LIST' },
-                ...(result?.data?.items?.map(user => ({
+                ...(result?.items?.map(user => ({
                     type: 'User' as const,
                     id: user.id
                 })) || [])
             ]
         }),
-        createUser: builder.mutation<
-            HandlerResponse<UpdatedResponse>,
-            CreateUserRequest
-        >({
+        createUser: builder.mutation<UpdatedResponse, CreateUserRequest>({
             query: body => ({
                 url: '/user',
                 method: 'POST',
@@ -166,12 +145,12 @@ export const api = createApi({
             invalidatesTags: (_, error) =>
                 error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]
         }),
-        getUser: builder.query<HandlerResponse<GetUserResponse>, string>({
+        getUser: builder.query<GetUserResponse, string>({
             query: id => `/user/${id}`,
-            providesTags: result => [{ type: 'User', id: result?.data?.id }]
+            providesTags: result => [{ type: 'User', id: result?.id }]
         }),
         updateUser: builder.mutation<
-            HandlerResponse<UpdatedResponse>,
+            UpdatedResponse,
             { id: string; body: UpdateUserRequest }
         >({
             query: ({ id, body }) => ({
@@ -180,10 +159,10 @@ export const api = createApi({
                 body
             }),
             invalidatesTags: (result, error) =>
-                error ? [] : [{ type: 'User', id: result?.data?.id }]
+                error ? [] : [{ type: 'User', id: result?.id }]
         }),
         lockUser: builder.mutation<
-            HandlerResponse<UpdatedResponse>,
+            UpdatedResponse,
             { id: string; body: LockUserRequest }
         >({
             query: ({ id, body }) => ({
@@ -192,10 +171,10 @@ export const api = createApi({
                 body
             }),
             invalidatesTags: (result, error) =>
-                error ? [] : [{ type: 'User', id: result?.data?.id }]
+                error ? [] : [{ type: 'User', id: result?.id }]
         }),
         unlockUser: builder.mutation<
-            HandlerResponse<UpdatedResponse>,
+            UpdatedResponse,
             { id: string; body: UnlockUserRequest }
         >({
             query: ({ id, body }) => ({
@@ -204,10 +183,10 @@ export const api = createApi({
                 body
             }),
             invalidatesTags: (result, error) =>
-                error ? [] : [{ type: 'User', id: result?.data?.id }]
+                error ? [] : [{ type: 'User', id: result?.id }]
         }),
         deleteUser: builder.mutation<
-            HandlerResponse<UpdatedResponse>,
+            UpdatedResponse,
             { id: string; body: DeleteUserRequest }
         >({
             query: ({ id, body }) => ({

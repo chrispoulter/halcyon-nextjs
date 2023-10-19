@@ -19,22 +19,22 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
-            message: 'User not found.'
+            title: 'User not found.',
+            status: 404
         });
     }
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            code: 'CONFLICT',
-            message: 'Data has been modified since resource was loaded.'
+            title: 'Data has been modified since entities were loaded.',
+            status: 409
         });
     }
 
     if (!user.password) {
         return res.status(400).json({
-            code: 'INCORRECT_PASSWORD',
-            message: 'Incorrect password.'
+            title: 'Incorrect password.',
+            status: 400
         });
     }
 
@@ -42,8 +42,8 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
 
     if (!verified) {
         return res.status(400).json({
-            code: 'INCORRECT_PASSWORD',
-            message: 'Incorrect password.'
+            title: 'Incorrect password.',
+            status: 400
         });
     }
 
@@ -58,11 +58,7 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
     });
 
     return res.json({
-        code: 'PASSWORD_CHANGED',
-        message: 'Your password has been changed.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 

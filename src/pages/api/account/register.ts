@@ -16,8 +16,8 @@ const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (existing) {
         return res.status(400).json({
-            code: 'DUPLICATE_USER',
-            message: `User name "${body.emailAddress}" is already taken.`
+            title: 'User name is already taken.',
+            status: 400
         });
     }
 
@@ -33,11 +33,7 @@ const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
     });
 
     return res.json({
-        code: 'USER_REGISTERED',
-        message: 'User successfully registered.',
-        data: {
-            id: result.id
-        }
+        id: result.id
     });
 };
 

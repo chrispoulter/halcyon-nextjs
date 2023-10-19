@@ -20,8 +20,8 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
-            message: 'User not found.'
+            title: 'User not found.',
+            status: 404
         });
     }
 
@@ -29,15 +29,15 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            code: 'CONFLICT',
-            message: 'Data has been modified since resource was loaded.'
+            title: 'Data has been modified since entities were loaded.',
+            status: 409
         });
     }
 
     if (user.id === currentUserId) {
         return res.status(400).json({
-            code: 'LOCK_CURRENT_USER',
-            message: 'Cannot lock currently logged in user.'
+            title: 'Cannot lock currently logged in user.',
+            status: 400
         });
     }
 
@@ -52,11 +52,7 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
     });
 
     return res.json({
-        code: 'USER_LOCKED',
-        message: 'User successfully locked.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 

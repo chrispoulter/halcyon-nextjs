@@ -23,7 +23,7 @@ const ChangePasswordPage = () => {
 
     const [changePassword] = useChangePasswordMutation();
 
-    const version = profile?.data?.version;
+    const version = profile?.version;
 
     const onSubmit = async (values: ChangePasswordFormValues) => {
         await changePassword({
@@ -42,7 +42,7 @@ const ChangePasswordPage = () => {
                 <Title>Change Password</Title>
 
                 <ChangePasswordForm
-                    profile={profile?.data}
+                    profile={profile}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">

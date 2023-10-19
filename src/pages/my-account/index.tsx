@@ -19,7 +19,7 @@ const MyAccountPage = () => {
     const [deleteAccount, { isLoading: isDeleting }] =
         useDeleteAccountMutation();
 
-    const version = profile?.data?.version;
+    const version = profile?.version;
 
     const onDelete = async () => {
         await deleteAccount({ version }).unwrap();
@@ -32,11 +32,11 @@ const MyAccountPage = () => {
 
             <Container>
                 <Title>My Account</Title>
-                <PersonalDetailsCard profile={profile?.data} className="mb-5" />
-                <LoginDetailsCard profile={profile?.data} className="mb-5" />
+                <PersonalDetailsCard profile={profile} className="mb-5" />
+                <LoginDetailsCard profile={profile} className="mb-5" />
 
                 <AccountSettingsCard
-                    profile={profile?.data}
+                    profile={profile}
                     isDeleting={isDeleting}
                     onDelete={onDelete}
                 />

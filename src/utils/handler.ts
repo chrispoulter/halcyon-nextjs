@@ -1,7 +1,7 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { ValidationError } from 'yup';
-import { HandlerResponse } from '@/models/base.types';
+import { ProblemResponse } from '@/models/base.types';
 import { Role, isAuthorized } from '@/utils/auth';
 import { config } from '@/utils/config';
 
@@ -11,7 +11,7 @@ type HandlerContext = {
 
 export type Handler<TResponse = unknown> = (
     req: NextApiRequest,
-    res: NextApiResponse<HandlerResponse<TResponse>>,
+    res: NextApiResponse<TResponse | ProblemResponse>,
     context: HandlerContext
 ) => unknown | Promise<unknown>;
 

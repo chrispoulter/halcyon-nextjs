@@ -1,11 +1,12 @@
 import crypto from 'crypto';
 import { forgotPasswordSchema } from '@/models/account.types';
+import { ProblemResponse } from '@/models/base.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
-import { EmailTemplate, sendEmail } from '@/utils/email';
+import { sendEmail } from '@/utils/email';
 import { getBaseUrl } from '@/utils/url';
 
-const forgotPasswordHandler: Handler = async (req, res) => {
+const forgotPasswordHandler: Handler<ProblemResponse> = async (req, res) => {
     const body = await forgotPasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
@@ -15,34 +16,30 @@ const forgotPasswordHandler: Handler = async (req, res) => {
     });
 
     if (user) {
-        const token = crypto.randomUUID();
+        const passwordResetToken = crypto.randomUUID();
 
         await prisma.users.update({
             where: {
                 id: user.id
             },
             data: {
-                passwordResetToken: token
+                passwordResetToken
             }
         });
 
-        const baseUrl = getBaseUrl(req);
+        const siteUrl = getBaseUrl(req);
 
         await sendEmail({
+            template: 'ResetPasswordEmail.html',
             to: user.emailAddress,
-            template: EmailTemplate.ResetPassword,
-            context: {
-                siteUrl: baseUrl,
-                passwordResetUrl: `${baseUrl}/reset-password/${token}`
+            data: {
+                passwordResetToken,
+                siteUrl
             }
         });
     }
 
-    return res.json({
-        code: 'FORGOT_PASSWORD',
-        message:
-            'Instructions as to how to reset your password have been sent to you via email.'
-    });
+    return res.status(200).end();
 };
 
 export default mapHandlers({

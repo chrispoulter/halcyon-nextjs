@@ -4,24 +4,16 @@ import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { config } from '@/utils/config';
 
-export enum EmailTemplate {
-    ResetPassword = 'RESET_PASSWORD'
-}
-
 type EmailMessage = {
-    from?: string;
+    template: string;
     to: string;
-    template: EmailTemplate;
-    context: object;
+    data: object;
 };
 
 export const sendEmail = async (message: EmailMessage) => {
     const template = await readResource(message.template);
-    const title = getTitle(template);
-
-    const from = message.from || config.EMAIL_NO_REPLY_ADDRESS;
-    const subject = replaceData(title, message.context);
-    const html = replaceData(template, message.context);
+    const html = render(template, message.data);
+    const subject = getHtmlTitle(template);
 
     const transport: SMTPTransport.Options = {
         host: config.EMAIL_SMTP_SERVER,
@@ -40,7 +32,7 @@ export const sendEmail = async (message: EmailMessage) => {
     try {
         await transporter.sendMail({
             to: message.to,
-            from,
+            from: config.EMAIL_NO_REPLY_ADDRESS,
             subject,
             html
         });
@@ -51,18 +43,18 @@ export const sendEmail = async (message: EmailMessage) => {
 
 const readResource = (resource: string) =>
     fs.readFile(
-        `${path.join(process.cwd(), 'src', 'templates')}/${resource}.html`,
+        `${path.join(process.cwd(), 'src', 'templates')}/${resource}`,
         'utf8'
     );
 
-const getTitle = (template: string) =>
+const getHtmlTitle = (template: string) =>
     new RegExp(/<title>\s*(.+?)\s*<\/title>/).exec(template)![1];
 
-const replaceData = (str: string, obj: object) => {
+const render = (str: string, obj: object) => {
     let result = str;
 
     for (const [key, replaceValue] of Object.entries(obj)) {
-        result = result.replace(new RegExp(`{{ ${key} }}`, 'g'), replaceValue);
+        result = result.replace(new RegExp(`{{${key}}}`, 'g'), replaceValue);
     }
 
     return result;

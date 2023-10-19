@@ -21,22 +21,20 @@ const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
-            message: 'User not found.'
+            title: 'User not found.',
+            status: 404
         });
     }
 
     return res.json({
-        data: {
-            id: user.id,
-            emailAddress: user.emailAddress,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth,
-            isLockedOut: user.isLockedOut,
-            roles: user.roles.map(r => r as Role),
-            version: user.version
-        }
+        id: user.id,
+        emailAddress: user.emailAddress,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        dateOfBirth: user.dateOfBirth,
+        isLockedOut: user.isLockedOut,
+        roles: user.roles.map(r => r as Role),
+        version: user.version
     });
 };
 
@@ -51,8 +49,8 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
-            message: 'User not found.'
+            title: 'User not found.',
+            status: 404
         });
     }
 
@@ -60,8 +58,8 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            code: 'CONFLICT',
-            message: 'Data has been modified since resource was loaded.'
+            title: 'Data has been modified since entities were loaded.',
+            status: 409
         });
     }
 
@@ -74,8 +72,8 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
         if (existing) {
             return res.status(400).json({
-                code: 'DUPLICATE_USER',
-                message: `User name "${body.emailAddress}" is already taken.`
+                title: 'User name is already taken.',
+                status: 400
             });
         }
     }
@@ -95,11 +93,7 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
     });
 
     return res.json({
-        code: 'USER_UPDATED',
-        message: 'User successfully updated.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 
@@ -118,8 +112,8 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
-            message: 'User not found.'
+            title: 'User not found.',
+            status: 404
         });
     }
 
@@ -127,15 +121,15 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            code: 'CONFLICT',
-            message: 'Data has been modified since resource was loaded.'
+            title: 'Data has been modified since entities were loaded.',
+            status: 409
         });
     }
 
     if (user.id === currentUserId) {
         return res.status(400).json({
-            code: 'DELETE_CURRENT_USER',
-            message: 'Cannot delete currently logged in user.'
+            title: 'Cannot delete currently logged in user.',
+            status: 400
         });
     }
 
@@ -146,11 +140,7 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
     });
 
     return res.json({
-        code: 'USER_DELETED',
-        message: 'User successfully deleted.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 

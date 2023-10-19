@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
 import { signIn } from 'next-auth/react';
-import { HandlerResponse, UpdatedResponse } from '@/models/base.types';
+import { UpdatedResponse } from '@/models/base.types';
 import RegisterPage from '@/pages/register';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
 import { storeWrapper } from '@/utils/test-utils';
@@ -60,7 +60,7 @@ describe('<RegisterPage />', () => {
     });
 
     it('handles form submission', async () => {
-        const response: HandlerResponse<UpdatedResponse> = { data: { id: 1 } };
+        const response: UpdatedResponse = { id: 1 };
 
         fetchMock.mockResponse(JSON.stringify(response), {
             headers: { 'content-type': 'application/json' }

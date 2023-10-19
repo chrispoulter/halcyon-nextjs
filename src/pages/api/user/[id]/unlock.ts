@@ -16,8 +16,8 @@ const unlockUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
-            message: 'User not found.'
+            title: 'User not found.',
+            status: 404
         });
     }
 
@@ -25,8 +25,8 @@ const unlockUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            code: 'CONFLICT',
-            message: 'Data has been modified since resource was loaded.'
+            title: 'Data has been modified since entities were loaded.',
+            status: 409
         });
     }
 
@@ -41,11 +41,7 @@ const unlockUserHandler: Handler<UpdatedResponse> = async (req, res) => {
     });
 
     return res.json({
-        code: 'USER_UNLOCKED',
-        message: 'User successfully unlocked.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 

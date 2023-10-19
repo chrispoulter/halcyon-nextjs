@@ -42,7 +42,7 @@ const UpdateUserPage = () => {
 
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
-    const version = user?.data?.version;
+    const version = user?.version;
 
     const onSubmit = async (values: UpdateUserFormValues) => {
         await updateUser({
@@ -80,7 +80,7 @@ const UpdateUserPage = () => {
                 Cancel
             </ButtonLink>
 
-            {user?.data?.isLockedOut ? (
+            {user?.isLockedOut ? (
                 <ConfirmUnlockUser
                     onConfirm={onUnlock}
                     loading={isUnlocking}
@@ -119,7 +119,7 @@ const UpdateUserPage = () => {
                 </Title>
 
                 <UpdateUserForm
-                    user={user?.data}
+                    user={user}
                     isDisabled={
                         isUnlocking || isLocking || isDeleting || isFetching
                     }

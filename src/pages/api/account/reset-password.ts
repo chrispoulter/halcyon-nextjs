@@ -15,8 +15,8 @@ const resetPasswordHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (!user || user.passwordResetToken !== body.token) {
         return res.status(400).json({
-            code: 'INVALID_TOKEN',
-            message: 'Invalid token.'
+            title: 'Invalid token.',
+            status: 400
         });
     }
 
@@ -31,11 +31,7 @@ const resetPasswordHandler: Handler<UpdatedResponse> = async (req, res) => {
     });
 
     return res.json({
-        code: 'PASSWORD_RESET',
-        message: 'Your password has been reset.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 

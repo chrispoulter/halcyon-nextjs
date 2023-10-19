@@ -39,7 +39,10 @@ describe('/api/account/register', () => {
         expect(statusCode).toBe(400);
 
         const data = JSON.parse(res._getData());
-        expect(data).toHaveProperty('code', 'INVALID_REQUEST');
+        expect(data).toHaveProperty(
+            'title',
+            'One or more validation errors occurred.'
+        );
     });
 
     it('handles duplicate email address', async () => {
@@ -62,7 +65,7 @@ describe('/api/account/register', () => {
         expect(statusCode).toBe(400);
 
         const data = JSON.parse(res._getData());
-        expect(data).toHaveProperty('code', 'DUPLICATE_USER');
+        expect(data).toHaveProperty('title', 'User name is already taken.');
     });
 
     it('creates new user', async () => {
@@ -86,6 +89,6 @@ describe('/api/account/register', () => {
         expect(statusCode).toBe(200);
 
         const data = JSON.parse(res._getData());
-        expect(data).toHaveProperty('code', 'USER_REGISTERED');
+        expect(data).toHaveProperty('id', user.id);
     });
 });

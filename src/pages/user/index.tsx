@@ -68,13 +68,13 @@ const UsersPage = () => {
                     </ButtonLink>
                 </ButtonGroup>
 
-                <UserList isLoading={isLoading} users={users?.data?.items} />
+                <UserList isLoading={isLoading} users={users?.items} />
 
                 <Pager
                     isLoading={isLoading}
                     isFetching={isFetching}
-                    hasNextPage={users?.data?.hasNextPage}
-                    hasPreviousPage={users?.data?.hasPreviousPage}
+                    hasNextPage={users?.hasNextPage}
+                    hasPreviousPage={users?.hasPreviousPage}
                     onNextPage={onNextPage}
                     onPreviousPage={onPreviousPage}
                 />
