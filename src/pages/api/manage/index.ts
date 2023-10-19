@@ -6,7 +6,7 @@ import {
     updateProfileSchema
 } from '@/models/manage.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 
 const getProfileHandler: Handler<GetProfileResponse> = async (
     _,
@@ -144,11 +144,11 @@ const deleteProfileHandler: Handler<UpdatedResponse> = async (
     });
 };
 
-export default handler(
+export default mapHandlers(
     {
         get: getProfileHandler,
         put: updateProfileHandler,
         delete: deleteProfileHandler
     },
-    { auth: true }
+    { authorize: true }
 );

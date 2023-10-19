@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { UpdatedResponse } from '@/models/base.types';
 import { registerSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
 
 const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
@@ -41,6 +41,6 @@ const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
     });
 };
 
-export default handler({
+export default mapHandlers({
     post: registerHandler
 });

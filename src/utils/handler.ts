@@ -20,20 +20,20 @@ type HandlerConfig = {
 };
 
 type HandlerOptions = {
-    auth?: boolean | Role[];
+    authorize?: boolean | Role[];
 };
 
 class HandlerError extends Error {
     status: number;
 
     constructor(status: number) {
-        super('An error has occurred.');
+        super('An error occurred while processing your request.');
         this.name = 'HandlerError';
         this.status = status;
     }
 }
 
-export const handler =
+export const mapHandlers =
     (handlers: HandlerConfig, options?: HandlerOptions): NextApiHandler =>
     async (req, res) => {
         try {
@@ -47,7 +47,7 @@ export const handler =
 
             const context: HandlerContext = {};
 
-            if (options?.auth) {
+            if (options?.authorize) {
                 const token = await getToken({
                     req,
                     secret: config.NEXTAUTH_SECRET
@@ -57,8 +57,8 @@ export const handler =
                     throw new HandlerError(401);
                 }
 
-                if (options.auth instanceof Array) {
-                    const authorized = isAuthorized(token, options.auth);
+                if (options.authorize instanceof Array) {
+                    const authorized = isAuthorized(token, options.authorize);
 
                     if (!authorized) {
                         throw new HandlerError(403);
@@ -77,20 +77,18 @@ export const handler =
 
             if (error instanceof ValidationError) {
                 return res.status(400).json({
-                    code: 'INVALID_REQUEST',
-                    message: 'Request is invalid.',
-                    data: error.errors
+                    title: 'One or more validation errors occurred.',
+                    errors: error.errors
                 });
             }
 
             console.error('api error', error);
 
             return res.status(500).json({
-                code: 'INTERNAL_SERVER_ERROR',
-                message:
+                title:
                     error instanceof Error
                         ? error.message
-                        : 'An error has occurred.'
+                        : 'An error occurred while processing your request.'
             });
         }
     };

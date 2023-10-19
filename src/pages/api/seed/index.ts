@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { hashPassword } from '@/utils/hash';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { Role } from '@/utils/auth';
 import prisma from '@/utils/prisma';
 import { config } from '@/utils/config';
@@ -30,6 +30,6 @@ const seedHandler: Handler = async (_, res) => {
     });
 };
 
-export default handler({
+export default mapHandlers({
     get: seedHandler
 });

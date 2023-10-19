@@ -1,7 +1,7 @@
 import { UpdatedResponse } from '@/models/base.types';
 import { changePasswordSchema } from '@/models/manage.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword, verifyPassword } from '@/utils/hash';
 
 const changePasswordHandler: Handler<UpdatedResponse> = async (
@@ -66,9 +66,9 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
     });
 };
 
-export default handler(
+export default mapHandlers(
     {
         put: changePasswordHandler
     },
-    { auth: true }
+    { authorize: true }
 );

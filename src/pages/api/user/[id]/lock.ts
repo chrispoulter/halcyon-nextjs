@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { UpdatedResponse } from '@/models/base.types';
 import { getUserSchema, lockUserSchema } from '@/models/user.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
 const lockUserHandler: Handler<UpdatedResponse> = async (
@@ -60,9 +60,9 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
     });
 };
 
-export default handler(
+export default mapHandlers(
     {
         put: lockUserHandler
     },
-    { auth: isUserAdministrator }
+    { authorize: isUserAdministrator }
 );

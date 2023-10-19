@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { forgotPasswordSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { EmailTemplate, sendEmail } from '@/utils/email';
 import { getBaseUrl } from '@/utils/url';
 
@@ -45,6 +45,6 @@ const forgotPasswordHandler: Handler = async (req, res) => {
     });
 };
 
-export default handler({
+export default mapHandlers({
     put: forgotPasswordHandler
 });

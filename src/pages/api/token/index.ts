@@ -1,6 +1,6 @@
 import { createTokenSchema } from '@/models/token.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
 
@@ -43,6 +43,6 @@ const createTokenHandler: Handler<string> = async (req, res) => {
     });
 };
 
-export default handler({
+export default mapHandlers({
     post: createTokenHandler
 });

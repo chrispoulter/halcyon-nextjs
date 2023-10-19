@@ -7,7 +7,7 @@ import {
     updateUserSchema
 } from '@/models/user.types';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { Role, isUserAdministrator } from '@/utils/auth';
 
 const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
@@ -154,11 +154,11 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
     });
 };
 
-export default handler(
+export default mapHandlers(
     {
         get: getUserHandler,
         put: updateUserHandler,
         delete: deleteUserHandler
     },
-    { auth: isUserAdministrator }
+    { authorize: isUserAdministrator }
 );

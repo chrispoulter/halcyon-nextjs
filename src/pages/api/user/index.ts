@@ -8,7 +8,7 @@ import {
 } from '@/models/user.types';
 import { Prisma } from '@prisma/client';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
 import { isUserAdministrator, Role } from '@/utils/auth';
 
@@ -122,10 +122,10 @@ const createUserHandler: Handler<UpdatedResponse> = async (req, res) => {
     });
 };
 
-export default handler(
+export default mapHandlers(
     {
         get: searchUsersHandler,
         post: createUserHandler
     },
-    { auth: isUserAdministrator }
+    { authorize: isUserAdministrator }
 );
