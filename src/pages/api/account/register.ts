@@ -3,7 +3,7 @@ import { UpdatedResponse } from '@/models/base.types';
 import { registerSchema } from '@/models/account.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler } from '@/utils/handler';
-import { generateHash } from '@/utils/hash';
+import { hashPassword } from '@/utils/hash';
 
 const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
     const body = await registerSchema.validate(req.body);
@@ -24,7 +24,7 @@ const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
     const result = await prisma.users.create({
         data: {
             emailAddress: body.emailAddress,
-            password: await generateHash(body.password),
+            password: await hashPassword(body.password),
             firstName: body.firstName,
             lastName: body.lastName,
             dateOfBirth: body.dateOfBirth,

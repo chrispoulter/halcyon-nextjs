@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { generateHash } from '@/utils/hash';
+import { hashPassword } from '@/utils/hash';
 import { handler, Handler } from '@/utils/handler';
 import { Role } from '@/utils/auth';
 import prisma from '@/utils/prisma';
@@ -8,7 +8,7 @@ import { config } from '@/utils/config';
 const seedHandler: Handler = async (_, res) => {
     const seedUser = {
         emailAddress: config.SEED_EMAIL_ADDRESS,
-        password: await generateHash(config.SEED_PASSWORD),
+        password: await hashPassword(config.SEED_PASSWORD),
         passwordResetToken: null,
         firstName: 'System',
         lastName: 'Administrator',

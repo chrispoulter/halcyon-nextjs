@@ -1,8 +1,8 @@
 import { createTokenSchema } from '@/models/token.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler } from '@/utils/handler';
-import { verifyHash } from '@/utils/hash';
-import { generateToken } from '@/utils/jwt';
+import { verifyPassword } from '@/utils/hash';
+import { generateJwtToken } from '@/utils/jwt';
 
 const createTokenHandler: Handler<string> = async (req, res) => {
     const body = await createTokenSchema.validate(req.body);
@@ -20,7 +20,7 @@ const createTokenHandler: Handler<string> = async (req, res) => {
         });
     }
 
-    const verified = await verifyHash(body.password, user.password);
+    const verified = await verifyPassword(body.password, user.password);
 
     if (!verified) {
         return res.status(400).json({
@@ -36,7 +36,7 @@ const createTokenHandler: Handler<string> = async (req, res) => {
         });
     }
 
-    const token = await generateToken(user);
+    const token = await generateJwtToken(user);
 
     return res.json({
         data: token

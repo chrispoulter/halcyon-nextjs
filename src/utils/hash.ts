@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 
-export const generateHash = (str: string) => bcrypt.hash(str, 10);
+export const hashPassword = (password: string) => bcrypt.hash(password, 10);
 
-export const verifyHash = (str: string, hash: string) =>
-    bcrypt.compare(str, hash);
+export const verifyPassword = (password: string, hashedPassword: string) =>
+    bcrypt.compare(password, hashedPassword);

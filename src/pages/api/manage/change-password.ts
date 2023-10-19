@@ -2,7 +2,7 @@ import { UpdatedResponse } from '@/models/base.types';
 import { changePasswordSchema } from '@/models/manage.types';
 import prisma from '@/utils/prisma';
 import { handler, Handler } from '@/utils/handler';
-import { generateHash, verifyHash } from '@/utils/hash';
+import { hashPassword, verifyPassword } from '@/utils/hash';
 
 const changePasswordHandler: Handler<UpdatedResponse> = async (
     req,
@@ -38,7 +38,7 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
         });
     }
 
-    const verified = await verifyHash(body.currentPassword, user.password);
+    const verified = await verifyPassword(body.currentPassword, user.password);
 
     if (!verified) {
         return res.status(400).json({
@@ -52,7 +52,7 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
             id: user.id
         },
         data: {
-            password: await generateHash(body.newPassword),
+            password: await hashPassword(body.newPassword),
             passwordResetToken: null
         }
     });
