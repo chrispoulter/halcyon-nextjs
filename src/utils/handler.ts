@@ -76,7 +76,7 @@ export const mapHandlers =
 
             if (error instanceof ValidationError) {
                 return res.status(400).json({
-                    title: 'One or more validation errors occurred.',
+                    message: 'One or more validation errors occurred.',
                     errors: error.errors
                 });
             }
@@ -84,7 +84,7 @@ export const mapHandlers =
             console.error('api error', error);
 
             return res.status(500).json({
-                title:
+                message:
                     error instanceof Error
                         ? error.message
                         : 'An error occurred while processing your request.'
