@@ -15,8 +15,7 @@ export const config = {
     EMAIL_NO_REPLY_ADDRESS:
         process.env.EMAIL_NO_REPLY_ADDRESS || 'noreply@example.com',
 
-    SEED_EMAIL_ADDRESS: process.env.SEED_EMAIL_ADDRESS!,
-    SEED_PASSWORD: process.env.SEED_PASSWORD!,
+    SEED_USERS: JSON.parse(process.env.SEED_USERS || '[]'),
 
     NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'change-me-1234567890',

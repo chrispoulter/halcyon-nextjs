@@ -65,7 +65,7 @@ describe('/api/account/register', () => {
         expect(statusCode).toBe(400);
 
         const data = JSON.parse(res._getData());
-        expect(data).toHaveProperty('title', 'User name is already taken.');
+        expect(data).toHaveProperty('message', 'User name is already taken.');
     });
 
     it('creates new user', async () => {

@@ -1,12 +1,12 @@
 import crypto from 'crypto';
-import { ProblemResponse } from '@/features/base.types';
+import { ErrorResponse } from '@/features/base.types';
 import { forgotPasswordSchema } from '@/features/account/account.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { sendEmail } from '@/utils/email';
 import { getBaseUrl } from '@/utils/url';
 
-const forgotPasswordHandler: Handler<ProblemResponse> = async (req, res) => {
+const forgotPasswordHandler: Handler<ErrorResponse> = async (req, res) => {
     const body = await forgotPasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({

@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
 import {
     GetProfileResponse,
     deleteAccountSchema,
@@ -8,7 +8,7 @@ import {
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 
-const getProfileHandler: Handler<GetProfileResponse | ProblemResponse> = async (
+const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
     _,
     res,
     { currentUserId }
@@ -21,8 +21,7 @@ const getProfileHandler: Handler<GetProfileResponse | ProblemResponse> = async (
 
     if (!user || user.isLockedOut) {
         return res.status(404).json({
-            title: 'User not found.',
-            status: 404
+            message: 'User not found.'
         });
     }
 
@@ -36,7 +35,7 @@ const getProfileHandler: Handler<GetProfileResponse | ProblemResponse> = async (
     });
 };
 
-const updateProfileHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res,
     { currentUserId }
@@ -51,15 +50,13 @@ const updateProfileHandler: Handler<UpdatedResponse | ProblemResponse> = async (
 
     if (!user) {
         return res.status(404).json({
-            title: 'User not found.',
-            status: 404
+            message: 'User not found.'
         });
     }
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            title: 'Data has been modified since entities were loaded.',
-            status: 409
+            message: 'Data has been modified since entities were loaded.'
         });
     }
 
@@ -72,8 +69,7 @@ const updateProfileHandler: Handler<UpdatedResponse | ProblemResponse> = async (
 
         if (existing) {
             return res.status(400).json({
-                title: 'User name is already taken.',
-                status: 400
+                message: 'User name is already taken.'
             });
         }
     }
@@ -96,7 +92,7 @@ const updateProfileHandler: Handler<UpdatedResponse | ProblemResponse> = async (
     });
 };
 
-const deleteProfileHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+const deleteProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res,
     { currentUserId }
@@ -109,8 +105,7 @@ const deleteProfileHandler: Handler<UpdatedResponse | ProblemResponse> = async (
 
     if (!user) {
         return res.status(404).json({
-            title: 'User not found.',
-            status: 404
+            message: 'User not found.'
         });
     }
 
@@ -118,8 +113,7 @@ const deleteProfileHandler: Handler<UpdatedResponse | ProblemResponse> = async (
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            title: 'Data has been modified since entities were loaded.',
-            status: 409
+            message: 'Data has been modified since entities were loaded.'
         });
     }
 

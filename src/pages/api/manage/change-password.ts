@@ -1,12 +1,14 @@
-import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
 import { changePasswordSchema } from '@/features/manage/manage.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword, verifyPassword } from '@/utils/hash';
 
-const changePasswordHandler: Handler<
-    UpdatedResponse | ProblemResponse
-> = async (req, res, { currentUserId }) => {
+const changePasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
+    req,
+    res,
+    { currentUserId }
+) => {
     const body = await changePasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
@@ -17,22 +19,19 @@ const changePasswordHandler: Handler<
 
     if (!user) {
         return res.status(404).json({
-            title: 'User not found.',
-            status: 404
+            message: 'User not found.'
         });
     }
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            title: 'Data has been modified since entities were loaded.',
-            status: 409
+            message: 'Data has been modified since entities were loaded.'
         });
     }
 
     if (!user.password) {
         return res.status(400).json({
-            title: 'Incorrect password.',
-            status: 400
+            message: 'Incorrect password.'
         });
     }
 
@@ -40,8 +39,7 @@ const changePasswordHandler: Handler<
 
     if (!verified) {
         return res.status(400).json({
-            title: 'Incorrect password.',
-            status: 400
+            message: 'Incorrect password.'
         });
     }
 

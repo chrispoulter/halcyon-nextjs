@@ -3,9 +3,9 @@ import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
-import { ProblemResponse } from '@/features/base.types';
+import { ErrorResponse } from '@/features/base.types';
 
-const createTokenHandler: Handler<string | ProblemResponse> = async (
+const createTokenHandler: Handler<string | ErrorResponse> = async (
     req,
     res
 ) => {
@@ -19,8 +19,7 @@ const createTokenHandler: Handler<string | ProblemResponse> = async (
 
     if (!user || !user.password) {
         return res.status(400).json({
-            title: 'The credentials provided were invalid.',
-            status: 400
+            message: 'The credentials provided were invalid.'
         });
     }
 
@@ -28,15 +27,13 @@ const createTokenHandler: Handler<string | ProblemResponse> = async (
 
     if (!verified) {
         return res.status(400).json({
-            title: 'The credentials provided were invalid.',
-            status: 400
+            message: 'The credentials provided were invalid.'
         });
     }
 
     if (user.isLockedOut) {
         return res.status(400).json({
-            title: 'This account has been locked out, please try again later.',
-            status: 400
+            message: 'This account has been locked out, please try again later.'
         });
     }
 

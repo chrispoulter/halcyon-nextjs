@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
 import { registerSchema } from '@/features/account/account.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
 
-const registerHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res
 ) => {
@@ -19,8 +19,7 @@ const registerHandler: Handler<UpdatedResponse | ProblemResponse> = async (
 
     if (existing) {
         return res.status(400).json({
-            title: 'User name is already taken.',
-            status: 400
+            message: 'User name is already taken.'
         });
     }
 

@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
 import { getUserSchema, unlockUserSchema } from '@/features/user/user.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
-const unlockUserHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+const unlockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res
 ) => {
@@ -19,8 +19,7 @@ const unlockUserHandler: Handler<UpdatedResponse | ProblemResponse> = async (
 
     if (!user) {
         return res.status(404).json({
-            title: 'User not found.',
-            status: 404
+            message: 'User not found.'
         });
     }
 
@@ -28,8 +27,7 @@ const unlockUserHandler: Handler<UpdatedResponse | ProblemResponse> = async (
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            title: 'Data has been modified since entities were loaded.',
-            status: 409
+            message: 'Data has been modified since entities were loaded.'
         });
     }
 

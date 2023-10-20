@@ -1,10 +1,10 @@
-import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
 import { resetPasswordSchema } from '@/features/account/account.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
 
-const resetPasswordHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+const resetPasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res
 ) => {
@@ -18,8 +18,7 @@ const resetPasswordHandler: Handler<UpdatedResponse | ProblemResponse> = async (
 
     if (!user || user.passwordResetToken !== body.token) {
         return res.status(400).json({
-            title: 'Invalid token.',
-            status: 400
+            message: 'Invalid token.'
         });
     }
 

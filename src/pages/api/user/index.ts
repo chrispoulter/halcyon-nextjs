@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
 import {
     createUserSchema,
     SearchUsersResponse,
@@ -83,7 +83,7 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     });
 };
 
-const createUserHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res
 ) => {
@@ -97,8 +97,7 @@ const createUserHandler: Handler<UpdatedResponse | ProblemResponse> = async (
 
     if (existing) {
         return res.status(400).json({
-            title: 'User name is already taken.',
-            status: 400
+            message: 'User name is already taken.'
         });
     }
 
