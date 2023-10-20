@@ -1,19 +1,19 @@
-import path from 'path';
-import { promises as fs } from 'fs';
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { renderTemplate } from './template';
 import { config } from '@/utils/config';
 
 type EmailMessage = {
     template: string;
     to: string;
-    data: object;
+    data: { [key: string]: any };
 };
 
 export const sendEmail = async (message: EmailMessage) => {
-    const template = await readResource(message.template);
-    const html = render(template, message.data);
-    const subject = getHtmlTitle(template);
+    const [html, subject] = await renderTemplate(
+        message.template,
+        message.data
+    );
 
     const transport: SMTPTransport.Options = {
         host: config.EMAIL_SMTP_SERVER,
@@ -39,23 +39,4 @@ export const sendEmail = async (message: EmailMessage) => {
     } catch (error) {
         console.error('email error', error);
     }
-};
-
-const readResource = (resource: string) =>
-    fs.readFile(
-        `${path.join(process.cwd(), 'src', 'templates')}/${resource}`,
-        'utf8'
-    );
-
-const getHtmlTitle = (template: string) =>
-    new RegExp(/<title>\s*(.+?)\s*<\/title>/).exec(template)![1];
-
-const render = (str: string, obj: object) => {
-    let result = str;
-
-    for (const [key, replaceValue] of Object.entries(obj)) {
-        result = result.replace(new RegExp(`{{${key}}}`, 'g'), replaceValue);
-    }
-
-    return result;
 };
