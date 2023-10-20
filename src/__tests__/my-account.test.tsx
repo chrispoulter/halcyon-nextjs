@@ -15,7 +15,7 @@ jest.mock('next-auth', () => ({
 
 const response: GetProfileResponse = {
     id: 1,
-    emailAddress: 'test@test.com',
+    emailAddress: 'test@example.com',
     firstName: 'John',
     lastName: 'Smith',
     dateOfBirth: new Date(1970, 1, 1),

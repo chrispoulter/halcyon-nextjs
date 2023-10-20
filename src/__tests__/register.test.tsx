@@ -69,7 +69,7 @@ describe('<RegisterPage />', () => {
         render(<RegisterPage />, { wrapper: storeWrapper });
 
         fillRegisterForm({
-            emailAddress: 'test@test.com',
+            emailAddress: 'test@example.com',
             password: 'Testing123',
             confirmPassword: 'Testing123',
             firstName: 'John',

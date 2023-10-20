@@ -13,7 +13,7 @@ jest.mock('crypto', () => ({
 
 const user: Users = {
     id: 1,
-    emailAddress: 'test@test.com',
+    emailAddress: 'test@example.com',
     password: 'Testing123!',
     passwordResetToken: null,
     firstName: 'John',
@@ -51,7 +51,7 @@ describe('/api/account/register', () => {
         const { req, res } = createMocks({
             method: 'POST',
             body: {
-                emailAddress: 'test@test.com',
+                emailAddress: 'test@example.com',
                 password: 'Testing123!',
                 firstName: 'John',
                 lastName: 'Smith',
@@ -75,7 +75,7 @@ describe('/api/account/register', () => {
         const { req, res } = createMocks({
             method: 'POST',
             body: {
-                emailAddress: 'test@test.com',
+                emailAddress: 'test@example.com',
                 password: 'Testing123!',
                 firstName: 'John',
                 lastName: 'Smith',
