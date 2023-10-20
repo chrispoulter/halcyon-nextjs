@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import { forgotPasswordSchema } from '@/models/account.types';
-import { ProblemResponse } from '@/models/base.types';
+import { ProblemResponse } from '@/features/base.types';
+import { forgotPasswordSchema } from '@/features/account/account.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { sendEmail } from '@/utils/email';

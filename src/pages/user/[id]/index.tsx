@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import {
-    useDeleteUserMutation,
     useGetUserQuery,
+    useUpdateUserMutation,
     useLockUserMutation,
     useUnlockUserMutation,
-    useUpdateUserMutation
-} from '@/redux/api';
+    useDeleteUserMutation
+} from '@/features/user/user.api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { SubTitle, Title } from '@/components/Title/Title';
@@ -22,7 +22,8 @@ import {
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getUser, getRunningQueriesThunk } from '@/redux/api';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { getUser } from '@/features/user/user.api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 

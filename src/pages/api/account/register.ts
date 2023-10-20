@@ -1,11 +1,14 @@
 import crypto from 'crypto';
-import { UpdatedResponse } from '@/models/base.types';
-import { registerSchema } from '@/models/account.types';
+import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { registerSchema } from '@/features/account/account.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
 
-const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
+const registerHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+    req,
+    res
+) => {
     const body = await registerSchema.validate(req.body);
 
     const existing = await prisma.users.findUnique({

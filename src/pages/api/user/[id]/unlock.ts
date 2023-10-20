@@ -1,11 +1,14 @@
 import crypto from 'crypto';
-import { UpdatedResponse } from '@/models/base.types';
-import { getUserSchema, unlockUserSchema } from '@/models/user.types';
+import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { getUserSchema, unlockUserSchema } from '@/features/user/user.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
-const unlockUserHandler: Handler<UpdatedResponse> = async (req, res) => {
+const unlockUserHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+    req,
+    res
+) => {
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({

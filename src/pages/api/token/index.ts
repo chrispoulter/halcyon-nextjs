@@ -1,10 +1,14 @@
-import { createTokenSchema } from '@/models/token.types';
+import { createTokenSchema } from '@/features/token/token.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
+import { ProblemResponse } from '@/features/base.types';
 
-const createTokenHandler: Handler<string> = async (req, res) => {
+const createTokenHandler: Handler<string | ProblemResponse> = async (
+    req,
+    res
+) => {
     const body = await createTokenSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({

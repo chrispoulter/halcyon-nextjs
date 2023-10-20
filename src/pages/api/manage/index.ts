@@ -1,14 +1,14 @@
 import crypto from 'crypto';
-import { UpdatedResponse } from '@/models/base.types';
+import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
 import {
     GetProfileResponse,
     deleteAccountSchema,
     updateProfileSchema
-} from '@/models/manage.types';
+} from '@/features/manage/manage.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 
-const getProfileHandler: Handler<GetProfileResponse> = async (
+const getProfileHandler: Handler<GetProfileResponse | ProblemResponse> = async (
     _,
     res,
     { currentUserId }
@@ -36,7 +36,7 @@ const getProfileHandler: Handler<GetProfileResponse> = async (
     });
 };
 
-const updateProfileHandler: Handler<UpdatedResponse> = async (
+const updateProfileHandler: Handler<UpdatedResponse | ProblemResponse> = async (
     req,
     res,
     { currentUserId }
@@ -96,7 +96,7 @@ const updateProfileHandler: Handler<UpdatedResponse> = async (
     });
 };
 
-const deleteProfileHandler: Handler<UpdatedResponse> = async (
+const deleteProfileHandler: Handler<UpdatedResponse | ProblemResponse> = async (
     req,
     res,
     { currentUserId }

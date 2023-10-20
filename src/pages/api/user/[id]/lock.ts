@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import { UpdatedResponse } from '@/models/base.types';
-import { getUserSchema, lockUserSchema } from '@/models/user.types';
+import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { getUserSchema, lockUserSchema } from '@/features/user/user.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
-const lockUserHandler: Handler<UpdatedResponse> = async (
+const lockUserHandler: Handler<UpdatedResponse | ProblemResponse> = async (
     req,
     res,
     { currentUserId }

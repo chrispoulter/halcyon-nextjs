@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import { UpdatedResponse } from '@/models/base.types';
+import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
 import {
     createUserSchema,
     SearchUsersResponse,
     searchUsersSchema,
     UserSort
-} from '@/models/user.types';
+} from '@/features/user/user.types';
 import { Prisma } from '@prisma/client';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
@@ -83,7 +83,10 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     });
 };
 
-const createUserHandler: Handler<UpdatedResponse> = async (req, res) => {
+const createUserHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+    req,
+    res
+) => {
     const body = await createUserSchema.validate(req.body);
 
     const existing = await prisma.users.findUnique({

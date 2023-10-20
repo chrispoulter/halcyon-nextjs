@@ -1,14 +1,12 @@
-import { UpdatedResponse } from '@/models/base.types';
-import { changePasswordSchema } from '@/models/manage.types';
+import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { changePasswordSchema } from '@/features/manage/manage.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword, verifyPassword } from '@/utils/hash';
 
-const changePasswordHandler: Handler<UpdatedResponse> = async (
-    req,
-    res,
-    { currentUserId }
-) => {
+const changePasswordHandler: Handler<
+    UpdatedResponse | ProblemResponse
+> = async (req, res, { currentUserId }) => {
     const body = await changePasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({

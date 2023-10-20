@@ -1,16 +1,19 @@
 import crypto from 'crypto';
-import { UpdatedResponse } from '@/models/base.types';
+import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
 import {
     GetUserResponse,
     deleteUserSchema,
     getUserSchema,
     updateUserSchema
-} from '@/models/user.types';
+} from '@/features/user/user.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { Role, isUserAdministrator } from '@/utils/auth';
 
-const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
+const getUserHandler: Handler<GetUserResponse | ProblemResponse> = async (
+    req,
+    res
+) => {
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
@@ -38,7 +41,10 @@ const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
     });
 };
 
-const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
+const updateUserHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+    req,
+    res
+) => {
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
@@ -97,7 +103,7 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
     });
 };
 
-const deleteUserHandler: Handler<UpdatedResponse> = async (
+const deleteUserHandler: Handler<UpdatedResponse | ProblemResponse> = async (
     req,
     res,
     { currentUserId }

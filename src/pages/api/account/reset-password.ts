@@ -1,10 +1,13 @@
-import { UpdatedResponse } from '@/models/base.types';
-import { resetPasswordSchema } from '@/models/account.types';
+import { ProblemResponse, UpdatedResponse } from '@/features/base.types';
+import { resetPasswordSchema } from '@/features/account/account.types';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
 
-const resetPasswordHandler: Handler<UpdatedResponse> = async (req, res) => {
+const resetPasswordHandler: Handler<UpdatedResponse | ProblemResponse> = async (
+    req,
+    res
+) => {
     const body = await resetPasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({

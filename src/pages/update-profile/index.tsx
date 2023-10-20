@@ -1,6 +1,9 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { useGetProfileQuery, useUpdateProfileMutation } from '@/redux/api';
+import {
+    useGetProfileQuery,
+    useUpdateProfileMutation
+} from '@/features/manage/manage.api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -12,7 +15,8 @@ import {
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getProfile, getRunningQueriesThunk } from '@/redux/api';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { getProfile } from '@/features/manage/manage.api';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
