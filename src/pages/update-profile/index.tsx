@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
@@ -26,6 +27,7 @@ const UpdateProfilePage = () => {
 
     const onSubmit = async (values: UpdateProfileFormValues) => {
         await updateProfile({ ...values, version }).unwrap();
+        toast.success('Your profile has been updated.');
         await router.push('/my-account');
     };
 

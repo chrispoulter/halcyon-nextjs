@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import {
     useDeleteUserMutation,
     useGetUserQuery,
@@ -50,6 +51,7 @@ const UpdateUserPage = () => {
             body: { ...values, version }
         }).unwrap();
 
+        toast.success('User successfully updated.');
         await router.push('/user');
     };
 
@@ -59,20 +61,27 @@ const UpdateUserPage = () => {
             body: { version }
         }).unwrap();
 
+        toast.success('User successfully deleted.');
         await router.push('/user');
     };
 
-    const onLock = () =>
-        lockUser({
+    const onLock = async () => {
+        await lockUser({
             id,
             body: { version }
-        });
+        }).unwrap();
 
-    const onUnlock = () =>
-        unlockUser({
+        toast.success('User successfully locked.');
+    };
+
+    const onUnlock = async () => {
+        await unlockUser({
             id,
             body: { version }
-        });
+        }).unwrap();
+
+        toast.success('User successfully unlocked.');
+    };
 
     const options = ({ isSubmitting }: UpdateUserFormState) => (
         <>

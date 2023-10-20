@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import { useChangePasswordMutation, useGetProfileQuery } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
@@ -31,6 +32,7 @@ const ChangePasswordPage = () => {
             version
         }).unwrap();
 
+        toast.success('Your password has been changed.');
         await router.push('/my-account');
     };
 

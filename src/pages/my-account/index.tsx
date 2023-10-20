@@ -1,4 +1,5 @@
 import { signOut } from 'next-auth/react';
+import toast from 'react-hot-toast';
 import { useDeleteAccountMutation, useGetProfileQuery } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
@@ -23,6 +24,7 @@ const MyAccountPage = () => {
 
     const onDelete = async () => {
         await deleteAccount({ version }).unwrap();
+        toast.success('Your account has been deleted.');
         await signOut({ callbackUrl: '/' });
     };
 

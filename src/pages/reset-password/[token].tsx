@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import { useResetPasswordMutation } from '@/redux/api';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
@@ -21,6 +22,7 @@ const ResetPasswordPage = () => {
             ...values
         }).unwrap();
 
+        toast.success('Your password has been reset.');
         await router.push('/login');
     };
 
