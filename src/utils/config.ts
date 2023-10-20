@@ -13,7 +13,7 @@ export const config = {
     EMAIL_SMTP_USERNAME: process.env.EMAIL_SMTP_USERNAME,
     EMAIL_SMTP_PASSWORD: process.env.EMAIL_SMTP_PASSWORD,
     EMAIL_NO_REPLY_ADDRESS:
-        process.env.EMAIL_NO_REPLY_ADDRESS || 'noreply@chrispoulter.com',
+        process.env.EMAIL_NO_REPLY_ADDRESS || 'noreply@example.com',
 
     SEED_EMAIL_ADDRESS: process.env.SEED_EMAIL_ADDRESS!,
     SEED_PASSWORD: process.env.SEED_PASSWORD!,
