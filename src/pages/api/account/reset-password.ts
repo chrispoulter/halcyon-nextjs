@@ -11,6 +11,10 @@ const resetPasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const body = await resetPasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            passwordResetToken: true
+        },
         where: {
             emailAddress: body.emailAddress
         }

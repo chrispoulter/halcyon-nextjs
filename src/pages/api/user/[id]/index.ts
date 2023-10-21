@@ -17,6 +17,16 @@ const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            emailAddress: true,
+            firstName: true,
+            lastName: true,
+            dateOfBirth: true,
+            isLockedOut: true,
+            version: true,
+            roles: true
+        },
         where: {
             id: query.id
         }
@@ -47,6 +57,11 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            emailAddress: true,
+            version: true
+        },
         where: {
             id: query.id
         }
@@ -67,7 +82,7 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     }
 
     if (user.emailAddress !== body.emailAddress) {
-        const existing = await prisma.users.findUnique({
+        const existing = await prisma.users.count({
             where: {
                 emailAddress: body.emailAddress
             }
@@ -107,6 +122,10 @@ const deleteUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            version: true
+        },
         where: {
             id: query.id
         }

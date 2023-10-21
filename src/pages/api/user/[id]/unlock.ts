@@ -12,6 +12,10 @@ const unlockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            version: true
+        },
         where: {
             id: query.id
         }

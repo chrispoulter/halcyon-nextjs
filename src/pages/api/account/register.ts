@@ -12,6 +12,9 @@ const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const body = await registerSchema.validate(req.body);
 
     const existing = await prisma.users.findUnique({
+        select: {
+            id: true
+        },
         where: {
             emailAddress: body.emailAddress
         }

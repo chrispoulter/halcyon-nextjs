@@ -12,6 +12,15 @@ const createTokenHandler: Handler<string | ErrorResponse> = async (
     const body = await createTokenSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            emailAddress: true,
+            firstName: true,
+            lastName: true,
+            password: true,
+            isLockedOut: true,
+            roles: true
+        },
         where: {
             emailAddress: body.emailAddress
         }

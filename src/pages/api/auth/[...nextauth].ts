@@ -18,6 +18,16 @@ export const authOptions: AuthOptions = {
                 const body = await createTokenSchema.validate(credentials);
 
                 const user = await prisma.users.findUnique({
+                    select: {
+                        id: true,
+                        emailAddress: true,
+                        firstName: true,
+                        lastName: true,
+                        dateOfBirth: true,
+                        password: true,
+                        isLockedOut: true,
+                        roles: true
+                    },
                     where: {
                         emailAddress: body.emailAddress
                     }

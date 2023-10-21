@@ -4,7 +4,12 @@ import crypto from 'crypto';
 import { config } from '@/utils/config';
 import { Role } from '@/utils/auth';
 
-export const generateJwtToken = async (user: Users) =>
+type JwtTokenUser = Pick<
+    Users,
+    'id' | 'emailAddress' | 'firstName' | 'lastName' | 'roles'
+>;
+
+export const generateJwtToken = async (user: JwtTokenUser) =>
     encode({
         secret: config.NEXTAUTH_SECRET,
         maxAge: config.NEXTAUTH_SESSION_MAXAGE,

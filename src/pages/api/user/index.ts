@@ -58,6 +58,14 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     const skip = (query.page - 1) * query.size;
 
     const users = await prisma.users.findMany({
+        select: {
+            id: true,
+            emailAddress: true,
+            firstName: true,
+            lastName: true,
+            isLockedOut: true,
+            roles: true
+        },
         where,
         orderBy,
         skip,
@@ -89,6 +97,9 @@ const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const body = await createUserSchema.validate(req.body);
 
     const existing = await prisma.users.findUnique({
+        select: {
+            id: true
+        },
         where: {
             emailAddress: body.emailAddress
         }
