@@ -9,7 +9,9 @@ const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res
 ) => {
-    const body = await registerSchema.validate(req.body);
+    const body = await registerSchema.validate(req.body, {
+        stripUnknown: true
+    });
 
     const existing = await prisma.users.findUnique({
         select: {
@@ -28,11 +30,8 @@ const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
 
     const result = await prisma.users.create({
         data: {
-            emailAddress: body.emailAddress,
+            ...body,
             password: await hashPassword(body.password),
-            firstName: body.firstName,
-            lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth,
             version: crypto.randomUUID()
         }
     });

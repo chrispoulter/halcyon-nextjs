@@ -67,7 +67,9 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         });
     }
 
-    const body = await updateUserSchema.validate(req.body);
+    const body = await updateUserSchema.validate(req.body, {
+        stripUnknown: true
+    });
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
@@ -94,11 +96,7 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
             id: user.id
         },
         data: {
-            emailAddress: body.emailAddress,
-            firstName: body.firstName,
-            lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth,
-            roles: body.roles,
+            ...body,
             version: crypto.randomUUID()
         }
     });

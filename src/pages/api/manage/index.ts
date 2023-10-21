@@ -42,7 +42,9 @@ const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     res,
     { currentUserId }
 ) => {
-    const body = await updateProfileSchema.validate(req.body);
+    const body = await updateProfileSchema.validate(req.body, {
+        stripUnknown: true
+    });
 
     const user = await prisma.users.findUnique({
         select: {
@@ -89,10 +91,7 @@ const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
             id: user.id
         },
         data: {
-            emailAddress: body.emailAddress,
-            firstName: body.firstName,
-            lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth,
+            ...body,
             version: crypto.randomUUID()
         }
     });

@@ -90,7 +90,9 @@ const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res
 ) => {
-    const body = await createUserSchema.validate(req.body);
+    const body = await createUserSchema.validate(req.body, {
+        stripUnknown: true
+    });
 
     const existing = await prisma.users.findUnique({
         select: {
@@ -109,12 +111,8 @@ const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
 
     const result = await prisma.users.create({
         data: {
-            emailAddress: body.emailAddress,
+            ...body,
             password: await hashPassword(body.password),
-            firstName: body.firstName,
-            lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth,
-            roles: body.roles,
             version: crypto.randomUUID()
         }
     });
