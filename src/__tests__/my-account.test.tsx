@@ -32,7 +32,7 @@ describe('<MyAccountPage />', () => {
         })
     );
 
-    it('renders a heading', async () => {
+    it('should render a heading', async () => {
         render(<MyAccountPage />, { wrapper: storeWrapper });
 
         const loading = screen.getAllByText(/loading/i);
@@ -45,7 +45,7 @@ describe('<MyAccountPage />', () => {
         expect(heading).toBeInTheDocument();
     });
 
-    it('renders personal details', async () => {
+    it('should render personal details', async () => {
         render(<MyAccountPage />, { wrapper: storeWrapper });
 
         const loading = screen.getAllByText(/loading/i);

@@ -49,7 +49,7 @@ describe('<RegisterPage />', () => {
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 
-    it('renders a heading', () => {
+    it('should render a heading', () => {
         render(<RegisterPage />, { wrapper: storeWrapper });
 
         const heading = screen.getByRole('heading', {
@@ -59,7 +59,7 @@ describe('<RegisterPage />', () => {
         expect(heading).toBeInTheDocument();
     });
 
-    it('handles form submission', async () => {
+    it('when form submitted should register user', async () => {
         const response: UpdatedResponse = { id: 1 };
 
         fetchMock.mockResponse(JSON.stringify(response), {
