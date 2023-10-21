@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import {
     useGetProfileQuery,
     useChangePasswordMutation
-} from '@/features/manage/manage.api';
+} from '@/features/manage/manageApi';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -18,7 +18,7 @@ import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { getRunningQueriesThunk } from '@/redux/api';
 import { wrapper } from '@/redux/store';
-import { getProfile } from '@/features/manage/manage.api';
+import { getProfile } from '@/features/manage/manageApi';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const ChangePasswordPage = () => {

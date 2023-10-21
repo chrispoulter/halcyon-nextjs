@@ -1,5 +1,5 @@
-import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
-import { resetPasswordSchema } from '@/features/account/account.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/apiTypes';
+import { resetPasswordSchema } from '@/features/account/accountTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';

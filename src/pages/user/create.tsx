@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { useCreateUserMutation } from '@/features/user/user.api';
+import { useCreateUserMutation } from '@/features/user/userApi';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title, SubTitle } from '@/components/Title/Title';

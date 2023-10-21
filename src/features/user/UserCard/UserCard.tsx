@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { SearchUserResponse } from '@/features/user/user.types';
+import { SearchUserResponse } from '@/features/user/userTypes';
 import { Badge } from '@/components/Badge/Badge';
 import { roles } from '@/utils/auth';
 

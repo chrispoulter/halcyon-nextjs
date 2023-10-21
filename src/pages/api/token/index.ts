@@ -1,9 +1,9 @@
-import { createTokenSchema } from '@/features/token/token.types';
+import { createTokenSchema } from '@/features/token/tokenTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
-import { ErrorResponse } from '@/features/base.types';
+import { ErrorResponse } from '@/features/apiTypes';
 
 const createTokenHandler: Handler<string | ErrorResponse> = async (
     req,

@@ -1,5 +1,5 @@
-import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
-import { changePasswordSchema } from '@/features/manage/manage.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/apiTypes';
+import { changePasswordSchema } from '@/features/manage/manageTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword, verifyPassword } from '@/utils/hash';

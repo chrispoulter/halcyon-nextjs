@@ -1,11 +1,11 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '../base.types';
+import { UpdatedResponse } from '../apiTypes';
 import {
     GetProfileResponse,
     UpdateProfileRequest,
     ChangePasswordRequest,
     DeleteAccountRequst
-} from './manage.types';
+} from './manageTypes';
 
 export const manageApi = api
     .enhanceEndpoints({ addTagTypes: ['User'] })

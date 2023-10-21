@@ -1,5 +1,5 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '../base.types';
+import { UpdatedResponse } from '../apiTypes';
 import {
     SearchUsersResponse,
     SearchUsersRequest,
@@ -9,7 +9,7 @@ import {
     LockUserRequest,
     UnlockUserRequest,
     DeleteUserRequest
-} from './user.types';
+} from './userTypes';
 
 export const userApi = api
     .enhanceEndpoints({ addTagTypes: ['User'] })

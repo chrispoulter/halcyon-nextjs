@@ -1,6 +1,6 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { createTokenSchema } from '@/features/token/token.types';
+import { createTokenSchema } from '@/features/token/tokenTypes';
 import prisma from '@/utils/prisma';
 import { verifyPassword } from '@/utils/hash';
 import { Role } from '@/utils/auth';

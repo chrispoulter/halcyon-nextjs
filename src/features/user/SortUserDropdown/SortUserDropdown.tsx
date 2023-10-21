@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { Menu } from '@headlessui/react';
-import { UserSort } from '@/features/user/user.types';
+import { UserSort } from '@/features/user/userTypes';
 import { SortIcon } from '@/components/Icons/SortIcon';
 
 const options = [

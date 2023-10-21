@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
-import { registerSchema } from '@/features/account/account.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/apiTypes';
+import { registerSchema } from '@/features/account/accountTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';

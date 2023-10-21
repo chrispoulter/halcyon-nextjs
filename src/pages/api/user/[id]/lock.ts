@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
-import { getUserSchema, lockUserSchema } from '@/features/user/user.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/apiTypes';
+import { getUserSchema, lockUserSchema } from '@/features/user/userTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';

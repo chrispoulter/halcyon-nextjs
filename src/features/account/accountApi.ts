@@ -1,10 +1,10 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '../base.types';
+import { UpdatedResponse } from '../apiTypes';
 import {
     RegisterRequest,
     ForgotPasswordRequest,
     ResetPasswordRequest
-} from './account.types';
+} from './accountTypes';
 
 export const accountApi = api
     .enhanceEndpoints({ addTagTypes: ['User'] })

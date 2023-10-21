@@ -4,7 +4,7 @@ import {
     waitForElementToBeRemoved
 } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
-import { GetProfileResponse } from '@/features/manage/manage.types';
+import { GetProfileResponse } from '@/features/manage/manageTypes';
 import MyAccountPage from '@/pages/my-account';
 import { storeWrapper } from '@/utils/test-utils';
 

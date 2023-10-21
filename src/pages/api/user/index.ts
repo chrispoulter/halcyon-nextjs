@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/apiTypes';
 import {
     createUserSchema,
     SearchUsersResponse,
     searchUsersSchema,
     UserSort
-} from '@/features/user/user.types';
+} from '@/features/user/userTypes';
 import { Prisma } from '@prisma/client';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';

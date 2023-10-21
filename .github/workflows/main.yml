@@ -43,7 +43,7 @@ jobs:
                   yarn install --frozen-lockfile
                   yarn lint
                   yarn build
-                  yarn test:ci
+                  yarn test
 
             - name: Move static folders into dynamic folder
               run: |

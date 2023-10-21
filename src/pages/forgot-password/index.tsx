@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { useForgotPasswordMutation } from '@/features/account/account.api';
+import { useForgotPasswordMutation } from '@/features/account/accountApi';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';

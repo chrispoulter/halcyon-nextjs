@@ -1,6 +1,6 @@
 import { Formik, Form } from 'formik';
 import { InferType, object, ref, string } from 'yup';
-import { GetProfileResponse } from '@/features/manage/manage.types';
+import { GetProfileResponse } from '@/features/manage/manageTypes';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';

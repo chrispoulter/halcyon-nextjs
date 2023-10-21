@@ -1,10 +1,10 @@
 import crypto from 'crypto';
-import { ErrorResponse, UpdatedResponse } from '@/features/base.types';
+import { ErrorResponse, UpdatedResponse } from '@/features/apiTypes';
 import {
     GetProfileResponse,
     deleteAccountSchema,
     updateProfileSchema
-} from '@/features/manage/manage.types';
+} from '@/features/manage/manageTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 

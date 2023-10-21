@@ -40,7 +40,7 @@ describe('/api/account/register', () => {
 
         const data = JSON.parse(res._getData());
         expect(data).toHaveProperty(
-            'title',
+            'message',
             'One or more validation errors occurred.'
         );
     });
