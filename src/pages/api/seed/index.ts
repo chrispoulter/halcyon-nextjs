@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import { generateHash } from '@/utils/hash';
-import { handler, Handler } from '@/utils/handler';
+import { hashPassword } from '@/utils/hash';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { Role } from '@/utils/auth';
 import prisma from '@/utils/prisma';
 import { config } from '@/utils/config';
@@ -8,7 +8,7 @@ import { config } from '@/utils/config';
 const seedHandler: Handler = async (_, res) => {
     const seedUser = {
         emailAddress: config.SEED_EMAIL_ADDRESS,
-        password: await generateHash(config.SEED_PASSWORD),
+        password: await hashPassword(config.SEED_PASSWORD),
         passwordResetToken: null,
         firstName: 'System',
         lastName: 'Administrator',
@@ -24,12 +24,9 @@ const seedHandler: Handler = async (_, res) => {
         create: seedUser
     });
 
-    return res.json({
-        code: 'ENVIRONMENT_SEEDED',
-        message: 'Environment seeded.'
-    });
+    return res.send('Environment seeded.');
 };
 
-export default handler({
+export default mapHandlers({
     get: seedHandler
 });

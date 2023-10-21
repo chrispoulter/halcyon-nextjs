@@ -3,11 +3,16 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import { Context, createWrapper } from 'next-redux-wrapper';
 import { api } from './api';
 import { logger } from './logger';
+import { GetServerSidePropsContext } from 'next';
+
+const isGetServerSidePropsContext = (
+    context: Context
+): context is GetServerSidePropsContext => 'resolvedUrl' in context;
 
 export const makeStore = (context: Context) => {
     let extraArgument: unknown = undefined;
 
-    if ('resolvedUrl' in context) {
+    if (isGetServerSidePropsContext(context)) {
         extraArgument = { cookies: context.req.cookies };
     }
 

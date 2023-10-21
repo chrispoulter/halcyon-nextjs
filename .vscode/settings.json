@@ -9,6 +9,5 @@
     "tailwindCSS.experimental.classRegex": [
         ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
     ],
-    "jest.jestCommandLine": "yarn test:ci",
-    "jest.rootPath": "./"
+    "jest.autoRun": "off"
 }

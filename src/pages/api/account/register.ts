@@ -1,11 +1,14 @@
 import crypto from 'crypto';
-import { UpdatedResponse } from '@/models/base.types';
-import { registerSchema } from '@/models/account.types';
+import { ErrorResponse, UpdatedResponse } from '@/common/types';
+import { registerSchema } from '@/features/account/accountTypes';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
-import { generateHash } from '@/utils/hash';
+import { mapHandlers, Handler } from '@/utils/handler';
+import { hashPassword } from '@/utils/hash';
 
-const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
+const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
+    req,
+    res
+) => {
     const body = await registerSchema.validate(req.body);
 
     const existing = await prisma.users.findUnique({
@@ -16,15 +19,14 @@ const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (existing) {
         return res.status(400).json({
-            code: 'DUPLICATE_USER',
-            message: `User name "${body.emailAddress}" is already taken.`
+            message: 'User name is already taken.'
         });
     }
 
     const result = await prisma.users.create({
         data: {
             emailAddress: body.emailAddress,
-            password: await generateHash(body.password),
+            password: await hashPassword(body.password),
             firstName: body.firstName,
             lastName: body.lastName,
             dateOfBirth: body.dateOfBirth,
@@ -33,14 +35,10 @@ const registerHandler: Handler<UpdatedResponse> = async (req, res) => {
     });
 
     return res.json({
-        code: 'USER_REGISTERED',
-        message: 'User successfully registered.',
-        data: {
-            id: result.id
-        }
+        id: result.id
     });
 };
 
-export default handler({
+export default mapHandlers({
     post: registerHandler
 });

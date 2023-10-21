@@ -1,5 +1,9 @@
 import { signOut } from 'next-auth/react';
-import { useDeleteAccountMutation, useGetProfileQuery } from '@/redux/api';
+import toast from 'react-hot-toast';
+import {
+    useGetProfileQuery,
+    useDeleteAccountMutation
+} from '@/features/manage/manageEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -9,7 +13,8 @@ import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/Accou
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk, getProfile } from '@/redux/api';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { getProfile } from '@/features/manage/manageEndpoints';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
@@ -19,10 +24,11 @@ const MyAccountPage = () => {
     const [deleteAccount, { isLoading: isDeleting }] =
         useDeleteAccountMutation();
 
-    const version = profile?.data?.version;
+    const version = profile?.version;
 
     const onDelete = async () => {
         await deleteAccount({ version }).unwrap();
+        toast.success('Your account has been deleted.');
         await signOut({ callbackUrl: '/' });
     };
 
@@ -32,11 +38,11 @@ const MyAccountPage = () => {
 
             <Container>
                 <Title>My Account</Title>
-                <PersonalDetailsCard profile={profile?.data} className="mb-5" />
-                <LoginDetailsCard profile={profile?.data} className="mb-5" />
+                <PersonalDetailsCard profile={profile} className="mb-5" />
+                <LoginDetailsCard profile={profile} className="mb-5" />
 
                 <AccountSettingsCard
-                    profile={profile?.data}
+                    profile={profile}
                     isDeleting={isDeleting}
                     onDelete={onDelete}
                 />

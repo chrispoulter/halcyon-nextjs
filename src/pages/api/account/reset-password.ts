@@ -1,10 +1,13 @@
-import { UpdatedResponse } from '@/models/base.types';
-import { resetPasswordSchema } from '@/models/account.types';
+import { ErrorResponse, UpdatedResponse } from '@/common/types';
+import { resetPasswordSchema } from '@/features/account/accountTypes';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
-import { generateHash } from '@/utils/hash';
+import { mapHandlers, Handler } from '@/utils/handler';
+import { hashPassword } from '@/utils/hash';
 
-const resetPasswordHandler: Handler<UpdatedResponse> = async (req, res) => {
+const resetPasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
+    req,
+    res
+) => {
     const body = await resetPasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
@@ -15,7 +18,6 @@ const resetPasswordHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (!user || user.passwordResetToken !== body.token) {
         return res.status(400).json({
-            code: 'INVALID_TOKEN',
             message: 'Invalid token.'
         });
     }
@@ -25,20 +27,16 @@ const resetPasswordHandler: Handler<UpdatedResponse> = async (req, res) => {
             id: user.id
         },
         data: {
-            password: await generateHash(body.newPassword),
+            password: await hashPassword(body.newPassword),
             passwordResetToken: null
         }
     });
 
     return res.json({
-        code: 'PASSWORD_RESET',
-        message: 'Your password has been reset.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 
-export default handler({
+export default mapHandlers({
     put: resetPasswordHandler
 });

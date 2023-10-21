@@ -4,8 +4,7 @@ import {
     waitForElementToBeRemoved
 } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
-import { HandlerResponse } from '@/models/base.types';
-import { GetProfileResponse } from '@/models/manage.types';
+import { GetProfileResponse } from '@/features/manage/manageTypes';
 import MyAccountPage from '@/pages/my-account';
 import { storeWrapper } from '@/utils/test-utils';
 
@@ -14,15 +13,13 @@ jest.mock('next-auth', () => ({
     default: jest.fn()
 }));
 
-const response: HandlerResponse<GetProfileResponse> = {
-    data: {
-        id: 1,
-        emailAddress: 'test@test.com',
-        firstName: 'John',
-        lastName: 'Smith',
-        dateOfBirth: new Date(1970, 1, 1),
-        version: '1234'
-    }
+const response: GetProfileResponse = {
+    id: 1,
+    emailAddress: 'test@example.com',
+    firstName: 'John',
+    lastName: 'Smith',
+    dateOfBirth: new Date(1970, 1, 1),
+    version: '1234'
 };
 
 describe('<MyAccountPage />', () => {
@@ -35,7 +32,7 @@ describe('<MyAccountPage />', () => {
         })
     );
 
-    it('renders a heading', async () => {
+    it('should render a heading', async () => {
         render(<MyAccountPage />, { wrapper: storeWrapper });
 
         const loading = screen.getAllByText(/loading/i);
@@ -48,13 +45,13 @@ describe('<MyAccountPage />', () => {
         expect(heading).toBeInTheDocument();
     });
 
-    it('renders personal details', async () => {
+    it('should render personal details', async () => {
         render(<MyAccountPage />, { wrapper: storeWrapper });
 
         const loading = screen.getAllByText(/loading/i);
         await waitForElementToBeRemoved(loading);
 
-        const emailAddress = screen.getByText(response.data!.emailAddress);
+        const emailAddress = screen.getByText(response.emailAddress);
         expect(emailAddress).toBeInTheDocument();
     });
 });

@@ -1,15 +1,15 @@
 import crypto from 'crypto';
-import { UpdatedResponse } from '@/models/base.types';
+import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import {
     createUserSchema,
     SearchUsersResponse,
     searchUsersSchema,
     UserSort
-} from '@/models/user.types';
+} from '@/features/user/userTypes';
 import { Prisma } from '@prisma/client';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
-import { generateHash } from '@/utils/hash';
+import { mapHandlers, Handler } from '@/utils/handler';
+import { hashPassword } from '@/utils/hash';
 import { isUserAdministrator, Role } from '@/utils/auth';
 
 const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
@@ -69,23 +69,24 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     const hasPreviousPage = query.page > 1;
 
     return res.json({
-        data: {
-            items: users.map(user => ({
-                id: user.id,
-                emailAddress: user.emailAddress,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                dateOfBirth: user.dateOfBirth,
-                isLockedOut: user.isLockedOut,
-                roles: user.roles.map(r => r as Role)
-            })),
-            hasNextPage,
-            hasPreviousPage
-        }
+        items: users.map(user => ({
+            id: user.id,
+            emailAddress: user.emailAddress,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            dateOfBirth: user.dateOfBirth,
+            isLockedOut: user.isLockedOut,
+            roles: user.roles.map(r => r as Role)
+        })),
+        hasNextPage,
+        hasPreviousPage
     });
 };
 
-const createUserHandler: Handler<UpdatedResponse> = async (req, res) => {
+const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
+    req,
+    res
+) => {
     const body = await createUserSchema.validate(req.body);
 
     const existing = await prisma.users.findUnique({
@@ -96,15 +97,14 @@ const createUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (existing) {
         return res.status(400).json({
-            code: 'DUPLICATE_USER',
-            message: `User name "${body.emailAddress}" is already taken.`
+            message: 'User name is already taken.'
         });
     }
 
     const result = await prisma.users.create({
         data: {
             emailAddress: body.emailAddress,
-            password: await generateHash(body.password),
+            password: await hashPassword(body.password),
             firstName: body.firstName,
             lastName: body.lastName,
             dateOfBirth: body.dateOfBirth,
@@ -114,18 +114,14 @@ const createUserHandler: Handler<UpdatedResponse> = async (req, res) => {
     });
 
     return res.json({
-        code: 'USER_CREATED',
-        message: 'User successfully created.',
-        data: {
-            id: result.id
-        }
+        id: result.id
     });
 };
 
-export default handler(
+export default mapHandlers(
     {
         get: searchUsersHandler,
         post: createUserHandler
     },
-    { auth: isUserAdministrator }
+    { authorize: isUserAdministrator }
 );

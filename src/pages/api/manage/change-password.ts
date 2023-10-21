@@ -1,10 +1,10 @@
-import { UpdatedResponse } from '@/models/base.types';
-import { changePasswordSchema } from '@/models/manage.types';
+import { ErrorResponse, UpdatedResponse } from '@/common/types';
+import { changePasswordSchema } from '@/features/manage/manageTypes';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
-import { generateHash, verifyHash } from '@/utils/hash';
+import { mapHandlers, Handler } from '@/utils/handler';
+import { hashPassword, verifyPassword } from '@/utils/hash';
 
-const changePasswordHandler: Handler<UpdatedResponse> = async (
+const changePasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res,
     { currentUserId }
@@ -19,30 +19,26 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
             message: 'User not found.'
         });
     }
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            code: 'CONFLICT',
-            message: 'Data has been modified since resource was loaded.'
+            message: 'Data has been modified since entities were loaded.'
         });
     }
 
     if (!user.password) {
         return res.status(400).json({
-            code: 'INCORRECT_PASSWORD',
             message: 'Incorrect password.'
         });
     }
 
-    const verified = await verifyHash(body.currentPassword, user.password);
+    const verified = await verifyPassword(body.currentPassword, user.password);
 
     if (!verified) {
         return res.status(400).json({
-            code: 'INCORRECT_PASSWORD',
             message: 'Incorrect password.'
         });
     }
@@ -52,23 +48,19 @@ const changePasswordHandler: Handler<UpdatedResponse> = async (
             id: user.id
         },
         data: {
-            password: await generateHash(body.newPassword),
+            password: await hashPassword(body.newPassword),
             passwordResetToken: null
         }
     });
 
     return res.json({
-        code: 'PASSWORD_CHANGED',
-        message: 'Your password has been changed.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 
-export default handler(
+export default mapHandlers(
     {
         put: changePasswordHandler
     },
-    { auth: true }
+    { authorize: true }
 );

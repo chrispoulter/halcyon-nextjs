@@ -1,5 +1,9 @@
 import { useRouter } from 'next/router';
-import { useGetProfileQuery, useUpdateProfileMutation } from '@/redux/api';
+import toast from 'react-hot-toast';
+import {
+    useGetProfileQuery,
+    useUpdateProfileMutation
+} from '@/features/manage/manageEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -11,7 +15,8 @@ import {
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getProfile, getRunningQueriesThunk } from '@/redux/api';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { getProfile } from '@/features/manage/manageEndpoints';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
@@ -22,10 +27,11 @@ const UpdateProfilePage = () => {
 
     const [updateProfile] = useUpdateProfileMutation();
 
-    const version = profile?.data?.version;
+    const version = profile?.version;
 
     const onSubmit = async (values: UpdateProfileFormValues) => {
         await updateProfile({ ...values, version }).unwrap();
+        toast.success('Your profile has been updated.');
         await router.push('/my-account');
     };
 
@@ -37,7 +43,7 @@ const UpdateProfilePage = () => {
                 <Title>Update Profile</Title>
 
                 <UpdateProfileForm
-                    profile={profile?.data}
+                    profile={profile}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">

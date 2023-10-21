@@ -1,4 +1,4 @@
-import { Middleware, isFulfilled, isRejectedWithValue } from '@reduxjs/toolkit';
+import { Middleware, isRejectedWithValue } from '@reduxjs/toolkit';
 import router from 'next/router';
 import { signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
@@ -12,7 +12,7 @@ export const logger: Middleware = () => next => async action => {
         const { request, response } = action.meta.baseQueryMeta;
         const method = request.method;
         const status = response?.status;
-        const message = action.payload.data?.message;
+        const errorMessage = action.payload.data?.message;
 
         switch (method) {
             case 'GET':
@@ -56,20 +56,12 @@ export const logger: Middleware = () => next => async action => {
 
                     default:
                         toast.error(
-                            message ||
+                            errorMessage ||
                                 'Sorry, something went wrong. Please try again later.'
                         );
                         break;
                 }
                 break;
-        }
-    }
-
-    if (isFulfilled(action)) {
-        const message = action.payload?.message;
-
-        if (message) {
-            toast.success(message);
         }
     }
 

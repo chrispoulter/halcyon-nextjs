@@ -1,16 +1,19 @@
 import crypto from 'crypto';
-import { UpdatedResponse } from '@/models/base.types';
+import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import {
     GetUserResponse,
     deleteUserSchema,
     getUserSchema,
     updateUserSchema
-} from '@/models/user.types';
+} from '@/features/user/userTypes';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { Role, isUserAdministrator } from '@/utils/auth';
 
-const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
+const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
+    req,
+    res
+) => {
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
@@ -21,26 +24,26 @@ const getUserHandler: Handler<GetUserResponse> = async (req, res) => {
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
             message: 'User not found.'
         });
     }
 
     return res.json({
-        data: {
-            id: user.id,
-            emailAddress: user.emailAddress,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth,
-            isLockedOut: user.isLockedOut,
-            roles: user.roles.map(r => r as Role),
-            version: user.version
-        }
+        id: user.id,
+        emailAddress: user.emailAddress,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        dateOfBirth: user.dateOfBirth,
+        isLockedOut: user.isLockedOut,
+        roles: user.roles.map(r => r as Role),
+        version: user.version
     });
 };
 
-const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
+const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
+    req,
+    res
+) => {
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
@@ -51,7 +54,6 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
             message: 'User not found.'
         });
     }
@@ -60,8 +62,7 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            code: 'CONFLICT',
-            message: 'Data has been modified since resource was loaded.'
+            message: 'Data has been modified since entities were loaded.'
         });
     }
 
@@ -74,8 +75,7 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
 
         if (existing) {
             return res.status(400).json({
-                code: 'DUPLICATE_USER',
-                message: `User name "${body.emailAddress}" is already taken.`
+                message: 'User name is already taken.'
             });
         }
     }
@@ -95,15 +95,11 @@ const updateUserHandler: Handler<UpdatedResponse> = async (req, res) => {
     });
 
     return res.json({
-        code: 'USER_UPDATED',
-        message: 'User successfully updated.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 
-const deleteUserHandler: Handler<UpdatedResponse> = async (
+const deleteUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res,
     { currentUserId }
@@ -118,7 +114,6 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
             message: 'User not found.'
         });
     }
@@ -127,14 +122,12 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            code: 'CONFLICT',
-            message: 'Data has been modified since resource was loaded.'
+            message: 'Data has been modified since entities were loaded.'
         });
     }
 
     if (user.id === currentUserId) {
         return res.status(400).json({
-            code: 'DELETE_CURRENT_USER',
             message: 'Cannot delete currently logged in user.'
         });
     }
@@ -146,19 +139,15 @@ const deleteUserHandler: Handler<UpdatedResponse> = async (
     });
 
     return res.json({
-        code: 'USER_DELETED',
-        message: 'User successfully deleted.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 
-export default handler(
+export default mapHandlers(
     {
         get: getUserHandler,
         put: updateUserHandler,
         delete: deleteUserHandler
     },
-    { auth: isUserAdministrator }
+    { authorize: isUserAdministrator }
 );

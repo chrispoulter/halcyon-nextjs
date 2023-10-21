@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import { UpdatedResponse } from '@/models/base.types';
-import { getUserSchema, lockUserSchema } from '@/models/user.types';
+import { ErrorResponse, UpdatedResponse } from '@/common/types';
+import { getUserSchema, lockUserSchema } from '@/features/user/userTypes';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
+import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
-const lockUserHandler: Handler<UpdatedResponse> = async (
+const lockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res,
     { currentUserId }
@@ -20,7 +20,6 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
 
     if (!user) {
         return res.status(404).json({
-            code: 'USER_NOT_FOUND',
             message: 'User not found.'
         });
     }
@@ -29,14 +28,12 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
-            code: 'CONFLICT',
-            message: 'Data has been modified since resource was loaded.'
+            message: 'Data has been modified since entities were loaded.'
         });
     }
 
     if (user.id === currentUserId) {
         return res.status(400).json({
-            code: 'LOCK_CURRENT_USER',
             message: 'Cannot lock currently logged in user.'
         });
     }
@@ -52,17 +49,13 @@ const lockUserHandler: Handler<UpdatedResponse> = async (
     });
 
     return res.json({
-        code: 'USER_LOCKED',
-        message: 'User successfully locked.',
-        data: {
-            id: user.id
-        }
+        id: user.id
     });
 };
 
-export default handler(
+export default mapHandlers(
     {
         put: lockUserHandler
     },
-    { auth: isUserAdministrator }
+    { authorize: isUserAdministrator }
 );

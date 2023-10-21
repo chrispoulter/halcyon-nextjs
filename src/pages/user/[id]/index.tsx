@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import {
-    useDeleteUserMutation,
     useGetUserQuery,
+    useUpdateUserMutation,
     useLockUserMutation,
     useUnlockUserMutation,
-    useUpdateUserMutation
-} from '@/redux/api';
+    useDeleteUserMutation
+} from '@/features/user/userEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { SubTitle, Title } from '@/components/Title/Title';
@@ -21,7 +22,8 @@ import {
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getUser, getRunningQueriesThunk } from '@/redux/api';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { getUser } from '@/features/user/userEndpoints';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
@@ -42,7 +44,7 @@ const UpdateUserPage = () => {
 
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
-    const version = user?.data?.version;
+    const version = user?.version;
 
     const onSubmit = async (values: UpdateUserFormValues) => {
         await updateUser({
@@ -50,6 +52,7 @@ const UpdateUserPage = () => {
             body: { ...values, version }
         }).unwrap();
 
+        toast.success('User successfully updated.');
         await router.push('/user');
     };
 
@@ -59,20 +62,27 @@ const UpdateUserPage = () => {
             body: { version }
         }).unwrap();
 
+        toast.success('User successfully deleted.');
         await router.push('/user');
     };
 
-    const onLock = () =>
-        lockUser({
+    const onLock = async () => {
+        await lockUser({
             id,
             body: { version }
-        });
+        }).unwrap();
 
-    const onUnlock = () =>
-        unlockUser({
+        toast.success('User successfully locked.');
+    };
+
+    const onUnlock = async () => {
+        await unlockUser({
             id,
             body: { version }
-        });
+        }).unwrap();
+
+        toast.success('User successfully unlocked.');
+    };
 
     const options = ({ isSubmitting }: UpdateUserFormState) => (
         <>
@@ -80,7 +90,7 @@ const UpdateUserPage = () => {
                 Cancel
             </ButtonLink>
 
-            {user?.data?.isLockedOut ? (
+            {user?.isLockedOut ? (
                 <ConfirmUnlockUser
                     onConfirm={onUnlock}
                     loading={isUnlocking}
@@ -119,7 +129,7 @@ const UpdateUserPage = () => {
                 </Title>
 
                 <UpdateUserForm
-                    user={user?.data}
+                    user={user}
                     isDisabled={
                         isUnlocking || isLocking || isDeleting || isFetching
                     }

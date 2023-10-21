@@ -1,8 +1,8 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { createTokenSchema } from '@/models/token.types';
+import { createTokenSchema } from '@/features/token/tokenTypes';
 import prisma from '@/utils/prisma';
-import { verifyHash } from '@/utils/hash';
+import { verifyPassword } from '@/utils/hash';
 import { Role } from '@/utils/auth';
 import { config } from '@/utils/config';
 
@@ -27,7 +27,10 @@ export const authOptions: AuthOptions = {
                     throw new Error('The credentials provided were invalid.');
                 }
 
-                const verified = await verifyHash(body.password, user.password);
+                const verified = await verifyPassword(
+                    body.password,
+                    user.password
+                );
 
                 if (!verified) {
                     throw new Error('The credentials provided were invalid.');

@@ -1,10 +1,14 @@
-import { createTokenSchema } from '@/models/token.types';
+import { createTokenSchema } from '@/features/token/tokenTypes';
 import prisma from '@/utils/prisma';
-import { handler, Handler } from '@/utils/handler';
-import { verifyHash } from '@/utils/hash';
-import { generateToken } from '@/utils/jwt';
+import { mapHandlers, Handler } from '@/utils/handler';
+import { verifyPassword } from '@/utils/hash';
+import { generateJwtToken } from '@/utils/jwt';
+import { ErrorResponse } from '@/common/types';
 
-const createTokenHandler: Handler<string> = async (req, res) => {
+const createTokenHandler: Handler<string | ErrorResponse> = async (
+    req,
+    res
+) => {
     const body = await createTokenSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
@@ -15,34 +19,29 @@ const createTokenHandler: Handler<string> = async (req, res) => {
 
     if (!user || !user.password) {
         return res.status(400).json({
-            code: 'CREDENTIALS_INVALID',
             message: 'The credentials provided were invalid.'
         });
     }
 
-    const verified = await verifyHash(body.password, user.password);
+    const verified = await verifyPassword(body.password, user.password);
 
     if (!verified) {
         return res.status(400).json({
-            code: 'CREDENTIALS_INVALID',
             message: 'The credentials provided were invalid.'
         });
     }
 
     if (user.isLockedOut) {
         return res.status(400).json({
-            code: 'USER_LOCKED_OUT',
             message: 'This account has been locked out, please try again later.'
         });
     }
 
-    const token = await generateToken(user);
+    const token = await generateJwtToken(user);
 
-    return res.json({
-        data: token
-    });
+    return res.send(token);
 };
 
-export default handler({
+export default mapHandlers({
     post: createTokenHandler
 });
