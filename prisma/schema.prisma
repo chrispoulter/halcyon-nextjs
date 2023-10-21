@@ -1,24 +1,27 @@
 generator client {
-    provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pg_trgm]
 }
 
 model Users {
-    id                 Int      @id(map: "pk_users") @default(autoincrement()) @map("id")
-    emailAddress       String   @unique(map: "ix_users_email_address") @map("email_address")
-    password           String?  @map("password")
-    passwordResetToken String?  @map("password_reset_token") @db.Uuid
-    firstName          String   @map("first_name")
-    lastName           String   @map("last_name")
-    dateOfBirth        DateTime @map("date_of_birth") @db.Timestamptz
-    isLockedOut        Boolean  @default(false) @map("is_locked_out")
-    roles              String[] @map("roles")
-    version            String   @map("version") @db.Uuid
-    search             String?  @map("search")
+  id                 Int      @id(map: "pk_users") @default(autoincrement()) @map("id")
+  emailAddress       String   @unique(map: "ix_users_email_address") @map("email_address")
+  password           String?  @map("password")
+  passwordResetToken String?  @map("password_reset_token") @db.Uuid
+  firstName          String   @map("first_name")
+  lastName           String   @map("last_name")
+  dateOfBirth        DateTime @map("date_of_birth") @db.Date
+  isLockedOut        Boolean  @default(false) @map("is_locked_out")
+  roles              String[] @map("roles")
+  search             String?  @map("search") //@default(dbgenerated("((((first_name || ' '::text) || last_name) || ' '::text) || email_address)"))
+  version            String   @map("version") @db.Uuid
 
-    @@map("users")
+  @@index([search(ops: raw("gin_trgm_ops"))], name: "ix_users_search", type: Gin)
+  @@map("users")
 }
