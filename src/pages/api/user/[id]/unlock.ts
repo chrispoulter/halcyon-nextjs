@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { ErrorResponse, UpdatedResponse } from '@/features/apiTypes';
+import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import { getUserSchema, unlockUserSchema } from '@/features/user/userTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';

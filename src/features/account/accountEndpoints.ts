@@ -1,12 +1,12 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '../apiTypes';
+import { UpdatedResponse } from '@/common/types';
 import {
     RegisterRequest,
     ForgotPasswordRequest,
     ResetPasswordRequest
 } from './accountTypes';
 
-export const accountApi = api
+export const accountEndpoints = api
     .enhanceEndpoints({ addTagTypes: ['User'] })
     .injectEndpoints({
         endpoints: builder => ({
@@ -44,4 +44,4 @@ export const {
     useRegisterMutation,
     useForgotPasswordMutation,
     useResetPasswordMutation
-} = accountApi;
+} = accountEndpoints;

@@ -6,7 +6,7 @@ import {
     useLockUserMutation,
     useUnlockUserMutation,
     useDeleteUserMutation
-} from '@/features/user/userApi';
+} from '@/features/user/userEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { SubTitle, Title } from '@/components/Title/Title';
@@ -23,7 +23,7 @@ import {
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { getRunningQueriesThunk } from '@/redux/api';
-import { getUser } from '@/features/user/userApi';
+import { getUser } from '@/features/user/userEndpoints';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 

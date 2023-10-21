@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { ErrorResponse } from '@/features/apiTypes';
+import { ErrorResponse } from '@/common/types';
 import { forgotPasswordSchema } from '@/features/account/accountTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';

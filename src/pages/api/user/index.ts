@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { ErrorResponse, UpdatedResponse } from '@/features/apiTypes';
+import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import {
     createUserSchema,
     SearchUsersResponse,

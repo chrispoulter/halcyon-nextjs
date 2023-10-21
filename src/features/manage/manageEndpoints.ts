@@ -1,5 +1,5 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '../apiTypes';
+import { UpdatedResponse } from '@/common/types';
 import {
     GetProfileResponse,
     UpdateProfileRequest,
@@ -7,7 +7,7 @@ import {
     DeleteAccountRequst
 } from './manageTypes';
 
-export const manageApi = api
+export const manageEndpoints = api
     .enhanceEndpoints({ addTagTypes: ['User'] })
     .injectEndpoints({
         endpoints: builder => ({
@@ -60,6 +60,6 @@ export const {
     useUpdateProfileMutation,
     useChangePasswordMutation,
     useDeleteAccountMutation
-} = manageApi;
+} = manageEndpoints;
 
-export const { getProfile } = manageApi.endpoints;
+export const { getProfile } = manageEndpoints.endpoints;

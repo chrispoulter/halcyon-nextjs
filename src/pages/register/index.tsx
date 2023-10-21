@@ -1,6 +1,6 @@
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import { useRegisterMutation } from '@/features/account/accountApi';
+import { useRegisterMutation } from '@/features/account/accountEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';

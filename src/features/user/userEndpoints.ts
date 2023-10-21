@@ -1,5 +1,5 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '../apiTypes';
+import { UpdatedResponse } from '@/common/types';
 import {
     SearchUsersResponse,
     SearchUsersRequest,
@@ -11,7 +11,7 @@ import {
     DeleteUserRequest
 } from './userTypes';
 
-export const userApi = api
+export const userEndpoints = api
     .enhanceEndpoints({ addTagTypes: ['User'] })
     .injectEndpoints({
         endpoints: builder => ({
@@ -103,6 +103,6 @@ export const {
     useLockUserMutation,
     useUnlockUserMutation,
     useDeleteUserMutation
-} = userApi;
+} = userEndpoints;
 
-export const { searchUsers, getUser } = userApi.endpoints;
+export const { searchUsers, getUser } = userEndpoints.endpoints;

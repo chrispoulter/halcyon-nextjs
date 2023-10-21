@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UserSort } from '@/features/user/userTypes';
-import { useSearchUsersQuery } from '@/features/user/userApi';
+import { useSearchUsersQuery } from '@/features/user/userEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -17,7 +17,7 @@ import { UserList } from '@/features/user/UserList/UserList';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { getRunningQueriesThunk } from '@/redux/api';
-import { searchUsers } from '@/features/user/userApi';
+import { searchUsers } from '@/features/user/userEndpoints';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 

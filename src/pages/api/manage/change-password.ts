@@ -1,4 +1,4 @@
-import { ErrorResponse, UpdatedResponse } from '@/features/apiTypes';
+import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import { changePasswordSchema } from '@/features/manage/manageTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';

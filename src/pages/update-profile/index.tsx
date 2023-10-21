@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import {
     useGetProfileQuery,
     useUpdateProfileMutation
-} from '@/features/manage/manageApi';
+} from '@/features/manage/manageEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -16,7 +16,7 @@ import {
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { getRunningQueriesThunk } from '@/redux/api';
-import { getProfile } from '@/features/manage/manageApi';
+import { getProfile } from '@/features/manage/manageEndpoints';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 

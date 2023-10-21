@@ -3,7 +3,7 @@ import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
-import { ErrorResponse } from '@/features/apiTypes';
+import { ErrorResponse } from '@/common/types';
 
 const createTokenHandler: Handler<string | ErrorResponse> = async (
     req,
