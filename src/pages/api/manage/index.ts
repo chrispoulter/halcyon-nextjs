@@ -34,14 +34,7 @@ const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
         });
     }
 
-    return res.json({
-        id: user.id,
-        emailAddress: user.emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
-        version: user.version
-    });
+    return res.json(user);
 };
 
 const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (

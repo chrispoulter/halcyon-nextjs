@@ -78,11 +78,7 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
 
     return res.json({
         items: users.map(user => ({
-            id: user.id,
-            emailAddress: user.emailAddress,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            isLockedOut: user.isLockedOut,
+            ...user,
             roles: user.roles.map(r => r as Role)
         })),
         hasNextPage,

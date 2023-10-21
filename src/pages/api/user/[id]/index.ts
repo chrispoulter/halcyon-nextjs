@@ -39,14 +39,8 @@ const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
     }
 
     return res.json({
-        id: user.id,
-        emailAddress: user.emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
-        isLockedOut: user.isLockedOut,
-        roles: user.roles.map(r => r as Role),
-        version: user.version
+        ...user,
+        roles: user.roles.map(r => r as Role)
     });
 };
 
