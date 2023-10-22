@@ -19,7 +19,7 @@ model Users {
   dateOfBirth        DateTime @map("date_of_birth") @db.Date
   isLockedOut        Boolean  @default(false) @map("is_locked_out")
   roles              String[] @map("roles")
-  search             String?  @map("search") //@default(dbgenerated("((((first_name || ' '::text) || last_name) || ' '::text) || email_address)"))
+  search             String?  @map("search")
   version            String   @map("version") @db.Uuid
 
   @@index([search(ops: raw("gin_trgm_ops"))], name: "ix_users_search", type: Gin)
