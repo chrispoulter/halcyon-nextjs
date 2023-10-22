@@ -2,7 +2,6 @@ import { Users } from '@prisma/client';
 import { encode } from 'next-auth/jwt';
 import crypto from 'crypto';
 import { config } from '@/utils/config';
-import { Role } from '@/utils/auth';
 
 type JwtTokenUser = Pick<
     Users,
@@ -19,6 +18,6 @@ export const generateJwtToken = async (user: JwtTokenUser) =>
             given_name: user.firstName,
             family_name: user.lastName,
             jti: crypto.randomUUID(),
-            roles: user.roles?.map(r => r as Role)
+            roles: user.roles
         }
     });

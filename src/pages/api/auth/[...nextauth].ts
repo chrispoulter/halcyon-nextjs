@@ -3,7 +3,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { createTokenSchema } from '@/features/token/tokenTypes';
 import prisma from '@/utils/prisma';
 import { verifyPassword } from '@/utils/hash';
-import { Role } from '@/utils/auth';
 import { config } from '@/utils/config';
 
 export const authOptions: AuthOptions = {
@@ -52,10 +51,7 @@ export const authOptions: AuthOptions = {
                     );
                 }
 
-                return {
-                    ...user,
-                    roles: user.roles?.map(r => r as Role)
-                };
+                return user;
             }
         })
     ],

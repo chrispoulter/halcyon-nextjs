@@ -1,5 +1,4 @@
 import { InferType, array, date, number, object, string } from 'yup';
-import { Role } from '@/utils/auth';
 
 export enum UserSort {
     EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
@@ -26,7 +25,7 @@ export type SearchUserResponse = {
     firstName: string;
     lastName: string;
     isLockedOut?: boolean;
-    roles?: Role[];
+    roles?: string[];
 };
 
 export type SearchUsersResponse = {
@@ -41,9 +40,7 @@ export const createUserSchema = object().shape({
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: date().label('Date Of Birth').required(),
-    roles: array()
-        .of(string<Role>().label('Role').oneOf(Object.values(Role)).required())
-        .label('Roles')
+    roles: array().of(string().label('Role').required()).label('Roles')
 });
 
 export type CreateUserRequest = InferType<typeof createUserSchema>;
@@ -59,7 +56,7 @@ export type GetUserResponse = {
     lastName: string;
     dateOfBirth: Date;
     isLockedOut?: boolean;
-    roles?: Role[];
+    roles?: string[];
     version: string;
 };
 
@@ -68,9 +65,7 @@ export const updateUserSchema = object().shape({
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: date().label('Date Of Birth').required(),
-    roles: array()
-        .of(string<Role>().label('Role').oneOf(Object.values(Role)).required())
-        .label('Roles'),
+    roles: array().of(string().label('Role').required()).label('Roles'),
     version: string().label('Version').uuid()
 });
 

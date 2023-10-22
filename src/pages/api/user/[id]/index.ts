@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import {
     GetUserResponse,
@@ -8,7 +7,7 @@ import {
 } from '@/features/user/userTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
-import { Role, isUserAdministrator } from '@/utils/auth';
+import { isUserAdministrator } from '@/utils/auth';
 
 const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
     req,
@@ -38,10 +37,7 @@ const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
         });
     }
 
-    return res.json({
-        ...user,
-        roles: user.roles.map(r => r as Role)
-    });
+    return res.json(user);
 };
 
 const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
@@ -95,10 +91,7 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         where: {
             id: user.id
         },
-        data: {
-            ...body,
-            version: crypto.randomUUID()
-        }
+        data: body
     });
 
     return res.json({

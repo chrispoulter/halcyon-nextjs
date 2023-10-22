@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import { registerSchema } from '@/features/account/accountTypes';
 import prisma from '@/utils/prisma';
@@ -31,8 +30,7 @@ const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const result = await prisma.users.create({
         data: {
             ...body,
-            password: await hashPassword(body.password),
-            version: crypto.randomUUID()
+            password: await hashPassword(body.password)
         }
     });
 

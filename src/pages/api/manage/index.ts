@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import {
     GetProfileResponse,
@@ -90,10 +89,7 @@ const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         where: {
             id: user.id
         },
-        data: {
-            ...body,
-            version: crypto.randomUUID()
-        }
+        data: body
     });
 
     return res.json({

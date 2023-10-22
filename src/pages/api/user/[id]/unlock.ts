@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import { getUserSchema, unlockUserSchema } from '@/features/user/userTypes';
 import prisma from '@/utils/prisma';
@@ -40,8 +39,7 @@ const unlockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
             id: user.id
         },
         data: {
-            isLockedOut: false,
-            version: crypto.randomUUID()
+            isLockedOut: false
         }
     });
 

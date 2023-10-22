@@ -20,7 +20,7 @@ model Users {
   isLockedOut        Boolean  @default(false) @map("is_locked_out")
   roles              String[] @map("roles")
   search             String?  @map("search")
-  version            String   @map("version") @db.Uuid
+  version            String   @default("") @map("version") @db.Uuid
 
   @@index([search(ops: raw("gin_trgm_ops"))], name: "ix_users_search", type: Gin)
   @@map("users")

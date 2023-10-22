@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import {
     createUserSchema,
@@ -10,7 +9,7 @@ import { Prisma } from '@prisma/client';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
-import { isUserAdministrator, Role } from '@/utils/auth';
+import { isUserAdministrator } from '@/utils/auth';
 
 const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     const query = await searchUsersSchema.validate(req.query);
@@ -77,10 +76,7 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     const hasPreviousPage = query.page > 1;
 
     return res.json({
-        items: users.map(user => ({
-            ...user,
-            roles: user.roles.map(r => r as Role)
-        })),
+        items: users,
         hasNextPage,
         hasPreviousPage
     });
@@ -112,8 +108,7 @@ const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const result = await prisma.users.create({
         data: {
             ...body,
-            password: await hashPassword(body.password),
-            version: crypto.randomUUID()
+            password: await hashPassword(body.password)
         }
     });
 

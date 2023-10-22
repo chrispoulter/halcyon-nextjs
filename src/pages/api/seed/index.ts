@@ -1,7 +1,5 @@
-import crypto from 'crypto';
 import { hashPassword } from '@/utils/hash';
 import { mapHandlers, Handler } from '@/utils/handler';
-import { Role } from '@/utils/auth';
 import prisma from '@/utils/prisma';
 import { config } from '@/utils/config';
 
@@ -12,10 +10,9 @@ const seedHandler: Handler = async (_, res) => {
         passwordResetToken: null,
         firstName: 'System',
         lastName: 'Administrator',
-        dateOfBirth: new Date(Date.UTC(1970, 0, 1)),
+        dateOfBirth: new Date(1970, 0, 1),
         isLockedOut: false,
-        roles: Object.values(Role),
-        version: crypto.randomUUID()
+        roles: ['SYSTEM_ADMINISTRATOR']
     };
 
     await prisma.users.upsert({
