@@ -13,7 +13,7 @@ CREATE TABLE "users" (
     "is_locked_out" BOOLEAN NOT NULL DEFAULT false,
     "roles" TEXT[],
     "search" TEXT,
-    "version" UUID NOT NULL,
+    "version" UUID,
 
     CONSTRAINT "pk_users" PRIMARY KEY ("id")
 );

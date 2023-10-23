@@ -33,7 +33,10 @@ const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
         });
     }
 
-    return res.json(user);
+    return res.json({
+        ...user,
+        version: user.version!
+    });
 };
 
 const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (

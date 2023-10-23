@@ -37,7 +37,10 @@ const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
         });
     }
 
-    return res.json(user);
+    return res.json({
+        ...user,
+        version: user.version!
+    });
 };
 
 const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
