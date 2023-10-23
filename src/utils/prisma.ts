@@ -29,9 +29,6 @@ const getExtendedClient = () => {
                         args.create.version = args.update.version =
                             crypto.randomUUID();
                         return query(args);
-                    },
-                    findUnique({ args, query }) {
-                        return query(args);
                     }
                 }
             }
