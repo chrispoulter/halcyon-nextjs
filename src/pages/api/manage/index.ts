@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import {
     GetProfileResponse,
@@ -14,6 +13,15 @@ const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
     { currentUserId }
 ) => {
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            emailAddress: true,
+            firstName: true,
+            lastName: true,
+            dateOfBirth: true,
+            isLockedOut: true,
+            version: true
+        },
         where: {
             id: currentUserId
         }
@@ -25,14 +33,7 @@ const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
         });
     }
 
-    return res.json({
-        id: user.id,
-        emailAddress: user.emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
-        version: user.version
-    });
+    return res.json(user);
 };
 
 const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
@@ -40,9 +41,16 @@ const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     res,
     { currentUserId }
 ) => {
-    const body = await updateProfileSchema.validate(req.body);
+    const body = await updateProfileSchema.validate(req.body, {
+        stripUnknown: true
+    });
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            emailAddress: true,
+            version: true
+        },
         where: {
             id: currentUserId
         }
@@ -62,6 +70,9 @@ const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
 
     if (user.emailAddress !== body.emailAddress) {
         const existing = await prisma.users.findUnique({
+            select: {
+                id: true
+            },
             where: {
                 emailAddress: body.emailAddress
             }
@@ -78,13 +89,7 @@ const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         where: {
             id: user.id
         },
-        data: {
-            emailAddress: body.emailAddress,
-            firstName: body.firstName,
-            lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth,
-            version: crypto.randomUUID()
-        }
+        data: body
     });
 
     return res.json({
@@ -98,6 +103,10 @@ const deleteProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     { currentUserId }
 ) => {
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            version: true
+        },
         where: {
             id: currentUserId
         }

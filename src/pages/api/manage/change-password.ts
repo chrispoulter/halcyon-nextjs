@@ -12,6 +12,11 @@ const changePasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const body = await changePasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            password: true,
+            version: true
+        },
         where: {
             id: currentUserId
         }

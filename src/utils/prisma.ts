@@ -1,36 +1,77 @@
-import { Prisma, PrismaClient, Users } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { config } from './config';
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
-
-const computeUserData = (user: Users) => {
-    user.search = `${user.emailAddress} ${user.firstName} ${user.lastName}`;
+const getExtendedClient = () => {
+    return new PrismaClient({
+        log: ['query']
+    })
+        .$extends({
+            result: {
+                $allModels: {
+                    version: {
+                        compute({ version }) {
+                            return version!;
+                        }
+                    }
+                }
+            },
+            query: {
+                $allModels: {
+                    create({ args, query }) {
+                        args.data.version = crypto.randomUUID();
+                        return query(args);
+                    },
+                    update({ args, query }) {
+                        args.data.version = crypto.randomUUID();
+                        return query(args);
+                    },
+                    upsert({ args, query }) {
+                        args.create.version = args.update.version =
+                            crypto.randomUUID();
+                        return query(args);
+                    }
+                }
+            }
+        })
+        .$extends({
+            result: {
+                users: {
+                    search: {
+                        needs: { search: true },
+                        compute({ search }) {
+                            return search!;
+                        }
+                    }
+                }
+            },
+            query: {
+                users: {
+                    create({ args, query }) {
+                        args.data.search = `${args.data.emailAddress} ${args.data.firstName} ${args.data.lastName}`;
+                        return query(args);
+                    },
+                    update({ args, query }) {
+                        args.data.search = `${args.data.emailAddress} ${args.data.firstName} ${args.data.lastName}`;
+                        return query(args);
+                    },
+                    upsert({ args, query }) {
+                        args.create.search =
+                            args.update.search = `${args.create.emailAddress} ${args.create.firstName} ${args.create.lastName}`;
+                        return query(args);
+                    }
+                }
+            }
+        });
 };
 
-const userMiddleware: Prisma.Middleware = async (params, next) => {
-    if (
-        params.model == 'Users' &&
-        ['create', 'update'].includes(params.action)
-    ) {
-        computeUserData(params.args.data);
-    }
+type ExtendedPrismaClient = ReturnType<typeof getExtendedClient>;
 
-    if (params.model == 'Users' && params.action === 'upsert') {
-        computeUserData(params.args.create);
-        computeUserData(params.args.update);
-    }
-
-    return next(params);
-};
+const globalForPrisma = global as unknown as { prisma: ExtendedPrismaClient };
 
 let prisma = globalForPrisma.prisma;
 
 if (!prisma) {
-    prisma = new PrismaClient({
-        log: ['query']
-    });
-
-    prisma.$use(userMiddleware);
+    prisma = getExtendedClient();
 }
 
 if (config.NODE_ENV === 'development') {

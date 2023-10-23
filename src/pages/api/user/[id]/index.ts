@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import {
     GetUserResponse,
@@ -8,7 +7,7 @@ import {
 } from '@/features/user/userTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
-import { Role, isUserAdministrator } from '@/utils/auth';
+import { isUserAdministrator } from '@/utils/auth';
 
 const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
     req,
@@ -17,6 +16,16 @@ const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            emailAddress: true,
+            firstName: true,
+            lastName: true,
+            dateOfBirth: true,
+            isLockedOut: true,
+            version: true,
+            roles: true
+        },
         where: {
             id: query.id
         }
@@ -28,16 +37,7 @@ const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
         });
     }
 
-    return res.json({
-        id: user.id,
-        emailAddress: user.emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
-        isLockedOut: user.isLockedOut,
-        roles: user.roles.map(r => r as Role),
-        version: user.version
-    });
+    return res.json(user);
 };
 
 const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
@@ -47,6 +47,11 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            emailAddress: true,
+            version: true
+        },
         where: {
             id: query.id
         }
@@ -58,7 +63,9 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         });
     }
 
-    const body = await updateUserSchema.validate(req.body);
+    const body = await updateUserSchema.validate(req.body, {
+        stripUnknown: true
+    });
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
@@ -67,7 +74,7 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     }
 
     if (user.emailAddress !== body.emailAddress) {
-        const existing = await prisma.users.findUnique({
+        const existing = await prisma.users.count({
             where: {
                 emailAddress: body.emailAddress
             }
@@ -84,14 +91,7 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         where: {
             id: user.id
         },
-        data: {
-            emailAddress: body.emailAddress,
-            firstName: body.firstName,
-            lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth,
-            roles: body.roles,
-            version: crypto.randomUUID()
-        }
+        data: body
     });
 
     return res.json({
@@ -107,6 +107,10 @@ const deleteUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            version: true
+        },
         where: {
             id: query.id
         }

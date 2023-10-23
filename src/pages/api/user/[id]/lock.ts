@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import { getUserSchema, lockUserSchema } from '@/features/user/userTypes';
 import prisma from '@/utils/prisma';
@@ -13,6 +12,10 @@ const lockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            version: true
+        },
         where: {
             id: query.id
         }
@@ -43,8 +46,7 @@ const lockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
             id: user.id
         },
         data: {
-            isLockedOut: true,
-            version: crypto.randomUUID()
+            isLockedOut: true
         }
     });
 

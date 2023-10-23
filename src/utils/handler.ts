@@ -1,7 +1,7 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { ValidationError } from 'yup';
-import { Role, isAuthorized } from '@/utils/auth';
+import { isAuthorized } from '@/utils/auth';
 import { config } from '@/utils/config';
 
 type HandlerContext = {
@@ -19,7 +19,7 @@ type HandlerConfig = {
 };
 
 type HandlerOptions = {
-    authorize?: boolean | Role[];
+    authorize?: boolean | string[];
 };
 
 class HandlerError extends Error {

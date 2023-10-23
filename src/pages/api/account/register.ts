@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import { registerSchema } from '@/features/account/accountTypes';
 import prisma from '@/utils/prisma';
@@ -9,9 +8,14 @@ const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res
 ) => {
-    const body = await registerSchema.validate(req.body);
+    const body = await registerSchema.validate(req.body, {
+        stripUnknown: true
+    });
 
     const existing = await prisma.users.findUnique({
+        select: {
+            id: true
+        },
         where: {
             emailAddress: body.emailAddress
         }
@@ -25,12 +29,8 @@ const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
 
     const result = await prisma.users.create({
         data: {
-            emailAddress: body.emailAddress,
-            password: await hashPassword(body.password),
-            firstName: body.firstName,
-            lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth,
-            version: crypto.randomUUID()
+            ...body,
+            password: await hashPassword(body.password)
         }
     });
 

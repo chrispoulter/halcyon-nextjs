@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse, UpdatedResponse } from '@/common/types';
 import {
     createUserSchema,
@@ -10,7 +9,7 @@ import { Prisma } from '@prisma/client';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
-import { isUserAdministrator, Role } from '@/utils/auth';
+import { isUserAdministrator } from '@/utils/auth';
 
 const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     const query = await searchUsersSchema.validate(req.query);
@@ -58,6 +57,14 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     const skip = (query.page - 1) * query.size;
 
     const users = await prisma.users.findMany({
+        select: {
+            id: true,
+            emailAddress: true,
+            firstName: true,
+            lastName: true,
+            isLockedOut: true,
+            roles: true
+        },
         where,
         orderBy,
         skip,
@@ -69,15 +76,7 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
     const hasPreviousPage = query.page > 1;
 
     return res.json({
-        items: users.map(user => ({
-            id: user.id,
-            emailAddress: user.emailAddress,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth,
-            isLockedOut: user.isLockedOut,
-            roles: user.roles.map(r => r as Role)
-        })),
+        items: users,
         hasNextPage,
         hasPreviousPage
     });
@@ -87,9 +86,14 @@ const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     req,
     res
 ) => {
-    const body = await createUserSchema.validate(req.body);
+    const body = await createUserSchema.validate(req.body, {
+        stripUnknown: true
+    });
 
     const existing = await prisma.users.findUnique({
+        select: {
+            id: true
+        },
         where: {
             emailAddress: body.emailAddress
         }
@@ -103,13 +107,8 @@ const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
 
     const result = await prisma.users.create({
         data: {
-            emailAddress: body.emailAddress,
-            password: await hashPassword(body.password),
-            firstName: body.firstName,
-            lastName: body.lastName,
-            dateOfBirth: body.dateOfBirth,
-            roles: body.roles,
-            version: crypto.randomUUID()
+            ...body,
+            password: await hashPassword(body.password)
         }
     });
 

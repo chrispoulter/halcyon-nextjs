@@ -10,16 +10,14 @@ import {
     InputSkeleton,
     ToggleGroupSkeleton
 } from '@/components/Skeleton/Skeleton';
-import { Role, roleOptions } from '@/utils/auth';
+import { roleOptions } from '@/utils/auth';
 
 const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: date().label('Date Of Birth').required(),
-    roles: array()
-        .of(string<Role>().label('Role').oneOf(Object.values(Role)).required())
-        .label('Roles')
+    roles: array().of(string().label('Role').required()).label('Roles')
 });
 
 export type UpdateUserFormValues = InferType<typeof schema>;

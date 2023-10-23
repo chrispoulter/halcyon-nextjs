@@ -10,6 +10,10 @@ const forgotPasswordHandler: Handler<ErrorResponse> = async (req, res) => {
     const body = await forgotPasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
+        select: {
+            id: true,
+            emailAddress: true
+        },
         where: {
             emailAddress: body.emailAddress
         }

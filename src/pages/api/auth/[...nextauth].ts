@@ -3,7 +3,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { createTokenSchema } from '@/features/token/tokenTypes';
 import prisma from '@/utils/prisma';
 import { verifyPassword } from '@/utils/hash';
-import { Role } from '@/utils/auth';
 import { config } from '@/utils/config';
 
 export const authOptions: AuthOptions = {
@@ -18,6 +17,16 @@ export const authOptions: AuthOptions = {
                 const body = await createTokenSchema.validate(credentials);
 
                 const user = await prisma.users.findUnique({
+                    select: {
+                        id: true,
+                        emailAddress: true,
+                        firstName: true,
+                        lastName: true,
+                        dateOfBirth: true,
+                        password: true,
+                        isLockedOut: true,
+                        roles: true
+                    },
                     where: {
                         emailAddress: body.emailAddress
                     }
@@ -42,10 +51,7 @@ export const authOptions: AuthOptions = {
                     );
                 }
 
-                return {
-                    ...user,
-                    roles: user.roles?.map(r => r as Role)
-                };
+                return user;
             }
         })
     ],
