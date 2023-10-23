@@ -6,6 +6,15 @@ const getExtendedClient = () => {
         log: ['query']
     })
         .$extends({
+            result: {
+                $allModels: {
+                    version: {
+                        compute({ version }) {
+                            return version!;
+                        }
+                    }
+                }
+            },
             query: {
                 $allModels: {
                     create({ args, query }) {
@@ -20,11 +29,24 @@ const getExtendedClient = () => {
                         args.create.version = args.update.version =
                             crypto.randomUUID();
                         return query(args);
+                    },
+                    findUnique({ args, query }) {
+                        return query(args);
                     }
                 }
             }
         })
         .$extends({
+            result: {
+                users: {
+                    search: {
+                        needs: { search: true },
+                        compute({ search }) {
+                            return search!;
+                        }
+                    }
+                }
+            },
             query: {
                 users: {
                     create({ args, query }) {
