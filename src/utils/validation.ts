@@ -3,8 +3,8 @@ import { toDateOnlyISOString } from './date';
 
 declare module 'yup' {
     interface StringSchema {
-        transformDateOnly(): StringSchema;
-        past(): StringSchema;
+        transformDateOnly(): StringSchema<string>;
+        past(): StringSchema<string>;
     }
 }
 
