@@ -15,9 +15,9 @@ type ToggleGroupProps = {
 };
 
 export const ToggleGroup = ({ name, options, disabled }: ToggleGroupProps) => {
-    const [field] = useField(name);
+    const [field] = useField<ToggleGroupOption[]>(name);
 
-    const currentValues: any[] = field.value ?? [];
+    const currentValues = field.value ?? [];
 
     const onChange = (value: any, checked: boolean) =>
         field.onChange({

@@ -8,6 +8,7 @@ import {
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
+import { toDateOnlyString } from '@/utils/date';
 
 const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
     req,
@@ -42,7 +43,7 @@ const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
         emailAddress: user.emailAddress,
         firstName: user.firstName,
         lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
+        dateOfBirth: toDateOnlyString(user.dateOfBirth),
         isLockedOut: user.isLockedOut,
         roles: user.roles,
         version: user.version!

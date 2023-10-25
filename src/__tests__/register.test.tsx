@@ -29,19 +29,21 @@ const fillRegisterForm = (values: RegisterFormValues) => {
     const lastNameInput = screen.getByLabelText(/last name/i);
     fireEvent.change(lastNameInput, { target: { value: values.lastName } });
 
+    const [year, month, date] = values.dateOfBirth.split('-');
+
     const dobDateSelect = screen.getByLabelText(/date of birth date/i);
     fireEvent.change(dobDateSelect, {
-        target: { value: values.dateOfBirth.getDate() }
+        target: { value: date }
     });
 
     const dobMonthSelect = screen.getByLabelText(/date of birth month/i);
     fireEvent.change(dobMonthSelect, {
-        target: { value: values.dateOfBirth.getMonth() + 1 }
+        target: { value: month }
     });
 
     const dobYearSelect = screen.getByLabelText(/date of birth year/i);
     fireEvent.change(dobYearSelect, {
-        target: { value: values.dateOfBirth.getFullYear() }
+        target: { value: year }
     });
 };
 
@@ -74,7 +76,7 @@ describe('<RegisterPage />', () => {
             confirmPassword: 'Testing123',
             firstName: 'John',
             lastName: 'Smith',
-            dateOfBirth: new Date(1970, 1, 1)
+            dateOfBirth: '1970-01-01'
         });
 
         const registerButton = screen.getByRole('button', { name: /submit/i });

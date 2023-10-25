@@ -18,7 +18,7 @@ export const Input = ({
     onClear,
     ...props
 }: InputProps) => {
-    const [field, meta] = useField(name);
+    const [field, meta] = useField<string>(name);
     const error = meta.touched && meta.error;
 
     const onClearInput = () => {

@@ -13,9 +13,9 @@ type DatePickerProps = {
 };
 
 type DatePickerState = {
-    year: number;
-    month: number;
-    date: number;
+    year?: string;
+    month?: string;
+    date?: string;
 };
 
 export const DatePicker = ({
@@ -26,47 +26,37 @@ export const DatePicker = ({
     autoComplete,
     className
 }: DatePickerProps) => {
-    const [field, meta] = useField(name);
+    const [field, meta] = useField<string>(name);
     const error = meta.touched && meta.error;
 
-    const dateValue: DatePickerState = {
-        year: -1,
-        month: -1,
-        date: -1
+    const initialState: DatePickerState = {
+        year: undefined,
+        month: undefined,
+        date: undefined
     };
 
     if (field.value) {
-        const date = new Date(field.value);
-        dateValue.year = date.getUTCFullYear();
-        dateValue.month = date.getUTCMonth();
-        dateValue.date = date.getUTCDate();
+        const [year, month, date] = field.value.split('-');
+        initialState.year = year;
+        initialState.month = month;
+        initialState.date = date;
     }
 
-    const [state, setState] = useState(dateValue);
+    const [state, setState] = useState(initialState);
 
-    const handleYear = (year: string) =>
-        handleChange({ ...state, year: parseInt(year, 10) });
+    const handleYear = (year: string) => handleChange({ ...state, year });
 
-    const handleMonth = (month: string) =>
-        handleChange({ ...state, month: parseInt(month, 10) });
+    const handleMonth = (month: string) => handleChange({ ...state, month });
 
-    const handleDay = (date: string) =>
-        handleChange({ ...state, date: parseInt(date, 10) });
+    const handleDay = (date: string) => handleChange({ ...state, date });
 
     const handleChange = (input: DatePickerState) => {
         setState(input);
 
-        const isDateSet =
-            input.year > -1 && input.month > -1 && input.date > -1;
-
-        const value = isDateSet
-            ? new Date(Date.UTC(input.year, input.month, input.date))
-            : undefined;
-
         field.onChange({
             target: {
                 name: field.name,
-                value
+                value: `${input.year}-${input.month}-${input.date}`
             }
         });
     };
@@ -104,9 +94,11 @@ export const DatePicker = ({
                         }
                     )}
                 >
-                    <option value={-1}>Day...</option>
+                    <option>Day...</option>
                     {Array.from({ length: 31 }).map((_, index) => (
-                        <option key={index}>{index + 1}</option>
+                        <option key={index}>
+                            {(index + 1).toString().padStart(2, '0')}
+                        </option>
                     ))}
                 </select>
                 <select
@@ -127,9 +119,12 @@ export const DatePicker = ({
                         }
                     )}
                 >
-                    <option value={-1}>Month...</option>
+                    <option>Month...</option>
                     {Array.from({ length: 12 }).map((_, index) => (
-                        <option key={index} value={index}>
+                        <option
+                            key={index}
+                            value={(index + 1).toString().padStart(2, '0')}
+                        >
                             {monthNames[index]}
                         </option>
                     ))}
@@ -152,7 +147,7 @@ export const DatePicker = ({
                         }
                     )}
                 >
-                    <option value={-1}>Year...</option>
+                    <option>Year...</option>
                     {Array.from({ length: 120 }).map((_, index) => (
                         <option key={index}>{currentYear - index}</option>
                     ))}

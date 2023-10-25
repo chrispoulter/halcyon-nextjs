@@ -18,7 +18,7 @@ const response: GetProfileResponse = {
     emailAddress: 'test@example.com',
     firstName: 'John',
     lastName: 'Smith',
-    dateOfBirth: new Date(1970, 1, 1),
+    dateOfBirth: '1970-01-01',
     version: '1234'
 };
 

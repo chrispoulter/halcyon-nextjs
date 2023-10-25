@@ -16,11 +16,11 @@ Object.defineProperty(globalThis, 'crypto', {
 const user: Users = {
     id: 1,
     emailAddress: 'test@example.com',
-    password: 'Testing123!',
+    password: 'change-me-1234567890',
     passwordResetToken: null,
     firstName: 'John',
     lastName: 'Smith',
-    dateOfBirth: new Date(1970, 0, 1),
+    dateOfBirth: new Date('1970-01-01T00:00:00.000Z'),
     isLockedOut: false,
     roles: [],
     search: 'John Smith',
@@ -54,10 +54,10 @@ describe('/api/account/register', () => {
             method: 'POST',
             body: {
                 emailAddress: 'test@example.com',
-                password: 'Testing123!',
+                password: 'change-me-1234567890',
                 firstName: 'John',
                 lastName: 'Smith',
-                dateOfBirth: new Date(1970, 0, 1)
+                dateOfBirth: '1970-01-01'
             }
         });
 
@@ -78,10 +78,10 @@ describe('/api/account/register', () => {
             method: 'POST',
             body: {
                 emailAddress: 'test@example.com',
-                password: 'Testing123!',
+                password: 'change-me-1234567890',
                 firstName: 'John',
                 lastName: 'Smith',
-                dateOfBirth: new Date(1970, 0, 1)
+                dateOfBirth: '1970-01-01'
             }
         });
 
