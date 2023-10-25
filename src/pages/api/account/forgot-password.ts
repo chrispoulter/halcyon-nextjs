@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { ErrorResponse } from '@/common/types';
 import { forgotPasswordSchema } from '@/features/account/accountTypes';
 import prisma from '@/utils/prisma';
@@ -27,7 +26,8 @@ const forgotPasswordHandler: Handler<ErrorResponse> = async (req, res) => {
                 id: user.id
             },
             data: {
-                passwordResetToken
+                passwordResetToken,
+                version: crypto.randomUUID()
             }
         });
 

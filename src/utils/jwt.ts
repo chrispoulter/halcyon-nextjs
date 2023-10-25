@@ -1,6 +1,5 @@
 import { Users } from '@prisma/client';
 import { encode } from 'next-auth/jwt';
-import crypto from 'crypto';
 import { config } from '@/utils/config';
 
 type JwtTokenUser = Pick<

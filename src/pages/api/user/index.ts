@@ -108,7 +108,9 @@ const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     const result = await prisma.users.create({
         data: {
             ...body,
-            password: await hashPassword(body.password)
+            password: await hashPassword(body.password),
+            search: `${body.emailAddress} ${body.firstName} ${body.lastName}`,
+            version: crypto.randomUUID()
         }
     });
 

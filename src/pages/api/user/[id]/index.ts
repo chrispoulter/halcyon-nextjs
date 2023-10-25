@@ -37,7 +37,16 @@ const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
         });
     }
 
-    return res.json(user);
+    return res.json({
+        id: user.id,
+        emailAddress: user.emailAddress,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        dateOfBirth: user.dateOfBirth,
+        isLockedOut: user.isLockedOut,
+        roles: user.roles,
+        version: user.version!
+    });
 };
 
 const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
@@ -91,7 +100,11 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         where: {
             id: user.id
         },
-        data: body
+        data: {
+            ...body,
+            search: `${body.emailAddress} ${body.firstName} ${body.lastName}`,
+            version: crypto.randomUUID()
+        }
     });
 
     return res.json({

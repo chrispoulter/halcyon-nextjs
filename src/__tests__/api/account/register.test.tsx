@@ -7,9 +7,11 @@ jest.mock('next-auth/jwt', () => ({
     getToken: jest.fn()
 }));
 
-jest.mock('crypto', () => ({
-    randomUUID: jest.fn()
-}));
+Object.defineProperty(globalThis, 'crypto', {
+    value: {
+        randomUUID: jest.fn()
+    }
+});
 
 const user: Users = {
     id: 1,

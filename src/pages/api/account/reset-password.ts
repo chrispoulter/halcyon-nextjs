@@ -32,7 +32,8 @@ const resetPasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         },
         data: {
             password: await hashPassword(body.newPassword),
-            passwordResetToken: null
+            passwordResetToken: null,
+            version: crypto.randomUUID()
         }
     });
 
