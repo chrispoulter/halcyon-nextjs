@@ -21,8 +21,8 @@ const schema = object({
         .label('Date Of Birth')
         .required()
         .test(
-            'past-date',
-            ({ label }) => `${label} must be in the past`,
+            'date-in-past',
+            '${label} must be in the past',
             value => new Date(value) < new Date()
         )
         .transform(toDateOnlyISOString),
