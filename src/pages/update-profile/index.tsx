@@ -13,12 +13,12 @@ import {
     UpdateProfileFormValues
 } from '@/features/manage/UpdateProfileForm/UpdateProfileForm';
 
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { getProfile } from '@/features/manage/manageEndpoints';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+// import { GetServerSideProps } from 'next';
+// import { getServerSession } from 'next-auth';
+// import { getRunningQueriesThunk } from '@/redux/api';
+// import { getProfile } from '@/features/manage/manageEndpoints';
+// import { wrapper } from '@/redux/store';
+// import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateProfilePage = () => {
     const router = useRouter();
@@ -56,19 +56,19 @@ const UpdateProfilePage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res }) => {
-        const session = await getServerSession(req, res, authOptions);
+// export const getServerSideProps: GetServerSideProps =
+//     wrapper.getServerSideProps(store => async ({ req, res }) => {
+//         const session = await getServerSession(req, res, authOptions);
 
-        store.dispatch(getProfile.initiate());
+//         store.dispatch(getProfile.initiate());
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
+//         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
-        return {
-            props: {
-                session
-            }
-        };
-    });
+//         return {
+//             props: {
+//                 session
+//             }
+//         };
+//     });
 
 export default UpdateProfilePage;

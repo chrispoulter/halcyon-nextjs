@@ -20,12 +20,12 @@ import {
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
 
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { getUser } from '@/features/user/userEndpoints';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+// import { GetServerSideProps } from 'next';
+// import { getServerSession } from 'next-auth';
+// import { getRunningQueriesThunk } from '@/redux/api';
+// import { getUser } from '@/features/user/userEndpoints';
+// import { wrapper } from '@/redux/store';
+// import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateUserPage = () => {
     const router = useRouter();
@@ -141,21 +141,21 @@ const UpdateUserPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res, params }) => {
-        const session = await getServerSession(req, res, authOptions);
+// export const getServerSideProps: GetServerSideProps =
+//     wrapper.getServerSideProps(store => async ({ req, res, params }) => {
+//         const session = await getServerSession(req, res, authOptions);
 
-        const id = params?.id as string;
+//         const id = params?.id as string;
 
-        store.dispatch(getUser.initiate(id));
+//         store.dispatch(getUser.initiate(id));
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
+//         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
-        return {
-            props: {
-                session
-            }
-        };
-    });
+//         return {
+//             props: {
+//                 session
+//             }
+//         };
+//     });
 
 export default UpdateUserPage;

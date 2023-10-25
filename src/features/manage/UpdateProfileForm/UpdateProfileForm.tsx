@@ -5,12 +5,16 @@ import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { InputSkeleton, FormSkeleton } from '@/components/Skeleton/Skeleton';
+import { toDateOnlyISOString } from '@/utils/date';
 
 const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
-    dateOfBirth: string().label('Date Of Birth').required()
+    dateOfBirth: string()
+        .label('Date Of Birth')
+        .transform(toDateOnlyISOString)
+        .required()
 });
 
 export type UpdateProfileFormValues = InferType<typeof schema>;
