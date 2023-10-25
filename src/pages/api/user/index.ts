@@ -1,4 +1,4 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/types';
+import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
 import {
     createUserSchema,
     SearchUsersResponse,

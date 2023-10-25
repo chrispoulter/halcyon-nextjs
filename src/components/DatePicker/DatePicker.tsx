@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import clsx from 'clsx';
 import { useField } from 'formik';
-import { currentYear, monthNames } from '@/utils/date';
+import { currentYear, monthNames } from '@/utils/dates';
 
 type DatePickerProps = {
     name: string;

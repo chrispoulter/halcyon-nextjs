@@ -1,5 +1,5 @@
 import { InferType, object, string } from 'yup';
-import '@/utils/validation';
+import '@/utils/yup';
 
 export type GetProfileResponse = {
     id: number;

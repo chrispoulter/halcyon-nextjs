@@ -4,7 +4,7 @@ import { Input } from '@/components/Input/Input';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import '@/utils/validation';
+import '@/utils/yup';
 
 const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),

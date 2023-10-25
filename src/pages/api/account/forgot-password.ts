@@ -1,4 +1,4 @@
-import { ErrorResponse } from '@/common/types';
+import { ErrorResponse } from '@/common/commonTypes';
 import { forgotPasswordSchema } from '@/features/account/accountTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';

@@ -1,5 +1,5 @@
 import { InferType, object, string } from 'yup';
-import '@/utils/validation';
+import '@/utils/yup';
 
 export const registerSchema = object().shape({
     emailAddress: string().label('Email Address').max(254).email().required(),

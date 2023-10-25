@@ -6,7 +6,7 @@ import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { roleOptions } from '@/utils/auth';
-import '@/utils/validation';
+import '@/utils/yup';
 
 const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),

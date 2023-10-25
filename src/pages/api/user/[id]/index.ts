@@ -1,4 +1,4 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/types';
+import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
 import {
     GetUserResponse,
     deleteUserSchema,
@@ -8,7 +8,7 @@ import {
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
-import { toDateOnlyString } from '@/utils/date';
+import { toDateOnlyString } from '@/utils/dates';
 
 const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
     req,

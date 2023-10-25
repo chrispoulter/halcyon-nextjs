@@ -1,5 +1,5 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '@/common/types';
+import { UpdatedResponse } from '@/common/commonTypes';
 import {
     SearchUsersResponse,
     SearchUsersRequest,

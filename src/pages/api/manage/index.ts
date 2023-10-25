@@ -1,4 +1,4 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/types';
+import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
 import {
     GetProfileResponse,
     deleteAccountSchema,
@@ -6,7 +6,7 @@ import {
 } from '@/features/manage/manageTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
-import { toDateOnlyString } from '@/utils/date';
+import { toDateOnlyString } from '@/utils/dates';
 
 const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
     _,

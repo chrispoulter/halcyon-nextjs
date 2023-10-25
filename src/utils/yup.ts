@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { toDateOnlyISOString } from './date';
+import { toDateOnlyISOString } from './dates';
 
 declare module 'yup' {
     interface StringSchema {

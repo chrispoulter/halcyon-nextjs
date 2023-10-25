@@ -1,5 +1,5 @@
 import { InferType, array, number, object, string } from 'yup';
-import '@/utils/validation';
+import '@/utils/yup';
 
 export enum UserSort {
     EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',

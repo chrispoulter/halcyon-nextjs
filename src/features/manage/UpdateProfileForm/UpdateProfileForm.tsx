@@ -6,7 +6,7 @@ import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { FormSkeleton } from '@/components/Form/FormSkeleton';
-import '@/utils/validation';
+import '@/utils/yup';
 
 const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),
