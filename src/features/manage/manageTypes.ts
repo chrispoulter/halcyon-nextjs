@@ -1,5 +1,5 @@
 import { InferType, object, string } from 'yup';
-import { toDateOnlyISOString } from '@/utils/date';
+import '@/utils/validation';
 
 export type GetProfileResponse = {
     id: number;
@@ -17,12 +17,8 @@ export const updateProfileSchema = object().shape({
     dateOfBirth: string()
         .label('Date Of Birth')
         .required()
-        .test(
-            'date-in-past',
-            '${label} must be in the past',
-            value => new Date(value) < new Date()
-        )
-        .transform(toDateOnlyISOString),
+        .past()
+        .transformDateOnly(),
     version: string().label('Version').uuid()
 });
 

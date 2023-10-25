@@ -1,5 +1,5 @@
 import { InferType, array, number, object, string } from 'yup';
-import { toDateOnlyISOString } from '@/utils/date';
+import '@/utils/validation';
 
 export enum UserSort {
     EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
@@ -43,12 +43,8 @@ export const createUserSchema = object().shape({
     dateOfBirth: string()
         .label('Date Of Birth')
         .required()
-        .test(
-            'date-in-past',
-            '${label} must be in the past',
-            value => new Date(value) < new Date()
-        )
-        .transform(toDateOnlyISOString),
+        .past()
+        .transformDateOnly(),
     roles: array().of(string().label('Role').required()).label('Roles')
 });
 
@@ -76,12 +72,8 @@ export const updateUserSchema = object().shape({
     dateOfBirth: string()
         .label('Date Of Birth')
         .required()
-        .test(
-            'date-in-past',
-            '${label} must be in the past',
-            value => new Date(value) < new Date()
-        )
-        .transform(toDateOnlyISOString),
+        .past()
+        .transformDateOnly(),
     roles: array().of(string().label('Role').required()).label('Roles'),
     version: string().label('Version').uuid()
 });

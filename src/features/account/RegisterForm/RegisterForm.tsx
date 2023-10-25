@@ -4,7 +4,7 @@ import { Input } from '@/components/Input/Input';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { toDateOnlyISOString } from '@/utils/date';
+import '@/utils/validation';
 
 const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),
@@ -18,12 +18,8 @@ const schema = object({
     dateOfBirth: string()
         .label('Date Of Birth')
         .required()
-        .test(
-            'date-in-past',
-            '${label} must be in the past',
-            value => new Date(value) < new Date()
-        )
-        .transform(toDateOnlyISOString)
+        .past()
+        .transformDateOnly()
 });
 
 export type RegisterFormValues = InferType<typeof schema>;

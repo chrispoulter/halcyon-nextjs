@@ -11,7 +11,7 @@ import {
     ToggleGroupSkeleton
 } from '@/components/Skeleton/Skeleton';
 import { roleOptions } from '@/utils/auth';
-import { toDateOnlyISOString } from '@/utils/date';
+import '@/utils/validation';
 
 const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),
@@ -20,12 +20,8 @@ const schema = object({
     dateOfBirth: string()
         .label('Date Of Birth')
         .required()
-        .test(
-            'date-in-past',
-            '${label} must be in the past',
-            value => new Date(value) < new Date()
-        )
-        .transform(toDateOnlyISOString),
+        .past()
+        .transformDateOnly(),
     roles: array().of(string().label('Role').required()).label('Roles')
 });
 
