@@ -1,25 +1,35 @@
+import { SeedUser } from '@/features/seed/seedTypes';
 import { hashPassword } from '@/utils/hash';
 import { mapHandlers, Handler } from '@/utils/handler';
 import prisma from '@/utils/prisma';
 import { config } from '@/utils/config';
 
-const seedHandler: Handler = async (_, res) => {
-    const seedUser = {
+const seedUsers: SeedUser[] = [
+    {
         emailAddress: config.SEED_EMAIL_ADDRESS,
-        password: await hashPassword(config.SEED_PASSWORD),
-        passwordResetToken: null,
+        password: config.SEED_PASSWORD,
         firstName: 'System',
         lastName: 'Administrator',
-        dateOfBirth: new Date(1970, 0, 1),
-        isLockedOut: false,
+        dateOfBirth: '1970-01-01T00:00:00.000Z',
         roles: ['SYSTEM_ADMINISTRATOR']
-    };
+    }
+];
 
-    await prisma.users.upsert({
-        where: { emailAddress: seedUser.emailAddress },
-        update: seedUser,
-        create: seedUser
-    });
+const seedHandler: Handler = async (_, res) => {
+    for (const seedUser of seedUsers) {
+        const user = {
+            ...seedUser,
+            password: await hashPassword(seedUser.password),
+            search: `${seedUser.emailAddress} ${seedUser.firstName} ${seedUser.lastName}`,
+            version: crypto.randomUUID()
+        };
+
+        await prisma.users.upsert({
+            where: { emailAddress: user.emailAddress },
+            update: user,
+            create: user
+        });
+    }
 
     return res.send('Environment seeded.');
 };
