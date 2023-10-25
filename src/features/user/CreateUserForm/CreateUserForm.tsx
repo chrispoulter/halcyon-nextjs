@@ -20,8 +20,13 @@ const schema = object({
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: string()
         .label('Date Of Birth')
-        .transform(toDateOnlyISOString)
-        .required(),
+        .required()
+        .test(
+            'past-date',
+            ({ label }) => `${label} must be in the past`,
+            value => new Date(value) < new Date()
+        )
+        .transform(toDateOnlyISOString),
     roles: array()
         .of(string().label('Role').required())
         .label('Roles')

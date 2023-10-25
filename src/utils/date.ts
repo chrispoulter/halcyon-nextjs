@@ -8,7 +8,7 @@ export const monthNames = Array.from({ length: 12 }, (_, i) => {
 export const toDateOnlyString = (date: Date) =>
     date.toISOString().split('T')[0];
 
-const toDateOnlyDate = (value: string) => {
+export const toDateOnlyDate = (value: string) => {
     if (!value) {
         return undefined;
     }
@@ -47,8 +47,8 @@ export const toDateOnlyISOString = (value: string) => {
     return date.toISOString();
 };
 
-export const toDateOnlyLocaleString = (value: string) => {
-    const date = toDateOnlyDate(value);
+export const toDateOnlyLocaleString = (value: string | Date) => {
+    const date = value instanceof Date ? value : toDateOnlyDate(value);
 
     if (!date) {
         return undefined;
