@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal, ModalBody, ModalTitle } from '@/components/Modal/Modal';
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
 import { Button } from '@/components/Button/Button';
 
 type ConfirmLockUserProps = {

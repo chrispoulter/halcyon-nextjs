@@ -1,6 +1,6 @@
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { InputSkeleton } from '@/components/Input/InputSkeleton';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
 import { ButtonSkeleton } from '@/components/Button/ButtonSkeleton';
+import { InputSkeleton } from './InputSkeleton';
 
 export const FormSkeleton = ({ children }: React.PropsWithChildren) => (
     <div role="status" className="animate-pulse">

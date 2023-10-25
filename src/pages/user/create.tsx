@@ -4,7 +4,7 @@ import { useCreateUserMutation } from '@/features/user/userEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title, SubTitle } from '@/components/Title/Title';
-import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
+import { ButtonLink } from '@/components/Button/ButtonLink';
 import {
     CreateUserForm,
     CreateUserFormValues

@@ -1,4 +1,4 @@
-import { ButtonSkeleton } from '@/components/Button/ButtonSkeleton';
+import { ButtonSkeleton } from './ButtonSkeleton';
 import { ButtonGroup } from './ButtonGroup';
 
 export const ButtonGroupSkeleton = () => (

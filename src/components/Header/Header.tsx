@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { NavbarMenu } from '@/components/NavbarMenu/NavbarMenu';
-import { ProfileDropdown } from '@/components/ProfileDropdown/ProfileDropdown';
+import { NavbarMenu } from './NavbarMenu';
+import { ProfileDropdown } from './ProfileDropdown';
 
 export const Header = () => (
     <header className="mb-3 bg-zinc-800">

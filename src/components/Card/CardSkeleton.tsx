@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { ButtonSkeleton } from '@/components/Button/ButtonSkeleton';
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
 import { Card, CardTitle, CardBody } from './Card';
 
 type CardSkeletonProps = React.PropsWithChildren<{ className?: string }>;

@@ -1,9 +1,9 @@
 import { Formik, Form } from 'formik';
 import { InferType, object, ref, string } from 'yup';
-import { Input } from '@/components/Input/Input';
-import { DatePicker } from '@/components/DatePicker/DatePicker';
+import { Input } from '@/components/Form/Input';
+import { DatePicker } from '@/components/Form/DatePicker';
 import { Button } from '@/components/Button/Button';
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
 import '@/utils/yup';
 
 const schema = object({

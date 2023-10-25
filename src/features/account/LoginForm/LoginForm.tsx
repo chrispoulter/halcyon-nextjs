@@ -1,8 +1,8 @@
 import { Formik, Form } from 'formik';
 import { InferType, object, string } from 'yup';
-import { Input } from '@/components/Input/Input';
+import { Input } from '@/components/Form/Input';
 import { Button } from '@/components/Button/Button';
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
 
 const schema = object({
     emailAddress: string().label('Email Address').email().required(),

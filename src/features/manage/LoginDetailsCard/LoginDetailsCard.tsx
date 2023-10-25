@@ -1,8 +1,8 @@
 import { GetProfileResponse } from '@/features/manage/manageTypes';
 import { Card, CardBody, CardTitle } from '@/components/Card/Card';
 import { CardSkeleton } from '@/components/Card/CardSkeleton';
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
+import { ButtonLink } from '@/components/Button/ButtonLink';
 
 type LoginDetailsCardProps = {
     profile?: GetProfileResponse;

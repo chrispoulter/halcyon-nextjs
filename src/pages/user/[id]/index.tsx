@@ -10,7 +10,7 @@ import {
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { SubTitle, Title } from '@/components/Title/Title';
-import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
+import { ButtonLink } from '@/components/Button/ButtonLink';
 import { ConfirmUnlockUser } from '@/features/user/ConfirmUnlockUser/ConfirmUnlockUser';
 import { ConfirmLockUser } from '@/features/user/ConfirmLockUser/ConfirmLockUser';
 import { ConfirmDeleteUser } from '@/features/user/ConfirmDeleteUser/ConfirmDeleteUser';
