@@ -7,9 +7,9 @@ import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
 import { Container } from '@/components/Container/Container';
 
-// import { GetServerSideProps } from 'next';
-// import { getServerSession } from 'next-auth';
-// import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const HomePage = () => (
     <>
@@ -72,10 +72,10 @@ const HomePage = () => (
     </>
 );
 
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => ({
-//     props: {
-//         session: await getServerSession(req, res, authOptions)
-//     }
-// });
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => ({
+    props: {
+        session: await getServerSession(req, res, authOptions)
+    }
+});
 
 export default HomePage;

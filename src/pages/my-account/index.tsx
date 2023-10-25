@@ -11,12 +11,12 @@ import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/Perso
 import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
 import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
 
-// import { GetServerSideProps } from 'next';
-// import { getServerSession } from 'next-auth';
-// import { getRunningQueriesThunk } from '@/redux/api';
-// import { getProfile } from '@/features/manage/manageEndpoints';
-// import { wrapper } from '@/redux/store';
-// import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { getProfile } from '@/features/manage/manageEndpoints';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const MyAccountPage = () => {
     const { data: profile } = useGetProfileQuery();
@@ -51,19 +51,19 @@ const MyAccountPage = () => {
     );
 };
 
-// export const getServerSideProps: GetServerSideProps =
-//     wrapper.getServerSideProps(store => async ({ req, res }) => {
-//         const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res }) => {
+        const session = await getServerSession(req, res, authOptions);
 
-//         store.dispatch(getProfile.initiate());
+        store.dispatch(getProfile.initiate());
 
-//         await Promise.all(store.dispatch(getRunningQueriesThunk()));
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
-//         return {
-//             props: {
-//                 session
-//             }
-//         };
-//     });
+        return {
+            props: {
+                session
+            }
+        };
+    });
 
 export default MyAccountPage;

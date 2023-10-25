@@ -14,12 +14,12 @@ import {
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
 
-// import { GetServerSideProps } from 'next';
-// import { getServerSession } from 'next-auth';
-// import { getRunningQueriesThunk } from '@/redux/api';
-// import { searchUsers } from '@/features/user/userEndpoints';
-// import { wrapper } from '@/redux/store';
-// import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { searchUsers } from '@/features/user/userEndpoints';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UsersPage = () => {
     const [request, setRequest] = useState({
@@ -84,26 +84,26 @@ const UsersPage = () => {
     );
 };
 
-// export const getServerSideProps: GetServerSideProps =
-//     wrapper.getServerSideProps(store => async ({ req, res }) => {
-//         const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps(store => async ({ req, res }) => {
+        const session = await getServerSession(req, res, authOptions);
 
-//         const request = {
-//             search: '',
-//             sort: UserSort.NAME_ASC,
-//             page: 1,
-//             size: 5
-//         };
+        const request = {
+            search: '',
+            sort: UserSort.NAME_ASC,
+            page: 1,
+            size: 5
+        };
 
-//         store.dispatch(searchUsers.initiate(request));
+        store.dispatch(searchUsers.initiate(request));
 
-//         await Promise.all(store.dispatch(getRunningQueriesThunk()));
+        await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
-//         return {
-//             props: {
-//                 session
-//             }
-//         };
-//     });
+        return {
+            props: {
+                session
+            }
+        };
+    });
 
 export default UsersPage;

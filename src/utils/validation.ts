@@ -12,7 +12,7 @@ yup.addMethod(yup.string, 'past', function () {
     return this.test({
         name: 'date-in-past',
         message: '${label} must be in the past',
-        test: function (value) {
+        test: value => {
             if (!value) {
                 return true;
             }
