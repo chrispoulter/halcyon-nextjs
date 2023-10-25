@@ -1,10 +1,11 @@
 import { Formik, Form } from 'formik';
 import { InferType, object, string } from 'yup';
 import { Input } from '@/components/Input/Input';
+import { InputSkeleton } from '@/components/Input/InputSkeleton';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { InputSkeleton, FormSkeleton } from '@/components/Skeleton/Skeleton';
+import { FormSkeleton } from '@/components/Form/FormSkeleton';
 import '@/utils/validation';
 
 const schema = object({

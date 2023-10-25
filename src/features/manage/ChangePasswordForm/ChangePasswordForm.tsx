@@ -4,7 +4,8 @@ import { GetProfileResponse } from '@/features/manage/manageTypes';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { FormSkeleton, InputSkeleton } from '@/components/Skeleton/Skeleton';
+import { FormSkeleton } from '@/components/Form/FormSkeleton';
+import { InputSkeleton } from '@/components/Input/InputSkeleton';
 
 const schema = object({
     currentPassword: string().label('Current Password').required(),

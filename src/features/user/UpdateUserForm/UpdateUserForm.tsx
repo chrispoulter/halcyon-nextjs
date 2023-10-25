@@ -1,15 +1,13 @@
 import { Formik, Form } from 'formik';
 import { object, string, array, InferType } from 'yup';
 import { Input } from '@/components/Input/Input';
+import { InputSkeleton } from '@/components/Input/InputSkeleton';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
+import { ToggleGroupSkeleton } from '@/components/ToggleGroup/ToggleGroupSkeleton';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import {
-    FormSkeleton,
-    InputSkeleton,
-    ToggleGroupSkeleton
-} from '@/components/Skeleton/Skeleton';
+import { FormSkeleton } from '@/components/Form/FormSkeleton';
 import { roleOptions } from '@/utils/auth';
 import '@/utils/validation';
 
