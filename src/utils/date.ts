@@ -5,7 +5,7 @@ export const monthNames = Array.from({ length: 12 }, (_, i) => {
     return date.toLocaleString('en', { month: 'long' });
 });
 
-export const formatForDisplay = (value: string) => {
+export const formatUTCDate = (value: string) => {
     const date = parseUTCDate(value);
     if (!date) {
         return undefined;
