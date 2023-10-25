@@ -29,20 +29,20 @@ export const DatePicker = ({
     const [field, meta] = useField<string>(name);
     const error = meta.touched && meta.error;
 
-    const dateValue: DatePickerState = {
+    const initialState: DatePickerState = {
         year: undefined,
         month: undefined,
         date: undefined
     };
 
     if (field.value) {
-        const parts = field.value.split('-');
-        dateValue.year = parts[0];
-        dateValue.month = parts[1];
-        dateValue.date = parts[2];
+        const [year, month, date] = field.value.split('-');
+        initialState.year = year;
+        initialState.month = month;
+        initialState.date = date;
     }
 
-    const [state, setState] = useState(dateValue);
+    const [state, setState] = useState(initialState);
 
     const handleYear = (year: string) => handleChange({ ...state, year });
 
