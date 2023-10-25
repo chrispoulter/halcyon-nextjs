@@ -3,7 +3,8 @@
         "**/node_modules": true,
         "**/.next": true,
         "**/.swc": true,
-        "**/out": true
+        "**/out": true,
+        "**/tsconfig.tsbuildinfo": true
     },
     "css.lint.unknownAtRules": "ignore",
     "tailwindCSS.experimental.classRegex": [
