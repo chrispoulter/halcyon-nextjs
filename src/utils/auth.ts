@@ -3,6 +3,8 @@ import { JWT } from 'next-auth/jwt';
 const SYSTEM_ADMINISTRATOR = 'SYSTEM_ADMINISTRATOR';
 const USER_ADMINISTRATOR = 'USER_ADMINISTRATOR';
 
+export const isUserAdministrator = [SYSTEM_ADMINISTRATOR, USER_ADMINISTRATOR];
+
 type Roles = {
     [key: string]: {
         title: string;
@@ -25,8 +27,6 @@ export const roleOptions = Object.entries(roles).map(([value, item]) => ({
     value,
     ...item
 }));
-
-export const isUserAdministrator = [SYSTEM_ADMINISTRATOR, USER_ADMINISTRATOR];
 
 export const isAuthorized = (
     token?: Pick<JWT, 'roles'>,
