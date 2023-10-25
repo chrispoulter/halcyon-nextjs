@@ -1,5 +1,5 @@
 import { Formik, Form } from 'formik';
-import { object, string, date, array, InferType } from 'yup';
+import { object, string, array, InferType } from 'yup';
 import { Input } from '@/components/Input/Input';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
@@ -11,12 +11,16 @@ import {
     ToggleGroupSkeleton
 } from '@/components/Skeleton/Skeleton';
 import { roleOptions } from '@/utils/auth';
+import { parseUTCDate } from '@/utils/date';
 
 const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
-    dateOfBirth: date().label('Date Of Birth').required(),
+    dateOfBirth: string()
+        .label('Date Of Birth')
+        .transform(parseUTCDate)
+        .required(),
     roles: array().of(string().label('Role').required()).label('Roles')
 });
 

@@ -1,11 +1,12 @@
-import { InferType, date, object, string } from 'yup';
+import { InferType, object, string } from 'yup';
+import { parseUTCDate } from '@/utils/date';
 
 export type GetProfileResponse = {
     id: number;
     emailAddress: string;
     firstName: string;
     lastName: string;
-    dateOfBirth: Date;
+    dateOfBirth: string;
     version: string;
 };
 
@@ -13,7 +14,10 @@ export const updateProfileSchema = object().shape({
     emailAddress: string().label('Email Address').max(254).email().required(),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
-    dateOfBirth: date().label('Date Of Birth').required(),
+    dateOfBirth: string()
+        .label('Date Of Birth')
+        .transform(parseUTCDate)
+        .required(),
     version: string().label('Version').uuid()
 });
 

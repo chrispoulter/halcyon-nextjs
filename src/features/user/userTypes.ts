@@ -1,4 +1,5 @@
-import { InferType, array, date, number, object, string } from 'yup';
+import { InferType, array, number, object, string } from 'yup';
+import { parseUTCDate } from '@/utils/date';
 
 export enum UserSort {
     EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
@@ -39,7 +40,10 @@ export const createUserSchema = object().shape({
     password: string().label('Password').min(8).max(50).required(),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
-    dateOfBirth: date().label('Date Of Birth').required(),
+    dateOfBirth: string()
+        .label('Date Of Birth')
+        .transform(parseUTCDate)
+        .required(),
     roles: array().of(string().label('Role').required()).label('Roles')
 });
 
@@ -54,7 +58,7 @@ export type GetUserResponse = {
     emailAddress: string;
     firstName: string;
     lastName: string;
-    dateOfBirth: Date;
+    dateOfBirth: string;
     isLockedOut?: boolean;
     roles?: string[];
     version: string;
@@ -64,7 +68,10 @@ export const updateUserSchema = object().shape({
     emailAddress: string().label('Email Address').max(254).email().required(),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
-    dateOfBirth: date().label('Date Of Birth').required(),
+    dateOfBirth: string()
+        .label('Date Of Birth')
+        .transform(parseUTCDate)
+        .required(),
     roles: array().of(string().label('Role').required()).label('Roles'),
     version: string().label('Version').uuid()
 });

@@ -1,5 +1,5 @@
 import { Formik, Form } from 'formik';
-import { InferType, date, object, ref, string } from 'yup';
+import { InferType, object, ref, string } from 'yup';
 import { Input } from '@/components/Input/Input';
 import { DatePicker } from '@/components/DatePicker/DatePicker';
 import { Button } from '@/components/Button/Button';
@@ -14,7 +14,7 @@ const schema = object({
         .oneOf([ref('password')], 'Passwords do not match'),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
-    dateOfBirth: date().label('Date Of Birth').required()
+    dateOfBirth: string().label('Date Of Birth').required()
 });
 
 export type RegisterFormValues = InferType<typeof schema>;

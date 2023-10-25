@@ -38,7 +38,7 @@ const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
         emailAddress: user.emailAddress,
         firstName: user.firstName,
         lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
+        dateOfBirth: user.dateOfBirth.toISOString().split('T')[0],
         version: user.version!
     });
 };

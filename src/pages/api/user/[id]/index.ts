@@ -42,7 +42,7 @@ const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
         emailAddress: user.emailAddress,
         firstName: user.firstName,
         lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
+        dateOfBirth: user.dateOfBirth.toISOString().split('T')[0],
         isLockedOut: user.isLockedOut,
         roles: user.roles,
         version: user.version!
