@@ -1,5 +1,5 @@
 import { InferType, object, string } from 'yup';
-import { parseUTCDate } from '@/utils/date';
+import { toDateOnlyISOString } from '@/utils/date';
 
 export type GetProfileResponse = {
     id: number;
@@ -16,7 +16,7 @@ export const updateProfileSchema = object().shape({
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: string()
         .label('Date Of Birth')
-        .transform(parseUTCDate)
+        .transform(toDateOnlyISOString)
         .required(),
     version: string().label('Version').uuid()
 });

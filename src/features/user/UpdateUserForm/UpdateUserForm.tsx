@@ -11,7 +11,7 @@ import {
     ToggleGroupSkeleton
 } from '@/components/Skeleton/Skeleton';
 import { roleOptions } from '@/utils/auth';
-import { parseUTCDate } from '@/utils/date';
+import { toDateOnlyISOString } from '@/utils/date';
 
 const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),
@@ -19,7 +19,7 @@ const schema = object({
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: string()
         .label('Date Of Birth')
-        .transform(parseUTCDate)
+        .transform(toDateOnlyISOString)
         .required(),
     roles: array().of(string().label('Role').required()).label('Roles')
 });

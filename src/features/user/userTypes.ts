@@ -1,5 +1,5 @@
 import { InferType, array, number, object, string } from 'yup';
-import { parseUTCDate } from '@/utils/date';
+import { toDateOnlyISOString } from '@/utils/date';
 
 export enum UserSort {
     EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
@@ -42,7 +42,7 @@ export const createUserSchema = object().shape({
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: string()
         .label('Date Of Birth')
-        .transform(parseUTCDate)
+        .transform(toDateOnlyISOString)
         .required(),
     roles: array().of(string().label('Role').required()).label('Roles')
 });
@@ -70,7 +70,7 @@ export const updateUserSchema = object().shape({
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: string()
         .label('Date Of Birth')
-        .transform(parseUTCDate)
+        .transform(toDateOnlyISOString)
         .required(),
     roles: array().of(string().label('Role').required()).label('Roles'),
     version: string().label('Version').uuid()
