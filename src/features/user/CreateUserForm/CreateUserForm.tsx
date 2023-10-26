@@ -18,11 +18,7 @@ const schema = object({
         .oneOf([ref('password')], 'Passwords do not match'),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
-    dateOfBirth: string()
-        .label('Date Of Birth')
-        .required()
-        .past()
-        .transformDateOnly(),
+    dateOfBirth: string().label('Date Of Birth').required().dateOnly().past(),
     roles: array()
         .of(string().label('Role').required())
         .label('Roles')

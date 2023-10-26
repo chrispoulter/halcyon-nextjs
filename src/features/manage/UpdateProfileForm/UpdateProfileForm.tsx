@@ -12,11 +12,7 @@ const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
-    dateOfBirth: string()
-        .label('Date Of Birth')
-        .required()
-        .past()
-        .transformDateOnly()
+    dateOfBirth: string().label('Date Of Birth').required().dateOnly().past()
 });
 
 export type UpdateProfileFormValues = InferType<typeof schema>;

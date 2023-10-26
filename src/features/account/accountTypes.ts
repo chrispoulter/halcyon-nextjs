@@ -6,11 +6,7 @@ export const registerSchema = object().shape({
     password: string().label('Password').min(8).max(50).required(),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
-    dateOfBirth: string()
-        .label('Date Of Birth')
-        .required()
-        .past()
-        .transformDateOnly()
+    dateOfBirth: string().label('Date Of Birth').required().dateOnly().past()
 });
 
 export type RegisterRequest = InferType<typeof registerSchema>;

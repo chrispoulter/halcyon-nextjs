@@ -109,6 +109,7 @@ const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         data: {
             ...body,
             password: await hashPassword(body.password),
+            dateOfBirth: `${body.dateOfBirth}T00:00:00.000Z`,
             search: `${body.emailAddress} ${body.firstName} ${body.lastName}`,
             version: crypto.randomUUID()
         }

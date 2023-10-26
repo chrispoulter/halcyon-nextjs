@@ -1,12 +1,28 @@
 import * as yup from 'yup';
-import { toDateOnlyISOString } from './dates';
 
 declare module 'yup' {
     interface StringSchema {
-        transformDateOnly(): StringSchema<string>;
+        dateOnly(): StringSchema<string>;
         past(): StringSchema<string>;
     }
 }
+
+yup.addMethod(yup.string, 'dateOnly', function () {
+    return this.test({
+        name: 'date-only',
+        message: '${label} must be a valid date',
+        test: value => {
+            if (!value) {
+                return true;
+            }
+
+            const isoString = `${value}T00:00:00.000Z`;
+            const date = new Date(isoString);
+
+            return !isNaN(date.getTime()) && isoString === date.toISOString();
+        }
+    });
+});
 
 yup.addMethod(yup.string, 'past', function () {
     return this.test({
@@ -17,11 +33,17 @@ yup.addMethod(yup.string, 'past', function () {
                 return true;
             }
 
-            return new Date(value) < new Date();
+            const isoString = `${value}T00:00:00.000Z`;
+            const date = new Date(isoString);
+
+            if (isNaN(date.getTime()) || isoString !== date.toISOString()) {
+                return false;
+            }
+
+            const now = new Date();
+            now.setUTCHours(0, 0, 0, 0);
+
+            return date < now;
         }
     });
-});
-
-yup.addMethod(yup.string, 'transformDateOnly', function () {
-    return this.transform(toDateOnlyISOString);
 });
