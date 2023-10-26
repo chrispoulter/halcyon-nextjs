@@ -6,7 +6,7 @@ declare module 'next-auth' {
         emailAddress: string;
         firstName: string;
         lastName: string;
-        dateOfBirth: Date;
+        dateOfBirth: string;
         roles?: string[];
     }
 

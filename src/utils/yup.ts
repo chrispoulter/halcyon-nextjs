@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { now, toDate } from './dates';
 
 declare module 'yup' {
     interface StringSchema {
@@ -16,10 +17,7 @@ yup.addMethod(yup.string, 'dateOnly', function () {
                 return true;
             }
 
-            const isoString = `${value}T00:00:00.000Z`;
-            const date = new Date(isoString);
-
-            return !isNaN(date.getTime()) && isoString === date.toISOString();
+            return !!toDate(value);
         }
     });
 });
@@ -33,17 +31,13 @@ yup.addMethod(yup.string, 'past', function () {
                 return true;
             }
 
-            const isoString = `${value}T00:00:00.000Z`;
-            const date = new Date(isoString);
+            const date = toDate(value);
 
-            if (isNaN(date.getTime()) || isoString !== date.toISOString()) {
+            if (!date) {
                 return false;
             }
 
-            const now = new Date();
-            now.setUTCHours(0, 0, 0, 0);
-
-            return date < now;
+            return date < now();
         }
     });
 });

@@ -6,6 +6,7 @@ import {
 } from '@/features/manage/manageTypes';
 import prisma from '@/utils/prisma';
 import { mapHandlers, Handler } from '@/utils/handler';
+import { toDateOnly } from '@/utils/dates';
 
 const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
     _,
@@ -38,7 +39,7 @@ const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
         emailAddress: user.emailAddress,
         firstName: user.firstName,
         lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth.toISOString().split('T')[0],
+        dateOfBirth: toDateOnly(user.dateOfBirth),
         version: user.version!
     });
 };
