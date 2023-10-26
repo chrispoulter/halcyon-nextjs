@@ -50,14 +50,13 @@ export const PersonalDetailsCard = ({
                 Date Of Birth
             </p>
             <p className="mb-3 text-sm text-gray-500">
-                {new Date(`${profile.dateOfBirth}T00:00:00.000Z`).toLocaleString(
-                    'en',
-                    {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    }
-                )}
+                {new Date(
+                    `${profile.dateOfBirth}T00:00:00.000Z`
+                ).toLocaleString('en', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                })}
             </p>
 
             <ButtonGroup align="left">
