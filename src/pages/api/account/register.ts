@@ -12,7 +12,7 @@ const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         stripUnknown: true
     });
 
-    const existing = await prisma.users.findUnique({
+    const existing = await prisma.users.count({
         select: {
             id: true
         },
