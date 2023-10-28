@@ -2,6 +2,7 @@ import { createMocks } from 'node-mocks-http';
 import { Users } from '@prisma/client';
 import handler from '@/pages/api/account/register';
 import prisma from '@/utils/prisma';
+import { toDateOnly } from '@/utils/dates';
 
 jest.mock('next-auth/jwt', () => ({
     getToken: jest.fn()
@@ -53,11 +54,11 @@ describe('/api/account/register', () => {
         const { req, res } = createMocks({
             method: 'POST',
             body: {
-                emailAddress: 'test@example.com',
-                password: 'change-me-1234567890',
-                firstName: 'John',
-                lastName: 'Smith',
-                dateOfBirth: '1970-01-01'
+                emailAddress: user.emailAddress,
+                password: user.password,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                dateOfBirth: toDateOnly(user.dateOfBirth)
             }
         });
 
@@ -77,11 +78,11 @@ describe('/api/account/register', () => {
         const { req, res } = createMocks({
             method: 'POST',
             body: {
-                emailAddress: 'test@example.com',
-                password: 'change-me-1234567890',
-                firstName: 'John',
-                lastName: 'Smith',
-                dateOfBirth: '1970-01-01'
+                emailAddress: user.emailAddress,
+                password: user.password,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                dateOfBirth: toDateOnly(user.dateOfBirth)
             }
         });
 
