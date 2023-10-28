@@ -48,7 +48,7 @@ describe('/api/account/register', () => {
     });
 
     it('when duplicate email address should return bad request', async () => {
-        jest.spyOn(prisma.users, 'findUnique').mockResolvedValue(user);
+        jest.spyOn(prisma.users, 'count').mockResolvedValue(1);
 
         const { req, res } = createMocks({
             method: 'POST',
@@ -71,7 +71,7 @@ describe('/api/account/register', () => {
     });
 
     it('when request is valid should create new user', async () => {
-        jest.spyOn(prisma.users, 'findUnique').mockResolvedValue(null);
+        jest.spyOn(prisma.users, 'count').mockResolvedValue(0);
         jest.spyOn(prisma.users, 'create').mockResolvedValue(user);
 
         const { req, res } = createMocks({
