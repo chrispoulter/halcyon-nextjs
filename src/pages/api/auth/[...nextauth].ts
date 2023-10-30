@@ -21,27 +21,27 @@ export const authOptions: AuthOptions = {
                     body: JSON.stringify(body)
                 });
 
-                const accessToken: string = await response.text();
+                if (!response.ok) {
+                    throw new Error('The credentials provided were invalid.');
+                }
 
-                const decodedToken = verify(
-                    accessToken,
-                    config.JWT_SECURITY_KEY,
-                    {
-                        issuer: config.JWT_ISSUER,
-                        audience: config.JWT_AUDIENCE
-                    }
-                ) as JwtPayload;
+                const accessToken = await response.text();
+
+                const payload = verify(accessToken, config.JWT_SECURITY_KEY, {
+                    issuer: config.JWT_ISSUER,
+                    audience: config.JWT_AUDIENCE
+                }) as JwtPayload;
 
                 return {
                     accessToken,
-                    id: parseInt(decodedToken.sub!),
-                    emailAddress: decodedToken.email,
-                    firstName: decodedToken.given_name,
-                    lastName: decodedToken.family_name,
+                    id: parseInt(payload.sub!),
+                    emailAddress: payload.email,
+                    firstName: payload.given_name,
+                    lastName: payload.family_name,
                     roles:
-                        typeof decodedToken.roles === 'string'
-                            ? [decodedToken.roles]
-                            : decodedToken.roles || []
+                        typeof payload.roles === 'string'
+                            ? [payload.roles]
+                            : payload.roles || []
                 };
             }
         })
