@@ -14,6 +14,16 @@ Object.defineProperty(globalThis, 'crypto', {
     }
 });
 
+jest.mock('@/utils/prisma', () => ({
+    __esModule: true,
+    default: {
+        users: {
+            count: jest.fn(),
+            create: jest.fn()
+        }
+    }
+}));
+
 const user: Users = {
     id: 1,
     emailAddress: 'test@example.com',
@@ -49,7 +59,7 @@ describe('/api/account/register', () => {
     });
 
     it('when duplicate email address should return bad request', async () => {
-        jest.spyOn(prisma.users, 'count').mockResolvedValue(1);
+        (prisma.users.count as jest.Mock).mockResolvedValue(1);
 
         const { req, res } = createMocks({
             method: 'POST',
@@ -72,8 +82,8 @@ describe('/api/account/register', () => {
     });
 
     it('when request is valid should create new user', async () => {
-        jest.spyOn(prisma.users, 'count').mockResolvedValue(0);
-        jest.spyOn(prisma.users, 'create').mockResolvedValue(user);
+        (prisma.users.count as jest.Mock).mockResolvedValue(0);
+        (prisma.users.create as jest.Mock).mockResolvedValue(user);
 
         const { req, res } = createMocks({
             method: 'POST',
