@@ -6,8 +6,15 @@ import RegisterPage from '@/pages/register';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
 import { storeWrapper } from '@/utils/test-utils';
 
+jest.mock('next-auth', () => ({
+    __esModule: true,
+    default: jest.fn(),
+    getServerSession: jest.fn()
+}));
+
 jest.mock('next-auth/react', () => ({
     __esModule: true,
+    getSession: jest.fn(),
     signIn: jest.fn()
 }));
 
