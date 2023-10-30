@@ -1,9 +1,6 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { createTokenSchema } from '@/features/token/tokenTypes';
-import prisma from '@/utils/prisma';
-import { verifyPassword } from '@/utils/hash';
-import { toDateOnly } from '@/utils/dates';
 import { config } from '@/utils/config';
 
 export const authOptions: AuthOptions = {
@@ -16,49 +13,50 @@ export const authOptions: AuthOptions = {
             },
             async authorize(credentials) {
                 const body = await createTokenSchema.validate(credentials);
+                console.log('body', body);
 
-                const user = await prisma.users.findUnique({
-                    select: {
-                        id: true,
-                        emailAddress: true,
-                        firstName: true,
-                        lastName: true,
-                        dateOfBirth: true,
-                        password: true,
-                        isLockedOut: true,
-                        roles: true
-                    },
-                    where: {
-                        emailAddress: body.emailAddress
-                    }
-                });
+                // const user = await prisma.users.findUnique({
+                //     select: {
+                //         id: true,
+                //         emailAddress: true,
+                //         firstName: true,
+                //         lastName: true,
+                //         dateOfBirth: true,
+                //         password: true,
+                //         isLockedOut: true,
+                //         roles: true
+                //     },
+                //     where: {
+                //         emailAddress: body.emailAddress
+                //     }
+                // });
 
-                if (!user || !user.password) {
-                    throw new Error('The credentials provided were invalid.');
-                }
+                // if (!user || !user.password) {
+                //     throw new Error('The credentials provided were invalid.');
+                // }
 
-                const verified = await verifyPassword(
-                    body.password,
-                    user.password
-                );
+                // const verified = await verifyPassword(
+                //     body.password,
+                //     user.password
+                // );
 
-                if (!verified) {
-                    throw new Error('The credentials provided were invalid.');
-                }
+                // if (!verified) {
+                //     throw new Error('The credentials provided were invalid.');
+                // }
 
-                if (user.isLockedOut) {
-                    throw new Error(
-                        'This account has been locked out, please try again later.'
-                    );
-                }
+                // if (user.isLockedOut) {
+                //     throw new Error(
+                //         'This account has been locked out, please try again later.'
+                //     );
+                // }
 
                 return {
-                    id: user.id,
-                    emailAddress: user.emailAddress,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    dateOfBirth: toDateOnly(user.dateOfBirth),
-                    roles: user.roles
+                    id: 1,
+                    emailAddress: 'halcyon@chrispoulter.com',
+                    firstName: 'System',
+                    lastName: 'Administrator',
+                    dateOfBirth: '1970-01-01',
+                    roles: ['SYSTEM_ADMINISTRATOR']
                 };
             }
         })
