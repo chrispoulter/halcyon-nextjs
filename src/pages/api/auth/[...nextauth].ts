@@ -3,7 +3,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { createTokenSchema } from '@/features/token/tokenTypes';
 import prisma from '@/utils/prisma';
 import { verifyPassword } from '@/utils/hash';
-import { toDateOnly } from '@/utils/dates';
 import { config } from '@/utils/config';
 
 export const authOptions: AuthOptions = {
@@ -23,7 +22,6 @@ export const authOptions: AuthOptions = {
                         emailAddress: true,
                         firstName: true,
                         lastName: true,
-                        dateOfBirth: true,
                         password: true,
                         isLockedOut: true,
                         roles: true
@@ -57,7 +55,6 @@ export const authOptions: AuthOptions = {
                     emailAddress: user.emailAddress,
                     firstName: user.firstName,
                     lastName: user.lastName,
-                    dateOfBirth: toDateOnly(user.dateOfBirth),
                     roles: user.roles
                 };
             }
