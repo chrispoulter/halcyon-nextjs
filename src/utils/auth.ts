@@ -1,16 +1,23 @@
-import { JwtPayload } from 'jsonwebtoken';
+import { JWT } from 'next-auth/jwt';
 
-export enum Role {
-    SYSTEM_ADMINISTRATOR = 'SYSTEM_ADMINISTRATOR',
-    USER_ADMINISTRATOR = 'USER_ADMINISTRATOR'
-}
+export const SYSTEM_ADMINISTRATOR = 'SYSTEM_ADMINISTRATOR';
+export const USER_ADMINISTRATOR = 'USER_ADMINISTRATOR';
 
-export const roles = {
-    [Role.SYSTEM_ADMINISTRATOR]: {
+export const isUserAdministrator = [SYSTEM_ADMINISTRATOR, USER_ADMINISTRATOR];
+
+type Roles = {
+    [key: string]: {
+        title: string;
+        description: string;
+    };
+};
+
+export const roles: Roles = {
+    [SYSTEM_ADMINISTRATOR]: {
         title: 'System Administrator',
         description: 'A system administrator has access to the entire system.'
     },
-    [Role.USER_ADMINISTRATOR]: {
+    [USER_ADMINISTRATOR]: {
         title: 'User Administrator',
         description: 'A user administrator can create / update / delete users.'
     }
@@ -21,13 +28,11 @@ export const roleOptions = Object.entries(roles).map(([value, item]) => ({
     ...item
 }));
 
-export const isUserAdministrator = [
-    Role.SYSTEM_ADMINISTRATOR,
-    Role.USER_ADMINISTRATOR
-];
-
-export const isAuthorized = (payload?: JwtPayload, requiredRoles?: Role[]) => {
-    if (!payload) {
+export const isAuthorized = (
+    token?: Pick<JWT, 'roles'>,
+    requiredRoles?: string[]
+) => {
+    if (!token) {
         return false;
     }
 
@@ -35,11 +40,11 @@ export const isAuthorized = (payload?: JwtPayload, requiredRoles?: Role[]) => {
         return true;
     }
 
-    if (!payload.roles) {
+    if (!token.roles) {
         return false;
     }
 
-    const userRoles = payload.roles;
+    const userRoles = token.roles;
 
     if (!requiredRoles.some(value => userRoles.includes(value))) {
         return false;

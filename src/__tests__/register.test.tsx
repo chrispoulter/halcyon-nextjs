@@ -1,10 +1,16 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
 import { signIn } from 'next-auth/react';
-import { HandlerResponse, UpdatedResponse } from '@/models/base.types';
+import { UpdatedResponse } from '@/common/commonTypes';
 import RegisterPage from '@/pages/register';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
 import { storeWrapper } from '@/utils/test-utils';
+
+jest.mock('next-auth', () => ({
+    __esModule: true,
+    default: jest.fn(),
+    getServerSession: jest.fn()
+}));
 
 jest.mock('next-auth/react', () => ({
     __esModule: true,
@@ -36,19 +42,21 @@ const fillRegisterForm = (values: RegisterFormValues) => {
     const lastNameInput = screen.getByLabelText(/last name/i);
     fireEvent.change(lastNameInput, { target: { value: values.lastName } });
 
+    const [year, month, date] = values.dateOfBirth.split('-');
+
     const dobDateSelect = screen.getByLabelText(/date of birth date/i);
     fireEvent.change(dobDateSelect, {
-        target: { value: values.dateOfBirth.getDate() }
+        target: { value: date }
     });
 
     const dobMonthSelect = screen.getByLabelText(/date of birth month/i);
     fireEvent.change(dobMonthSelect, {
-        target: { value: values.dateOfBirth.getMonth() + 1 }
+        target: { value: month }
     });
 
     const dobYearSelect = screen.getByLabelText(/date of birth year/i);
     fireEvent.change(dobYearSelect, {
-        target: { value: values.dateOfBirth.getFullYear() }
+        target: { value: year }
     });
 };
 
@@ -56,7 +64,7 @@ describe('<RegisterPage />', () => {
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 
-    it('renders a heading', () => {
+    it('should render a heading', () => {
         render(<RegisterPage />, { wrapper: storeWrapper });
 
         const heading = screen.getByRole('heading', {
@@ -66,8 +74,8 @@ describe('<RegisterPage />', () => {
         expect(heading).toBeInTheDocument();
     });
 
-    it('handles form submission', async () => {
-        const response: HandlerResponse<UpdatedResponse> = { data: { id: 1 } };
+    it('when form submitted should register user', async () => {
+        const response: UpdatedResponse = { id: 1 };
 
         fetchMock.mockResponse(JSON.stringify(response), {
             headers: { 'content-type': 'application/json' }
@@ -76,12 +84,12 @@ describe('<RegisterPage />', () => {
         render(<RegisterPage />, { wrapper: storeWrapper });
 
         fillRegisterForm({
-            emailAddress: 'test@test.com',
+            emailAddress: 'test@example.com',
             password: 'Testing123',
             confirmPassword: 'Testing123',
             firstName: 'John',
             lastName: 'Smith',
-            dateOfBirth: new Date(1970, 1, 1)
+            dateOfBirth: '1970-01-01'
         });
 
         const registerButton = screen.getByRole('button', { name: /submit/i });

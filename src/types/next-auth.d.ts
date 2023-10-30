@@ -1,27 +1,26 @@
 import { DefaultUser } from 'next-auth';
-import { Role } from '@/utils/auth';
 
 declare module 'next-auth' {
     interface User {
         accessToken: string;
-        email: string;
-        given_name: string;
-        family_name: string;
-        accessToken: string;
-        roles?: Role[];
+        id: number;
+        emailAddress: string;
+        firstName: string;
+        lastName: string;
+        roles?: string[];
     }
 
     interface Session {
-        accessToken?: string;
+        accessToken: string;
         user: {
-            roles?: Role[] | null;
+            roles?: string[];
         } & DefaultUser;
     }
 }
 
 declare module 'next-auth/jwt' {
     interface JWT {
-        accessToken?: string;
-        roles?: Role[] | null;
+        accessToken: string;
+        roles?: string[];
     }
 }

@@ -1,5 +1,5 @@
 import { TextLink } from '@/components/TextLink/TextLink';
-import { currentYear } from '@/utils/date';
+import { currentYear } from '@/utils/dates';
 import { config } from '@/utils/config';
 
 export const Footer = () => (

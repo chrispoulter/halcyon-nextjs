@@ -1,8 +1,7 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { JwtPayload, verify } from 'jsonwebtoken';
-import { HandlerResponse } from '@/models/base.types';
-import { createTokenSchema } from '@/models/token.types';
+import { createTokenSchema } from '@/features/token/tokenTypes';
 import { config } from '@/utils/config';
 
 export const authOptions: AuthOptions = {
@@ -22,33 +21,27 @@ export const authOptions: AuthOptions = {
                     body: JSON.stringify(body)
                 });
 
-                const result: HandlerResponse<string> = await response.json();
-
-                if (!result.data) {
-                    throw new Error(result.message);
+                if (!response.ok) {
+                    throw new Error('The credentials provided were invalid.');
                 }
 
-                const accessToken = result.data;
+                const accessToken = await response.text();
 
-                const decodedToken = verify(
-                    accessToken,
-                    config.JWT_SECURITY_KEY,
-                    {
-                        issuer: config.JWT_ISSUER,
-                        audience: config.JWT_AUDIENCE
-                    }
-                ) as JwtPayload;
+                const payload = verify(accessToken, config.JWT_SECURITY_KEY, {
+                    issuer: config.JWT_ISSUER,
+                    audience: config.JWT_AUDIENCE
+                }) as JwtPayload;
 
                 return {
                     accessToken,
-                    id: decodedToken.sub!,
-                    email: decodedToken.email!,
-                    given_name: decodedToken.given_name!,
-                    family_name: decodedToken.family_name!,
+                    id: parseInt(payload.sub!),
+                    emailAddress: payload.email,
+                    firstName: payload.given_name,
+                    lastName: payload.family_name,
                     roles:
-                        typeof decodedToken.roles === 'string'
-                            ? [decodedToken.roles]
-                            : decodedToken.roles || []
+                        typeof payload.roles === 'string'
+                            ? [payload.roles]
+                            : payload.roles || []
                 };
             }
         })
@@ -57,8 +50,8 @@ export const authOptions: AuthOptions = {
         async jwt({ token, user }) {
             if (user) {
                 token.accessToken = user.accessToken;
-                token.email = user.email;
-                token.name = `${user.given_name} ${user.family_name}`;
+                token.email = user.emailAddress;
+                token.name = `${user.firstName} ${user.lastName}`;
                 token.picture = null;
                 token.roles = user.roles;
             }

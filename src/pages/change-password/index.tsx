@@ -1,10 +1,14 @@
 import { useRouter } from 'next/router';
-import { useChangePasswordMutation, useGetProfileQuery } from '@/redux/api';
+import toast from 'react-hot-toast';
+import {
+    useGetProfileQuery,
+    useChangePasswordMutation
+} from '@/features/manage/manageEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
 import { TextLink } from '@/components/TextLink/TextLink';
-import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
+import { ButtonLink } from '@/components/Button/ButtonLink';
 import {
     ChangePasswordForm,
     ChangePasswordFormValues
@@ -12,8 +16,9 @@ import {
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getProfile, getRunningQueriesThunk } from '@/redux/api';
+import { getRunningQueriesThunk } from '@/redux/api';
 import { wrapper } from '@/redux/store';
+import { getProfile } from '@/features/manage/manageEndpoints';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const ChangePasswordPage = () => {
@@ -23,7 +28,7 @@ const ChangePasswordPage = () => {
 
     const [changePassword] = useChangePasswordMutation();
 
-    const version = profile?.data?.version;
+    const version = profile?.version;
 
     const onSubmit = async (values: ChangePasswordFormValues) => {
         await changePassword({
@@ -31,6 +36,7 @@ const ChangePasswordPage = () => {
             version
         }).unwrap();
 
+        toast.success('Your password has been changed.');
         await router.push('/my-account');
     };
 
@@ -42,7 +48,7 @@ const ChangePasswordPage = () => {
                 <Title>Change Password</Title>
 
                 <ChangePasswordForm
-                    profile={profile?.data}
+                    profile={profile}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">

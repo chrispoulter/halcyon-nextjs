@@ -43,12 +43,11 @@ jobs:
                   yarn install --frozen-lockfile
                   yarn lint
                   yarn build
-                  yarn test:ci
+                  yarn test
 
             - name: Move static folders into dynamic folder
               run: |
                   cp -r ./public ./.next/standalone
-                  cp -r ./prisma ./.next/standalone
                   cp -r ./.next/static ./.next/standalone/.next/static
                   rm ./.next/standalone/package.json
 

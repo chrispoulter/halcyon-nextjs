@@ -3,8 +3,8 @@ import {
     JumbotronBody,
     JumbotronTitle
 } from '@/components/Jumbotron/Jumbotron';
-import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
+import { ButtonLink } from '@/components/Button/ButtonLink';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
 import { Container } from '@/components/Container/Container';
 
 import { GetServerSideProps } from 'next';

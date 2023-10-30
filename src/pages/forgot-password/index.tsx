@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { useForgotPasswordMutation } from '@/redux/api';
+import toast from 'react-hot-toast';
+import { useForgotPasswordMutation } from '@/features/account/accountEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -18,6 +19,10 @@ const ForgotPasswordPage = () => {
             ...values,
             siteUrl: window.location.origin
         }).unwrap();
+
+        toast.success(
+            'Instructions as to how to reset your password have been sent to you via email.'
+        );
 
         await router.push('/login');
     };

@@ -11,7 +11,7 @@ jest.mock('next-auth', () => ({
 }));
 
 describe('<HomePage />', () => {
-    it('renders a heading', () => {
+    it('should render a heading', () => {
         render(<HomePage />);
 
         const heading = screen.getByRole('heading', {
@@ -21,7 +21,7 @@ describe('<HomePage />', () => {
         expect(heading).toBeInTheDocument();
     });
 
-    it('renders a register link', () => {
+    it('should render a register link', () => {
         render(<HomePage />, { wrapper: MemoryRouterProvider });
 
         const registerLink = screen.getByRole('link', { name: /get started/i });

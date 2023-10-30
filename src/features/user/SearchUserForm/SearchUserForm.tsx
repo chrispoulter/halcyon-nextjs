@@ -1,6 +1,6 @@
 import { Formik, Form } from 'formik';
 import { InferType, object, string } from 'yup';
-import { Input } from '@/components/Input/Input';
+import { Input } from '@/components/Form/Input';
 import { Button } from '@/components/Button/Button';
 import { SearchIcon } from '@/components/Icons/SearchIcon';
 

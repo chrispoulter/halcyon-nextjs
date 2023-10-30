@@ -1,5 +1,6 @@
 import { signIn } from 'next-auth/react';
-import { useRegisterMutation } from '@/redux/api';
+import toast from 'react-hot-toast';
+import { useRegisterMutation } from '@/features/account/accountEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -14,6 +15,7 @@ const RegisterPage = () => {
 
     const onSubmit = async (values: RegisterFormValues) => {
         await register(values).unwrap();
+        toast.success('User successfully registered.');
         await signIn('credentials', { ...values, callbackUrl: '/' });
     };
 

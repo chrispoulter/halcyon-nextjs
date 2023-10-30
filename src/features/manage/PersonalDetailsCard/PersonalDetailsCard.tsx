@@ -1,9 +1,9 @@
-import { GetProfileResponse } from '@/models/manage.types';
+import { GetProfileResponse } from '@/features/manage/manageTypes';
 import { Card, CardTitle } from '@/components/Card/Card';
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { ButtonLink } from '@/components/ButtonLink/ButtonLink';
-import { CardSkeleton } from '@/components/Skeleton/Skeleton';
-import { formatForDisplay } from '@/utils/date';
+import { CardSkeleton } from '@/components/Card/CardSkeleton';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
+import { ButtonLink } from '@/components/Button/ButtonLink';
+import { toLocaleString } from '@/utils/dates';
 
 type PersonalDetailsCardProps = {
     profile?: GetProfileResponse;
@@ -51,7 +51,7 @@ export const PersonalDetailsCard = ({
                 Date Of Birth
             </p>
             <p className="mb-3 text-sm text-gray-500">
-                {formatForDisplay(profile.dateOfBirth)}
+                {toLocaleString(profile.dateOfBirth)}
             </p>
 
             <ButtonGroup align="left">

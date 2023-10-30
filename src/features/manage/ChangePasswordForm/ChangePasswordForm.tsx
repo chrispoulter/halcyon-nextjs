@@ -1,10 +1,11 @@
 import { Formik, Form } from 'formik';
 import { InferType, object, ref, string } from 'yup';
-import { GetProfileResponse } from '@/models/manage.types';
-import { Input } from '@/components/Input/Input';
+import { GetProfileResponse } from '@/features/manage/manageTypes';
+import { Input } from '@/components/Form/Input';
 import { Button } from '@/components/Button/Button';
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { FormSkeleton, InputSkeleton } from '@/components/Skeleton/Skeleton';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
+import { FormSkeleton } from '@/components/Form/FormSkeleton';
+import { InputSkeleton } from '@/components/Form/InputSkeleton';
 
 const schema = object({
     currentPassword: string().label('Current Password').required(),

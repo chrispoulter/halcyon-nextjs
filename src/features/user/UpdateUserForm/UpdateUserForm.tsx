@@ -1,25 +1,22 @@
 import { Formik, Form } from 'formik';
-import { object, string, date, array, InferType } from 'yup';
-import { Input } from '@/components/Input/Input';
-import { DatePicker } from '@/components/DatePicker/DatePicker';
-import { ToggleGroup } from '@/components/ToggleGroup/ToggleGroup';
+import { object, string, array, InferType } from 'yup';
+import { Input } from '@/components/Form/Input';
+import { InputSkeleton } from '@/components/Form/InputSkeleton';
+import { DatePicker } from '@/components/Form/DatePicker';
+import { ToggleGroup } from '@/components/Form/ToggleGroup';
+import { ToggleGroupSkeleton } from '@/components/Form/ToggleGroupSkeleton';
 import { Button } from '@/components/Button/Button';
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import {
-    FormSkeleton,
-    InputSkeleton,
-    ToggleGroupSkeleton
-} from '@/components/Skeleton/Skeleton';
-import { Role, roleOptions } from '@/utils/auth';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
+import { FormSkeleton } from '@/components/Form/FormSkeleton';
+import { roleOptions } from '@/utils/auth';
+import '@/utils/yup';
 
 const schema = object({
     emailAddress: string().label('Email Address').max(254).email().required(),
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
-    dateOfBirth: date().label('Date Of Birth').required(),
-    roles: array()
-        .of(string<Role>().label('Role').oneOf(Object.values(Role)).required())
-        .label('Roles')
+    dateOfBirth: string().label('Date Of Birth').required().dateOnly().past(),
+    roles: array().of(string().label('Role').required()).label('Roles')
 });
 
 export type UpdateUserFormValues = InferType<typeof schema>;

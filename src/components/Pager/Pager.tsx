@@ -1,6 +1,6 @@
 import { Button } from '@/components/Button/Button';
-import { ButtonGroup } from '@/components/ButtonGroup/ButtonGroup';
-import { ButtonGroupSkeleton } from '@/components/Skeleton/Skeleton';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
+import { ButtonGroupSkeleton } from '@/components/Button/ButtonGroupSkeleton';
 
 type PagerProps = {
     isLoading?: boolean;
