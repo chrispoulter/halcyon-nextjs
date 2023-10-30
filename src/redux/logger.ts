@@ -12,7 +12,7 @@ export const logger: Middleware = () => next => async action => {
         const { request, response } = action.meta.baseQueryMeta;
         const method = request.method;
         const status = response?.status;
-        const errorMessage = action.payload.data?.message;
+        const errorMessage = action.payload.data?.title;
 
         switch (method) {
             case 'GET':

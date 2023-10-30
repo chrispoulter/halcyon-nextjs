@@ -1,5 +1,6 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { JwtPayload, verify } from 'jsonwebtoken';
 import { createTokenSchema } from '@/features/token/tokenTypes';
 import { config } from '@/utils/config';
 
@@ -13,50 +14,34 @@ export const authOptions: AuthOptions = {
             },
             async authorize(credentials) {
                 const body = await createTokenSchema.validate(credentials);
-                console.log('body', body);
 
-                // const user = await prisma.users.findUnique({
-                //     select: {
-                //         id: true,
-                //         emailAddress: true,
-                //         firstName: true,
-                //         lastName: true,
-                //         dateOfBirth: true,
-                //         password: true,
-                //         isLockedOut: true,
-                //         roles: true
-                //     },
-                //     where: {
-                //         emailAddress: body.emailAddress
-                //     }
-                // });
+                const response = await fetch(`${config.API_URL}/token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
 
-                // if (!user || !user.password) {
-                //     throw new Error('The credentials provided were invalid.');
-                // }
+                const accessToken: string = await response.text();
 
-                // const verified = await verifyPassword(
-                //     body.password,
-                //     user.password
-                // );
-
-                // if (!verified) {
-                //     throw new Error('The credentials provided were invalid.');
-                // }
-
-                // if (user.isLockedOut) {
-                //     throw new Error(
-                //         'This account has been locked out, please try again later.'
-                //     );
-                // }
+                const decodedToken = verify(
+                    accessToken,
+                    config.JWT_SECURITY_KEY,
+                    {
+                        issuer: config.JWT_ISSUER,
+                        audience: config.JWT_AUDIENCE
+                    }
+                ) as JwtPayload;
 
                 return {
-                    id: 1,
-                    emailAddress: 'halcyon@chrispoulter.com',
-                    firstName: 'System',
-                    lastName: 'Administrator',
-                    dateOfBirth: '1970-01-01',
-                    roles: ['SYSTEM_ADMINISTRATOR']
+                    accessToken,
+                    id: parseInt(decodedToken.sub!),
+                    emailAddress: decodedToken.email,
+                    firstName: decodedToken.given_name,
+                    lastName: decodedToken.family_name,
+                    roles:
+                        typeof decodedToken.roles === 'string'
+                            ? [decodedToken.roles]
+                            : decodedToken.roles || []
                 };
             }
         })
@@ -64,6 +49,7 @@ export const authOptions: AuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
+                token.accessToken = user.accessToken;
                 token.email = user.emailAddress;
                 token.name = `${user.firstName} ${user.lastName}`;
                 token.picture = null;
@@ -74,6 +60,7 @@ export const authOptions: AuthOptions = {
         },
         async session({ session, token }) {
             if (session.user) {
+                session.accessToken = token.accessToken;
                 session.user.id = token.sub!;
                 session.user.email = token.email;
                 session.user.name = token.name;
