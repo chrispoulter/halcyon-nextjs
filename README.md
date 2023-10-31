@@ -14,7 +14,7 @@ A web application template.
 Create a `.env` file in the web project directory.
 
 ```
-PROXY_API_URL=http://localhost:5257
+NEXT_PUBLIC_API_URL=https://localhost:7257
 
 JWT_SECURITY_KEY=change-me-1234567890
 JWT_ISSUER:=HalcyonApi

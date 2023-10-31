@@ -2,7 +2,7 @@ import { NextApiHandler } from 'next';
 import { config } from '@/utils/config';
 
 const apiHealthCheck = async () => {
-    const response = await fetch(`${config.PROXY_API_URL}/health`, {
+    const response = await fetch(`${config.API_URL}/health`, {
         method: 'GET'
     });
 
