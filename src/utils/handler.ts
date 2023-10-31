@@ -81,7 +81,7 @@ export const mapHandlers =
                 });
             }
 
-            console.error('api error', error);
+            console.error('Api handler failed', error);
 
             return res.status(500).json({
                 message:

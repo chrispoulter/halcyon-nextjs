@@ -10,6 +10,10 @@ type EmailMessage = {
 };
 
 export const sendEmail = async (message: EmailMessage) => {
+    console.info(
+        `Sending email to ${message.to} with template ${message.template}`
+    );
+
     const [html, subject] = await renderTemplate(
         message.template,
         message.data
@@ -37,6 +41,6 @@ export const sendEmail = async (message: EmailMessage) => {
             html
         });
     } catch (error) {
-        console.error('email error', error);
+        console.error('Email send failed', error);
     }
 };
