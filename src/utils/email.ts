@@ -1,7 +1,8 @@
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { renderTemplate } from './template';
-import { config } from '@/utils/config';
+import { logger } from './logger';
+import { config } from './config';
 
 type EmailMessage = {
     template: string;
@@ -10,8 +11,10 @@ type EmailMessage = {
 };
 
 export const sendEmail = async (message: EmailMessage) => {
-    console.info(
-        `Sending email to ${message.to} with template ${message.template}`
+    logger.info(
+        'Sending email to %s with template %s',
+        message.to,
+        message.template
     );
 
     const [html, subject] = await renderTemplate(
@@ -41,6 +44,6 @@ export const sendEmail = async (message: EmailMessage) => {
             html
         });
     } catch (error) {
-        console.error('Email send failed', error);
+        logger.error(error, 'Email send failed');
     }
 };

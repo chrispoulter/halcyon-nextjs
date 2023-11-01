@@ -1,5 +1,6 @@
-import prisma from '@/utils/prisma';
 import { NextApiHandler } from 'next';
+import prisma from '@/utils/prisma';
+import { logger } from '@/utils/logger';
 
 const dbHealthCheck = async () => {
     await prisma.$queryRaw`SELECT true AS connected`;
@@ -10,7 +11,7 @@ const healthHandler: NextApiHandler = async (_, res) => {
         await dbHealthCheck();
         return res.send('Healthy');
     } catch (error) {
-        console.error('Health check failed', error);
+        logger.error(error, 'Health check failed');
         return res.status(503).send('Unhealthy');
     }
 };
