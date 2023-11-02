@@ -4,32 +4,6 @@ import handler from '@/pages/api/account/register';
 import prisma from '@/utils/prisma';
 import { toDateOnly } from '@/utils/dates';
 
-jest.mock('next-auth/jwt', () => ({
-    getToken: jest.fn()
-}));
-
-Object.defineProperty(globalThis, 'crypto', {
-    value: {
-        randomUUID: jest.fn()
-    }
-});
-
-jest.mock('@/utils/prisma', () => ({
-    __esModule: true,
-    default: {
-        users: {
-            count: jest.fn(),
-            create: jest.fn()
-        }
-    }
-}));
-
-jest.mock('@/utils/logger', () => ({
-    logger: {
-        info: jest.fn()
-    }
-}));
-
 const user: Users = {
     id: 1,
     emailAddress: 'test@example.com',

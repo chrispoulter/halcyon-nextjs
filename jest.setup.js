@@ -7,3 +7,41 @@ import '@testing-library/jest-dom';
 
 import jestFetchMock from 'jest-fetch-mock';
 jestFetchMock.enableMocks();
+
+jest.mock('next/router', () => require('next-router-mock'));
+
+jest.mock('next-auth', () => ({
+    __esModule: true,
+    default: jest.fn()
+}));
+
+jest.mock('next-auth/react', () => ({
+    __esModule: true,
+    signIn: jest.fn()
+}));
+
+jest.mock('next-auth/jwt', () => ({
+    getToken: jest.fn()
+}));
+
+jest.mock('@/utils/prisma', () => ({
+    __esModule: true,
+    default: {
+        users: {
+            count: jest.fn(),
+            create: jest.fn()
+        }
+    }
+}));
+
+jest.mock('@/utils/logger', () => ({
+    logger: {
+        info: jest.fn()
+    }
+}));
+
+Object.defineProperty(globalThis, 'crypto', {
+    value: {
+        randomUUID: jest.fn()
+    }
+});
