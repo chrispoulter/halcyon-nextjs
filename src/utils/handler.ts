@@ -91,4 +91,11 @@ export const mapHandlers =
                         : 'An error occurred while processing your request.'
             });
         }
+
+        logger.info(
+            'HTTP %s %s responded %d',
+            req.method,
+            req.url,
+            res.statusCode
+        );
     };

@@ -24,6 +24,12 @@ jest.mock('@/utils/prisma', () => ({
     }
 }));
 
+jest.mock('@/utils/logger', () => ({
+    logger: {
+        info: jest.fn()
+    }
+}));
+
 const user: Users = {
     id: 1,
     emailAddress: 'test@example.com',
