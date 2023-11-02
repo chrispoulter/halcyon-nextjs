@@ -1,4 +1,5 @@
 import { createMocks } from 'node-mocks-http';
+import { when } from 'jest-when';
 import { Users } from '@prisma/client';
 import handler from '@/pages/api/account/register';
 import prisma from '@/utils/prisma';
@@ -31,7 +32,7 @@ describe('/api/account/register', () => {
         const statusCode = res._getStatusCode();
         expect(statusCode).toBe(400);
 
-        const data = JSON.parse(res._getData());
+        const data = res._getJSONData();
         expect(data).toHaveProperty(
             'message',
             'One or more validation errors occurred.'
@@ -39,7 +40,7 @@ describe('/api/account/register', () => {
     });
 
     it('when duplicate email address should return bad request', async () => {
-        (prisma.users.count as jest.Mock).mockResolvedValue(1);
+        when(prisma.users.count).mockResolvedValue(1);
 
         const { req, res } = createMocks({
             method: 'POST',
@@ -57,13 +58,13 @@ describe('/api/account/register', () => {
         const statusCode = res._getStatusCode();
         expect(statusCode).toBe(400);
 
-        const data = JSON.parse(res._getData());
+        const data = res._getJSONData();
         expect(data).toHaveProperty('message', 'User name is already taken.');
     });
 
     it('when request is valid should create new user', async () => {
-        (prisma.users.count as jest.Mock).mockResolvedValue(0);
-        (prisma.users.create as jest.Mock).mockResolvedValue(user);
+        when(prisma.users.count).mockResolvedValue(0);
+        when(prisma.users.create).mockResolvedValue(user);
 
         const { req, res } = createMocks({
             method: 'POST',
@@ -81,7 +82,7 @@ describe('/api/account/register', () => {
         const statusCode = res._getStatusCode();
         expect(statusCode).toBe(200);
 
-        const data = JSON.parse(res._getData());
+        const data = res._getJSONData();
         expect(data).toHaveProperty('id', user.id);
     });
 });
