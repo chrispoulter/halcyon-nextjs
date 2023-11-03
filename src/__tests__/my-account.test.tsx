@@ -8,11 +8,6 @@ import { GetProfileResponse } from '@/features/manage/manageTypes';
 import MyAccountPage from '@/pages/my-account';
 import { storeWrapper } from '@/utils/test-utils';
 
-jest.mock('next-auth', () => ({
-    __esModule: true,
-    default: jest.fn()
-}));
-
 const response: GetProfileResponse = {
     id: 1,
     emailAddress: 'test@example.com',

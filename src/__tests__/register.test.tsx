@@ -6,11 +6,6 @@ import RegisterPage from '@/pages/register';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
 import { storeWrapper } from '@/utils/test-utils';
 
-jest.mock('next-auth/react', () => ({
-    __esModule: true,
-    signIn: jest.fn()
-}));
-
 const fillRegisterForm = (values: RegisterFormValues) => {
     const emailInput = screen.getByLabelText(/email address/i);
     fireEvent.change(emailInput, { target: { value: values.emailAddress } });

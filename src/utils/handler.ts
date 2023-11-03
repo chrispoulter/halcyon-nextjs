@@ -1,8 +1,9 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { ValidationError } from 'yup';
-import { isAuthorized } from '@/utils/auth';
-import { config } from '@/utils/config';
+import { isAuthorized } from './auth';
+import { logger } from './logger';
+import { config } from './config';
 
 type HandlerContext = {
     currentUserId?: number;
@@ -81,7 +82,7 @@ export const mapHandlers =
                 });
             }
 
-            console.error('Api handler failed', error);
+            logger.error(error, 'Api handler failed');
 
             return res.status(500).json({
                 message:
@@ -90,4 +91,11 @@ export const mapHandlers =
                         : 'An error occurred while processing your request.'
             });
         }
+
+        logger.info(
+            'HTTP %s %s responded %d',
+            req.method,
+            req.url,
+            res.statusCode
+        );
     };
