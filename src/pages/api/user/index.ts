@@ -91,9 +91,6 @@ const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     });
 
     const existing = await prisma.users.count({
-        select: {
-            id: true
-        },
         where: {
             emailAddress: body.emailAddress
         }

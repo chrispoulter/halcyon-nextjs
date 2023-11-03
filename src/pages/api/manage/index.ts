@@ -78,9 +78,6 @@ const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
 
     if (user.emailAddress !== body.emailAddress) {
         const existing = await prisma.users.count({
-            select: {
-                id: true
-            },
             where: {
                 emailAddress: body.emailAddress
             }
