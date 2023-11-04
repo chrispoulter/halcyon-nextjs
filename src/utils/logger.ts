@@ -7,9 +7,6 @@ export const logger = pino({
         level: label => ({ level: label })
     },
     timestamp: pino.stdTimeFunctions.isoTime,
-    browser: {
-        asObject: true
-    },
     transport: {
         target: 'pino-pretty'
     }
