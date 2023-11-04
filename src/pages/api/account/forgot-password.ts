@@ -1,12 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { createRouter } from 'next-connect';
 import { forgotPasswordSchema } from '@/features/account/accountTypes';
-import { onError } from '@/utils/router';
+import { baseRouter, onError, onNoMatch } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { sendEmail } from '@/utils/email';
 import { getBaseUrl } from '@/utils/url';
 
-const router = createRouter<NextApiRequest, NextApiResponse>();
+const router = baseRouter.clone();
 
 router.put(async (req, res) => {
     const body = await forgotPasswordSchema.validate(req.body);
@@ -50,5 +48,6 @@ router.put(async (req, res) => {
 });
 
 export default router.handler({
-    onError
+    onError,
+    onNoMatch
 });

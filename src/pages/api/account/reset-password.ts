@@ -1,11 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { createRouter } from 'next-connect';
 import { resetPasswordSchema } from '@/features/account/accountTypes';
-import { onError } from '@/utils/router';
+import { baseRouter, onError, onNoMatch } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { hashPassword } from '@/utils/hash';
 
-const router = createRouter<NextApiRequest, NextApiResponse>();
+const router = baseRouter.clone();
 
 router.put(async (req, res) => {
     const body = await resetPasswordSchema.validate(req.body);
@@ -43,5 +41,6 @@ router.put(async (req, res) => {
 });
 
 export default router.handler({
-    onError
+    onError,
+    onNoMatch
 });

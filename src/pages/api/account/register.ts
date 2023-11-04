@@ -1,11 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { createRouter } from 'next-connect';
 import { registerSchema } from '@/features/account/accountTypes';
-import { onError } from '@/utils/router';
+import { baseRouter, onError, onNoMatch } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { hashPassword } from '@/utils/hash';
 
-const router = createRouter<NextApiRequest, NextApiResponse>();
+const router = baseRouter.clone();
 
 router.post(async (req, res) => {
     const body = await registerSchema.validate(req.body, {
@@ -40,5 +38,6 @@ router.post(async (req, res) => {
 });
 
 export default router.handler({
-    onError
+    onError,
+    onNoMatch
 });

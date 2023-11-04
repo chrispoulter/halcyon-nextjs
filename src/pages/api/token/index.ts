@@ -1,12 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { createRouter } from 'next-connect';
 import { createTokenSchema } from '@/features/token/tokenTypes';
-import { onError } from '@/utils/router';
+import { baseRouter, onError, onNoMatch } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
 
-const router = createRouter<NextApiRequest, NextApiResponse>();
+const router = baseRouter.clone();
 
 router.post(async (req, res) => {
     const body = await createTokenSchema.validate(req.body);
@@ -52,5 +50,6 @@ router.post(async (req, res) => {
 });
 
 export default router.handler({
-    onError
+    onError,
+    onNoMatch
 });

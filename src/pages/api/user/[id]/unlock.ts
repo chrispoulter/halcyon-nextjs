@@ -1,15 +1,9 @@
-import { NextApiResponse } from 'next';
-import { createRouter } from 'next-connect';
 import { getUserSchema, unlockUserSchema } from '@/features/user/userTypes';
-import {
-    onError,
-    authorize,
-    AuthenticatedNextApiRequest
-} from '@/utils/router';
+import { baseRouter, onError, onNoMatch, authorize } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { isUserAdministrator } from '@/utils/auth';
 
-const router = createRouter<AuthenticatedNextApiRequest, NextApiResponse>();
+const router = baseRouter.clone();
 
 router.use(authorize(isUserAdministrator));
 
@@ -56,5 +50,6 @@ router.put(async (req, res) => {
 });
 
 export default router.handler({
-    onError
+    onError,
+    onNoMatch
 });

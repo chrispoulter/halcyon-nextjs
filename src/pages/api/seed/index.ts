@@ -1,12 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { createRouter } from 'next-connect';
-import { onError } from '@/utils/router';
+import { baseRouter, onError, onNoMatch } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { hashPassword } from '@/utils/hash';
 import { SYSTEM_ADMINISTRATOR } from '@/utils/auth';
 import { config } from '@/utils/config';
 
-const router = createRouter<NextApiRequest, NextApiResponse>();
+const router = baseRouter.clone();
 
 router.get(async (_, res) => {
     const user = {
@@ -30,5 +28,6 @@ router.get(async (_, res) => {
 });
 
 export default router.handler({
-    onError
+    onError,
+    onNoMatch
 });
