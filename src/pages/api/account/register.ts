@@ -1,13 +1,13 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { createRouter } from 'next-connect';
 import { registerSchema } from '@/features/account/accountTypes';
+import { onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
-import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
 
-const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
-    req,
-    res
-) => {
+const router = createRouter<NextApiRequest, NextApiResponse>();
+
+router.post(async (req, res) => {
     const body = await registerSchema.validate(req.body, {
         stripUnknown: true
     });
@@ -37,8 +37,8 @@ const registerHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     return res.json({
         id: result.id
     });
-};
+});
 
-export default mapHandlers({
-    post: registerHandler
+export default router.handler({
+    onError
 });

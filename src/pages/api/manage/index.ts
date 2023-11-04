@@ -1,18 +1,22 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
+import { NextApiResponse } from 'next';
+import { createRouter } from 'next-connect';
 import {
-    GetProfileResponse,
     deleteAccountSchema,
     updateProfileSchema
 } from '@/features/manage/manageTypes';
+import {
+    onError,
+    authorize,
+    AuthenticatedNextApiRequest
+} from '@/utils/router';
 import prisma from '@/utils/prisma';
-import { mapHandlers, Handler } from '@/utils/handler';
 import { toDateOnly } from '@/utils/dates';
 
-const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
-    _,
-    res,
-    { currentUserId }
-) => {
+const router = createRouter<AuthenticatedNextApiRequest, NextApiResponse>();
+
+router.use(authorize());
+
+router.get(async (req, res) => {
     const user = await prisma.users.findUnique({
         select: {
             id: true,
@@ -24,7 +28,7 @@ const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
             version: true
         },
         where: {
-            id: currentUserId
+            id: req.currentUserId
         }
     });
 
@@ -42,13 +46,9 @@ const getProfileHandler: Handler<GetProfileResponse | ErrorResponse> = async (
         dateOfBirth: toDateOnly(user.dateOfBirth),
         version: user.version!
     });
-};
+});
 
-const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
-    req,
-    res,
-    { currentUserId }
-) => {
+router.put(async (req, res) => {
     const body = await updateProfileSchema.validate(req.body, {
         stripUnknown: true
     });
@@ -60,7 +60,7 @@ const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
             version: true
         },
         where: {
-            id: currentUserId
+            id: req.currentUserId
         }
     });
 
@@ -105,20 +105,16 @@ const updateProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     return res.json({
         id: user.id
     });
-};
+});
 
-const deleteProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
-    req,
-    res,
-    { currentUserId }
-) => {
+router.delete(async (req, res) => {
     const user = await prisma.users.findUnique({
         select: {
             id: true,
             version: true
         },
         where: {
-            id: currentUserId
+            id: req.currentUserId
         }
     });
 
@@ -145,13 +141,8 @@ const deleteProfileHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     return res.json({
         id: user.id
     });
-};
+});
 
-export default mapHandlers(
-    {
-        get: getProfileHandler,
-        put: updateProfileHandler,
-        delete: deleteProfileHandler
-    },
-    { authorize: true }
-);
+export default router.handler({
+    onError
+});

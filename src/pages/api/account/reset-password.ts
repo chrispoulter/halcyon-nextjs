@@ -1,13 +1,13 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { createRouter } from 'next-connect';
 import { resetPasswordSchema } from '@/features/account/accountTypes';
+import { onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
-import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
 
-const resetPasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
-    req,
-    res
-) => {
+const router = createRouter<NextApiRequest, NextApiResponse>();
+
+router.put(async (req, res) => {
     const body = await resetPasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
@@ -40,8 +40,8 @@ const resetPasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     return res.json({
         id: user.id
     });
-};
+});
 
-export default mapHandlers({
-    put: resetPasswordHandler
+export default router.handler({
+    onError
 });

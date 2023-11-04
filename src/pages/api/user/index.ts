@@ -1,17 +1,25 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
+import { NextApiResponse } from 'next';
+import { createRouter } from 'next-connect';
+import { Prisma } from '@prisma/client';
 import {
     createUserSchema,
-    SearchUsersResponse,
     searchUsersSchema,
     UserSort
 } from '@/features/user/userTypes';
-import { Prisma } from '@prisma/client';
+import {
+    onError,
+    authorize,
+    AuthenticatedNextApiRequest
+} from '@/utils/router';
 import prisma from '@/utils/prisma';
-import { mapHandlers, Handler } from '@/utils/handler';
 import { hashPassword } from '@/utils/hash';
 import { isUserAdministrator } from '@/utils/auth';
 
-const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
+const router = createRouter<AuthenticatedNextApiRequest, NextApiResponse>();
+
+router.use(authorize(isUserAdministrator));
+
+router.get(async (req, res) => {
     const query = await searchUsersSchema.validate(req.query);
 
     let where: Prisma.UsersWhereInput | undefined;
@@ -80,12 +88,9 @@ const searchUsersHandler: Handler<SearchUsersResponse> = async (req, res) => {
         hasNextPage,
         hasPreviousPage
     });
-};
+});
 
-const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
-    req,
-    res
-) => {
+router.post(async (req, res) => {
     const body = await createUserSchema.validate(req.body, {
         stripUnknown: true
     });
@@ -115,12 +120,8 @@ const createUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     return res.json({
         id: result.id
     });
-};
+});
 
-export default mapHandlers(
-    {
-        get: searchUsersHandler,
-        post: createUserHandler
-    },
-    { authorize: isUserAdministrator }
-);
+export default router.handler({
+    onError
+});

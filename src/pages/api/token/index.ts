@@ -1,14 +1,14 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import { createRouter } from 'next-connect';
 import { createTokenSchema } from '@/features/token/tokenTypes';
+import { onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
-import { mapHandlers, Handler } from '@/utils/handler';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
-import { ErrorResponse } from '@/common/commonTypes';
 
-const createTokenHandler: Handler<string | ErrorResponse> = async (
-    req,
-    res
-) => {
+const router = createRouter<NextApiRequest, NextApiResponse>();
+
+router.post(async (req, res) => {
     const body = await createTokenSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
@@ -49,8 +49,8 @@ const createTokenHandler: Handler<string | ErrorResponse> = async (
     const token = await generateJwtToken(user);
 
     return res.send(token);
-};
+});
 
-export default mapHandlers({
-    post: createTokenHandler
+export default router.handler({
+    onError
 });

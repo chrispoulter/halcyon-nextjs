@@ -1,14 +1,19 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
+import { NextApiResponse } from 'next';
+import { createRouter } from 'next-connect';
 import { changePasswordSchema } from '@/features/manage/manageTypes';
 import prisma from '@/utils/prisma';
-import { mapHandlers, Handler } from '@/utils/handler';
+import {
+    onError,
+    authorize,
+    AuthenticatedNextApiRequest
+} from '@/utils/router';
 import { hashPassword, verifyPassword } from '@/utils/hash';
 
-const changePasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
-    req,
-    res,
-    { currentUserId }
-) => {
+const router = createRouter<AuthenticatedNextApiRequest, NextApiResponse>();
+
+router.use(authorize());
+
+router.put(async (req, res) => {
     const body = await changePasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
@@ -18,7 +23,7 @@ const changePasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
             version: true
         },
         where: {
-            id: currentUserId
+            id: req.currentUserId
         }
     });
 
@@ -62,11 +67,8 @@ const changePasswordHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     return res.json({
         id: user.id
     });
-};
+});
 
-export default mapHandlers(
-    {
-        put: changePasswordHandler
-    },
-    { authorize: true }
-);
+export default router.handler({
+    onError
+});

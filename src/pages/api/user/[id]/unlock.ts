@@ -1,13 +1,19 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
+import { NextApiResponse } from 'next';
+import { createRouter } from 'next-connect';
 import { getUserSchema, unlockUserSchema } from '@/features/user/userTypes';
+import {
+    onError,
+    authorize,
+    AuthenticatedNextApiRequest
+} from '@/utils/router';
 import prisma from '@/utils/prisma';
-import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
-const unlockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
-    req,
-    res
-) => {
+const router = createRouter<AuthenticatedNextApiRequest, NextApiResponse>();
+
+router.use(authorize(isUserAdministrator));
+
+router.put(async (req, res) => {
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
@@ -47,11 +53,8 @@ const unlockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     return res.json({
         id: user.id
     });
-};
+});
 
-export default mapHandlers(
-    {
-        put: unlockUserHandler
-    },
-    { authorize: isUserAdministrator }
-);
+export default router.handler({
+    onError
+});

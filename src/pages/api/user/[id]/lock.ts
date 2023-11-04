@@ -1,14 +1,19 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
+import { NextApiResponse } from 'next';
+import { createRouter } from 'next-connect';
 import { getUserSchema, lockUserSchema } from '@/features/user/userTypes';
+import {
+    onError,
+    authorize,
+    AuthenticatedNextApiRequest
+} from '@/utils/router';
 import prisma from '@/utils/prisma';
-import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 
-const lockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
-    req,
-    res,
-    { currentUserId }
-) => {
+const router = createRouter<AuthenticatedNextApiRequest, NextApiResponse>();
+
+router.use(authorize(isUserAdministrator));
+
+router.put(async (req, res) => {
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
@@ -35,7 +40,7 @@ const lockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         });
     }
 
-    if (user.id === currentUserId) {
+    if (user.id === req.currentUserId) {
         return res.status(400).json({
             message: 'Cannot lock currently logged in user.'
         });
@@ -54,11 +59,8 @@ const lockUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     return res.json({
         id: user.id
     });
-};
+});
 
-export default mapHandlers(
-    {
-        put: lockUserHandler
-    },
-    { authorize: isUserAdministrator }
-);
+export default router.handler({
+    onError
+});
