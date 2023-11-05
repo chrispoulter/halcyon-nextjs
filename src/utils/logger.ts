@@ -1,10 +1,9 @@
 import pino from 'pino';
-import pinoHttp from 'pino-http';
 import { config } from './config';
 
 import 'pino-pretty';
 
-export const httpLogger = pinoHttp({
+export const logger = pino({
     level: config.LOG_LEVEL,
     formatters: {
         level: label => ({ level: label })
@@ -14,5 +13,3 @@ export const httpLogger = pinoHttp({
         target: 'pino-pretty'
     }
 });
-
-export const logger = httpLogger.logger;

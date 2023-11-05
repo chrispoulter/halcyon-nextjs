@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { NextHandler, createRouter } from 'next-connect';
 import { getToken } from 'next-auth/jwt';
 import { ValidationError } from 'yup';
-import { httpLogger } from './logger';
+import { logger } from './logger';
 import { isAuthorized } from './auth';
 import { config } from './config';
 
@@ -43,17 +43,17 @@ export const authorize =
 
 export const onError = (
     error: unknown,
-    _: NextApiRequest,
+    req: NextApiRequest,
     res: NextApiResponse
 ) => {
-    // logger.error(error, 'Api handler failed');
-
     if (error instanceof ValidationError) {
         return res.status(400).json({
             message: 'One or more validation errors occurred.',
             errors: error.errors
         });
     }
+
+    logger.error(error, 'HTTP %s %s failed', req.method, req.url);
 
     return res.status(500).json({
         message:
@@ -70,4 +70,4 @@ export const onNoMatch = (_: NextApiRequest, res: NextApiResponse) => {
 export const baseRouter = createRouter<
     AuthenticatedNextApiRequest,
     NextApiResponse
->().use(httpLogger);
+>();
