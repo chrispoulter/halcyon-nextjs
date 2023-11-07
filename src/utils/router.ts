@@ -53,7 +53,7 @@ export const onError = (
         });
     }
 
-    logger.error(error, 'HTTP %s %s failed', req.method, req.url);
+    logger.error(error, 'Route %s %s failed', req.method, req.url);
 
     return res.status(500).json({
         message:
@@ -61,10 +61,6 @@ export const onError = (
                 ? error.message
                 : 'An error occurred while processing your request.'
     });
-};
-
-export const onNoMatch = (_: NextApiRequest, res: NextApiResponse) => {
-    res.status(405).end();
 };
 
 export const baseRouter = createRouter<

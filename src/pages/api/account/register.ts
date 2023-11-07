@@ -1,5 +1,5 @@
 import { registerSchema } from '@/features/account/accountTypes';
-import { baseRouter, onError, onNoMatch } from '@/utils/router';
+import { baseRouter, onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { hashPassword } from '@/utils/hash';
 
@@ -38,6 +38,5 @@ router.post(async (req, res) => {
 });
 
 export default router.handler({
-    onError,
-    onNoMatch
+    onError
 });

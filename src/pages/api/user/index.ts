@@ -4,7 +4,7 @@ import {
     searchUsersSchema,
     UserSort
 } from '@/features/user/userTypes';
-import { baseRouter, onError, onNoMatch, authorize } from '@/utils/router';
+import { baseRouter, onError, authorize } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { hashPassword } from '@/utils/hash';
 import { isUserAdministrator } from '@/utils/auth';
@@ -117,6 +117,5 @@ router.post(async (req, res) => {
 });
 
 export default router.handler({
-    onError,
-    onNoMatch
+    onError
 });

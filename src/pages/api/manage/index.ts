@@ -2,7 +2,7 @@ import {
     deleteAccountSchema,
     updateProfileSchema
 } from '@/features/manage/manageTypes';
-import { baseRouter, onError, onNoMatch, authorize } from '@/utils/router';
+import { baseRouter, onError, authorize } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { toDateOnly } from '@/utils/dates';
 
@@ -138,6 +138,5 @@ router.delete(async (req, res) => {
 });
 
 export default router.handler({
-    onError,
-    onNoMatch
+    onError
 });

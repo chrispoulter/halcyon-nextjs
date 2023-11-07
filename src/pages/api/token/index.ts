@@ -1,5 +1,5 @@
 import { createTokenSchema } from '@/features/token/tokenTypes';
-import { baseRouter, onError, onNoMatch } from '@/utils/router';
+import { baseRouter, onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
@@ -50,6 +50,5 @@ router.post(async (req, res) => {
 });
 
 export default router.handler({
-    onError,
-    onNoMatch
+    onError
 });

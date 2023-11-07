@@ -1,5 +1,5 @@
 import { forgotPasswordSchema } from '@/features/account/accountTypes';
-import { baseRouter, onError, onNoMatch } from '@/utils/router';
+import { baseRouter, onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { sendEmail } from '@/utils/email';
 import { getBaseUrl } from '@/utils/url';
@@ -48,6 +48,5 @@ router.put(async (req, res) => {
 });
 
 export default router.handler({
-    onError,
-    onNoMatch
+    onError
 });

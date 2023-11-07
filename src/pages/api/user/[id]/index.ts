@@ -3,7 +3,7 @@ import {
     getUserSchema,
     updateUserSchema
 } from '@/features/user/userTypes';
-import { baseRouter, onError, onNoMatch, authorize } from '@/utils/router';
+import { baseRouter, onError, authorize } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { isUserAdministrator } from '@/utils/auth';
 import { toDateOnly } from '@/utils/dates';
@@ -155,6 +155,5 @@ router.delete(async (req, res) => {
 });
 
 export default router.handler({
-    onError,
-    onNoMatch
+    onError
 });

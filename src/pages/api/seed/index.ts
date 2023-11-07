@@ -1,4 +1,4 @@
-import { baseRouter, onError, onNoMatch } from '@/utils/router';
+import { baseRouter, onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { hashPassword } from '@/utils/hash';
 import { SYSTEM_ADMINISTRATOR } from '@/utils/auth';
@@ -28,6 +28,5 @@ router.get(async (_, res) => {
 });
 
 export default router.handler({
-    onError,
-    onNoMatch
+    onError
 });

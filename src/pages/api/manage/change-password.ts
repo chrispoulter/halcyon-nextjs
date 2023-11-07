@@ -1,6 +1,6 @@
 import { changePasswordSchema } from '@/features/manage/manageTypes';
 import prisma from '@/utils/prisma';
-import { baseRouter, onError, onNoMatch, authorize } from '@/utils/router';
+import { baseRouter, onError, authorize } from '@/utils/router';
 import { hashPassword, verifyPassword } from '@/utils/hash';
 
 const router = baseRouter.clone();
@@ -64,6 +64,5 @@ router.put(async (req, res) => {
 });
 
 export default router.handler({
-    onError,
-    onNoMatch
+    onError
 });
