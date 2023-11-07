@@ -10,7 +10,7 @@
         "prepare": "husky install",
         "type-check": "tsc --noEmit",
         "format": "prettier --write .",
-        "test": "jest --ci --verbose",
+        "test": "jest --ci",
         "test:watch": "jest --watch"
     },
     "dependencies": {
