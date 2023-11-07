@@ -1,10 +1,10 @@
 import { forgotPasswordSchema } from '@/features/account/accountTypes';
-import { baseRouter, onError } from '@/utils/router';
+import { createApiRouter, onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { sendEmail } from '@/utils/email';
 import { getBaseUrl } from '@/utils/url';
 
-const router = baseRouter.clone();
+const router = createApiRouter();
 
 router.put(async (req, res) => {
     const body = await forgotPasswordSchema.validate(req.body);

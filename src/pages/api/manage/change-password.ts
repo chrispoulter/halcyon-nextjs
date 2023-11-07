@@ -1,9 +1,9 @@
 import { changePasswordSchema } from '@/features/manage/manageTypes';
 import prisma from '@/utils/prisma';
-import { baseRouter, onError, authorize } from '@/utils/router';
+import { createApiRouter, onError, authorize } from '@/utils/router';
 import { hashPassword, verifyPassword } from '@/utils/hash';
 
-const router = baseRouter.clone();
+const router = createApiRouter();
 
 router.use(authorize());
 

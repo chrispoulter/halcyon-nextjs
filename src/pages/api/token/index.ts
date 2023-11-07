@@ -1,10 +1,10 @@
 import { createTokenSchema } from '@/features/token/tokenTypes';
-import { baseRouter, onError } from '@/utils/router';
+import { createApiRouter, onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
 
-const router = baseRouter.clone();
+const router = createApiRouter();
 
 router.post(async (req, res) => {
     const body = await createTokenSchema.validate(req.body);

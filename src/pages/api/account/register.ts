@@ -1,9 +1,9 @@
 import { registerSchema } from '@/features/account/accountTypes';
-import { baseRouter, onError } from '@/utils/router';
+import { createApiRouter, onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { hashPassword } from '@/utils/hash';
 
-const router = baseRouter.clone();
+const router = createApiRouter();
 
 router.post(async (req, res) => {
     const body = await registerSchema.validate(req.body, {

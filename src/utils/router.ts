@@ -6,7 +6,7 @@ import { logger } from './logger';
 import { isAuthorized } from './auth';
 import { config } from './config';
 
-export type AuthenticatedNextApiRequest = NextApiRequest & {
+type AuthenticatedNextApiRequest = NextApiRequest & {
     currentUserId: number;
 };
 
@@ -63,7 +63,5 @@ export const onError = (
     });
 };
 
-export const baseRouter = createRouter<
-    AuthenticatedNextApiRequest,
-    NextApiResponse
->();
+export const createApiRouter = () =>
+    createRouter<AuthenticatedNextApiRequest, NextApiResponse>();

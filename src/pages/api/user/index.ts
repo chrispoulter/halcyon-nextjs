@@ -4,12 +4,12 @@ import {
     searchUsersSchema,
     UserSort
 } from '@/features/user/userTypes';
-import { baseRouter, onError, authorize } from '@/utils/router';
+import { createApiRouter, onError, authorize } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { hashPassword } from '@/utils/hash';
 import { isUserAdministrator } from '@/utils/auth';
 
-const router = baseRouter.clone();
+const router = createApiRouter();
 
 router.use(authorize(isUserAdministrator));
 

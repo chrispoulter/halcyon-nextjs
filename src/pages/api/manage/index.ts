@@ -2,11 +2,11 @@ import {
     deleteAccountSchema,
     updateProfileSchema
 } from '@/features/manage/manageTypes';
-import { baseRouter, onError, authorize } from '@/utils/router';
+import { createApiRouter, onError, authorize } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { toDateOnly } from '@/utils/dates';
 
-const router = baseRouter.clone();
+const router = createApiRouter();
 
 router.use(authorize());
 

@@ -1,10 +1,10 @@
-import { baseRouter, onError } from '@/utils/router';
+import { createApiRouter, onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
 import { hashPassword } from '@/utils/hash';
 import { SYSTEM_ADMINISTRATOR } from '@/utils/auth';
 import { config } from '@/utils/config';
 
-const router = baseRouter.clone();
+const router = createApiRouter();
 
 router.get(async (_, res) => {
     const user = {
