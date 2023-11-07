@@ -1,11 +1,12 @@
-import { ErrorResponse } from '@/common/commonTypes';
 import { forgotPasswordSchema } from '@/features/account/accountTypes';
+import { createApiRouter, onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
-import { mapHandlers, Handler } from '@/utils/handler';
 import { sendEmail } from '@/utils/email';
 import { getBaseUrl } from '@/utils/url';
 
-const forgotPasswordHandler: Handler<ErrorResponse> = async (req, res) => {
+const router = createApiRouter();
+
+router.put(async (req, res) => {
     const body = await forgotPasswordSchema.validate(req.body);
 
     const user = await prisma.users.findUnique({
@@ -44,8 +45,8 @@ const forgotPasswordHandler: Handler<ErrorResponse> = async (req, res) => {
     }
 
     return res.status(200).end();
-};
+});
 
-export default mapHandlers({
-    put: forgotPasswordHandler
+export default router.handler({
+    onError
 });

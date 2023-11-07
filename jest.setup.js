@@ -36,7 +36,8 @@ jest.mock('@/utils/prisma', () => ({
 
 jest.mock('@/utils/logger', () => ({
     logger: {
-        info: jest.fn()
+        info: jest.fn(),
+        error: jest.fn()
     }
 }));
 

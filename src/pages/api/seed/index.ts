@@ -1,10 +1,12 @@
-import { hashPassword } from '@/utils/hash';
-import { mapHandlers, Handler } from '@/utils/handler';
+import { createApiRouter, onError } from '@/utils/router';
 import prisma from '@/utils/prisma';
+import { hashPassword } from '@/utils/hash';
 import { SYSTEM_ADMINISTRATOR } from '@/utils/auth';
 import { config } from '@/utils/config';
 
-const seedHandler: Handler = async (_, res) => {
+const router = createApiRouter();
+
+router.get(async (_, res) => {
     const user = {
         emailAddress: config.SEED_EMAIL_ADDRESS,
         password: await hashPassword(config.SEED_PASSWORD),
@@ -23,8 +25,8 @@ const seedHandler: Handler = async (_, res) => {
     });
 
     return res.send('Environment seeded.');
-};
+});
 
-export default mapHandlers({
-    get: seedHandler
+export default router.handler({
+    onError
 });

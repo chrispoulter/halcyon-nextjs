@@ -1,19 +1,18 @@
-import { ErrorResponse, UpdatedResponse } from '@/common/commonTypes';
 import {
-    GetUserResponse,
     deleteUserSchema,
     getUserSchema,
     updateUserSchema
 } from '@/features/user/userTypes';
+import { createApiRouter, onError, authorize } from '@/utils/router';
 import prisma from '@/utils/prisma';
-import { mapHandlers, Handler } from '@/utils/handler';
 import { isUserAdministrator } from '@/utils/auth';
 import { toDateOnly } from '@/utils/dates';
 
-const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
-    req,
-    res
-) => {
+const router = createApiRouter();
+
+router.use(authorize(isUserAdministrator));
+
+router.get(async (req, res) => {
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
@@ -48,12 +47,9 @@ const getUserHandler: Handler<GetUserResponse | ErrorResponse> = async (
         roles: user.roles,
         version: user.version!
     });
-};
+});
 
-const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
-    req,
-    res
-) => {
+router.put(async (req, res) => {
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
@@ -112,13 +108,9 @@ const updateUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     return res.json({
         id: user.id
     });
-};
+});
 
-const deleteUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
-    req,
-    res,
-    { currentUserId }
-) => {
+router.delete(async (req, res) => {
     const query = await getUserSchema.validate(req.query);
 
     const user = await prisma.users.findUnique({
@@ -145,7 +137,7 @@ const deleteUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
         });
     }
 
-    if (user.id === currentUserId) {
+    if (user.id === req.currentUserId) {
         return res.status(400).json({
             message: 'Cannot delete currently logged in user.'
         });
@@ -160,13 +152,8 @@ const deleteUserHandler: Handler<UpdatedResponse | ErrorResponse> = async (
     return res.json({
         id: user.id
     });
-};
+});
 
-export default mapHandlers(
-    {
-        get: getUserHandler,
-        put: updateUserHandler,
-        delete: deleteUserHandler
-    },
-    { authorize: isUserAdministrator }
-);
+export default router.handler({
+    onError
+});
