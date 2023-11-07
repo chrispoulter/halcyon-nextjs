@@ -32,7 +32,7 @@ class ErrorBoundaryInner extends React.Component<
     }
 
     componentDidCatch() {
-        // console.error('client error', { error, info });
+        // console.error('client failed to render', { error, info });
         this.props.setHasError(true);
     }
 

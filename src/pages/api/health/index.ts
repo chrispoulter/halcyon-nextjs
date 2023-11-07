@@ -1,4 +1,5 @@
 import { NextApiHandler } from 'next';
+import { logger } from '@/utils/logger';
 import { config } from '@/utils/config';
 
 const apiHealthCheck = async () => {
@@ -19,7 +20,7 @@ const healthHandler: NextApiHandler = async (_, res) => {
 
         return res.send('Healthy');
     } catch (error) {
-        console.error('Health check failed', error);
+        logger.error(error, 'Health check failed');
         return res.status(503).send('Unhealthy');
     }
 };
