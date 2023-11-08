@@ -3,8 +3,9 @@ import {
     searchUsersSchema,
     UserSort
 } from '@/features/user/userTypes';
+import { query } from '@/data/db';
+import { User } from '@/data/schema';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import { User, query } from '@/utils/db';
 import { hashPassword } from '@/utils/hash';
 import { isUserAdministrator } from '@/utils/auth';
 

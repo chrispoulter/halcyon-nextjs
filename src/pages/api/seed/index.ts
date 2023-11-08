@@ -1,5 +1,6 @@
+import { query } from '@/data/db';
+import { User } from '@/data/schema';
 import { createApiRouter, onError } from '@/utils/router';
-import { User, query } from '@/utils/db';
 import { hashPassword } from '@/utils/hash';
 import { SYSTEM_ADMINISTRATOR } from '@/utils/auth';
 import { config } from '@/utils/config';

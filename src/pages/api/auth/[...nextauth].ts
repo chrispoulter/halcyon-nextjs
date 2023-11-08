@@ -1,7 +1,8 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { createTokenSchema } from '@/features/token/tokenTypes';
-import { User, query } from '@/utils/db';
+import { query } from '@/data/db';
+import { User } from '@/data/schema';
 import { verifyPassword } from '@/utils/hash';
 import { config } from '@/utils/config';
 

@@ -1,20 +1,6 @@
 import { Pool, QueryResultRow } from 'pg';
-import { logger } from './logger';
-import { config } from './config';
-
-export type User = {
-    id: number;
-    email_address: string;
-    password?: string;
-    password_reset_token?: string;
-    first_name: string;
-    last_name: string;
-    date_of_birth: string;
-    is_locked_out: boolean;
-    roles?: string[];
-    search: string;
-    xmin: number;
-};
+import { logger } from '@/utils/logger';
+import { config } from '@/utils/config';
 
 const pool = new Pool({
     connectionString: config.DATABASE_URL

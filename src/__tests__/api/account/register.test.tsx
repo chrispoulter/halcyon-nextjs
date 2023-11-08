@@ -1,7 +1,8 @@
 import { createMocks } from 'node-mocks-http';
 import { when } from 'jest-when';
 import handler from '@/pages/api/account/register';
-import { User, query } from '@/utils/db';
+import { query } from '@/data/db';
+import { User } from '@/data/schema';
 
 const user: User = {
     id: 1,

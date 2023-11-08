@@ -1,6 +1,7 @@
 import { createTokenSchema } from '@/features/token/tokenTypes';
+import { query } from '@/data/db';
+import { User } from '@/data/schema';
 import { createApiRouter, onError } from '@/utils/router';
-import { User, query } from '@/utils/db';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
 

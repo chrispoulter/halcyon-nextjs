@@ -1,6 +1,7 @@
 import { forgotPasswordSchema } from '@/features/account/accountTypes';
+import { query } from '@/data/db';
+import { User } from '@/data/schema';
 import { createApiRouter, onError } from '@/utils/router';
-import { User, query } from '@/utils/db';
 import { sendEmail } from '@/utils/email';
 import { getBaseUrl } from '@/utils/url';
 

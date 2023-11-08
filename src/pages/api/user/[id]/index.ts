@@ -3,8 +3,9 @@ import {
     getUserSchema,
     updateUserSchema
 } from '@/features/user/userTypes';
+import { query } from '@/data/db';
+import { User } from '@/data/schema';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import { User, query } from '@/utils/db';
 import { isUserAdministrator } from '@/utils/auth';
 
 const router = createApiRouter();

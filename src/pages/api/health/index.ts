@@ -1,5 +1,5 @@
 import { NextApiHandler } from 'next';
-import { query } from '@/utils/db';
+import { query } from '@/data/db';
 import { logger } from '@/utils/logger';
 
 const dbHealthCheck = async () => {

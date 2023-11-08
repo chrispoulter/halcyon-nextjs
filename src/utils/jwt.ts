@@ -1,5 +1,5 @@
 import { encode } from 'next-auth/jwt';
-import { User } from './db';
+import { User } from '@/data/schema';
 import { config } from './config';
 
 export const generateJwtToken = async (user: User) =>

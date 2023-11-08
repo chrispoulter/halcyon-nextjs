@@ -1,6 +1,7 @@
 import { resetPasswordSchema } from '@/features/account/accountTypes';
+import { query } from '@/data/db';
+import { User } from '@/data/schema';
 import { createApiRouter, onError } from '@/utils/router';
-import { query, User } from '@/utils/db';
 import { hashPassword } from '@/utils/hash';
 
 const router = createApiRouter();
