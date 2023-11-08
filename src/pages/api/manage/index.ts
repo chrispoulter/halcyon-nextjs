@@ -31,7 +31,7 @@ router.get(async (req, res) => {
         firstName: user.first_name,
         lastName: user.last_name,
         dateOfBirth: toDateOnly(user.date_of_birth),
-        version: user.xmin
+        version: parseInt(user.xmin as any)
     });
 });
 
@@ -53,7 +53,7 @@ router.put(async (req, res) => {
         });
     }
 
-    if (body.version && body.version !== user.xmin) {
+    if (body.version && body.version !== parseInt(user.xmin as any)) {
         return res.status(409).json({
             message: 'Data has been modified since entities were loaded.'
         });
@@ -75,7 +75,7 @@ router.put(async (req, res) => {
     }
 
     await query<User>(
-        'UPDATE users SET email_address = $2, first_name = $3, last_name = $4, date_of_birth = $5 WHERE id = $1 LIMIT 1',
+        'UPDATE users SET email_address = $2, first_name = $3, last_name = $4, date_of_birth = $5 WHERE id = $1',
         [
             user.id,
             body.emailAddress,
@@ -105,15 +105,13 @@ router.delete(async (req, res) => {
 
     const body = await deleteAccountSchema.validate(req.body);
 
-    if (body.version && body.version !== user.xmin) {
+    if (body.version && body.version !== parseInt(user.xmin as any)) {
         return res.status(409).json({
             message: 'Data has been modified since entities were loaded.'
         });
     }
 
-    await query<User>('DELETE FROM users WHERE id = $1 LIMIT 1', [
-        req.currentUserId
-    ]);
+    await query<User>('DELETE FROM users WHERE id = $1', [req.currentUserId]);
 
     return res.json({
         id: user.id

@@ -23,7 +23,7 @@ router.put(async (req, res) => {
     }
 
     await query<User>(
-        'UPDATE users SET password = $2, password_reset_token = $3 WHERE id = $1 LIMIT 1',
+        'UPDATE users SET password = $2, password_reset_token = $3 WHERE id = $1',
         [user.id, await hashPassword(body.newPassword), null]
     );
 

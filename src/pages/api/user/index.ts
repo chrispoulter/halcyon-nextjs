@@ -52,7 +52,7 @@ router.get(async (req, res) => {
 
     const skip = (params.page - 1) * params.size;
 
-    const { rows: users } = await query<User[]>(
+    const { rows } = await query<User>(
         `SELECT id, email_address, first_name, last_name, is_locked_out, roles FROM users ${where} ${orderBy} OFFSET ${skip} LIMIT ${params.size}`,
         args
     );
@@ -62,7 +62,14 @@ router.get(async (req, res) => {
     const hasPreviousPage = params.page > 1;
 
     return res.json({
-        items: users,
+        items: rows.map(user => ({
+            id: user.id,
+            emailAddress: user.email_address,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            isLockedOut: user.is_locked_out,
+            roles: user.roles
+        })),
         hasNextPage,
         hasPreviousPage
     });

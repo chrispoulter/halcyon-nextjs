@@ -24,7 +24,7 @@ router.put(async (req, res) => {
         });
     }
 
-    if (body.version && body.version !== user.xmin) {
+    if (body.version && body.version !== parseInt(user.xmin as any)) {
         return res.status(409).json({
             message: 'Data has been modified since entities were loaded.'
         });
@@ -45,7 +45,7 @@ router.put(async (req, res) => {
     }
 
     await query<User>(
-        'UPDATE users SET password = $2, password_reset_token = $3 WHERE id = $1 LIMIT 1',
+        'UPDATE users SET password = $2, password_reset_token = $3 WHERE id = $1',
         [user.id, await hashPassword(body.newPassword), null]
     );
 

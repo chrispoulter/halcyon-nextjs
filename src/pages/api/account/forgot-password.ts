@@ -21,7 +21,7 @@ router.put(async (req, res) => {
         const passwordResetToken = crypto.randomUUID();
 
         await query(
-            'UPDATE users SET password_reset_token = $2 WHERE id = $1 LIMIT 1',
+            'UPDATE users SET password_reset_token = $2 WHERE id = $1',
             [user.id, passwordResetToken]
         );
 

@@ -25,16 +25,16 @@ router.put(async (req, res) => {
 
     const body = await unlockUserSchema.validate(req.body);
 
-    if (body.version && body.version !== user.xmin) {
+    if (body.version && body.version !== parseInt(user.xmin as any)) {
         return res.status(409).json({
             message: 'Data has been modified since entities were loaded.'
         });
     }
 
-    await query<User>(
-        'UPDATE users SET is_locked_out = $2 WHERE id = $1 LIMIT 1',
-        [user.id, false]
-    );
+    await query<User>('UPDATE users SET is_locked_out = $2 WHERE id = $1', [
+        user.id,
+        false
+    ]);
 
     return res.json({
         id: user.id
