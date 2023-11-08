@@ -10,7 +10,7 @@ router.get(async (_, res) => {
     await query<User>(
         `
 INSERT INTO users (email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles)
-VALUES ($1, $2, $3, $4, $5, $6 $7)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT (email_address)
 DO UPDATE SET 
 	email_address = EXCLUDED.email_address, 
