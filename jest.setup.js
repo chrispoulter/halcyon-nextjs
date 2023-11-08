@@ -24,14 +24,9 @@ jest.mock('next-auth/jwt', () => ({
     getToken: jest.fn()
 }));
 
-jest.mock('@/utils/prisma', () => ({
+jest.mock('@/utils/db', () => ({
     __esModule: true,
-    default: {
-        users: {
-            count: jest.fn(),
-            create: jest.fn()
-        }
-    }
+    query: jest.fn()
 }));
 
 jest.mock('@/utils/logger', () => ({

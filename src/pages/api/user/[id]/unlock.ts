@@ -1,6 +1,6 @@
 import { getUserSchema, unlockUserSchema } from '@/features/user/userTypes';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import prisma from '@/utils/prisma';
+import { User, query } from '@/utils/db';
 import { isUserAdministrator } from '@/utils/auth';
 
 const router = createApiRouter();
@@ -8,17 +8,13 @@ const router = createApiRouter();
 router.use(authorize(isUserAdministrator));
 
 router.put(async (req, res) => {
-    const query = await getUserSchema.validate(req.query);
+    const params = await getUserSchema.validate(req.query);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            version: true
-        },
-        where: {
-            id: query.id
-        }
-    });
+    const {
+        rows: [user]
+    } = await query<User>('SELECT id, xmin FROM users WHERE id = $1 LIMIT 1', [
+        params.id
+    ]);
 
     if (!user) {
         return res.status(404).json({
@@ -28,21 +24,16 @@ router.put(async (req, res) => {
 
     const body = await unlockUserSchema.validate(req.body);
 
-    if (body.version && body.version !== user.version) {
+    if (body.version && body.version !== user.xmin) {
         return res.status(409).json({
             message: 'Data has been modified since entities were loaded.'
         });
     }
 
-    await prisma.users.update({
-        where: {
-            id: user.id
-        },
-        data: {
-            isLockedOut: false,
-            version: crypto.randomUUID()
-        }
-    });
+    await query<User>(
+        'UPDATE users SET is_locked_out = $2 WHERE id = $1 LIMIT 1',
+        [user.id, false]
+    );
 
     return res.json({
         id: user.id

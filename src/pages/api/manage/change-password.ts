@@ -1,6 +1,6 @@
 import { changePasswordSchema } from '@/features/manage/manageTypes';
-import prisma from '@/utils/prisma';
 import { createApiRouter, onError, authorize } from '@/utils/router';
+import { User, query } from '@/utils/db';
 import { hashPassword, verifyPassword } from '@/utils/hash';
 
 const router = createApiRouter();
@@ -10,16 +10,12 @@ router.use(authorize());
 router.put(async (req, res) => {
     const body = await changePasswordSchema.validate(req.body);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            password: true,
-            version: true
-        },
-        where: {
-            id: req.currentUserId
-        }
-    });
+    const {
+        rows: [user]
+    } = await query<User>(
+        'SELECT id, password, xmin FROM users WHERE id = $1 LIMIT 1',
+        [req.currentUserId]
+    );
 
     if (!user) {
         return res.status(404).json({
@@ -27,7 +23,7 @@ router.put(async (req, res) => {
         });
     }
 
-    if (body.version && body.version !== user.version) {
+    if (body.version && body.version !== user.xmin) {
         return res.status(409).json({
             message: 'Data has been modified since entities were loaded.'
         });
@@ -47,16 +43,10 @@ router.put(async (req, res) => {
         });
     }
 
-    await prisma.users.update({
-        where: {
-            id: user.id
-        },
-        data: {
-            password: await hashPassword(body.newPassword),
-            passwordResetToken: null,
-            version: crypto.randomUUID()
-        }
-    });
+    await query<User>(
+        'UPDATE users SET password = $2, password_reset_token = $3 WHERE id = $1 LIMIT 1',
+        [user.id, await hashPassword(body.newPassword), null]
+    );
 
     return res.json({
         id: user.id

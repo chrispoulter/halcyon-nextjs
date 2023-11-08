@@ -1,7 +1,7 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { createTokenSchema } from '@/features/token/tokenTypes';
-import prisma from '@/utils/prisma';
+import { User, query } from '@/utils/db';
 import { verifyPassword } from '@/utils/hash';
 import { config } from '@/utils/config';
 
@@ -16,20 +16,12 @@ export const authOptions: AuthOptions = {
             async authorize(credentials) {
                 const body = await createTokenSchema.validate(credentials);
 
-                const user = await prisma.users.findUnique({
-                    select: {
-                        id: true,
-                        emailAddress: true,
-                        firstName: true,
-                        lastName: true,
-                        password: true,
-                        isLockedOut: true,
-                        roles: true
-                    },
-                    where: {
-                        emailAddress: body.emailAddress
-                    }
-                });
+                const {
+                    rows: [user]
+                } = await query<User>(
+                    'SELECT id, email_address, password, first_name, last_name, is_locked_out, roles FROM users WHERE email_address = $1 LIMIT 1',
+                    [body.emailAddress]
+                );
 
                 if (!user || !user.password) {
                     throw new Error('The credentials provided were invalid.');
@@ -44,7 +36,7 @@ export const authOptions: AuthOptions = {
                     throw new Error('The credentials provided were invalid.');
                 }
 
-                if (user.isLockedOut) {
+                if (user.is_locked_out) {
                     throw new Error(
                         'This account has been locked out, please try again later.'
                     );
@@ -52,9 +44,9 @@ export const authOptions: AuthOptions = {
 
                 return {
                     id: user.id,
-                    emailAddress: user.emailAddress,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
+                    emailAddress: user.email_address,
+                    firstName: user.first_name,
+                    lastName: user.last_name,
                     roles: user.roles
                 };
             }

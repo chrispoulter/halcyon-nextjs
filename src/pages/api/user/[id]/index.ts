@@ -4,32 +4,22 @@ import {
     updateUserSchema
 } from '@/features/user/userTypes';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import prisma from '@/utils/prisma';
+import { User, query } from '@/utils/db';
 import { isUserAdministrator } from '@/utils/auth';
-import { toDateOnly } from '@/utils/dates';
 
 const router = createApiRouter();
 
 router.use(authorize(isUserAdministrator));
 
 router.get(async (req, res) => {
-    const query = await getUserSchema.validate(req.query);
+    const params = await getUserSchema.validate(req.query);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            emailAddress: true,
-            firstName: true,
-            lastName: true,
-            dateOfBirth: true,
-            isLockedOut: true,
-            version: true,
-            roles: true
-        },
-        where: {
-            id: query.id
-        }
-    });
+    const {
+        rows: [user]
+    } = await query<User>(
+        'SELECT id, email_address, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE id = $1 LIMIT 1',
+        [params.id]
+    );
 
     if (!user) {
         return res.status(404).json({
@@ -39,29 +29,31 @@ router.get(async (req, res) => {
 
     return res.json({
         id: user.id,
-        emailAddress: user.emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        dateOfBirth: toDateOnly(user.dateOfBirth),
-        isLockedOut: user.isLockedOut,
+        emailAddress: user.email_address,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        dateOfBirth: user.date_of_birth,
+        isLockedOut: user.is_locked_out,
         roles: user.roles,
-        version: user.version!
+        version: user.xmin
     });
 });
 
 router.put(async (req, res) => {
-    const query = await getUserSchema.validate(req.query);
+    const params = await getUserSchema.validate(req.query);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            emailAddress: true,
-            version: true
-        },
-        where: {
-            id: query.id
-        }
-    });
+    const {
+        rows: [user]
+    } = await query<User>(
+        'SELECT id, email_address, xmin FROM users WHERE id = $1 LIMIT 1',
+        [params.id]
+    );
+
+    if (!user) {
+        return res.status(404).json({
+            message: 'User not found.'
+        });
+    }
 
     if (!user) {
         return res.status(404).json({
@@ -73,18 +65,19 @@ router.put(async (req, res) => {
         stripUnknown: true
     });
 
-    if (body.version && body.version !== user.version) {
+    if (body.version && body.version !== user.xmin) {
         return res.status(409).json({
             message: 'Data has been modified since entities were loaded.'
         });
     }
 
-    if (user.emailAddress !== body.emailAddress) {
-        const existing = await prisma.users.count({
-            where: {
-                emailAddress: body.emailAddress
-            }
-        });
+    if (user.email_address !== body.emailAddress) {
+        const {
+            rows: [existing]
+        } = await query<User>(
+            'SELECT id FROM users WHERE email_address = $1 LIMIT 1',
+            [body.emailAddress]
+        );
 
         if (existing) {
             return res.status(400).json({
@@ -93,17 +86,17 @@ router.put(async (req, res) => {
         }
     }
 
-    await prisma.users.update({
-        where: {
-            id: user.id
-        },
-        data: {
-            ...body,
-            dateOfBirth: `${body.dateOfBirth}T00:00:00.000Z`,
-            search: `${body.emailAddress} ${body.firstName} ${body.lastName}`,
-            version: crypto.randomUUID()
-        }
-    });
+    await query<User>(
+        'UPDATE users SET email_address = $2, first_name = $3, last_name = $4, date_of_birth = $5, roles = $6 WHERE id = $1 LIMIT 1',
+        [
+            user.id,
+            body.emailAddress,
+            body.firstName,
+            body.lastName,
+            body.dateOfBirth,
+            body.roles
+        ]
+    );
 
     return res.json({
         id: user.id
@@ -111,17 +104,13 @@ router.put(async (req, res) => {
 });
 
 router.delete(async (req, res) => {
-    const query = await getUserSchema.validate(req.query);
+    const params = await getUserSchema.validate(req.query);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            version: true
-        },
-        where: {
-            id: query.id
-        }
-    });
+    const {
+        rows: [user]
+    } = await query<User>('SELECT id, xmin FROM users WHERE id = $1 LIMIT 1', [
+        params.id
+    ]);
 
     if (!user) {
         return res.status(404).json({
@@ -131,7 +120,7 @@ router.delete(async (req, res) => {
 
     const body = await deleteUserSchema.validate(req.body);
 
-    if (body.version && body.version !== user.version) {
+    if (body.version && body.version !== user.xmin) {
         return res.status(409).json({
             message: 'Data has been modified since entities were loaded.'
         });
@@ -143,11 +132,7 @@ router.delete(async (req, res) => {
         });
     }
 
-    await prisma.users.delete({
-        where: {
-            id: user.id
-        }
-    });
+    await query<User>('DELETE FROM users WHERE id = $1 LIMIT 1', [user.id]);
 
     return res.json({
         id: user.id

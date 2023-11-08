@@ -1,21 +1,16 @@
-import { Users } from '@prisma/client';
 import { encode } from 'next-auth/jwt';
+import { User } from './db';
 import { config } from './config';
 
-type JwtTokenUser = Pick<
-    Users,
-    'id' | 'emailAddress' | 'firstName' | 'lastName' | 'roles'
->;
-
-export const generateJwtToken = async (user: JwtTokenUser) =>
+export const generateJwtToken = async (user: User) =>
     encode({
         secret: config.NEXTAUTH_SECRET,
         maxAge: config.NEXTAUTH_SESSION_MAXAGE,
         token: {
             sub: user.id.toString(),
-            email: user.emailAddress,
-            given_name: user.firstName,
-            family_name: user.lastName,
+            email: user.email_address,
+            given_name: user.first_name,
+            family_name: user.last_name,
             jti: crypto.randomUUID(),
             roles: user.roles
         }

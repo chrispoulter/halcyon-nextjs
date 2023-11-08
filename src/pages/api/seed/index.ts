@@ -1,5 +1,5 @@
 import { createApiRouter, onError } from '@/utils/router';
-import prisma from '@/utils/prisma';
+import { User, query } from '@/utils/db';
 import { hashPassword } from '@/utils/hash';
 import { SYSTEM_ADMINISTRATOR } from '@/utils/auth';
 import { config } from '@/utils/config';
@@ -7,22 +7,32 @@ import { config } from '@/utils/config';
 const router = createApiRouter();
 
 router.get(async (_, res) => {
-    const user = {
-        emailAddress: config.SEED_EMAIL_ADDRESS,
-        password: await hashPassword(config.SEED_PASSWORD),
-        firstName: 'System',
-        lastName: 'Administrator',
-        dateOfBirth: '1970-01-01T00:00:00.000Z',
-        roles: [SYSTEM_ADMINISTRATOR],
-        search: `${config.SEED_EMAIL_ADDRESS} System Administrator`,
-        version: crypto.randomUUID()
-    };
-
-    await prisma.users.upsert({
-        where: { emailAddress: user.emailAddress },
-        update: user,
-        create: user
-    });
+    await query<User>(
+        `
+INSERT INTO users (email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles)
+VALUES ($1, $2, $3, $4, $5, $6 $7)
+ON CONFLICT (email_address)
+DO UPDATE SET 
+	email_address = EXCLUDED.email_address, 
+	password = EXCLUDED.password, 
+	password_reset_token = EXCLUDED.password_reset_token, 
+	first_name = EXCLUDED.first_name, 
+	last_name = EXCLUDED.last_name, 
+	date_of_birth = EXCLUDED.date_of_birth, 
+	is_locked_out = EXCLUDED.is_locked_out, 
+	roles = EXCLUDED.roles
+RETURNING id;
+`,
+        [
+            config.SEED_EMAIL_ADDRESS,
+            await hashPassword(config.SEED_PASSWORD),
+            'System',
+            'Administrator',
+            '1970-01-01',
+            false,
+            [SYSTEM_ADMINISTRATOR]
+        ]
+    );
 
     return res.send('Environment seeded.');
 });

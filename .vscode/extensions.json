@@ -4,7 +4,6 @@
         "dbaeumer.vscode-eslint",
         "Orta.vscode-jest",
         "esbenp.prettier-vscode",
-        "Prisma.prisma",
         "bradlc.vscode-tailwindcss"
     ]
 }

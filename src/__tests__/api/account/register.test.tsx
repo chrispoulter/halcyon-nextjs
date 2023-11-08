@@ -1,22 +1,20 @@
 import { createMocks } from 'node-mocks-http';
 import { when } from 'jest-when';
-import { Users } from '@prisma/client';
 import handler from '@/pages/api/account/register';
-import prisma from '@/utils/prisma';
-import { toDateOnly } from '@/utils/dates';
+import { User, query } from '@/utils/db';
 
-const user: Users = {
+const user: User = {
     id: 1,
-    emailAddress: 'test@example.com',
+    email_address: 'test@example.com',
     password: 'change-me-1234567890',
-    passwordResetToken: null,
-    firstName: 'John',
-    lastName: 'Smith',
-    dateOfBirth: new Date('1970-01-01T00:00:00.000Z'),
-    isLockedOut: false,
+    password_reset_token: undefined,
+    first_name: 'John',
+    last_name: 'Smith',
+    date_of_birth: '1970-01-01',
+    is_locked_out: false,
     roles: [],
-    search: 'John Smith',
-    version: '1234'
+    xmin: 1234,
+    search: 'search text'
 };
 
 describe('/api/account/register', () => {
@@ -40,16 +38,23 @@ describe('/api/account/register', () => {
     });
 
     it('when duplicate email address should return bad request', async () => {
-        when(prisma.users.count).mockResolvedValue(1);
-
+        when(query<User>)
+            .calledWith(expect.stringContaining('SELECT'), expect.anything())
+            .mockResolvedValue({
+                rows: [user],
+                rowCount: 1,
+                command: 'SELECT',
+                oid: 1,
+                fields: []
+            });
         const { req, res } = createMocks({
             method: 'POST',
             body: {
-                emailAddress: user.emailAddress,
+                emailAddress: user.email_address,
                 password: user.password,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                dateOfBirth: toDateOnly(user.dateOfBirth)
+                firstName: user.first_name,
+                lastName: user.last_name,
+                dateOfBirth: user.date_of_birth
             }
         });
 
@@ -63,17 +68,34 @@ describe('/api/account/register', () => {
     });
 
     it('when request is valid should create new user', async () => {
-        when(prisma.users.count).mockResolvedValue(0);
-        when(prisma.users.create).mockResolvedValue(user);
+        when(query<User>)
+            .calledWith(expect.stringContaining('SELECT'), expect.anything())
+            .mockResolvedValue({
+                rows: [],
+                rowCount: 1,
+                command: 'SELECT',
+                oid: 1,
+                fields: []
+            });
+
+        when(query<User>)
+            .calledWith(expect.stringContaining('INSERT'), expect.anything())
+            .mockResolvedValue({
+                rows: [user],
+                rowCount: 1,
+                command: 'INSERT',
+                oid: 1,
+                fields: []
+            });
 
         const { req, res } = createMocks({
             method: 'POST',
             body: {
-                emailAddress: user.emailAddress,
+                emailAddress: user.email_address,
                 password: user.password,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                dateOfBirth: toDateOnly(user.dateOfBirth)
+                firstName: user.first_name,
+                lastName: user.last_name,
+                dateOfBirth: user.date_of_birth
             }
         });
 

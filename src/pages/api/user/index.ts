@@ -1,11 +1,10 @@
-import { Prisma } from '@prisma/client';
 import {
     createUserSchema,
     searchUsersSchema,
     UserSort
 } from '@/features/user/userTypes';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import prisma from '@/utils/prisma';
+import { User, query } from '@/utils/db';
 import { hashPassword } from '@/utils/hash';
 import { isUserAdministrator } from '@/utils/auth';
 
@@ -14,68 +13,48 @@ const router = createApiRouter();
 router.use(authorize(isUserAdministrator));
 
 router.get(async (req, res) => {
-    const query = await searchUsersSchema.validate(req.query);
+    const params = await searchUsersSchema.validate(req.query);
 
-    let where: Prisma.UsersWhereInput | undefined;
+    let where = '';
+    const args = [];
 
-    if (query.search) {
-        where = {
-            search: {
-                contains: query.search,
-                mode: Prisma.QueryMode.insensitive
-            }
-        };
+    if (params.search) {
+        where += `WHERE search ILIKE '%' || '$1' || '%'`;
+        args.push(params.search);
     }
 
-    const count = await prisma.users.count({ where });
+    const {
+        rows: [{ count }]
+    } = await query<{ count: number }>(
+        `SELECT COUNT(*) FROM users ${where}`,
+        args
+    );
 
-    let orderBy: Prisma.Enumerable<Prisma.UsersOrderByWithRelationInput>;
+    let orderBy = ' ORDER BY first_name ASC, last_name ASC';
 
-    switch (query.sort) {
+    switch (params.sort) {
         case UserSort.EMAIL_ADDRESS_ASC:
-            orderBy = {
-                emailAddress: Prisma.SortOrder.asc
-            };
+            orderBy = ' ORDER BY email_address ASC';
             break;
+
         case UserSort.EMAIL_ADDRESS_DESC:
-            orderBy = {
-                emailAddress: Prisma.SortOrder.desc
-            };
-            break;
+            orderBy = ' ORDER BY email_address DESC';
+
         case UserSort.NAME_DESC:
-            orderBy = [
-                { firstName: Prisma.SortOrder.desc },
-                { lastName: Prisma.SortOrder.desc }
-            ];
-            break;
-        default:
-            orderBy = [
-                { firstName: Prisma.SortOrder.asc },
-                { lastName: Prisma.SortOrder.asc }
-            ];
+            orderBy = ' ORDER BY first_name DESC, last_name DESC';
             break;
     }
 
-    const skip = (query.page - 1) * query.size;
+    const skip = (params.page - 1) * params.size;
 
-    const users = await prisma.users.findMany({
-        select: {
-            id: true,
-            emailAddress: true,
-            firstName: true,
-            lastName: true,
-            isLockedOut: true,
-            roles: true
-        },
-        where,
-        orderBy,
-        skip,
-        take: query.size
-    });
+    const { rows: users } = await query<User[]>(
+        `SELECT id, email_address, first_name, last_name, is_locked_out, roles FROM users ${where} ${orderBy} OFFSET $1 LIMIT $2`,
+        [skip, params.size, ...args]
+    );
 
-    const pageCount = Math.floor((count + query.size - 1) / query.size);
-    const hasNextPage = query.page < pageCount;
-    const hasPreviousPage = query.page > 1;
+    const pageCount = Math.floor((count + params.size - 1) / params.size);
+    const hasNextPage = params.page < pageCount;
+    const hasPreviousPage = params.page > 1;
 
     return res.json({
         items: users,
@@ -89,11 +68,12 @@ router.post(async (req, res) => {
         stripUnknown: true
     });
 
-    const existing = await prisma.users.count({
-        where: {
-            emailAddress: body.emailAddress
-        }
-    });
+    const {
+        rows: [existing]
+    } = await query<User>(
+        'SELECT id FROM users WHERE email_address = $1 LIMIT 1',
+        [body.emailAddress]
+    );
 
     if (existing) {
         return res.status(400).json({
@@ -101,15 +81,19 @@ router.post(async (req, res) => {
         });
     }
 
-    const result = await prisma.users.create({
-        data: {
-            ...body,
-            password: await hashPassword(body.password),
-            dateOfBirth: `${body.dateOfBirth}T00:00:00.000Z`,
-            search: `${body.emailAddress} ${body.firstName} ${body.lastName}`,
-            version: crypto.randomUUID()
-        }
-    });
+    const {
+        rows: [result]
+    } = await query<User>(
+        'INSERT INTO users (email_address, password, first_name, last_name, date_of_birth, roles) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+        [
+            body.emailAddress,
+            await hashPassword(body.password),
+            body.firstName,
+            body.lastName,
+            body.dateOfBirth,
+            body.roles
+        ]
+    );
 
     return res.json({
         id: result.id

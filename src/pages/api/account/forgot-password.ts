@@ -1,6 +1,6 @@
 import { forgotPasswordSchema } from '@/features/account/accountTypes';
 import { createApiRouter, onError } from '@/utils/router';
-import prisma from '@/utils/prisma';
+import { User, query } from '@/utils/db';
 import { sendEmail } from '@/utils/email';
 import { getBaseUrl } from '@/utils/url';
 
@@ -9,34 +9,26 @@ const router = createApiRouter();
 router.put(async (req, res) => {
     const body = await forgotPasswordSchema.validate(req.body);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            emailAddress: true
-        },
-        where: {
-            emailAddress: body.emailAddress
-        }
-    });
+    const {
+        rows: [user]
+    } = await query<User>(
+        'SELECT id, email_address FROM users WHERE email_address = $1 LIMIT 1',
+        [body.emailAddress]
+    );
 
     if (user) {
         const passwordResetToken = crypto.randomUUID();
 
-        await prisma.users.update({
-            where: {
-                id: user.id
-            },
-            data: {
-                passwordResetToken,
-                version: crypto.randomUUID()
-            }
-        });
+        await query(
+            'UPDATE users SET password_reset_token = $2 WHERE id = $1 LIMIT 1',
+            [user.id, passwordResetToken]
+        );
 
         const siteUrl = getBaseUrl(req);
 
         await sendEmail({
             template: 'ResetPasswordEmail.html',
-            to: user.emailAddress,
+            to: user.email_address,
             data: {
                 passwordResetToken,
                 siteUrl

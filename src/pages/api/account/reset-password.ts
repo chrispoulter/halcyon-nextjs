@@ -1,6 +1,6 @@
 import { resetPasswordSchema } from '@/features/account/accountTypes';
 import { createApiRouter, onError } from '@/utils/router';
-import prisma from '@/utils/prisma';
+import { query, User } from '@/utils/db';
 import { hashPassword } from '@/utils/hash';
 
 const router = createApiRouter();
@@ -8,32 +8,23 @@ const router = createApiRouter();
 router.put(async (req, res) => {
     const body = await resetPasswordSchema.validate(req.body);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            passwordResetToken: true
-        },
-        where: {
-            emailAddress: body.emailAddress
-        }
-    });
+    const {
+        rows: [user]
+    } = await query<User>(
+        'SELECT id, password_reset_token FROM users WHERE email_address = $1 LIMIT 1',
+        [body.emailAddress]
+    );
 
-    if (!user || user.passwordResetToken !== body.token) {
+    if (!user || user.password_reset_token !== body.token) {
         return res.status(400).json({
             message: 'Invalid token.'
         });
     }
 
-    await prisma.users.update({
-        where: {
-            id: user.id
-        },
-        data: {
-            password: await hashPassword(body.newPassword),
-            passwordResetToken: null,
-            version: crypto.randomUUID()
-        }
-    });
+    await query<User>(
+        'UPDATE users SET password = $2, password_reset_token = $3 WHERE id = $1 LIMIT 1',
+        [user.id, await hashPassword(body.newPassword), null]
+    );
 
     return res.json({
         id: user.id
