@@ -33,7 +33,7 @@ router.post(async (req, res) => {
             await hashPassword(body.password),
             body.firstName,
             body.lastName,
-            body.dateOfBirth
+            `${body.dateOfBirth}T00:00:00.000Z`
         ]
     );
 

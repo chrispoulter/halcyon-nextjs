@@ -16,11 +16,11 @@ router.use(authorize(isUserAdministrator));
 router.get(async (req, res) => {
     const params = await searchUsersSchema.validate(req.query);
 
-    let where = '';
+    let where = undefined;
     const args = [];
 
     if (params.search) {
-        where += `WHERE search ILIKE '%' || '$1' || '%'`;
+        where = `WHERE search ILIKE '%' || $1 || '%'`;
         args.push(params.search);
     }
 
@@ -31,7 +31,7 @@ router.get(async (req, res) => {
         args
     );
 
-    let orderBy = ' ORDER BY first_name ASC, last_name ASC';
+    let orderBy = undefined;
 
     switch (params.sort) {
         case UserSort.EMAIL_ADDRESS_ASC:
@@ -44,13 +44,17 @@ router.get(async (req, res) => {
         case UserSort.NAME_DESC:
             orderBy = ' ORDER BY first_name DESC, last_name DESC';
             break;
+
+        default:
+            orderBy = ' ORDER BY first_name ASC, last_name ASC';
+            break;
     }
 
     const skip = (params.page - 1) * params.size;
 
     const { rows: users } = await query<User[]>(
-        `SELECT id, email_address, first_name, last_name, is_locked_out, roles FROM users ${where} ${orderBy} OFFSET $1 LIMIT $2`,
-        [skip, params.size, ...args]
+        `SELECT id, email_address, first_name, last_name, is_locked_out, roles FROM users ${where} ${orderBy} OFFSET ${skip} LIMIT ${params.size}`,
+        args
     );
 
     const pageCount = Math.floor((count + params.size - 1) / params.size);
@@ -91,7 +95,7 @@ router.post(async (req, res) => {
             await hashPassword(body.password),
             body.firstName,
             body.lastName,
-            body.dateOfBirth,
+            `${body.dateOfBirth}T00:00:00.000Z`,
             body.roles
         ]
     );

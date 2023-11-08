@@ -29,7 +29,7 @@ RETURNING id;
             await hashPassword(config.SEED_PASSWORD),
             'System',
             'Administrator',
-            '1970-01-01',
+            '1970-01-01T00:00:00.000Z',
             false,
             [SYSTEM_ADMINISTRATOR]
         ]

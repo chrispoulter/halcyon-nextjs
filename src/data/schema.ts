@@ -5,7 +5,7 @@ export type User = {
     password_reset_token?: string;
     first_name: string;
     last_name: string;
-    date_of_birth: string;
+    date_of_birth: Date;
     is_locked_out: boolean;
     roles?: string[];
     search: string;

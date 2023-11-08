@@ -7,6 +7,7 @@ import { query } from '@/data/db';
 import { User } from '@/data/schema';
 import { createApiRouter, onError, authorize } from '@/utils/router';
 import { isUserAdministrator } from '@/utils/auth';
+import { toDateOnly } from '@/utils/dates';
 
 const router = createApiRouter();
 
@@ -33,7 +34,7 @@ router.get(async (req, res) => {
         emailAddress: user.email_address,
         firstName: user.first_name,
         lastName: user.last_name,
-        dateOfBirth: user.date_of_birth,
+        dateOfBirth: toDateOnly(user.date_of_birth),
         isLockedOut: user.is_locked_out,
         roles: user.roles,
         version: user.xmin
@@ -94,7 +95,7 @@ router.put(async (req, res) => {
             body.emailAddress,
             body.firstName,
             body.lastName,
-            body.dateOfBirth,
+            `${body.dateOfBirth}T00:00:00.000Z`,
             body.roles
         ]
     );

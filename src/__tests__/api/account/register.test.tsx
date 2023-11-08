@@ -11,7 +11,7 @@ const user: User = {
     password_reset_token: undefined,
     first_name: 'John',
     last_name: 'Smith',
-    date_of_birth: '1970-01-01',
+    date_of_birth: new Date('1970-01-01'),
     is_locked_out: false,
     roles: [],
     xmin: 1234,
