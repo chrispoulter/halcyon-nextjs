@@ -4,14 +4,14 @@ import { query } from './db';
 type UserRow = {
     id: number;
     email_address: string;
-    password?: string;
-    password_reset_token?: string;
+    password: string | null;
+    password_reset_token: string | null;
     first_name: string;
     last_name: string;
     date_of_birth: string;
     is_locked_out: boolean;
-    roles?: string[];
-    xmin: string;
+    roles: string[] | null;
+    xmin: number;
 };
 
 type UserSearchRow = {
@@ -20,7 +20,7 @@ type UserSearchRow = {
     first_name: string;
     last_name: string;
     is_locked_out: boolean;
-    roles?: string[];
+    roles: string[] | null;
 };
 
 export type CreateUser = {
@@ -119,14 +119,14 @@ export const getUserById = async (id: number) => {
     return {
         id: user.id,
         emailAddress: user.email_address,
-        password: user.password,
-        passwordResetToken: user.password_reset_token,
+        password: user.password || undefined,
+        passwordResetToken: user.password_reset_token || undefined,
         firstName: user.first_name,
         lastName: user.last_name,
         dateOfBirth: user.date_of_birth,
         isLockedOut: user.is_locked_out,
         roles: user.roles || undefined,
-        version: parseInt(user.xmin)
+        version: user.xmin
     };
 };
 
@@ -145,14 +145,14 @@ export const getUserByEmailAddress = async (emailAddress: string) => {
     return {
         id: user.id,
         emailAddress: user.email_address,
-        password: user.password,
-        passwordResetToken: user.password_reset_token,
+        password: user.password || undefined,
+        passwordResetToken: user.password_reset_token || undefined,
         firstName: user.first_name,
         lastName: user.last_name,
         dateOfBirth: user.date_of_birth,
         isLockedOut: user.is_locked_out,
         roles: user.roles || undefined,
-        version: parseInt(user.xmin)
+        version: user.xmin
     };
 };
 
