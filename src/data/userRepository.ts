@@ -45,7 +45,7 @@ export const createUser = async (user: CreateUser) => {
     const {
         rows: [result]
     } = await query<{ id: number }>(
-        'INSERT INTO users (email_address, password, first_name, last_name, date_of_birth, roles) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+        'INSERT INTO users (email_address, password, first_name, last_name, date_of_birth, roles) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;',
         [
             user.emailAddress,
             await hashPassword(user.password),
@@ -61,7 +61,7 @@ export const createUser = async (user: CreateUser) => {
 
 export const updateUser = async (user: UpdateUser) => {
     await query(
-        'UPDATE users SET email_address = $2, first_name = $3, last_name = $4, date_of_birth = $5, roles = $6 WHERE id = $1',
+        'UPDATE users SET email_address = $2, first_name = $3, last_name = $4, date_of_birth = $5, roles = $6 WHERE id = $1;',
         [
             user.id,
             user.emailAddress,
@@ -75,8 +75,7 @@ export const updateUser = async (user: UpdateUser) => {
 
 export const upsertUser = async (user: CreateUser) => {
     await query(
-        `
-INSERT INTO users (email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles)
+        `INSERT INTO users (email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles)
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 ON CONFLICT (email_address)
 DO UPDATE SET 
@@ -88,8 +87,7 @@ DO UPDATE SET
 	date_of_birth = EXCLUDED.date_of_birth, 
 	is_locked_out = EXCLUDED.is_locked_out, 
 	roles = EXCLUDED.roles
-RETURNING id;
-`,
+RETURNING id;`,
         [
             user.emailAddress,
             await hashPassword(user.password),
@@ -103,14 +101,14 @@ RETURNING id;
 };
 
 export const deleteUser = async (id: number) => {
-    await query('DELETE FROM users WHERE id = $1', [id]);
+    await query('DELETE FROM users WHERE id = $1;', [id]);
 };
 
 export const getUserById = async (id: number) => {
     const {
         rows: [user]
     } = await query<UserRow>(
-        'SELECT id, email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE id = $1 LIMIT 1',
+        'SELECT id, email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE id = $1 LIMIT 1;',
         [id]
     );
 
@@ -127,7 +125,7 @@ export const getUserById = async (id: number) => {
         lastName: user.last_name,
         dateOfBirth: user.date_of_birth,
         isLockedOut: user.is_locked_out,
-        roles: user.roles,
+        roles: user.roles || undefined,
         version: parseInt(user.xmin)
     };
 };
@@ -136,7 +134,7 @@ export const getUserByEmailAddress = async (emailAddress: string) => {
     const {
         rows: [user]
     } = await query<UserRow>(
-        'SELECT id, email_address, password, first_name, last_name, date_of_birth AS TEXT, is_locked_out, roles, xmin FROM users WHERE email_address = $1 LIMIT 1',
+        'SELECT id, email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE email_address = $1 LIMIT 1;',
         [emailAddress]
     );
 
@@ -153,7 +151,7 @@ export const getUserByEmailAddress = async (emailAddress: string) => {
         lastName: user.last_name,
         dateOfBirth: user.date_of_birth,
         isLockedOut: user.is_locked_out,
-        roles: user.roles,
+        roles: user.roles || undefined,
         version: parseInt(user.xmin)
     };
 };
@@ -161,7 +159,7 @@ export const getUserByEmailAddress = async (emailAddress: string) => {
 export const generatePasswordResetToken = async (id: number) => {
     const passwordResetToken = crypto.randomUUID();
 
-    await query('UPDATE users SET password_reset_token = $2 WHERE id = $1', [
+    await query('UPDATE users SET password_reset_token = $2 WHERE id = $1;', [
         id,
         passwordResetToken
     ]);
@@ -171,13 +169,13 @@ export const generatePasswordResetToken = async (id: number) => {
 
 export const setUserPassword = async (id: number, password: string) => {
     await query(
-        'UPDATE users SET password = $2, password_reset_token = $3 WHERE id = $1',
+        'UPDATE users SET password = $2, password_reset_token = $3 WHERE id = $1;',
         [id, await hashPassword(password), null]
     );
 };
 
 export const setUserIsLockedOut = async (id: number, isLockedOut: boolean) => {
-    await query('UPDATE users SET is_locked_out = $2 WHERE id = $1', [
+    await query('UPDATE users SET is_locked_out = $2 WHERE id = $1;', [
         id,
         isLockedOut
     ]);
@@ -226,7 +224,7 @@ export const searchUsers = async (
     const skip = (page - 1) * size;
 
     const { rows } = await query<UserSearchRow>(
-        `SELECT id, email_address, first_name, last_name, is_locked_out, roles FROM users ${where} ${orderBy} OFFSET ${skip} LIMIT ${size}`,
+        `SELECT id, email_address, first_name, last_name, is_locked_out, roles FROM users ${where} ${orderBy} OFFSET ${skip} LIMIT ${size};`,
         args
     );
 
@@ -241,7 +239,7 @@ export const searchUsers = async (
             firstName: user.first_name,
             lastName: user.last_name,
             isLockedOut: user.is_locked_out,
-            roles: user.roles
+            roles: user.roles || undefined
         })),
         hasNextPage,
         hasPreviousPage
