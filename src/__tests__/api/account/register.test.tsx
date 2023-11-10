@@ -1,9 +1,9 @@
 import { createMocks } from 'node-mocks-http';
 import { when } from 'jest-when';
 import handler from '@/pages/api/account/register';
-import { User, createUser, getUserByEmailAddress } from '@/data/userRepository';
+import { createUser, getUserByEmailAddress } from '@/data/userRepository';
 
-const user: User = {
+const user = {
     id: 1,
     emailAddress: 'test@example.com',
     password: 'change-me-1234567890',

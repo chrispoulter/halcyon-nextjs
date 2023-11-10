@@ -42,32 +42,6 @@ export type UpdateUser = {
     roles?: string[];
 };
 
-export type User = {
-    id: number;
-    emailAddress: string;
-    password?: string;
-    passwordResetToken?: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    isLockedOut: boolean;
-    roles?: string[];
-    version: number;
-};
-
-export type UserSearch = {
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-    items: {
-        id: number;
-        emailAddress: string;
-        firstName: string;
-        lastName: string;
-        isLockedOut: boolean;
-        roles?: string[];
-    }[];
-};
-
 export const createUser = async (user: CreateUser) => {
     const {
         rows: [result]
@@ -133,13 +107,17 @@ export const deleteUser = async (id: number) => {
     await query('DELETE FROM users WHERE id = $1', [id]);
 };
 
-export const getUserById = async (id: number): Promise<User | undefined> => {
+export const getUserById = async (id: number) => {
     const {
         rows: [user]
     } = await query<UserRow>(
-        'SELECT id, email_address, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE id = $1 LIMIT 1',
+        'SELECT id, email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE id = $1 LIMIT 1',
         [id]
     );
+
+    if (!user) {
+        return undefined;
+    }
 
     return {
         id: user.id,
@@ -155,15 +133,17 @@ export const getUserById = async (id: number): Promise<User | undefined> => {
     };
 };
 
-export const getUserByEmailAddress = async (
-    emailAddress: string
-): Promise<User | undefined> => {
+export const getUserByEmailAddress = async (emailAddress: string) => {
     const {
         rows: [user]
     } = await query<UserRow>(
-        'SELECT id, email_address, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE email_address = $1 LIMIT 1',
+        'SELECT id, email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE email_address = $1 LIMIT 1',
         [emailAddress]
     );
+
+    if (!user) {
+        return undefined;
+    }
 
     return {
         id: user.id,
@@ -209,7 +189,7 @@ export const searchUsers = async (
     size: number,
     search?: string,
     sort?: string
-): Promise<UserSearch> => {
+) => {
     let where = undefined;
     const args = [];
 
