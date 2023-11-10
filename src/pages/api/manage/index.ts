@@ -34,9 +34,7 @@ router.get(async (req, res) => {
 });
 
 router.put(async (req, res) => {
-    const body = await updateProfileSchema.validate(req.body, {
-        stripUnknown: true
-    });
+    const body = await updateProfileSchema.validate(req.body);
 
     const user = await getUserById(req.currentUserId);
 

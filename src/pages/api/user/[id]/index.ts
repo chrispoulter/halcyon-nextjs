@@ -56,9 +56,7 @@ router.put(async (req, res) => {
         });
     }
 
-    const body = await updateUserSchema.validate(req.body, {
-        stripUnknown: true
-    });
+    const body = await updateUserSchema.validate(req.body);
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
