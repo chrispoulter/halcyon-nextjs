@@ -1,4 +1,3 @@
-import { toDateOnly } from '@/utils/dates';
 import { hashPassword } from '@/utils/hash';
 import { query } from './db';
 
@@ -9,7 +8,7 @@ type UserRow = {
     password_reset_token?: string;
     first_name: string;
     last_name: string;
-    date_of_birth: Date;
+    date_of_birth: string;
     is_locked_out: boolean;
     roles?: string[];
     xmin: string;
@@ -111,7 +110,7 @@ export const getUserById = async (id: number) => {
     const {
         rows: [user]
     } = await query<UserRow>(
-        'SELECT id, email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE id = $1 LIMIT 1',
+        'SELECT id, email_address, password, first_name, last_name, CAST(date_of_birth AS TEXT), is_locked_out, roles, xmin FROM users WHERE id = $1 LIMIT 1',
         [id]
     );
 
@@ -126,7 +125,7 @@ export const getUserById = async (id: number) => {
         passwordResetToken: user.password_reset_token,
         firstName: user.first_name,
         lastName: user.last_name,
-        dateOfBirth: toDateOnly(user.date_of_birth),
+        dateOfBirth: user.date_of_birth,
         isLockedOut: user.is_locked_out,
         roles: user.roles,
         version: parseInt(user.xmin)
@@ -137,7 +136,7 @@ export const getUserByEmailAddress = async (emailAddress: string) => {
     const {
         rows: [user]
     } = await query<UserRow>(
-        'SELECT id, email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE email_address = $1 LIMIT 1',
+        'SELECT id, email_address, password, first_name, last_name, CAST(date_of_birth AS TEXT), is_locked_out, roles, xmin FROM users WHERE email_address = $1 LIMIT 1',
         [emailAddress]
     );
 
@@ -152,7 +151,7 @@ export const getUserByEmailAddress = async (emailAddress: string) => {
         passwordResetToken: user.password_reset_token,
         firstName: user.first_name,
         lastName: user.last_name,
-        dateOfBirth: toDateOnly(user.date_of_birth),
+        dateOfBirth: user.date_of_birth,
         isLockedOut: user.is_locked_out,
         roles: user.roles,
         version: parseInt(user.xmin)

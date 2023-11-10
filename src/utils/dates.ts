@@ -18,8 +18,6 @@ export const toLocaleString = (value: string) =>
         day: 'numeric'
     });
 
-export const toDateOnly = (value: Date) => value.toISOString().split('T')[0];
-
 export const toDate = (value: string) => {
     const isoString = `${value}T00:00:00.000Z`;
     const date = new Date(isoString);
