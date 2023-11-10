@@ -1,6 +1,10 @@
-import { Pool, QueryResultRow } from 'pg';
+import { Pool, QueryResultRow, types } from 'pg';
 import { logger } from '@/utils/logger';
 import { config } from '@/utils/config';
+
+types.setTypeParser(types.builtins.DATE, (value) => value)
+types.setTypeParser(types.builtins.XID, parseInt);
+types.setTypeParser(types.builtins.INT8, parseInt);
 
 const pool = new Pool({
     connectionString: config.DATABASE_URL

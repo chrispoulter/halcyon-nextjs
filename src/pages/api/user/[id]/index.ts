@@ -27,7 +27,16 @@ router.get(async (req, res) => {
         });
     }
 
-    return res.json(user);
+    return res.json({
+        id: user.id,
+        emailAddrfess: user.emailAddress,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        dateOfBirth: user.dateOfBirth,
+        roles: user.roles,
+        isLockedOut: user.isLockedOut,
+        version: user.version
+    });
 });
 
 router.put(async (req, res) => {

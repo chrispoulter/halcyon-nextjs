@@ -17,8 +17,8 @@ router.get(async (req, res) => {
     const result = await searchUsers(
         params.page,
         params.size,
-        params.sort,
-        params.search
+        params.search,
+        params.sort
     );
 
     return res.json(result);

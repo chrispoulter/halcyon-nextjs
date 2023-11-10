@@ -110,7 +110,7 @@ export const getUserById = async (id: number) => {
     const {
         rows: [user]
     } = await query<UserRow>(
-        'SELECT id, email_address, password, first_name, last_name, CAST(date_of_birth AS TEXT), is_locked_out, roles, xmin FROM users WHERE id = $1 LIMIT 1',
+        'SELECT id, email_address, password, first_name, last_name, date_of_birth, is_locked_out, roles, xmin FROM users WHERE id = $1 LIMIT 1',
         [id]
     );
 
@@ -136,7 +136,7 @@ export const getUserByEmailAddress = async (emailAddress: string) => {
     const {
         rows: [user]
     } = await query<UserRow>(
-        'SELECT id, email_address, password, first_name, last_name, CAST(date_of_birth AS TEXT), is_locked_out, roles, xmin FROM users WHERE email_address = $1 LIMIT 1',
+        'SELECT id, email_address, password, first_name, last_name, date_of_birth AS TEXT, is_locked_out, roles, xmin FROM users WHERE email_address = $1 LIMIT 1',
         [emailAddress]
     );
 
@@ -189,7 +189,7 @@ export const searchUsers = async (
     search?: string,
     sort?: string
 ) => {
-    let where = undefined;
+    let where = '';
     const args = [];
 
     if (search) {
@@ -208,18 +208,18 @@ export const searchUsers = async (
 
     switch (sort) {
         case 'EMAIL_ADDRESS_ASC':
-            orderBy = ' ORDER BY email_address ASC';
+            orderBy = 'ORDER BY email_address ASC';
             break;
 
         case 'EMAIL_ADDRESS_DESC':
-            orderBy = ' ORDER BY email_address DESC';
+            orderBy = 'ORDER BY email_address DESC';
 
         case 'NAME_DESC':
-            orderBy = ' ORDER BY first_name DESC, last_name DESC';
+            orderBy = 'ORDER BY first_name DESC, last_name DESC';
             break;
 
         default:
-            orderBy = ' ORDER BY first_name ASC, last_name ASC';
+            orderBy = 'ORDER BY first_name ASC, last_name ASC';
             break;
     }
 
