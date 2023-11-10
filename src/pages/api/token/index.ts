@@ -1,6 +1,5 @@
 import { createTokenSchema } from '@/features/token/tokenTypes';
-import { query } from '@/data/db';
-import { User } from '@/data/schema';
+import { getUserByEmailAddress } from '@/data/userRepository';
 import { createApiRouter, onError } from '@/utils/router';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
@@ -10,12 +9,7 @@ const router = createApiRouter();
 router.post(async (req, res) => {
     const body = await createTokenSchema.validate(req.body);
 
-    const {
-        rows: [user]
-    } = await query<User>(
-        'SELECT id, email_address, password, first_name, last_name, is_locked_out, roles FROM users WHERE email_address = $1 LIMIT 1',
-        [body.emailAddress]
-    );
+    const user = await getUserByEmailAddress(body.emailAddress);
 
     if (!user || !user.password) {
         return res.status(400).json({
@@ -31,7 +25,7 @@ router.post(async (req, res) => {
         });
     }
 
-    if (user.is_locked_out) {
+    if (user.isLockedOut) {
         return res.status(400).json({
             message: 'This account has been locked out, please try again later.'
         });

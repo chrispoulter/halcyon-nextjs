@@ -24,15 +24,15 @@ jest.mock('next-auth/jwt', () => ({
     getToken: jest.fn()
 }));
 
-jest.mock('@/utils/db', () => ({
+jest.mock('@/data/userRepository', () => ({
     __esModule: true,
-    query: jest.fn()
+    getUserByEmailAddress: jest.fn(),
+    createUser: jest.fn()
 }));
 
 jest.mock('@/utils/logger', () => ({
     logger: {
-        info: jest.fn(),
-        error: jest.fn()
+        info: jest.fn()
     }
 }));
 

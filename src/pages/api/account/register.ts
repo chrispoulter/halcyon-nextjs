@@ -1,8 +1,6 @@
 import { registerSchema } from '@/features/account/accountTypes';
-import { query } from '@/data/db';
-import { User } from '@/data/schema';
+import { createUser, getUserByEmailAddress } from '@/data/userRepository';
 import { createApiRouter, onError } from '@/utils/router';
-import { hashPassword } from '@/utils/hash';
 
 const router = createApiRouter();
 
@@ -11,12 +9,7 @@ router.post(async (req, res) => {
         stripUnknown: true
     });
 
-    const {
-        rows: [existing]
-    } = await query<User>(
-        'SELECT id FROM users WHERE email_address = $1 LIMIT 1',
-        [body.emailAddress]
-    );
+    const existing = await getUserByEmailAddress(body.emailAddress);
 
     if (existing) {
         return res.status(400).json({
@@ -24,21 +17,10 @@ router.post(async (req, res) => {
         });
     }
 
-    const {
-        rows: [result]
-    } = await query<User>(
-        'INSERT INTO users (email_address, password, first_name, last_name, date_of_birth) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-        [
-            body.emailAddress,
-            await hashPassword(body.password),
-            body.firstName,
-            body.lastName,
-            `${body.dateOfBirth}T00:00:00.000Z`
-        ]
-    );
+    const id = await createUser(body);
 
     return res.json({
-        id: result.id
+        id
     });
 });
 

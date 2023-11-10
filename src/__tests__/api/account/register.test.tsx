@@ -1,21 +1,19 @@
 import { createMocks } from 'node-mocks-http';
 import { when } from 'jest-when';
 import handler from '@/pages/api/account/register';
-import { query } from '@/data/db';
-import { User } from '@/data/schema';
+import { User, createUser, getUserByEmailAddress } from '@/data/userRepository';
 
 const user: User = {
     id: 1,
-    email_address: 'test@example.com',
+    emailAddress: 'test@example.com',
     password: 'change-me-1234567890',
-    password_reset_token: undefined,
-    first_name: 'John',
-    last_name: 'Smith',
-    date_of_birth: new Date('1970-01-01'),
-    is_locked_out: false,
+    passwordResetToken: undefined,
+    firstName: 'John',
+    lastName: 'Smith',
+    dateOfBirth: '1970-01-01',
+    isLockedOut: false,
     roles: [],
-    xmin: 1234,
-    search: 'search text'
+    version: 1234
 };
 
 describe('/api/account/register', () => {
@@ -39,23 +37,16 @@ describe('/api/account/register', () => {
     });
 
     it('when duplicate email address should return bad request', async () => {
-        when(query<User>)
-            .calledWith(expect.stringContaining('SELECT'), expect.anything())
-            .mockResolvedValue({
-                rows: [user],
-                rowCount: 1,
-                command: 'SELECT',
-                oid: 1,
-                fields: []
-            });
+        when(getUserByEmailAddress).mockResolvedValue(user);
+
         const { req, res } = createMocks({
             method: 'POST',
             body: {
-                emailAddress: user.email_address,
+                emailAddress: user.emailAddress,
                 password: user.password,
-                firstName: user.first_name,
-                lastName: user.last_name,
-                dateOfBirth: user.date_of_birth
+                firstName: user.firstName,
+                lastName: user.lastName,
+                dateOfBirth: user.dateOfBirth
             }
         });
 
@@ -69,34 +60,17 @@ describe('/api/account/register', () => {
     });
 
     it('when request is valid should create new user', async () => {
-        when(query<User>)
-            .calledWith(expect.stringContaining('SELECT'), expect.anything())
-            .mockResolvedValue({
-                rows: [],
-                rowCount: 1,
-                command: 'SELECT',
-                oid: 1,
-                fields: []
-            });
-
-        when(query<User>)
-            .calledWith(expect.stringContaining('INSERT'), expect.anything())
-            .mockResolvedValue({
-                rows: [user],
-                rowCount: 1,
-                command: 'INSERT',
-                oid: 1,
-                fields: []
-            });
+        when(getUserByEmailAddress).mockResolvedValue(undefined);
+        when(createUser).mockResolvedValue(user.id);
 
         const { req, res } = createMocks({
             method: 'POST',
             body: {
-                emailAddress: user.email_address,
+                emailAddress: user.emailAddress,
                 password: user.password,
-                firstName: user.first_name,
-                lastName: user.last_name,
-                dateOfBirth: user.date_of_birth
+                firstName: user.firstName,
+                lastName: user.lastName,
+                dateOfBirth: user.dateOfBirth
             }
         });
 

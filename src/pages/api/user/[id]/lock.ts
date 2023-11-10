@@ -1,6 +1,5 @@
 import { getUserSchema, lockUserSchema } from '@/features/user/userTypes';
-import { query } from '@/data/db';
-import { User } from '@/data/schema';
+import { getUserById, setUserIsLockedOut } from '@/data/userRepository';
 import { createApiRouter, onError, authorize } from '@/utils/router';
 import { isUserAdministrator } from '@/utils/auth';
 
@@ -11,11 +10,7 @@ router.use(authorize(isUserAdministrator));
 router.put(async (req, res) => {
     const params = await getUserSchema.validate(req.query);
 
-    const {
-        rows: [user]
-    } = await query<User>('SELECT id, xmin FROM users WHERE id = $1 LIMIT 1', [
-        params.id
-    ]);
+    const user = await getUserById(params.id);
 
     if (!user) {
         return res.status(404).json({
@@ -25,7 +20,7 @@ router.put(async (req, res) => {
 
     const body = await lockUserSchema.validate(req.body);
 
-    if (body.version && body.version !== parseInt(user.xmin as any)) {
+    if (body.version && body.version !== user.version) {
         return res.status(409).json({
             message: 'Data has been modified since entities were loaded.'
         });
@@ -37,10 +32,7 @@ router.put(async (req, res) => {
         });
     }
 
-    await query<User>('UPDATE users SET is_locked_out = $2 WHERE id = $1', [
-        user.id,
-        true
-    ]);
+    await setUserIsLockedOut(user.id, true);
 
     return res.json({
         id: user.id

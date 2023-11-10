@@ -1,16 +1,23 @@
 import { encode } from 'next-auth/jwt';
-import { User } from '@/data/schema';
 import { config } from './config';
 
-export const generateJwtToken = async (user: User) =>
+type JwtUser = {
+    id: number;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    roles?: string[];
+};
+
+export const generateJwtToken = async (user: JwtUser) =>
     encode({
         secret: config.NEXTAUTH_SECRET,
         maxAge: config.NEXTAUTH_SESSION_MAXAGE,
         token: {
             sub: user.id.toString(),
-            email: user.email_address,
-            given_name: user.first_name,
-            family_name: user.last_name,
+            email: user.emailAddress,
+            given_name: user.firstName,
+            family_name: user.lastName,
             jti: crypto.randomUUID(),
             roles: user.roles
         }

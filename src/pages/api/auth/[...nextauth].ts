@@ -1,8 +1,7 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { createTokenSchema } from '@/features/token/tokenTypes';
-import { query } from '@/data/db';
-import { User } from '@/data/schema';
+import { getUserByEmailAddress } from '@/data/userRepository';
 import { verifyPassword } from '@/utils/hash';
 import { config } from '@/utils/config';
 
@@ -17,12 +16,7 @@ export const authOptions: AuthOptions = {
             async authorize(credentials) {
                 const body = await createTokenSchema.validate(credentials);
 
-                const {
-                    rows: [user]
-                } = await query<User>(
-                    'SELECT id, email_address, password, first_name, last_name, is_locked_out, roles FROM users WHERE email_address = $1 LIMIT 1',
-                    [body.emailAddress]
-                );
+                const user = await getUserByEmailAddress(body.emailAddress);
 
                 if (!user || !user.password) {
                     throw new Error('The credentials provided were invalid.');
@@ -37,19 +31,13 @@ export const authOptions: AuthOptions = {
                     throw new Error('The credentials provided were invalid.');
                 }
 
-                if (user.is_locked_out) {
+                if (user.isLockedOut) {
                     throw new Error(
                         'This account has been locked out, please try again later.'
                     );
                 }
 
-                return {
-                    id: user.id,
-                    emailAddress: user.email_address,
-                    firstName: user.first_name,
-                    lastName: user.last_name,
-                    roles: user.roles
-                };
+                return user;
             }
         })
     ],

@@ -1,12 +1,10 @@
+import { createUserSchema, searchUsersSchema } from '@/features/user/userTypes';
 import {
-    createUserSchema,
-    searchUsersSchema,
-    UserSort
-} from '@/features/user/userTypes';
-import { query } from '@/data/db';
-import { User } from '@/data/schema';
+    createUser,
+    getUserByEmailAddress,
+    searchUsers
+} from '@/data/userRepository';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import { hashPassword } from '@/utils/hash';
 import { isUserAdministrator } from '@/utils/auth';
 
 const router = createApiRouter();
@@ -16,63 +14,14 @@ router.use(authorize(isUserAdministrator));
 router.get(async (req, res) => {
     const params = await searchUsersSchema.validate(req.query);
 
-    let where = undefined;
-    const args = [];
-
-    if (params.search) {
-        where = `WHERE search ILIKE '%' || $1 || '%'`;
-        args.push(params.search);
-    }
-
-    const {
-        rows: [{ count }]
-    } = await query<{ count: number }>(
-        `SELECT COUNT(*) FROM users ${where}`,
-        args
+    const result = await searchUsers(
+        params.page,
+        params.size,
+        params.sort,
+        params.search
     );
 
-    let orderBy = undefined;
-
-    switch (params.sort) {
-        case UserSort.EMAIL_ADDRESS_ASC:
-            orderBy = ' ORDER BY email_address ASC';
-            break;
-
-        case UserSort.EMAIL_ADDRESS_DESC:
-            orderBy = ' ORDER BY email_address DESC';
-
-        case UserSort.NAME_DESC:
-            orderBy = ' ORDER BY first_name DESC, last_name DESC';
-            break;
-
-        default:
-            orderBy = ' ORDER BY first_name ASC, last_name ASC';
-            break;
-    }
-
-    const skip = (params.page - 1) * params.size;
-
-    const { rows } = await query<User>(
-        `SELECT id, email_address, first_name, last_name, is_locked_out, roles FROM users ${where} ${orderBy} OFFSET ${skip} LIMIT ${params.size}`,
-        args
-    );
-
-    const pageCount = Math.floor((count + params.size - 1) / params.size);
-    const hasNextPage = params.page < pageCount;
-    const hasPreviousPage = params.page > 1;
-
-    return res.json({
-        items: rows.map(user => ({
-            id: user.id,
-            emailAddress: user.email_address,
-            firstName: user.first_name,
-            lastName: user.last_name,
-            isLockedOut: user.is_locked_out,
-            roles: user.roles
-        })),
-        hasNextPage,
-        hasPreviousPage
-    });
+    return res.json(result);
 });
 
 router.post(async (req, res) => {
@@ -80,12 +29,7 @@ router.post(async (req, res) => {
         stripUnknown: true
     });
 
-    const {
-        rows: [existing]
-    } = await query<User>(
-        'SELECT id FROM users WHERE email_address = $1 LIMIT 1',
-        [body.emailAddress]
-    );
+    const existing = await getUserByEmailAddress(body.emailAddress);
 
     if (existing) {
         return res.status(400).json({
@@ -93,22 +37,10 @@ router.post(async (req, res) => {
         });
     }
 
-    const {
-        rows: [result]
-    } = await query<User>(
-        'INSERT INTO users (email_address, password, first_name, last_name, date_of_birth, roles) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-        [
-            body.emailAddress,
-            await hashPassword(body.password),
-            body.firstName,
-            body.lastName,
-            `${body.dateOfBirth}T00:00:00.000Z`,
-            body.roles
-        ]
-    );
+    const id = await createUser(body);
 
     return res.json({
-        id: result.id
+        id
     });
 });
 
