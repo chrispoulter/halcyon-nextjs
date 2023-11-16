@@ -29,7 +29,7 @@ router.get(async (req, res) => {
 
     return res.json({
         id: user.id,
-        emailAddrfess: user.emailAddress,
+        emailAddress: user.emailAddress,
         firstName: user.firstName,
         lastName: user.lastName,
         dateOfBirth: user.dateOfBirth,
@@ -43,12 +43,6 @@ router.put(async (req, res) => {
     const params = await getUserSchema.validate(req.query);
 
     const user = await getUserById(params.id);
-
-    if (!user) {
-        return res.status(404).json({
-            message: 'User not found.'
-        });
-    }
 
     if (!user) {
         return res.status(404).json({
