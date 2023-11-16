@@ -16,10 +16,12 @@ export const config = {
 
     SEED_EMAIL_ADDRESS:
         process.env.SEED_EMAIL_ADDRESS || 'system.administrator@example.com',
-    SEED_PASSWORD: process.env.SEED_PASSWORD || 'change-me-0987654321',
+    SEED_PASSWORD: process.env.SEED_PASSWORD || 'change-me-1234567890',
 
     NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'change-me-1234567890',
+    NEXTAUTH_SECRET:
+        process.env.NEXTAUTH_SECRET ||
+        'YenEZqADi2YnfVCNWMFkcUpmr55ESFepmHgH3NSmPoBeSqf9Hs3Ui8vb6xdkCY9PNewqNxVQdjkqhCGaWeyri48FyDPU9HfKFjbHcfbyq4Fuqmk2suehduYJYzuPoSD8',
     NEXTAUTH_SESSION_MAXAGE: parseInt(
         process.env.NEXTAUTH_SESSION_MAXAGE || '3600'
     )
