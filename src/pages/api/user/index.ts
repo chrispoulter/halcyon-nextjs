@@ -14,12 +14,7 @@ router.use(authorize(isUserAdministrator));
 router.get(async (req, res) => {
     const params = await searchUsersSchema.validate(req.query);
 
-    const result = await searchUsers(
-        params.page,
-        params.size,
-        params.search,
-        params.sort
-    );
+    const result = await searchUsers(params);
 
     return res.json(result);
 });

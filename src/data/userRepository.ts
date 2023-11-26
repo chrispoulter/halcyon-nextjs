@@ -1,3 +1,4 @@
+import { UserSort } from '@/features/user/userTypes';
 import { hashPassword } from '@/utils/hash';
 import { query } from './db';
 
@@ -39,6 +40,13 @@ export type UpdateUser = {
     lastName: string;
     dateOfBirth: string;
     roles?: string[];
+};
+
+export type SearchUsers = {
+    page: number;
+    size: number;
+    search?: string;
+    sort?: UserSort;
 };
 
 export const createUser = async (user: CreateUser) => {
@@ -181,12 +189,12 @@ export const setUserIsLockedOut = async (id: number, isLockedOut: boolean) => {
     ]);
 };
 
-export const searchUsers = async (
-    page: number,
-    size: number,
-    search?: string,
-    sort?: string
-) => {
+export const searchUsers = async ({
+    search,
+    sort,
+    page,
+    size
+}: SearchUsers) => {
     let where = '';
     const args = [];
 
@@ -205,14 +213,14 @@ export const searchUsers = async (
     let orderBy = undefined;
 
     switch (sort) {
-        case 'EMAIL_ADDRESS_ASC':
+        case UserSort.EMAIL_ADDRESS_ASC:
             orderBy = 'ORDER BY email_address ASC';
             break;
 
-        case 'EMAIL_ADDRESS_DESC':
+        case UserSort.EMAIL_ADDRESS_DESC:
             orderBy = 'ORDER BY email_address DESC';
 
-        case 'NAME_DESC':
+        case UserSort.NAME_DESC:
             orderBy = 'ORDER BY first_name DESC, last_name DESC';
             break;
 
