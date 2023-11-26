@@ -2,28 +2,6 @@ import { UserSort } from '@/features/user/userTypes';
 import { hashPassword } from '@/utils/hash';
 import { query } from './db';
 
-type UserRow = {
-    id: number;
-    email_address: string;
-    password: string | null;
-    password_reset_token: string | null;
-    first_name: string;
-    last_name: string;
-    date_of_birth: string;
-    is_locked_out: boolean;
-    roles: string[] | null;
-    xmin: number;
-};
-
-type UserSearchRow = {
-    id: number;
-    email_address: string;
-    first_name: string;
-    last_name: string;
-    is_locked_out: boolean;
-    roles: string[] | null;
-};
-
 export type CreateUser = {
     emailAddress: string;
     password: string;
@@ -31,22 +9,6 @@ export type CreateUser = {
     lastName: string;
     dateOfBirth: string;
     roles?: string[];
-};
-
-export type UpdateUser = {
-    id: number;
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    roles?: string[];
-};
-
-export type SearchUsers = {
-    page: number;
-    size: number;
-    search?: string;
-    sort?: UserSort;
 };
 
 export const createUser = async (user: CreateUser) => {
@@ -65,6 +27,15 @@ export const createUser = async (user: CreateUser) => {
     );
 
     return result.id;
+};
+
+export type UpdateUser = {
+    id: number;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    roles?: string[];
 };
 
 export const updateUser = async (user: UpdateUser) => {
@@ -110,6 +81,19 @@ RETURNING id;`,
 
 export const deleteUser = async (id: number) => {
     await query('DELETE FROM users WHERE id = $1;', [id]);
+};
+
+type UserRow = {
+    id: number;
+    email_address: string;
+    password: string | null;
+    password_reset_token: string | null;
+    first_name: string;
+    last_name: string;
+    date_of_birth: string;
+    is_locked_out: boolean;
+    roles: string[] | null;
+    xmin: number;
 };
 
 export const getUserById = async (id: number) => {
@@ -187,6 +171,22 @@ export const setUserIsLockedOut = async (id: number, isLockedOut: boolean) => {
         id,
         isLockedOut
     ]);
+};
+
+export type SearchUsers = {
+    page: number;
+    size: number;
+    search?: string;
+    sort?: UserSort;
+};
+
+type UserSearchRow = {
+    id: number;
+    email_address: string;
+    first_name: string;
+    last_name: string;
+    is_locked_out: boolean;
+    roles: string[] | null;
 };
 
 export const searchUsers = async ({
