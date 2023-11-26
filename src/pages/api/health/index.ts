@@ -1,9 +1,9 @@
 import { NextApiHandler } from 'next';
-import prisma from '@/utils/prisma';
+import { query } from '@/data/db';
 import { logger } from '@/utils/logger';
 
 const dbHealthCheck = async () => {
-    await prisma.$queryRaw`SELECT true AS connected`;
+    await query<{ connected: boolean }>('SELECT true AS connected');
 };
 
 const healthHandler: NextApiHandler = async (_, res) => {

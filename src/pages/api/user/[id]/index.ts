@@ -3,33 +3,23 @@ import {
     getUserSchema,
     updateUserSchema
 } from '@/features/user/userTypes';
+import {
+    deleteUser,
+    getUserByEmailAddress,
+    getUserById,
+    updateUser
+} from '@/data/userRepository';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import prisma from '@/utils/prisma';
 import { isUserAdministrator } from '@/utils/auth';
-import { toDateOnly } from '@/utils/dates';
 
 const router = createApiRouter();
 
 router.use(authorize(isUserAdministrator));
 
 router.get(async (req, res) => {
-    const query = await getUserSchema.validate(req.query);
+    const params = await getUserSchema.validate(req.query);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            emailAddress: true,
-            firstName: true,
-            lastName: true,
-            dateOfBirth: true,
-            isLockedOut: true,
-            version: true,
-            roles: true
-        },
-        where: {
-            id: query.id
-        }
-    });
+    const user = await getUserById(params.id);
 
     if (!user) {
         return res.status(404).json({
@@ -42,26 +32,17 @@ router.get(async (req, res) => {
         emailAddress: user.emailAddress,
         firstName: user.firstName,
         lastName: user.lastName,
-        dateOfBirth: toDateOnly(user.dateOfBirth),
-        isLockedOut: user.isLockedOut,
+        dateOfBirth: user.dateOfBirth,
         roles: user.roles,
-        version: user.version!
+        isLockedOut: user.isLockedOut,
+        version: user.version
     });
 });
 
 router.put(async (req, res) => {
-    const query = await getUserSchema.validate(req.query);
+    const params = await getUserSchema.validate(req.query);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            emailAddress: true,
-            version: true
-        },
-        where: {
-            id: query.id
-        }
-    });
+    const user = await getUserById(params.id);
 
     if (!user) {
         return res.status(404).json({
@@ -69,9 +50,7 @@ router.put(async (req, res) => {
         });
     }
 
-    const body = await updateUserSchema.validate(req.body, {
-        stripUnknown: true
-    });
+    const body = await updateUserSchema.validate(req.body);
 
     if (body.version && body.version !== user.version) {
         return res.status(409).json({
@@ -80,11 +59,7 @@ router.put(async (req, res) => {
     }
 
     if (user.emailAddress !== body.emailAddress) {
-        const existing = await prisma.users.count({
-            where: {
-                emailAddress: body.emailAddress
-            }
-        });
+        const existing = await getUserByEmailAddress(body.emailAddress);
 
         if (existing) {
             return res.status(400).json({
@@ -93,16 +68,13 @@ router.put(async (req, res) => {
         }
     }
 
-    await prisma.users.update({
-        where: {
-            id: user.id
-        },
-        data: {
-            ...body,
-            dateOfBirth: `${body.dateOfBirth}T00:00:00.000Z`,
-            search: `${body.emailAddress} ${body.firstName} ${body.lastName}`,
-            version: crypto.randomUUID()
-        }
+    await updateUser({
+        id: user.id,
+        emailAddress: body.emailAddress,
+        firstName: body.firstName,
+        lastName: body.lastName,
+        dateOfBirth: body.dateOfBirth,
+        roles: body.roles
     });
 
     return res.json({
@@ -111,17 +83,9 @@ router.put(async (req, res) => {
 });
 
 router.delete(async (req, res) => {
-    const query = await getUserSchema.validate(req.query);
+    const params = await getUserSchema.validate(req.query);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            version: true
-        },
-        where: {
-            id: query.id
-        }
-    });
+    const user = await getUserById(params.id);
 
     if (!user) {
         return res.status(404).json({
@@ -143,11 +107,7 @@ router.delete(async (req, res) => {
         });
     }
 
-    await prisma.users.delete({
-        where: {
-            id: user.id
-        }
-    });
+    await deleteUser(user.id);
 
     return res.json({
         id: user.id

@@ -1,22 +1,13 @@
 import { resetPasswordSchema } from '@/features/account/accountTypes';
+import { getUserByEmailAddress, setUserPassword } from '@/data/userRepository';
 import { createApiRouter, onError } from '@/utils/router';
-import prisma from '@/utils/prisma';
-import { hashPassword } from '@/utils/hash';
 
 const router = createApiRouter();
 
 router.put(async (req, res) => {
     const body = await resetPasswordSchema.validate(req.body);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            passwordResetToken: true
-        },
-        where: {
-            emailAddress: body.emailAddress
-        }
-    });
+    const user = await getUserByEmailAddress(body.emailAddress);
 
     if (!user || user.passwordResetToken !== body.token) {
         return res.status(400).json({
@@ -24,16 +15,7 @@ router.put(async (req, res) => {
         });
     }
 
-    await prisma.users.update({
-        where: {
-            id: user.id
-        },
-        data: {
-            password: await hashPassword(body.newPassword),
-            passwordResetToken: null,
-            version: crypto.randomUUID()
-        }
-    });
+    await setUserPassword(user.id, body.newPassword);
 
     return res.json({
         id: user.id

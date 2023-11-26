@@ -1,22 +1,19 @@
 import { createMocks } from 'node-mocks-http';
 import { when } from 'jest-when';
-import { Users } from '@prisma/client';
 import handler from '@/pages/api/account/register';
-import prisma from '@/utils/prisma';
-import { toDateOnly } from '@/utils/dates';
+import { createUser, getUserByEmailAddress } from '@/data/userRepository';
 
-const user: Users = {
+const user = {
     id: 1,
     emailAddress: 'test@example.com',
     password: 'change-me-1234567890',
-    passwordResetToken: null,
+    passwordResetToken: undefined,
     firstName: 'John',
     lastName: 'Smith',
-    dateOfBirth: new Date('1970-01-01T00:00:00.000Z'),
+    dateOfBirth: '1970-01-01',
     isLockedOut: false,
     roles: [],
-    search: 'John Smith',
-    version: '1234'
+    version: 1234
 };
 
 describe('/api/account/register', () => {
@@ -40,7 +37,7 @@ describe('/api/account/register', () => {
     });
 
     it('when duplicate email address should return bad request', async () => {
-        when(prisma.users.count).mockResolvedValue(1);
+        when(getUserByEmailAddress).mockResolvedValue(user);
 
         const { req, res } = createMocks({
             method: 'POST',
@@ -49,7 +46,7 @@ describe('/api/account/register', () => {
                 password: user.password,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                dateOfBirth: toDateOnly(user.dateOfBirth)
+                dateOfBirth: user.dateOfBirth
             }
         });
 
@@ -63,8 +60,8 @@ describe('/api/account/register', () => {
     });
 
     it('when request is valid should create new user', async () => {
-        when(prisma.users.count).mockResolvedValue(0);
-        when(prisma.users.create).mockResolvedValue(user);
+        when(getUserByEmailAddress).mockResolvedValue(undefined);
+        when(createUser).mockResolvedValue(user.id);
 
         const { req, res } = createMocks({
             method: 'POST',
@@ -73,7 +70,7 @@ describe('/api/account/register', () => {
                 password: user.password,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                dateOfBirth: toDateOnly(user.dateOfBirth)
+                dateOfBirth: user.dateOfBirth
             }
         });
 

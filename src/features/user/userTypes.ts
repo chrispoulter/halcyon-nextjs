@@ -58,7 +58,7 @@ export type GetUserResponse = {
     dateOfBirth: string;
     isLockedOut?: boolean;
     roles?: string[];
-    version: string;
+    version: number;
 };
 
 export const updateUserSchema = object().shape({
@@ -67,25 +67,25 @@ export const updateUserSchema = object().shape({
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: string().label('Date Of Birth').required().dateOnly().past(),
     roles: array().of(string().label('Role').required()).label('Roles'),
-    version: string().label('Version').uuid()
+    version: number().label('Version')
 });
 
 export type UpdateUserRequest = InferType<typeof updateUserSchema>;
 
 export const lockUserSchema = object().shape({
-    version: string().label('Version').uuid()
+    version: number().label('Version')
 });
 
 export type LockUserRequest = InferType<typeof lockUserSchema>;
 
 export const unlockUserSchema = object().shape({
-    version: string().label('Version').uuid()
+    version: number().label('Version')
 });
 
 export type UnlockUserRequest = InferType<typeof unlockUserSchema>;
 
 export const deleteUserSchema = object().shape({
-    version: string().label('Version').uuid()
+    version: number().label('Version')
 });
 
 export type DeleteUserRequest = InferType<typeof deleteUserSchema>;

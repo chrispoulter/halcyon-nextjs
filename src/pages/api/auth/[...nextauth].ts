@@ -1,7 +1,7 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { createTokenSchema } from '@/features/token/tokenTypes';
-import prisma from '@/utils/prisma';
+import { getUserByEmailAddress } from '@/data/userRepository';
 import { verifyPassword } from '@/utils/hash';
 import { config } from '@/utils/config';
 
@@ -16,20 +16,7 @@ export const authOptions: AuthOptions = {
             async authorize(credentials) {
                 const body = await createTokenSchema.validate(credentials);
 
-                const user = await prisma.users.findUnique({
-                    select: {
-                        id: true,
-                        emailAddress: true,
-                        firstName: true,
-                        lastName: true,
-                        password: true,
-                        isLockedOut: true,
-                        roles: true
-                    },
-                    where: {
-                        emailAddress: body.emailAddress
-                    }
-                });
+                const user = await getUserByEmailAddress(body.emailAddress);
 
                 if (!user || !user.password) {
                     throw new Error('The credentials provided were invalid.');
@@ -50,13 +37,7 @@ export const authOptions: AuthOptions = {
                     );
                 }
 
-                return {
-                    id: user.id,
-                    emailAddress: user.emailAddress,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    roles: user.roles
-                };
+                return user;
             }
         })
     ],

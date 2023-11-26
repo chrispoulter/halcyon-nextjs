@@ -1,12 +1,10 @@
-import { Prisma } from '@prisma/client';
+import { createUserSchema, searchUsersSchema } from '@/features/user/userTypes';
 import {
-    createUserSchema,
-    searchUsersSchema,
-    UserSort
-} from '@/features/user/userTypes';
+    createUser,
+    getUserByEmailAddress,
+    searchUsers
+} from '@/data/userRepository';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import prisma from '@/utils/prisma';
-import { hashPassword } from '@/utils/hash';
 import { isUserAdministrator } from '@/utils/auth';
 
 const router = createApiRouter();
@@ -14,74 +12,11 @@ const router = createApiRouter();
 router.use(authorize(isUserAdministrator));
 
 router.get(async (req, res) => {
-    const query = await searchUsersSchema.validate(req.query);
+    const params = await searchUsersSchema.validate(req.query);
 
-    let where: Prisma.UsersWhereInput | undefined;
+    const result = await searchUsers(params);
 
-    if (query.search) {
-        where = {
-            search: {
-                contains: query.search,
-                mode: Prisma.QueryMode.insensitive
-            }
-        };
-    }
-
-    const count = await prisma.users.count({ where });
-
-    let orderBy: Prisma.Enumerable<Prisma.UsersOrderByWithRelationInput>;
-
-    switch (query.sort) {
-        case UserSort.EMAIL_ADDRESS_ASC:
-            orderBy = {
-                emailAddress: Prisma.SortOrder.asc
-            };
-            break;
-        case UserSort.EMAIL_ADDRESS_DESC:
-            orderBy = {
-                emailAddress: Prisma.SortOrder.desc
-            };
-            break;
-        case UserSort.NAME_DESC:
-            orderBy = [
-                { firstName: Prisma.SortOrder.desc },
-                { lastName: Prisma.SortOrder.desc }
-            ];
-            break;
-        default:
-            orderBy = [
-                { firstName: Prisma.SortOrder.asc },
-                { lastName: Prisma.SortOrder.asc }
-            ];
-            break;
-    }
-
-    const skip = (query.page - 1) * query.size;
-
-    const users = await prisma.users.findMany({
-        select: {
-            id: true,
-            emailAddress: true,
-            firstName: true,
-            lastName: true,
-            isLockedOut: true,
-            roles: true
-        },
-        where,
-        orderBy,
-        skip,
-        take: query.size
-    });
-
-    const pageCount = Math.floor((count + query.size - 1) / query.size);
-    const hasNextPage = query.page < pageCount;
-    const hasPreviousPage = query.page > 1;
-
-    return res.json({
-        items: users,
-        hasNextPage,
-        hasPreviousPage
-    });
+    return res.json(result);
 });
 
 router.post(async (req, res) => {
@@ -89,11 +24,7 @@ router.post(async (req, res) => {
         stripUnknown: true
     });
 
-    const existing = await prisma.users.count({
-        where: {
-            emailAddress: body.emailAddress
-        }
-    });
+    const existing = await getUserByEmailAddress(body.emailAddress);
 
     if (existing) {
         return res.status(400).json({
@@ -101,18 +32,10 @@ router.post(async (req, res) => {
         });
     }
 
-    const result = await prisma.users.create({
-        data: {
-            ...body,
-            password: await hashPassword(body.password),
-            dateOfBirth: `${body.dateOfBirth}T00:00:00.000Z`,
-            search: `${body.emailAddress} ${body.firstName} ${body.lastName}`,
-            version: crypto.randomUUID()
-        }
-    });
+    const id = await createUser(body);
 
     return res.json({
-        id: result.id
+        id
     });
 });
 

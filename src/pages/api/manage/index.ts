@@ -2,29 +2,20 @@ import {
     deleteAccountSchema,
     updateProfileSchema
 } from '@/features/manage/manageTypes';
+import {
+    deleteUser,
+    getUserByEmailAddress,
+    getUserById,
+    updateUser
+} from '@/data/userRepository';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import prisma from '@/utils/prisma';
-import { toDateOnly } from '@/utils/dates';
 
 const router = createApiRouter();
 
 router.use(authorize());
 
 router.get(async (req, res) => {
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            emailAddress: true,
-            firstName: true,
-            lastName: true,
-            dateOfBirth: true,
-            isLockedOut: true,
-            version: true
-        },
-        where: {
-            id: req.currentUserId
-        }
-    });
+    const user = await getUserById(req.currentUserId);
 
     if (!user || user.isLockedOut) {
         return res.status(404).json({
@@ -37,26 +28,15 @@ router.get(async (req, res) => {
         emailAddress: user.emailAddress,
         firstName: user.firstName,
         lastName: user.lastName,
-        dateOfBirth: toDateOnly(user.dateOfBirth),
-        version: user.version!
+        dateOfBirth: user.dateOfBirth,
+        version: user.version
     });
 });
 
 router.put(async (req, res) => {
-    const body = await updateProfileSchema.validate(req.body, {
-        stripUnknown: true
-    });
+    const body = await updateProfileSchema.validate(req.body);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            emailAddress: true,
-            version: true
-        },
-        where: {
-            id: req.currentUserId
-        }
-    });
+    const user = await getUserById(req.currentUserId);
 
     if (!user) {
         return res.status(404).json({
@@ -71,11 +51,7 @@ router.put(async (req, res) => {
     }
 
     if (user.emailAddress !== body.emailAddress) {
-        const existing = await prisma.users.count({
-            where: {
-                emailAddress: body.emailAddress
-            }
-        });
+        const existing = await getUserByEmailAddress(body.emailAddress);
 
         if (existing) {
             return res.status(400).json({
@@ -84,16 +60,13 @@ router.put(async (req, res) => {
         }
     }
 
-    await prisma.users.update({
-        where: {
-            id: user.id
-        },
-        data: {
-            ...body,
-            dateOfBirth: `${body.dateOfBirth}T00:00:00.000Z`,
-            search: `${body.emailAddress} ${body.firstName} ${body.lastName}`,
-            version: crypto.randomUUID()
-        }
+    await updateUser({
+        id: user.id,
+        emailAddress: body.emailAddress,
+        firstName: body.firstName,
+        lastName: body.lastName,
+        dateOfBirth: body.dateOfBirth,
+        roles: user.roles
     });
 
     return res.json({
@@ -102,15 +75,7 @@ router.put(async (req, res) => {
 });
 
 router.delete(async (req, res) => {
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            version: true
-        },
-        where: {
-            id: req.currentUserId
-        }
-    });
+    const user = await getUserById(req.currentUserId);
 
     if (!user) {
         return res.status(404).json({
@@ -126,11 +91,7 @@ router.delete(async (req, res) => {
         });
     }
 
-    await prisma.users.delete({
-        where: {
-            id: user.id
-        }
-    });
+    await deleteUser(user.id);
 
     return res.json({
         id: user.id

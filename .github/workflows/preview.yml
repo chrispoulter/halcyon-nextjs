@@ -45,7 +45,6 @@ jobs:
             - name: Move static folders into dynamic folder
               run: |
                   cp -r ./public ./.next/standalone
-                  cp -r ./prisma ./.next/standalone
                   cp -r ./.next/static ./.next/standalone/.next/static
                   rm ./.next/standalone/package.json
 

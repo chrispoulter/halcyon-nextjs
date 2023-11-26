@@ -1,4 +1,4 @@
-import { InferType, object, string } from 'yup';
+import { InferType, number, object, string } from 'yup';
 import '@/utils/yup';
 
 export type GetProfileResponse = {
@@ -7,7 +7,7 @@ export type GetProfileResponse = {
     firstName: string;
     lastName: string;
     dateOfBirth: string;
-    version: string;
+    version: number;
 };
 
 export const updateProfileSchema = object().shape({
@@ -15,7 +15,7 @@ export const updateProfileSchema = object().shape({
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: string().label('Date Of Birth').required().dateOnly().past(),
-    version: string().label('Version').uuid()
+    version: number().label('Version')
 });
 
 export type UpdateProfileRequest = InferType<typeof updateProfileSchema>;
@@ -23,13 +23,13 @@ export type UpdateProfileRequest = InferType<typeof updateProfileSchema>;
 export const changePasswordSchema = object().shape({
     currentPassword: string().label('Current Password').required(),
     newPassword: string().label('New Password').min(8).max(50).required(),
-    version: string().label('Version').uuid()
+    version: number().label('Version')
 });
 
 export type ChangePasswordRequest = InferType<typeof changePasswordSchema>;
 
 export const deleteAccountSchema = object().shape({
-    version: string().label('Version').uuid()
+    version: number().label('Version')
 });
 
 export type DeleteAccountRequst = InferType<typeof deleteAccountSchema>;

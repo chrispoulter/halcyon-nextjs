@@ -1,6 +1,6 @@
 import { getUserSchema, lockUserSchema } from '@/features/user/userTypes';
+import { getUserById, setUserIsLockedOut } from '@/data/userRepository';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import prisma from '@/utils/prisma';
 import { isUserAdministrator } from '@/utils/auth';
 
 const router = createApiRouter();
@@ -8,17 +8,9 @@ const router = createApiRouter();
 router.use(authorize(isUserAdministrator));
 
 router.put(async (req, res) => {
-    const query = await getUserSchema.validate(req.query);
+    const params = await getUserSchema.validate(req.query);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            version: true
-        },
-        where: {
-            id: query.id
-        }
-    });
+    const user = await getUserById(params.id);
 
     if (!user) {
         return res.status(404).json({
@@ -40,15 +32,7 @@ router.put(async (req, res) => {
         });
     }
 
-    await prisma.users.update({
-        where: {
-            id: user.id
-        },
-        data: {
-            isLockedOut: true,
-            version: crypto.randomUUID()
-        }
-    });
+    await setUserIsLockedOut(user.id, true);
 
     return res.json({
         id: user.id

@@ -1,6 +1,6 @@
 import { createTokenSchema } from '@/features/token/tokenTypes';
+import { getUserByEmailAddress } from '@/data/userRepository';
 import { createApiRouter, onError } from '@/utils/router';
-import prisma from '@/utils/prisma';
 import { verifyPassword } from '@/utils/hash';
 import { generateJwtToken } from '@/utils/jwt';
 
@@ -9,20 +9,7 @@ const router = createApiRouter();
 router.post(async (req, res) => {
     const body = await createTokenSchema.validate(req.body);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            emailAddress: true,
-            firstName: true,
-            lastName: true,
-            password: true,
-            isLockedOut: true,
-            roles: true
-        },
-        where: {
-            emailAddress: body.emailAddress
-        }
-    });
+    const user = await getUserByEmailAddress(body.emailAddress);
 
     if (!user || !user.password) {
         return res.status(400).json({

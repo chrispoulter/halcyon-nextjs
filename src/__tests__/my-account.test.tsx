@@ -14,7 +14,7 @@ const response: GetProfileResponse = {
     firstName: 'John',
     lastName: 'Smith',
     dateOfBirth: '1970-01-01',
-    version: '1234'
+    version: 1234
 };
 
 describe('<MyAccountPage />', () => {

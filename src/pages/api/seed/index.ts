@@ -1,27 +1,21 @@
+import { migrate } from '@/data/migrate';
+import { upsertUser } from '@/data/userRepository';
 import { createApiRouter, onError } from '@/utils/router';
-import prisma from '@/utils/prisma';
-import { hashPassword } from '@/utils/hash';
 import { SYSTEM_ADMINISTRATOR } from '@/utils/auth';
 import { config } from '@/utils/config';
 
 const router = createApiRouter();
 
 router.get(async (_, res) => {
-    const user = {
+    await migrate();
+
+    await upsertUser({
         emailAddress: config.SEED_EMAIL_ADDRESS,
-        password: await hashPassword(config.SEED_PASSWORD),
+        password: config.SEED_PASSWORD,
         firstName: 'System',
         lastName: 'Administrator',
-        dateOfBirth: '1970-01-01T00:00:00.000Z',
-        roles: [SYSTEM_ADMINISTRATOR],
-        search: `${config.SEED_EMAIL_ADDRESS} System Administrator`,
-        version: crypto.randomUUID()
-    };
-
-    await prisma.users.upsert({
-        where: { emailAddress: user.emailAddress },
-        update: user,
-        create: user
+        dateOfBirth: '1970-01-01',
+        roles: [SYSTEM_ADMINISTRATOR]
     });
 
     return res.send('Environment seeded.');

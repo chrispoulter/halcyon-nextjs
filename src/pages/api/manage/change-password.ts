@@ -1,7 +1,7 @@
 import { changePasswordSchema } from '@/features/manage/manageTypes';
-import prisma from '@/utils/prisma';
+import { getUserById, setUserPassword } from '@/data/userRepository';
 import { createApiRouter, onError, authorize } from '@/utils/router';
-import { hashPassword, verifyPassword } from '@/utils/hash';
+import { verifyPassword } from '@/utils/hash';
 
 const router = createApiRouter();
 
@@ -10,16 +10,7 @@ router.use(authorize());
 router.put(async (req, res) => {
     const body = await changePasswordSchema.validate(req.body);
 
-    const user = await prisma.users.findUnique({
-        select: {
-            id: true,
-            password: true,
-            version: true
-        },
-        where: {
-            id: req.currentUserId
-        }
-    });
+    const user = await getUserById(req.currentUserId);
 
     if (!user) {
         return res.status(404).json({
@@ -47,16 +38,7 @@ router.put(async (req, res) => {
         });
     }
 
-    await prisma.users.update({
-        where: {
-            id: user.id
-        },
-        data: {
-            password: await hashPassword(body.newPassword),
-            passwordResetToken: null,
-            version: crypto.randomUUID()
-        }
-    });
+    await setUserPassword(user.id, body.newPassword);
 
     return res.json({
         id: user.id
