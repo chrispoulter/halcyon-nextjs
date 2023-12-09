@@ -5,7 +5,9 @@ export const config = {
 
     API_URL: `${process.env.NEXTAUTH_URL || ''}/api`,
 
-    DATABASE_URL: process.env.DATABASE_URL!,
+    DATABASE_URL:
+        process.env.DATABASE_URL ||
+        'postgres://postgres:password@localhost/halcyon',
 
     EMAIL_SMTP_SERVER: process.env.EMAIL_SMTP_SERVER || 'localhost',
     EMAIL_SMTP_PORT: parseInt(process.env.EMAIL_SMTP_PORT || '1025'),
