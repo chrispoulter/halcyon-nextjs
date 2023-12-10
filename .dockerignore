@@ -1,0 +1,17 @@
+node_modules
+.git
+.github
+.husky
+.idea
+.next
+.swc
+.vscode
+.dockerignore
+.env*
+docker-compose*.yml
+Dockerfile
+GitVersion.yml
+yarn-debug.log*
+yarn-error.log*
+*.tsbuildinfo
+README.md
