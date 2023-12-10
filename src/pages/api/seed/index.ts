@@ -1,4 +1,4 @@
-import { migrate } from '@/data/migrate';
+import { migrate } from '@/data/db';
 import { upsertUser } from '@/data/userRepository';
 import { createApiRouter, onError } from '@/utils/router';
 import { SYSTEM_ADMINISTRATOR } from '@/utils/auth';
