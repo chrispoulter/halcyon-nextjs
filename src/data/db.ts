@@ -13,18 +13,7 @@ types.setTypeParser(types.builtins.INT8, parseInt);
 const poolConfig = parse(config.DATABASE_URL) as PoolConfig;
 const pool = new Pool(poolConfig);
 
-export const query = async <T extends QueryResultRow>(
-    text: string,
-    params?: any[]
-) => {
-    const start = Date.now();
-    const res = await pool.query<T>(text, params);
-    const duration = Date.now() - start;
-    logger.info('Executed query (%dms) %s', duration, text);
-    return res;
-};
-
-export const migrate = async () => {
+const createDbIfNotExists = async () => {
     try {
         await createdb(poolConfig, poolConfig.database!);
     } catch (error) {
@@ -34,6 +23,10 @@ export const migrate = async () => {
 
         throw error;
     }
+};
+
+export const migrate = async () => {
+    await createDbIfNotExists();
 
     const folderPath = path.join(process.cwd(), 'src', 'migrations');
     const files = await fs.readdir(folderPath);
@@ -43,4 +36,15 @@ export const migrate = async () => {
         logger.info('Running migration %s', file);
         await query(sql);
     }
+};
+
+export const query = async <T extends QueryResultRow>(
+    text: string,
+    params?: any[]
+) => {
+    const start = Date.now();
+    const res = await pool.query<T>(text, params);
+    const duration = Date.now() - start;
+    logger.info('Executed query (%dms) %s', duration, text);
+    return res;
 };
