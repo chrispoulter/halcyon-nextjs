@@ -1,7 +1,7 @@
 node_modules
+.idea
 .next
-dist
-out
-.env
-yarn-error.log
-tsconfig.tsbuildinfo
+yarn-debug.log*
+yarn-error.log*
+.env*
+*.tsbuildinfo
