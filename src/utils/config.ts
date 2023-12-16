@@ -1,6 +1,6 @@
 export const config = {
     NODE_ENV: process.env.NODE_ENV,
-    VERSION: process.env.NEXT_PUBLIC_GITVERSION_SEMVER || '1.0.0',
+    VERSION: process.env.NEXT_PUBLIC_VERSION || '1.0.0',
     LOG_LEVEL: process.env.LOG_LEVEL || 'info',
 
     API_URL: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api`,

@@ -4,8 +4,7 @@
         "**/.idea": true,
         "**/.next": true,
         "**/.swc": true,
-        "**/out": true,
-        "**/tsconfig.tsbuildinfo": true
+        "**/*.tsbuildinfo": true
     },
     "css.lint.unknownAtRules": "ignore",
     "tailwindCSS.experimental.classRegex": [
