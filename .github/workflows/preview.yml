@@ -5,11 +5,11 @@ on:
         branches: ['feature/**', 'bugfix/**']
     workflow_dispatch:
 
-permissions:
-    contents: read
-
 jobs:
     build:
+        permissions:
+            contents: read
+            packages: write
         runs-on: ubuntu-latest
 
         steps:
@@ -38,8 +38,6 @@ jobs:
                       VERSION=${{ github.sha }}
 
     deploy:
-        permissions:
-            contents: none
         runs-on: ubuntu-latest
         needs: build
         environment:

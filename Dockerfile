@@ -16,6 +16,8 @@ ARG VERSION=1.0.0
 ENV NEXT_PUBLIC_VERSION=${VERSION}
 
 ENV NEXT_TELEMETRY_DISABLED 1
+RUN yarn lint
+RUN yarn test
 RUN yarn build
 
 FROM base AS runner
