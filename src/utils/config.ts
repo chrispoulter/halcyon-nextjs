@@ -3,7 +3,7 @@ export const config = {
     VERSION: process.env.NEXT_PUBLIC_VERSION || '1.0.0',
     LOG_LEVEL: process.env.LOG_LEVEL || 'info',
 
-    API_URL: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api`,
+    API_URL: `${process.env.NEXTAUTH_URL}/api`,
 
     DATABASE_URL:
         process.env.DATABASE_URL ||
@@ -20,7 +20,6 @@ export const config = {
         process.env.SEED_EMAIL_ADDRESS || 'system.administrator@example.com',
     SEED_PASSWORD: process.env.SEED_PASSWORD || 'change-me-1234567890',
 
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
     NEXTAUTH_SECRET:
         process.env.NEXTAUTH_SECRET ||
         'YenEZqADi2YnfVCNWMFkcUpmr55ESFepmHgH3NSmPoBeSqf9Hs3Ui8vb6xdkCY9PNewqNxVQdjkqhCGaWeyri48FyDPU9HfKFjbHcfbyq4Fuqmk2suehduYJYzuPoSD8',
