@@ -10,7 +10,7 @@ node_modules
 .env*
 docker-compose*.yml
 Dockerfile
-yarn-debug.log*
-yarn-error.log*
+yarn-debug.log
+yarn-error.log
 *.tsbuildinfo
 README.md
