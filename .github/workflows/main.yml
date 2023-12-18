@@ -7,10 +7,12 @@ on:
 
 jobs:
     build:
+        runs-on: ubuntu-latest
         permissions:
             contents: read
             packages: write
-        runs-on: ubuntu-latest
+        outputs:
+            escapedBranchName: ${{ steps.gitversion.outputs.escapedBranchName }}
 
         steps:
             - uses: actions/checkout@v3
@@ -68,4 +70,4 @@ jobs:
               with:
                   app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
                   publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-                  images: 'ghcr.io/${{ env.REPO }}:${{ steps.gitversion.outputs.escapedBranchName }}'
+                  images: 'ghcr.io/${{ env.REPO }}:${{ needs.build.outputs.escapedBranchName }}'
