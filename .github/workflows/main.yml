@@ -12,7 +12,7 @@ jobs:
             contents: read
             packages: write
         outputs:
-            escapedBranchName: ${{ steps.gitversion.outputs.escapedBranchName }}
+            semVer: ${{ steps.gitversion.outputs.semVer }}
 
         steps:
             - uses: actions/checkout@v3
@@ -47,7 +47,7 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   push: true
-                  tags: ghcr.io/${{ env.REPO }}:${{ steps.gitversion.outputs.escapedBranchName }}
+                  tags: ghcr.io/${{ env.REPO }}:${{ steps.gitversion.outputs.semVer }}
                   file: ./Dockerfile
                   build-args: |
                       VERSION=${{ steps.gitversion.outputs.semVer }}
@@ -70,4 +70,4 @@ jobs:
               with:
                   app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
                   publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-                  images: 'ghcr.io/${{ env.REPO }}:${{ needs.build.outputs.escapedBranchName }}'
+                  images: 'ghcr.io/${{ env.REPO }}:${{ needs.build.outputs.semVer }}'
