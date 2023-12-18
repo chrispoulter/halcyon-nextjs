@@ -46,12 +46,13 @@ jobs:
             - name: Build and push container image to registry
               uses: docker/build-push-action@v5
               with:
-                  push: true
-                  provenance: false
+                  file: ./Dockerfile
                   tags: |
                       ghcr.io/${{ env.REPO }}:${{ steps.gitversion.outputs.semVer }}
                       ghcr.io/${{ env.REPO }}:latest
-                  file: ./Dockerfile
+                  context: .
+                  push: true
+                  provenance: false
                   build-args: |
                       VERSION=${{ steps.gitversion.outputs.semVer }}
 
