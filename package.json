@@ -67,10 +67,9 @@
         "sharp": "0.32.6",
         "tailwindcss": "3.3.5",
         "ts-node": "10.9.1",
-        "tsc-files": "1.1.4",
         "typescript": "5.3.2"
     },
     "lint-staged": {
-        "**/*.ts": "tsc-files --noEmit"
+        "**/*.{ts,tsx}": "eslint"
     }
 }
