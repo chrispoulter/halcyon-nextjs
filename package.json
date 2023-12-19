@@ -70,6 +70,6 @@
         "typescript": "5.3.2"
     },
     "lint-staged": {
-        "**/*.{ts,tsx}": "eslint"
+        "**/*.{ts,tsx}": "yarn lint"
     }
 }
