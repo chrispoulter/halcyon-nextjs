@@ -7,6 +7,5 @@ const buildEslintCommand = filenames =>
 
 module.exports = {
     '*.{js,jsx,ts,tsx}': [buildEslintCommand],
-    '*.{ts,tsx}':
-        'tsc-files --noEmit next-env.d.ts src/types/next.d.ts src/types/next-auth.d.ts'
+    '*.{ts,tsx}': () => 'yarn type-check'
 };
