@@ -8,6 +8,10 @@ node_modules
 .vscode
 .dockerignore
 .env*
+.gitignore
+.lintstagedrc.js
+.prettierignore
+.prettierrc.json
 docker-compose*.yml
 Dockerfile
 GitVersion.yml
