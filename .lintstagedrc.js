@@ -7,5 +7,5 @@ const buildEslintCommand = filenames =>
 
 module.exports = {
     '*.{js,jsx,ts,tsx}': [buildEslintCommand],
-    '*.{ts,tsx}': () => 'yarn type-check'
+    '*.{ts,tsx}': () => 'tsc --noEmit'
 };
