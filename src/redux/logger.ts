@@ -3,12 +3,29 @@ import router from 'next/router';
 import { signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
 
+const hasRTKQMeta = (
+    action: any
+): action is {
+    type: string;
+    meta: {
+        baseQueryMeta: {
+            request: Request;
+            response?: Response;
+        };
+    };
+    payload: {
+        data?: {
+            message?: string;
+        };
+    };
+} => action?.meta?.baseQueryMeta?.request instanceof Request;
+
 export const logger: Middleware = () => next => async action => {
     if (typeof window === 'undefined') {
         return next(action);
     }
 
-    if (isRejectedWithValue(action)) {
+    if (isRejectedWithValue(action) && hasRTKQMeta(action)) {
         const { request, response } = action.meta.baseQueryMeta;
         const method = request.method;
         const status = response?.status;

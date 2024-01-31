@@ -6,7 +6,7 @@ import { logger } from './logger';
 import { isAuthorized } from './auth';
 import { config } from './config';
 
-type AuthenticatedNextApiRequest = NextApiRequest & {
+export type AuthenticatedNextApiRequest = NextApiRequest & {
     currentUserId: number;
 };
 

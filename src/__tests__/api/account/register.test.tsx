@@ -2,6 +2,8 @@ import { createMocks } from 'node-mocks-http';
 import { when } from 'jest-when';
 import handler from '@/pages/api/account/register';
 import { createUser, getUserByEmailAddress } from '@/data/userRepository';
+import { NextApiResponse } from 'next';
+import { AuthenticatedNextApiRequest } from '@/utils/router';
 
 const user = {
     id: 1,
@@ -20,7 +22,10 @@ describe('/api/account/register', () => {
     beforeEach(jest.clearAllMocks);
 
     it('when request invalid should return bad request', async () => {
-        const { req, res } = createMocks({
+        const { req, res } = createMocks<
+            AuthenticatedNextApiRequest,
+            NextApiResponse
+        >({
             method: 'POST'
         });
 
@@ -39,7 +44,10 @@ describe('/api/account/register', () => {
     it('when duplicate email address should return bad request', async () => {
         when(getUserByEmailAddress).mockResolvedValue(user);
 
-        const { req, res } = createMocks({
+        const { req, res } = createMocks<
+            AuthenticatedNextApiRequest,
+            NextApiResponse
+        >({
             method: 'POST',
             body: {
                 emailAddress: user.emailAddress,
@@ -63,7 +71,10 @@ describe('/api/account/register', () => {
         when(getUserByEmailAddress).mockResolvedValue(undefined);
         when(createUser).mockResolvedValue(user.id);
 
-        const { req, res } = createMocks({
+        const { req, res } = createMocks<
+            AuthenticatedNextApiRequest,
+            NextApiResponse
+        >({
             method: 'POST',
             body: {
                 emailAddress: user.emailAddress,
