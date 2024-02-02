@@ -1,7 +1,5 @@
 node_modules
 .idea
 .next
-yarn-debug.log*
-yarn-error.log*
 .env*
 *.tsbuildinfo
