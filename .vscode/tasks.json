@@ -21,9 +21,9 @@
         },
         {
             "type": "npm",
-            "script": "test:ci",
+            "script": "test",
             "problemMatcher": [],
-            "label": "npm: test:ci",
+            "label": "npm: test",
             "detail": "jest --ci",
             "group": {
                 "kind": "test",
