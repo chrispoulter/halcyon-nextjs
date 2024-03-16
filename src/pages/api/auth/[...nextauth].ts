@@ -1,8 +1,7 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { JwtPayload, verify } from 'jsonwebtoken';
 import { createTokenSchema } from '@/features/token/tokenTypes';
-import { getUserByEmailAddress } from '@/data/userRepository';
-import { verifyPassword } from '@/utils/hash';
 import { config } from '@/utils/config';
 
 export const authOptions: AuthOptions = {
@@ -16,34 +15,44 @@ export const authOptions: AuthOptions = {
             async authorize(credentials) {
                 const body = await createTokenSchema.validate(credentials);
 
-                const user = await getUserByEmailAddress(body.emailAddress);
-
-                if (!user || !user.password) {
-                    throw new Error('The credentials provided were invalid.');
-                }
-
-                const verified = await verifyPassword(
-                    body.password,
-                    user.password
+                const response = await fetch(
+                    `${config.EXTERNAL_API_URL}/token`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body)
+                    }
                 );
 
-                if (!verified) {
+                if (!response.ok) {
                     throw new Error('The credentials provided were invalid.');
                 }
 
-                if (user.isLockedOut) {
-                    throw new Error(
-                        'This account has been locked out, please try again later.'
-                    );
-                }
+                const accessToken = await response.text();
 
-                return user;
+                const payload = verify(accessToken, config.JWT_SECURITY_KEY, {
+                    issuer: config.JWT_ISSUER,
+                    audience: config.JWT_AUDIENCE
+                }) as JwtPayload;
+
+                return {
+                    accessToken,
+                    id: parseInt(payload.sub!),
+                    emailAddress: payload.email,
+                    firstName: payload.given_name,
+                    lastName: payload.family_name,
+                    roles:
+                        typeof payload.roles === 'string'
+                            ? [payload.roles]
+                            : payload.roles || []
+                };
             }
         })
     ],
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
+                token.accessToken = user.accessToken;
                 token.email = user.emailAddress;
                 token.name = `${user.firstName} ${user.lastName}`;
                 token.picture = null;
@@ -54,6 +63,7 @@ export const authOptions: AuthOptions = {
         },
         async session({ session, token }) {
             if (session.user) {
+                session.accessToken = token.accessToken;
                 session.user.id = token.sub!;
                 session.user.email = token.email;
                 session.user.name = token.name;

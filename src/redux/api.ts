@@ -5,29 +5,40 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { Action, PayloadAction } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
+import { getServerSession } from 'next-auth';
+import { getSession } from 'next-auth/react';
+import { IncomingMessage, ServerResponse } from 'http';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { RootState } from './store';
 import { config } from '@/utils/config';
 
-const isExtraWithCookies = (
+const isExtraWithContext = (
     extra: unknown
 ): extra is {
-    cookies: Partial<{
-        [key: string]: string;
-    }>;
-} => typeof extra === 'object' && extra != null && 'cookies' in extra;
+    req: IncomingMessage & {
+        cookies: Partial<{
+            [key: string]: string;
+        }>;
+    };
+    res: ServerResponse<IncomingMessage>;
+} =>
+    typeof extra === 'object' &&
+    extra != null &&
+    'req' in extra &&
+    'res' in extra;
 
-const prepareHeaders = (
+const prepareHeaders = async (
     headers: Headers,
     {
         extra
     }: Pick<BaseQueryApi, 'getState' | 'extra' | 'endpoint' | 'type' | 'forced'>
 ) => {
-    if (isExtraWithCookies(extra)) {
-        const cookie = Object.entries(extra.cookies)
-            .map(([key, value]) => `${key}=${value}`)
-            .join('; ');
+    const session = isExtraWithContext(extra)
+        ? await getServerSession(extra.req, extra.res, authOptions)
+        : await getSession();
 
-        headers.set('Cookie', cookie);
+    if (session) {
+        headers.set('Authorization', `Bearer ${session.accessToken}`);
     }
 
     return headers;

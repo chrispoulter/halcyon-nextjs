@@ -13,7 +13,7 @@ export const makeStore = (context: Context) => {
     let extraArgument: unknown = undefined;
 
     if (isGetServerSidePropsContext(context)) {
-        extraArgument = { cookies: context.req.cookies };
+        extraArgument = { req: context.req, res: context.res };
     }
 
     const store = configureStore({

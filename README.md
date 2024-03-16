@@ -8,24 +8,17 @@ A web application template.
     [https://reactjs.org/](https://reactjs.org/)
 -   Next.js
     [https://nextjs.org/](https://nextjs.org/)
--   PostgreSQL
-    [https://www.postgresql.org/](https://www.postgresql.org/)
 
 #### Custom Settings
 
 Create a `.env` file in the web project directory.
 
 ```
-DATABASE_URL=postgres://postgres:password@localhost/halcyon
+EXTERNAL_API_URL=https://localhost:7257
 
-EMAIL_SMTP_SERVER=localhost
-EMAIL_SMTP_PORT=1025
-EMAIL_SMTP_USERNAME=
-EMAIL_SMTP_PASSWORD=
-EMAIL_NO_REPLY_ADDRESS=noreply@example.com
-
-SEED_EMAIL_ADDRESS=system.administrator@example.com
-SEED_PASSWORD=change-me-1234567890
+JWT_SECURITY_KEY=X46npCfZgsMFwJNnLk3Yb9yUPW9x6SuD8ChZ6cVooSZMdtHHPEkwPkQoHUsNDLTanSEiG7y6shTXHePUZ5fr6i5J3R2cMvCRNGeq55jRXRxAeeSwA46ro5bTVSBiif86
+JWT_ISSUER:=HalcyonApi
+JWT_AUDIENCE=HalcyonClient
 
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=YenEZqADi2YnfVCNWMFkcUpmr55ESFepmHgH3NSmPoBeSqf9Hs3Ui8vb6xdkCY9PNewqNxVQdjkqhCGaWeyri48FyDPU9HfKFjbHcfbyq4Fuqmk2suehduYJYzuPoSD8

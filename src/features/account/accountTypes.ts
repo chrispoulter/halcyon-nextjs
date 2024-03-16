@@ -12,7 +12,8 @@ export const registerSchema = object().shape({
 export type RegisterRequest = InferType<typeof registerSchema>;
 
 export const forgotPasswordSchema = object().shape({
-    emailAddress: string().label('Email Address').max(254).email().required()
+    emailAddress: string().label('Email Address').max(254).email().required(),
+    siteUrl: string().label('Site Url').max(254).url().required()
 });
 
 export type ForgotPasswordRequest = InferType<typeof forgotPasswordSchema>;

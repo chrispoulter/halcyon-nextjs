@@ -1,14 +1,23 @@
 import { NextApiHandler } from 'next';
-import { query } from '@/data/db';
 import { logger } from '@/utils/logger';
+import { config } from '@/utils/config';
 
-const dbHealthCheck = async () => {
-    await query<{ connected: boolean }>('SELECT true AS connected');
+const apiHealthCheck = async () => {
+    const response = await fetch(`${config.EXTERNAL_API_URL}/health`, {
+        method: 'GET'
+    });
+
+    if (!response.ok) {
+        throw new Error(
+            `Request failed with status ${response.status} ${response.statusText}`
+        );
+    }
 };
 
 const healthHandler: NextApiHandler = async (_, res) => {
     try {
-        await dbHealthCheck();
+        await apiHealthCheck();
+
         return res.send('Healthy');
     } catch (error) {
         logger.error(error, 'Health check failed');

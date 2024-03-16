@@ -15,7 +15,10 @@ const ForgotPasswordPage = () => {
     const [forgotPassword] = useForgotPasswordMutation();
 
     const onSubmit = async (values: ForgotPasswordFormValues) => {
-        await forgotPassword(values).unwrap();
+        await forgotPassword({
+            ...values,
+            siteUrl: window.location.origin
+        }).unwrap();
 
         toast.success(
             'Instructions as to how to reset your password have been sent to you via email.'

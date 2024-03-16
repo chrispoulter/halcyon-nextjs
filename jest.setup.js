@@ -12,32 +12,12 @@ jest.mock('next/router', () => require('next-router-mock'));
 
 jest.mock('next-auth', () => ({
     __esModule: true,
-    default: jest.fn()
+    default: jest.fn(),
+    getServerSession: jest.fn()
 }));
 
 jest.mock('next-auth/react', () => ({
     __esModule: true,
+    getSession: jest.fn(),
     signIn: jest.fn()
 }));
-
-jest.mock('next-auth/jwt', () => ({
-    getToken: jest.fn()
-}));
-
-jest.mock('@/data/userRepository', () => ({
-    __esModule: true,
-    getUserByEmailAddress: jest.fn(),
-    createUser: jest.fn()
-}));
-
-jest.mock('@/utils/logger', () => ({
-    logger: {
-        info: jest.fn()
-    }
-}));
-
-Object.defineProperty(globalThis, 'crypto', {
-    value: {
-        randomUUID: jest.fn()
-    }
-});

@@ -5,20 +5,13 @@ export const config = {
 
     API_URL: `${process.env.NEXTAUTH_URL || ''}/api`,
 
-    DATABASE_URL:
-        process.env.DATABASE_URL ||
-        'postgres://postgres:password@localhost/halcyon',
+    EXTERNAL_API_URL: process.env.EXTERNAL_API_URL || 'https://localhost:7257',
 
-    EMAIL_SMTP_SERVER: process.env.EMAIL_SMTP_SERVER || 'localhost',
-    EMAIL_SMTP_PORT: parseInt(process.env.EMAIL_SMTP_PORT || '1025'),
-    EMAIL_SMTP_USERNAME: process.env.EMAIL_SMTP_USERNAME,
-    EMAIL_SMTP_PASSWORD: process.env.EMAIL_SMTP_PASSWORD,
-    EMAIL_NO_REPLY_ADDRESS:
-        process.env.EMAIL_NO_REPLY_ADDRESS || 'noreply@example.com',
-
-    SEED_EMAIL_ADDRESS:
-        process.env.SEED_EMAIL_ADDRESS || 'system.administrator@example.com',
-    SEED_PASSWORD: process.env.SEED_PASSWORD || 'change-me-1234567890',
+    JWT_SECURITY_KEY:
+        process.env.JWT_SECURITY_KEY ||
+        'X46npCfZgsMFwJNnLk3Yb9yUPW9x6SuD8ChZ6cVooSZMdtHHPEkwPkQoHUsNDLTanSEiG7y6shTXHePUZ5fr6i5J3R2cMvCRNGeq55jRXRxAeeSwA46ro5bTVSBiif86',
+    JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
+    JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient',
 
     NEXTAUTH_SECRET:
         process.env.NEXTAUTH_SECRET ||
