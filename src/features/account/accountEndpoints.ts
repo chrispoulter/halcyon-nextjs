@@ -1,5 +1,5 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '@/features/commonTypes';
+import { UpdatedResponse } from '@/features/common/commonTypes';
 import {
     RegisterRequest,
     ForgotPasswordRequest,
