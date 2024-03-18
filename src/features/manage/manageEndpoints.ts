@@ -1,5 +1,5 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '@/common/commonTypes';
+import { UpdatedResponse } from '@/features/commonTypes';
 import {
     GetProfileResponse,
     UpdateProfileRequest,
