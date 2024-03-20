@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import { addMethod, string } from 'yup';
 import { now, toDate } from './dates';
 
 declare module 'yup' {
@@ -8,7 +8,7 @@ declare module 'yup' {
     }
 }
 
-yup.addMethod(yup.string, 'dateOnly', function () {
+addMethod(string, 'dateOnly', function () {
     return this.test({
         name: 'date-only',
         message: '${label} must be a valid date',
@@ -22,7 +22,7 @@ yup.addMethod(yup.string, 'dateOnly', function () {
     });
 });
 
-yup.addMethod(yup.string, 'past', function () {
+addMethod(string, 'past', function () {
     return this.test({
         name: 'date-in-past',
         message: '${label} must be in the past',
