@@ -56,7 +56,7 @@ describe('<RegisterPage />', () => {
         expect(heading).toBeInTheDocument();
     });
 
-    it('when form submitted should register user', async () => {
+    it('should register user when form submitted', async () => {
         const response: UpdatedResponse = { id: 1 };
 
         fetchMock.mockResponse(JSON.stringify(response), {
