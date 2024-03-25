@@ -56,7 +56,7 @@ export const ProfileDropdown = () => {
                     <button
                         type="button"
                         onClick={onLogout}
-                        className="w-full px-5 py-3 text-left text-sm text-gray-800 hover:bg-gray-200"
+                        className="block w-full px-5 py-3 text-left text-sm text-gray-800 hover:bg-gray-200"
                     >
                         Log Out
                     </button>
