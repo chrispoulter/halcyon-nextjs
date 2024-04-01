@@ -16,8 +16,6 @@ ARG VERSION=1.0.0
 ENV NEXT_PUBLIC_VERSION=${VERSION}
 
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN npm run lint
-RUN npm test
 RUN npm run build
 
 FROM base AS runner

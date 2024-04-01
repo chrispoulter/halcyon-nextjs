@@ -8,6 +8,23 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  cache: 'npm'
+
+            - name: Build and test
+              run: |
+                  npm ci
+                  npm run lint
+                  npm test
+
+    build-docker:
+        runs-on: ubuntu-latest
         permissions:
             contents: read
             packages: write
@@ -72,4 +89,4 @@ jobs:
               with:
                   app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
                   publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-                  images: 'ghcr.io/${{ env.REPO }}:${{ needs.build.outputs.semVer }}'
+                  images: 'ghcr.io/${{ env.REPO }}:${{ needs.build-docker.outputs.semVer }}'
