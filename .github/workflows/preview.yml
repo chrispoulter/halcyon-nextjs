@@ -18,6 +18,8 @@ jobs:
                   cache: 'npm'
 
             - name: Build and test
+              env:
+                  NEXT_TELEMETRY_DISABLED: 1
               run: |
                   npm ci
                   npm run lint
