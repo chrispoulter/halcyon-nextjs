@@ -19,6 +19,7 @@ jobs:
 
             - name: Build and test
               env:
+                  HUSKY: 0
                   NEXT_TELEMETRY_DISABLED: 1
               run: |
                   npm ci
