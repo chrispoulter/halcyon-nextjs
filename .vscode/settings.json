@@ -4,11 +4,13 @@
         "**/.idea": true,
         "**/.next": true,
         "**/.swc": true,
-        "**/*.tsbuildinfo": true
+        "**/*.tsbuildinfo": true,
+        "**/playwright-report": true,
+        "**/test-results": true
     },
     "css.lint.unknownAtRules": "ignore",
     "tailwindCSS.experimental.classRegex": [
         ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
     ],
-    "jest.autoRun": "off"
+    "jest.runMode": "on-demand"
 }

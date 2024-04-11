@@ -3,6 +3,7 @@ node_modules
 .next
 .env*
 *.tsbuildinfo
+
 /test-results/
 /playwright-report/
 /blob-report/
