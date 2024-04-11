@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
@@ -13,7 +14,7 @@ const customJestConfig = {
         '^@/(.*)$': '<rootDir>/src/$1'
     },
     testEnvironment: 'jest-environment-jsdom',
-    modulePathIgnorePatterns: ['<rootDir>/.next']
+    modulePathIgnorePatterns: ['<rootDir>/.next', '<rootDir>/tests']
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
