@@ -9,10 +9,7 @@
     "plugins": ["@typescript-eslint"],
     "overrides": [
         {
-            "files": [
-                "**/__tests__/**/*.[jt]s?(x)",
-                "**/?(*.)+(spec|test).[jt]s?(x)"
-            ],
+            "files": ["**/__tests__/**/*.[jt]s?(x)"],
             "plugins": ["jest", "testing-library"],
             "extends": [
                 "plugin:jest/recommended",
