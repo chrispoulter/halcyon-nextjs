@@ -43,8 +43,8 @@ jobs:
             - name: Run Playwright tests
               run: |
                   npm ci
-                  npx playwright install --with-deps
-                  npx playwright test
+                  npm run playwright:install
+                  npx run playwright:test
 
             - name: Upload Playwright report
               uses: actions/upload-artifact@v4
