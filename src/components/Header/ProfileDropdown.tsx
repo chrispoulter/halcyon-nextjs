@@ -16,7 +16,11 @@ export const ProfileDropdown = () => {
     }
 
     return (
-        <Menu as="div" className="relative ml-auto sm:order-2 sm:ml-0">
+        <Menu
+            as="div"
+            data-testid="profile-menu"
+            className="relative ml-auto sm:order-2 sm:ml-0"
+        >
             <Menu.Button className="relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full border-2 border-gray-800 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-cyan-500">
                 <span className="font-medium text-gray-900">
                     {user.name![0]}

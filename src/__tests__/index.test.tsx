@@ -3,12 +3,12 @@ import mockRouter from 'next-router-mock';
 import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider';
 import HomePage from '@/pages/index';
 
-describe('<HomePage />', () => {
+describe('home page', () => {
     it('should render a heading', () => {
         render(<HomePage />);
 
         const heading = screen.getByRole('heading', {
-            name: /welcome!/i
+            name: 'Welcome!'
         });
 
         expect(heading).toBeInTheDocument();
@@ -17,7 +17,7 @@ describe('<HomePage />', () => {
     it('should render a register link', () => {
         render(<HomePage />, { wrapper: MemoryRouterProvider });
 
-        const registerLink = screen.getByRole('link', { name: /get started/i });
+        const registerLink = screen.getByRole('link', { name: 'Get Started' });
         fireEvent.click(registerLink);
 
         expect(mockRouter.asPath).toBe('/register');
