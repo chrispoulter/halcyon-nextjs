@@ -14,7 +14,7 @@ import {
 const RegisterPage = () => {
     const router = useRouter();
 
-    const callbackUrl = router.query.callbackUrl as string;
+    const callbackUrl = (router.query.callbackUrl as string) || '/';
 
     const [register] = useRegisterMutation();
 
@@ -26,7 +26,7 @@ const RegisterPage = () => {
         const result = await signIn('credentials', {
             ...values,
             redirect: false,
-            callbackUrl: callbackUrl || '/'
+            callbackUrl
         });
 
         if (!result?.ok) {
