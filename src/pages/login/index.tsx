@@ -13,13 +13,13 @@ import {
 const LoginPage = () => {
     const router = useRouter();
 
-    const callbackUrl = router.query.callbackUrl as string;
+    const callbackUrl = (router.query.callbackUrl as string) || '/';
 
     const onSubmit = async (values: LoginFormValues) => {
         const result = await signIn('credentials', {
             ...values,
             redirect: false,
-            callbackUrl: callbackUrl || '/'
+            callbackUrl
         });
 
         if (!result?.ok) {
