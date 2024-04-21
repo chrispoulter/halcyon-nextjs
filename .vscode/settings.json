@@ -10,5 +10,5 @@
     "tailwindCSS.experimental.classRegex": [
         ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
     ],
-    "jest.autoRun": "off"
+    "jest.runMode": "on-demand"
 }

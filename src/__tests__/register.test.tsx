@@ -1,48 +1,51 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
 import { signIn } from 'next-auth/react';
+import { randomUUID } from 'crypto';
 import RegisterPage from '@/pages/register';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
 import { storeWrapper } from '@/utils/test-utils';
 
 const fillRegisterForm = (values: RegisterFormValues) => {
-    const emailInput = screen.getByLabelText(/email address/i);
+    const emailInput = screen.getByLabelText('Email Address');
     fireEvent.change(emailInput, { target: { value: values.emailAddress } });
 
-    const passwordInput = screen.getAllByLabelText(/password/i);
-    fireEvent.change(passwordInput[0], {
+    const passwordInput = screen.getByLabelText('Password', { exact: true });
+    fireEvent.change(passwordInput, {
         target: { value: values.password }
     });
-    fireEvent.change(passwordInput[1], {
+
+    const confirmPasswordInput = screen.getByLabelText('Confirm Password');
+    fireEvent.change(confirmPasswordInput, {
         target: { value: values.confirmPassword }
     });
 
-    const firstNameInput = screen.getByLabelText(/first name/i);
+    const firstNameInput = screen.getByLabelText('First Name');
     fireEvent.change(firstNameInput, { target: { value: values.firstName } });
 
-    const lastNameInput = screen.getByLabelText(/last name/i);
+    const lastNameInput = screen.getByLabelText('Last Name');
     fireEvent.change(lastNameInput, { target: { value: values.lastName } });
 
     const [year, month, date] = values.dateOfBirth.split('-');
 
-    const dobDateSelect = screen.getByLabelText(/date of birth date/i);
+    const dobDateSelect = screen.getByLabelText('Date Of Birth Date');
     fireEvent.change(dobDateSelect, {
         target: { value: date }
     });
 
-    const dobMonthSelect = screen.getByLabelText(/date of birth month/i);
+    const dobMonthSelect = screen.getByLabelText('Date Of Birth Month');
     fireEvent.change(dobMonthSelect, {
         target: { value: month }
     });
 
-    const dobYearSelect = screen.getByLabelText(/date of birth year/i);
+    const dobYearSelect = screen.getByLabelText('Date Of Birth Year');
     fireEvent.change(dobYearSelect, {
         target: { value: year }
     });
 };
 
-describe('<RegisterPage />', () => {
+describe('register page', () => {
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 
@@ -50,7 +53,7 @@ describe('<RegisterPage />', () => {
         render(<RegisterPage />, { wrapper: storeWrapper });
 
         const heading = screen.getByRole('heading', {
-            name: /register/i
+            name: 'Register'
         });
 
         expect(heading).toBeInTheDocument();
@@ -66,15 +69,15 @@ describe('<RegisterPage />', () => {
         render(<RegisterPage />, { wrapper: storeWrapper });
 
         fillRegisterForm({
-            emailAddress: 'test@example.com',
-            password: 'Testing123',
-            confirmPassword: 'Testing123',
-            firstName: 'John',
-            lastName: 'Smith',
+            emailAddress: `${randomUUID()}@example.com`,
+            password: 'password',
+            confirmPassword: 'password',
+            firstName: 'Test',
+            lastName: 'User',
             dateOfBirth: '1970-01-01'
         });
 
-        const registerButton = screen.getByRole('button', { name: /submit/i });
+        const registerButton = screen.getByRole('button', { name: 'Submit' });
         fireEvent.click(registerButton);
 
         await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
