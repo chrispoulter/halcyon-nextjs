@@ -4,7 +4,6 @@ node_modules
 .env*
 *.tsbuildinfo
 
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+playwright
+playwright-report
+test-results

@@ -5,6 +5,7 @@
         "**/.next": true,
         "**/.swc": true,
         "**/*.tsbuildinfo": true,
+        "**/playwright": true,
         "**/playwright-report": true,
         "**/test-results": true
     },

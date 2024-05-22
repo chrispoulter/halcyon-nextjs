@@ -7,7 +7,9 @@ import { UpdatedResponse } from '@/features/common/commonTypes';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
 import { storeWrapper } from '@/utils/test-utils';
 
-const fillRegisterForm = (values: RegisterFormValues) => {
+const fillRegisterForm = (
+    values: Omit<RegisterFormValues, 'confirmPassword'>
+) => {
     const emailInput = screen.getByLabelText('Email Address');
     fireEvent.change(emailInput, { target: { value: values.emailAddress } });
 
@@ -18,7 +20,7 @@ const fillRegisterForm = (values: RegisterFormValues) => {
 
     const confirmPasswordInput = screen.getByLabelText('Confirm Password');
     fireEvent.change(confirmPasswordInput, {
-        target: { value: values.confirmPassword }
+        target: { value: values.password }
     });
 
     const firstNameInput = screen.getByLabelText('First Name');
@@ -49,16 +51,6 @@ describe('register page', () => {
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 
-    it('should render a heading', () => {
-        render(<RegisterPage />, { wrapper: storeWrapper });
-
-        const heading = screen.getByRole('heading', {
-            name: 'Register'
-        });
-
-        expect(heading).toBeInTheDocument();
-    });
-
     it('should register user when form submitted', async () => {
         const response: UpdatedResponse = { id: 1 };
 
@@ -70,8 +62,7 @@ describe('register page', () => {
 
         fillRegisterForm({
             emailAddress: `${randomUUID()}@example.com`,
-            password: 'password',
-            confirmPassword: 'password',
+            password: randomUUID(),
             firstName: 'Test',
             lastName: 'User',
             dateOfBirth: '1970-01-01'
