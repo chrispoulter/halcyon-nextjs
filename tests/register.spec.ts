@@ -33,6 +33,8 @@ test.describe('register page', () => {
 
         await page.getByRole('button', { name: 'Submit' }).click();
 
+        await page.waitForURL('/');
+
         await expect(page.getByRole('button', { name: /T/ })).toBeVisible();
     });
 });
