@@ -28,7 +28,7 @@ jobs:
                   npm run playwright:install
                   npm run playwright:test
               env:
-                  PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment_status.target_url }}
+                  PLAYWRIGHT_TEST_BASE_URL: ${{ vars.URL }}
 
             - name: Upload Playwright report
               uses: actions/upload-artifact@v4
