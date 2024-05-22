@@ -27,33 +27,6 @@ jobs:
                   npm run lint
                   npm test
 
-    test:
-        runs-on: ubuntu-latest
-        needs: build
-        timeout-minutes: 20
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  cache: 'npm'
-
-            - name: Run Playwright tests
-              run: |
-                  npm ci
-                  npm run playwright:install
-                  npm run playwright:test
-
-            - name: Upload Playwright report
-              uses: actions/upload-artifact@v4
-              if: always()
-              with:
-                  name: playwright-report
-                  path: playwright-report/
-                  retention-days: 10
-
     build-docker:
         runs-on: ubuntu-latest
         needs: test

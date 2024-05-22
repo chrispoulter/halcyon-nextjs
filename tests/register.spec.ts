@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 const fillRegisterForm = async (page: Page, values: any) => {
     await page.getByLabel('Email Address').fill(values.emailAddress);
     await page.getByLabel('Password', { exact: true }).fill(values.password);
-    await page.getByLabel('Confirm Password').fill(values.confirmPassword);
+    await page.getByLabel('Confirm Password').fill(values.password);
     await page.getByLabel('First Name').fill(values.firstName);
     await page.getByLabel('Last Name').fill(values.lastName);
 
@@ -25,8 +25,7 @@ test.describe('register page', () => {
 
         await fillRegisterForm(page, {
             emailAddress: `${randomUUID()}@example.com`,
-            password: 'password',
-            confirmPassword: 'password',
+            password: randomUUID(),
             firstName: 'Test',
             lastName: 'User',
             dateOfBirth: '1970-01-01'
