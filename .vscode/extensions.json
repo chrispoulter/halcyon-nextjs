@@ -3,6 +3,7 @@
         "mikestead.dotenv",
         "dbaeumer.vscode-eslint",
         "Orta.vscode-jest",
+        "ms-playwright.playwright",
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss"
     ]

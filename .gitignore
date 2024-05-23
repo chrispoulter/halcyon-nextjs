@@ -3,3 +3,7 @@ node_modules
 .next
 .env*
 *.tsbuildinfo
+
+playwright
+playwright-report
+test-results

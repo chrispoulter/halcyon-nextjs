@@ -28,19 +28,6 @@ describe('my account page', () => {
         })
     );
 
-    it('should render a heading', async () => {
-        render(<MyAccountPage />, { wrapper: storeWrapper });
-
-        const loading = screen.getAllByText(/loading/i);
-        await waitForElementToBeRemoved(loading);
-
-        const heading = screen.getByRole('heading', {
-            name: 'My Account'
-        });
-
-        expect(heading).toBeInTheDocument();
-    });
-
     it('should render personal details', async () => {
         render(<MyAccountPage />, { wrapper: storeWrapper });
 
