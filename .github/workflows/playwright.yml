@@ -18,7 +18,7 @@ env:
 jobs:
     test:
         runs-on: ubuntu-latest
-        environment: ${{ github.event.inputs.environment }}
+        environment: ${{ inputs.environment }}
         timeout-minutes: 20
         steps:
             - name: Checkout code
