@@ -1,6 +1,8 @@
-import { test, expect, Page } from '@playwright/test';
+import { Page, expect, test as setup } from '@playwright/test';
 import { randomUUID } from 'crypto';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
+
+const userFile = 'playwright/.auth/user.json';
 
 const fillRegisterForm = async (
     page: Page,
@@ -18,26 +20,24 @@ const fillRegisterForm = async (
     await page.getByLabel('Date Of Birth Year').selectOption(year);
 };
 
-test.use({ storageState: { cookies: [], origins: [] } });
+setup('register a new user', async ({ page }) => {
+    await page.goto('/register');
 
-test.describe('register page', () => {
-    test('should register user when form submitted', async ({ page }) => {
-        await page.goto('/register');
-
-        await fillRegisterForm(page, {
-            emailAddress: `${randomUUID()}@example.com`,
-            password: randomUUID(),
-            firstName: 'Test',
-            lastName: 'User',
-            dateOfBirth: '1970-01-01'
-        });
-
-        await page.getByRole('button', { name: 'Submit' }).click();
-
-        await page.waitForURL('/');
-
-        await expect(
-            page.getByRole('button', { name: 'T', exact: true })
-        ).toBeVisible();
+    await fillRegisterForm(page, {
+        emailAddress: `${randomUUID()}@example.com`,
+        password: randomUUID(),
+        firstName: 'Test',
+        lastName: 'User',
+        dateOfBirth: '1970-01-01'
     });
+
+    await page.getByRole('button', { name: 'Submit' }).click();
+
+    await page.waitForURL('/');
+
+    await expect(
+        page.getByRole('button', { name: 'T', exact: true })
+    ).toBeVisible();
+
+    await page.context().storageState({ path: userFile });
 });
