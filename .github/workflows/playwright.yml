@@ -1,6 +1,15 @@
 name: Playwright Tests
 
-on: workflow_dispatch
+on:
+    workflow_dispatch:
+        inputs:
+            environment:
+                type: choice
+                description: Select the environment
+                required: true
+                options:
+                    - Preview
+                    - Production
 
 env:
     HUSKY: 0
@@ -9,6 +18,7 @@ env:
 jobs:
     test:
         runs-on: ubuntu-latest
+        environment: ${{ github.event.inputs.environment }}
         timeout-minutes: 20
         steps:
             - name: Checkout code
