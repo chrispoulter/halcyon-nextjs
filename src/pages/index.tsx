@@ -1,105 +1,79 @@
+import {
+    Jumbotron,
+    JumbotronBody,
+    JumbotronTitle
+} from '@/components/Jumbotron/Jumbotron';
+import { ButtonLink } from '@/components/Button/ButtonLink';
+import { ButtonGroup } from '@/components/Button/ButtonGroup';
+import { Container } from '@/components/Container/Container';
+
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-import { useEffect, useState } from 'react';
-import {
-    HubConnection,
-    HubConnectionBuilder,
-    LogLevel
-} from '@microsoft/signalr';
-import { config } from '@/utils/config';
+import { Chat } from '@/components/Chat/Chat';
 
-type Message = {
-    sender: string;
-    content: string;
-    sentTime: Date;
-};
+const HomePage = () => (
+    <>
+        <Chat />
+        <Jumbotron>
+            <JumbotronTitle>Welcome!</JumbotronTitle>
+            <JumbotronBody>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
+                semper diam at erat pulvinar, at pulvinar felis blandit.
+                Vestibulum volutpat tellus diam, consequat gravida libero
+                rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc
+                dui porta orci, quis semper odio felis ut quam.
+            </JumbotronBody>
+            <ButtonGroup>
+                <ButtonLink href="/register" size="lg">
+                    Get Started
+                </ButtonLink>
+            </ButtonGroup>
+        </Jumbotron>
 
-const HomePage = () => {
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [newMessage, setNewMessage] = useState('');
-    const [connection, setConnection] = useState<HubConnection | null>(null);
+        <Container>
+            <div className="md:flex md:gap-5">
+                <div className="mb-3 flex-1">
+                    <h2 className="mb-3 border-b pb-3 text-2xl font-light leading-tight text-gray-900">
+                        Fusce condimentum
+                    </h2>
 
-    useEffect(() => {
-        const connect = new HubConnectionBuilder()
-            .withUrl(`${config.EXTERNAL_API_URL}/hub`)
-            .withAutomaticReconnect()
-            .configureLogging(LogLevel.Information)
-            .build();
+                    <p className="mb-3 text-gray-600">
+                        Fusce vitae commodo metus. Pellentesque a eleifend
+                        dolor. Morbi et finibus elit, accumsan sodales turpis.
+                        Nulla bibendum pulvinar enim vitae malesuada. Nullam
+                        nulla justo, ullamcorper et dui vel, pulvinar mattis
+                        enim. Ut dignissim laoreet neque, eget placerat nisl
+                        auctor ac. Quisque id quam sollicitudin, suscipit dui a,
+                        tempus justo. Aliquam iaculis nisl lacus, non accumsan
+                        velit facilisis sed. Nulla commodo sapien sit amet
+                        mauris sollicitudin, in lobortis quam lacinia. Donec at
+                        pharetra neque, in accumsan dolor.
+                    </p>
+                </div>
+                <div className="mb-3 flex-1">
+                    <h2 className="mb-3 border-b pb-3 text-2xl font-light leading-tight text-gray-900">
+                        Morbi venenatis
+                    </h2>
 
-        setConnection(connect);
-
-        connect
-            .start()
-            .then(() => {
-                connect.on('ReceiveMessage', (sender, content, sentTime) => {
-                    setMessages(prev => [
-                        ...prev,
-                        { sender, content, sentTime }
-                    ]);
-                });
-
-                connect.invoke('RetrieveMessageHistory');
-            })
-            .catch(err =>
-                console.error('Error while connecting to SignalR Hub:', err)
-            );
-
-        return () => {
-            if (connection) {
-                connection.off('ReceiveMessage');
-            }
-        };
-    }, []);
-
-    const sendMessage = async () => {
-        if (connection && newMessage.trim()) {
-            await connection.send('PostMessage', newMessage);
-            setNewMessage('');
-        }
-    };
-
-    const isMyMessage = (username: string) => {
-        return connection && username === connection.connectionId;
-    };
-
-    return (
-        <div className="p-4">
-            <div className="mb-4">
-                {messages.map((msg, index) => (
-                    <div
-                        key={index}
-                        className={`p-2 my-2 rounded ${
-                            isMyMessage(msg.sender)
-                                ? 'bg-blue-200'
-                                : 'bg-gray-200'
-                        }`}
-                    >
-                        <p>{msg.content}</p>
-                        <p className="text-xs">
-                            {new Date(msg.sentTime).toLocaleString()}
-                        </p>
-                    </div>
-                ))}
+                    <p className="mb-3 text-gray-600">
+                        Morbi venenatis, felis ut cursus volutpat, dolor tortor
+                        pulvinar nisl, ac scelerisque quam tortor sit amet ante.
+                        Aliquam feugiat nisl arcu, sit amet tincidunt erat
+                        tempus ut. Quisque laoreet purus et tempor dignissim.
+                        Phasellus vehicula dapibus quam eget faucibus. Sed non
+                        posuere lorem. Mauris sit amet risus imperdiet,
+                        scelerisque velit at, condimentum nisl. Integer at
+                        ligula nisl. Donec sodales justo mi, et bibendum enim
+                        bibendum quis. Vestibulum non magna auctor massa
+                        efficitur maximus.
+                    </p>
+                </div>
             </div>
-            <div className="d-flex justify-row">
-                <input
-                    type="text"
-                    className="border p-2 mr-2 rounded w-[300px]"
-                    value={newMessage}
-                    onChange={e => setNewMessage(e.target.value)}
-                />
-                <button
-                    onClick={sendMessage}
-                    className="bg-blue-500 text-white p-2 rounded"
-                >
-                    Send
-                </button>
-            </div>
-        </div>
-    );
-};
+        </Container>
+    </>
+);
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => ({
     props: {
