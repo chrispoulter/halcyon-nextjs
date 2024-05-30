@@ -24,25 +24,36 @@ export const Chat = () => {
             .configureLogging(LogLevel.Information)
             .build();
 
+        console.log('booom', connection);
+
         setConnection(connect);
 
         connect
             .start()
             .then(() => {
+                console.log('STARTED');
+
                 connect.on('ReceiveMessage', (sender, content, sentTime) => {
+                    console.log('RECIEVED MESSAGE');
                     setMessages(prev => [
                         ...prev,
                         { sender, content, sentTime }
                     ]);
                 });
 
-                connect.invoke('RetrieveMessageHistory');
+                connect
+                    .invoke('RetrieveMessageHistory')
+                    .then((history: Message[]) => {
+                        console.log('RECIEVED HISTORY', history);
+                        if (history) setMessages(prev => [...prev, ...history]);
+                    });
             })
             .catch(err =>
                 console.error('Error while connecting to SignalR Hub:', err)
             );
 
         return () => {
+            console.log('CLOSE CONNECTION');
             if (connection) {
                 connection.off('ReceiveMessage');
             }
@@ -50,7 +61,9 @@ export const Chat = () => {
     }, []);
 
     const sendMessage = async () => {
-        if (connection && newMessage.trim()) {
+        console.log('POST MESSAGE');
+
+        if (connection) {
             await connection.send('PostMessage', newMessage);
             setNewMessage('');
         }
