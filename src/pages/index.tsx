@@ -11,11 +11,8 @@ import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-import { Chat } from '@/components/Chat/Chat';
-
 const HomePage = () => (
     <>
-        <Chat />
         <Jumbotron>
             <JumbotronTitle>Welcome!</JumbotronTitle>
             <JumbotronBody>
