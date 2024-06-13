@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
     HubConnection,
     HubConnectionBuilder,
     LogLevel
 } from '@microsoft/signalr';
 import { useSession } from 'next-auth/react';
+import { ButtonGroup } from '../Button/ButtonGroup';
+import { Button } from '../Button/Button';
 import { config } from '@/utils/config';
 
 export const Messages = () => {
@@ -14,15 +16,15 @@ export const Messages = () => {
 
     const [connection, setConnection] = useState<HubConnection | null>(null);
 
-    useEffect(() => {
-        console.log('LOADED');
+    const onConnect = () => {
+        console.log('onConnect');
 
         if (isLoading || !session) {
             return;
         }
 
         const connect = new HubConnectionBuilder()
-            .withUrl(`${config.EXTERNAL_API_URL}/hub`, {
+            .withUrl(`${config.EXTERNAL_API_URL}/messages`, {
                 accessTokenFactory: () => session?.accessToken,
                 withCredentials: false
             })
@@ -44,14 +46,33 @@ export const Messages = () => {
             .catch(err =>
                 console.error('Error while connecting to SignalR Hub', err)
             );
+    };
 
-        return () => {
-            console.log('CLOSED');
-            if (connection) {
-                connection.off('ReceiveMessage');
-            }
-        };
-    }, [isLoading, session]);
+    const onDisconnect = () => {
+        console.log('onDisconnect');
+        if (connection) {
+            connection
+                .stop()
+                .then(() => {
+                    console.log('STOPPED');
+                })
+                .catch(err =>
+                    console.error(
+                        'Error while disconnecting from SignalR Hub',
+                        err
+                    )
+                );
+        }
+    };
 
-    return null;
+    return (
+        <ButtonGroup>
+            <Button type="button" loading={isLoading} onClick={onDisconnect}>
+                Disconnect
+            </Button>
+            <Button type="button" loading={isLoading} onClick={onConnect}>
+                Connect
+            </Button>
+        </ButtonGroup>
+    );
 };
