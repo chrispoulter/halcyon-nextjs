@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-    HttpTransportType,
     HubConnection,
     HubConnectionBuilder,
     LogLevel
@@ -22,7 +21,7 @@ export const Messages = () => {
 
         const connect = new HubConnectionBuilder()
             .withUrl(`${config.EXTERNAL_API_URL}/messages`, {
-                transport: HttpTransportType.ServerSentEvents,
+                // transport: HttpTransportType.ServerSentEvents,
                 accessTokenFactory: () => session?.accessToken || '',
                 withCredentials: false
             })
