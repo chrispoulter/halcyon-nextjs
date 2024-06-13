@@ -34,7 +34,7 @@ export const Messages = () => {
         connect
             .start()
             .then(() => {
-                toast('Connected');
+                toast.success('Connected');
 
                 connect.on('ReceiveMessage', message => {
                     toast.success(`Message: ${JSON.stringify(message)}`);
