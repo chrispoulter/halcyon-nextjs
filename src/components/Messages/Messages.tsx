@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import {
+    HttpTransportType,
     HubConnection,
     HubConnectionBuilder,
     LogLevel
 } from '@microsoft/signalr';
 import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 import { ButtonGroup } from '../Button/ButtonGroup';
 import { Button } from '../Button/Button';
 import { config } from '@/utils/config';
@@ -17,11 +19,9 @@ export const Messages = () => {
     const [connection, setConnection] = useState<HubConnection | null>(null);
 
     const onConnect = () => {
-        console.log('onConnect');
-
         const connect = new HubConnectionBuilder()
             .withUrl(`${config.EXTERNAL_API_URL}/messages`, {
-                // transport: HttpTransportType.ServerSentEvents,
+                transport: HttpTransportType.ServerSentEvents,
                 accessTokenFactory: () => session?.accessToken || '',
                 withCredentials: false
             })
@@ -34,31 +34,21 @@ export const Messages = () => {
         connect
             .start()
             .then(() => {
-                console.log('STARTED');
+                toast('Connected');
 
                 connect.on('ReceiveMessage', message => {
-                    console.log('RECEIVED', message);
+                    toast.success(`Message: ${JSON.stringify(message)}`);
                 });
             })
-            .catch(err =>
-                console.error('Error while connecting to SignalR Hub', err)
-            );
+            .catch(() => toast.error('Error'));
     };
 
     const onDisconnect = () => {
-        console.log('onDisconnect');
         if (connection) {
             connection
                 .stop()
-                .then(() => {
-                    console.log('STOPPED');
-                })
-                .catch(err =>
-                    console.error(
-                        'Error while disconnecting from SignalR Hub',
-                        err
-                    )
-                );
+                .then(() => toast.success('Disconnected'))
+                .catch(() => toast.error('Error'));
         }
     };
 
