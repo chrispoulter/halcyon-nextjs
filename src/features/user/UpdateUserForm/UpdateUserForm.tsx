@@ -1,5 +1,5 @@
-import { Formik, Form } from 'formik';
-import { object, string, array, InferType } from 'yup';
+import { Formik, Form, Field } from 'formik';
+import { object, string, array, InferType, number } from 'yup';
 import { Input } from '@/components/Form/Input';
 import { InputSkeleton } from '@/components/Form/InputSkeleton';
 import { DatePicker } from '@/components/Form/DatePicker';
@@ -16,12 +16,16 @@ const schema = object({
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: string().label('Date Of Birth').required().dateOnly().past(),
-    roles: array().of(string().label('Role').required()).label('Roles')
+    roles: array().of(string().label('Role').required()).label('Roles'),
+    version: number().label('Version').required()
 });
 
 export type UpdateUserFormValues = InferType<typeof schema>;
 
-export type UpdateUserFormState = { isSubmitting: boolean };
+export type UpdateUserFormState = {
+    isSubmitting: boolean;
+    values: UpdateUserFormValues;
+};
 
 type UpdateUserFormProps = {
     user?: UpdateUserFormValues;
@@ -53,8 +57,9 @@ const UpdateUserFormInternal = ({
     options
 }: UpdateUserFormInternalProps) => (
     <Formik initialValues={user} validationSchema={schema} onSubmit={onSubmit}>
-        {({ isSubmitting }) => (
+        {({ isSubmitting, values }) => (
             <Form noValidate>
+                <Field type="hidden" name="version" />
                 <Input
                     label="Email Address"
                     name="emailAddress"
@@ -106,7 +111,7 @@ const UpdateUserFormInternal = ({
                     />
                 </div>
                 <ButtonGroup>
-                    {options && options({ isSubmitting })}
+                    {options && options({ isSubmitting, values })}
                     <Button
                         type="submit"
                         loading={isSubmitting}

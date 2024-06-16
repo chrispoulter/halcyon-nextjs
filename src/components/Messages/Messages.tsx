@@ -6,7 +6,9 @@ import {
     LogLevel
 } from '@microsoft/signalr';
 import { useSession } from 'next-auth/react';
+import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
+import { api } from '@/redux/api';
 import { ButtonGroup } from '../Button/ButtonGroup';
 import { Button } from '../Button/Button';
 import { config } from '@/utils/config';
@@ -15,6 +17,8 @@ export const Messages = () => {
     const { data: session, status } = useSession();
 
     const isLoading = status === 'loading';
+
+    const dispatch = useDispatch();
 
     const [connection, setConnection] = useState<HubConnection | null>(null);
 
@@ -38,6 +42,17 @@ export const Messages = () => {
 
                 connect.on('ReceiveMessage', message => {
                     toast.success(`Message: ${JSON.stringify(message)}`);
+
+                    switch (message.entity) {
+                        case 'User':
+                            dispatch(
+                                api.util.invalidateTags([
+                                    { type: 'User', id: message.id },
+                                    { type: 'User', id: 'PARTIAL-LIST' }
+                                ] as any)
+                            );
+                            break;
+                    }
                 });
             })
             .catch(() => toast.error('Error'));

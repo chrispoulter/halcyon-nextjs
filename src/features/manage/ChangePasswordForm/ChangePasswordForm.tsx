@@ -1,5 +1,5 @@
-import { Formik, Form } from 'formik';
-import { InferType, object, ref, string } from 'yup';
+import { Formik, Form, Field } from 'formik';
+import { InferType, number, object, ref, string } from 'yup';
 import { GetProfileResponse } from '@/features/manage/manageTypes';
 import { Input } from '@/components/Form/Input';
 import { Button } from '@/components/Button/Button';
@@ -13,7 +13,8 @@ const schema = object({
     confirmNewPassword: string()
         .label('Confirm New Password')
         .required()
-        .oneOf([ref('newPassword')], 'Passwords do not match')
+        .oneOf([ref('newPassword')], 'Passwords do not match'),
+    version: number().label('Version').required()
 });
 
 export type ChangePasswordFormValues = InferType<typeof schema>;
@@ -49,6 +50,7 @@ const ChangePasswordFormInternal = ({
     >
         {({ isSubmitting }) => (
             <Form noValidate className={className}>
+                <Field type="hidden" name="version" />
                 <Input
                     label="Current Password"
                     name="currentPassword"
