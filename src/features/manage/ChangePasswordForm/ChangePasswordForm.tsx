@@ -28,6 +28,10 @@ type ChangePasswordFormProps = {
     className?: string;
 };
 
+type ChangePasswordFormInternalProps = ChangePasswordFormProps & {
+    profile: GetProfileResponse;
+};
+
 const ChangePasswordFormLoading = () => (
     <FormSkeleton>
         <InputSkeleton className="mb-3" />
@@ -39,12 +43,13 @@ const ChangePasswordFormLoading = () => (
 );
 
 const ChangePasswordFormInternal = ({
+    profile: { version },
     onSubmit,
     options,
     className
-}: ChangePasswordFormProps) => (
+}: ChangePasswordFormInternalProps) => (
     <Formik
-        initialValues={initialValues}
+        initialValues={{ ...initialValues, version }}
         validationSchema={schema}
         onSubmit={onSubmit}
     >
@@ -103,5 +108,11 @@ export const ChangePasswordForm = ({
         return <ChangePasswordFormLoading />;
     }
 
-    return <ChangePasswordFormInternal onSubmit={onSubmit} options={options} />;
+    return (
+        <ChangePasswordFormInternal
+            profile={profile}
+            onSubmit={onSubmit}
+            options={options}
+        />
+    );
 };
