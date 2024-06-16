@@ -54,29 +54,29 @@ const UpdateUserPage = () => {
         await router.push('/user');
     };
 
-    const onDelete = async (values: UpdateUserFormValues) => {
+    const onDelete = async ({ version }: UpdateUserFormValues) => {
         await deleteUser({
             id,
-            body: { version: values.version }
+            body: { version }
         }).unwrap();
 
         toast.success('User successfully deleted.');
         await router.push('/user');
     };
 
-    const onLock = async (values: UpdateUserFormValues) => {
+    const onLock = async ({ version }: UpdateUserFormValues) => {
         await lockUser({
             id,
-            body: { version: values.version }
+            body: { version }
         }).unwrap();
 
         toast.success('User successfully locked.');
     };
 
-    const onUnlock = async (values: UpdateUserFormValues) => {
+    const onUnlock = async ({ version }: UpdateUserFormValues) => {
         await unlockUser({
             id,
-            body: { version: values.version }
+            body: { version }
         }).unwrap();
 
         toast.success('User successfully unlocked.');
