@@ -49,7 +49,7 @@ export const Messages = () => {
                                 api.util.invalidateTags([
                                     { type: 'User', id: message.id },
                                     { type: 'User', id: 'PARTIAL-LIST' }
-                                ] as any)
+                                ])
                             );
                             break;
                     }
