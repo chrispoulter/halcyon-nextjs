@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import {
     HttpTransportType,
-    HubConnection,
     HubConnectionBuilder,
     LogLevel
 } from '@microsoft/signalr';
@@ -9,72 +8,62 @@ import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { api } from '@/redux/api';
-import { ButtonGroup } from '../Button/ButtonGroup';
-import { Button } from '../Button/Button';
 import { config } from '@/utils/config';
 
 export const Messages = () => {
-    const { data: session, status } = useSession();
-
-    const isLoading = status === 'loading';
+    const { data: session } = useSession();
 
     const dispatch = useDispatch();
 
-    const [connection, setConnection] = useState<HubConnection | null>(null);
+    const accessToken = session?.accessToken || '';
 
-    const onConnect = () => {
+    useEffect(() => {
+        toast.success(`useEffect ${!!accessToken}`);
+
         const connect = new HubConnectionBuilder()
             .withUrl(`${config.EXTERNAL_API_URL}/messages`, {
                 transport: HttpTransportType.ServerSentEvents,
-                accessTokenFactory: () => session?.accessToken || '',
+                accessTokenFactory: () => accessToken,
                 withCredentials: false
             })
             .withAutomaticReconnect()
             .configureLogging(LogLevel.Information)
             .build();
 
-        setConnection(connect);
+        connect.on('ReceiveMessage', message => {
+            toast.success(`ReceiveMessage: ${JSON.stringify(message)}`);
+
+            switch (message.entity) {
+                case 'User':
+                    dispatch(
+                        api.util.invalidateTags([
+                            { type: 'User', id: message.id },
+                            { type: 'User', id: 'PARTIAL-LIST' }
+                        ])
+                    );
+                    break;
+            }
+        });
 
         connect
             .start()
             .then(() => {
-                toast.success('Connected');
-
-                connect.on('ReceiveMessage', message => {
-                    toast.success(`Message: ${JSON.stringify(message)}`);
-
-                    switch (message.entity) {
-                        case 'User':
-                            dispatch(
-                                api.util.invalidateTags([
-                                    { type: 'User', id: message.id },
-                                    { type: 'User', id: 'PARTIAL-LIST' }
-                                ])
-                            );
-                            break;
-                    }
-                });
+                toast.success('Started');
             })
-            .catch(() => toast.error('Error'));
-    };
+            .catch(error => toast.error(`Start Error: ${error.message}`));
 
-    const onDisconnect = () => {
-        if (connection) {
-            connection
-                .stop()
-                .then(() => toast.success('Disconnected'))
-                .catch(() => toast.error('Error'));
-        }
-    };
+        return () => {
+            connect.off('ReceiveMessage');
+            toast.success('Stopped');
 
-    return (
-        <ButtonGroup>
-            <Button type="button" loading={isLoading} onClick={onDisconnect}>
-                Disconnect
-            </Button>
-            <Button type="button" loading={isLoading} onClick={onConnect}>
-                Connect
-            </Button>
-        </ButtonGroup>
-    );
+            // connect
+            //     .stop()
+            //     .then(() => {
+            //         toast.success('Stopped');
+            //     })
+            //     .catch(error => toast.error(`Stop Error: ${error.message}`));
+        };
+    }, []);
+
+    return null;
 };
