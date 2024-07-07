@@ -1,37 +1,37 @@
 import { useEffect } from 'react';
-import {
-    HttpTransportType,
-    HubConnectionBuilder,
-    LogLevel
-} from '@microsoft/signalr';
 import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
-import toast from 'react-hot-toast';
 import { api } from '@/redux/api';
-import { config } from '@/utils/config';
+import { ConnectionManager } from './connectionMananger';
+
+enum ChangeType {
+    Added,
+    Modified,
+    Deleted
+}
+
+type Message = {
+    id?: number;
+    entity: string;
+    changeType: ChangeType;
+};
+
+const connection = new ConnectionManager();
 
 export const Messages = () => {
-    const { data: session } = useSession();
-
     const dispatch = useDispatch();
+
+    const { data: session } = useSession();
 
     const accessToken = session?.accessToken || '';
 
     useEffect(() => {
-        toast.success(`useEffect ${!!accessToken}`);
+        if (!accessToken) {
+            return;
+        }
 
-        const connect = new HubConnectionBuilder()
-            .withUrl(`${config.EXTERNAL_API_URL}/messages`, {
-                transport: HttpTransportType.ServerSentEvents,
-                accessTokenFactory: () => accessToken,
-                withCredentials: false
-            })
-            .withAutomaticReconnect()
-            .configureLogging(LogLevel.Information)
-            .build();
-
-        connect.on('ReceiveMessage', message => {
-            toast.success(`ReceiveMessage: ${JSON.stringify(message)}`);
+        const onMessageReceived = (message: Message) => {
+            console.log('Message received:', message);
 
             switch (message.entity) {
                 case 'User':
@@ -43,27 +43,14 @@ export const Messages = () => {
                     );
                     break;
             }
-        });
-
-        connect
-            .start()
-            .then(() => {
-                toast.success('Started');
-            })
-            .catch(error => toast.error(`Start Error: ${error.message}`));
-
-        return () => {
-            connect.off('ReceiveMessage');
-            toast.success('Stopped');
-
-            // connect
-            //     .stop()
-            //     .then(() => {
-            //         toast.success('Stopped');
-            //     })
-            //     .catch(error => toast.error(`Stop Error: ${error.message}`));
         };
-    }, []);
+
+        connection.startConnection(accessToken);
+        connection.addListener('MessageReceived', onMessageReceived);
+
+        return () =>
+            connection.removeListener('MessageReceived', onMessageReceived);
+    }, [accessToken, dispatch]);
 
     return null;
 };

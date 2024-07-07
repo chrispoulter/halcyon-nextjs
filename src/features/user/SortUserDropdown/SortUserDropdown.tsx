@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Menu } from '@headlessui/react';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { UserSort } from '@/features/user/userTypes';
 import { SortIcon } from '@/components/Icons/SortIcon';
 
@@ -34,17 +34,17 @@ export const SortUserDropdown = ({
     isLoading
 }: SortUserDropdownProps) => (
     <Menu as="div" className="relative">
-        <Menu.Button
+        <MenuButton
             aria-label="Sort"
             disabled={isLoading}
             className="h-full w-full bg-gray-300 px-5 py-2 font-light text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:opacity-50 sm:py-1"
         >
             <SortIcon className="h-4 w-4" />
-        </Menu.Button>
+        </MenuButton>
 
-        <Menu.Items className="absolute right-0 z-10 mt-1 w-44 border bg-white shadow focus:outline-none">
+        <MenuItems className="absolute right-0 z-10 mt-1 w-44 border bg-white shadow focus:outline-none">
             {options.map(({ value, label }) => (
-                <Menu.Item key={value} disabled={selected === value}>
+                <MenuItem key={value} disabled={selected === value}>
                     {({ active, disabled }) => (
                         <button
                             type="button"
@@ -61,8 +61,8 @@ export const SortUserDropdown = ({
                             {label}
                         </button>
                     )}
-                </Menu.Item>
+                </MenuItem>
             ))}
-        </Menu.Items>
+        </MenuItems>
     </Menu>
 );
