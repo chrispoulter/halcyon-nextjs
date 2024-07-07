@@ -7,10 +7,17 @@ import {
 import { config } from '@/utils/config';
 
 export class ConnectionManager {
-    connection: HubConnection | null = null;
+    private connection: HubConnection | null = null;
+    private accessToken: string | null = null;
 
     startConnection(accessToken: string) {
+        if (accessToken === this.accessToken) {
+            return;
+        }
+
         console.log('Starting connection');
+        
+        this.accessToken = accessToken;
 
         this.connection = new HubConnectionBuilder()
             .withUrl(`${config.EXTERNAL_API_URL}/messages`, {
