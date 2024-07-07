@@ -10,6 +10,8 @@ export class ConnectionManager {
     connection: HubConnection | null = null;
 
     startConnection(accessToken: string) {
+        console.log('Starting connection');
+
         this.connection = new HubConnectionBuilder()
             .withUrl(`${config.EXTERNAL_API_URL}/messages`, {
                 transport: HttpTransportType.ServerSentEvents,
@@ -33,6 +35,8 @@ export class ConnectionManager {
             return;
         }
 
+        console.log('Adding listener', method);
+
         this.connection.on(method, callback);
     }
 
@@ -40,6 +44,8 @@ export class ConnectionManager {
         if (!this.connection) {
             return;
         }
+
+        console.log('Removing listener', method);
 
         this.connection.off(method, callback);
     }

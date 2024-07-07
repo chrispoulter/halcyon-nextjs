@@ -46,10 +46,10 @@ export const Messages = () => {
         };
 
         connection.startConnection(accessToken);
-        connection.addListener('MessageReceived', onMessageReceived);
+        connection.addListener('ReceiveMessage', onMessageReceived);
 
         return () =>
-            connection.removeListener('MessageReceived', onMessageReceived);
+            connection.removeListener('ReceiveMessage', onMessageReceived);
     }, [accessToken, dispatch]);
 
     return null;
