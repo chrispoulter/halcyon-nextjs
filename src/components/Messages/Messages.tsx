@@ -1,8 +1,13 @@
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
+import {
+    HttpTransportType,
+    HubConnectionBuilder,
+    LogLevel
+} from '@microsoft/signalr';
 import { api } from '@/redux/api';
-import { ConnectionManager } from './connectionMananger';
+import { config } from '@/utils/config';
 
 enum ChangeType {
     Added,
@@ -15,8 +20,6 @@ type Message = {
     entity: string;
     changeType: ChangeType;
 };
-
-const connection = new ConnectionManager();
 
 export const Messages = () => {
     const dispatch = useDispatch();
@@ -45,11 +48,21 @@ export const Messages = () => {
             }
         };
 
-        connection.startConnection(accessToken);
-        connection.addListener('ReceiveMessage', onMessageReceived);
+        const connection = new HubConnectionBuilder()
+            .withUrl(`${config.API_URL}/messages`, {
+                transport: HttpTransportType.WebSockets,
+                accessTokenFactory: () => accessToken,
+                withCredentials: false,
+                skipNegotiation: true
+            })
+            .withAutomaticReconnect()
+            .configureLogging(LogLevel.Information)
+            .build();
 
-        return () =>
-            connection.removeListener('ReceiveMessage', onMessageReceived);
+        connection.start();
+        connection.on('ReceiveMessage', onMessageReceived);
+
+        return () => connection.off('ReceiveMessage', onMessageReceived);
     }, [accessToken, dispatch]);
 
     return null;
