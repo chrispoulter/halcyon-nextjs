@@ -22,7 +22,7 @@ const replaceInFile = (filePath, replacements) => {
     fs.writeFileSync(filePath, content);
 };
 
-const directoryPath = path.join(__dirname, 'replace-test');
+const directoryPath = path.join(__dirname, '.next');
 
 const traverseDirectory = dir =>
     fs.readdirSync(dir).forEach(file => {
