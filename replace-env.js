@@ -16,7 +16,7 @@ const replaceInFile = (filePath, replacements) => {
         }
 
         const regex = new RegExp(key, 'g');
-        content = content.replace(regex, `'${value}'`);
+        content = content.replace(regex, `"${value}"`);
     });
 
     fs.writeFileSync(filePath, content);
