@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
-import { Popover } from '@headlessui/react';
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { MenuIcon } from '@/components/Icons/MenuIcon';
 import { isAuthorized, isUserAdministrator } from '@/utils/auth';
 
@@ -57,14 +57,14 @@ export const NavbarMenu = () => (
     <Popover as={React.Fragment}>
         {({ open }) => (
             <>
-                <Popover.Button
+                <PopoverButton
                     className="p-1 text-gray-400 hover:text-gray-100 focus:text-gray-100 focus:outline-none focus:ring-1 focus:ring-cyan-500 sm:order-1 sm:hidden"
                     aria-label="Toggle Navigation"
                 >
                     <MenuIcon className="h-6 w-6" />
-                </Popover.Button>
+                </PopoverButton>
 
-                <Popover.Panel
+                <PopoverPanel
                     static
                     className={clsx(
                         'flex basis-full flex-col gap-1 p-1 sm:ml-auto sm:flex sm:basis-auto sm:flex-row sm:items-center sm:p-0',
@@ -74,7 +74,7 @@ export const NavbarMenu = () => (
                     )}
                 >
                     <NavbarMenuOptions />
-                </Popover.Panel>
+                </PopoverPanel>
             </>
         )}
     </Popover>

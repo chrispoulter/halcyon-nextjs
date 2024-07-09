@@ -1,4 +1,4 @@
-import { Dialog } from '@headlessui/react';
+import { Dialog, DialogPanel } from '@headlessui/react';
 
 type ModalProps = React.PropsWithChildren<{
     open: boolean;
@@ -11,9 +11,9 @@ export const Modal = ({ children, open, onClose }: ModalProps) => (
         onClose={onClose}
         className="fixed inset-0 flex flex-col items-center justify-end bg-black bg-opacity-50 p-2 sm:justify-center"
     >
-        <Dialog.Panel className="bg-white p-8 shadow-xl sm:max-w-md">
+        <DialogPanel className="bg-white p-8 shadow-xl sm:max-w-md">
             {children}
-        </Dialog.Panel>
+        </DialogPanel>
     </Dialog>
 );
 

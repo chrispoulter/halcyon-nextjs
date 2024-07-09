@@ -1,5 +1,5 @@
-import { Formik, Form } from 'formik';
-import { InferType, object, ref, string } from 'yup';
+import { Formik, Form, Field } from 'formik';
+import { InferType, number, object, ref, string } from 'yup';
 import { GetProfileResponse } from '@/features/manage/manageTypes';
 import { Input } from '@/components/Form/Input';
 import { Button } from '@/components/Button/Button';
@@ -13,7 +13,8 @@ const schema = object({
     confirmNewPassword: string()
         .label('Confirm New Password')
         .required()
-        .oneOf([ref('newPassword')], 'Passwords do not match')
+        .oneOf([ref('newPassword')], 'Passwords do not match'),
+    version: number().label('Version').required()
 });
 
 export type ChangePasswordFormValues = InferType<typeof schema>;
@@ -27,6 +28,10 @@ type ChangePasswordFormProps = {
     className?: string;
 };
 
+type ChangePasswordFormInternalProps = ChangePasswordFormProps & {
+    profile: GetProfileResponse;
+};
+
 const ChangePasswordFormLoading = () => (
     <FormSkeleton>
         <InputSkeleton className="mb-3" />
@@ -38,17 +43,19 @@ const ChangePasswordFormLoading = () => (
 );
 
 const ChangePasswordFormInternal = ({
+    profile: { version },
     onSubmit,
     options,
     className
-}: ChangePasswordFormProps) => (
+}: ChangePasswordFormInternalProps) => (
     <Formik
-        initialValues={initialValues}
+        initialValues={{ ...initialValues, version }}
         validationSchema={schema}
         onSubmit={onSubmit}
     >
         {({ isSubmitting }) => (
             <Form noValidate className={className}>
+                <Field type="hidden" name="version" />
                 <Input
                     label="Current Password"
                     name="currentPassword"
@@ -101,5 +108,11 @@ export const ChangePasswordForm = ({
         return <ChangePasswordFormLoading />;
     }
 
-    return <ChangePasswordFormInternal onSubmit={onSubmit} options={options} />;
+    return (
+        <ChangePasswordFormInternal
+            profile={profile}
+            onSubmit={onSubmit}
+            options={options}
+        />
+    );
 };

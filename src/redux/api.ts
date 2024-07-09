@@ -59,7 +59,7 @@ export const api = createApi({
         }
     },
     endpoints: () => ({})
-});
+}).enhanceEndpoints({ addTagTypes: ['User'] });
 
 export const {
     util: { getRunningQueriesThunk }

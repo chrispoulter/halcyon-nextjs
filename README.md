@@ -14,7 +14,7 @@ A web application template.
 Create a `.env` file in the web project directory.
 
 ```
-EXTERNAL_API_URL=https://localhost:7257
+NEXT_PUBLIC_API_URL=https://localhost:7257
 
 JWT_SECURITY_KEY=X46npCfZgsMFwJNnLk3Yb9yUPW9x6SuD8ChZ6cVooSZMdtHHPEkwPkQoHUsNDLTanSEiG7y6shTXHePUZ5fr6i5J3R2cMvCRNGeq55jRXRxAeeSwA46ro5bTVSBiif86
 JWT_ISSUER:=HalcyonApi

@@ -27,10 +27,8 @@ const UpdateProfilePage = () => {
 
     const [updateProfile] = useUpdateProfileMutation();
 
-    const version = profile?.version;
-
     const onSubmit = async (values: UpdateProfileFormValues) => {
-        await updateProfile({ ...values, version }).unwrap();
+        await updateProfile(values).unwrap();
         toast.success('Your profile has been updated.');
         await router.push('/my-account');
     };

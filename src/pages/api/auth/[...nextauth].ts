@@ -15,14 +15,11 @@ export const authOptions: AuthOptions = {
             async authorize(credentials) {
                 const body = await createTokenSchema.validate(credentials);
 
-                const response = await fetch(
-                    `${config.EXTERNAL_API_URL}/token`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(body)
-                    }
-                );
+                const response = await fetch(`${config.API_URL}/token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
 
                 if (!response.ok) {
                     throw new Error('The credentials provided were invalid.');

@@ -8,6 +8,7 @@ import { Header } from '@/components/Header/Header';
 import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
 import { Footer } from '@/components/Footer/Footer';
 import { Toaster } from '@/components/Toast/Toast';
+import { Messages } from '@/components/Messages/Messages';
 
 import '@/styles/globals.css';
 
@@ -38,6 +39,7 @@ const App = ({ Component, ...rest }: AppProps) => {
                         </ErrorBoundary>
                     </main>
                     <Footer />
+                    <Messages />
                 </Provider>
             </SessionProvider>
             <Toaster />
