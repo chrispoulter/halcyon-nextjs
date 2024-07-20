@@ -1,11 +1,7 @@
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
-import {
-    HttpTransportType,
-    HubConnectionBuilder,
-    LogLevel
-} from '@microsoft/signalr';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { api } from '@/redux/api';
 import { config } from '@/utils/config';
 
@@ -50,10 +46,8 @@ export const Messages = () => {
 
         const connection = new HubConnectionBuilder()
             .withUrl(`${config.API_URL}/messages`, {
-                transport: HttpTransportType.WebSockets,
                 accessTokenFactory: () => accessToken,
-                withCredentials: false,
-                skipNegotiation: true
+                withCredentials: false
             })
             .withAutomaticReconnect()
             .configureLogging(LogLevel.Information)
