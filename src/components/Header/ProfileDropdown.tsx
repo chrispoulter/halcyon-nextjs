@@ -7,7 +7,7 @@ import { roles } from '@/utils/auth';
 export const ProfileDropdown = () => {
     const { data: session } = useSession();
 
-    const onLogout = () => signOut({ callbackUrl: '/', redirect: false });
+    const onLogout = () => signOut({ callbackUrl: '/', redirect: true });
 
     const user = session?.user;
 
