@@ -1,7 +1,6 @@
 {
     "files.exclude": {
         "**/node_modules": true,
-        "**/.idea": true,
         "**/.next": true,
         "**/.swc": true,
         "**/*.tsbuildinfo": true,
