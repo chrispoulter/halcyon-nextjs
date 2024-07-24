@@ -52,6 +52,7 @@ const ChangePasswordFormInternal = ({
         initialValues={{ ...initialValues, version }}
         validationSchema={schema}
         onSubmit={onSubmit}
+        enableReinitialize
     >
         {({ isSubmitting }) => (
             <Form noValidate className={className}>

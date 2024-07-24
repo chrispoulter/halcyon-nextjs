@@ -44,6 +44,8 @@ const UpdateUserPage = () => {
 
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
+    const version = user?.version;
+
     const onSubmit = async (values: UpdateUserFormValues) => {
         await updateUser({
             id,
@@ -54,7 +56,7 @@ const UpdateUserPage = () => {
         await router.push('/user');
     };
 
-    const onDelete = async ({ version }: UpdateUserFormValues) => {
+    const onDelete = async () => {
         await deleteUser({
             id,
             body: { version }
@@ -64,7 +66,7 @@ const UpdateUserPage = () => {
         await router.push('/user');
     };
 
-    const onLock = async ({ version }: UpdateUserFormValues) => {
+    const onLock = async () => {
         await lockUser({
             id,
             body: { version }
@@ -73,7 +75,7 @@ const UpdateUserPage = () => {
         toast.success('User successfully locked.');
     };
 
-    const onUnlock = async ({ version }: UpdateUserFormValues) => {
+    const onUnlock = async () => {
         await unlockUser({
             id,
             body: { version }
@@ -82,7 +84,7 @@ const UpdateUserPage = () => {
         toast.success('User successfully unlocked.');
     };
 
-    const options = ({ isSubmitting, values }: UpdateUserFormState) => (
+    const options = ({ isSubmitting }: UpdateUserFormState) => (
         <>
             <ButtonLink href="/user" variant="secondary">
                 Cancel
@@ -90,7 +92,7 @@ const UpdateUserPage = () => {
 
             {user?.isLockedOut ? (
                 <ConfirmUnlockUser
-                    onConfirm={() => onUnlock(values)}
+                    onConfirm={onUnlock}
                     loading={isUnlocking}
                     disabled={
                         isDeleting || isLocking || isSubmitting || isFetching
@@ -98,7 +100,7 @@ const UpdateUserPage = () => {
                 />
             ) : (
                 <ConfirmLockUser
-                    onConfirm={() => onLock(values)}
+                    onConfirm={onLock}
                     loading={isLocking}
                     disabled={
                         isDeleting || isUnlocking || isSubmitting || isFetching
@@ -107,7 +109,7 @@ const UpdateUserPage = () => {
             )}
 
             <ConfirmDeleteUser
-                onConfirm={() => onDelete(values)}
+                onConfirm={onDelete}
                 loading={isDeleting}
                 disabled={
                     isUnlocking || isLocking || isSubmitting || isFetching
