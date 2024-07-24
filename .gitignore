@@ -1,9 +1,7 @@
 node_modules
-.idea
 .next
 .env*
 *.tsbuildinfo
-
 playwright
 playwright-report
 test-results
