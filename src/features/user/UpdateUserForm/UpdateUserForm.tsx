@@ -24,7 +24,6 @@ export type UpdateUserFormValues = InferType<typeof schema>;
 
 export type UpdateUserFormState = {
     isSubmitting: boolean;
-    values: UpdateUserFormValues;
 };
 
 type UpdateUserFormProps = {
@@ -56,8 +55,13 @@ const UpdateUserFormInternal = ({
     onSubmit,
     options
 }: UpdateUserFormInternalProps) => (
-    <Formik initialValues={user} validationSchema={schema} onSubmit={onSubmit}>
-        {({ isSubmitting, values }) => (
+    <Formik
+        initialValues={user}
+        validationSchema={schema}
+        onSubmit={onSubmit}
+        enableReinitialize
+    >
+        {({ isSubmitting }) => (
             <Form noValidate>
                 <Field type="hidden" name="version" />
                 <Input
@@ -111,7 +115,7 @@ const UpdateUserFormInternal = ({
                     />
                 </div>
                 <ButtonGroup>
-                    {options && options({ isSubmitting, values })}
+                    {options && options({ isSubmitting })}
                     <Button
                         type="submit"
                         loading={isSubmitting}
