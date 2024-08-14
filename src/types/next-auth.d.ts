@@ -3,7 +3,7 @@ import { DefaultUser } from 'next-auth';
 declare module 'next-auth' {
     interface User {
         accessToken: string;
-        id: number;
+        id: string;
         emailAddress: string;
         firstName: string;
         lastName: string;

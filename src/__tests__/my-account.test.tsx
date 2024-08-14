@@ -10,7 +10,7 @@ import MyAccountPage from '@/pages/my-account';
 import { storeWrapper } from '@/utils/test-utils';
 
 const response: GetProfileResponse = {
-    id: 1,
+    id: 'user-1',
     emailAddress: `${randomUUID()}@example.com`,
     firstName: 'Test',
     lastName: 'User',

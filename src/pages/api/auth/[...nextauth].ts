@@ -34,7 +34,7 @@ export const authOptions: AuthOptions = {
 
                 return {
                     accessToken,
-                    id: parseInt(payload.sub!),
+                    id: payload.sub!,
                     emailAddress: payload.email,
                     firstName: payload.given_name,
                     lastName: payload.family_name,
