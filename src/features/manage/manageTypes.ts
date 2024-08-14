@@ -2,7 +2,7 @@ import { InferType, number, object, string } from 'yup';
 import '@/utils/yup';
 
 export type GetProfileResponse = {
-    id: number;
+    id: string;
     emailAddress: string;
     firstName: string;
     lastName: string;

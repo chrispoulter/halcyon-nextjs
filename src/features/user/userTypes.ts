@@ -21,7 +21,7 @@ export const searchUsersSchema = object().shape({
 export type SearchUsersRequest = InferType<typeof searchUsersSchema>;
 
 export type SearchUserResponse = {
-    id: number;
+    id: string;
     emailAddress: string;
     firstName: string;
     lastName: string;
@@ -47,11 +47,11 @@ export const createUserSchema = object().shape({
 export type CreateUserRequest = InferType<typeof createUserSchema>;
 
 export const getUserSchema = object().shape({
-    id: number().label('Id').required()
+    id: string().label('Id').required()
 });
 
 export type GetUserResponse = {
-    id: number;
+    id: string;
     emailAddress: string;
     firstName: string;
     lastName: string;

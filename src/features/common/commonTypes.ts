@@ -1,1 +1,1 @@
-export type UpdatedResponse = { id: number };
+export type UpdatedResponse = { id: string };

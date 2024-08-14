@@ -52,7 +52,7 @@ describe('register page', () => {
     beforeEach(fetchMock.resetMocks);
 
     it('should register user when form submitted', async () => {
-        const response: UpdatedResponse = { id: 1 };
+        const response: UpdatedResponse = { id: 'user-1' };
 
         fetchMock.mockResponse(JSON.stringify(response), {
             headers: { 'content-type': 'application/json' }

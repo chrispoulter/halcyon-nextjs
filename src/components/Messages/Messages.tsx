@@ -12,7 +12,7 @@ enum ChangeType {
 }
 
 type Message = {
-    id?: number;
+    id?: string;
     entity: string;
     changeType: ChangeType;
 };
