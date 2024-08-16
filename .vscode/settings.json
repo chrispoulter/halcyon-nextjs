@@ -8,9 +8,11 @@
         "**/playwright-report": true,
         "**/test-results": true
     },
-    "css.lint.unknownAtRules": "ignore",
-    "tailwindCSS.experimental.classRegex": [
-        ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-    ],
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "editor.quickSuggestions": {
+        "strings": "on"
+    },
     "jest.runMode": "on-demand"
 }
