@@ -1,3 +1,4 @@
 .next
-dist
-out
+playwright
+playwright-report
+test-results

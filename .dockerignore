@@ -16,4 +16,5 @@ docker-compose*.yml
 Dockerfile
 GitVersion.yml
 *.tsbuildinfo
+next-env.d.ts
 README.md
