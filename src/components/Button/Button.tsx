@@ -30,7 +30,7 @@ export const Button = ({
                     variant === 'danger',
                 'bg-yellow-600 text-white hover:bg-yellow-700 focus:bg-yellow-700 focus:ring-yellow-500':
                     variant === 'warning',
-                ' bg-gray-300 text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:ring-cyan-500':
+                'bg-gray-300 text-gray-800 hover:bg-gray-200 focus:bg-gray-200 focus:ring-cyan-500':
                     variant === 'secondary',
                 'opacity-50': loading || disabled
             }
