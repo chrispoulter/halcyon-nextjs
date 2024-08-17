@@ -10,7 +10,6 @@ node_modules
 .gitignore
 .gitattributes
 .lintstagedrc.js
-.prettierignore
 .prettierrc.json
 docker-compose*.yml
 Dockerfile
