@@ -13,7 +13,7 @@ export const Meta = ({
     title,
     separator = ' // ',
     description = 'A web application template.',
-    keywords = 'react, nextjs, postgressql'
+    keywords = 'react, nextjs'
 }: MetaProps) => (
     <Head>
         <title>{[title, app].filter(v => !!v).join(separator)}</title>
