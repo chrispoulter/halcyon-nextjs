@@ -1,8 +1,13 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { JwtPayload, verify } from 'jsonwebtoken';
-import { createTokenSchema } from '@/features/token/tokenTypes';
+import { object, string } from 'yup';
 import { config } from '@/utils/config';
+
+export const schema = object().shape({
+    emailAddress: string().label('Email Address').email().required(),
+    password: string().label('Password').required()
+});
 
 export const authOptions: AuthOptions = {
     providers: [
@@ -13,7 +18,7 @@ export const authOptions: AuthOptions = {
                 password: { label: 'Password', type: 'password' }
             },
             async authorize(credentials) {
-                const body = await createTokenSchema.validate(credentials);
+                const body = await schema.validate(credentials);
 
                 const response = await fetch(`${config.API_URL}/token`, {
                     method: 'POST',
