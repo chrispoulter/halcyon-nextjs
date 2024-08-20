@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import clsx from 'clsx';
-import { useField } from 'formik';
+import { Control, useController } from 'react-hook-form';
 import { currentYear, monthNames } from '@/utils/dates';
 
 type DatePickerProps = {
+    control: Control<any, any>;
     name: string;
     label: string;
     required?: boolean;
@@ -19,6 +20,7 @@ type DatePickerState = {
 };
 
 export const DatePicker = ({
+    control,
     name,
     label,
     required,
@@ -26,8 +28,14 @@ export const DatePicker = ({
     autoComplete,
     className
 }: DatePickerProps) => {
-    const [field, meta] = useField<string>(name);
-    const error = meta.touched && meta.error;
+    const {
+        field,
+        fieldState: { error },
+        formState: { isSubmitting }
+    } = useController({
+        name,
+        control
+    });
 
     const initialState: DatePickerState = {
         year: undefined,
@@ -80,7 +88,7 @@ export const DatePicker = ({
                     id={`${name}.date`}
                     value={state.date}
                     required={required}
-                    disabled={disabled}
+                    disabled={disabled || isSubmitting}
                     aria-label={`${label} Date`}
                     aria-invalid={!!error}
                     autoComplete={autoComplete && autoComplete[0]}
@@ -105,7 +113,7 @@ export const DatePicker = ({
                     id={`${name}.month`}
                     value={state.month}
                     required={required}
-                    disabled={disabled}
+                    disabled={disabled || isSubmitting}
                     aria-label={`${label} Month`}
                     aria-invalid={!!error}
                     autoComplete={autoComplete && autoComplete[1]}
@@ -133,7 +141,7 @@ export const DatePicker = ({
                     id={`${name}.year`}
                     value={state.year}
                     required={required}
-                    disabled={disabled}
+                    disabled={disabled || isSubmitting}
                     aria-label={`${label} Year`}
                     aria-invalid={!!error}
                     autoComplete={autoComplete && autoComplete[2]}
@@ -156,7 +164,7 @@ export const DatePicker = ({
 
             {error && (
                 <span role="alert" className="mt-2 text-sm text-red-600">
-                    {error}
+                    {error.message}
                 </span>
             )}
         </div>

@@ -26,3 +26,17 @@ export const toDate = (value: string) => {
         ? date
         : undefined;
 };
+
+export const isInPast = (value: string) => {
+    if (!value) {
+        return false;
+    }
+
+    const date = toDate(value);
+
+    if (!date) {
+        return false;
+    }
+
+    return date < now();
+};

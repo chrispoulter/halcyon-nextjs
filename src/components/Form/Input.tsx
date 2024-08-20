@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import { useField } from 'formik';
+import { Control, useController } from 'react-hook-form';
 import { CloseIcon } from '@/components/Icons/CloseIcon';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+    control: Control<any, any>;
     name: string;
     label: string;
     hideLabel?: boolean;
@@ -10,6 +11,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export const Input = ({
+    control,
     name,
     type = 'text',
     label,
@@ -18,8 +20,14 @@ export const Input = ({
     onClear,
     ...props
 }: InputProps) => {
-    const [field, meta] = useField<string>(name);
-    const error = meta.touched && meta.error;
+    const {
+        field,
+        fieldState: { error },
+        formState: { isSubmitting }
+    } = useController({
+        name,
+        control
+    });
 
     const onClearInput = () => {
         field.onChange({
@@ -58,6 +66,7 @@ export const Input = ({
                     id={field.name}
                     type={type}
                     value={value}
+                    disabled={props.disabled || isSubmitting}
                     aria-invalid={!!error}
                     className={clsx(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
@@ -73,7 +82,7 @@ export const Input = ({
                     <button
                         type="button"
                         aria-label="Clear"
-                        disabled={props.disabled}
+                        disabled={props.disabled || isSubmitting}
                         onClick={onClearInput}
                         className="absolute right-0 top-0 h-full px-2 py-1 text-gray-800 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:opacity-50"
                     >
@@ -84,7 +93,7 @@ export const Input = ({
 
             {error && (
                 <span role="alert" className="mt-2 text-sm text-red-600">
-                    {error}
+                    {error.message}
                 </span>
             )}
         </div>
