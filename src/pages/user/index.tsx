@@ -92,18 +92,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         sort: UserSort.NAME_ASC
     };
 
-    await queryClient.prefetchInfiniteQuery(
-        ['users', request],
-        ({ pageParam = 1 }) =>
+    await queryClient.prefetchInfiniteQuery({
+        queryKey: ['users', request],
+        initialPageParam: [],
+        queryFn: ({ pageParam = 1 }) =>
             searchUsers(
-                { ...request, page: pageParam, size: PAGE_SIZE },
+                { ...request, page: pageParam as number, size: PAGE_SIZE },
                 {
                     headers: {
                         cookie: req.headers.cookie!
                     }
                 }
             )
-    );
+    });
 
     // next ssr hack!
     queryClient.setQueryData(['users', request], (data: any) => ({

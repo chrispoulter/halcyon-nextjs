@@ -15,7 +15,7 @@ import {
     UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
-import { useGetUser } from '@/features/user/hooks/useGetUser';
+import { getUser, useGetUser } from '@/features/user/hooks/useGetUser';
 import { useUpdateUser } from '@/features/user/hooks/useUpdateUser';
 import { useLockUser } from '@/features/user/hooks/useLockUser';
 import { useUnlockUser } from '@/features/user/hooks/useUnlockUser';
@@ -129,13 +129,15 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     const queryClient = new QueryClient();
 
-    await queryClient.prefetchQuery(['user', id], () =>
-        getUser(id, {
-            headers: {
-                cookie: req.headers.cookie!
-            }
-        })
-    );
+    await queryClient.prefetchQuery({
+        queryKey: ['user', id],
+        queryFn: () =>
+            getUser(id, {
+                headers: {
+                    cookie: req.headers.cookie!
+                }
+            })
+    });
 
     return {
         props: {

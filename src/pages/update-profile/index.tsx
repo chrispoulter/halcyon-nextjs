@@ -59,13 +59,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
     const queryClient = new QueryClient();
 
-    await queryClient.prefetchQuery(['profile'], () =>
-        getProfile({
-            headers: {
-                cookie: req.headers.cookie!
-            }
-        })
-    );
+    await queryClient.prefetchQuery({
+        queryKey: ['profile'],
+        queryFn: () =>
+            getProfile({
+                headers: {
+                    cookie: req.headers.cookie!
+                }
+            })
+    });
 
     return {
         props: {
