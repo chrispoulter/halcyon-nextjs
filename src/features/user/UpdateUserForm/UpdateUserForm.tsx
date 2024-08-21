@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from 'formik';
-import { object, string, array, InferType, number } from 'yup';
+import { object, string, array, InferType } from 'yup';
 import { Input } from '@/components/Form/Input';
 import { InputSkeleton } from '@/components/Form/InputSkeleton';
 import { DatePicker } from '@/components/Form/DatePicker';
@@ -16,8 +16,7 @@ const schema = object({
     firstName: string().label('First Name').max(50).required(),
     lastName: string().label('Last Name').max(50).required(),
     dateOfBirth: string().label('Date Of Birth').required().dateOnly().past(),
-    roles: array().of(string().label('Role').required()).label('Roles'),
-    version: number().label('Version').required()
+    roles: array().of(string().label('Role').required()).label('Roles')
 });
 
 export type UpdateUserFormValues = InferType<typeof schema>;
