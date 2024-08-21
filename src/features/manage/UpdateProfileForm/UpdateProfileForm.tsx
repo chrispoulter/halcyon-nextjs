@@ -25,10 +25,7 @@ const schema = z.object({
             message: 'Date of Birth is a required field'
         })
         .date('Date Of Birth must be a valid date')
-        .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
-    version: z.number({
-        message: 'Version is a required field'
-    })
+        .refine(isInPast, { message: 'Date Of Birth must be in the past' })
 });
 
 export type UpdateProfileFormValues = z.infer<typeof schema>;
@@ -61,7 +58,6 @@ const UpdateProfileFormInternal = ({
 }: UpdateProfileFormInternalProps) => {
     const {
         handleSubmit,
-        register,
         control,
         formState: { isSubmitting }
     } = useForm<UpdateProfileFormValues>({
@@ -71,7 +67,6 @@ const UpdateProfileFormInternal = ({
 
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
-            <input type="hidden" {...register('version')} />
             <Input
                 control={control}
                 label="Email Address"

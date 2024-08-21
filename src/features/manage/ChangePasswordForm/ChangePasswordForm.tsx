@@ -19,8 +19,7 @@ const schema = z
             .max(50, 'New Password must be no more than 50 characters'),
         confirmNewPassword: z.string({
             message: 'Confirm New Password is a required field'
-        }),
-        version: z.number({ message: 'Version is a required field' })
+        })
     })
     .refine(data => data.newPassword === data.confirmNewPassword, {
         message: 'Passwords do not match',
@@ -36,9 +35,7 @@ type ChangePasswordFormProps = {
     className?: string;
 };
 
-type ChangePasswordFormInternalProps = ChangePasswordFormProps & {
-    profile: GetProfileResponse;
-};
+type ChangePasswordFormInternalProps = Omit<ChangePasswordFormProps, 'profile'>;
 
 const ChangePasswordFormLoading = () => (
     <FormSkeleton>
@@ -51,19 +48,16 @@ const ChangePasswordFormLoading = () => (
 );
 
 const ChangePasswordFormInternal = ({
-    profile: { version },
     onSubmit,
     options,
     className
 }: ChangePasswordFormInternalProps) => {
     const {
         handleSubmit,
-        register,
         control,
         formState: { isSubmitting }
     } = useForm<ChangePasswordFormValues>({
-        resolver: zodResolver(schema),
-        defaultValues: { version }
+        resolver: zodResolver(schema)
     });
 
     return (
@@ -72,7 +66,6 @@ const ChangePasswordFormInternal = ({
             onSubmit={handleSubmit(onSubmit)}
             className={className}
         >
-            <input type="hidden" {...register('version')} />
             <Input
                 control={control}
                 label="Current Password"
@@ -118,7 +111,8 @@ const ChangePasswordFormInternal = ({
 export const ChangePasswordForm = ({
     profile,
     onSubmit,
-    options
+    options,
+    className
 }: ChangePasswordFormProps) => {
     if (!profile) {
         return <ChangePasswordFormLoading />;
@@ -126,9 +120,9 @@ export const ChangePasswordForm = ({
 
     return (
         <ChangePasswordFormInternal
-            profile={profile}
             onSubmit={onSubmit}
             options={options}
+            className={className}
         />
     );
 };

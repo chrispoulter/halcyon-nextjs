@@ -49,7 +49,7 @@ const UpdateUserPage = () => {
     const onSubmit = async (values: UpdateUserFormValues) => {
         await updateUser({
             id,
-            body: values
+            body: { ...values, version }
         }).unwrap();
 
         toast.success('User successfully updated.');

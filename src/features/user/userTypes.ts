@@ -1,3 +1,5 @@
+import { Role } from '@/utils/auth';
+
 export enum UserSort {
     EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
     EMAIL_ADDRESS_DESC = 'EMAIL_ADDRESS_DESC',
@@ -18,7 +20,7 @@ export type SearchUserResponse = {
     firstName: string;
     lastName: string;
     isLockedOut?: boolean;
-    roles?: string[];
+    roles?: Role[];
 };
 
 export type SearchUsersResponse = {
@@ -33,7 +35,7 @@ export type CreateUserRequest = {
     firstName: string;
     lastName: string;
     dateOfBirth: string;
-    roles?: string[];
+    roles?: Role[];
 };
 
 export type GetUserResponse = {
@@ -43,7 +45,7 @@ export type GetUserResponse = {
     lastName: string;
     dateOfBirth: string;
     isLockedOut?: boolean;
-    roles?: string[];
+    roles?: Role[];
     version: number;
 };
 
@@ -52,7 +54,7 @@ export type UpdateUserRequest = {
     firstName: string;
     lastName: string;
     dateOfBirth: string;
-    roles?: string[];
+    roles?: Role[];
     version?: number;
 };
 
