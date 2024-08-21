@@ -47,13 +47,8 @@ const queryClient = new QueryClient({
         }
     }),
     mutationCache: new MutationCache({
-        onSuccess: (data: any) => {
-            if (data.message) {
-                toast.success(data.message);
-            }
-        },
         onError: async (error: any) => {
-            const message = error.response?.message || error.message;
+            const message = error?.response?.title || error?.message;
 
             switch (error.status) {
                 case 401:
