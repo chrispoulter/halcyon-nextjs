@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from 'formik';
-import { InferType, number, object, ref, string } from 'yup';
+import { InferType, object, ref, string } from 'yup';
 import { GetProfileResponse } from '@/features/manage/manageTypes';
 import { Input } from '@/components/Form/Input';
 import { Button } from '@/components/Button/Button';
@@ -13,8 +13,7 @@ const schema = object({
     confirmNewPassword: string()
         .label('Confirm New Password')
         .required()
-        .oneOf([ref('newPassword')], 'Passwords do not match'),
-    version: number().label('Version').required()
+        .oneOf([ref('newPassword')], 'Passwords do not match')
 });
 
 export type ChangePasswordFormValues = InferType<typeof schema>;
@@ -28,9 +27,7 @@ type ChangePasswordFormProps = {
     className?: string;
 };
 
-type ChangePasswordFormInternalProps = ChangePasswordFormProps & {
-    profile: GetProfileResponse;
-};
+type ChangePasswordFormInternalProps = Omit<ChangePasswordFormProps, 'profile'>;
 
 const ChangePasswordFormLoading = () => (
     <FormSkeleton>
@@ -43,13 +40,12 @@ const ChangePasswordFormLoading = () => (
 );
 
 const ChangePasswordFormInternal = ({
-    profile: { version },
     onSubmit,
     options,
     className
 }: ChangePasswordFormInternalProps) => (
     <Formik
-        initialValues={{ ...initialValues, version }}
+        initialValues={initialValues}
         validationSchema={schema}
         onSubmit={onSubmit}
         enableReinitialize
@@ -109,11 +105,5 @@ export const ChangePasswordForm = ({
         return <ChangePasswordFormLoading />;
     }
 
-    return (
-        <ChangePasswordFormInternal
-            profile={profile}
-            onSubmit={onSubmit}
-            options={options}
-        />
-    );
+    return <ChangePasswordFormInternal onSubmit={onSubmit} options={options} />;
 };
