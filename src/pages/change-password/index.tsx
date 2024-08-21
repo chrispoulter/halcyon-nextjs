@@ -1,9 +1,7 @@
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import {
-    useGetProfileQuery,
-    useChangePasswordMutation
-} from '@/features/manage/manageEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -13,25 +11,21 @@ import {
     ChangePasswordForm,
     ChangePasswordFormValues
 } from '@/features/manage/ChangePasswordForm/ChangePasswordForm';
-
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { wrapper } from '@/redux/store';
-import { getProfile } from '@/features/manage/manageEndpoints';
+import { useGetProfile } from '@/features/manage/hooks/useGetProfile';
+import { useChangePassword } from '@/features/manage/hooks/useChangePassword';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const ChangePasswordPage = () => {
     const router = useRouter();
 
-    const { data: profile } = useGetProfileQuery();
+    const { profile } = useGetProfile();
 
-    const [changePassword] = useChangePasswordMutation();
+    const { changePassword } = useChangePassword();
 
     const version = profile?.version;
 
     const onSubmit = async (values: ChangePasswordFormValues) => {
-        await changePassword({ ...values, version }).unwrap();
+        await changePassword({ ...values, version });
         toast.success('Your password has been changed.');
         await router.push('/my-account');
     };
@@ -63,19 +57,10 @@ const ChangePasswordPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res }) => {
-        const session = await getServerSession(req, res, authOptions);
-
-        store.dispatch(getProfile.initiate());
-
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
-
-        return {
-            props: {
-                session
-            }
-        };
-    });
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => ({
+    props: {
+        session: await getServerSession(req, res, authOptions)
+    }
+});
 
 export default ChangePasswordPage;

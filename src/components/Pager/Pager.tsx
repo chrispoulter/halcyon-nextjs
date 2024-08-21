@@ -5,48 +5,33 @@ import { ButtonGroupSkeleton } from '@/components/Button/ButtonGroupSkeleton';
 type PagerProps = {
     isLoading?: boolean;
     isFetching?: boolean;
-    hasNextPage?: boolean;
-    hasPreviousPage?: boolean;
-    onNextPage: () => void;
-    onPreviousPage: () => void;
+    hasMore?: boolean;
+    onLoadMore: () => void;
 };
 
 export const Pager = ({
     isLoading,
     isFetching,
-    hasNextPage,
-    hasPreviousPage,
-    onNextPage,
-    onPreviousPage
+    hasMore,
+    onLoadMore
 }: PagerProps) => {
     if (isLoading) {
         return <ButtonGroupSkeleton />;
     }
 
-    if (!hasNextPage && !hasPreviousPage) {
+    if (!hasMore) {
         return null;
     }
 
     return (
         <ButtonGroup>
-            {hasPreviousPage && (
-                <Button
-                    variant="secondary"
-                    loading={isFetching}
-                    onClick={onPreviousPage}
-                >
-                    Previous
-                </Button>
-            )}
-            {hasNextPage && (
-                <Button
-                    variant="secondary"
-                    loading={isFetching}
-                    onClick={onNextPage}
-                >
-                    Next
-                </Button>
-            )}
+            <Button
+                variant="secondary"
+                loading={isFetching}
+                onClick={onLoadMore}
+            >
+                Load More...
+            </Button>
         </ButtonGroup>
     );
 };

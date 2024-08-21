@@ -1,9 +1,8 @@
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import {
-    useGetProfileQuery,
-    useUpdateProfileMutation
-} from '@/features/manage/manageEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -12,25 +11,24 @@ import {
     UpdateProfileForm,
     UpdateProfileFormValues
 } from '@/features/manage/UpdateProfileForm/UpdateProfileForm';
-
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { getProfile } from '@/features/manage/manageEndpoints';
-import { wrapper } from '@/redux/store';
+import {
+    getProfile,
+    useGetProfile
+} from '@/features/manage/hooks/useGetProfile';
+import { useUpdateProfile } from '@/features/manage/hooks/useUpdateProfile';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateProfilePage = () => {
     const router = useRouter();
 
-    const { data: profile } = useGetProfileQuery();
+    const { profile } = useGetProfile();
 
-    const [updateProfile] = useUpdateProfileMutation();
+    const { updateProfile } = useUpdateProfile();
 
     const version = profile?.version;
 
     const onSubmit = async (values: UpdateProfileFormValues) => {
-        await updateProfile({ ...values, version }).unwrap();
+        await updateProfile({ ...values, version });
         toast.success('Your profile has been updated.');
         await router.push('/my-account');
     };
@@ -56,19 +54,25 @@ const UpdateProfilePage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res }) => {
-        const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const session = await getServerSession(req, res, authOptions);
 
-        store.dispatch(getProfile.initiate());
+    const queryClient = new QueryClient();
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
-
-        return {
-            props: {
-                session
+    await queryClient.prefetchQuery(['profile'], () =>
+        getProfile({
+            headers: {
+                cookie: req.headers.cookie!
             }
-        };
-    });
+        })
+    );
+
+    return {
+        props: {
+            session,
+            dehydratedState: dehydrate(queryClient)
+        }
+    };
+};
 
 export default UpdateProfilePage;

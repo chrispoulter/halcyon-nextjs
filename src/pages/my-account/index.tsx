@@ -1,33 +1,30 @@
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
 import { signOut } from 'next-auth/react';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import {
-    useGetProfileQuery,
-    useDeleteAccountMutation
-} from '@/features/manage/manageEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
 import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/PersonalDetailsCard';
 import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
 import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
-
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { getProfile } from '@/features/manage/manageEndpoints';
-import { wrapper } from '@/redux/store';
+import {
+    getProfile,
+    useGetProfile
+} from '@/features/manage/hooks/useGetProfile';
+import { useDeleteAccount } from '@/features/manage/hooks/useDeleteAccount';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const MyAccountPage = () => {
-    const { data: profile } = useGetProfileQuery();
+    const { profile } = useGetProfile();
 
-    const [deleteAccount, { isLoading: isDeleting }] =
-        useDeleteAccountMutation();
+    const { deleteAccount, isDeleting } = useDeleteAccount();
 
     const version = profile?.version;
 
     const onDelete = async () => {
-        await deleteAccount({ version }).unwrap();
+        await deleteAccount({ version });
         toast.success('Your account has been deleted.');
         await signOut({ callbackUrl: '/' });
     };
@@ -51,19 +48,25 @@ const MyAccountPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res }) => {
-        const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const session = await getServerSession(req, res, authOptions);
 
-        store.dispatch(getProfile.initiate());
+    const queryClient = new QueryClient();
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
-
-        return {
-            props: {
-                session
+    await queryClient.prefetchQuery(['profile'], () =>
+        getProfile({
+            headers: {
+                cookie: req.headers.cookie!
             }
-        };
-    });
+        })
+    );
+
+    return {
+        props: {
+            session,
+            dehydratedState: dehydrate(queryClient)
+        }
+    };
+};
 
 export default MyAccountPage;

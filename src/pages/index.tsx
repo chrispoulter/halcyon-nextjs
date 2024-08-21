@@ -9,7 +9,7 @@ import { Container } from '@/components/Container/Container';
 
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { authOptions } from '@/pages${config.API_URL}/auth/[...nextauth]';
 
 const HomePage = () => (
     <>

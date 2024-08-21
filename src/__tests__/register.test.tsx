@@ -3,9 +3,9 @@ import fetchMock from 'jest-fetch-mock';
 import { signIn } from 'next-auth/react';
 import { randomUUID } from 'crypto';
 import RegisterPage from '@/pages/register';
-import { UpdatedResponse } from '@/features/common/commonTypes';
+import { UpdatedResponse } from '@/features/common';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
-import { storeWrapper } from '@/utils/test-utils';
+import { queryWrapper } from './test-utils';
 
 const fillRegisterForm = (
     values: Omit<RegisterFormValues, 'confirmPassword'>
@@ -58,7 +58,7 @@ describe('register page', () => {
             headers: { 'content-type': 'application/json' }
         });
 
-        render(<RegisterPage />, { wrapper: storeWrapper });
+        render(<RegisterPage />, { wrapper: queryWrapper });
 
         fillRegisterForm({
             emailAddress: `${randomUUID()}@example.com`,

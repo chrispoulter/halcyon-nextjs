@@ -1,12 +1,8 @@
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import {
-    useGetUserQuery,
-    useUpdateUserMutation,
-    useLockUserMutation,
-    useUnlockUserMutation,
-    useDeleteUserMutation
-} from '@/features/user/userEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { SubTitle, Title } from '@/components/Title/Title';
@@ -19,12 +15,11 @@ import {
     UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
-
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { getUser } from '@/features/user/userEndpoints';
-import { wrapper } from '@/redux/store';
+import { useGetUser } from '@/features/user/hooks/useGetUser';
+import { useUpdateUser } from '@/features/user/hooks/useUpdateUser';
+import { useLockUser } from '@/features/user/hooks/useLockUser';
+import { useUnlockUser } from '@/features/user/hooks/useUnlockUser';
+import { useDeleteUser } from '@/features/user/hooks/useDeleteUser';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateUserPage = () => {
@@ -32,55 +27,37 @@ const UpdateUserPage = () => {
 
     const id = router.query.id as string;
 
-    const { data: user, isFetching } = useGetUserQuery(id, {
-        skip: !router.isReady
-    });
+    const { user, isFetching } = useGetUser(id);
 
-    const [updateUser] = useUpdateUserMutation();
+    const { updateUser } = useUpdateUser(id);
 
-    const [lockUser, { isLoading: isLocking }] = useLockUserMutation();
+    const { lockUser, isLocking } = useLockUser(id);
 
-    const [unlockUser, { isLoading: isUnlocking }] = useUnlockUserMutation();
+    const { unlockUser, isUnlocking } = useUnlockUser(id);
 
-    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+    const { deleteUser, isDeleting } = useDeleteUser(id);
 
     const version = user?.version;
 
     const onSubmit = async (values: UpdateUserFormValues) => {
-        await updateUser({
-            id,
-            body: { ...values, version }
-        }).unwrap();
-
+        await updateUser({ ...values, version });
         toast.success('User successfully updated.');
         await router.push('/user');
     };
 
     const onDelete = async () => {
-        await deleteUser({
-            id,
-            body: { version }
-        }).unwrap();
-
+        await deleteUser({ version });
         toast.success('User successfully deleted.');
         await router.push('/user');
     };
 
     const onLock = async () => {
-        await lockUser({
-            id,
-            body: { version }
-        }).unwrap();
-
+        await lockUser({ version });
         toast.success('User successfully locked.');
     };
 
     const onUnlock = async () => {
-        await unlockUser({
-            id,
-            body: { version }
-        }).unwrap();
-
+        await unlockUser({ version });
         toast.success('User successfully unlocked.');
     };
 
@@ -141,21 +118,31 @@ const UpdateUserPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res, params }) => {
-        const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async ({
+    req,
+    res,
+    params
+}) => {
+    const session = await getServerSession(req, res, authOptions);
 
-        const id = params?.id as string;
+    const id = params?.id as string;
 
-        store.dispatch(getUser.initiate(id));
+    const queryClient = new QueryClient();
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
-
-        return {
-            props: {
-                session
+    await queryClient.prefetchQuery(['user', id], () =>
+        getUser(id, {
+            headers: {
+                cookie: req.headers.cookie!
             }
-        };
-    });
+        })
+    );
+
+    return {
+        props: {
+            session,
+            dehydratedState: dehydrate(queryClient)
+        }
+    };
+};
 
 export default UpdateUserPage;
