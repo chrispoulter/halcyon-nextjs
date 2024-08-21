@@ -38,7 +38,6 @@ const App = ({ Component, ...rest }: AppProps) => {
                         </ErrorBoundary>
                     </main>
                     <Footer />
-                    {/* <Messages /> */}
                 </Provider>
             </SessionProvider>
             <Toaster />
