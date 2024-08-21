@@ -20,12 +20,16 @@ export const authOptions: AuthOptions = {
                 password: { label: 'Password', type: 'password' }
             },
             async authorize(credentials) {
-                const body = await schema.parseAsync(credentials);
+                const result = await schema.safeParseAsync(credentials);
+
+                if (!result.success) {
+                    throw new Error(result.error.issues[0].message);
+                }
 
                 const response = await fetch(`${config.API_URL}/token`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
+                    body: JSON.stringify(result.data)
                 });
 
                 if (!response.ok) {
