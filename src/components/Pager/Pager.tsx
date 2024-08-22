@@ -5,21 +5,21 @@ import { ButtonGroupSkeleton } from '@/components/Button/ButtonGroupSkeleton';
 type PagerProps = {
     isLoading?: boolean;
     isFetching?: boolean;
-    hasMore?: boolean;
-    onLoadMore: () => void;
+    hasNextPage?: boolean;
+    onNextPage: () => void;
 };
 
 export const Pager = ({
     isLoading,
     isFetching,
-    hasMore,
-    onLoadMore
+    hasNextPage,
+    onNextPage
 }: PagerProps) => {
     if (isLoading) {
         return <ButtonGroupSkeleton />;
     }
 
-    if (!hasMore) {
+    if (!hasNextPage) {
         return null;
     }
 
@@ -28,9 +28,9 @@ export const Pager = ({
             <Button
                 variant="secondary"
                 loading={isFetching}
-                onClick={onLoadMore}
+                onClick={onNextPage}
             >
-                Load More...
+                More...
             </Button>
         </ButtonGroup>
     );

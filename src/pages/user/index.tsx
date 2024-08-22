@@ -16,8 +16,7 @@ import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropd
 import { UserList } from '@/features/user/UserList/UserList';
 import {
     useSearchUsers,
-    searchUsers,
-    PAGE_SIZE
+    searchUsers
 } from '@/features/user/hooks/useSearchUsers';
 import { UserSort } from '@/features/user/userTypes';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
@@ -26,21 +25,19 @@ const defaultRequest = {
     search: '',
     sort: UserSort.NAME_ASC,
     page: 1,
-    size: PAGE_SIZE
+    size: 5
 };
 
 const UsersPage = () => {
     const [request, setRequest] = useState(defaultRequest);
 
-    const { users, isLoading, isFetching, hasMore, loadMore } =
+    const { users, isLoading, isFetching, hasNextPage, fetchNextPage } =
         useSearchUsers(request);
 
     const onSubmit = (values: SearchUserFormValues) => {
         setRequest({ ...request, ...values });
         return true;
     };
-
-    const onLoadMore = () => loadMore();
 
     const onSort = (sort: UserSort) => setRequest({ ...request, sort });
 
@@ -75,22 +72,22 @@ const UsersPage = () => {
                 <Pager
                     isLoading={isLoading}
                     isFetching={isFetching}
-                    hasMore={hasMore}
-                    onLoadMore={onLoadMore}
+                    hasNextPage={hasNextPage}
+                    onNextPage={fetchNextPage}
                 />
             </Container>
         </>
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const _getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     const session = await getServerSession(req, res, authOptions);
 
     const queryClient = new QueryClient();
 
     await queryClient.prefetchInfiniteQuery({
         queryKey: ['users', defaultRequest],
-        initialPageParam: [],
+        initialPageParam: defaultRequest.page,
         queryFn: ({ pageParam = 1 }) =>
             searchUsers({
                 ...defaultRequest,
