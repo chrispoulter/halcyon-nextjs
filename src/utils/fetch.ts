@@ -12,13 +12,15 @@ class FetchError extends Error {
     }
 }
 
-export const fetcher = async <TResponse>(url: string) => {
+export const fetcher = async <TResponse>(url: string, init?: RequestInit) => {
     const session = await getSession();
 
     const result = await fetch(url, {
+        ...init,
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session?.accessToken}`
+            Authorization: `Bearer ${session?.accessToken}`,
+            ...init?.headers
         }
     });
 
