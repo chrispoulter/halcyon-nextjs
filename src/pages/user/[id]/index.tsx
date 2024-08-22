@@ -131,7 +131,12 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     await queryClient.prefetchQuery({
         queryKey: ['user', id],
-        queryFn: () => getUser(id)
+        queryFn: () =>
+            getUser(id, {
+                headers: {
+                    Authorization: `Bearer ${session?.accessToken}`
+                }
+            })
     });
 
     return {

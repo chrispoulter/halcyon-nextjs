@@ -80,7 +80,7 @@ const UsersPage = () => {
     );
 };
 
-export const _getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     const session = await getServerSession(req, res, authOptions);
 
     const queryClient = new QueryClient();
@@ -89,10 +89,17 @@ export const _getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         queryKey: ['users', defaultRequest],
         initialPageParam: defaultRequest.page,
         queryFn: ({ pageParam = 1 }) =>
-            searchUsers({
-                ...defaultRequest,
-                page: pageParam as number
-            })
+            searchUsers(
+                {
+                    ...defaultRequest,
+                    page: pageParam as number
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${session?.accessToken}`
+                    }
+                }
+            )
     });
 
     // next ssr hack!
