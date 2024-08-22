@@ -21,13 +21,15 @@ import { searchUsers } from '@/features/user/userEndpoints';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
+const defaultRequest = {
+    search: '',
+    sort: UserSort.NAME_ASC,
+    page: 1,
+    size: 5
+};
+
 const UsersPage = () => {
-    const [request, setRequest] = useState({
-        search: '',
-        sort: UserSort.NAME_ASC,
-        page: 1,
-        size: 5
-    });
+    const [request, setRequest] = useState(defaultRequest);
 
     const { data: users, isLoading, isFetching } = useSearchUsersQuery(request);
 
@@ -88,14 +90,7 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        const request = {
-            search: '',
-            sort: UserSort.NAME_ASC,
-            page: 1,
-            size: 5
-        };
-
-        store.dispatch(searchUsers.initiate(request));
+        store.dispatch(searchUsers.initiate(defaultRequest));
 
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
