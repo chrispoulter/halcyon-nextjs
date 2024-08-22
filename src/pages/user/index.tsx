@@ -31,7 +31,14 @@ const defaultRequest = {
 const UsersPage = () => {
     const [request, setRequest] = useState(defaultRequest);
 
-    const { data: users, isLoading, isFetching } = useSearchUsersQuery(request);
+    const {
+        data: users,
+        isLoading,
+        isFetching,
+        error
+    } = useSearchUsersQuery(request);
+
+    const loadingOrError = isLoading || !!error;
 
     const onSubmit = (values: SearchUserFormValues) => {
         setRequest({ ...request, ...values });
@@ -56,12 +63,12 @@ const UsersPage = () => {
                     <SearchUserForm
                         values={request}
                         onSubmit={onSubmit}
-                        isLoading={isLoading || isFetching}
+                        isLoading={loadingOrError}
                     />
                     <SortUserDropdown
                         selected={request.sort}
                         onSelect={onSort}
-                        isLoading={isLoading || isFetching}
+                        isLoading={loadingOrError || isFetching}
                     />
                 </div>
 
@@ -71,10 +78,10 @@ const UsersPage = () => {
                     </ButtonLink>
                 </ButtonGroup>
 
-                <UserList isLoading={isLoading} users={users?.items} />
+                <UserList isLoading={loadingOrError} users={users?.items} />
 
                 <Pager
-                    isLoading={isLoading}
+                    isLoading={loadingOrError}
                     isFetching={isFetching}
                     hasNextPage={users?.hasNextPage}
                     hasPreviousPage={users?.hasPreviousPage}
