@@ -21,15 +21,24 @@ import { searchUsers } from '@/features/user/userEndpoints';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-const UsersPage = () => {
-    const [request, setRequest] = useState({
-        search: '',
-        sort: UserSort.NAME_ASC,
-        page: 1,
-        size: 5
-    });
+const defaultRequest = {
+    search: '',
+    sort: UserSort.NAME_ASC,
+    page: 1,
+    size: 5
+};
 
-    const { data: users, isLoading, isFetching } = useSearchUsersQuery(request);
+const UsersPage = () => {
+    const [request, setRequest] = useState(defaultRequest);
+
+    const {
+        data: users,
+        isLoading,
+        isFetching,
+        error
+    } = useSearchUsersQuery(request);
+
+    const loadingOrError = isLoading || !!error;
 
     const onSubmit = (values: SearchUserFormValues) => {
         setRequest({ ...request, ...values });
@@ -54,12 +63,12 @@ const UsersPage = () => {
                     <SearchUserForm
                         values={request}
                         onSubmit={onSubmit}
-                        isLoading={isLoading || isFetching}
+                        isLoading={loadingOrError}
                     />
                     <SortUserDropdown
                         selected={request.sort}
                         onSelect={onSort}
-                        isLoading={isLoading || isFetching}
+                        isLoading={loadingOrError || isFetching}
                     />
                 </div>
 
@@ -69,10 +78,10 @@ const UsersPage = () => {
                     </ButtonLink>
                 </ButtonGroup>
 
-                <UserList isLoading={isLoading} users={users?.items} />
+                <UserList isLoading={loadingOrError} users={users?.items} />
 
                 <Pager
-                    isLoading={isLoading}
+                    isLoading={loadingOrError}
                     isFetching={isFetching}
                     hasNextPage={users?.hasNextPage}
                     hasPreviousPage={users?.hasPreviousPage}
@@ -88,14 +97,7 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        const request = {
-            search: '',
-            sort: UserSort.NAME_ASC,
-            page: 1,
-            size: 5
-        };
-
-        store.dispatch(searchUsers.initiate(request));
+        store.dispatch(searchUsers.initiate(defaultRequest));
 
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
