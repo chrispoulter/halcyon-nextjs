@@ -1,36 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Role } from '@/utils/auth';
+import { SearchUsersRequest, SearchUsersResponse } from '../userTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
-
-export enum UserSort {
-    EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
-    EMAIL_ADDRESS_DESC = 'EMAIL_ADDRESS_DESC',
-    NAME_ASC = 'NAME_ASC',
-    NAME_DESC = 'NAME_DESC'
-}
-
-export type SearchUsersRequest = {
-    search?: string;
-    sort: UserSort;
-    page: number;
-    size: number;
-};
-
-export type SearchUserResponse = {
-    id: string;
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    isLockedOut?: boolean;
-    roles?: Role[];
-};
-
-export type SearchUsersResponse = {
-    items?: SearchUserResponse[];
-    hasNextPage?: boolean;
-    hasPreviousPage?: boolean;
-};
 
 const PAGE_SIZE = 5;
 

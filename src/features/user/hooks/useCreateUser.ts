@@ -1,17 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UpdatedResponse } from '@/features/common';
-import { Role } from '@/utils/auth';
+import { UpdatedResponse } from '@/features/common/commonTypes';
+import { CreateUserRequest } from '../userTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
-
-export type CreateUserRequest = {
-    emailAddress: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    roles?: Role[];
-};
 
 const createUser = (request: CreateUserRequest) =>
     fetcher<UpdatedResponse>(`${config.API_URL}/user`, {

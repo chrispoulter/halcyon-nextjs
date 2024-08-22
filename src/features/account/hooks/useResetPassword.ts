@@ -1,13 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { UpdatedResponse } from '@/features/common';
+import { UpdatedResponse } from '@/features/common/commonTypes';
+import { ResetPasswordRequest } from '../accountTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
-
-export type ResetPasswordRequest = {
-    token: string;
-    emailAddress: string;
-    newPassword: string;
-};
 
 const resetPassword = (request: ResetPasswordRequest) =>
     fetcher<UpdatedResponse>(`${config.API_URL}/account/reset-password`, {

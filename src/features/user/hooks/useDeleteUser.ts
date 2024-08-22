@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UpdatedResponse } from '@/features/common';
+import { UpdatedResponse } from '@/features/common/commonTypes';
+import { DeleteUserRequest } from '../userTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
-
-export type DeleteUserRequest = { version?: number };
 
 const deleteUser = (id: string, request: DeleteUserRequest) =>
     fetcher<UpdatedResponse>(`${config.API_URL}/user/${id}`, {

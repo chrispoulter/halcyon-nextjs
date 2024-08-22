@@ -1,15 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UpdatedResponse } from '@/features/common';
+import { UpdatedResponse } from '@/features/common/commonTypes';
+import { UpdateProfileRequest } from '../manageTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
-
-export type UpdateProfileRequest = {
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    version?: number;
-};
 
 const updateProfile = (request: UpdateProfileRequest) =>
     fetcher<UpdatedResponse>(`${config.API_URL}/manage`, {

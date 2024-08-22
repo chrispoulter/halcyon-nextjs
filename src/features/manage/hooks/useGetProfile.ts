@@ -1,15 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
+import { GetProfileResponse } from '../manageTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
-
-export type GetProfileResponse = {
-    id: string;
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    version: number;
-};
 
 export const getProfile = () =>
     fetcher<GetProfileResponse>(`${config.API_URL}/manage`);

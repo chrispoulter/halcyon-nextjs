@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UpdatedResponse } from '@/features/common';
+import { UpdatedResponse } from '@/features/common/commonTypes';
+import { UnlockUserRequest } from '../userTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
-
-export type UnlockUserRequest = { version?: number };
 
 const unlockUser = (id: string, request: UnlockUserRequest) =>
     fetcher<UpdatedResponse>(`${config.API_URL}/user/${id}/unlock`, {

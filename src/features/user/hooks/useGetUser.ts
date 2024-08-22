@@ -1,18 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { Role } from '@/utils/auth';
+import { GetUserResponse } from '../userTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
-
-export type GetUserResponse = {
-    id: string;
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    isLockedOut?: boolean;
-    roles?: Role[];
-    version: number;
-};
 
 export const getUser = (id: string) =>
     fetcher<GetUserResponse>(`${config.API_URL}/user/${id}`);

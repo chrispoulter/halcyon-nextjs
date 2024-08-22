@@ -1,15 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { UpdatedResponse } from '@/features/common';
+import { UpdatedResponse } from '@/features/common/commonTypes';
+import { RegisterRequest } from '../accountTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
-
-export type RegisterRequest = {
-    emailAddress: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-};
 
 const register = (request: RegisterRequest) =>
     fetcher<UpdatedResponse>(`${config.API_URL}/account/register`, {

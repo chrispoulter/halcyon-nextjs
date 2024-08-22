@@ -1,8 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
+import { ForgotPasswordRequest } from '../accountTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
-
-export type ForgotPasswordRequest = { emailAddress: string; siteUrl: string };
 
 export const forgotPassword = (request: ForgotPasswordRequest) =>
     fetcher(`${config.API_URL}/account/forgot-password`, {
