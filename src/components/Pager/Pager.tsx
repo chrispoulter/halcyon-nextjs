@@ -6,32 +6,47 @@ type PagerProps = {
     isLoading?: boolean;
     isFetching?: boolean;
     hasNextPage?: boolean;
+    hasPreviousPage?: boolean;
     onNextPage: () => void;
+    onPreviousPage: () => void;
 };
 
 export const Pager = ({
     isLoading,
     isFetching,
     hasNextPage,
-    onNextPage
+    hasPreviousPage,
+    onNextPage,
+    onPreviousPage
 }: PagerProps) => {
     if (isLoading) {
         return <ButtonGroupSkeleton />;
     }
 
-    if (!hasNextPage) {
+    if (!hasNextPage && !hasPreviousPage) {
         return null;
     }
 
     return (
         <ButtonGroup>
-            <Button
-                variant="secondary"
-                loading={isFetching}
-                onClick={onNextPage}
-            >
-                More...
-            </Button>
+            {hasPreviousPage && (
+                <Button
+                    variant="secondary"
+                    loading={isFetching}
+                    onClick={onPreviousPage}
+                >
+                    Previous
+                </Button>
+            )}
+            {hasNextPage && (
+                <Button
+                    variant="secondary"
+                    loading={isFetching}
+                    onClick={onNextPage}
+                >
+                    Next
+                </Button>
+            )}
         </ButtonGroup>
     );
 };

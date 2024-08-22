@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
     SearchUsersRequest,
     SearchUsersResponse
@@ -20,24 +20,15 @@ export const searchUsers = (
     );
 };
 
-type UseSearchUsersProps = Omit<SearchUsersRequest, 'page'>;
-
-export const useSearchUsers = (request: UseSearchUsersProps) => {
-    const { data, fetchNextPage, isLoading, isFetching, isError, hasNextPage } =
-        useInfiniteQuery({
-            queryKey: ['users', request],
-            queryFn: ({ pageParam }) =>
-                searchUsers({ ...request, page: pageParam }),
-            initialPageParam: 1,
-            getNextPageParam: (lastPage, pages) =>
-                lastPage.hasNextPage ? pages.length + 1 : undefined
-        });
+export const useSearchUsers = (request: SearchUsersRequest) => {
+    const { data, isFetching, isLoading, isError } = useQuery({
+        queryKey: ['users', request],
+        queryFn: () => searchUsers(request)
+    });
 
     return {
-        isLoading: isLoading || isError,
         isFetching,
-        users: data?.pages?.map(response => response?.items || []).flat(),
-        hasNextPage,
-        fetchNextPage
+        isLoading: isLoading || isError,
+        ...data
     };
 };

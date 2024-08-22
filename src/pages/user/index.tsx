@@ -31,13 +31,18 @@ const defaultRequest = {
 const UsersPage = () => {
     const [request, setRequest] = useState(defaultRequest);
 
-    const { users, isLoading, isFetching, hasNextPage, fetchNextPage } =
+    const { items, isFetching, isLoading, hasNextPage, hasPreviousPage } =
         useSearchUsers(request);
 
     const onSubmit = (values: SearchUserFormValues) => {
         setRequest({ ...request, ...values });
         return true;
     };
+
+    const onNextPage = () => setRequest({ ...request, page: request.page + 1 });
+
+    const onPreviousPage = () =>
+        setRequest({ ...request, page: request.page - 1 });
 
     const onSort = (sort: UserSort) => setRequest({ ...request, sort });
 
@@ -67,13 +72,15 @@ const UsersPage = () => {
                     </ButtonLink>
                 </ButtonGroup>
 
-                <UserList isLoading={isLoading} users={users} />
+                <UserList isLoading={isLoading} users={items} />
 
                 <Pager
                     isLoading={isLoading}
                     isFetching={isFetching}
                     hasNextPage={hasNextPage}
-                    onNextPage={fetchNextPage}
+                    hasPreviousPage={hasPreviousPage}
+                    onNextPage={onNextPage}
+                    onPreviousPage={onPreviousPage}
                 />
             </Container>
         </>
@@ -85,28 +92,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
     const queryClient = new QueryClient();
 
-    await queryClient.prefetchInfiniteQuery({
+    await queryClient.prefetchQuery({
         queryKey: ['users', defaultRequest],
-        initialPageParam: defaultRequest.page,
-        queryFn: ({ pageParam = 1 }) =>
-            searchUsers(
-                {
-                    ...defaultRequest,
-                    page: pageParam as number
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${session?.accessToken}`
-                    }
+        queryFn: () =>
+            searchUsers(defaultRequest, {
+                headers: {
+                    Authorization: `Bearer ${session?.accessToken}`
                 }
-            )
+            })
     });
-
-    // next ssr hack!
-    queryClient.setQueryData(['users', defaultRequest], (data: any) => ({
-        ...data,
-        pageParams: []
-    }));
 
     return {
         props: {
