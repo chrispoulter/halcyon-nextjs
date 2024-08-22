@@ -11,8 +11,8 @@ export type GetProfileResponse = {
     version: number;
 };
 
-export const getProfile = (init?: RequestInit) =>
-    fetcher<GetProfileResponse>(`${config.API_URL}/manage`, init);
+export const getProfile = () =>
+    fetcher<GetProfileResponse>(`${config.API_URL}/manage`);
 
 export const useGetProfile = () => {
     const { data } = useQuery({
@@ -20,5 +20,5 @@ export const useGetProfile = () => {
         queryFn: () => getProfile()
     });
 
-    return { profile: data?.data };
+    return { profile: data };
 };

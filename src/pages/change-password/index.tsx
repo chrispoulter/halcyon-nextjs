@@ -57,7 +57,10 @@ const ChangePasswordPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => ({
+export const _getServerSideProps: GetServerSideProps = async ({
+    req,
+    res
+}) => ({
     props: {
         session: await getServerSession(req, res, authOptions)
     }

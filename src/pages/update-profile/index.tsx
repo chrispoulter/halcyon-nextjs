@@ -54,7 +54,7 @@ const UpdateProfilePage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const _getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     const session = await getServerSession(req, res, authOptions);
 
     const queryClient = new QueryClient();

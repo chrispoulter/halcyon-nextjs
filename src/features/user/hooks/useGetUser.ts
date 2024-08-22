@@ -14,8 +14,8 @@ export type GetUserResponse = {
     version: number;
 };
 
-export const getUser = (id: string, init?: RequestInit) =>
-    fetcher<GetUserResponse>(`${config.API_URL}/user/${id}`, init);
+export const getUser = (id: string) =>
+    fetcher<GetUserResponse>(`${config.API_URL}/user/${id}`);
 
 export const useGetUser = (id: string) => {
     const { data, isFetching } = useQuery({
@@ -24,5 +24,5 @@ export const useGetUser = (id: string) => {
         enabled: !!id
     });
 
-    return { user: data?.data, isFetching };
+    return { user: data, isFetching };
 };

@@ -118,7 +118,7 @@ const UpdateUserPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
+export const _getServerSideProps: GetServerSideProps = async ({
     req,
     res,
     params

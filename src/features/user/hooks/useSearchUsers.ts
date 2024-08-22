@@ -34,18 +34,12 @@ export type SearchUsersResponse = {
 
 const PAGE_SIZE = 5;
 
-export const searchUsers = (
-    request: SearchUsersRequest,
-    init?: RequestInit
-) => {
+export const searchUsers = (request: SearchUsersRequest) => {
     const params = Object.entries(request)
         .map(pair => pair.map(encodeURIComponent).join('='))
         .join('&');
 
-    return fetcher<SearchUsersResponse>(
-        `${config.API_URL}/user?${params}`,
-        init
-    );
+    return fetcher<SearchUsersResponse>(`${config.API_URL}/user?${params}`);
 };
 
 type UseSearchUsersProps = Omit<SearchUsersRequest, 'page' | 'size'>;
@@ -63,7 +57,7 @@ export const useSearchUsers = (request: UseSearchUsersProps) => {
     return {
         isLoading: isLoading || isError,
         isFetching,
-        users: data?.pages?.map(response => response.data?.items || []).flat(),
+        users: data?.pages?.map(response => response?.items || []).flat(),
         hasMore: hasNextPage,
         loadMore: fetchNextPage
     };
