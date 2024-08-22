@@ -3,7 +3,7 @@ import {
     SearchUsersRequest,
     SearchUsersResponse
 } from '@/features/user/userTypes';
-import { fetcher } from '@/utils/fetch';
+import { fetchWithToken } from '@/utils/fetch';
 import { config } from '@/utils/config';
 
 export const PAGE_SIZE = 5;
@@ -13,7 +13,9 @@ export const searchUsers = (request: SearchUsersRequest) => {
         .map(pair => pair.map(encodeURIComponent).join('='))
         .join('&');
 
-    return fetcher<SearchUsersResponse>(`${config.API_URL}/user?${params}`);
+    return fetchWithToken<SearchUsersResponse>(
+        `${config.API_URL}/user?${params}`
+    );
 };
 
 type UseSearchUsersProps = Omit<SearchUsersRequest, 'page' | 'size'>;

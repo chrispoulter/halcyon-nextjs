@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { LockUserRequest } from '@/features/user/userTypes';
-import { fetcher } from '@/utils/fetch';
+import { fetchWithToken } from '@/utils/fetch';
 import { config } from '@/utils/config';
 
 const lockUser = (id: string, request: LockUserRequest) =>
-    fetcher<UpdatedResponse>(`${config.API_URL}/user/${id}/lock`, {
+    fetchWithToken<UpdatedResponse>(`${config.API_URL}/user/${id}/lock`, {
         method: 'PUT',
         body: JSON.stringify(request)
     });

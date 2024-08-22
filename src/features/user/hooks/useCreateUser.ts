@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { CreateUserRequest } from '@/features/user/userTypes';
-import { fetcher } from '@/utils/fetch';
+import { fetchWithToken } from '@/utils/fetch';
 import { config } from '@/utils/config';
 
 const createUser = (request: CreateUserRequest) =>
-    fetcher<UpdatedResponse>(`${config.API_URL}/user`, {
+    fetchWithToken<UpdatedResponse>(`${config.API_URL}/user`, {
         method: 'POST',
         body: JSON.stringify(request)
     });

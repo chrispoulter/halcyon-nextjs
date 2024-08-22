@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
     await queryClient.prefetchQuery({
         queryKey: ['profile'],
-        queryFn: () => getProfile()
+        queryFn: getProfile
     });
 
     return {

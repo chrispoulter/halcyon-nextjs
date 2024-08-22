@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { DeleteUserRequest } from '@/features/user/userTypes';
-import { fetcher } from '@/utils/fetch';
+import { fetchWithToken } from '@/utils/fetch';
 import { config } from '@/utils/config';
 
 const deleteUser = (id: string, request: DeleteUserRequest) =>
-    fetcher<UpdatedResponse>(`${config.API_URL}/user/${id}`, {
+    fetchWithToken<UpdatedResponse>(`${config.API_URL}/user/${id}`, {
         method: 'DELETE',
         body: JSON.stringify(request)
     });
