@@ -40,6 +40,8 @@ const App = ({
                 },
                 queryCache: new QueryCache({
                     onError: async (error: any) => {
+                        console.log('queryCache', error);
+
                         switch (error.status) {
                             case 401:
                                 await signOut({ callbackUrl: '/' });
@@ -61,8 +63,9 @@ const App = ({
                 }),
                 mutationCache: new MutationCache({
                     onError: async (error: any) => {
-                        const message =
-                            error?.response?.title || error?.message;
+                        console.log('mutationCache', error.response);
+
+                        const message = error?.response?.title;
 
                         switch (error.status) {
                             case 401:

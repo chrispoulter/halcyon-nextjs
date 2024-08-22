@@ -27,9 +27,7 @@ export const fetchWithToken = async <TResponse>(
         }
     });
 
-    const isJson = result.headers
-        .get('content-type')
-        ?.includes('application/json');
+    const isJson = result.headers.get('content-type')?.includes('json');
 
     const response: TResponse = isJson ? await result.json() : undefined;
 
