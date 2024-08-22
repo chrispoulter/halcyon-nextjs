@@ -118,7 +118,7 @@ const UpdateUserPage = () => {
     );
 };
 
-export const _getServerSideProps: GetServerSideProps = async ({
+export const getServerSideProps: GetServerSideProps = async ({
     req,
     res,
     params
@@ -131,12 +131,7 @@ export const _getServerSideProps: GetServerSideProps = async ({
 
     await queryClient.prefetchQuery({
         queryKey: ['user', id],
-        queryFn: () =>
-            getUser(id, {
-                headers: {
-                    cookie: req.headers.cookie!
-                }
-            })
+        queryFn: () => getUser(id)
     });
 
     return {

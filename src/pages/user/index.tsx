@@ -16,20 +16,21 @@ import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropd
 import { UserList } from '@/features/user/UserList/UserList';
 import {
     useSearchUsers,
-    UserSort,
-    searchUsers
+    searchUsers,
+    PAGE_SIZE
 } from '@/features/user/hooks/useSearchUsers';
+import { UserSort } from '@/features/user/userTypes';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-const PAGE_SIZE = 5;
+const defaultRequest = {
+    search: '',
+    sort: UserSort.NAME_ASC,
+    page: 1,
+    size: PAGE_SIZE
+};
 
 const UsersPage = () => {
-    const [request, setRequest] = useState({
-        search: '',
-        sort: UserSort.NAME_ASC,
-        page: 1,
-        size: PAGE_SIZE
-    });
+    const [request, setRequest] = useState(defaultRequest);
 
     const { users, isLoading, isFetching, hasMore, loadMore } =
         useSearchUsers(request);
@@ -82,32 +83,23 @@ const UsersPage = () => {
     );
 };
 
-export const _getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     const session = await getServerSession(req, res, authOptions);
 
     const queryClient = new QueryClient();
 
-    const request = {
-        search: '',
-        sort: UserSort.NAME_ASC
-    };
-
     await queryClient.prefetchInfiniteQuery({
-        queryKey: ['users', request],
+        queryKey: ['users', defaultRequest],
         initialPageParam: [],
         queryFn: ({ pageParam = 1 }) =>
-            searchUsers(
-                { ...request, page: pageParam as number, size: PAGE_SIZE },
-                {
-                    headers: {
-                        cookie: req.headers.cookie!
-                    }
-                }
-            )
+            searchUsers({
+                ...defaultRequest,
+                page: pageParam as number
+            })
     });
 
     // next ssr hack!
-    queryClient.setQueryData(['users', request], (data: any) => ({
+    queryClient.setQueryData(['users', defaultRequest], (data: any) => ({
         ...data,
         pageParams: []
     }));

@@ -1,9 +1,12 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { SearchUsersRequest, SearchUsersResponse } from '../userTypes';
+import {
+    SearchUsersRequest,
+    SearchUsersResponse
+} from '@/features/user/userTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
 
-const PAGE_SIZE = 5;
+export const PAGE_SIZE = 5;
 
 export const searchUsers = (request: SearchUsersRequest) => {
     const params = Object.entries(request)

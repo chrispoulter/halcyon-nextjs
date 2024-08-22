@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { GetUserResponse } from '../userTypes';
+import { GetUserResponse } from '@/features/user/userTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
 

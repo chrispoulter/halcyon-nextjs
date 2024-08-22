@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdatedResponse } from '@/features/common/commonTypes';
-import { UnlockUserRequest } from '../userTypes';
+import { UnlockUserRequest } from '@/features/user/userTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
 

@@ -48,19 +48,14 @@ const MyAccountPage = () => {
     );
 };
 
-export const _getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     const session = await getServerSession(req, res, authOptions);
 
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
         queryKey: ['profile'],
-        queryFn: () =>
-            getProfile({
-                headers: {
-                    cookie: req.headers.cookie!
-                }
-            })
+        queryFn: () => getProfile()
     });
 
     return {

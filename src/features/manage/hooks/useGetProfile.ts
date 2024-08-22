@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { GetProfileResponse } from '../manageTypes';
+import { GetProfileResponse } from '@/features/manage/manageTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
 

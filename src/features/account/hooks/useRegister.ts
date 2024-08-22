@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { UpdatedResponse } from '@/features/common/commonTypes';
-import { RegisterRequest } from '../accountTypes';
+import { RegisterRequest } from '@/features/account/accountTypes';
 import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
 
