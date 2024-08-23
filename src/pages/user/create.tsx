@@ -13,10 +13,10 @@ import { useCreateUser } from '@/features/user/hooks/useCreateUser';
 const CreateUserPage = () => {
     const router = useRouter();
 
-    const { createUser, isSaving } = useCreateUser();
+    const { mutate, isPending } = useCreateUser();
 
     const onSubmit = (values: CreateUserFormValues) =>
-        createUser(values, {
+        mutate(values, {
             onSuccess: async () => {
                 toast.success('User successfully created.');
                 await router.push('/user');
@@ -34,7 +34,7 @@ const CreateUserPage = () => {
                 </Title>
 
                 <CreateUserForm
-                    isLoading={isSaving}
+                    isLoading={isPending}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/user" variant="secondary">

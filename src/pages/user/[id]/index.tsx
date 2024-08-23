@@ -27,20 +27,20 @@ const UpdateUserPage = () => {
 
     const id = router.query.id as string;
 
-    const { user, isFetching } = useGetUser(id);
+    const { data, isFetching } = useGetUser(id);
 
-    const { updateUser, isSaving } = useUpdateUser(id);
+    const { mutate, isPending } = useUpdateUser(id);
 
-    const { lockUser, isLocking } = useLockUser(id);
+    const { mutate: lockUser, isPending: isLocking } = useLockUser(id);
 
-    const { unlockUser, isUnlocking } = useUnlockUser(id);
+    const { mutate: unlockUser, isPending: isUnlocking } = useUnlockUser(id);
 
-    const { deleteUser, isDeleting } = useDeleteUser(id);
+    const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser(id);
 
-    const version = user?.version;
+    const version = data?.version;
 
     const onSubmit = async (values: UpdateUserFormValues) =>
-        updateUser(
+        mutate(
             { ...values, version },
             {
                 onSuccess: async () => {
@@ -83,13 +83,13 @@ const UpdateUserPage = () => {
                 Cancel
             </ButtonLink>
 
-            {user?.isLockedOut ? (
+            {data?.isLockedOut ? (
                 <ConfirmUnlockUser
                     onConfirm={onUnlock}
                     loading={isUnlocking}
                     disabled={
                         isSubmitting ||
-                        isSaving ||
+                        isPending ||
                         isDeleting ||
                         isLocking ||
                         isFetching
@@ -101,7 +101,7 @@ const UpdateUserPage = () => {
                     loading={isLocking}
                     disabled={
                         isSubmitting ||
-                        isSaving ||
+                        isPending ||
                         isDeleting ||
                         isUnlocking ||
                         isFetching
@@ -114,7 +114,7 @@ const UpdateUserPage = () => {
                 loading={isDeleting}
                 disabled={
                     isSubmitting ||
-                    isSaving ||
+                    isPending ||
                     isUnlocking ||
                     isLocking ||
                     isFetching
@@ -134,8 +134,8 @@ const UpdateUserPage = () => {
                 </Title>
 
                 <UpdateUserForm
-                    user={user}
-                    isLoading={isSaving}
+                    user={data}
+                    isLoading={isPending}
                     isDisabled={
                         isUnlocking || isLocking || isDeleting || isFetching
                     }

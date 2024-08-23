@@ -13,10 +13,7 @@ const resetPassword = (request: ResetPasswordRequest) =>
         }
     );
 
-export const useResetPassword = () => {
-    const { mutate, isPending } = useMutation({
+export const useResetPassword = () =>
+    useMutation({
         mutationFn: resetPassword
     });
-
-    return { resetPassword: mutate, isSaving: isPending };
-};

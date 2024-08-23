@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { ChangePasswordRequest } from '@/features/manage/manageTypes';
 import { fetchWithToken } from '@/utils/fetch';
@@ -14,9 +14,11 @@ const changePassword = (request: ChangePasswordRequest) =>
     );
 
 export const useChangePassword = () => {
-    const { mutate, isPending } = useMutation({
-        mutationFn: changePassword
-    });
+    const queryClient = useQueryClient();
 
-    return { changePassword: mutate, isSaving: isPending };
+    return useMutation({
+        mutationFn: changePassword,
+        onSuccess: () =>
+            queryClient.invalidateQueries({ queryKey: ['profile'] })
+    });
 };

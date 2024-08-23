@@ -6,12 +6,9 @@ import { config } from '@/utils/config';
 export const getUser = (id: string, init?: RequestInit) =>
     fetchWithToken<GetUserResponse>(`${config.API_URL}/user/${id}`, init);
 
-export const useGetUser = (id: string) => {
-    const { data, isFetching } = useQuery({
+export const useGetUser = (id: string) =>
+    useQuery({
         queryKey: ['user', id],
         queryFn: () => getUser(id),
         enabled: !!id
     });
-
-    return { user: data, isFetching };
-};

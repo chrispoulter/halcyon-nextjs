@@ -13,13 +13,11 @@ const lockUser = (id: string, request: LockUserRequest) =>
 export const useLockUser = (id: string) => {
     const queryClient = useQueryClient();
 
-    const { mutate, isPending } = useMutation({
+    return useMutation({
         mutationFn: (request: LockUserRequest) => lockUser(id, request),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
             queryClient.invalidateQueries({ queryKey: ['user', id] });
         }
     });
-
-    return { lockUser: mutate, isLocking: isPending };
 };

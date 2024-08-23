@@ -13,11 +13,9 @@ const updateProfile = (request: UpdateProfileRequest) =>
 export const useUpdateProfile = () => {
     const queryClient = useQueryClient();
 
-    const { mutate, isPending } = useMutation({
+    return useMutation({
         mutationFn: updateProfile,
         onSuccess: () =>
             queryClient.invalidateQueries({ queryKey: ['profile'] })
     });
-
-    return { updateProfile: mutate, isSaving: isPending };
 };

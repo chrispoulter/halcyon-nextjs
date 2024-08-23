@@ -13,7 +13,7 @@ const deleteAccount = (request: DeleteAccountRequst) =>
 export const useDeleteAccount = () => {
     const queryClient = useQueryClient();
 
-    const { mutate, isPending } = useMutation({
+    return useMutation({
         mutationFn: (request: DeleteAccountRequst) => deleteAccount(request),
         onSuccess: () =>
             queryClient.invalidateQueries({
@@ -21,6 +21,4 @@ export const useDeleteAccount = () => {
                 refetchType: 'none'
             })
     });
-
-    return { deleteAccount: mutate, isDeleting: isPending };
 };

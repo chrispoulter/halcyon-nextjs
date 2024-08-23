@@ -21,14 +21,14 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 const UpdateProfilePage = () => {
     const router = useRouter();
 
-    const { profile } = useGetProfile();
+    const { data } = useGetProfile();
 
-    const { updateProfile, isSaving } = useUpdateProfile();
+    const { mutate, isPending } = useUpdateProfile();
 
-    const version = profile?.version;
+    const version = data?.version;
 
     const onSubmit = (values: UpdateProfileFormValues) =>
-        updateProfile(
+        mutate(
             { ...values, version },
             {
                 onSuccess: async () => {
@@ -46,8 +46,8 @@ const UpdateProfilePage = () => {
                 <Title>Update Profile</Title>
 
                 <UpdateProfileForm
-                    profile={profile}
-                    isLoading={isSaving}
+                    profile={data}
+                    isLoading={isPending}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">

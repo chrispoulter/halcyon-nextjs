@@ -12,10 +12,10 @@ import { useForgotPassword } from '@/features/account/hooks/useForgotPassword';
 const ForgotPasswordPage = () => {
     const router = useRouter();
 
-    const { forgotPassword, isSaving } = useForgotPassword();
+    const { mutate, isPending } = useForgotPassword();
 
     const onSubmit = (values: ForgotPasswordFormValues) =>
-        forgotPassword(
+        mutate(
             {
                 ...values,
                 siteUrl: window.location.origin
@@ -37,7 +37,7 @@ const ForgotPasswordPage = () => {
 
             <Container>
                 <Title>Forgot Password</Title>
-                <ForgotPasswordForm isLoading={isSaving} onSubmit={onSubmit} />
+                <ForgotPasswordForm isLoading={isPending} onSubmit={onSubmit} />
             </Container>
         </>
     );

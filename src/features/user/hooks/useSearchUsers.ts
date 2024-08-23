@@ -21,14 +21,8 @@ export const searchUsers = (
 };
 
 export const useSearchUsers = (request: SearchUsersRequest) => {
-    const { data, isFetching, isLoading, isError } = useQuery({
+    return useQuery({
         queryKey: ['users', request],
         queryFn: () => searchUsers(request)
     });
-
-    return {
-        isFetching,
-        isLoading: isLoading || isError,
-        ...data
-    };
 };

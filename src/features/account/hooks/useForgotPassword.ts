@@ -9,10 +9,7 @@ export const forgotPassword = (request: ForgotPasswordRequest) =>
         body: JSON.stringify(request)
     });
 
-export const useForgotPassword = () => {
-    const { mutate, isPending } = useMutation({
+export const useForgotPassword = () =>
+    useMutation({
         mutationFn: forgotPassword
     });
-
-    return { forgotPassword: mutate, isSaving: isPending };
-};

@@ -13,10 +13,8 @@ const createUser = (request: CreateUserRequest) =>
 export const useCreateUser = () => {
     const queryClient = useQueryClient();
 
-    const { mutate, isPending } = useMutation({
+    return useMutation({
         mutationFn: createUser,
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] })
     });
-
-    return { createUser: mutate, isSaving: isPending };
 };

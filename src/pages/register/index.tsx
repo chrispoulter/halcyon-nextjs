@@ -16,10 +16,10 @@ const RegisterPage = () => {
 
     const callbackUrl = (router.query.callbackUrl as string) || '/';
 
-    const { register, isSaving } = useRegister();
+    const { mutate, isPending } = useRegister();
 
     const onSubmit = (values: RegisterFormValues) =>
-        register(values, {
+        mutate(values, {
             onSuccess: async () => {
                 toast.success('User successfully registered.');
 
@@ -48,7 +48,7 @@ const RegisterPage = () => {
             <Container>
                 <Title>Register</Title>
                 <RegisterForm
-                    isLoading={isSaving}
+                    isLoading={isPending}
                     onSubmit={onSubmit}
                     className="mb-5"
                 />

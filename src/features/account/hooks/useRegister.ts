@@ -10,10 +10,7 @@ const register = (request: RegisterRequest) =>
         body: JSON.stringify(request)
     });
 
-export const useRegister = () => {
-    const { mutate, isPending } = useMutation({
+export const useRegister = () =>
+    useMutation({
         mutationFn: register
     });
-
-    return { register: mutate, isSaving: isPending };
-};

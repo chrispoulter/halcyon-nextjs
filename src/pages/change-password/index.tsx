@@ -22,14 +22,14 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 const ChangePasswordPage = () => {
     const router = useRouter();
 
-    const { profile } = useGetProfile();
+    const { data } = useGetProfile();
 
-    const { changePassword, isSaving } = useChangePassword();
+    const { mutate, isPending } = useChangePassword();
 
-    const version = profile?.version;
+    const version = data?.version;
 
     const onSubmit = (values: ChangePasswordFormValues) =>
-        changePassword(
+        mutate(
             { ...values, version },
             {
                 onSuccess: async () => {
@@ -47,8 +47,8 @@ const ChangePasswordPage = () => {
                 <Title>Change Password</Title>
 
                 <ChangePasswordForm
-                    profile={profile}
-                    isLoading={isSaving}
+                    profile={data}
+                    isLoading={isPending}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">

@@ -17,14 +17,14 @@ import { useDeleteAccount } from '@/features/manage/hooks/useDeleteAccount';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const MyAccountPage = () => {
-    const { profile } = useGetProfile();
+    const { data } = useGetProfile();
 
-    const { deleteAccount, isDeleting } = useDeleteAccount();
+    const { mutate, isPending } = useDeleteAccount();
 
-    const version = profile?.version;
+    const version = data?.version;
 
     const onDelete = () =>
-        deleteAccount(
+        mutate(
             { version },
             {
                 onSuccess: async () => {
@@ -40,12 +40,12 @@ const MyAccountPage = () => {
 
             <Container>
                 <Title>My Account</Title>
-                <PersonalDetailsCard profile={profile} className="mb-5" />
-                <LoginDetailsCard profile={profile} className="mb-5" />
+                <PersonalDetailsCard profile={data} className="mb-5" />
+                <LoginDetailsCard profile={data} className="mb-5" />
 
                 <AccountSettingsCard
-                    profile={profile}
-                    isDeleting={isDeleting}
+                    profile={data}
+                    isDeleting={isPending}
                     onDelete={onDelete}
                 />
             </Container>

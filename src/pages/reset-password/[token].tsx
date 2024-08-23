@@ -14,10 +14,10 @@ const ResetPasswordPage = () => {
 
     const token = router.query.token as string;
 
-    const { resetPassword } = useResetPassword();
+    const { mutate, isPending } = useResetPassword();
 
     const onSubmit = (values: ResetPasswordFormValues) =>
-        resetPassword(
+        mutate(
             {
                 token,
                 ...values
@@ -36,7 +36,7 @@ const ResetPasswordPage = () => {
 
             <Container>
                 <Title>Reset Password</Title>
-                <ResetPasswordForm onSubmit={onSubmit} />
+                <ResetPasswordForm isLoading={isPending} onSubmit={onSubmit} />
             </Container>
         </>
     );

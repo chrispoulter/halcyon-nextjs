@@ -13,13 +13,11 @@ const updateUser = (id: string, request: UpdateUserRequest) =>
 export const useUpdateUser = (id: string) => {
     const queryClient = useQueryClient();
 
-    const { mutate, isPending } = useMutation({
+    return useMutation({
         mutationFn: (request: UpdateUserRequest) => updateUser(id, request),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
             queryClient.invalidateQueries({ queryKey: ['user', id] });
         }
     });
-
-    return { updateUser: mutate, isSaving: isPending };
 };
