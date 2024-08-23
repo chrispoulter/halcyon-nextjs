@@ -48,6 +48,7 @@ export const ResetPasswordForm = ({ onSubmit }: ResetPasswordFormProps) => {
                 maxLength={254}
                 autoComplete="username"
                 required
+                disabled={isSubmitting}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -59,6 +60,7 @@ export const ResetPasswordForm = ({ onSubmit }: ResetPasswordFormProps) => {
                     maxLength={50}
                     autoComplete="new-password"
                     required
+                    disabled={isSubmitting}
                     className="mb-5 sm:flex-1"
                 />
                 <Input
@@ -69,6 +71,7 @@ export const ResetPasswordForm = ({ onSubmit }: ResetPasswordFormProps) => {
                     maxLength={50}
                     autoComplete="new-password"
                     required
+                    disabled={isSubmitting}
                     className="mb-5 sm:flex-1"
                 />
             </div>

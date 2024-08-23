@@ -21,10 +21,7 @@ export const ToggleGroup = ({
     disabled,
     control
 }: ToggleGroupProps) => {
-    const {
-        field,
-        formState: { isSubmitting }
-    } = useController({
+    const { field } = useController({
         name,
         control
     });
@@ -52,7 +49,7 @@ export const ToggleGroup = ({
                         checked={isChecked}
                         onChange={checked => onChange(option.value, checked)}
                         onBlur={field.onBlur}
-                        disabled={disabled || isSubmitting}
+                        disabled={disabled}
                         className={clsx(
                             'mb-2 flex w-full items-center justify-between gap-5 border px-5 py-3 text-left focus:outline-none focus:ring-1 focus:ring-cyan-500 sm:py-2',
                             {

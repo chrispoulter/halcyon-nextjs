@@ -74,6 +74,7 @@ const ChangePasswordFormInternal = ({
                 maxLength={50}
                 autoComplete="current-password"
                 required
+                disabled={isSubmitting}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -85,6 +86,7 @@ const ChangePasswordFormInternal = ({
                     maxLength={50}
                     autoComplete="new-password"
                     required
+                    disabled={isSubmitting}
                     className="mb-5 sm:flex-1"
                 />
                 <Input
@@ -95,6 +97,7 @@ const ChangePasswordFormInternal = ({
                     maxLength={50}
                     autoComplete="new-password"
                     required
+                    disabled={isSubmitting}
                     className="mb-5 sm:flex-1"
                 />
             </div>

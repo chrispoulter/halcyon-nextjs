@@ -30,8 +30,7 @@ export const DatePicker = ({
 }: DatePickerProps) => {
     const {
         field,
-        fieldState: { error },
-        formState: { isSubmitting }
+        fieldState: { error }
     } = useController({
         name,
         control
@@ -88,7 +87,7 @@ export const DatePicker = ({
                     id={`${name}.date`}
                     value={state.date}
                     required={required}
-                    disabled={disabled || isSubmitting}
+                    disabled={disabled}
                     aria-label={`${label} Date`}
                     aria-invalid={!!error}
                     autoComplete={autoComplete && autoComplete[0]}
@@ -113,7 +112,7 @@ export const DatePicker = ({
                     id={`${name}.month`}
                     value={state.month}
                     required={required}
-                    disabled={disabled || isSubmitting}
+                    disabled={disabled}
                     aria-label={`${label} Month`}
                     aria-invalid={!!error}
                     autoComplete={autoComplete && autoComplete[1]}
@@ -141,7 +140,7 @@ export const DatePicker = ({
                     id={`${name}.year`}
                     value={state.year}
                     required={required}
-                    disabled={disabled || isSubmitting}
+                    disabled={disabled}
                     aria-label={`${label} Year`}
                     aria-invalid={!!error}
                     autoComplete={autoComplete && autoComplete[2]}

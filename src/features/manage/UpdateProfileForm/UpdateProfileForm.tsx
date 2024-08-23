@@ -75,6 +75,7 @@ const UpdateProfileFormInternal = ({
                 maxLength={254}
                 autoComplete="username"
                 required
+                disabled={isSubmitting}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -86,6 +87,7 @@ const UpdateProfileFormInternal = ({
                     maxLength={50}
                     autoComplete="given-name"
                     required
+                    disabled={isSubmitting}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -96,6 +98,7 @@ const UpdateProfileFormInternal = ({
                     maxLength={50}
                     autoComplete="family-name"
                     required
+                    disabled={isSubmitting}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -105,6 +108,7 @@ const UpdateProfileFormInternal = ({
                 name="dateOfBirth"
                 autoComplete={['bday-day', 'bday-month', 'bday-year']}
                 required
+                disabled={isSubmitting}
                 className="mb-5"
             />
             <ButtonGroup>

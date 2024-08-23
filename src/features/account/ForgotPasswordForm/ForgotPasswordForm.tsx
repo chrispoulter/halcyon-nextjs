@@ -29,13 +29,14 @@ export const ForgotPasswordForm = ({ onSubmit }: ForgotPasswordFormProps) => {
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <Input
+                control={control}
                 label="Email Address"
                 name="emailAddress"
                 type="email"
                 maxLength={254}
                 autoComplete="username"
                 required
-                control={control}
+                disabled={isSubmitting}
                 className="mb-5"
             />
             <ButtonGroup>

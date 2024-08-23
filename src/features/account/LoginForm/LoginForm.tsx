@@ -42,6 +42,7 @@ export const LoginForm = ({ onSubmit, className }: LoginFormProps) => {
                 maxLength={254}
                 autoComplete="username"
                 required
+                disabled={isSubmitting}
                 className="mb-3"
             />
             <Input
@@ -52,6 +53,7 @@ export const LoginForm = ({ onSubmit, className }: LoginFormProps) => {
                 maxLength={50}
                 autoComplete="current-password"
                 required
+                disabled={isSubmitting}
                 className="mb-5"
             />
             <ButtonGroup>

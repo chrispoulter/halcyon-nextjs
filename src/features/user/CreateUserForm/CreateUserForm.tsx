@@ -67,6 +67,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                 maxLength={254}
                 autoComplete="username"
                 required
+                disabled={isSubmitting}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -78,6 +79,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                     maxLength={50}
                     autoComplete="new-password"
                     required
+                    disabled={isSubmitting}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -88,6 +90,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                     maxLength={50}
                     autoComplete="new-password"
                     required
+                    disabled={isSubmitting}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -100,6 +103,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                     maxLength={50}
                     autoComplete="given-name"
                     required
+                    disabled={isSubmitting}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -110,6 +114,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                     maxLength={50}
                     autoComplete="family-name"
                     required
+                    disabled={isSubmitting}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -119,6 +124,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                 name="dateOfBirth"
                 required
                 autoComplete={['bday-day', 'bday-month', 'bday-year']}
+                disabled={isSubmitting}
                 className="mb-3"
             />
             <div className="mb-5">
@@ -129,6 +135,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                     control={control}
                     name="roles"
                     options={roleOptions}
+                    disabled={isSubmitting}
                 />
             </div>
             <ButtonGroup>
