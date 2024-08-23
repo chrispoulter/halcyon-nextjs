@@ -35,7 +35,7 @@ export const roleOptions = Object.entries(roles).map(([value, item]) => ({
 
 export const isAuthorized = (
     token?: Pick<JWT, 'roles'>,
-    requiredRoles?: string[]
+    requiredRoles?: Role[]
 ) => {
     if (!token) {
         return false;
