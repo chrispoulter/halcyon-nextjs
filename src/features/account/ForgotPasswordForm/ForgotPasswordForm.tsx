@@ -35,13 +35,13 @@ export const ForgotPasswordForm = ({
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <Input
+                control={control}
                 label="Email Address"
                 name="emailAddress"
                 type="email"
                 maxLength={254}
                 autoComplete="username"
                 required
-                control={control}
                 disabled={isLoading}
                 className="mb-5"
             />

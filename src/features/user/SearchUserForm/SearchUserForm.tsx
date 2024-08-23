@@ -43,7 +43,7 @@ export const SearchUserForm = ({
                 name="search"
                 type="search"
                 placeholder="Search Users..."
-                disabled={isLoading}
+                disabled={isSubmitting || isLoading}
                 hideLabel={true}
                 onClear={handleSubmit(onSubmit)}
             />
