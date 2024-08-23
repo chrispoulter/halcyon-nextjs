@@ -45,7 +45,7 @@ export const SortUserDropdown = ({
         <MenuItems className="absolute right-0 z-10 mt-1 w-44 border bg-white shadow focus:outline-none">
             {options.map(({ value, label }) => (
                 <MenuItem key={value} disabled={selected === value}>
-                    {({ active, disabled }) => (
+                    {({ focus, disabled }) => (
                         <button
                             type="button"
                             onClick={() => onSelect(value)}
@@ -53,7 +53,7 @@ export const SortUserDropdown = ({
                             className={clsx(
                                 'w-full px-5 py-3 text-left text-sm text-gray-800',
                                 {
-                                    'bg-gray-200': active,
+                                    'bg-gray-200': focus,
                                     'bg-cyan-600 text-white': disabled
                                 }
                             )}

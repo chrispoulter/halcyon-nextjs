@@ -29,7 +29,9 @@ export const accountEndpoints = api.injectEndpoints({
                 url: '/account/reset-password',
                 method: 'PUT',
                 body
-            })
+            }),
+            invalidatesTags: (result, error) =>
+                error ? [] : [{ type: 'User', id: result?.id }]
         })
     }),
     overrideExisting: false

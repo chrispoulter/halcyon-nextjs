@@ -119,18 +119,11 @@ const UpdateProfileFormInternal = ({
 
 export const UpdateProfileForm = ({
     profile,
-    onSubmit,
-    options
+    ...props
 }: UpdateProfileFormProps) => {
     if (!profile) {
         return <UpdateProfileFormLoading />;
     }
 
-    return (
-        <UpdateProfileFormInternal
-            profile={profile}
-            onSubmit={onSubmit}
-            options={options}
-        />
-    );
+    return <UpdateProfileFormInternal {...props} profile={profile} />;
 };
