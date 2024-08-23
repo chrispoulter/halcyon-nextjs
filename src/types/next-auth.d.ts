@@ -1,4 +1,5 @@
 import { DefaultUser } from 'next-auth';
+import { Role } from '@/utils/auth';
 
 declare module 'next-auth' {
     interface User {
@@ -7,13 +8,13 @@ declare module 'next-auth' {
         emailAddress: string;
         firstName: string;
         lastName: string;
-        roles?: string[];
+        roles?: Role[];
     }
 
     interface Session {
         accessToken: string;
         user: {
-            roles?: string[];
+            roles?: Role[];
         } & DefaultUser;
     }
 }
@@ -21,6 +22,6 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
     interface JWT {
         accessToken: string;
-        roles?: string[];
+        roles?: Role[];
     }
 }
