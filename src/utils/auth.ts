@@ -1,9 +1,14 @@
 import { JWT } from 'next-auth/jwt';
 
-export const SYSTEM_ADMINISTRATOR = 'SYSTEM_ADMINISTRATOR';
-export const USER_ADMINISTRATOR = 'USER_ADMINISTRATOR';
+export enum Role {
+    SYSTEM_ADMINISTRATOR = 'SYSTEM_ADMINISTRATOR',
+    USER_ADMINISTRATOR = 'USER_ADMINISTRATOR'
+}
 
-export const isUserAdministrator = [SYSTEM_ADMINISTRATOR, USER_ADMINISTRATOR];
+export const isUserAdministrator = [
+    Role.SYSTEM_ADMINISTRATOR,
+    Role.USER_ADMINISTRATOR
+];
 
 type Roles = {
     [key: string]: {
@@ -13,11 +18,11 @@ type Roles = {
 };
 
 export const roles: Roles = {
-    [SYSTEM_ADMINISTRATOR]: {
+    [Role.SYSTEM_ADMINISTRATOR]: {
         title: 'System Administrator',
         description: 'A system administrator has access to the entire system.'
     },
-    [USER_ADMINISTRATOR]: {
+    [Role.USER_ADMINISTRATOR]: {
         title: 'User Administrator',
         description: 'A user administrator can create / update / delete users.'
     }
