@@ -28,7 +28,7 @@ export const SearchUserForm = ({
         formState: { isSubmitting }
     } = useForm<SearchUserFormValues>({
         resolver: zodResolver(schema),
-        defaultValues: values
+        values
     });
 
     return (

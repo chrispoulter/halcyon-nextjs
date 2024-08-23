@@ -62,7 +62,7 @@ const UpdateProfileFormInternal = ({
         formState: { isSubmitting }
     } = useForm<UpdateProfileFormValues>({
         resolver: zodResolver(schema),
-        defaultValues: profile
+        values: profile
     });
 
     return (
@@ -119,18 +119,11 @@ const UpdateProfileFormInternal = ({
 
 export const UpdateProfileForm = ({
     profile,
-    onSubmit,
-    options
+    ...props
 }: UpdateProfileFormProps) => {
     if (!profile) {
         return <UpdateProfileFormLoading />;
     }
 
-    return (
-        <UpdateProfileFormInternal
-            profile={profile}
-            onSubmit={onSubmit}
-            options={options}
-        />
-    );
+    return <UpdateProfileFormInternal {...props} profile={profile} />;
 };

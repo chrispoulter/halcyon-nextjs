@@ -110,19 +110,11 @@ const ChangePasswordFormInternal = ({
 
 export const ChangePasswordForm = ({
     profile,
-    onSubmit,
-    options,
-    className
+    ...props
 }: ChangePasswordFormProps) => {
     if (!profile) {
         return <ChangePasswordFormLoading />;
     }
 
-    return (
-        <ChangePasswordFormInternal
-            onSubmit={onSubmit}
-            options={options}
-            className={className}
-        />
-    );
+    return <ChangePasswordFormInternal {...props} />;
 };
