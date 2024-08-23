@@ -14,10 +14,14 @@ const schema = z.object({
 export type ForgotPasswordFormValues = z.infer<typeof schema>;
 
 export type ForgotPasswordFormProps = {
+    isSaving?: boolean;
     onSubmit: (values: ForgotPasswordFormValues) => void;
 };
 
-export const ForgotPasswordForm = ({ onSubmit }: ForgotPasswordFormProps) => {
+export const ForgotPasswordForm = ({
+    isSaving,
+    onSubmit
+}: ForgotPasswordFormProps) => {
     const {
         handleSubmit,
         control,
@@ -25,6 +29,8 @@ export const ForgotPasswordForm = ({ onSubmit }: ForgotPasswordFormProps) => {
     } = useForm<ForgotPasswordFormValues>({
         resolver: zodResolver(schema)
     });
+
+    const isLoading = isSubmitting || isSaving;
 
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -36,10 +42,11 @@ export const ForgotPasswordForm = ({ onSubmit }: ForgotPasswordFormProps) => {
                 autoComplete="username"
                 required
                 control={control}
+                disabled={isLoading}
                 className="mb-5"
             />
             <ButtonGroup>
-                <Button type="submit" loading={isSubmitting}>
+                <Button type="submit" loading={isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

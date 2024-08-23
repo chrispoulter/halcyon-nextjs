@@ -23,17 +23,20 @@ const UpdateProfilePage = () => {
 
     const { profile } = useGetProfile();
 
-    const { updateProfile } = useUpdateProfile();
+    const { updateProfile, isSaving } = useUpdateProfile();
 
     const version = profile?.version;
 
-    const onSubmit = async (values: UpdateProfileFormValues) => {
-        try {
-            await updateProfile({ ...values, version });
-            toast.success('Your profile has been updated.');
-            await router.push('/my-account');
-        } catch {}
-    };
+    const onSubmit = (values: UpdateProfileFormValues) =>
+        updateProfile(
+            { ...values, version },
+            {
+                onSuccess: async () => {
+                    toast.success('Your profile has been updated.');
+                    await router.push('/my-account');
+                }
+            }
+        );
 
     return (
         <>
@@ -44,6 +47,7 @@ const UpdateProfilePage = () => {
 
                 <UpdateProfileForm
                     profile={profile}
+                    isSaving={isSaving}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">

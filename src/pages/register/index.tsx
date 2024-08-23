@@ -16,31 +16,30 @@ const RegisterPage = () => {
 
     const callbackUrl = (router.query.callbackUrl as string) || '/';
 
-    const { register } = useRegister();
+    const { register, isSaving } = useRegister();
 
-    const onSubmit = async (values: RegisterFormValues) => {
-        try {
-            await register(values);
+    const onSubmit = (values: RegisterFormValues) =>
+        register(values, {
+            onSuccess: async () => {
+                toast.success('User successfully registered.');
 
-            toast.success('User successfully registered.');
+                const result = await signIn('credentials', {
+                    ...values,
+                    redirect: false,
+                    callbackUrl
+                });
 
-            const result = await signIn('credentials', {
-                ...values,
-                redirect: false,
-                callbackUrl
-            });
+                if (!result?.ok) {
+                    toast.error(
+                        result?.error ||
+                            'Sorry, something went wrong. Please try again later.'
+                    );
+                    return;
+                }
 
-            if (!result?.ok) {
-                toast.error(
-                    result?.error ||
-                        'Sorry, something went wrong. Please try again later.'
-                );
-                return;
+                await router.push(result.url!);
             }
-
-            await router.push(result.url!);
-        } catch {}
-    };
+        });
 
     return (
         <>
@@ -48,7 +47,11 @@ const RegisterPage = () => {
 
             <Container>
                 <Title>Register</Title>
-                <RegisterForm onSubmit={onSubmit} className="mb-5" />
+                <RegisterForm
+                    isSaving={isSaving}
+                    onSubmit={onSubmit}
+                    className="mb-5"
+                />
 
                 <p className="text-sm text-gray-600">
                     Already have an account?{' '}

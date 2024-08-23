@@ -22,8 +22,7 @@ export const Input = ({
 }: InputProps) => {
     const {
         field,
-        fieldState: { error },
-        formState: { isSubmitting }
+        fieldState: { error }
     } = useController({
         name,
         control
@@ -66,7 +65,6 @@ export const Input = ({
                     id={field.name}
                     type={type}
                     value={value}
-                    disabled={props.disabled || isSubmitting}
                     aria-invalid={!!error}
                     className={clsx(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
@@ -82,7 +80,7 @@ export const Input = ({
                     <button
                         type="button"
                         aria-label="Clear"
-                        disabled={props.disabled || isSubmitting}
+                        disabled={props.disabled}
                         onClick={onClearInput}
                         className="absolute right-0 top-0 h-full px-2 py-1 text-gray-800 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:opacity-50"
                     >

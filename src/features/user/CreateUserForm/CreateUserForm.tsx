@@ -45,10 +45,15 @@ export type CreateUserFormValues = z.infer<typeof schema>;
 
 type CreateUserFormProps = {
     options?: JSX.Element;
+    isSaving?: boolean;
     onSubmit: (values: CreateUserFormValues) => void;
 };
 
-export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
+export const CreateUserForm = ({
+    options,
+    isSaving,
+    onSubmit
+}: CreateUserFormProps) => {
     const {
         handleSubmit,
         control,
@@ -56,6 +61,8 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
     } = useForm<CreateUserFormValues>({
         resolver: zodResolver(schema)
     });
+
+    const isLoading = isSubmitting || isSaving;
 
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -67,6 +74,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                 maxLength={254}
                 autoComplete="username"
                 required
+                disabled={isLoading}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -78,6 +86,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                     maxLength={50}
                     autoComplete="new-password"
                     required
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -88,6 +97,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                     maxLength={50}
                     autoComplete="new-password"
                     required
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -100,6 +110,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                     maxLength={50}
                     autoComplete="given-name"
                     required
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -110,6 +121,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                     maxLength={50}
                     autoComplete="family-name"
                     required
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -119,6 +131,7 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                 name="dateOfBirth"
                 required
                 autoComplete={['bday-day', 'bday-month', 'bday-year']}
+                disabled={isLoading}
                 className="mb-3"
             />
             <div className="mb-5">
@@ -129,11 +142,12 @@ export const CreateUserForm = ({ onSubmit, options }: CreateUserFormProps) => {
                     control={control}
                     name="roles"
                     options={roleOptions}
+                    disabled={isLoading}
                 />
             </div>
             <ButtonGroup>
                 {options}
-                <Button type="submit" loading={isSubmitting}>
+                <Button type="submit" loading={isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

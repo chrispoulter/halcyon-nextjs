@@ -24,17 +24,20 @@ const ChangePasswordPage = () => {
 
     const { profile } = useGetProfile();
 
-    const { changePassword } = useChangePassword();
+    const { changePassword, isSaving } = useChangePassword();
 
     const version = profile?.version;
 
-    const onSubmit = async (values: ChangePasswordFormValues) => {
-        try {
-            await changePassword({ ...values, version });
-            toast.success('Your password has been changed.');
-            await router.push('/my-account');
-        } catch {}
-    };
+    const onSubmit = (values: ChangePasswordFormValues) =>
+        changePassword(
+            { ...values, version },
+            {
+                onSuccess: async () => {
+                    toast.success('Your password has been changed.');
+                    await router.push('/my-account');
+                }
+            }
+        );
 
     return (
         <>
@@ -45,6 +48,7 @@ const ChangePasswordPage = () => {
 
                 <ChangePasswordForm
                     profile={profile}
+                    isSaving={isSaving}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">

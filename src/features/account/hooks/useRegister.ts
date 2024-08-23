@@ -11,9 +11,9 @@ const register = (request: RegisterRequest) =>
     });
 
 export const useRegister = () => {
-    const { mutateAsync } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: register
     });
 
-    return { register: mutateAsync };
+    return { register: mutate, isSaving: isPending };
 };

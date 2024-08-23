@@ -32,8 +32,9 @@ export type UpdateProfileFormValues = z.infer<typeof schema>;
 
 type UpdateProfileFormProps = {
     profile?: UpdateProfileFormValues;
-    onSubmit: (values: UpdateProfileFormValues) => void;
     options?: JSX.Element;
+    isSaving?: boolean;
+    onSubmit: (values: UpdateProfileFormValues) => void;
 };
 
 type UpdateProfileFormInternalProps = UpdateProfileFormProps & {
@@ -53,8 +54,9 @@ const UpdateProfileFormLoading = () => (
 
 const UpdateProfileFormInternal = ({
     profile,
-    onSubmit,
-    options
+    options,
+    isSaving,
+    onSubmit
 }: UpdateProfileFormInternalProps) => {
     const {
         handleSubmit,
@@ -64,6 +66,8 @@ const UpdateProfileFormInternal = ({
         resolver: zodResolver(schema),
         values: profile
     });
+
+    const isLoading = isSubmitting || isSaving;
 
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -75,6 +79,7 @@ const UpdateProfileFormInternal = ({
                 maxLength={254}
                 autoComplete="username"
                 required
+                disabled={isLoading}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -86,6 +91,7 @@ const UpdateProfileFormInternal = ({
                     maxLength={50}
                     autoComplete="given-name"
                     required
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -96,6 +102,7 @@ const UpdateProfileFormInternal = ({
                     maxLength={50}
                     autoComplete="family-name"
                     required
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -105,11 +112,12 @@ const UpdateProfileFormInternal = ({
                 name="dateOfBirth"
                 autoComplete={['bday-day', 'bday-month', 'bday-year']}
                 required
+                disabled={isLoading}
                 className="mb-5"
             />
             <ButtonGroup>
                 {options}
-                <Button type="submit" loading={isSubmitting}>
+                <Button type="submit" loading={isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

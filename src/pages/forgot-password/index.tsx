@@ -12,22 +12,24 @@ import { useForgotPassword } from '@/features/account/hooks/useForgotPassword';
 const ForgotPasswordPage = () => {
     const router = useRouter();
 
-    const { forgotPassword } = useForgotPassword();
+    const { forgotPassword, isSaving } = useForgotPassword();
 
-    const onSubmit = async (values: ForgotPasswordFormValues) => {
-        try {
-            await forgotPassword({
+    const onSubmit = (values: ForgotPasswordFormValues) =>
+        forgotPassword(
+            {
                 ...values,
                 siteUrl: window.location.origin
-            });
+            },
+            {
+                onSuccess: async () => {
+                    toast.success(
+                        'Instructions as to how to reset your password have been sent to you via email.'
+                    );
 
-            toast.success(
-                'Instructions as to how to reset your password have been sent to you via email.'
-            );
-
-            await router.push('/login');
-        } catch {}
-    };
+                    await router.push('/login');
+                }
+            }
+        );
 
     return (
         <>
@@ -35,7 +37,7 @@ const ForgotPasswordPage = () => {
 
             <Container>
                 <Title>Forgot Password</Title>
-                <ForgotPasswordForm onSubmit={onSubmit} />
+                <ForgotPasswordForm isSaving={isSaving} onSubmit={onSubmit} />
             </Container>
         </>
     );

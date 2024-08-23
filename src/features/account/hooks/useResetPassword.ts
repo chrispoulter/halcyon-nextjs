@@ -14,9 +14,9 @@ const resetPassword = (request: ResetPasswordRequest) =>
     );
 
 export const useResetPassword = () => {
-    const { mutateAsync } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: resetPassword
     });
 
-    return { resetPassword: mutateAsync };
+    return { resetPassword: mutate, isSaving: isPending };
 };

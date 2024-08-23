@@ -13,7 +13,7 @@ const deleteUser = (id: string, request: DeleteUserRequest) =>
 export const useDeleteUser = (id: string) => {
     const queryClient = useQueryClient();
 
-    const { mutateAsync, isPending } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: (request: DeleteUserRequest) => deleteUser(id, request),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
@@ -25,5 +25,5 @@ export const useDeleteUser = (id: string) => {
         }
     });
 
-    return { deleteUser: mutateAsync, isDeleting: isPending };
+    return { deleteUser: mutate, isDeleting: isPending };
 };

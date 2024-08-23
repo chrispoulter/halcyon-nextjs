@@ -29,7 +29,7 @@ const UpdateUserPage = () => {
 
     const { user, isFetching } = useGetUser(id);
 
-    const { updateUser } = useUpdateUser(id);
+    const { updateUser, isSaving } = useUpdateUser(id);
 
     const { lockUser, isLocking } = useLockUser(id);
 
@@ -39,35 +39,43 @@ const UpdateUserPage = () => {
 
     const version = user?.version;
 
-    const onSubmit = async (values: UpdateUserFormValues) => {
-        try {
-            await updateUser({ ...values, version });
-            toast.success('User successfully updated.');
-            await router.push('/user');
-        } catch {}
-    };
+    const onSubmit = async (values: UpdateUserFormValues) =>
+        updateUser(
+            { ...values, version },
+            {
+                onSuccess: async () => {
+                    toast.success('User successfully updated.');
+                    await router.push('/user');
+                }
+            }
+        );
 
-    const onDelete = async () => {
-        try {
-            await deleteUser({ version });
-            toast.success('User successfully deleted.');
-            await router.push('/user');
-        } catch {}
-    };
+    const onDelete = () =>
+        deleteUser(
+            { version },
+            {
+                onSuccess: async () => {
+                    toast.success('User successfully deleted.');
+                    await router.push('/user');
+                }
+            }
+        );
 
-    const onLock = async () => {
-        try {
-            await lockUser({ version });
-            toast.success('User successfully locked.');
-        } catch {}
-    };
+    const onLock = () =>
+        lockUser(
+            { version },
+            {
+                onSuccess: () => toast.success('User successfully locked.')
+            }
+        );
 
-    const onUnlock = async () => {
-        try {
-            await unlockUser({ version });
-            toast.success('User successfully unlocked.');
-        } catch {}
-    };
+    const onUnlock = () =>
+        unlockUser(
+            { version },
+            {
+                onSuccess: () => toast.success('User successfully unlocked.')
+            }
+        );
 
     const options = ({ isSubmitting }: UpdateUserFormState) => (
         <>
@@ -80,7 +88,11 @@ const UpdateUserPage = () => {
                     onConfirm={onUnlock}
                     loading={isUnlocking}
                     disabled={
-                        isDeleting || isLocking || isSubmitting || isFetching
+                        isSaving ||
+                        isDeleting ||
+                        isLocking ||
+                        isSubmitting ||
+                        isFetching
                     }
                 />
             ) : (
@@ -88,7 +100,11 @@ const UpdateUserPage = () => {
                     onConfirm={onLock}
                     loading={isLocking}
                     disabled={
-                        isDeleting || isUnlocking || isSubmitting || isFetching
+                        isSaving ||
+                        isDeleting ||
+                        isUnlocking ||
+                        isSubmitting ||
+                        isFetching
                     }
                 />
             )}
@@ -97,7 +113,11 @@ const UpdateUserPage = () => {
                 onConfirm={onDelete}
                 loading={isDeleting}
                 disabled={
-                    isUnlocking || isLocking || isSubmitting || isFetching
+                    isSaving ||
+                    isUnlocking ||
+                    isLocking ||
+                    isSubmitting ||
+                    isFetching
                 }
             />
         </>
@@ -115,6 +135,7 @@ const UpdateUserPage = () => {
 
                 <UpdateUserForm
                     user={user}
+                    isSaving={isSaving}
                     isDisabled={
                         isUnlocking || isLocking || isDeleting || isFetching
                     }

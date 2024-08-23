@@ -10,9 +10,9 @@ export const forgotPassword = (request: ForgotPasswordRequest) =>
     });
 
 export const useForgotPassword = () => {
-    const { mutateAsync } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: forgotPassword
     });
 
-    return { forgotPassword: mutateAsync };
+    return { forgotPassword: mutate, isSaving: isPending };
 };

@@ -14,9 +14,9 @@ const changePassword = (request: ChangePasswordRequest) =>
     );
 
 export const useChangePassword = () => {
-    const { mutateAsync } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: changePassword
     });
 
-    return { changePassword: mutateAsync };
+    return { changePassword: mutate, isSaving: isPending };
 };

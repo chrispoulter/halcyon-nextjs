@@ -13,11 +13,11 @@ const updateProfile = (request: UpdateProfileRequest) =>
 export const useUpdateProfile = () => {
     const queryClient = useQueryClient();
 
-    const { mutateAsync } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: updateProfile,
         onSuccess: () =>
             queryClient.invalidateQueries({ queryKey: ['profile'] })
     });
 
-    return { updateProfile: mutateAsync };
+    return { updateProfile: mutate, isSaving: isPending };
 };

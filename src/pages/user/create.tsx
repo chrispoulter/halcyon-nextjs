@@ -13,15 +13,15 @@ import { useCreateUser } from '@/features/user/hooks/useCreateUser';
 const CreateUserPage = () => {
     const router = useRouter();
 
-    const { createUser } = useCreateUser();
+    const { createUser, isSaving } = useCreateUser();
 
-    const onSubmit = async (values: CreateUserFormValues) => {
-        try {
-            await createUser(values);
-            toast.success('User successfully created.');
-            await router.push('/user');
-        } catch {}
-    };
+    const onSubmit = (values: CreateUserFormValues) =>
+        createUser(values, {
+            onSuccess: async () => {
+                toast.success('User successfully created.');
+                await router.push('/user');
+            }
+        });
 
     return (
         <>
@@ -34,6 +34,7 @@ const CreateUserPage = () => {
                 </Title>
 
                 <CreateUserForm
+                    isSaving={isSaving}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/user" variant="secondary">
