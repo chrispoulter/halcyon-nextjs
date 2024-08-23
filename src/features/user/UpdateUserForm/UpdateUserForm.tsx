@@ -128,22 +128,10 @@ const UpdateUserFormInternal = ({
     </Formik>
 );
 
-export const UpdateUserForm = ({
-    user,
-    isDisabled,
-    onSubmit,
-    options
-}: UpdateUserFormProps) => {
+export const UpdateUserForm = ({ user, ...props }: UpdateUserFormProps) => {
     if (!user) {
         return <UpdateUserFormLoading />;
     }
 
-    return (
-        <UpdateUserFormInternal
-            user={user}
-            isDisabled={isDisabled}
-            onSubmit={onSubmit}
-            options={options}
-        />
-    );
+    return <UpdateUserFormInternal {...props} user={user} />;
 };
