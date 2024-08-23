@@ -17,6 +17,7 @@ import { Header } from '@/components/Header/Header';
 import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
 import { Footer } from '@/components/Footer/Footer';
 import { Toaster } from '@/components/Toast/Toast';
+import { FetchError } from '@/utils/fetch';
 
 import '@/styles/globals.css';
 
@@ -39,58 +40,54 @@ const App = ({
                     }
                 },
                 queryCache: new QueryCache({
-                    onError: async (error: any) => {
-                        console.log('queryCache', error);
+                    onError: (error: Error) => {
+                        if (error instanceof FetchError) {
+                            switch (error.status) {
+                                case 401:
+                                    return signOut({ callbackUrl: '/' });
 
-                        switch (error.status) {
-                            case 401:
-                                await signOut({ callbackUrl: '/' });
-                                break;
+                                case 403:
+                                    return router.push('/403', router.asPath);
 
-                            case 403:
-                                router.push('/403', router.asPath);
-                                break;
+                                case 404:
+                                    return router.push('/404', router.asPath);
 
-                            case 404:
-                                router.push('/404', router.asPath);
-                                break;
-
-                            default:
-                                router.push('/500', router.asPath);
-                                break;
+                                default:
+                                    return router.push('/500', router.asPath);
+                            }
                         }
+
+                        return router.push('/500', router.asPath);
                     }
                 }),
                 mutationCache: new MutationCache({
-                    onError: async (error: any) => {
-                        console.log('mutationCache', error.response);
+                    onError: (error: Error) => {
+                        if (error instanceof FetchError) {
+                            const message = error?.response?.title;
 
-                        const message = error?.response?.title;
+                            switch (error.status) {
+                                case 401:
+                                    return signOut({ callbackUrl: '/' });
 
-                        switch (error.status) {
-                            case 401:
-                                await signOut({ callbackUrl: '/' });
-                                break;
+                                case 403:
+                                    return toast.error(
+                                        'Sorry, you do not have access to this resource.'
+                                    );
 
-                            case 403:
-                                toast.error(
-                                    'Sorry, you do not have access to this resource.'
-                                );
-                                break;
+                                case 404:
+                                    return toast.error(
+                                        'Sorry, the resource you were looking for could not be found.'
+                                    );
 
-                            case 404:
-                                toast.error(
-                                    'Sorry, the resource you were looking for could not be found.'
-                                );
-                                break;
-
-                            default:
-                                toast.error(
-                                    message ||
-                                        'Sorry, something went wrong. Please try again later.'
-                                );
-                                break;
+                                default:
+                                    return toast.error(message);
+                            }
                         }
+
+                        return toast.error(
+                            error.message ||
+                                'Sorry, something went wrong. Please try again later.'
+                        );
                     }
                 })
             })

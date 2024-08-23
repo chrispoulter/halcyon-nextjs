@@ -1,6 +1,6 @@
 import { getSession } from 'next-auth/react';
 
-class FetchError extends Error {
+export class FetchError extends Error {
     status: number;
     response?: any;
 
