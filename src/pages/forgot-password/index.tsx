@@ -15,16 +15,18 @@ const ForgotPasswordPage = () => {
     const { forgotPassword } = useForgotPassword();
 
     const onSubmit = async (values: ForgotPasswordFormValues) => {
-        await forgotPassword({
-            ...values,
-            siteUrl: window.location.origin
-        });
+        try {
+            await forgotPassword({
+                ...values,
+                siteUrl: window.location.origin
+            });
 
-        toast.success(
-            'Instructions as to how to reset your password have been sent to you via email.'
-        );
+            toast.success(
+                'Instructions as to how to reset your password have been sent to you via email.'
+            );
 
-        await router.push('/login');
+            await router.push('/login');
+        } catch {}
     };
 
     return (

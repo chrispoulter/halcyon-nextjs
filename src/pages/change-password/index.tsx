@@ -29,9 +29,11 @@ const ChangePasswordPage = () => {
     const version = profile?.version;
 
     const onSubmit = async (values: ChangePasswordFormValues) => {
-        await changePassword({ ...values, version });
-        toast.success('Your password has been changed.');
-        await router.push('/my-account');
+        try {
+            await changePassword({ ...values, version });
+            toast.success('Your password has been changed.');
+            await router.push('/my-account');
+        } catch {}
     };
 
     return (

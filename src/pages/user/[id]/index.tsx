@@ -40,25 +40,33 @@ const UpdateUserPage = () => {
     const version = user?.version;
 
     const onSubmit = async (values: UpdateUserFormValues) => {
-        await updateUser({ ...values, version });
-        toast.success('User successfully updated.');
-        await router.push('/user');
+        try {
+            await updateUser({ ...values, version });
+            toast.success('User successfully updated.');
+            await router.push('/user');
+        } catch {}
     };
 
     const onDelete = async () => {
-        await deleteUser({ version });
-        toast.success('User successfully deleted.');
-        await router.push('/user');
+        try {
+            await deleteUser({ version });
+            toast.success('User successfully deleted.');
+            await router.push('/user');
+        } catch {}
     };
 
     const onLock = async () => {
-        await lockUser({ version });
-        toast.success('User successfully locked.');
+        try {
+            await lockUser({ version });
+            toast.success('User successfully locked.');
+        } catch {}
     };
 
     const onUnlock = async () => {
-        await unlockUser({ version });
-        toast.success('User successfully unlocked.');
+        try {
+            await unlockUser({ version });
+            toast.success('User successfully unlocked.');
+        } catch {}
     };
 
     const options = ({ isSubmitting }: UpdateUserFormState) => (

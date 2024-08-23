@@ -24,9 +24,11 @@ const MyAccountPage = () => {
     const version = profile?.version;
 
     const onDelete = async () => {
-        await deleteAccount({ version });
-        toast.success('Your account has been deleted.');
-        await signOut({ callbackUrl: '/' });
+        try {
+            await deleteAccount({ version });
+            toast.success('Your account has been deleted.');
+            await signOut({ callbackUrl: '/' });
+        } catch {}
     };
 
     return (

@@ -19,25 +19,27 @@ const RegisterPage = () => {
     const { register } = useRegister();
 
     const onSubmit = async (values: RegisterFormValues) => {
-        await register(values);
+        try {
+            await register(values);
 
-        toast.success('User successfully registered.');
+            toast.success('User successfully registered.');
 
-        const result = await signIn('credentials', {
-            ...values,
-            redirect: false,
-            callbackUrl
-        });
+            const result = await signIn('credentials', {
+                ...values,
+                redirect: false,
+                callbackUrl
+            });
 
-        if (!result?.ok) {
-            toast.error(
-                result?.error ||
-                    'Sorry, something went wrong. Please try again later.'
-            );
-            return;
-        }
+            if (!result?.ok) {
+                toast.error(
+                    result?.error ||
+                        'Sorry, something went wrong. Please try again later.'
+                );
+                return;
+            }
 
-        await router.push(result.url!);
+            await router.push(result.url!);
+        } catch {}
     };
 
     return (

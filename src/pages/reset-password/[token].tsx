@@ -17,13 +17,15 @@ const ResetPasswordPage = () => {
     const { resetPassword } = useResetPassword();
 
     const onSubmit = async (values: ResetPasswordFormValues) => {
-        await resetPassword({
-            token,
-            ...values
-        });
+        try {
+            await resetPassword({
+                token,
+                ...values
+            });
 
-        toast.success('Your password has been reset.');
-        await router.push('/login');
+            toast.success('Your password has been reset.');
+            await router.push('/login');
+        } catch {}
     };
 
     return (

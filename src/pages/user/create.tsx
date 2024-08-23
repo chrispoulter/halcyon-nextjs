@@ -16,9 +16,11 @@ const CreateUserPage = () => {
     const { createUser } = useCreateUser();
 
     const onSubmit = async (values: CreateUserFormValues) => {
-        await createUser(values);
-        toast.success('User successfully created.');
-        await router.push('/user');
+        try {
+            await createUser(values);
+            toast.success('User successfully created.');
+            await router.push('/user');
+        } catch {}
     };
 
     return (
