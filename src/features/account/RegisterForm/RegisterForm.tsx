@@ -41,13 +41,13 @@ const schema = z
 export type RegisterFormValues = z.infer<typeof schema>;
 
 type RegisterFormProps = {
-    isSaving?: boolean;
+    isLoading?: boolean;
     onSubmit: (values: RegisterFormValues) => void;
     className?: string;
 };
 
 export const RegisterForm = ({
-    isSaving,
+    isLoading,
     onSubmit,
     className
 }: RegisterFormProps) => {
@@ -58,8 +58,6 @@ export const RegisterForm = ({
     } = useForm<RegisterFormValues>({
         resolver: zodResolver(schema)
     });
-
-    const isLoading = isSubmitting || isSaving;
 
     return (
         <form
@@ -75,7 +73,7 @@ export const RegisterForm = ({
                 maxLength={254}
                 autoComplete="username"
                 required
-                disabled={isLoading}
+                disabled={isSubmitting || isLoading}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -87,7 +85,7 @@ export const RegisterForm = ({
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isLoading}
+                    disabled={isSubmitting || isLoading}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -98,7 +96,7 @@ export const RegisterForm = ({
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isLoading}
+                    disabled={isSubmitting || isLoading}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -111,7 +109,7 @@ export const RegisterForm = ({
                     maxLength={50}
                     autoComplete="given-name"
                     required
-                    disabled={isLoading}
+                    disabled={isSubmitting || isLoading}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -122,7 +120,7 @@ export const RegisterForm = ({
                     maxLength={50}
                     autoComplete="family-name"
                     required
-                    disabled={isLoading}
+                    disabled={isSubmitting || isLoading}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -132,11 +130,11 @@ export const RegisterForm = ({
                 name="dateOfBirth"
                 required
                 autoComplete={['bday-day', 'bday-month', 'bday-year']}
-                disabled={isLoading}
+                disabled={isSubmitting || isLoading}
                 className="mb-5"
             />
             <ButtonGroup>
-                <Button type="submit" loading={isLoading}>
+                <Button type="submit" loading={isSubmitting || isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

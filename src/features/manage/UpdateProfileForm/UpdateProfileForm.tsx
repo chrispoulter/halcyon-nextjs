@@ -33,7 +33,7 @@ export type UpdateProfileFormValues = z.infer<typeof schema>;
 type UpdateProfileFormProps = {
     profile?: UpdateProfileFormValues;
     options?: JSX.Element;
-    isSaving?: boolean;
+    isLoading?: boolean;
     onSubmit: (values: UpdateProfileFormValues) => void;
 };
 
@@ -55,7 +55,7 @@ const UpdateProfileFormLoading = () => (
 const UpdateProfileFormInternal = ({
     profile,
     options,
-    isSaving,
+    isLoading,
     onSubmit
 }: UpdateProfileFormInternalProps) => {
     const {
@@ -67,8 +67,6 @@ const UpdateProfileFormInternal = ({
         values: profile
     });
 
-    const isLoading = isSubmitting || isSaving;
-
     return (
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <Input
@@ -79,7 +77,7 @@ const UpdateProfileFormInternal = ({
                 maxLength={254}
                 autoComplete="username"
                 required
-                disabled={isLoading}
+                disabled={isSubmitting || isLoading}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -91,7 +89,7 @@ const UpdateProfileFormInternal = ({
                     maxLength={50}
                     autoComplete="given-name"
                     required
-                    disabled={isLoading}
+                    disabled={isSubmitting || isLoading}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -102,7 +100,7 @@ const UpdateProfileFormInternal = ({
                     maxLength={50}
                     autoComplete="family-name"
                     required
-                    disabled={isLoading}
+                    disabled={isSubmitting || isLoading}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -112,12 +110,12 @@ const UpdateProfileFormInternal = ({
                 name="dateOfBirth"
                 autoComplete={['bday-day', 'bday-month', 'bday-year']}
                 required
-                disabled={isLoading}
+                disabled={isSubmitting || isLoading}
                 className="mb-5"
             />
             <ButtonGroup>
                 {options}
-                <Button type="submit" loading={isLoading}>
+                <Button type="submit" loading={isSubmitting || isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

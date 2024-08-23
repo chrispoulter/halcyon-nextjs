@@ -37,7 +37,7 @@ const ForgotPasswordPage = () => {
 
             <Container>
                 <Title>Forgot Password</Title>
-                <ForgotPasswordForm isSaving={isSaving} onSubmit={onSubmit} />
+                <ForgotPasswordForm isLoading={isSaving} onSubmit={onSubmit} />
             </Container>
         </>
     );

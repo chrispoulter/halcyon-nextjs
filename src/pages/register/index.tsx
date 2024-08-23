@@ -48,7 +48,7 @@ const RegisterPage = () => {
             <Container>
                 <Title>Register</Title>
                 <RegisterForm
-                    isSaving={isSaving}
+                    isLoading={isSaving}
                     onSubmit={onSubmit}
                     className="mb-5"
                 />

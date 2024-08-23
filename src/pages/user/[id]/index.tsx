@@ -88,10 +88,10 @@ const UpdateUserPage = () => {
                     onConfirm={onUnlock}
                     loading={isUnlocking}
                     disabled={
+                        isSubmitting ||
                         isSaving ||
                         isDeleting ||
                         isLocking ||
-                        isSubmitting ||
                         isFetching
                     }
                 />
@@ -100,10 +100,10 @@ const UpdateUserPage = () => {
                     onConfirm={onLock}
                     loading={isLocking}
                     disabled={
+                        isSubmitting ||
                         isSaving ||
                         isDeleting ||
                         isUnlocking ||
-                        isSubmitting ||
                         isFetching
                     }
                 />
@@ -113,10 +113,10 @@ const UpdateUserPage = () => {
                 onConfirm={onDelete}
                 loading={isDeleting}
                 disabled={
+                    isSubmitting ||
                     isSaving ||
                     isUnlocking ||
                     isLocking ||
-                    isSubmitting ||
                     isFetching
                 }
             />
@@ -135,7 +135,7 @@ const UpdateUserPage = () => {
 
                 <UpdateUserForm
                     user={user}
-                    isSaving={isSaving}
+                    isLoading={isSaving}
                     isDisabled={
                         isUnlocking || isLocking || isDeleting || isFetching
                     }

@@ -34,7 +34,7 @@ const CreateUserPage = () => {
                 </Title>
 
                 <CreateUserForm
-                    isSaving={isSaving}
+                    isLoading={isSaving}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/user" variant="secondary">

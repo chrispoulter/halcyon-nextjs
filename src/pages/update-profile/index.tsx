@@ -47,7 +47,7 @@ const UpdateProfilePage = () => {
 
                 <UpdateProfileForm
                     profile={profile}
-                    isSaving={isSaving}
+                    isLoading={isSaving}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">
