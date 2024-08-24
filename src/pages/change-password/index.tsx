@@ -34,7 +34,7 @@ const ChangePasswordPage = () => {
             {
                 onSuccess: async () => {
                     toast.success('Your password has been changed.');
-                    await router.push('/my-account');
+                    return router.push('/my-account');
                 }
             }
         );

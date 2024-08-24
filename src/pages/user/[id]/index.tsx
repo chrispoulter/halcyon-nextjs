@@ -45,7 +45,7 @@ const UpdateUserPage = () => {
             {
                 onSuccess: async () => {
                     toast.success('User successfully updated.');
-                    await router.push('/user');
+                    return router.push('/user');
                 }
             }
         );
@@ -56,7 +56,7 @@ const UpdateUserPage = () => {
             {
                 onSuccess: async () => {
                     toast.success('User successfully deleted.');
-                    await router.push('/user');
+                    return router.push('/user');
                 }
             }
         );

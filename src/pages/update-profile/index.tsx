@@ -33,7 +33,7 @@ const UpdateProfilePage = () => {
             {
                 onSuccess: async () => {
                     toast.success('Your profile has been updated.');
-                    await router.push('/my-account');
+                    return router.push('/my-account');
                 }
             }
         );

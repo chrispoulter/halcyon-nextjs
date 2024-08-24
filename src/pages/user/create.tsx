@@ -19,7 +19,7 @@ const CreateUserPage = () => {
         mutate(values, {
             onSuccess: async () => {
                 toast.success('User successfully created.');
-                await router.push('/user');
+                return router.push('/user');
             }
         });
 
