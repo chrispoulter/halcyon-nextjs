@@ -1,6 +1,4 @@
-import { useRouter } from 'next/router';
-import { ParsedUrlQuery } from 'querystring';
-import { mixed, number, object, string } from 'yup';
+import { useState } from 'react';
 import { UserSort } from '@/features/user/userTypes';
 import { useSearchUsersQuery } from '@/features/user/userEndpoints';
 import { Meta } from '@/components/Meta/Meta';
@@ -23,65 +21,36 @@ import { searchUsers } from '@/features/user/userEndpoints';
 import { wrapper } from '@/redux/store';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-const PAGE_SIZE = 5;
-
-const schema = object().shape({
-    search: string().default(''),
-    sort: mixed<UserSort>()
-        .oneOf(Object.values(UserSort))
-        .default(UserSort.NAME_ASC),
-    page: number().positive().integer().default(1)
-});
-
-const defaultRequest = schema.getDefault();
-
-const parseQuery = (query: ParsedUrlQuery) => {
-    try {
-        return {
-            ...defaultRequest,
-            ...schema.validateSync(query, { stripUnknown: true })
-        };
-    } catch {
-        return defaultRequest;
-    }
+const defaultRequest = {
+    search: '',
+    sort: UserSort.NAME_ASC,
+    page: 1,
+    size: 5
 };
 
 const UsersPage = () => {
-    const router = useRouter();
-
-    const request = parseQuery(router.query);
+    const [request, setRequest] = useState(defaultRequest);
 
     const {
         data: users,
         isLoading,
         isFetching,
         error
-    } = useSearchUsersQuery(
-        { ...request, size: PAGE_SIZE },
-        { skip: !router.isReady }
-    );
-
-    const onSubmit = (values: SearchUserFormValues) =>
-        router.push({
-            query: { ...request, ...values, page: 1 }
-        });
-
-    const onNextPage = () =>
-        router.push({
-            query: { ...request, page: request.page + 1 }
-        });
-
-    const onPreviousPage = () =>
-        router.push({
-            query: { ...request, page: request.page - 1 }
-        });
-
-    const onSort = (sort: UserSort) =>
-        router.push({
-            query: { ...request, sort }
-        });
+    } = useSearchUsersQuery(request);
 
     const loadingOrError = isLoading || !!error;
+
+    const onSubmit = (values: SearchUserFormValues) => {
+        setRequest({ ...request, ...values, page: 1 });
+        return true;
+    };
+
+    const onNextPage = () => setRequest({ ...request, page: request.page + 1 });
+
+    const onPreviousPage = () =>
+        setRequest({ ...request, page: request.page - 1 });
+
+    const onSort = (sort: UserSort) => setRequest({ ...request, sort });
 
     return (
         <>
@@ -125,12 +94,10 @@ const UsersPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res, query }) => {
+    wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        const request = parseQuery(query);
-
-        store.dispatch(searchUsers.initiate({ ...request, size: PAGE_SIZE }));
+        store.dispatch(searchUsers.initiate(defaultRequest));
 
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
