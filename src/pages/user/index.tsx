@@ -63,25 +63,21 @@ const UsersPage = () => {
 
     const onSubmit = (values: SearchUserFormValues) =>
         router.push({
-            pathname: router.pathname,
             query: { ...request, ...values, page: 1 }
         });
 
     const onNextPage = () =>
         router.push({
-            pathname: router.pathname,
             query: { ...request, page: request.page + 1 }
         });
 
     const onPreviousPage = () =>
         router.push({
-            pathname: router.pathname,
             query: { ...request, page: request.page - 1 }
         });
 
     const onSort = (sort: UserSort) =>
         router.push({
-            pathname: router.pathname,
             query: { ...request, sort }
         });
 
