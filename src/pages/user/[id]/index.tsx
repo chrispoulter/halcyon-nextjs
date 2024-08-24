@@ -53,7 +53,7 @@ const UpdateUserPage = () => {
         }).unwrap();
 
         toast.success('User successfully updated.');
-        await router.push('/user');
+        return router.push('/user');
     };
 
     const onDelete = async () => {
@@ -63,7 +63,7 @@ const UpdateUserPage = () => {
         }).unwrap();
 
         toast.success('User successfully deleted.');
-        await router.push('/user');
+        return router.push('/user');
     };
 
     const onLock = async () => {
@@ -72,7 +72,7 @@ const UpdateUserPage = () => {
             body: { version }
         }).unwrap();
 
-        toast.success('User successfully locked.');
+        return toast.success('User successfully locked.');
     };
 
     const onUnlock = async () => {
@@ -81,7 +81,7 @@ const UpdateUserPage = () => {
             body: { version }
         }).unwrap();
 
-        toast.success('User successfully unlocked.');
+        return toast.success('User successfully unlocked.');
     };
 
     const options = ({ isSubmitting }: UpdateUserFormState) => (

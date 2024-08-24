@@ -32,7 +32,7 @@ const UpdateProfilePage = () => {
     const onSubmit = async (values: UpdateProfileFormValues) => {
         await updateProfile({ ...values, version }).unwrap();
         toast.success('Your profile has been updated.');
-        await router.push('/my-account');
+        return router.push('/my-account');
     };
 
     return (
