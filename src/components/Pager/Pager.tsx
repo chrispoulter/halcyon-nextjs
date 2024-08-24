@@ -32,7 +32,7 @@ export const Pager = ({
             {hasPreviousPage && (
                 <Button
                     variant="secondary"
-                    loading={isFetching}
+                    disabled={isFetching}
                     onClick={onPreviousPage}
                 >
                     Previous
@@ -41,7 +41,7 @@ export const Pager = ({
             {hasNextPage && (
                 <Button
                     variant="secondary"
-                    loading={isFetching}
+                    disabled={isFetching}
                     onClick={onNextPage}
                 >
                     Next

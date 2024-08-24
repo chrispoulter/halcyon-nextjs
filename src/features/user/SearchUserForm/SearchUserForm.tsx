@@ -25,6 +25,7 @@ export const SearchUserForm = ({
         initialValues={values}
         validationSchema={schema}
         onSubmit={onSubmit}
+        enableReinitialize
     >
         {({ isSubmitting, handleSubmit }) => (
             <Form noValidate className="flex w-full gap-1">
