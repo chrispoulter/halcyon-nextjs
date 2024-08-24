@@ -34,7 +34,7 @@ const UsersPage = () => {
     const { data, isFetching, isLoading, isError } = useSearchUsers(request);
 
     const onSubmit = (values: SearchUserFormValues) => {
-        setRequest({ ...request, ...values });
+        setRequest({ ...request, ...values, page: 1 });
         return true;
     };
 
