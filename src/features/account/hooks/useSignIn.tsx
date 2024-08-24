@@ -10,13 +10,11 @@ type SignInRequest = {
 export const useSignIn = () => {
     const router = useRouter();
 
-    const callbackUrl = (router.query.callbackUrl as string) || '/';
-
     return async (values: SignInRequest) => {
         const result = await signIn('credentials', {
             ...values,
             redirect: false,
-            callbackUrl
+            callbackUrl: '/'
         });
 
         if (!result?.ok) {
