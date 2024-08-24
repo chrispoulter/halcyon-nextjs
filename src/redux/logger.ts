@@ -35,20 +35,16 @@ export const logger: Middleware = () => next => async action => {
             case 'GET':
                 switch (status) {
                     case 401:
-                        await signOut({ callbackUrl: '/' });
-                        break;
+                        return signOut({ callbackUrl: '/' });
 
                     case 403:
-                        await router.push('/403', router.asPath);
-                        break;
+                        return router.push('/403', router.asPath);
 
                     case 404:
-                        await router.push('/404', router.asPath);
-                        break;
+                        return router.push('/404', router.asPath);
 
                     default:
-                        await router.push('/500', router.asPath);
-                        break;
+                        return router.push('/500', router.asPath);
                 }
 
                 break;
@@ -56,27 +52,23 @@ export const logger: Middleware = () => next => async action => {
             default:
                 switch (status) {
                     case 401:
-                        await signOut({ callbackUrl: '/' });
-                        break;
+                        return signOut({ callbackUrl: '/' });
 
                     case 403:
-                        toast.error(
+                        return toast.error(
                             'Sorry, you do not have access to this resource.'
                         );
-                        break;
 
                     case 404:
-                        toast.error(
+                        return toast.error(
                             'Sorry, the resource you were looking for could not be found.'
                         );
-                        break;
 
                     default:
-                        toast.error(
+                        return toast.error(
                             errorMessage ||
                                 'Sorry, something went wrong. Please try again later.'
                         );
-                        break;
                 }
                 break;
         }

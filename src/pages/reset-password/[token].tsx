@@ -23,7 +23,7 @@ const ResetPasswordPage = () => {
         }).unwrap();
 
         toast.success('Your password has been reset.');
-        await router.push('/login');
+        return router.push('/login');
     };
 
     return (

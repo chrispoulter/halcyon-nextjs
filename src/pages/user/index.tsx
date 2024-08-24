@@ -41,7 +41,7 @@ const UsersPage = () => {
     const loadingOrError = isLoading || !!error;
 
     const onSubmit = (values: SearchUserFormValues) => {
-        setRequest({ ...request, ...values });
+        setRequest({ ...request, ...values, page: 1 });
         return true;
     };
 
@@ -63,7 +63,7 @@ const UsersPage = () => {
                     <SearchUserForm
                         values={request}
                         onSubmit={onSubmit}
-                        isLoading={loadingOrError}
+                        isLoading={loadingOrError || isFetching}
                     />
                     <SortUserDropdown
                         selected={request.sort}
