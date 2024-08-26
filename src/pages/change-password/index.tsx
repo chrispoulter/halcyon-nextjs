@@ -26,19 +26,22 @@ const ChangePasswordPage = () => {
 
     const { data: session, status } = useSession();
 
+    const accessToken = session?.accessToken;
+    const loading = status === 'loading';
+
     const { data: profile } = useGetProfileQuery(
-        { accessToken: session?.accessToken },
-        { skip: status === 'loading' }
+        { accessToken },
+        { skip: loading }
     );
 
-    const [changePassword] = useChangePasswordMutation();
-
     const version = profile?.version;
+
+    const [changePassword] = useChangePasswordMutation();
 
     const onSubmit = async (values: ChangePasswordFormValues) => {
         await changePassword({
             body: { ...values, version },
-            accessToken: session?.accessToken
+            accessToken
         }).unwrap();
 
         toast.success('Your password has been changed.');
@@ -76,8 +79,7 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-         const accessToken = session?.accessToken || null;
-
+        const accessToken = session && session?.accessToken;
         store.dispatch(getProfile.initiate({ accessToken }));
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 

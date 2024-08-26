@@ -33,6 +33,9 @@ const params = {
 const UsersPage = () => {
     const { data: session, status } = useSession();
 
+    const accessToken = session?.accessToken;
+    const loading = status === 'loading';
+
     const [state, setState] = useState(params);
 
     const {
@@ -40,10 +43,7 @@ const UsersPage = () => {
         isLoading,
         isFetching,
         error
-    } = useSearchUsersQuery(
-        { params: state, accessToken: session?.accessToken },
-        { skip: status === 'loading' }
-    );
+    } = useSearchUsersQuery({ params: state, accessToken }, { skip: loading });
 
     const loadingOrError = isLoading || !!error;
 
@@ -103,7 +103,7 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-         const accessToken = session?.accessToken || null;
+        const accessToken = session && session?.accessToken;
 
         store.dispatch(
             searchUsers.initiate({

@@ -16,12 +16,14 @@ const CreateUserPage = () => {
 
     const { data: session } = useSession();
 
+    const accessToken = session?.accessToken;
+
     const [createUser] = useCreateUserMutation();
 
     const onSubmit = async (values: CreateUserFormValues) => {
         await createUser({
             body: values,
-            accessToken: session?.accessToken
+            accessToken
         }).unwrap();
 
         toast.success('User successfully created.');

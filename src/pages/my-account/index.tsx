@@ -20,20 +20,23 @@ import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/Accou
 const MyAccountPage = () => {
     const { data: session, status } = useSession();
 
+    const accessToken = session?.accessToken;
+    const loading = status === 'loading';
+
     const { data: profile } = useGetProfileQuery(
-        { accessToken: session?.accessToken },
-        { skip: status === 'loading' }
+        { accessToken },
+        { skip: loading }
     );
+
+    const version = profile?.version;
 
     const [deleteAccount, { isLoading: isDeleting }] =
         useDeleteAccountMutation();
 
-    const version = profile?.version;
-
     const onDelete = async () => {
         await deleteAccount({
             body: { version },
-            accessToken: session?.accessToken
+            accessToken
         }).unwrap();
 
         toast.success('Your account has been deleted.');
@@ -64,8 +67,7 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-         const accessToken = session?.accessToken || null;
-
+        const accessToken = session && session?.accessToken;
         store.dispatch(getProfile.initiate({ accessToken }));
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 

@@ -25,19 +25,22 @@ const UpdateProfilePage = () => {
 
     const { data: session, status } = useSession();
 
+    const accessToken = session?.accessToken;
+    const loading = status === 'loading';
+
     const { data: profile } = useGetProfileQuery(
-        { accessToken: session?.accessToken },
-        { skip: status === 'loading' }
+        { accessToken },
+        { skip: loading }
     );
 
-    const [updateProfile] = useUpdateProfileMutation();
-
     const version = profile?.version;
+
+    const [updateProfile] = useUpdateProfileMutation();
 
     const onSubmit = async (values: UpdateProfileFormValues) => {
         await updateProfile({
             body: { ...values, version },
-            accessToken: session?.accessToken
+            accessToken
         }).unwrap();
 
         toast.success('Your profile has been updated.');
@@ -69,8 +72,7 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-         const accessToken = session?.accessToken || null;
-
+        const accessToken = session && session?.accessToken;
         store.dispatch(getProfile.initiate({ accessToken }));
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
