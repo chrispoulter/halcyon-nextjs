@@ -155,8 +155,17 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res, params }) => {
         const session = await getServerSession(req, res, authOptions);
 
+        if (!session) {
+            return {
+                redirect: {
+                    destination: '/',
+                    permanent: false
+                }
+            };
+        }
+
         const id = params?.id as string;
-        const accessToken = session?.accessToken;
+        const accessToken = session.accessToken;
 
         store.dispatch(getUser.initiate({ id, accessToken }));
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
