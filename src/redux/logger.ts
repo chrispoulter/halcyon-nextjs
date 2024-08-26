@@ -52,8 +52,6 @@ export const logger: Middleware = () => next => async action => {
                         return router.push('/500', router.asPath);
                 }
 
-                break;
-
             default:
                 switch (status) {
                     case 401:
@@ -80,7 +78,6 @@ export const logger: Middleware = () => next => async action => {
                                 'Sorry, something went wrong. Please try again later.'
                         );
                 }
-                break;
         }
     }
 
