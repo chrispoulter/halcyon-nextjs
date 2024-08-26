@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { getServerSession } from 'next-auth';
 import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
@@ -19,8 +18,6 @@ import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetail
 import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
 
 const MyAccountPage = () => {
-    const router = useRouter();
-
     const { data: session, status } = useSession();
 
     const { data: profile } = useGetProfileQuery(
@@ -41,8 +38,7 @@ const MyAccountPage = () => {
 
         toast.success('Your account has been deleted.');
 
-        const result = await signOut({ redirect: false, callbackUrl: '/' });
-        return router.push(result.url);
+        return signOut({ callbackUrl: '/' });
     };
 
     return (

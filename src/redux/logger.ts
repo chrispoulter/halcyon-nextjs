@@ -35,12 +35,7 @@ export const logger: Middleware = () => next => async action => {
             case 'GET':
                 switch (status) {
                     case 401:
-                        const result = await signOut({
-                            redirect: false,
-                            callbackUrl: '/'
-                        });
-
-                        return router.push(result.url);
+                        return signOut({ callbackUrl: '/' });
 
                     case 403:
                         return router.push('/403', router.asPath);
@@ -55,12 +50,7 @@ export const logger: Middleware = () => next => async action => {
             default:
                 switch (status) {
                     case 401:
-                        const result = await signOut({
-                            redirect: false,
-                            callbackUrl: '/'
-                        });
-
-                        return router.push(result.url);
+                        return signOut({ callbackUrl: '/' });
 
                     case 403:
                         return toast.error(

@@ -1,19 +1,13 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useSession, signOut } from 'next-auth/react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { Badge } from '@/components/Badge/Badge';
 import { roles } from '@/utils/auth';
 
 export const ProfileDropdown = () => {
-    const router = useRouter();
-
     const { data: session } = useSession();
 
-    const onLogout = async () => {
-        const result = await signOut({ redirect: false, callbackUrl: '/' });
-        return router.push(result.url);
-    };
+    const onLogout = () => signOut({ callbackUrl: '/' });
 
     const user = session?.user;
 
