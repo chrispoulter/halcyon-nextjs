@@ -13,6 +13,7 @@ jest.mock('next-auth', () => ({
 
 jest.mock('next-auth/react', () => ({
     __esModule: true,
+    useSession: jest.fn(),
     getSession: jest.fn(),
     signIn: jest.fn()
 }));

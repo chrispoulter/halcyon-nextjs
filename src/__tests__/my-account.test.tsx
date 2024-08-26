@@ -4,6 +4,7 @@ import {
     waitForElementToBeRemoved
 } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
+import { useSession } from 'next-auth/react';
 import { randomUUID } from 'crypto';
 import { GetProfileResponse } from '@/features/manage/manageTypes';
 import MyAccountPage from '@/pages/my-account';
@@ -19,14 +20,20 @@ const response: GetProfileResponse = {
 };
 
 describe('my account page', () => {
+    const mockedUseSession = useSession as jest.Mock;
+
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 
-    beforeEach(() =>
+    beforeEach(() => {
+        mockedUseSession.mockReturnValue({
+            status: 'authenticated'
+        });
+
         fetchMock.mockResponse(JSON.stringify(response), {
             headers: { 'content-type': 'application/json' }
-        })
-    );
+        });
+    });
 
     it('should render personal details', async () => {
         render(<MyAccountPage />, { wrapper: storeWrapper });
