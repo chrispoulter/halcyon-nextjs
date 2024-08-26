@@ -1,5 +1,8 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '@/features/common/commonTypes';
+import {
+    AuthorizedRequest,
+    UpdatedResponse
+} from '@/features/common/commonTypes';
 import {
     GetProfileResponse,
     UpdateProfileRequest,
@@ -9,36 +12,48 @@ import {
 
 export const manageEndpoints = api.injectEndpoints({
     endpoints: builder => ({
-        getProfile: builder.query<GetProfileResponse, void>({
-            query: () => '/manage',
+        getProfile: builder.query<GetProfileResponse, AuthorizedRequest>({
+            query: ({ accessToken }) => ({
+                url: '/manage',
+                headers: { Authorization: `Bearer ${accessToken}` }
+            }),
             providesTags: result => [{ type: 'User', id: result?.id }]
         }),
-        updateProfile: builder.mutation<UpdatedResponse, UpdateProfileRequest>({
-            query: body => ({
+        updateProfile: builder.mutation<
+            UpdatedResponse,
+            { body: UpdateProfileRequest } & AuthorizedRequest
+        >({
+            query: ({ body, accessToken }) => ({
                 url: '/manage',
                 method: 'PUT',
-                body
+                body,
+                headers: { Authorization: `Bearer ${accessToken}` }
             }),
             invalidatesTags: (result, error) =>
                 error ? [] : [{ type: 'User', id: result?.id }]
         }),
         changePassword: builder.mutation<
             UpdatedResponse,
-            ChangePasswordRequest
+            { body: ChangePasswordRequest } & AuthorizedRequest
         >({
-            query: body => ({
+            query: ({ body, accessToken }) => ({
                 url: '/manage/change-password',
                 method: 'PUT',
-                body
+                body,
+                headers: { Authorization: `Bearer ${accessToken}` }
             }),
             invalidatesTags: (result, error) =>
                 error ? [] : [{ type: 'User', id: result?.id }]
         }),
-        deleteAccount: builder.mutation<UpdatedResponse, DeleteAccountRequst>({
-            query: body => ({
+        deleteAccount: builder.mutation<
+            UpdatedResponse,
+            { body: DeleteAccountRequst } & AuthorizedRequest
+        >({
+            query: ({ body, accessToken }) => ({
                 url: '/manage',
                 method: 'DELETE',
-                body
+                body,
+                headers: { Authorization: `Bearer ${accessToken}` }
             }),
             invalidatesTags: (_, error) =>
                 error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]

@@ -1,6 +1,15 @@
 import { useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { UserSort } from '@/features/user/userTypes';
-import { useSearchUsersQuery } from '@/features/user/userEndpoints';
+import {
+    searchUsers,
+    useSearchUsersQuery
+} from '@/features/user/userEndpoints';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -14,14 +23,7 @@ import {
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
 
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { searchUsers } from '@/features/user/userEndpoints';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-
-const defaultRequest = {
+const params = {
     search: '',
     sort: UserSort.NAME_ASC,
     page: 1,
@@ -29,28 +31,31 @@ const defaultRequest = {
 };
 
 const UsersPage = () => {
-    const [request, setRequest] = useState(defaultRequest);
+    const { data: session, status } = useSession();
+    const accessToken = session?.accessToken;
+    const loading = status === 'loading';
+
+    const [state, setState] = useState(params);
 
     const {
         data: users,
         isLoading,
         isFetching,
         error
-    } = useSearchUsersQuery(request);
+    } = useSearchUsersQuery({ params: state, accessToken }, { skip: loading });
 
     const loadingOrError = isLoading || !!error;
 
     const onSubmit = (values: SearchUserFormValues) => {
-        setRequest({ ...request, ...values, page: 1 });
+        setState({ ...state, ...values, page: 1 });
         return true;
     };
 
-    const onNextPage = () => setRequest({ ...request, page: request.page + 1 });
+    const onNextPage = () => setState({ ...state, page: state.page + 1 });
 
-    const onPreviousPage = () =>
-        setRequest({ ...request, page: request.page - 1 });
+    const onPreviousPage = () => setState({ ...state, page: state.page - 1 });
 
-    const onSort = (sort: UserSort) => setRequest({ ...request, sort });
+    const onSort = (sort: UserSort) => setState({ ...state, sort });
 
     return (
         <>
@@ -61,12 +66,12 @@ const UsersPage = () => {
 
                 <div className="mb-3 flex gap-1">
                     <SearchUserForm
-                        values={request}
+                        values={state}
                         onSubmit={onSubmit}
                         isLoading={loadingOrError || isFetching}
                     />
                     <SortUserDropdown
-                        selected={request.sort}
+                        selected={state.sort}
                         onSelect={onSort}
                         isLoading={loadingOrError || isFetching}
                     />
@@ -97,7 +102,14 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        store.dispatch(searchUsers.initiate(defaultRequest));
+        const accessToken = session && session?.accessToken;
+
+        store.dispatch(
+            searchUsers.initiate({
+                params,
+                accessToken
+            })
+        );
 
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 

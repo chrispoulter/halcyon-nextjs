@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import {
@@ -29,12 +30,21 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateUserPage = () => {
     const router = useRouter();
-
     const id = router.query.id as string;
+    const ready = router.isReady;
 
-    const { data: user, isFetching } = useGetUserQuery(id, {
-        skip: !router.isReady
-    });
+    const { data: session, status } = useSession();
+    const accessToken = session?.accessToken;
+    const loading = status === 'loading';
+
+    const { data: user, isFetching } = useGetUserQuery(
+        { id, accessToken },
+        {
+            skip: !ready || loading
+        }
+    );
+
+    const version = user?.version;
 
     const [updateUser] = useUpdateUserMutation();
 
@@ -44,12 +54,11 @@ const UpdateUserPage = () => {
 
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
-    const version = user?.version;
-
     const onSubmit = async (values: UpdateUserFormValues) => {
         await updateUser({
             id,
-            body: { ...values, version }
+            body: { ...values, version },
+            accessToken
         }).unwrap();
 
         toast.success('User successfully updated.');
@@ -59,7 +68,8 @@ const UpdateUserPage = () => {
     const onDelete = async () => {
         await deleteUser({
             id,
-            body: { version }
+            body: { version },
+            accessToken
         }).unwrap();
 
         toast.success('User successfully deleted.');
@@ -69,7 +79,8 @@ const UpdateUserPage = () => {
     const onLock = async () => {
         await lockUser({
             id,
-            body: { version }
+            body: { version },
+            accessToken
         }).unwrap();
 
         return toast.success('User successfully locked.');
@@ -78,7 +89,8 @@ const UpdateUserPage = () => {
     const onUnlock = async () => {
         await unlockUser({
             id,
-            body: { version }
+            body: { version },
+            accessToken
         }).unwrap();
 
         return toast.success('User successfully unlocked.');
@@ -143,12 +155,12 @@ const UpdateUserPage = () => {
 
 export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res, params }) => {
-        const session = await getServerSession(req, res, authOptions);
-
         const id = params?.id as string;
 
-        store.dispatch(getUser.initiate(id));
+        const session = await getServerSession(req, res, authOptions);
 
+        const accessToken = session && session?.accessToken;
+        store.dispatch(getUser.initiate({ id, accessToken }));
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
         return {

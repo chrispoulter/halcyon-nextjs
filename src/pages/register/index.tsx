@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { useRegisterMutation } from '@/features/account/accountEndpoints';
 import { Meta } from '@/components/Meta/Meta';
@@ -8,17 +10,27 @@ import {
     RegisterForm,
     RegisterFormValues
 } from '@/features/account/RegisterForm/RegisterForm';
-import { useSignIn } from '@/features/account/hooks/useSignIn';
 
 const RegisterPage = () => {
-    const [register] = useRegisterMutation();
+    const router = useRouter();
 
-    const signIn = useSignIn();
+    const [register] = useRegisterMutation();
 
     const onSubmit = async (values: RegisterFormValues) => {
         await register(values).unwrap();
+
         toast.success('User successfully registered.');
-        return signIn(values);
+
+        const result = await signIn('credentials', {
+            ...values,
+            redirect: false
+        });
+
+        if (result?.ok) {
+            return router.push('/');
+        }
+
+        return toast.error('The credentials provided were invalid.');
     };
 
     return (
