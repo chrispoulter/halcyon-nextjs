@@ -1,5 +1,8 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '@/features/common/commonTypes';
+import {
+    AuthorizedRequest,
+    UpdatedResponse
+} from '@/features/common/commonTypes';
 import {
     GetProfileResponse,
     UpdateProfileRequest,
@@ -9,18 +12,16 @@ import {
 
 export const manageEndpoints = api.injectEndpoints({
     endpoints: builder => ({
-        getProfile: builder.query<GetProfileResponse, { accessToken?: string }>(
-            {
-                query: ({ accessToken }) => ({
-                    url: '/manage',
-                    headers: { Authorization: `Bearer ${accessToken}` }
-                }),
-                providesTags: result => [{ type: 'User', id: result?.id }]
-            }
-        ),
+        getProfile: builder.query<GetProfileResponse, AuthorizedRequest>({
+            query: ({ accessToken }) => ({
+                url: '/manage',
+                headers: { Authorization: `Bearer ${accessToken}` }
+            }),
+            providesTags: result => [{ type: 'User', id: result?.id }]
+        }),
         updateProfile: builder.mutation<
             UpdatedResponse,
-            { body: UpdateProfileRequest; accessToken?: string }
+            { body: UpdateProfileRequest } & AuthorizedRequest
         >({
             query: ({ body, accessToken }) => ({
                 url: '/manage',
@@ -33,7 +34,7 @@ export const manageEndpoints = api.injectEndpoints({
         }),
         changePassword: builder.mutation<
             UpdatedResponse,
-            { body: ChangePasswordRequest; accessToken?: string }
+            { body: ChangePasswordRequest } & AuthorizedRequest
         >({
             query: ({ body, accessToken }) => ({
                 url: '/manage/change-password',
@@ -46,7 +47,7 @@ export const manageEndpoints = api.injectEndpoints({
         }),
         deleteAccount: builder.mutation<
             UpdatedResponse,
-            { body: DeleteAccountRequst; accessToken?: string }
+            { body: DeleteAccountRequst } & AuthorizedRequest
         >({
             query: ({ body, accessToken }) => ({
                 url: '/manage',

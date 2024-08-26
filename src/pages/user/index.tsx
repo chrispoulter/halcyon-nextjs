@@ -103,16 +103,7 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) {
-            return {
-                redirect: {
-                    destination: '/',
-                    permanent: false
-                }
-            };
-        }
-
-        const accessToken = session.accessToken;
+         const accessToken = session?.accessToken || null;
 
         store.dispatch(
             searchUsers.initiate({

@@ -1,5 +1,8 @@
 import { api } from '@/redux/api';
-import { UpdatedResponse } from '@/features/common/commonTypes';
+import {
+    AuthorizedRequest,
+    UpdatedResponse
+} from '@/features/common/commonTypes';
 import {
     SearchUsersResponse,
     SearchUsersRequest,
@@ -15,7 +18,7 @@ export const userEndpoints = api.injectEndpoints({
     endpoints: builder => ({
         searchUsers: builder.query<
             SearchUsersResponse,
-            { params: SearchUsersRequest; accessToken?: string }
+            { params: SearchUsersRequest } & AuthorizedRequest
         >({
             query: ({ params, accessToken }) => ({
                 url: `/user`,
@@ -34,7 +37,7 @@ export const userEndpoints = api.injectEndpoints({
         }),
         createUser: builder.mutation<
             UpdatedResponse,
-            { body: CreateUserRequest; accessToken?: string }
+            { body: CreateUserRequest } & AuthorizedRequest
         >({
             query: ({ body, accessToken }) => ({
                 url: '/user',
@@ -49,7 +52,7 @@ export const userEndpoints = api.injectEndpoints({
         }),
         getUser: builder.query<
             GetUserResponse,
-            { id: string; accessToken?: string }
+            { id: string } & AuthorizedRequest
         >({
             query: ({ id, accessToken }) => ({
                 url: `/user/${id}`,
@@ -59,7 +62,7 @@ export const userEndpoints = api.injectEndpoints({
         }),
         updateUser: builder.mutation<
             UpdatedResponse,
-            { id: string; body: UpdateUserRequest; accessToken?: string }
+            { id: string; body: UpdateUserRequest } & AuthorizedRequest
         >({
             query: ({ id, body, accessToken }) => ({
                 url: `/user/${id}`,
@@ -74,7 +77,7 @@ export const userEndpoints = api.injectEndpoints({
         }),
         lockUser: builder.mutation<
             UpdatedResponse,
-            { id: string; body: LockUserRequest; accessToken?: string }
+            { id: string; body: LockUserRequest } & AuthorizedRequest
         >({
             query: ({ id, body, accessToken }) => ({
                 url: `/user/${id}/lock`,
@@ -89,7 +92,7 @@ export const userEndpoints = api.injectEndpoints({
         }),
         unlockUser: builder.mutation<
             UpdatedResponse,
-            { id: string; body: UnlockUserRequest; accessToken?: string }
+            { id: string; body: UnlockUserRequest } & AuthorizedRequest
         >({
             query: ({ id, body, accessToken }) => ({
                 url: `/user/${id}/unlock`,
@@ -104,7 +107,7 @@ export const userEndpoints = api.injectEndpoints({
         }),
         deleteUser: builder.mutation<
             UpdatedResponse,
-            { id: string; body: DeleteUserRequest; accessToken?: string }
+            { id: string; body: DeleteUserRequest; accessToken?: string | null }
         >({
             query: ({ id, body, accessToken }) => ({
                 url: `/user/${id}`,
