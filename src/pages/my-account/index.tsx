@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { getServerSession } from 'next-auth';
 import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
@@ -18,11 +19,13 @@ import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetail
 import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
 
 const MyAccountPage = () => {
+    const router = useRouter();
+
     const { data: session, status } = useSession();
 
     const { data: profile } = useGetProfileQuery(
         { accessToken: session?.accessToken },
-        { skip: status !== 'authenticated' }
+        { skip: status === 'loading' }
     );
 
     const [deleteAccount, { isLoading: isDeleting }] =
@@ -37,7 +40,9 @@ const MyAccountPage = () => {
         }).unwrap();
 
         toast.success('Your account has been deleted.');
-        await signOut({ callbackUrl: '/' });
+
+        const result = await signOut({ redirect: false, callbackUrl: '/' });
+        return router.push(result.url);
     };
 
     return (
@@ -63,16 +68,7 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        if (!session) {
-            return {
-                redirect: {
-                    destination: '/login',
-                    permanent: false
-                }
-            };
-        }
-
-        const accessToken = session.accessToken;
+        const accessToken = session?.accessToken || '';
 
         store.dispatch(getProfile.initiate({ accessToken }));
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
