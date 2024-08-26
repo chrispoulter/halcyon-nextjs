@@ -9,36 +9,50 @@ import {
 
 export const manageEndpoints = api.injectEndpoints({
     endpoints: builder => ({
-        getProfile: builder.query<GetProfileResponse, void>({
-            query: () => '/manage',
-            providesTags: result => [{ type: 'User', id: result?.id }]
-        }),
-        updateProfile: builder.mutation<UpdatedResponse, UpdateProfileRequest>({
-            query: body => ({
+        getProfile: builder.query<GetProfileResponse, { accessToken?: string }>(
+            {
+                query: ({ accessToken }) => ({
+                    url: '/manage',
+                    headers: { Authorization: `Bearer ${accessToken}` }
+                }),
+                providesTags: result => [{ type: 'User', id: result?.id }]
+            }
+        ),
+        updateProfile: builder.mutation<
+            UpdatedResponse,
+            { body: UpdateProfileRequest; accessToken?: string }
+        >({
+            query: ({ body, accessToken }) => ({
                 url: '/manage',
                 method: 'PUT',
-                body
+                body,
+                headers: { Authorization: `Bearer ${accessToken}` }
             }),
             invalidatesTags: (result, error) =>
                 error ? [] : [{ type: 'User', id: result?.id }]
         }),
         changePassword: builder.mutation<
             UpdatedResponse,
-            ChangePasswordRequest
+            { body: ChangePasswordRequest; accessToken?: string }
         >({
-            query: body => ({
+            query: ({ body, accessToken }) => ({
                 url: '/manage/change-password',
                 method: 'PUT',
-                body
+                body,
+                headers: { Authorization: `Bearer ${accessToken}` }
             }),
             invalidatesTags: (result, error) =>
                 error ? [] : [{ type: 'User', id: result?.id }]
         }),
-        deleteAccount: builder.mutation<UpdatedResponse, DeleteAccountRequst>({
-            query: body => ({
+        deleteAccount: builder.mutation<
+            UpdatedResponse,
+            { body: DeleteAccountRequst; accessToken?: string }
+        >({
+            query: ({ body, accessToken }) => ({
                 url: '/manage',
                 method: 'DELETE',
-                body
+                body,
+                headers: { Authorization: `Bearer ${accessToken}` }
             }),
             invalidatesTags: (_, error) =>
                 error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]

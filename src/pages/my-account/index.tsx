@@ -1,9 +1,15 @@
-import { signOut } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import {
+    getProfile,
     useGetProfileQuery,
     useDeleteAccountMutation
 } from '@/features/manage/manageEndpoints';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -11,15 +17,13 @@ import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/Perso
 import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
 import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
 
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { getProfile } from '@/features/manage/manageEndpoints';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-
 const MyAccountPage = () => {
-    const { data: profile } = useGetProfileQuery();
+    const { data: session, status } = useSession();
+
+    const { data: profile } = useGetProfileQuery(
+        { accessToken: session?.accessToken },
+        { skip: status === 'loading' }
+    );
 
     const [deleteAccount, { isLoading: isDeleting }] =
         useDeleteAccountMutation();
@@ -27,7 +31,11 @@ const MyAccountPage = () => {
     const version = profile?.version;
 
     const onDelete = async () => {
-        await deleteAccount({ version }).unwrap();
+        await deleteAccount({
+            body: { version },
+            accessToken: session?.accessToken
+        }).unwrap();
+
         toast.success('Your account has been deleted.');
         await signOut({ callbackUrl: '/' });
     };
@@ -55,7 +63,9 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        store.dispatch(getProfile.initiate());
+        store.dispatch(
+            getProfile.initiate({ accessToken: session?.accessToken })
+        );
 
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
