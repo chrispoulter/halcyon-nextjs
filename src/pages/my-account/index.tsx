@@ -22,7 +22,7 @@ const MyAccountPage = () => {
 
     const { data: profile } = useGetProfileQuery(
         { accessToken: session?.accessToken },
-        { skip: status === 'loading' }
+        { skip: status !== 'authenticated' }
     );
 
     const [deleteAccount, { isLoading: isDeleting }] =
@@ -63,10 +63,18 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        const accessToken = session?.accessToken || '';
+        if (!session) {
+            return {
+                redirect: {
+                    destination: '/login',
+                    permanent: false
+                }
+            };
+        }
+
+        const accessToken = session.accessToken;
 
         store.dispatch(getProfile.initiate({ accessToken }));
-
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
         return {
