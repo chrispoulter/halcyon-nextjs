@@ -25,7 +25,6 @@ const ChangePasswordPage = () => {
     const router = useRouter();
 
     const { data: session, status } = useSession();
-
     const accessToken = session?.accessToken;
     const loading = status === 'loading';
 

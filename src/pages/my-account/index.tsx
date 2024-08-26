@@ -19,7 +19,6 @@ import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/Accou
 
 const MyAccountPage = () => {
     const { data: session, status } = useSession();
-
     const accessToken = session?.accessToken;
     const loading = status === 'loading';
 

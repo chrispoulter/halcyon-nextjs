@@ -15,7 +15,6 @@ const CreateUserPage = () => {
     const router = useRouter();
 
     const { data: session } = useSession();
-
     const accessToken = session?.accessToken;
 
     const [createUser] = useCreateUserMutation();

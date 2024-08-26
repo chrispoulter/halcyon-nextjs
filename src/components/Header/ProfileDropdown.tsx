@@ -6,14 +6,13 @@ import { roles } from '@/utils/auth';
 
 export const ProfileDropdown = () => {
     const { data: session } = useSession();
-
-    const onLogout = () => signOut({ callbackUrl: '/' });
-
     const user = session?.user;
 
     if (!user) {
         return null;
     }
+
+    const onLogout = () => signOut({ callbackUrl: '/' });
 
     return (
         <Menu

@@ -30,18 +30,17 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateUserPage = () => {
     const router = useRouter();
-
     const id = router.query.id as string;
+    const ready = router.isReady;
 
     const { data: session, status } = useSession();
-
     const accessToken = session?.accessToken;
-    const isLoading = status === 'loading';
+    const loading = status === 'loading';
 
     const { data: user, isFetching } = useGetUserQuery(
         { id, accessToken },
         {
-            skip: !router.isReady || isLoading
+            skip: !ready || loading
         }
     );
 

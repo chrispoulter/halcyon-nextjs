@@ -32,7 +32,6 @@ const params = {
 
 const UsersPage = () => {
     const { data: session, status } = useSession();
-
     const accessToken = session?.accessToken;
     const loading = status === 'loading';
 
