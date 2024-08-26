@@ -156,10 +156,9 @@ export const getServerSideProps: GetServerSideProps =
         const session = await getServerSession(req, res, authOptions);
 
         const id = params?.id as string;
+        const accessToken = session?.accessToken || '';
 
-        store.dispatch(
-            getUser.initiate({ id, accessToken: session?.accessToken })
-        );
+        store.dispatch(getUser.initiate({ id, accessToken }));
 
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
