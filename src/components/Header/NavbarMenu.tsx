@@ -6,6 +6,11 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { MenuIcon } from '@/components/Icons/MenuIcon';
 import { isAuthorized, isUserAdministrator } from '@/utils/auth';
 
+type NavbarMenuOption = {
+    href: string;
+    label: string;
+};
+
 const NavbarMenuOptionsLoading = () => (
     <>
         <div role="status" className="animate-pulse p-2">
@@ -26,7 +31,7 @@ const NavbarMenuOptions = () => {
         return <NavbarMenuOptionsLoading />;
     }
 
-    const options: { href: string; label: string }[] = [];
+    const options: NavbarMenuOption[] = [];
 
     if (!isAuthorized(session?.user)) {
         options.push({ href: '/login', label: 'Login' });
