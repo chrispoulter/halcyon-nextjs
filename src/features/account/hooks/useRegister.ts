@@ -10,7 +10,7 @@ const register = (request: RegisterRequest) =>
         body: JSON.stringify(request)
     });
 
-export const useResetPassword = () => {
+export const useRegister = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
