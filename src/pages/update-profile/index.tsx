@@ -1,16 +1,15 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { getServerSession } from 'next-auth';
-import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import {
     getProfile,
     useGetProfileQuery,
     useUpdateProfileMutation
 } from '@/features/manage/manageEndpoints';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -23,25 +22,14 @@ import {
 const UpdateProfilePage = () => {
     const router = useRouter();
 
-    const { data: session, status } = useSession();
-    const accessToken = session?.accessToken;
-    const loading = status === 'loading';
-
-    const { data: profile } = useGetProfileQuery(
-        { accessToken },
-        { skip: loading }
-    );
+    const { data: profile } = useGetProfileQuery();
 
     const version = profile?.version;
 
     const [updateProfile] = useUpdateProfileMutation();
 
     const onSubmit = async (values: UpdateProfileFormValues) => {
-        await updateProfile({
-            body: { ...values, version },
-            accessToken
-        }).unwrap();
-
+        await updateProfile({ ...values, version }).unwrap();
         toast.success('Your profile has been updated.');
         return router.push('/my-account');
     };
@@ -71,8 +59,8 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        const accessToken = session && session?.accessToken;
-        store.dispatch(getProfile.initiate({ accessToken }));
+        store.dispatch(getProfile.initiate());
+
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 
         return {

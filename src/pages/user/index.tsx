@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { useSession } from 'next-auth/react';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { UserSort } from '@/features/user/userTypes';
 import {
     searchUsers,
     useSearchUsersQuery
 } from '@/features/user/userEndpoints';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -31,10 +30,6 @@ const params = {
 };
 
 const UsersPage = () => {
-    const { data: session, status } = useSession();
-    const accessToken = session?.accessToken;
-    const loading = status === 'loading';
-
     const [state, setState] = useState(params);
 
     const {
@@ -42,14 +37,12 @@ const UsersPage = () => {
         isLoading,
         isFetching,
         error
-    } = useSearchUsersQuery({ params: state, accessToken }, { skip: loading });
+    } = useSearchUsersQuery(state);
 
     const loadingOrError = isLoading || !!error;
 
-    const onSubmit = (values: SearchUserFormValues) => {
+    const onSubmit = (values: SearchUserFormValues) =>
         setState({ ...state, ...values, page: 1 });
-        return true;
-    };
 
     const onNextPage = () => setState({ ...state, page: state.page + 1 });
 
@@ -102,14 +95,7 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res }) => {
         const session = await getServerSession(req, res, authOptions);
 
-        const accessToken = session && session?.accessToken;
-
-        store.dispatch(
-            searchUsers.initiate({
-                params,
-                accessToken
-            })
-        );
+        store.dispatch(searchUsers.initiate(params));
 
         await Promise.all(store.dispatch(getRunningQueriesThunk()));
 

@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { useCreateUserMutation } from '@/features/user/userEndpoints';
 import { Meta } from '@/components/Meta/Meta';
@@ -14,17 +13,10 @@ import {
 const CreateUserPage = () => {
     const router = useRouter();
 
-    const { data: session } = useSession();
-    const accessToken = session?.accessToken;
-
     const [createUser] = useCreateUserMutation();
 
     const onSubmit = async (values: CreateUserFormValues) => {
-        await createUser({
-            body: values,
-            accessToken
-        }).unwrap();
-
+        await createUser(values).unwrap();
         toast.success('User successfully created.');
         return router.push('/user');
     };

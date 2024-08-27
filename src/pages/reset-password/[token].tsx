@@ -11,7 +11,6 @@ import {
 
 const ResetPasswordPage = () => {
     const router = useRouter();
-
     const token = router.query.token as string;
 
     const [resetPassword] = useResetPasswordMutation();
