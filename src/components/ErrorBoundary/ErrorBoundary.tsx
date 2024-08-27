@@ -46,9 +46,9 @@ class ErrorBoundaryInner extends React.Component<
 }
 
 const ErrorBoundary = ({ children }: React.PropsWithChildren) => {
-    const [hasError, setHasError] = useState(false);
-
     const router = useRouter();
+
+    const [hasError, setHasError] = useState(false);
 
     useEffect(() => {
         if (hasError) {

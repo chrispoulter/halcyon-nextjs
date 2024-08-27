@@ -3,18 +3,18 @@ import { getServerSession } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { Meta } from '@/components/Meta/Meta';
-import { Container } from '@/components/Container/Container';
-import { Title } from '@/components/Title/Title';
-import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/PersonalDetailsCard';
-import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
-import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
 import {
     getProfile,
     useGetProfile
 } from '@/features/manage/hooks/useGetProfile';
 import { useDeleteAccount } from '@/features/manage/hooks/useDeleteAccount';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { Meta } from '@/components/Meta/Meta';
+import { Container } from '@/components/Container/Container';
+import { Title } from '@/components/Title/Title';
+import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/PersonalDetailsCard';
+import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
+import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
 
 const MyAccountPage = () => {
     const { data } = useGetProfile();

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import { useResetPassword } from '@/features/account/hooks/useResetPassword';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -7,11 +8,9 @@ import {
     ResetPasswordForm,
     ResetPasswordFormValues
 } from '@/features/account/ResetPasswordForm/ResetPasswordForm';
-import { useResetPassword } from '@/features/account/hooks/useResetPassword';
 
 const ResetPasswordPage = () => {
     const router = useRouter();
-
     const token = router.query.token as string;
 
     const { mutate, isPending } = useResetPassword();

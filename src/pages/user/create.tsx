@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import { useCreateUser } from '@/features/user/hooks/useCreateUser';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title, SubTitle } from '@/components/Title/Title';
@@ -8,7 +9,6 @@ import {
     CreateUserForm,
     CreateUserFormValues
 } from '@/features/user/CreateUserForm/CreateUserForm';
-import { useCreateUser } from '@/features/user/hooks/useCreateUser';
 
 const CreateUserPage = () => {
     const router = useRouter();

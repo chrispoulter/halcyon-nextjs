@@ -3,6 +3,12 @@ import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import {
+    getProfile,
+    useGetProfile
+} from '@/features/manage/hooks/useGetProfile';
+import { useChangePassword } from '@/features/manage/hooks/useChangePassword';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -12,12 +18,6 @@ import {
     ChangePasswordForm,
     ChangePasswordFormValues
 } from '@/features/manage/ChangePasswordForm/ChangePasswordForm';
-import {
-    getProfile,
-    useGetProfile
-} from '@/features/manage/hooks/useGetProfile';
-import { useChangePassword } from '@/features/manage/hooks/useChangePassword';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const ChangePasswordPage = () => {
     const router = useRouter();

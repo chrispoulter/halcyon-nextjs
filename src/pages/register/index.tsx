@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import { useRegister } from '@/features/account/hooks/useRegister';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -9,7 +10,6 @@ import {
     RegisterForm,
     RegisterFormValues
 } from '@/features/account/RegisterForm/RegisterForm';
-import { useRegister } from '@/features/account/hooks/useRegister';
 
 const RegisterPage = () => {
     const router = useRouter();

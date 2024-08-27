@@ -3,6 +3,12 @@ import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { getUser, useGetUser } from '@/features/user/hooks/useGetUser';
+import { useUpdateUser } from '@/features/user/hooks/useUpdateUser';
+import { useLockUser } from '@/features/user/hooks/useLockUser';
+import { useUnlockUser } from '@/features/user/hooks/useUnlockUser';
+import { useDeleteUser } from '@/features/user/hooks/useDeleteUser';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { SubTitle, Title } from '@/components/Title/Title';
@@ -15,12 +21,6 @@ import {
     UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
-import { getUser, useGetUser } from '@/features/user/hooks/useGetUser';
-import { useUpdateUser } from '@/features/user/hooks/useUpdateUser';
-import { useLockUser } from '@/features/user/hooks/useLockUser';
-import { useUnlockUser } from '@/features/user/hooks/useUnlockUser';
-import { useDeleteUser } from '@/features/user/hooks/useDeleteUser';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateUserPage = () => {
     const router = useRouter();

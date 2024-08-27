@@ -2,6 +2,12 @@ import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { UserSort } from '@/features/user/userTypes';
+import {
+    useSearchUsers,
+    searchUsers
+} from '@/features/user/hooks/useSearchUsers';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -14,12 +20,6 @@ import {
 } from '@/features/user/SearchUserForm/SearchUserForm';
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
-import {
-    useSearchUsers,
-    searchUsers
-} from '@/features/user/hooks/useSearchUsers';
-import { UserSort } from '@/features/user/userTypes';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const params = {
     search: '',
