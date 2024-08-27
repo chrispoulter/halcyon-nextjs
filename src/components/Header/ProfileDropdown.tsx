@@ -6,7 +6,6 @@ import { roles } from '@/utils/auth';
 
 export const ProfileDropdown = () => {
     const { data: session } = useSession();
-
     const user = session?.user;
 
     if (!user) {
