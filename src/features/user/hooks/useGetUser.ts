@@ -9,6 +9,7 @@ export const getUser = (id: string, init?: RequestInit) =>
 
 export const useGetUser = (id: string) => {
     const { data: session, status } = useSession();
+    const loading = status === 'loading';
 
     return useQuery({
         queryKey: ['user', id],
@@ -16,6 +17,6 @@ export const useGetUser = (id: string) => {
             getUser(id, {
                 headers: { Authorization: `Bearer ${session?.accessToken}` }
             }),
-        enabled: !!id && status !== 'loading'
+        enabled: !!id && !loading
     });
 };

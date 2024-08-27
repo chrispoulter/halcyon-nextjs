@@ -9,6 +9,7 @@ export const getProfile = (init?: RequestInit) =>
 
 export const useGetProfile = () => {
     const { data: session, status } = useSession();
+    const loading = status === 'loading';
 
     return useQuery({
         queryKey: ['profile'],
@@ -16,6 +17,6 @@ export const useGetProfile = () => {
             getProfile({
                 headers: { Authorization: `Bearer ${session?.accessToken}` }
             }),
-        enabled: status !== 'loading'
+        enabled: !loading
     });
 };

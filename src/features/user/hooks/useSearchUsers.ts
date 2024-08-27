@@ -23,6 +23,7 @@ export const searchUsers = (
 
 export const useSearchUsers = (request: SearchUsersRequest) => {
     const { data: session, status } = useSession();
+    const loading = status === 'loading';
 
     return useQuery({
         queryKey: ['users', request],
@@ -30,6 +31,6 @@ export const useSearchUsers = (request: SearchUsersRequest) => {
             searchUsers(request, {
                 headers: { Authorization: `Bearer ${session?.accessToken}` }
             }),
-        enabled: status !== 'loading'
+        enabled: !loading
     });
 };
