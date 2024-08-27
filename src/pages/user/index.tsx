@@ -21,7 +21,7 @@ import {
 import { UserSort } from '@/features/user/userTypes';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-const defaultRequest = {
+const params = {
     search: '',
     sort: UserSort.NAME_ASC,
     page: 1,
@@ -29,19 +29,18 @@ const defaultRequest = {
 };
 
 const UsersPage = () => {
-    const [request, setRequest] = useState(defaultRequest);
+    const [state, setState] = useState(params);
 
-    const { data, isFetching, isLoading, isError } = useSearchUsers(request);
+    const { data, isFetching, isLoading, isError } = useSearchUsers(state);
 
     const onSubmit = (values: SearchUserFormValues) =>
-        setRequest({ ...request, ...values, page: 1 });
+        setState({ ...state, ...values, page: 1 });
 
-    const onNextPage = () => setRequest({ ...request, page: request.page + 1 });
+    const onNextPage = () => setState({ ...state, page: state.page + 1 });
 
-    const onPreviousPage = () =>
-        setRequest({ ...request, page: request.page - 1 });
+    const onPreviousPage = () => setState({ ...state, page: state.page - 1 });
 
-    const onSort = (sort: UserSort) => setRequest({ ...request, sort });
+    const onSort = (sort: UserSort) => setState({ ...state, sort });
 
     return (
         <>
@@ -52,12 +51,12 @@ const UsersPage = () => {
 
                 <div className="mb-3 flex gap-1">
                     <SearchUserForm
-                        values={request}
+                        values={state}
                         onSubmit={onSubmit}
                         isLoading={isLoading || isError || isFetching}
                     />
                     <SortUserDropdown
-                        selected={request.sort}
+                        selected={state.sort}
                         onSelect={onSort}
                         isLoading={isLoading || isError || isFetching}
                     />
@@ -93,9 +92,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
-        queryKey: ['users', defaultRequest],
+        queryKey: ['users', params],
         queryFn: () =>
-            searchUsers(defaultRequest, {
+            searchUsers(params, {
                 headers: {
                     Authorization: `Bearer ${session?.accessToken}`
                 }

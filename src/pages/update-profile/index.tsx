@@ -23,9 +23,9 @@ const UpdateProfilePage = () => {
 
     const { data } = useGetProfile();
 
-    const { mutate, isPending } = useUpdateProfile();
-
     const version = data?.version;
+
+    const { mutate, isPending } = useUpdateProfile();
 
     const onSubmit = (values: UpdateProfileFormValues) =>
         mutate(

@@ -20,7 +20,6 @@ const NavbarMenuOptionsLoading = () => (
 
 const NavbarMenuOptions = () => {
     const { data: session, status } = useSession();
-
     const isLoading = status === 'loading';
 
     if (isLoading) {

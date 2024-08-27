@@ -24,9 +24,9 @@ const ChangePasswordPage = () => {
 
     const { data } = useGetProfile();
 
-    const { mutate, isPending } = useChangePassword();
-
     const version = data?.version;
+
+    const { mutate, isPending } = useChangePassword();
 
     const onSubmit = (values: ChangePasswordFormValues) =>
         mutate(

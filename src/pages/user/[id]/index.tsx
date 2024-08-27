@@ -24,10 +24,11 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateUserPage = () => {
     const router = useRouter();
-
     const id = router.query.id as string;
 
     const { data, isFetching } = useGetUser(id);
+
+    const version = data?.version;
 
     const { mutate, isPending } = useUpdateUser(id);
 
@@ -36,8 +37,6 @@ const UpdateUserPage = () => {
     const { mutate: unlockUser, isPending: isUnlocking } = useUnlockUser(id);
 
     const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser(id);
-
-    const version = data?.version;
 
     const onSubmit = async (values: UpdateUserFormValues) =>
         mutate(

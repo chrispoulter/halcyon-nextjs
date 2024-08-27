@@ -19,9 +19,9 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 const MyAccountPage = () => {
     const { data } = useGetProfile();
 
-    const { mutate, isPending } = useDeleteAccount();
-
     const version = data?.version;
+
+    const { mutate, isPending } = useDeleteAccount();
 
     const onDelete = () =>
         mutate(
