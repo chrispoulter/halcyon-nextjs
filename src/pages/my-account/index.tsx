@@ -1,6 +1,12 @@
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import {
+    getProfile,
     useGetProfileQuery,
     useDeleteAccountMutation
 } from '@/features/manage/manageEndpoints';
@@ -10,13 +16,6 @@ import { Title } from '@/components/Title/Title';
 import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/PersonalDetailsCard';
 import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
 import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
-
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { getProfile } from '@/features/manage/manageEndpoints';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const MyAccountPage = () => {
     const { data: profile } = useGetProfileQuery();

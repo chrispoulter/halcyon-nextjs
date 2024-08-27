@@ -1,6 +1,12 @@
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { getServerSession } from 'next-auth';
 import toast from 'react-hot-toast';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import {
+    getUser,
     useGetUserQuery,
     useUpdateUserMutation,
     useLockUserMutation,
@@ -19,13 +25,6 @@ import {
     UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
-
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { getUser } from '@/features/user/userEndpoints';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateUserPage = () => {
     const router = useRouter();

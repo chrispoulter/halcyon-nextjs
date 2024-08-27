@@ -1,6 +1,12 @@
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { getServerSession } from 'next-auth';
 import toast from 'react-hot-toast';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import {
+    getProfile,
     useGetProfileQuery,
     useUpdateProfileMutation
 } from '@/features/manage/manageEndpoints';
@@ -12,13 +18,6 @@ import {
     UpdateProfileForm,
     UpdateProfileFormValues
 } from '@/features/manage/UpdateProfileForm/UpdateProfileForm';
-
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { getProfile } from '@/features/manage/manageEndpoints';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateProfilePage = () => {
     const router = useRouter();

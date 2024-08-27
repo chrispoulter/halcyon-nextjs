@@ -1,6 +1,12 @@
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { getServerSession } from 'next-auth';
 import toast from 'react-hot-toast';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import {
+    getProfile,
     useGetProfileQuery,
     useChangePasswordMutation
 } from '@/features/manage/manageEndpoints';
@@ -13,13 +19,6 @@ import {
     ChangePasswordForm,
     ChangePasswordFormValues
 } from '@/features/manage/ChangePasswordForm/ChangePasswordForm';
-
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { wrapper } from '@/redux/store';
-import { getProfile } from '@/features/manage/manageEndpoints';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const ChangePasswordPage = () => {
     const router = useRouter();

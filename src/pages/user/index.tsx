@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { getRunningQueriesThunk } from '@/redux/api';
+import { wrapper } from '@/redux/store';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { UserSort } from '@/features/user/userTypes';
-import { useSearchUsersQuery } from '@/features/user/userEndpoints';
+import { searchUsers, useSearchUsersQuery } from '@/features/user/userEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -13,13 +18,6 @@ import {
 } from '@/features/user/SearchUserForm/SearchUserForm';
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
-
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { searchUsers } from '@/features/user/userEndpoints';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const defaultRequest = {
     search: '',
