@@ -80,7 +80,10 @@ const App = ({
                                     );
 
                                 default:
-                                    return toast.error(message);
+                                    return toast.error(
+                                        message ||
+                                            'Sorry, something went wrong. Please try again later.'
+                                    );
                             }
                         }
 
