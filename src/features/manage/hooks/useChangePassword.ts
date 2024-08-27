@@ -20,6 +20,7 @@ export const useChangePassword = () => {
         mutationFn: changePassword,
         onSuccess: data => {
             queryClient.invalidateQueries({ queryKey: ['profile'] });
+            queryClient.invalidateQueries({ queryKey: ['users'] });
             queryClient.invalidateQueries({ queryKey: ['user', data.id] });
         }
     });
