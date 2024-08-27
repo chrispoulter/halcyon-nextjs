@@ -29,10 +29,9 @@ import {
 const UpdateUserPage = () => {
     const router = useRouter();
     const id = router.query.id as string;
-    const skip = !router.isReady;
 
     const { data: user, isFetching } = useGetUserQuery(id, {
-        skip
+        skip: !id
     });
 
     const version = user?.version;
