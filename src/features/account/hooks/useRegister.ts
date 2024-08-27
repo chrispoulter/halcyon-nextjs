@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { RegisterRequest } from '@/features/account/accountTypes';
 import { fetchWithToken } from '@/utils/fetch';
@@ -10,7 +10,11 @@ const register = (request: RegisterRequest) =>
         body: JSON.stringify(request)
     });
 
-export const useRegister = () =>
-    useMutation({
-        mutationFn: register
+export const useResetPassword = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: register,
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] })
     });
+};

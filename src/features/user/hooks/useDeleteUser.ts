@@ -16,6 +16,7 @@ export const useDeleteUser = (id: string) => {
     return useMutation({
         mutationFn: (request: DeleteUserRequest) => deleteUser(id, request),
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['profile'] });
             queryClient.invalidateQueries({ queryKey: ['users'] });
 
             queryClient.invalidateQueries({

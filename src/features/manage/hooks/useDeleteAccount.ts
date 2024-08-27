@@ -15,10 +15,16 @@ export const useDeleteAccount = () => {
 
     return useMutation({
         mutationFn: (request: DeleteAccountRequst) => deleteAccount(request),
-        onSuccess: () =>
+        onSuccess: data => {
             queryClient.invalidateQueries({
                 queryKey: ['profile'],
                 refetchType: 'none'
-            })
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: ['user', data.id],
+                refetchType: 'none'
+            });
+        }
     });
 };

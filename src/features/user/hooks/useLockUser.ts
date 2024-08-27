@@ -16,6 +16,7 @@ export const useLockUser = (id: string) => {
     return useMutation({
         mutationFn: (request: LockUserRequest) => lockUser(id, request),
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['profile'] });
             queryClient.invalidateQueries({ queryKey: ['users'] });
             queryClient.invalidateQueries({ queryKey: ['user', id] });
         }

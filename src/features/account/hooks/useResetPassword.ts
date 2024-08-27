@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { ResetPasswordRequest } from '@/features/account/accountTypes';
 import { fetchWithToken } from '@/utils/fetch';
@@ -13,7 +13,14 @@ const resetPassword = (request: ResetPasswordRequest) =>
         }
     );
 
-export const useResetPassword = () =>
-    useMutation({
-        mutationFn: resetPassword
+export const useResetPassword = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: resetPassword,
+        onSuccess: data => {
+            queryClient.invalidateQueries({ queryKey: ['profile'] });
+            queryClient.invalidateQueries({ queryKey: ['user', data.id] });
+        }
     });
+};

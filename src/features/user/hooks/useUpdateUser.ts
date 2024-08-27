@@ -16,6 +16,7 @@ export const useUpdateUser = (id: string) => {
     return useMutation({
         mutationFn: (request: UpdateUserRequest) => updateUser(id, request),
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['profile'] });
             queryClient.invalidateQueries({ queryKey: ['users'] });
             queryClient.invalidateQueries({ queryKey: ['user', id] });
         }
