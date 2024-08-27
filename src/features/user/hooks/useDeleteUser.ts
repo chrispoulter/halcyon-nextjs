@@ -1,20 +1,31 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { DeleteUserRequest } from '@/features/user/userTypes';
-import { fetchWithToken } from '@/utils/fetch';
+import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
 
-const deleteUser = (id: string, request: DeleteUserRequest) =>
-    fetchWithToken<UpdatedResponse>(`${config.API_URL}/user/${id}`, {
+const deleteUser = (
+    id: string,
+    request: DeleteUserRequest,
+    init?: RequestInit
+) =>
+    fetcher<UpdatedResponse>(`${config.API_URL}/user/${id}`, {
+        ...init,
         method: 'DELETE',
         body: JSON.stringify(request)
     });
 
 export const useDeleteUser = (id: string) => {
+    const { data: session } = useSession();
+
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (request: DeleteUserRequest) => deleteUser(id, request),
+        mutationFn: (request: DeleteUserRequest) =>
+            deleteUser(id, request, {
+                headers: { Authorization: `Bearer ${session?.accessToken}` }
+            }),
         onSuccess: data => {
             queryClient.invalidateQueries({ queryKey: ['profile'] });
             queryClient.invalidateQueries({ queryKey: ['users'] });

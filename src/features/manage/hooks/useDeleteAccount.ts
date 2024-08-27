@@ -1,20 +1,27 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { DeleteAccountRequst } from '@/features/manage/manageTypes';
-import { fetchWithToken } from '@/utils/fetch';
+import { fetcher as fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
 
-const deleteAccount = (request: DeleteAccountRequst) =>
-    fetchWithToken<UpdatedResponse>(`${config.API_URL}/manage`, {
+const deleteAccount = (request: DeleteAccountRequst, init?: RequestInit) =>
+    fetcher<UpdatedResponse>(`${config.API_URL}/manage`, {
+        ...init,
         method: 'DELETE',
         body: JSON.stringify(request)
     });
 
 export const useDeleteAccount = () => {
+    const { data: session } = useSession();
+
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (request: DeleteAccountRequst) => deleteAccount(request),
+        mutationFn: (request: DeleteAccountRequst) =>
+            deleteAccount(request, {
+                headers: { Authorization: `Bearer ${session?.accessToken}` }
+            }),
         onSuccess: data => {
             queryClient.invalidateQueries({
                 queryKey: ['profile'],

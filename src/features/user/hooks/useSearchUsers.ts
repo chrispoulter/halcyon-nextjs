@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import {
     SearchUsersRequest,
     SearchUsersResponse
 } from '@/features/user/userTypes';
-import { fetchWithToken } from '@/utils/fetch';
+import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
 
 export const searchUsers = (
@@ -14,15 +15,21 @@ export const searchUsers = (
         .map(pair => pair.map(encodeURIComponent).join('='))
         .join('&');
 
-    return fetchWithToken<SearchUsersResponse>(
+    return fetcher<SearchUsersResponse>(
         `${config.API_URL}/user?${params}`,
         init
     );
 };
 
 export const useSearchUsers = (request: SearchUsersRequest) => {
+    const { data: session, status } = useSession();
+
     return useQuery({
         queryKey: ['users', request],
-        queryFn: () => searchUsers(request)
+        queryFn: () =>
+            searchUsers(request, {
+                headers: { Authorization: `Bearer ${session?.accessToken}` }
+            }),
+        enabled: status !== 'loading'
     });
 };

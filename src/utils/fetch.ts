@@ -1,5 +1,3 @@
-import { getSession } from 'next-auth/react';
-
 export class FetchError extends Error {
     status: number;
     response?: any;
@@ -12,17 +10,11 @@ export class FetchError extends Error {
     }
 }
 
-export const fetchWithToken = async <TResponse>(
-    url: string,
-    init?: RequestInit
-) => {
-    const session = await getSession();
-
+export const fetcher = async <TResponse>(url: string, init?: RequestInit) => {
     const result = await fetch(url, {
         ...init,
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session?.accessToken}`,
             ...init?.headers
         }
     });

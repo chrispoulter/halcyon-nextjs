@@ -1,14 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import { GetUserResponse } from '@/features/user/userTypes';
-import { fetchWithToken } from '@/utils/fetch';
+import { fetcher } from '@/utils/fetch';
 import { config } from '@/utils/config';
 
 export const getUser = (id: string, init?: RequestInit) =>
-    fetchWithToken<GetUserResponse>(`${config.API_URL}/user/${id}`, init);
+    fetcher<GetUserResponse>(`${config.API_URL}/user/${id}`, init);
 
-export const useGetUser = (id: string) =>
-    useQuery({
+export const useGetUser = (id: string) => {
+    const { data: session, status } = useSession();
+
+    return useQuery({
         queryKey: ['user', id],
-        queryFn: () => getUser(id),
-        enabled: !!id
+        queryFn: () =>
+            getUser(id, {
+                headers: { Authorization: `Bearer ${session?.accessToken}` }
+            }),
+        enabled: !!id && status !== 'loading'
     });
+};
