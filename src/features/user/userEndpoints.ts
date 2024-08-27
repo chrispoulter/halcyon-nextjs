@@ -1,8 +1,5 @@
 import { api } from '@/redux/api';
-import {
-    AuthorizedRequest,
-    UpdatedResponse
-} from '@/features/common/commonTypes';
+import { UpdatedResponse } from '@/features/common/commonTypes';
 import {
     SearchUsersResponse,
     SearchUsersRequest,
@@ -16,16 +13,10 @@ import {
 
 export const userEndpoints = api.injectEndpoints({
     endpoints: builder => ({
-        searchUsers: builder.query<
-            SearchUsersResponse,
-            { params: SearchUsersRequest } & AuthorizedRequest
-        >({
-            query: ({ params, accessToken }) => ({
+        searchUsers: builder.query<SearchUsersResponse, SearchUsersRequest>({
+            query: params => ({
                 url: `/user`,
-                params,
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
+                params
             }),
             providesTags: result => [
                 { type: 'User', id: 'PARTIAL-LIST' },
@@ -35,87 +26,63 @@ export const userEndpoints = api.injectEndpoints({
                 })) || [])
             ]
         }),
-        createUser: builder.mutation<
-            UpdatedResponse,
-            { body: CreateUserRequest } & AuthorizedRequest
-        >({
-            query: ({ body, accessToken }) => ({
+        createUser: builder.mutation<UpdatedResponse, CreateUserRequest>({
+            query: body => ({
                 url: '/user',
                 method: 'POST',
-                body,
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
+                body
             }),
             invalidatesTags: (_, error) =>
                 error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]
         }),
-        getUser: builder.query<
-            GetUserResponse,
-            { id: string } & AuthorizedRequest
-        >({
-            query: ({ id, accessToken }) => ({
-                url: `/user/${id}`,
-                headers: { Authorization: `Bearer ${accessToken}` }
-            }),
+        getUser: builder.query<GetUserResponse, string>({
+            query: id => `/user/${id}`,
             providesTags: result => [{ type: 'User', id: result?.id }]
         }),
         updateUser: builder.mutation<
             UpdatedResponse,
-            { id: string; body: UpdateUserRequest } & AuthorizedRequest
+            { id: string; body: UpdateUserRequest }
         >({
-            query: ({ id, body, accessToken }) => ({
+            query: ({ id, body }) => ({
                 url: `/user/${id}`,
                 method: 'PUT',
-                body,
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
+                body
             }),
             invalidatesTags: (result, error) =>
                 error ? [] : [{ type: 'User', id: result?.id }]
         }),
         lockUser: builder.mutation<
             UpdatedResponse,
-            { id: string; body: LockUserRequest } & AuthorizedRequest
+            { id: string; body: LockUserRequest }
         >({
-            query: ({ id, body, accessToken }) => ({
+            query: ({ id, body }) => ({
                 url: `/user/${id}/lock`,
                 method: 'PUT',
-                body,
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
+                body
             }),
             invalidatesTags: (result, error) =>
                 error ? [] : [{ type: 'User', id: result?.id }]
         }),
         unlockUser: builder.mutation<
             UpdatedResponse,
-            { id: string; body: UnlockUserRequest } & AuthorizedRequest
+            { id: string; body: UnlockUserRequest }
         >({
-            query: ({ id, body, accessToken }) => ({
+            query: ({ id, body }) => ({
                 url: `/user/${id}/unlock`,
                 method: 'PUT',
-                body,
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
+                body
             }),
             invalidatesTags: (result, error) =>
                 error ? [] : [{ type: 'User', id: result?.id }]
         }),
         deleteUser: builder.mutation<
             UpdatedResponse,
-            { id: string; body: DeleteUserRequest; accessToken?: string | null }
+            { id: string; body: DeleteUserRequest }
         >({
-            query: ({ id, body, accessToken }) => ({
+            query: ({ id, body }) => ({
                 url: `/user/${id}`,
                 method: 'DELETE',
-                body,
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
+                body
             }),
             invalidatesTags: (_, error) =>
                 error ? [] : [{ type: 'User', id: 'PARTIAL-LIST' }]
