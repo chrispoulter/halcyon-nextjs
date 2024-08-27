@@ -29,12 +29,14 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateUserPage = () => {
     const router = useRouter();
-
     const id = router.query.id as string;
+    const skip = !router.isReady;
 
     const { data: user, isFetching } = useGetUserQuery(id, {
-        skip: !router.isReady
+        skip
     });
+
+    const version = user?.version;
 
     const [updateUser] = useUpdateUserMutation();
 
@@ -43,8 +45,6 @@ const UpdateUserPage = () => {
     const [unlockUser, { isLoading: isUnlocking }] = useUnlockUserMutation();
 
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
-
-    const version = user?.version;
 
     const onSubmit = async (values: UpdateUserFormValues) => {
         await updateUser({
@@ -143,9 +143,8 @@ const UpdateUserPage = () => {
 
 export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps(store => async ({ req, res, params }) => {
-        const session = await getServerSession(req, res, authOptions);
-
         const id = params?.id as string;
+        const session = await getServerSession(req, res, authOptions);
 
         store.dispatch(getUser.initiate(id));
 

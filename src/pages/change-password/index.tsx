@@ -26,9 +26,9 @@ const ChangePasswordPage = () => {
 
     const { data: profile } = useGetProfileQuery();
 
-    const [changePassword] = useChangePasswordMutation();
-
     const version = profile?.version;
+
+    const [changePassword] = useChangePasswordMutation();
 
     const onSubmit = async (values: ChangePasswordFormValues) => {
         await changePassword({ ...values, version }).unwrap();

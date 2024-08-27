@@ -21,10 +21,10 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 const MyAccountPage = () => {
     const { data: profile } = useGetProfileQuery();
 
+    const version = profile?.version;
+
     const [deleteAccount, { isLoading: isDeleting }] =
         useDeleteAccountMutation();
-
-    const version = profile?.version;
 
     const onDelete = async () => {
         await deleteAccount({ version }).unwrap();

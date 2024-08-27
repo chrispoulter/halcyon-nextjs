@@ -25,9 +25,9 @@ const UpdateProfilePage = () => {
 
     const { data: profile } = useGetProfileQuery();
 
-    const [updateProfile] = useUpdateProfileMutation();
-
     const version = profile?.version;
+
+    const [updateProfile] = useUpdateProfileMutation();
 
     const onSubmit = async (values: UpdateProfileFormValues) => {
         await updateProfile({ ...values, version }).unwrap();
