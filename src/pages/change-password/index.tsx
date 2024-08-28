@@ -1,15 +1,14 @@
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { getServerSession } from 'next-auth';
+import { useRouter } from 'next/router';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import {
     getProfile,
-    useGetProfileQuery,
-    useChangePasswordMutation
-} from '@/features/manage/manageEndpoints';
+    useGetProfile
+} from '@/features/manage/hooks/useGetProfile';
+import { useChangePassword } from '@/features/manage/hooks/useChangePassword';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -23,17 +22,22 @@ import {
 const ChangePasswordPage = () => {
     const router = useRouter();
 
-    const { data: profile } = useGetProfileQuery();
+    const { data } = useGetProfile();
 
-    const version = profile?.version;
+    const version = data?.version;
 
-    const [changePassword] = useChangePasswordMutation();
+    const { mutate, isPending } = useChangePassword();
 
-    const onSubmit = async (values: ChangePasswordFormValues) => {
-        await changePassword({ ...values, version }).unwrap();
-        toast.success('Your password has been changed.');
-        return router.push('/my-account');
-    };
+    const onSubmit = (values: ChangePasswordFormValues) =>
+        mutate(
+            { ...values, version },
+            {
+                onSuccess: async () => {
+                    toast.success('Your password has been changed.');
+                    return router.push('/my-account');
+                }
+            }
+        );
 
     return (
         <>
@@ -43,7 +47,8 @@ const ChangePasswordPage = () => {
                 <Title>Change Password</Title>
 
                 <ChangePasswordForm
-                    profile={profile}
+                    profile={data}
+                    isLoading={isPending}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">
@@ -62,19 +67,27 @@ const ChangePasswordPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res }) => {
-        const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const session = await getServerSession(req, res, authOptions);
 
-        store.dispatch(getProfile.initiate());
+    const queryClient = new QueryClient();
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
-
-        return {
-            props: {
-                session
-            }
-        };
+    await queryClient.prefetchQuery({
+        queryKey: ['profile'],
+        queryFn: () =>
+            getProfile({
+                headers: {
+                    Authorization: `Bearer ${session?.accessToken}`
+                }
+            })
     });
+
+    return {
+        props: {
+            session,
+            dehydratedState: dehydrate(queryClient)
+        }
+    };
+};
 
 export default ChangePasswordPage;

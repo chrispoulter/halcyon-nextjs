@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import { useField } from 'formik';
+import { Control, useController } from 'react-hook-form';
 import { CloseIcon } from '@/components/Icons/CloseIcon';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+    control: Control<any, any>;
     name: string;
     label: string;
     hideLabel?: boolean;
@@ -10,6 +11,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export const Input = ({
+    control,
     name,
     type = 'text',
     label,
@@ -18,8 +20,13 @@ export const Input = ({
     onClear,
     ...props
 }: InputProps) => {
-    const [field, meta] = useField<string>(name);
-    const error = meta.touched && meta.error;
+    const {
+        field,
+        fieldState: { error }
+    } = useController({
+        name,
+        control
+    });
 
     const onClearInput = () => {
         field.onChange({
@@ -84,7 +91,7 @@ export const Input = ({
 
             {error && (
                 <span role="alert" className="mt-2 text-sm text-red-600">
-                    {error}
+                    {error.message}
                 </span>
             )}
         </div>

@@ -1,12 +1,14 @@
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { JwtPayload, verify } from 'jsonwebtoken';
-import { object, string } from 'yup';
+import { z } from 'zod';
 import { config } from '@/utils/config';
 
-export const schema = object().shape({
-    emailAddress: string().label('Email Address').email().required(),
-    password: string().label('Password').required()
+const schema = z.object({
+    emailAddress: z
+        .string({ message: 'Email Address is a required field' })
+        .email('Email Address must be a valid email'),
+    password: z.string({ message: 'Password is a required field' })
 });
 
 export const authOptions: AuthOptions = {
@@ -18,12 +20,16 @@ export const authOptions: AuthOptions = {
                 password: { label: 'Password', type: 'password' }
             },
             async authorize(credentials) {
-                const body = await schema.validate(credentials);
+                const result = await schema.safeParseAsync(credentials);
+
+                if (!result.success) {
+                    throw new Error(result.error.issues[0].message);
+                }
 
                 const response = await fetch(`${config.API_URL}/token`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
+                    body: JSON.stringify(result.data)
                 });
 
                 if (!response.ok) {

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
+import toast from 'react-hot-toast';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -8,7 +9,6 @@ import {
     LoginForm,
     LoginFormValues
 } from '@/features/account/LoginForm/LoginForm';
-import toast from 'react-hot-toast';
 
 const LoginPage = () => {
     const router = useRouter();

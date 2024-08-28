@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { UserSort } from '@/features/user/userTypes';
 import {
-    searchUsers,
-    useSearchUsersQuery
-} from '@/features/user/userEndpoints';
+    useSearchUsers,
+    searchUsers
+} from '@/features/user/hooks/useSearchUsers';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -32,14 +31,8 @@ const params = {
 const UsersPage = () => {
     const [state, setState] = useState(params);
 
-    const {
-        data: users,
-        isLoading,
-        isFetching,
-        error
-    } = useSearchUsersQuery(state);
-
-    const loadingOrError = isLoading || !!error;
+    const { data, isLoading, isError, isFetching, isPending } =
+        useSearchUsers(state);
 
     const onSubmit = (values: SearchUserFormValues) =>
         setState({ ...state, ...values, page: 1 });
@@ -61,12 +54,12 @@ const UsersPage = () => {
                     <SearchUserForm
                         values={state}
                         onSubmit={onSubmit}
-                        isLoading={loadingOrError || isFetching}
+                        isLoading={isFetching || isError}
                     />
                     <SortUserDropdown
                         selected={state.sort}
                         onSelect={onSort}
-                        isLoading={loadingOrError || isFetching}
+                        isLoading={isFetching || isError}
                     />
                 </div>
 
@@ -76,13 +69,16 @@ const UsersPage = () => {
                     </ButtonLink>
                 </ButtonGroup>
 
-                <UserList isLoading={loadingOrError} users={users?.items} />
+                <UserList
+                    isLoading={isLoading || isPending || isError}
+                    users={data?.items}
+                />
 
                 <Pager
-                    isLoading={loadingOrError}
+                    isLoading={isLoading || isError}
                     isFetching={isFetching}
-                    hasNextPage={users?.hasNextPage}
-                    hasPreviousPage={users?.hasPreviousPage}
+                    hasNextPage={data?.hasNextPage}
+                    hasPreviousPage={data?.hasPreviousPage}
                     onNextPage={onNextPage}
                     onPreviousPage={onPreviousPage}
                 />
@@ -91,19 +87,27 @@ const UsersPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res }) => {
-        const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const session = await getServerSession(req, res, authOptions);
 
-        store.dispatch(searchUsers.initiate(params));
+    const queryClient = new QueryClient();
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
-
-        return {
-            props: {
-                session
-            }
-        };
+    await queryClient.prefetchQuery({
+        queryKey: ['users', params],
+        queryFn: () =>
+            searchUsers(params, {
+                headers: {
+                    Authorization: `Bearer ${session?.accessToken}`
+                }
+            })
     });
+
+    return {
+        props: {
+            session,
+            dehydratedState: dehydrate(queryClient)
+        }
+    };
+};
 
 export default UsersPage;

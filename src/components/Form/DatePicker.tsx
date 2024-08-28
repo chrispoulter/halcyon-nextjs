@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import clsx from 'clsx';
-import { useField } from 'formik';
+import { Control, useController } from 'react-hook-form';
 import { currentYear, monthNames } from '@/utils/dates';
 
 type DatePickerProps = {
+    control: Control<any, any>;
     name: string;
     label: string;
     required?: boolean;
@@ -19,6 +20,7 @@ type DatePickerState = {
 };
 
 export const DatePicker = ({
+    control,
     name,
     label,
     required,
@@ -26,8 +28,13 @@ export const DatePicker = ({
     autoComplete,
     className
 }: DatePickerProps) => {
-    const [field, meta] = useField<string>(name);
-    const error = meta.touched && meta.error;
+    const {
+        field,
+        fieldState: { error }
+    } = useController({
+        name,
+        control
+    });
 
     const initialState: DatePickerState = {
         year: undefined,
@@ -156,7 +163,7 @@ export const DatePicker = ({
 
             {error && (
                 <span role="alert" className="mt-2 text-sm text-red-600">
-                    {error}
+                    {error.message}
                 </span>
             )}
         </div>

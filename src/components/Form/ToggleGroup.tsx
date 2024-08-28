@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useField } from 'formik';
+import { Control, useController } from 'react-hook-form';
 import { Switch } from '@headlessui/react';
 
 type ToggleGroupOption = {
@@ -9,13 +9,22 @@ type ToggleGroupOption = {
 };
 
 type ToggleGroupProps = {
+    control: Control<any, any>;
     name: string;
     options: ToggleGroupOption[];
     disabled?: boolean;
 };
 
-export const ToggleGroup = ({ name, options, disabled }: ToggleGroupProps) => {
-    const [field] = useField<ToggleGroupOption[]>(name);
+export const ToggleGroup = ({
+    name,
+    options,
+    disabled,
+    control
+}: ToggleGroupProps) => {
+    const { field } = useController({
+        name,
+        control
+    });
 
     const currentValues = field.value ?? [];
 
@@ -25,7 +34,7 @@ export const ToggleGroup = ({ name, options, disabled }: ToggleGroupProps) => {
                 name: field.name,
                 value: checked
                     ? [value, ...currentValues]
-                    : currentValues.filter(v => v !== value)
+                    : currentValues.filter((v: any) => v !== value)
             }
         });
 

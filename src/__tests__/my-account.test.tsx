@@ -7,7 +7,7 @@ import fetchMock from 'jest-fetch-mock';
 import { randomUUID } from 'crypto';
 import { GetProfileResponse } from '@/features/manage/manageTypes';
 import MyAccountPage from '@/pages/my-account';
-import { storeWrapper } from '@/utils/test-utils';
+import { queryWrapper } from '@/utils/test-utils';
 
 const response: GetProfileResponse = {
     id: 'user-1',
@@ -29,7 +29,7 @@ describe('my account page', () => {
     );
 
     it('should render personal details', async () => {
-        render(<MyAccountPage />, { wrapper: storeWrapper });
+        render(<MyAccountPage />, { wrapper: queryWrapper });
 
         const loading = screen.getAllByText(/loading/i);
         await waitForElementToBeRemoved(loading);

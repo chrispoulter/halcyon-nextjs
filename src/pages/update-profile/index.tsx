@@ -1,15 +1,14 @@
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { getServerSession } from 'next-auth';
+import { useRouter } from 'next/router';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { wrapper } from '@/redux/store';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import {
     getProfile,
-    useGetProfileQuery,
-    useUpdateProfileMutation
-} from '@/features/manage/manageEndpoints';
+    useGetProfile
+} from '@/features/manage/hooks/useGetProfile';
+import { useUpdateProfile } from '@/features/manage/hooks/useUpdateProfile';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -22,17 +21,22 @@ import {
 const UpdateProfilePage = () => {
     const router = useRouter();
 
-    const { data: profile } = useGetProfileQuery();
+    const { data } = useGetProfile();
 
-    const version = profile?.version;
+    const version = data?.version;
 
-    const [updateProfile] = useUpdateProfileMutation();
+    const { mutate, isPending } = useUpdateProfile();
 
-    const onSubmit = async (values: UpdateProfileFormValues) => {
-        await updateProfile({ ...values, version }).unwrap();
-        toast.success('Your profile has been updated.');
-        return router.push('/my-account');
-    };
+    const onSubmit = (values: UpdateProfileFormValues) =>
+        mutate(
+            { ...values, version },
+            {
+                onSuccess: async () => {
+                    toast.success('Your profile has been updated.');
+                    return router.push('/my-account');
+                }
+            }
+        );
 
     return (
         <>
@@ -42,7 +46,8 @@ const UpdateProfilePage = () => {
                 <Title>Update Profile</Title>
 
                 <UpdateProfileForm
-                    profile={profile}
+                    profile={data}
+                    isLoading={isPending}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/my-account" variant="secondary">
@@ -55,19 +60,27 @@ const UpdateProfilePage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res }) => {
-        const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    const session = await getServerSession(req, res, authOptions);
 
-        store.dispatch(getProfile.initiate());
+    const queryClient = new QueryClient();
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
-
-        return {
-            props: {
-                session
-            }
-        };
+    await queryClient.prefetchQuery({
+        queryKey: ['profile'],
+        queryFn: () =>
+            getProfile({
+                headers: {
+                    Authorization: `Bearer ${session?.accessToken}`
+                }
+            })
     });
+
+    return {
+        props: {
+            session,
+            dehydratedState: dehydrate(queryClient)
+        }
+    };
+};
 
 export default UpdateProfilePage;
