@@ -26,15 +26,15 @@ const schema = z
 export type ResetPasswordFormValues = z.infer<typeof schema>;
 
 type ResetPasswordFormProps = {
+    isLoading?: boolean;
     onSubmit: (values: ResetPasswordFormValues) => void;
 };
 
-export const ResetPasswordForm = ({ onSubmit }: ResetPasswordFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<ResetPasswordFormValues>({
+export const ResetPasswordForm = ({
+    isLoading,
+    onSubmit
+}: ResetPasswordFormProps) => {
+    const { handleSubmit, control } = useForm<ResetPasswordFormValues>({
         resolver: zodResolver(schema)
     });
 
@@ -48,7 +48,7 @@ export const ResetPasswordForm = ({ onSubmit }: ResetPasswordFormProps) => {
                 maxLength={254}
                 autoComplete="username"
                 required
-                disabled={isSubmitting}
+                disabled={isLoading}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -60,7 +60,7 @@ export const ResetPasswordForm = ({ onSubmit }: ResetPasswordFormProps) => {
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                     className="mb-5 sm:flex-1"
                 />
                 <Input
@@ -71,12 +71,12 @@ export const ResetPasswordForm = ({ onSubmit }: ResetPasswordFormProps) => {
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                     className="mb-5 sm:flex-1"
                 />
             </div>
             <ButtonGroup>
-                <Button type="submit" loading={isSubmitting}>
+                <Button type="submit" loading={isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

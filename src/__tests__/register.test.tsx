@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto';
 import RegisterPage from '@/pages/register';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
-import { storeWrapper } from '@/utils/test-utils';
+import { queryWrapper } from '@/utils/test-utils';
 
 const fillRegisterForm = (
     values: Omit<RegisterFormValues, 'confirmPassword'>
@@ -58,7 +58,7 @@ describe('register page', () => {
             headers: { 'content-type': 'application/json' }
         });
 
-        render(<RegisterPage />, { wrapper: storeWrapper });
+        render(<RegisterPage />, { wrapper: queryWrapper });
 
         fillRegisterForm({
             emailAddress: `${randomUUID()}@example.com`,

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { useResetPasswordMutation } from '@/features/account/accountEndpoints';
+import { useResetPassword } from '@/features/account/hooks/useResetPassword';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -13,17 +13,21 @@ const ResetPasswordPage = () => {
     const router = useRouter();
     const token = router.query.token as string;
 
-    const [resetPassword] = useResetPasswordMutation();
+    const { mutate, isPending } = useResetPassword();
 
-    const onSubmit = async (values: ResetPasswordFormValues) => {
-        await resetPassword({
-            token,
-            ...values
-        }).unwrap();
-
-        toast.success('Your password has been reset.');
-        return router.push('/login');
-    };
+    const onSubmit = (values: ResetPasswordFormValues) =>
+        mutate(
+            {
+                token,
+                ...values
+            },
+            {
+                onSuccess: async () => {
+                    toast.success('Your password has been reset.');
+                    return router.push('/login');
+                }
+            }
+        );
 
     return (
         <>
@@ -31,7 +35,7 @@ const ResetPasswordPage = () => {
 
             <Container>
                 <Title>Reset Password</Title>
-                <ResetPasswordForm onSubmit={onSubmit} />
+                <ResetPasswordForm isLoading={isPending} onSubmit={onSubmit} />
             </Container>
         </>
     );

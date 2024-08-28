@@ -14,15 +14,15 @@ const schema = z.object({
 export type ForgotPasswordFormValues = z.infer<typeof schema>;
 
 export type ForgotPasswordFormProps = {
+    isLoading?: boolean;
     onSubmit: (values: ForgotPasswordFormValues) => void;
 };
 
-export const ForgotPasswordForm = ({ onSubmit }: ForgotPasswordFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<ForgotPasswordFormValues>({
+export const ForgotPasswordForm = ({
+    isLoading,
+    onSubmit
+}: ForgotPasswordFormProps) => {
+    const { handleSubmit, control } = useForm<ForgotPasswordFormValues>({
         resolver: zodResolver(schema)
     });
 
@@ -36,11 +36,11 @@ export const ForgotPasswordForm = ({ onSubmit }: ForgotPasswordFormProps) => {
                 maxLength={254}
                 autoComplete="username"
                 required
-                disabled={isSubmitting}
+                disabled={isLoading}
                 className="mb-5"
             />
             <ButtonGroup>
-                <Button type="submit" loading={isSubmitting}>
+                <Button type="submit" loading={isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

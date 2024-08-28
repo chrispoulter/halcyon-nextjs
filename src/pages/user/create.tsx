@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { useCreateUserMutation } from '@/features/user/userEndpoints';
+import { useCreateUser } from '@/features/user/hooks/useCreateUser';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title, SubTitle } from '@/components/Title/Title';
@@ -13,13 +13,15 @@ import {
 const CreateUserPage = () => {
     const router = useRouter();
 
-    const [createUser] = useCreateUserMutation();
+    const { mutate, isPending } = useCreateUser();
 
-    const onSubmit = async (values: CreateUserFormValues) => {
-        await createUser(values).unwrap();
-        toast.success('User successfully created.');
-        return router.push('/user');
-    };
+    const onSubmit = (values: CreateUserFormValues) =>
+        mutate(values, {
+            onSuccess: async () => {
+                toast.success('User successfully created.');
+                return router.push('/user');
+            }
+        });
 
     return (
         <>
@@ -32,6 +34,7 @@ const CreateUserPage = () => {
                 </Title>
 
                 <CreateUserForm
+                    isLoading={isPending}
                     onSubmit={onSubmit}
                     options={
                         <ButtonLink href="/user" variant="secondary">

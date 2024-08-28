@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import { useRegisterMutation } from '@/features/account/accountEndpoints';
+import { useRegister } from '@/features/account/hooks/useRegister';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { Title } from '@/components/Title/Title';
@@ -14,24 +14,25 @@ import {
 const RegisterPage = () => {
     const router = useRouter();
 
-    const [register] = useRegisterMutation();
+    const { mutate, isPending } = useRegister();
 
-    const onSubmit = async (values: RegisterFormValues) => {
-        await register(values).unwrap();
+    const onSubmit = (values: RegisterFormValues) =>
+        mutate(values, {
+            onSuccess: async () => {
+                toast.success('User successfully registered.');
 
-        toast.success('User successfully registered.');
+                const result = await signIn('credentials', {
+                    ...values,
+                    redirect: false
+                });
 
-        const result = await signIn('credentials', {
-            ...values,
-            redirect: false
+                if (result?.ok) {
+                    return router.push('/');
+                }
+
+                return toast.error('The credentials provided were invalid.');
+            }
         });
-
-        if (result?.ok) {
-            return router.push('/');
-        }
-
-        return toast.error('The credentials provided were invalid.');
-    };
 
     return (
         <>
@@ -39,7 +40,11 @@ const RegisterPage = () => {
 
             <Container>
                 <Title>Register</Title>
-                <RegisterForm onSubmit={onSubmit} className="mb-5" />
+                <RegisterForm
+                    isLoading={isPending}
+                    onSubmit={onSubmit}
+                    className="mb-5"
+                />
 
                 <p className="text-sm text-gray-600">
                     Already have an account?{' '}

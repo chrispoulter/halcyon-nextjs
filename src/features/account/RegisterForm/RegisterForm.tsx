@@ -41,16 +41,17 @@ const schema = z
 export type RegisterFormValues = z.infer<typeof schema>;
 
 type RegisterFormProps = {
+    isLoading?: boolean;
     onSubmit: (values: RegisterFormValues) => void;
     className?: string;
 };
 
-export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<RegisterFormValues>({
+export const RegisterForm = ({
+    isLoading,
+    onSubmit,
+    className
+}: RegisterFormProps) => {
+    const { handleSubmit, control } = useForm<RegisterFormValues>({
         resolver: zodResolver(schema)
     });
 
@@ -68,7 +69,7 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                 maxLength={254}
                 autoComplete="username"
                 required
-                disabled={isSubmitting}
+                disabled={isLoading}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -80,7 +81,7 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -91,7 +92,7 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -104,7 +105,7 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                     maxLength={50}
                     autoComplete="given-name"
                     required
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -115,7 +116,7 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                     maxLength={50}
                     autoComplete="family-name"
                     required
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -125,11 +126,11 @@ export const RegisterForm = ({ onSubmit, className }: RegisterFormProps) => {
                 name="dateOfBirth"
                 required
                 autoComplete={['bday-day', 'bday-month', 'bday-year']}
-                disabled={isSubmitting}
+                disabled={isLoading}
                 className="mb-5"
             />
             <ButtonGroup>
-                <Button type="submit" loading={isSubmitting}>
+                <Button type="submit" loading={isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

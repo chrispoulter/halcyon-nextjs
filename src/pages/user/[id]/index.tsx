@@ -1,18 +1,14 @@
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { getServerSession } from 'next-auth';
+import { useRouter } from 'next/router';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { getRunningQueriesThunk } from '@/redux/api';
-import { wrapper } from '@/redux/store';
+import { getUser, useGetUser } from '@/features/user/hooks/useGetUser';
+import { useUpdateUser } from '@/features/user/hooks/useUpdateUser';
+import { useLockUser } from '@/features/user/hooks/useLockUser';
+import { useUnlockUser } from '@/features/user/hooks/useUnlockUser';
+import { useDeleteUser } from '@/features/user/hooks/useDeleteUser';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import {
-    getUser,
-    useGetUserQuery,
-    useUpdateUserMutation,
-    useLockUserMutation,
-    useUnlockUserMutation,
-    useDeleteUserMutation
-} from '@/features/user/userEndpoints';
 import { Meta } from '@/components/Meta/Meta';
 import { Container } from '@/components/Container/Container';
 import { SubTitle, Title } from '@/components/Title/Title';
@@ -22,7 +18,6 @@ import { ConfirmLockUser } from '@/features/user/ConfirmLockUser/ConfirmLockUser
 import { ConfirmDeleteUser } from '@/features/user/ConfirmDeleteUser/ConfirmDeleteUser';
 import {
     UpdateUserForm,
-    UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
 
@@ -30,91 +25,55 @@ const UpdateUserPage = () => {
     const router = useRouter();
     const id = router.query.id as string;
 
-    const { data: user, isFetching } = useGetUserQuery(id, {
-        skip: !id
-    });
+    const { data, isFetching } = useGetUser(id);
 
-    const version = user?.version;
+    const version = data?.version;
 
-    const [updateUser] = useUpdateUserMutation();
+    const { mutate, isPending } = useUpdateUser(id);
 
-    const [lockUser, { isLoading: isLocking }] = useLockUserMutation();
+    const { mutate: lockUser, isPending: isLocking } = useLockUser(id);
 
-    const [unlockUser, { isLoading: isUnlocking }] = useUnlockUserMutation();
+    const { mutate: unlockUser, isPending: isUnlocking } = useUnlockUser(id);
 
-    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+    const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser(id);
 
-    const onSubmit = async (values: UpdateUserFormValues) => {
-        await updateUser({
-            id,
-            body: { ...values, version }
-        }).unwrap();
-
-        toast.success('User successfully updated.');
-        return router.push('/user');
-    };
-
-    const onDelete = async () => {
-        await deleteUser({
-            id,
-            body: { version }
-        }).unwrap();
-
-        toast.success('User successfully deleted.');
-        return router.push('/user');
-    };
-
-    const onLock = async () => {
-        await lockUser({
-            id,
-            body: { version }
-        }).unwrap();
-
-        return toast.success('User successfully locked.');
-    };
-
-    const onUnlock = async () => {
-        await unlockUser({
-            id,
-            body: { version }
-        }).unwrap();
-
-        return toast.success('User successfully unlocked.');
-    };
-
-    const options = ({ isSubmitting }: UpdateUserFormState) => (
-        <>
-            <ButtonLink href="/user" variant="secondary">
-                Cancel
-            </ButtonLink>
-
-            {user?.isLockedOut ? (
-                <ConfirmUnlockUser
-                    onConfirm={onUnlock}
-                    loading={isUnlocking}
-                    disabled={
-                        isDeleting || isLocking || isSubmitting || isFetching
-                    }
-                />
-            ) : (
-                <ConfirmLockUser
-                    onConfirm={onLock}
-                    loading={isLocking}
-                    disabled={
-                        isDeleting || isUnlocking || isSubmitting || isFetching
-                    }
-                />
-            )}
-
-            <ConfirmDeleteUser
-                onConfirm={onDelete}
-                loading={isDeleting}
-                disabled={
-                    isUnlocking || isLocking || isSubmitting || isFetching
+    const onSubmit = async (values: UpdateUserFormValues) =>
+        mutate(
+            { ...values, version },
+            {
+                onSuccess: async () => {
+                    toast.success('User successfully updated.');
+                    return router.push('/user');
                 }
-            />
-        </>
-    );
+            }
+        );
+
+    const onDelete = () =>
+        deleteUser(
+            { version },
+            {
+                onSuccess: async () => {
+                    toast.success('User successfully deleted.');
+                    return router.push('/user');
+                }
+            }
+        );
+
+    const onLock = () =>
+        lockUser(
+            { version },
+            {
+                onSuccess: () => toast.success('User successfully locked.')
+            }
+        );
+
+    const onUnlock = () =>
+        unlockUser(
+            { version },
+            {
+                onSuccess: () => toast.success('User successfully unlocked.')
+            }
+        );
 
     return (
         <>
@@ -127,32 +86,87 @@ const UpdateUserPage = () => {
                 </Title>
 
                 <UpdateUserForm
-                    user={user}
+                    user={data}
+                    isLoading={isPending}
                     isDisabled={
                         isUnlocking || isLocking || isDeleting || isFetching
                     }
                     onSubmit={onSubmit}
-                    options={options}
+                    options={
+                        <>
+                            <ButtonLink href="/user" variant="secondary">
+                                Cancel
+                            </ButtonLink>
+
+                            {data?.isLockedOut ? (
+                                <ConfirmUnlockUser
+                                    onConfirm={onUnlock}
+                                    loading={isUnlocking}
+                                    disabled={
+                                        isPending ||
+                                        isDeleting ||
+                                        isLocking ||
+                                        isFetching
+                                    }
+                                />
+                            ) : (
+                                <ConfirmLockUser
+                                    onConfirm={onLock}
+                                    loading={isLocking}
+                                    disabled={
+                                        isPending ||
+                                        isDeleting ||
+                                        isUnlocking ||
+                                        isFetching
+                                    }
+                                />
+                            )}
+
+                            <ConfirmDeleteUser
+                                onConfirm={onDelete}
+                                loading={isDeleting}
+                                disabled={
+                                    isPending ||
+                                    isUnlocking ||
+                                    isLocking ||
+                                    isFetching
+                                }
+                            />
+                        </>
+                    }
                 />
             </Container>
         </>
     );
 };
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps(store => async ({ req, res, params }) => {
-        const id = params?.id as string;
-        const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async ({
+    req,
+    res,
+    params
+}) => {
+    const session = await getServerSession(req, res, authOptions);
 
-        store.dispatch(getUser.initiate(id));
+    const id = params?.id as string;
 
-        await Promise.all(store.dispatch(getRunningQueriesThunk()));
+    const queryClient = new QueryClient();
 
-        return {
-            props: {
-                session
-            }
-        };
+    await queryClient.prefetchQuery({
+        queryKey: ['user', id],
+        queryFn: () =>
+            getUser(id, {
+                headers: {
+                    Authorization: `Bearer ${session?.accessToken}`
+                }
+            })
     });
+
+    return {
+        props: {
+            session,
+            dehydratedState: dehydrate(queryClient)
+        }
+    };
+};
 
 export default UpdateUserPage;
