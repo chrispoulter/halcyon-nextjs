@@ -31,7 +31,8 @@ const params = {
 const UsersPage = () => {
     const [state, setState] = useState(params);
 
-    const { data, isFetching, isLoading, isError } = useSearchUsers(state);
+    const { data, isLoading, isError, isFetching, isPending } =
+        useSearchUsers(state);
 
     const onSubmit = (values: SearchUserFormValues) =>
         setState({ ...state, ...values, page: 1 });
@@ -53,12 +54,12 @@ const UsersPage = () => {
                     <SearchUserForm
                         values={state}
                         onSubmit={onSubmit}
-                        isLoading={isLoading || isError || isFetching}
+                        isLoading={isFetching || isError}
                     />
                     <SortUserDropdown
                         selected={state.sort}
                         onSelect={onSort}
-                        isLoading={isLoading || isError || isFetching}
+                        isLoading={isFetching || isError}
                     />
                 </div>
 
@@ -69,7 +70,7 @@ const UsersPage = () => {
                 </ButtonGroup>
 
                 <UserList
-                    isLoading={isLoading || isError}
+                    isLoading={isLoading || isPending || isError}
                     users={data?.items}
                 />
 
@@ -86,7 +87,7 @@ const UsersPage = () => {
     );
 };
 
-export const _getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     const session = await getServerSession(req, res, authOptions);
 
     const queryClient = new QueryClient();

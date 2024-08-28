@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import {
     SearchUsersRequest,
@@ -31,6 +31,7 @@ export const useSearchUsers = (request: SearchUsersRequest) => {
             searchUsers(request, {
                 headers: { Authorization: `Bearer ${session?.accessToken}` }
             }),
+        placeholderData: keepPreviousData,
         enabled: !loading
     });
 };
