@@ -54,11 +54,7 @@ const ChangePasswordFormInternal = ({
     onSubmit,
     className
 }: ChangePasswordFormInternalProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<ChangePasswordFormValues>({
+    const { handleSubmit, control } = useForm<ChangePasswordFormValues>({
         resolver: zodResolver(schema)
     });
 
@@ -76,7 +72,7 @@ const ChangePasswordFormInternal = ({
                 maxLength={50}
                 autoComplete="current-password"
                 required
-                disabled={isSubmitting || isLoading}
+                disabled={isLoading}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -88,7 +84,7 @@ const ChangePasswordFormInternal = ({
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isSubmitting || isLoading}
+                    disabled={isLoading}
                     className="mb-5 sm:flex-1"
                 />
                 <Input
@@ -99,13 +95,13 @@ const ChangePasswordFormInternal = ({
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isSubmitting || isLoading}
+                    disabled={isLoading}
                     className="mb-5 sm:flex-1"
                 />
             </div>
             <ButtonGroup>
                 {options}
-                <Button type="submit" loading={isSubmitting || isLoading}>
+                <Button type="submit" loading={isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

@@ -34,13 +34,9 @@ const schema = z.object({
 
 export type UpdateUserFormValues = z.infer<typeof schema>;
 
-export type UpdateUserFormState = {
-    isSubmitting: boolean;
-};
-
 type UpdateUserFormProps = {
     user?: UpdateUserFormValues;
-    options?: (state: UpdateUserFormState) => JSX.Element;
+    options?: JSX.Element;
     isDisabled?: boolean;
     isLoading?: boolean;
     onSubmit: (values: UpdateUserFormValues) => void;
@@ -69,11 +65,7 @@ const UpdateUserFormInternal = ({
     isDisabled,
     onSubmit
 }: UpdateUserFormInternalProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<UpdateUserFormValues>({
+    const { handleSubmit, control } = useForm<UpdateUserFormValues>({
         resolver: zodResolver(schema),
         values: user
     });
@@ -88,7 +80,7 @@ const UpdateUserFormInternal = ({
                 maxLength={254}
                 autoComplete="username"
                 required
-                disabled={isSubmitting || isLoading || isDisabled}
+                disabled={isLoading || isDisabled}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -100,7 +92,7 @@ const UpdateUserFormInternal = ({
                     maxLength={50}
                     autoComplete="given-name"
                     required
-                    disabled={isSubmitting || isLoading || isDisabled}
+                    disabled={isLoading || isDisabled}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -111,7 +103,7 @@ const UpdateUserFormInternal = ({
                     maxLength={50}
                     autoComplete="family-name"
                     required
-                    disabled={isSubmitting || isLoading || isDisabled}
+                    disabled={isLoading || isDisabled}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -121,7 +113,7 @@ const UpdateUserFormInternal = ({
                 name="dateOfBirth"
                 required
                 autoComplete={['bday-day', 'bday-month', 'bday-year']}
-                disabled={isSubmitting || isLoading || isDisabled}
+                disabled={isLoading || isDisabled}
                 className="mb-3"
             />
             <div className="mb-5">
@@ -132,16 +124,12 @@ const UpdateUserFormInternal = ({
                     control={control}
                     name="roles"
                     options={roleOptions}
-                    disabled={isSubmitting || isLoading || isDisabled}
+                    disabled={isLoading || isDisabled}
                 />
             </div>
             <ButtonGroup>
-                {options && options({ isSubmitting })}
-                <Button
-                    type="submit"
-                    loading={isSubmitting || isLoading}
-                    disabled={isDisabled}
-                >
+                {options}
+                <Button type="submit" loading={isLoading} disabled={isDisabled}>
                     Submit
                 </Button>
             </ButtonGroup>

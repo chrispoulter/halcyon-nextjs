@@ -34,11 +34,7 @@ export const ResetPasswordForm = ({
     isLoading,
     onSubmit
 }: ResetPasswordFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<ResetPasswordFormValues>({
+    const { handleSubmit, control } = useForm<ResetPasswordFormValues>({
         resolver: zodResolver(schema)
     });
 
@@ -52,7 +48,7 @@ export const ResetPasswordForm = ({
                 maxLength={254}
                 autoComplete="username"
                 required
-                disabled={isSubmitting || isLoading}
+                disabled={isLoading}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -64,7 +60,7 @@ export const ResetPasswordForm = ({
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isSubmitting || isLoading}
+                    disabled={isLoading}
                     className="mb-5 sm:flex-1"
                 />
                 <Input
@@ -75,12 +71,12 @@ export const ResetPasswordForm = ({
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isSubmitting || isLoading}
+                    disabled={isLoading}
                     className="mb-5 sm:flex-1"
                 />
             </div>
             <ButtonGroup>
-                <Button type="submit" loading={isSubmitting || isLoading}>
+                <Button type="submit" loading={isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

@@ -18,7 +18,6 @@ import { ConfirmLockUser } from '@/features/user/ConfirmLockUser/ConfirmLockUser
 import { ConfirmDeleteUser } from '@/features/user/ConfirmDeleteUser/ConfirmDeleteUser';
 import {
     UpdateUserForm,
-    UpdateUserFormState,
     UpdateUserFormValues
 } from '@/features/user/UpdateUserForm/UpdateUserForm';
 
@@ -76,52 +75,6 @@ const UpdateUserPage = () => {
             }
         );
 
-    const options = ({ isSubmitting }: UpdateUserFormState) => (
-        <>
-            <ButtonLink href="/user" variant="secondary">
-                Cancel
-            </ButtonLink>
-
-            {data?.isLockedOut ? (
-                <ConfirmUnlockUser
-                    onConfirm={onUnlock}
-                    loading={isUnlocking}
-                    disabled={
-                        isSubmitting ||
-                        isPending ||
-                        isDeleting ||
-                        isLocking ||
-                        isFetching
-                    }
-                />
-            ) : (
-                <ConfirmLockUser
-                    onConfirm={onLock}
-                    loading={isLocking}
-                    disabled={
-                        isSubmitting ||
-                        isPending ||
-                        isDeleting ||
-                        isUnlocking ||
-                        isFetching
-                    }
-                />
-            )}
-
-            <ConfirmDeleteUser
-                onConfirm={onDelete}
-                loading={isDeleting}
-                disabled={
-                    isSubmitting ||
-                    isPending ||
-                    isUnlocking ||
-                    isLocking ||
-                    isFetching
-                }
-            />
-        </>
-    );
-
     return (
         <>
             <Meta title="Update User" />
@@ -139,14 +92,55 @@ const UpdateUserPage = () => {
                         isUnlocking || isLocking || isDeleting || isFetching
                     }
                     onSubmit={onSubmit}
-                    options={options}
+                    options={
+                        <>
+                            <ButtonLink href="/user" variant="secondary">
+                                Cancel
+                            </ButtonLink>
+
+                            {data?.isLockedOut ? (
+                                <ConfirmUnlockUser
+                                    onConfirm={onUnlock}
+                                    loading={isUnlocking}
+                                    disabled={
+                                        isPending ||
+                                        isDeleting ||
+                                        isLocking ||
+                                        isFetching
+                                    }
+                                />
+                            ) : (
+                                <ConfirmLockUser
+                                    onConfirm={onLock}
+                                    loading={isLocking}
+                                    disabled={
+                                        isPending ||
+                                        isDeleting ||
+                                        isUnlocking ||
+                                        isFetching
+                                    }
+                                />
+                            )}
+
+                            <ConfirmDeleteUser
+                                onConfirm={onDelete}
+                                loading={isDeleting}
+                                disabled={
+                                    isPending ||
+                                    isUnlocking ||
+                                    isLocking ||
+                                    isFetching
+                                }
+                            />
+                        </>
+                    }
                 />
             </Container>
         </>
     );
 };
 
-export const _getServerSideProps: GetServerSideProps = async ({
+export const getServerSideProps: GetServerSideProps = async ({
     req,
     res,
     params

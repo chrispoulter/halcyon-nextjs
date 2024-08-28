@@ -51,11 +51,7 @@ export const RegisterForm = ({
     onSubmit,
     className
 }: RegisterFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<RegisterFormValues>({
+    const { handleSubmit, control } = useForm<RegisterFormValues>({
         resolver: zodResolver(schema)
     });
 
@@ -73,7 +69,7 @@ export const RegisterForm = ({
                 maxLength={254}
                 autoComplete="username"
                 required
-                disabled={isSubmitting || isLoading}
+                disabled={isLoading}
                 className="mb-3"
             />
             <div className="sm:flex sm:gap-3">
@@ -85,7 +81,7 @@ export const RegisterForm = ({
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isSubmitting || isLoading}
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -96,7 +92,7 @@ export const RegisterForm = ({
                     maxLength={50}
                     autoComplete="new-password"
                     required
-                    disabled={isSubmitting || isLoading}
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -109,7 +105,7 @@ export const RegisterForm = ({
                     maxLength={50}
                     autoComplete="given-name"
                     required
-                    disabled={isSubmitting || isLoading}
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
                 <Input
@@ -120,7 +116,7 @@ export const RegisterForm = ({
                     maxLength={50}
                     autoComplete="family-name"
                     required
-                    disabled={isSubmitting || isLoading}
+                    disabled={isLoading}
                     className="mb-3 sm:flex-1"
                 />
             </div>
@@ -130,11 +126,11 @@ export const RegisterForm = ({
                 name="dateOfBirth"
                 required
                 autoComplete={['bday-day', 'bday-month', 'bday-year']}
-                disabled={isSubmitting || isLoading}
+                disabled={isLoading}
                 className="mb-5"
             />
             <ButtonGroup>
-                <Button type="submit" loading={isSubmitting || isLoading}>
+                <Button type="submit" loading={isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

@@ -22,11 +22,7 @@ export const ForgotPasswordForm = ({
     isLoading,
     onSubmit
 }: ForgotPasswordFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<ForgotPasswordFormValues>({
+    const { handleSubmit, control } = useForm<ForgotPasswordFormValues>({
         resolver: zodResolver(schema)
     });
 
@@ -40,11 +36,11 @@ export const ForgotPasswordForm = ({
                 maxLength={254}
                 autoComplete="username"
                 required
-                disabled={isSubmitting || isLoading}
+                disabled={isLoading}
                 className="mb-5"
             />
             <ButtonGroup>
-                <Button type="submit" loading={isSubmitting || isLoading}>
+                <Button type="submit" loading={isLoading}>
                     Submit
                 </Button>
             </ButtonGroup>

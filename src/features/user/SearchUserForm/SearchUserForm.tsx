@@ -22,11 +22,7 @@ export const SearchUserForm = ({
     values,
     isLoading
 }: SearchUserFormProps) => {
-    const {
-        handleSubmit,
-        control,
-        formState: { isSubmitting }
-    } = useForm<SearchUserFormValues>({
+    const { handleSubmit, control } = useForm<SearchUserFormValues>({
         resolver: zodResolver(schema),
         values
     });
@@ -43,7 +39,7 @@ export const SearchUserForm = ({
                 name="search"
                 type="search"
                 placeholder="Search Users..."
-                disabled={isSubmitting || isLoading}
+                disabled={isLoading}
                 hideLabel={true}
                 onClear={handleSubmit(onSubmit)}
             />
@@ -53,7 +49,6 @@ export const SearchUserForm = ({
                     variant="secondary"
                     aria-label="Search"
                     disabled={isLoading}
-                    loading={isSubmitting}
                 >
                     <SearchIcon className="h-4 w-4" />
                 </Button>
