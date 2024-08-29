@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { z } from 'zod';
 import { UserSort } from '@/features/user/userTypes';
 import {
     useSearchUsers,
@@ -21,27 +22,37 @@ import {
 import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
 import { UserList } from '@/features/user/UserList/UserList';
 
-const params = {
-    search: '',
-    sort: UserSort.NAME_ASC,
-    page: 1,
-    size: 5
-};
+const PAGE_SIZE = 5;
+
+const schema = z.object({
+    search: z.string().catch(''),
+    page: z.coerce.number().int().positive().catch(1),
+    sort: z.nativeEnum(UserSort).catch(UserSort.NAME_ASC)
+});
 
 const UsersPage = () => {
-    const [state, setState] = useState(params);
+    const router = useRouter();
+    const params = schema.parse(router.query);
+    const request = { ...params, size: PAGE_SIZE };
 
-    const { data, isLoading, isError, isFetching, isPending } =
-        useSearchUsers(state);
+    const { data, isLoading, isError, isFetching, isPending } = useSearchUsers(
+        request,
+        router.isReady
+    );
 
     const onSubmit = (values: SearchUserFormValues) =>
-        setState({ ...state, ...values, page: 1 });
+        router.replace({ query: { ...params, ...values, page: 1 } });
 
-    const onNextPage = () => setState({ ...state, page: state.page + 1 });
+    const onNextPage = () =>
+        router.replace({ query: { ...params, page: params.page + 1 } });
 
-    const onPreviousPage = () => setState({ ...state, page: state.page - 1 });
+    const onPreviousPage = () =>
+        router.replace({ query: { ...params, page: params.page - 1 } });
 
-    const onSort = (sort: UserSort) => setState({ ...state, sort });
+    const onSort = (sort: UserSort) =>
+        router.replace({
+            query: { ...params, sort }
+        });
 
     return (
         <>
@@ -52,12 +63,12 @@ const UsersPage = () => {
 
                 <div className="mb-3 flex gap-1">
                     <SearchUserForm
-                        values={state}
+                        values={params}
                         onSubmit={onSubmit}
                         isLoading={isFetching || isError}
                     />
                     <SortUserDropdown
-                        selected={state.sort}
+                        selected={params.sort}
                         onSelect={onSort}
                         isLoading={isFetching || isError}
                     />
@@ -87,15 +98,22 @@ const UsersPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+    req,
+    res,
+    query
+}) => {
     const session = await getServerSession(req, res, authOptions);
 
     const queryClient = new QueryClient();
 
+    const params = schema.parse(query);
+    const request = { ...params, size: PAGE_SIZE };
+
     await queryClient.prefetchQuery({
-        queryKey: ['users', params],
+        queryKey: ['users', request],
         queryFn: () =>
-            searchUsers(params, {
+            searchUsers(request, {
                 headers: {
                     Authorization: `Bearer ${session?.accessToken}`
                 }

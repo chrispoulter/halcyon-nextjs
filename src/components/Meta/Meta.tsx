@@ -20,39 +20,35 @@ export const Meta = ({
         <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />
 
-        <meta httpEquiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
         <meta name="format-detection" content="telephone=no" />
+
         <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="/images/favicon/apple-touch-icon.png"
+            href="/apple-touch-icon.png"
         />
         <link
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="/images/favicon/favicon-32x32.png"
+            href="/favicon-32x32.png"
         />
         <link
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="/images/favicon/favicon-16x16.png"
-        />
-        <link
-            rel="mask-icon"
-            href="/images/favicon/safari-pinned-tab.svg"
-            color="#333"
+            href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <meta name="apple-mobile-web-app-title" content={app} />
-        <meta name="application-name" content={app} />
-        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#333" />
+        <meta name="apple-mobile-web-app-title" content="Halcyon" />
+        <meta name="application-name" content="Halcyon" />
+        <meta name="msapplication-TileColor" content="#333" />
         <meta name="theme-color" content="#333" />
     </Head>
 );

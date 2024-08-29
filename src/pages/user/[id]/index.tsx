@@ -25,7 +25,7 @@ const UpdateUserPage = () => {
     const router = useRouter();
     const id = router.query.id as string;
 
-    const { data, isFetching } = useGetUser(id);
+    const { data, isFetching } = useGetUser(id, router.isReady);
 
     const version = data?.version;
 
