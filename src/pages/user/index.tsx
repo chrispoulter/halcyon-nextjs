@@ -25,7 +25,7 @@ import { UserList } from '@/features/user/UserList/UserList';
 const PAGE_SIZE = 5;
 
 const schema = z.object({
-    search: z.coerce.string().catch(''),
+    search: z.string().catch(''),
     page: z.coerce.number().int().positive().catch(1),
     sort: z.nativeEnum(UserSort).catch(UserSort.NAME_ASC)
 });
