@@ -7,7 +7,7 @@ import { config } from '@/utils/config';
 export const getUser = (id: string, init?: RequestInit) =>
     fetcher<GetUserResponse>(`${config.API_URL}/user/${id}`, init);
 
-export const useGetUser = (id: string) => {
+export const useGetUser = (id: string, enabled = true) => {
     const { data: session, status } = useSession();
     const loading = status === 'loading';
 
@@ -17,6 +17,6 @@ export const useGetUser = (id: string) => {
             getUser(id, {
                 headers: { Authorization: `Bearer ${session?.accessToken}` }
             }),
-        enabled: !!id && !loading
+        enabled: enabled && !loading
     });
 };

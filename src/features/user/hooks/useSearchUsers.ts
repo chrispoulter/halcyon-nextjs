@@ -21,7 +21,7 @@ export const searchUsers = (
     );
 };
 
-export const useSearchUsers = (request: SearchUsersRequest) => {
+export const useSearchUsers = (request: SearchUsersRequest, enabled = true) => {
     const { data: session, status } = useSession();
     const loading = status === 'loading';
 
@@ -32,6 +32,6 @@ export const useSearchUsers = (request: SearchUsersRequest) => {
                 headers: { Authorization: `Bearer ${session?.accessToken}` }
             }),
         placeholderData: keepPreviousData,
-        enabled: !loading
+        enabled: enabled && !loading
     });
 };
