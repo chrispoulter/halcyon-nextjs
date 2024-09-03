@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { GetProfileResponse } from '@/features/manage/manageTypes';
-import { fetcher } from '@/utils/fetch';
-import { config } from '@/utils/config';
+import { fetcher } from '@/lib/fetch';
+import { config } from '@/lib/config';
 
 export const getProfile = (init?: RequestInit) =>
     fetcher<GetProfileResponse>(`${config.API_URL}/manage`, init);

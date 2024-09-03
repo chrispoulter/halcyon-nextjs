@@ -5,7 +5,7 @@ import { Input } from '@/components/Form/Input';
 import { DatePicker } from '@/components/Form/DatePicker';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/Button/ButtonGroup';
-import { isInPast } from '@/utils/dates';
+import { isInPast } from '@/lib/dates';
 
 const schema = z
     .object({

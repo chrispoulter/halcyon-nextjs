@@ -2,8 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { CreateUserRequest } from '@/features/user/userTypes';
-import { fetcher } from '@/utils/fetch';
-import { config } from '@/utils/config';
+import { fetcher } from '@/lib/fetch';
+import { config } from '@/lib/config';
 
 const createUser = (request: CreateUserRequest, init?: RequestInit) =>
     fetcher<UpdatedResponse>(`${config.API_URL}/user`, {

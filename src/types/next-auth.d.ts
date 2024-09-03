@@ -1,5 +1,5 @@
 import { DefaultUser } from 'next-auth';
-import { Role } from '@/utils/auth';
+import { Role } from '@/lib/auth';
 
 declare module 'next-auth' {
     interface User {

@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { MenuIcon } from '@/components/Icons/MenuIcon';
-import { isAuthorized, isUserAdministrator } from '@/utils/auth';
+import { isAuthorized, isUserAdministrator } from '@/lib/auth';
 
 type NavbarMenuOption = {
     href: string;

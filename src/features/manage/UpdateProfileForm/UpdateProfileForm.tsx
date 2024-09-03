@@ -7,7 +7,7 @@ import { DatePicker } from '@/components/Form/DatePicker';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/Button/ButtonGroup';
 import { FormSkeleton } from '@/components/Form/FormSkeleton';
-import { isInPast } from '@/utils/dates';
+import { isInPast } from '@/lib/dates';
 
 const schema = z.object({
     emailAddress: z

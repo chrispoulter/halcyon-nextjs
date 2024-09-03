@@ -2,8 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { UpdatedResponse } from '@/features/common/commonTypes';
 import { DeleteAccountRequst } from '@/features/manage/manageTypes';
-import { fetcher as fetcher } from '@/utils/fetch';
-import { config } from '@/utils/config';
+import { fetcher as fetcher } from '@/lib/fetch';
+import { config } from '@/lib/config';
 
 const deleteAccount = (request: DeleteAccountRequst, init?: RequestInit) =>
     fetcher<UpdatedResponse>(`${config.API_URL}/manage`, {

@@ -4,8 +4,8 @@ import {
     SearchUsersRequest,
     SearchUsersResponse
 } from '@/features/user/userTypes';
-import { fetcher } from '@/utils/fetch';
-import { config } from '@/utils/config';
+import { fetcher } from '@/lib/fetch';
+import { config } from '@/lib/config';
 
 export const searchUsers = (
     request: SearchUsersRequest,

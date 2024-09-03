@@ -17,7 +17,7 @@ import { Header } from '@/components/Header/Header';
 import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
 import { Footer } from '@/components/Footer/Footer';
 import { Toaster } from '@/components/Toast/Toast';
-import { FetchError } from '@/utils/fetch';
+import { FetchError } from '@/lib/fetch';
 
 import '@/styles/globals.css';
 
