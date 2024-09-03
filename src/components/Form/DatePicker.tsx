@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import clsx from 'clsx';
 import { Control, useController } from 'react-hook-form';
-import { currentYear, monthNames } from '@/utils/dates';
+import { currentYear, monthNames } from '@/lib/dates';
 
 type DatePickerProps = {
     control: Control<any, any>;

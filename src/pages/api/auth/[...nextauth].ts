@@ -2,7 +2,7 @@ import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { JwtPayload, verify } from 'jsonwebtoken';
 import { z } from 'zod';
-import { config } from '@/utils/config';
+import { config } from '@/lib/config';
 
 const schema = z.object({
     emailAddress: z

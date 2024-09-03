@@ -1,4 +1,4 @@
-import { Role } from '@/utils/auth';
+import { Role } from '@/lib/auth';
 
 export enum UserSort {
     EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',

@@ -9,8 +9,8 @@ import { ToggleGroupSkeleton } from '@/components/Form/ToggleGroupSkeleton';
 import { Button } from '@/components/Button/Button';
 import { ButtonGroup } from '@/components/Button/ButtonGroup';
 import { FormSkeleton } from '@/components/Form/FormSkeleton';
-import { Role, roleOptions } from '@/utils/auth';
-import { isInPast } from '@/utils/dates';
+import { Role, roleOptions } from '@/lib/auth';
+import { isInPast } from '@/lib/dates';
 
 const schema = z.object({
     emailAddress: z
