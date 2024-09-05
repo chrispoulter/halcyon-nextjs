@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-import { isAuthorized, Role } from '@/lib/auth';
+import { isAuthorized, isUserAdministrator } from '@/lib/auth';
 import { config as libConfig } from '@/lib/config';
 
 const protectedRoutes = [
     {
         path: '/user',
-        roles: [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR]
+        roles: isUserAdministrator
     }
 ];
 
