@@ -21,10 +21,7 @@ import { FetchError } from '@/lib/fetch';
 
 import '@/styles/globals.css';
 
-const font = Open_Sans({
-    subsets: ['latin'],
-    display: 'swap'
-});
+const font = Open_Sans({ subsets: ['latin'] });
 
 const App = ({
     Component,
