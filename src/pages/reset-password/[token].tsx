@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { useResetPassword } from '@/features/account/hooks/useResetPassword';
-import { Meta } from '@/components/Meta/Meta';
-import { Container } from '@/components/Container/Container';
-import { Title } from '@/components/Title/Title';
+import { Meta } from '@/components/meta';
+import { Container } from '@/components/container';
+import { Title } from '@/components/title';
 import {
     ResetPasswordForm,
     ResetPasswordFormValues
-} from '@/features/account/ResetPasswordForm/ResetPasswordForm';
+} from '@/features/account/components/reset-password-form';
 
 const ResetPasswordPage = () => {
     const router = useRouter();

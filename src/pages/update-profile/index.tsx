@@ -9,14 +9,14 @@ import {
 } from '@/features/manage/hooks/useGetProfile';
 import { useUpdateProfile } from '@/features/manage/hooks/useUpdateProfile';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { Meta } from '@/components/Meta/Meta';
-import { Container } from '@/components/Container/Container';
-import { Title } from '@/components/Title/Title';
-import { ButtonLink } from '@/components/Button/ButtonLink';
+import { Meta } from '@/components/meta';
+import { Container } from '@/components/container';
+import { Title } from '@/components/title';
+import { ButtonLink } from '@/components/button-link';
 import {
     UpdateProfileForm,
     UpdateProfileFormValues
-} from '@/features/manage/UpdateProfileForm/UpdateProfileForm';
+} from '@/features/manage/components/update-profile-form';
 
 const UpdateProfilePage = () => {
     const router = useRouter();

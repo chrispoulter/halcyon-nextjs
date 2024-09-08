@@ -9,18 +9,18 @@ import {
     searchUsers
 } from '@/features/user/hooks/useSearchUsers';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { Meta } from '@/components/Meta/Meta';
-import { Container } from '@/components/Container/Container';
-import { Title } from '@/components/Title/Title';
-import { ButtonLink } from '@/components/Button/ButtonLink';
-import { ButtonGroup } from '@/components/Button/ButtonGroup';
-import { Pager } from '@/components/Pager/Pager';
+import { Meta } from '@/components/meta';
+import { Container } from '@/components/container';
+import { Title } from '@/components/title';
+import { ButtonLink } from '@/components/button-link';
+import { ButtonGroup } from '@/components/button-group';
+import { Pager } from '@/components/pager';
 import {
     SearchUserForm,
     SearchUserFormValues
-} from '@/features/user/SearchUserForm/SearchUserForm';
-import { SortUserDropdown } from '@/features/user/SortUserDropdown/SortUserDropdown';
-import { UserList } from '@/features/user/UserList/UserList';
+} from '@/features/user/components/search-user-form';
+import { SortUserDropdown } from '@/features/user/components/sort-user-dropdown';
+import { UserList } from '@/features/user/components/user-list';
 
 const PAGE_SIZE = 5;
 

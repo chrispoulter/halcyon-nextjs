@@ -9,15 +9,15 @@ import {
 } from '@/features/manage/hooks/useGetProfile';
 import { useChangePassword } from '@/features/manage/hooks/useChangePassword';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { Meta } from '@/components/Meta/Meta';
-import { Container } from '@/components/Container/Container';
-import { Title } from '@/components/Title/Title';
-import { TextLink } from '@/components/TextLink/TextLink';
-import { ButtonLink } from '@/components/Button/ButtonLink';
+import { Meta } from '@/components/meta';
+import { Container } from '@/components/container';
+import { Title } from '@/components/title';
+import { TextLink } from '@/components/text-link';
+import { ButtonLink } from '@/components/button-link';
 import {
     ChangePasswordForm,
     ChangePasswordFormValues
-} from '@/features/manage/ChangePasswordForm/ChangePasswordForm';
+} from '@/features/manage/components/change-password-form';
 
 const ChangePasswordPage = () => {
     const router = useRouter();

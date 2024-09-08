@@ -9,12 +9,12 @@ import {
 } from '@/features/manage/hooks/useGetProfile';
 import { useDeleteAccount } from '@/features/manage/hooks/useDeleteAccount';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { Meta } from '@/components/Meta/Meta';
-import { Container } from '@/components/Container/Container';
-import { Title } from '@/components/Title/Title';
-import { PersonalDetailsCard } from '@/features/manage/PersonalDetailsCard/PersonalDetailsCard';
-import { LoginDetailsCard } from '@/features/manage/LoginDetailsCard/LoginDetailsCard';
-import { AccountSettingsCard } from '@/features/manage/AccountSettingsCard/AccountSettingsCard';
+import { Meta } from '@/components/meta';
+import { Container } from '@/components/container';
+import { Title } from '@/components/title';
+import { PersonalDetailsCard } from '@/features/manage/components/personal-details-card';
+import { LoginDetailsCard } from '@/features/manage/components/login-details-card';
+import { AccountSettingsCard } from '@/features/manage/components/account-settings-card';
 
 const MyAccountPage = () => {
     const { data } = useGetProfile();

@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react';
 import { randomUUID } from 'crypto';
 import RegisterPage from '@/pages/register';
 import { UpdatedResponse } from '@/features/common/commonTypes';
-import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
+import { RegisterFormValues } from '@/features/account/components/register-form';
 import { queryWrapper } from '@/lib/test-utils';
 
 const fillRegisterForm = (
