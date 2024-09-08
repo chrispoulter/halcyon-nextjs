@@ -32,10 +32,10 @@ export const roleOptions = Object.entries(roles).map(([value, item]) => ({
 }));
 
 export const isAuthorized = (
-    token?: { roles?: Role[] },
+    user?: { roles?: Role[] },
     requiredRoles?: Role[]
 ) => {
-    if (!token) {
+    if (!user) {
         return false;
     }
 
@@ -43,11 +43,11 @@ export const isAuthorized = (
         return true;
     }
 
-    if (!token.roles) {
+    if (!user.roles) {
         return false;
     }
 
-    const userRoles = token.roles;
+    const userRoles = user.roles;
 
     if (!requiredRoles.some(value => userRoles.includes(value))) {
         return false;
