@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-import { isAuthorized, isUserAdministrator } from '@/lib/auth';
+import { isAuthorized, isUserAdministrator } from '@/lib/roles';
 import { config as libConfig } from '@/lib/config';
 
 const protectedRoutes = [

@@ -16,7 +16,7 @@ import {
     useGetProfile
 } from '@/features/manage/hooks/use-get-profile';
 import { useUpdateProfile } from '@/features/manage/hooks/use-update-profile';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { authOptions } from '@/lib/auth';
 
 const UpdateProfilePage = () => {
     const router = useRouter();

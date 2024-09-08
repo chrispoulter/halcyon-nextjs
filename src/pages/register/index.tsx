@@ -21,12 +21,12 @@ const RegisterPage = () => {
             onSuccess: async () => {
                 toast.success('User successfully registered.');
 
-                const result = await signIn('credentials', {
+                const signInResult = await signIn('credentials', {
                     ...values,
                     redirect: false
                 });
 
-                if (result?.ok) {
+                if (signInResult?.ok) {
                     return router.push('/');
                 }
 

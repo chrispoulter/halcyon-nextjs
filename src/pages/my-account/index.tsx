@@ -14,7 +14,7 @@ import {
     useGetProfile
 } from '@/features/manage/hooks/use-get-profile';
 import { useDeleteAccount } from '@/features/manage/hooks/use-delete-account';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { authOptions } from '@/lib/auth';
 
 const MyAccountPage = () => {
     const { data } = useGetProfile();

@@ -20,7 +20,7 @@ import {
     useSearchUsers,
     searchUsers
 } from '@/features/user/hooks/use-search-users';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { authOptions } from '@/lib/auth';
 
 const PAGE_SIZE = 5;
 

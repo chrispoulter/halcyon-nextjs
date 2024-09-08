@@ -9,7 +9,7 @@ import { ToggleGroupSkeleton } from '@/components/toggle-group-skeleton';
 import { Button } from '@/components/button';
 import { ButtonGroup } from '@/components/button-group';
 import { FormSkeleton } from '@/components/form-skeleton';
-import { Role, roleOptions } from '@/lib/auth';
+import { Role, roleOptions } from '@/lib/roles';
 import { isInPast } from '@/lib/dates';
 
 const schema = z.object({
