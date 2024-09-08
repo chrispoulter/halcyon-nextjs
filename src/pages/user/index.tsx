@@ -7,7 +7,7 @@ import { UserSort } from '@/features/user/userTypes';
 import {
     useSearchUsers,
     searchUsers
-} from '@/features/user/hooks/useSearchUsers';
+} from '@/features/user/hooks/use-search-users';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';

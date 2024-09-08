@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { useCreateUser } from '@/features/user/hooks/useCreateUser';
+import { useCreateUser } from '@/features/user/hooks/use-create-user';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title, SubTitle } from '@/components/title';

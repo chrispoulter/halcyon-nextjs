@@ -6,8 +6,8 @@ import toast from 'react-hot-toast';
 import {
     getProfile,
     useGetProfile
-} from '@/features/manage/hooks/useGetProfile';
-import { useChangePassword } from '@/features/manage/hooks/useChangePassword';
+} from '@/features/manage/hooks/use-get-profile';
+import { useChangePassword } from '@/features/manage/hooks/use-change-password';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';

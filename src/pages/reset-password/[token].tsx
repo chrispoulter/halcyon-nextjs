@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { useResetPassword } from '@/features/account/hooks/useResetPassword';
+import { useResetPassword } from '@/features/account/hooks/use-reset-password';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';
