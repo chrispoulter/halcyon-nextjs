@@ -11,7 +11,7 @@ A web application template.
 
 #### Custom Settings
 
-Create a `.env.local` file in the web project directory.
+Create a `.env.local` file in the root directory.
 
 ```
 NEXT_PUBLIC_VERSION=1.0.0-local
