@@ -1,6 +1,9 @@
 export const config = {
     VERSION: process.env.NEXT_PUBLIC_VERSION || '1.0.0',
-    API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7257',
+    API_URL:
+        process.env.NEXT_SERVER_API_URL ||
+        process.env.NEXT_PUBLIC_API_URL ||
+        'https://localhost:7257',
     JWT_SECURITY_KEY:
         process.env.JWT_SECURITY_KEY ||
         'X46npCfZgsMFwJNnLk3Yb9yUPW9x6SuD8ChZ6cVooSZMdtHHPEkwPkQoHUsNDLTanSEiG7y6shTXHePUZ5fr6i5J3R2cMvCRNGeq55jRXRxAeeSwA46ro5bTVSBiif86',
