@@ -8,7 +8,7 @@ import {
 import { ButtonLink } from '@/components/button-link';
 import { ButtonGroup } from '@/components/button-group';
 import { Container } from '@/components/container';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { authOptions } from '@/lib/auth';
 
 const HomePage = () => (
     <>

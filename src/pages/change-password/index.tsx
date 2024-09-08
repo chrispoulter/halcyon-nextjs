@@ -17,7 +17,7 @@ import {
     useGetProfile
 } from '@/features/manage/hooks/use-get-profile';
 import { useChangePassword } from '@/features/manage/hooks/use-change-password';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { authOptions } from '@/lib/auth';
 
 const ChangePasswordPage = () => {
     const router = useRouter();

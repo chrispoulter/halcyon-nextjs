@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { Badge } from '@/components/badge';
-import { roles } from '@/lib/auth';
+import { roles } from '@/lib/roles';
 
 export const ProfileDropdown = () => {
     const { data: session } = useSession();

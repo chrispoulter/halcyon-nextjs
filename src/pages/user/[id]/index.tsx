@@ -19,7 +19,7 @@ import { useUpdateUser } from '@/features/user/hooks/use-update-user';
 import { useLockUser } from '@/features/user/hooks/use-lock-user';
 import { useUnlockUser } from '@/features/user/hooks/use-unlock-user';
 import { useDeleteUser } from '@/features/user/hooks/use-delete-user';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { authOptions } from '@/lib/auth';
 
 const UpdateUserPage = () => {
     const router = useRouter();
