@@ -1,5 +1,3 @@
-import { JWT } from 'next-auth/jwt';
-
 export enum Role {
     SYSTEM_ADMINISTRATOR = 'SYSTEM_ADMINISTRATOR',
     USER_ADMINISTRATOR = 'USER_ADMINISTRATOR'
@@ -34,7 +32,7 @@ export const roleOptions = Object.entries(roles).map(([value, item]) => ({
 }));
 
 export const isAuthorized = (
-    token?: Pick<JWT, 'roles'>,
+    token?: { roles?: Role[] },
     requiredRoles?: Role[]
 ) => {
     if (!token) {
