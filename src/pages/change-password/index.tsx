@@ -3,21 +3,21 @@ import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import {
-    getProfile,
-    useGetProfile
-} from '@/features/manage/hooks/useGetProfile';
-import { useChangePassword } from '@/features/manage/hooks/useChangePassword';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { Meta } from '@/components/Meta/Meta';
-import { Container } from '@/components/Container/Container';
-import { Title } from '@/components/Title/Title';
-import { TextLink } from '@/components/TextLink/TextLink';
-import { ButtonLink } from '@/components/Button/ButtonLink';
+import { Meta } from '@/components/meta';
+import { Container } from '@/components/container';
+import { Title } from '@/components/title';
+import { TextLink } from '@/components/text-link';
+import { ButtonLink } from '@/components/button-link';
 import {
     ChangePasswordForm,
     ChangePasswordFormValues
-} from '@/features/manage/ChangePasswordForm/ChangePasswordForm';
+} from '@/features/manage/components/change-password-form';
+import {
+    getProfile,
+    useGetProfile
+} from '@/features/manage/hooks/use-get-profile';
+import { useChangePassword } from '@/features/manage/hooks/use-change-password';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const ChangePasswordPage = () => {
     const router = useRouter();

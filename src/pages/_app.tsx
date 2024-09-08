@@ -12,11 +12,11 @@ import {
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import toast from 'react-hot-toast';
-import { Meta } from '@/components/Meta/Meta';
-import { Header } from '@/components/Header/Header';
-import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary';
-import { Footer } from '@/components/Footer/Footer';
-import { Toaster } from '@/components/Toast/Toast';
+import { Meta } from '@/components/meta';
+import { Header } from '@/components/header';
+import ErrorBoundary from '@/components/error-boundary';
+import { Footer } from '@/components/footer';
+import { Toaster } from '@/components/toast';
 import { FetchError } from '@/lib/fetch';
 
 import '@/styles/globals.css';

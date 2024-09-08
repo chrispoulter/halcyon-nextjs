@@ -1,11 +1,11 @@
-import { Meta } from '@/components/Meta/Meta';
+import { Meta } from '@/components/meta';
 import {
     Jumbotron,
     JumbotronBody,
     JumbotronTitle
-} from '@/components/Jumbotron/Jumbotron';
-import { ButtonGroup } from '@/components/Button/ButtonGroup';
-import { ButtonLink } from '@/components/Button/ButtonLink';
+} from '@/components/jumbotron';
+import { ButtonGroup } from '@/components/button-group';
+import { ButtonLink } from '@/components/button-link';
 
 const NotFoundPage = () => (
     <>

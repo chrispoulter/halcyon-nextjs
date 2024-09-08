@@ -1,14 +1,14 @@
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import {
     Jumbotron,
     JumbotronBody,
     JumbotronTitle
-} from '@/components/Jumbotron/Jumbotron';
-import { ButtonLink } from '@/components/Button/ButtonLink';
-import { ButtonGroup } from '@/components/Button/ButtonGroup';
-import { Container } from '@/components/Container/Container';
+} from '@/components/jumbotron';
+import { ButtonLink } from '@/components/button-link';
+import { ButtonGroup } from '@/components/button-group';
+import { Container } from '@/components/container';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const HomePage = () => (
     <>

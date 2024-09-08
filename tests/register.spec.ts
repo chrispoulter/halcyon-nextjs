@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import { randomUUID } from 'crypto';
-import { RegisterFormValues } from '@/features/account/RegisterForm/RegisterForm';
+import { RegisterFormValues } from '@/features/account/components/register-form';
 
 const fillRegisterForm = async (
     page: Page,

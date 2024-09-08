@@ -3,23 +3,23 @@ import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { getUser, useGetUser } from '@/features/user/hooks/useGetUser';
-import { useUpdateUser } from '@/features/user/hooks/useUpdateUser';
-import { useLockUser } from '@/features/user/hooks/useLockUser';
-import { useUnlockUser } from '@/features/user/hooks/useUnlockUser';
-import { useDeleteUser } from '@/features/user/hooks/useDeleteUser';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { Meta } from '@/components/Meta/Meta';
-import { Container } from '@/components/Container/Container';
-import { SubTitle, Title } from '@/components/Title/Title';
-import { ButtonLink } from '@/components/Button/ButtonLink';
-import { ConfirmUnlockUser } from '@/features/user/ConfirmUnlockUser/ConfirmUnlockUser';
-import { ConfirmLockUser } from '@/features/user/ConfirmLockUser/ConfirmLockUser';
-import { ConfirmDeleteUser } from '@/features/user/ConfirmDeleteUser/ConfirmDeleteUser';
+import { Meta } from '@/components/meta';
+import { Container } from '@/components/container';
+import { SubTitle, Title } from '@/components/title';
+import { ButtonLink } from '@/components/button-link';
+import { ConfirmUnlockUser } from '@/features/user/components/confirm-unlock-user';
+import { ConfirmLockUser } from '@/features/user/components/confirm-lock-user';
+import { ConfirmDeleteUser } from '@/features/user/components/confirm-delete-user';
 import {
     UpdateUserForm,
     UpdateUserFormValues
-} from '@/features/user/UpdateUserForm/UpdateUserForm';
+} from '@/features/user/components/update-user-form';
+import { getUser, useGetUser } from '@/features/user/hooks/use-get-user';
+import { useUpdateUser } from '@/features/user/hooks/use-update-user';
+import { useLockUser } from '@/features/user/hooks/use-lock-user';
+import { useUnlockUser } from '@/features/user/hooks/use-unlock-user';
+import { useDeleteUser } from '@/features/user/hooks/use-delete-user';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateUserPage = () => {
     const router = useRouter();

@@ -1,15 +1,15 @@
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import { useRegister } from '@/features/account/hooks/useRegister';
-import { Meta } from '@/components/Meta/Meta';
-import { Container } from '@/components/Container/Container';
-import { Title } from '@/components/Title/Title';
-import { TextLink } from '@/components/TextLink/TextLink';
+import { Meta } from '@/components/meta';
+import { Container } from '@/components/container';
+import { Title } from '@/components/title';
+import { TextLink } from '@/components/text-link';
 import {
     RegisterForm,
     RegisterFormValues
-} from '@/features/account/RegisterForm/RegisterForm';
+} from '@/features/account/components/register-form';
+import { useRegister } from '@/features/account/hooks/use-register';
 
 const RegisterPage = () => {
     const router = useRouter();
