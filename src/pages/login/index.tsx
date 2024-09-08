@@ -14,12 +14,12 @@ const LoginPage = () => {
     const router = useRouter();
 
     const onSubmit = async (values: LoginFormValues) => {
-        const result = await signIn('credentials', {
+        const signInResult = await signIn('credentials', {
             ...values,
             redirect: false
         });
 
-        if (result?.ok) {
+        if (signInResult?.ok) {
             return router.push('/');
         }
 
