@@ -1,6 +1,6 @@
-import { SearchUserResponse } from '@/features/user/user-types';
 import { TextLink } from '@/components/text-link';
 import { UserCard } from '@/features/user/components/user-card';
+import { SearchUserResponse } from '@/features/user/user-types';
 
 type UserListProps = {
     isLoading?: boolean;

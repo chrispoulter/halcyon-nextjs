@@ -3,12 +3,6 @@ import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import {
-    getProfile,
-    useGetProfile
-} from '@/features/manage/hooks/use-get-profile';
-import { useUpdateProfile } from '@/features/manage/hooks/use-update-profile';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';
@@ -17,6 +11,12 @@ import {
     UpdateProfileForm,
     UpdateProfileFormValues
 } from '@/features/manage/components/update-profile-form';
+import {
+    getProfile,
+    useGetProfile
+} from '@/features/manage/hooks/use-get-profile';
+import { useUpdateProfile } from '@/features/manage/hooks/use-update-profile';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 const UpdateProfilePage = () => {
     const router = useRouter();

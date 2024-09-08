@@ -1,12 +1,12 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { GetProfileResponse } from '@/features/manage/manage-types';
 import { Input } from '@/components/input';
 import { Button } from '@/components/button';
 import { ButtonGroup } from '@/components/button-group';
 import { FormSkeleton } from '@/components/form-skeleton';
 import { InputSkeleton } from '@/components/input-skeleton';
+import { GetProfileResponse } from '@/features/manage/manage-types';
 
 const schema = z
     .object({

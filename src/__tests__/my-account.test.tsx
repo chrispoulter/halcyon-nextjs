@@ -6,8 +6,8 @@ import {
 import fetchMock from 'jest-fetch-mock';
 import { randomUUID } from 'crypto';
 import { GetProfileResponse } from '@/features/manage/manage-types';
-import MyAccountPage from '@/pages/my-account';
 import { queryWrapper } from '@/lib/test-utils';
+import MyAccountPage from '@/pages/my-account';
 
 const response: GetProfileResponse = {
     id: 'user-1',

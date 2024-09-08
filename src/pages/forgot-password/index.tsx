@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { useForgotPassword } from '@/features/account/hooks/use-forgot-password';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';
@@ -8,6 +7,7 @@ import {
     ForgotPasswordForm,
     ForgotPasswordFormValues
 } from '@/features/account/components/forgot-password-form';
+import { useForgotPassword } from '@/features/account/hooks/use-forgot-password';
 
 const ForgotPasswordPage = () => {
     const router = useRouter();
