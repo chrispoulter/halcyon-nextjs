@@ -5,7 +5,7 @@ import {
 } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
 import { randomUUID } from 'crypto';
-import { GetProfileResponse } from '@/features/manage/manageTypes';
+import { GetProfileResponse } from '@/features/manage/manage-types';
 import MyAccountPage from '@/pages/my-account';
 import { queryWrapper } from '@/lib/test-utils';
 

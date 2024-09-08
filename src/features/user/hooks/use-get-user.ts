@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import { GetUserResponse } from '@/features/user/userTypes';
+import { GetUserResponse } from '@/features/user/user-types';
 import { fetcher } from '@/lib/fetch';
 import { config } from '@/lib/config';
 

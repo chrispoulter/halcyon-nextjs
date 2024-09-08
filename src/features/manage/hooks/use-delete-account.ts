@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import { UpdatedResponse } from '@/features/common/commonTypes';
-import { DeleteAccountRequst } from '@/features/manage/manageTypes';
+import { UpdatedResponse } from '@/features/common/common-types';
+import { DeleteAccountRequst } from '@/features/manage/manage-types';
 import { fetcher as fetcher } from '@/lib/fetch';
 import { config } from '@/lib/config';
 

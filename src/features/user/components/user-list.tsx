@@ -1,4 +1,4 @@
-import { SearchUserResponse } from '@/features/user/userTypes';
+import { SearchUserResponse } from '@/features/user/user-types';
 import { TextLink } from '@/components/text-link';
 import { UserCard } from '@/features/user/components/user-card';
 

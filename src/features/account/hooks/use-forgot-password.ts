@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { ForgotPasswordRequest } from '@/features/account/accountTypes';
+import { ForgotPasswordRequest } from '@/features/account/account-types';
 import { fetcher } from '@/lib/fetch';
 import { config } from '@/lib/config';
 

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import { UpdatedResponse } from '@/features/common/commonTypes';
-import { ChangePasswordRequest } from '@/features/manage/manageTypes';
+import { UpdatedResponse } from '@/features/common/common-types';
+import { ChangePasswordRequest } from '@/features/manage/manage-types';
 import { fetcher } from '@/lib/fetch';
 import { config } from '@/lib/config';
 

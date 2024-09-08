@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UpdatedResponse } from '@/features/common/commonTypes';
-import { ResetPasswordRequest } from '@/features/account/accountTypes';
+import { UpdatedResponse } from '@/features/common/common-types';
+import { ResetPasswordRequest } from '@/features/account/account-types';
 import { fetcher } from '@/lib/fetch';
 import { config } from '@/lib/config';
 

@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react';
 import {
     SearchUsersRequest,
     SearchUsersResponse
-} from '@/features/user/userTypes';
+} from '@/features/user/user-types';
 import { fetcher } from '@/lib/fetch';
 import { config } from '@/lib/config';
 

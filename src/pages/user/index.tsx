@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
-import { UserSort } from '@/features/user/userTypes';
+import { UserSort } from '@/features/user/user-types';
 import {
     useSearchUsers,
     searchUsers

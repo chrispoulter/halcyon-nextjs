@@ -1,4 +1,4 @@
-import { GetProfileResponse } from '@/features/manage/manageTypes';
+import { GetProfileResponse } from '@/features/manage/manage-types';
 import { Card, CardTitle } from '@/components/card';
 import { CardSkeleton } from '@/components/card-skeleton';
 import { ButtonGroup } from '@/components/button-group';
