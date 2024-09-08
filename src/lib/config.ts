@@ -1,5 +1,5 @@
 export const config = {
-    VERSION: process.env.NEXT_PUBLIC_VERSION || '1.0.0',
+    VERSION: process.env.NEXT_PUBLIC_VERSION || '1.0.0-local',
     API_URL:
         process.env.NEXT_SERVER_API_URL ||
         process.env.NEXT_PUBLIC_API_URL ||

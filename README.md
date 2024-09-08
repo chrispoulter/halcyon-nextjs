@@ -11,13 +11,15 @@ A web application template.
 
 #### Custom Settings
 
-Create a `.env` file in the web project directory.
+Create a `.env.local` file in the web project directory.
 
 ```
-NEXT_PUBLIC_API_URL=https://localhost:7257
+NEXT_PUBLIC_VERSION=1.0.0-local
+
+NEXT_PUBLIC_API_URL=http://localhost:5257
 
 JWT_SECURITY_KEY=X46npCfZgsMFwJNnLk3Yb9yUPW9x6SuD8ChZ6cVooSZMdtHHPEkwPkQoHUsNDLTanSEiG7y6shTXHePUZ5fr6i5J3R2cMvCRNGeq55jRXRxAeeSwA46ro5bTVSBiif86
-JWT_ISSUER:=HalcyonApi
+JWT_ISSUER=HalcyonApi
 JWT_AUDIENCE=HalcyonClient
 
 NEXTAUTH_URL=http://localhost:3000
