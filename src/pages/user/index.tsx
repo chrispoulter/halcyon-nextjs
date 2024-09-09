@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { Meta } from '@/components/meta';
@@ -20,7 +19,7 @@ import {
     useSearchUsers,
     searchUsers
 } from '@/features/user/hooks/use-search-users';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 
 const PAGE_SIZE = 5;
 
@@ -103,7 +102,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     res,
     query
 }) => {
-    const session = await getServerSession(req, res, authOptions);
+    const session = await auth(req, res);
 
     const queryClient = new QueryClient();
 

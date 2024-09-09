@@ -1,4 +1,9 @@
-import { AuthOptions } from 'next-auth';
+import {
+    GetServerSidePropsContext,
+    NextApiRequest,
+    NextApiResponse
+} from 'next';
+import { AuthOptions, getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { JwtPayload, verify } from 'jsonwebtoken';
 import { z } from 'zod';
@@ -83,10 +88,18 @@ export const authOptions: AuthOptions = {
         }
     },
     pages: {
-        signIn: '/login'
+        signIn: '/login',
+        error: '/500'
     },
     session: {
         maxAge: config.NEXTAUTH_SESSION_MAXAGE
     },
     secret: config.NEXTAUTH_SECRET
 };
+
+export const auth = (
+    ...args:
+        | [GetServerSidePropsContext['req'], GetServerSidePropsContext['res']]
+        | [NextApiRequest, NextApiResponse]
+        | []
+) => getServerSession(...args, authOptions);
