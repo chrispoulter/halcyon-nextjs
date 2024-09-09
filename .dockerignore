@@ -6,7 +6,7 @@ node_modules
 .swc
 .vscode
 .dockerignore
-.env.*
+.env*
 .gitignore
 .gitattributes
 .lintstagedrc.mjs
