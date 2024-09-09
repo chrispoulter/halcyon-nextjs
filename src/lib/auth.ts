@@ -90,11 +90,7 @@ export const authOptions: AuthOptions = {
     pages: {
         signIn: '/login',
         error: '/500'
-    },
-    session: {
-        maxAge: config.NEXTAUTH_SESSION_MAXAGE
-    },
-    secret: config.NEXTAUTH_SECRET
+    }
 };
 
 export const auth = (
