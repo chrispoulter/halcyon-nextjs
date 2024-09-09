@@ -12,15 +12,17 @@ import {
 
 const LoginPage = () => {
     const router = useRouter();
+    const callbackUrl = (router.query.callbackUrl as string) || '/';
 
     const onSubmit = async (values: LoginFormValues) => {
         const signInResult = await signIn('credentials', {
             ...values,
+            callbackUrl,
             redirect: false
         });
 
         if (signInResult?.ok) {
-            return router.push('/');
+            return router.push(signInResult.url!);
         }
 
         return toast.error('The credentials provided were invalid.');

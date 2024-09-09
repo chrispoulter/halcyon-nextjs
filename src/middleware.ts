@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { getToken } from 'next-auth/jwt';
+import { withAuth } from 'next-auth/middleware';
 import { isAuthorized, isUserAdministrator } from '@/lib/roles';
-import { config as libConfig } from '@/lib/config';
 
 const protectedRoutes = [
     {
@@ -11,13 +9,7 @@ const protectedRoutes = [
     }
 ];
 
-export async function middleware(req: NextRequest) {
-    const token = await getToken({ req, secret: libConfig.NEXTAUTH_SECRET });
-
-    if (!token) {
-        return NextResponse.redirect(new URL('/login', req.url));
-    }
-
+export default withAuth(req => {
     const matchedRoute = protectedRoutes.find(route =>
         req.nextUrl.pathname.startsWith(route.path)
     );
@@ -26,12 +18,12 @@ export async function middleware(req: NextRequest) {
         return NextResponse.next();
     }
 
-    if (!isAuthorized(token, matchedRoute.roles)) {
+    if (!isAuthorized(req.nextauth.token!, matchedRoute.roles)) {
         return NextResponse.rewrite(new URL('/403', req.url));
     }
 
     return NextResponse.next();
-}
+});
 
 export const config = {
     matcher: [
