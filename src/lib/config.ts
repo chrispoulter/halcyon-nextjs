@@ -1,12 +1,8 @@
 export const config = {
-    VERSION: process.env.NEXT_PUBLIC_VERSION || '1.0.0-local',
+    VERSION: process.env.NEXT_PUBLIC_VERSION!,
     API_URL:
-        process.env.NEXT_SERVER_API_URL ||
-        process.env.NEXT_PUBLIC_API_URL ||
-        'http://localhost:5257',
-    JWT_SECURITY_KEY:
-        process.env.JWT_SECURITY_KEY ||
-        'X46npCfZgsMFwJNnLk3Yb9yUPW9x6SuD8ChZ6cVooSZMdtHHPEkwPkQoHUsNDLTanSEiG7y6shTXHePUZ5fr6i5J3R2cMvCRNGeq55jRXRxAeeSwA46ro5bTVSBiif86',
-    JWT_ISSUER: process.env.JWT_ISSUER || 'HalcyonApi',
-    JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient'
+        process.env.NEXT_SERVER_API_URL || process.env.NEXT_PUBLIC_API_URL!,
+    JWT_SECURITY_KEY: process.env.JWT_SECURITY_KEY!,
+    JWT_ISSUER: process.env.JWT_ISSUER!,
+    JWT_AUDIENCE: process.env.JWT_AUDIENCE!
 };
