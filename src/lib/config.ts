@@ -11,5 +11,5 @@ export const config = {
     JWT_AUDIENCE: process.env.JWT_AUDIENCE || 'HalcyonClient',
     NEXTAUTH_SECRET:
         process.env.NEXTAUTH_SECRET ||
-        'YenEZqADi2YnfVCNWMFkcUpmr55ESFepmHgH3NSmPoBeSqf9Hs3Ui8vb6xdkCY9PNewqNxVQdjkqhCGaWeyri48FyDPU9HfKFjbHcfbyq4Fuqmk2suehduYJYzuPoSD8',
+        'YenEZqADi2YnfVCNWMFkcUpmr55ESFepmHgH3NSmPoBeSqf9Hs3Ui8vb6xdkCY9PNewqNxVQdjkqhCGaWeyri48FyDPU9HfKFjbHcfbyq4Fuqmk2suehduYJYzuPoSD8'
 };

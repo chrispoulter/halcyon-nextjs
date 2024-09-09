@@ -10,24 +10,26 @@ const protectedRoutes = [
     }
 ];
 
-export default withAuth(req => {
-    const matchedRoute = protectedRoutes.find(route =>
-        req.nextUrl.pathname.startsWith(route.path)
-    );
+export default withAuth(
+    req => {
+        const matchedRoute = protectedRoutes.find(route =>
+            req.nextUrl.pathname.startsWith(route.path)
+        );
 
-    if (!matchedRoute) {
+        if (!matchedRoute) {
+            return NextResponse.next();
+        }
+
+        if (!isAuthorized(req.nextauth.token!, matchedRoute.roles)) {
+            return NextResponse.rewrite(new URL('/403', req.url));
+        }
+
         return NextResponse.next();
+    },
+    {
+        secret: libConfig.NEXTAUTH_SECRET
     }
-
-    if (!isAuthorized(req.nextauth.token!, matchedRoute.roles)) {
-        return NextResponse.rewrite(new URL('/403', req.url));
-    }
-
-    return NextResponse.next();
-},
-{
-    secret: libConfig.NEXTAUTH_SECRET
-});
+);
 
 export const config = {
     matcher: [
