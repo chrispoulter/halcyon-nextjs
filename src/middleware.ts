@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { withAuth } from 'next-auth/middleware';
 import { isAuthorized, isUserAdministrator } from '@/lib/roles';
+import { config as libConfig } from '@/lib/config';
 
 const protectedRoutes = [
     {
@@ -23,6 +24,9 @@ export default withAuth(req => {
     }
 
     return NextResponse.next();
+},
+{
+    secret: libConfig.NEXTAUTH_SECRET
 });
 
 export const config = {
