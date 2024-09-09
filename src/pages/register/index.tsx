@@ -23,12 +23,11 @@ const RegisterPage = () => {
 
                 const signInResult = await signIn('credentials', {
                     ...values,
-                    callbackUrl: '/',
                     redirect: false
                 });
 
                 if (signInResult?.ok) {
-                    return router.push(signInResult.url!);
+                    return router.push('/');
                 }
 
                 return toast.error('The credentials provided were invalid.');
