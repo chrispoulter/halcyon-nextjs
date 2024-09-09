@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
 import {
     Jumbotron,
     JumbotronBody,
@@ -8,7 +7,7 @@ import {
 import { ButtonLink } from '@/components/button-link';
 import { ButtonGroup } from '@/components/button-group';
 import { Container } from '@/components/container';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 
 const HomePage = () => (
     <>
@@ -73,7 +72,7 @@ const HomePage = () => (
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => ({
     props: {
-        session: await getServerSession(req, res, authOptions)
+        session: await auth(req, res)
     }
 });
 
