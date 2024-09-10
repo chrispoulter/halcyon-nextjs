@@ -90,8 +90,7 @@ export const authOptions: AuthOptions = {
     pages: {
         signIn: '/login',
         error: '/500'
-    },
-    secret: config.NEXTAUTH_SECRET
+    }
 };
 
 export const auth = (
