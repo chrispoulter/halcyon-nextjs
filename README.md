@@ -18,10 +18,10 @@ NEXT_PUBLIC_VERSION=1.0.0-local
 
 NEXT_PUBLIC_API_URL=http://localhost:5257
 
-JWT_SECURITY_KEY=change-me-123456789012345678901234567890
+JWT_SECURITY_KEY=super_secret_key_that_should_be_changed
 JWT_ISSUER=HalcyonApi
 JWT_AUDIENCE=HalcyonClient
 
 NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=change-me
+NEXTAUTH_SECRET=super_secret_key_that_should_be_changed
 ```
