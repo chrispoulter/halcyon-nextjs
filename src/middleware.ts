@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import { isAuthorized, isUserAdministrator } from '@/lib/roles';
 
 const protectedRoutes = [

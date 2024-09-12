@@ -2,7 +2,6 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { auth } from '@/auth';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { SubTitle, Title } from '@/components/title';
@@ -19,6 +18,7 @@ import { useUpdateUser } from '@/features/user/hooks/use-update-user';
 import { useLockUser } from '@/features/user/hooks/use-lock-user';
 import { useUnlockUser } from '@/features/user/hooks/use-unlock-user';
 import { useDeleteUser } from '@/features/user/hooks/use-delete-user';
+import { auth } from '@/lib/auth';
 
 const UpdateUserPage = () => {
     const router = useRouter();

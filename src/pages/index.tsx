@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next';
-import { auth } from '@/auth';
 import {
     Jumbotron,
     JumbotronBody,
@@ -8,6 +7,7 @@ import {
 import { ButtonLink } from '@/components/button-link';
 import { ButtonGroup } from '@/components/button-group';
 import { Container } from '@/components/container';
+import { auth } from '@/lib/auth';
 
 const HomePage = () => (
     <>

@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next';
 import { signOut } from 'next-auth/react';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';

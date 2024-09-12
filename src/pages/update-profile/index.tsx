@@ -2,7 +2,6 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { auth } from '@/auth';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';
@@ -16,6 +15,7 @@ import {
     useGetProfile
 } from '@/features/manage/hooks/use-get-profile';
 import { useUpdateProfile } from '@/features/manage/hooks/use-update-profile';
+import { auth } from '@/lib/auth';
 
 const UpdateProfilePage = () => {
     const router = useRouter();

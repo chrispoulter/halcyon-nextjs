@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
-import { auth } from '@/auth';
+import { auth } from '@/lib/auth';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';

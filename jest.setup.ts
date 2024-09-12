@@ -11,6 +11,6 @@ jest.mock('next-auth/react', () => ({
     signIn: jest.fn()
 }));
 
-jest.mock('@/auth', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }));
