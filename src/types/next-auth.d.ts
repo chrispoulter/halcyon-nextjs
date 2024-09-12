@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import NextAuth, { type DefaultSession } from 'next-auth';
+import { type DefaultSession } from 'next-auth';
+import 'next-auth/jwt';
 import { Role } from '@/lib/roles';
 
 declare module 'next-auth' {
@@ -19,8 +19,6 @@ declare module 'next-auth' {
         } & DefaultSession['user'];
     }
 }
-
-import { JWT } from "next-auth/jwt"
 
 declare module 'next-auth/jwt' {
     interface JWT {
