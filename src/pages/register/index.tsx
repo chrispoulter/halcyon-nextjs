@@ -13,7 +13,6 @@ import { useRegister } from '@/features/account/hooks/use-register';
 
 const RegisterPage = () => {
     const router = useRouter();
-    const callbackUrl = (router.query.callbackUrl as string) || '/';
 
     const { mutate, isPending } = useRegister();
 
@@ -24,7 +23,7 @@ const RegisterPage = () => {
 
                 const signInResult = await signIn('credentials', {
                     ...values,
-                    callbackUrl,
+                    callbackUrl: '/',
                     redirect: false
                 });
 

@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next';
 import { signOut } from 'next-auth/react';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { auth } from '@/auth';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';
@@ -13,7 +14,6 @@ import {
     useGetProfile
 } from '@/features/manage/hooks/use-get-profile';
 import { useDeleteAccount } from '@/features/manage/hooks/use-delete-account';
-import { auth } from '@/lib/auth';
 
 const MyAccountPage = () => {
     const { data } = useGetProfile();
@@ -52,8 +52,8 @@ const MyAccountPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    const session = await auth(req, res);
+export const getServerSideProps: GetServerSideProps = async context => {
+    const session = await auth(context);
 
     const queryClient = new QueryClient();
 

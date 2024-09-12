@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { auth } from '@/auth';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';
@@ -16,7 +17,6 @@ import {
     useGetProfile
 } from '@/features/manage/hooks/use-get-profile';
 import { useChangePassword } from '@/features/manage/hooks/use-change-password';
-import { auth } from '@/lib/auth';
 
 const ChangePasswordPage = () => {
     const router = useRouter();
@@ -66,8 +66,8 @@ const ChangePasswordPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    const session = await auth(req, res);
+export const getServerSideProps: GetServerSideProps = async context => {
+    const session = await auth(context);
 
     const queryClient = new QueryClient();
 

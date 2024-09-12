@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { auth } from '@/auth';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { SubTitle, Title } from '@/components/title';
@@ -18,7 +19,6 @@ import { useUpdateUser } from '@/features/user/hooks/use-update-user';
 import { useLockUser } from '@/features/user/hooks/use-lock-user';
 import { useUnlockUser } from '@/features/user/hooks/use-unlock-user';
 import { useDeleteUser } from '@/features/user/hooks/use-delete-user';
-import { auth } from '@/lib/auth';
 
 const UpdateUserPage = () => {
     const router = useRouter();
@@ -139,14 +139,10 @@ const UpdateUserPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-    req,
-    res,
-    params
-}) => {
-    const session = await auth(req, res);
+export const getServerSideProps: GetServerSideProps = async context => {
+    const session = await auth(context);
 
-    const id = params?.id as string;
+    const id = context.params?.id as string;
 
     const queryClient = new QueryClient();
 

@@ -5,14 +5,12 @@ jestFetchMock.enableMocks();
 
 jest.mock('next/router', () => require('next-router-mock'));
 
-jest.mock('next-auth', () => ({
-    __esModule: true,
-    default: jest.fn(),
-    getServerSession: jest.fn()
-}));
-
 jest.mock('next-auth/react', () => ({
     __esModule: true,
     useSession: jest.fn(() => ({})),
     signIn: jest.fn()
+}));
+
+jest.mock('@/auth', () => ({
+    auth: jest.fn()
 }));

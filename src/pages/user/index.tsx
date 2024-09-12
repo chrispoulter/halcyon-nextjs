@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
+import { auth } from '@/auth';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';
@@ -19,7 +20,6 @@ import {
     useSearchUsers,
     searchUsers
 } from '@/features/user/hooks/use-search-users';
-import { auth } from '@/lib/auth';
 
 const PAGE_SIZE = 5;
 
@@ -97,16 +97,12 @@ const UsersPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-    req,
-    res,
-    query
-}) => {
-    const session = await auth(req, res);
+export const getServerSideProps: GetServerSideProps = async context => {
+    const session = await auth(context);
 
     const queryClient = new QueryClient();
 
-    const params = schema.parse(query);
+    const params = schema.parse(context.query);
     const request = { ...params, size: PAGE_SIZE };
 
     await queryClient.prefetchQuery({
