@@ -24,7 +24,7 @@ const ResetPasswordPage = () => {
             {
                 onSuccess: async () => {
                     toast.success('Your password has been reset.');
-                    return router.push('/login');
+                    return router.push('/account/login');
                 }
             }
         );

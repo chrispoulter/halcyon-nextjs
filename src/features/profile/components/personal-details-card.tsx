@@ -2,7 +2,7 @@ import { Card, CardTitle } from '@/components/card';
 import { CardSkeleton } from '@/components/card-skeleton';
 import { ButtonGroup } from '@/components/button-group';
 import { ButtonLink } from '@/components/button-link';
-import { GetProfileResponse } from '@/features/manage/manage-types';
+import { GetProfileResponse } from '@/features/profile/profile-types';
 import { toLocaleString } from '@/lib/dates';
 
 type PersonalDetailsCardProps = {
@@ -55,7 +55,7 @@ export const PersonalDetailsCard = ({
             </p>
 
             <ButtonGroup align="left">
-                <ButtonLink href="/update-profile" variant="primary">
+                <ButtonLink href="/profile/update-profile" variant="primary">
                     Update Profile
                 </ButtonLink>
             </ButtonGroup>

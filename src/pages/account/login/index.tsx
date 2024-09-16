@@ -38,10 +38,12 @@ const LoginPage = () => {
 
                 <p className="text-sm leading-loose text-gray-600">
                     Not already a member?{' '}
-                    <TextLink href="/register">Register now</TextLink>
+                    <TextLink href="/account/register">Register now</TextLink>
                     <br />
                     Forgotten your password?{' '}
-                    <TextLink href="/forgot-password">Request reset</TextLink>
+                    <TextLink href="/account/forgot-password">
+                        Request reset
+                    </TextLink>
                 </p>
             </Container>
         </>

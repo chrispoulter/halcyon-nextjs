@@ -34,8 +34,8 @@ const NavbarMenuOptions = () => {
     const options: NavbarMenuOption[] = [];
 
     if (!isAuthorized(session?.user)) {
-        options.push({ href: '/login', label: 'Login' });
-        options.push({ href: '/register', label: 'Register' });
+        options.push({ href: '/account/login', label: 'Login' });
+        options.push({ href: '/account/register', label: 'Register' });
     }
 
     if (isAuthorized(session?.user, isUserAdministrator)) {

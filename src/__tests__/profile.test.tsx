@@ -5,9 +5,9 @@ import {
 } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
 import { randomUUID } from 'crypto';
-import { GetProfileResponse } from '@/features/manage/manage-types';
+import { GetProfileResponse } from '@/features/profile/profile-types';
 import { queryWrapper } from '@/lib/test-utils';
-import MyAccountPage from '@/pages/my-account';
+import ProfilePage from '@/pages/profile';
 
 const response: GetProfileResponse = {
     id: 'user-1',
@@ -18,7 +18,7 @@ const response: GetProfileResponse = {
     version: 1234
 };
 
-describe('my account page', () => {
+describe('profile page', () => {
     beforeEach(jest.clearAllMocks);
     beforeEach(fetchMock.resetMocks);
 
@@ -29,7 +29,7 @@ describe('my account page', () => {
     );
 
     it('should render personal details', async () => {
-        render(<MyAccountPage />, { wrapper: queryWrapper });
+        render(<ProfilePage />, { wrapper: queryWrapper });
 
         const loading = screen.getAllByText(/loading/i);
         await waitForElementToBeRemoved(loading);

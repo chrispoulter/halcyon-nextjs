@@ -5,14 +5,14 @@ import toast from 'react-hot-toast';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';
-import { PersonalDetailsCard } from '@/features/manage/components/personal-details-card';
-import { LoginDetailsCard } from '@/features/manage/components/login-details-card';
-import { AccountSettingsCard } from '@/features/manage/components/account-settings-card';
+import { PersonalDetailsCard } from '@/features/profile/components/personal-details-card';
+import { LoginDetailsCard } from '@/features/profile/components/login-details-card';
+import { AccountSettingsCard } from '@/features/profile/components/account-settings-card';
 import {
     getProfile,
     useGetProfile
-} from '@/features/manage/hooks/use-get-profile';
-import { useDeleteAccount } from '@/features/manage/hooks/use-delete-account';
+} from '@/features/profile/hooks/use-get-profile';
+import { useDeleteAccount } from '@/features/profile/hooks/use-delete-account';
 import { auth } from '@/lib/auth';
 
 const MyAccountPage = () => {

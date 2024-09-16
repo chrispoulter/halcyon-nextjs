@@ -2,7 +2,7 @@ import { Card, CardBody, CardTitle } from '@/components/card';
 import { CardSkeleton } from '@/components/card-skeleton';
 import { ButtonGroup } from '@/components/button-group';
 import { ButtonLink } from '@/components/button-link';
-import { GetProfileResponse } from '@/features/manage/manage-types';
+import { GetProfileResponse } from '@/features/profile/profile-types';
 
 type LoginDetailsCardProps = {
     profile?: GetProfileResponse;
@@ -33,7 +33,7 @@ export const LoginDetailsCard = ({
                 regular basis.
             </CardBody>
             <ButtonGroup align="left">
-                <ButtonLink href="/change-password" variant="primary">
+                <ButtonLink href="/profile/change-password" variant="primary">
                     Change Password
                 </ButtonLink>
             </ButtonGroup>

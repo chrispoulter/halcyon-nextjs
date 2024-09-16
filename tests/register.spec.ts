@@ -22,7 +22,7 @@ test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('register page', () => {
     test('should register user when form submitted', async ({ page }) => {
-        await page.goto('/register');
+        await page.goto('/account/register');
 
         await fillRegisterForm(page, {
             emailAddress: `${randomUUID()}@example.com`,

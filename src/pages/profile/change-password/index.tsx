@@ -5,55 +5,64 @@ import toast from 'react-hot-toast';
 import { Meta } from '@/components/meta';
 import { Container } from '@/components/container';
 import { Title } from '@/components/title';
+import { TextLink } from '@/components/text-link';
 import { ButtonLink } from '@/components/button-link';
 import {
-    UpdateProfileForm,
-    UpdateProfileFormValues
-} from '@/features/manage/components/update-profile-form';
+    ChangePasswordForm,
+    ChangePasswordFormValues
+} from '@/features/profile/components/change-password-form';
 import {
     getProfile,
     useGetProfile
-} from '@/features/manage/hooks/use-get-profile';
-import { useUpdateProfile } from '@/features/manage/hooks/use-update-profile';
+} from '@/features/profile/hooks/use-get-profile';
+import { useChangePassword } from '@/features/profile/hooks/use-change-password';
 import { auth } from '@/lib/auth';
 
-const UpdateProfilePage = () => {
+const ChangePasswordPage = () => {
     const router = useRouter();
 
     const { data } = useGetProfile();
 
     const version = data?.version;
 
-    const { mutate, isPending } = useUpdateProfile();
+    const { mutate, isPending } = useChangePassword();
 
-    const onSubmit = (values: UpdateProfileFormValues) =>
+    const onSubmit = (values: ChangePasswordFormValues) =>
         mutate(
             { ...values, version },
             {
                 onSuccess: async () => {
-                    toast.success('Your profile has been updated.');
-                    return router.push('/my-account');
+                    toast.success('Your password has been changed.');
+                    return router.push('/profile');
                 }
             }
         );
 
     return (
         <>
-            <Meta title="Update Profile" />
+            <Meta title="Change Password" />
 
             <Container>
-                <Title>Update Profile</Title>
+                <Title>Change Password</Title>
 
-                <UpdateProfileForm
+                <ChangePasswordForm
                     profile={data}
                     isLoading={isPending}
                     onSubmit={onSubmit}
                     options={
-                        <ButtonLink href="/my-account" variant="secondary">
+                        <ButtonLink href="/profile" variant="secondary">
                             Cancel
                         </ButtonLink>
                     }
+                    className="mb-5"
                 />
+
+                <p className="text-sm text-gray-600">
+                    Forgotten your password?{' '}
+                    <TextLink href="/account/forgot-password">
+                        Request reset
+                    </TextLink>
+                </p>
             </Container>
         </>
     );
@@ -82,4 +91,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     };
 };
 
-export default UpdateProfilePage;
+export default ChangePasswordPage;

@@ -21,7 +21,7 @@ const fillRegisterForm = async (
 };
 
 setup('register a new user', async ({ page }) => {
-    await page.goto('/register');
+    await page.goto('/account/register');
 
     await fillRegisterForm(page, {
         emailAddress: `${randomUUID()}@example.com`,

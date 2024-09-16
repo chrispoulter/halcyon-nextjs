@@ -26,10 +26,5 @@ export default withAuth(req => {
 });
 
 export const config = {
-    matcher: [
-        '/user/:path*',
-        '/my-account/:path*',
-        '/update-profile/:path*',
-        '/change-password/:path*'
-    ]
+    matcher: ['/user/:path*', '/profile/:path*']
 };

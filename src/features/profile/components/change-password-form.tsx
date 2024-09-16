@@ -6,7 +6,7 @@ import { Button } from '@/components/button';
 import { ButtonGroup } from '@/components/button-group';
 import { FormSkeleton } from '@/components/form-skeleton';
 import { InputSkeleton } from '@/components/input-skeleton';
-import { GetProfileResponse } from '@/features/manage/manage-types';
+import { GetProfileResponse } from '@/features/profile/profile-types';
 
 const schema = z
     .object({
