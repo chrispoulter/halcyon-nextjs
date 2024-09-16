@@ -1,8 +1,8 @@
 import { Card, CardBody, CardTitle } from '@/components/card';
 import { CardSkeleton } from '@/components/card-skeleton';
 import { ButtonGroup } from '@/components/button-group';
-import { ConfirmDeleteAccount } from '@/features/manage/components/confirm-delete-account';
-import { GetProfileResponse } from '@/features/manage/manage-types';
+import { ConfirmDeleteAccount } from '@/features/profile/components/confirm-delete-account';
+import { GetProfileResponse } from '@/features/profile/profile-types';
 
 type AccountSettingsCardProps = {
     profile?: GetProfileResponse;

@@ -31,11 +31,14 @@ export const authOptions: AuthOptions = {
                     throw new Error(result.error.issues[0].message);
                 }
 
-                const response = await fetch(`${config.API_URL}/token`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(result.data)
-                });
+                const response = await fetch(
+                    `${config.API_URL}/account/login`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(result.data)
+                    }
+                );
 
                 if (!response.ok) {
                     throw new Error('The credentials provided were invalid.');
@@ -88,7 +91,7 @@ export const authOptions: AuthOptions = {
         }
     },
     pages: {
-        signIn: '/login',
+        signIn: '/account/login',
         error: '/500'
     }
 };

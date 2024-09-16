@@ -49,7 +49,7 @@ export const ProfileDropdown = () => {
                 <div className="my-1 border-b" />
                 <MenuItem>
                     <Link
-                        href="/my-account"
+                        href="/profile"
                         className="block w-full px-5 py-3 text-left text-sm text-gray-800 hover:bg-gray-200"
                     >
                         My Account

@@ -50,7 +50,7 @@ const RegisterPage = () => {
 
                 <p className="text-sm text-gray-600">
                     Already have an account?{' '}
-                    <TextLink href="/login">Log in now</TextLink>
+                    <TextLink href="/account/login">Log in now</TextLink>
                 </p>
             </Container>
         </>

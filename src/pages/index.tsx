@@ -21,7 +21,7 @@ const HomePage = () => (
                 dui porta orci, quis semper odio felis ut quam.
             </JumbotronBody>
             <ButtonGroup>
-                <ButtonLink href="/register" size="lg">
+                <ButtonLink href="/account/register" size="lg">
                     Get Started
                 </ButtonLink>
             </ButtonGroup>

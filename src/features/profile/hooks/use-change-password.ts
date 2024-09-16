@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { UpdatedResponse } from '@/features/common/common-types';
-import { ChangePasswordRequest } from '@/features/manage/manage-types';
+import { ChangePasswordRequest } from '@/features/profile/profile-types';
 import { fetcher } from '@/lib/fetch';
 import { config } from '@/lib/config';
 
 const changePassword = (request: ChangePasswordRequest, init?: RequestInit) =>
-    fetcher<UpdatedResponse>(`${config.API_URL}/manage/change-password`, {
+    fetcher<UpdatedResponse>(`${config.API_URL}/profile/change-password`, {
         ...init,
         method: 'PUT',
         body: JSON.stringify(request)

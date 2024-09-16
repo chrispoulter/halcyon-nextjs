@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { UpdatedResponse } from '@/features/common/common-types';
-import { UpdateProfileRequest } from '@/features/manage/manage-types';
+import { UpdateProfileRequest } from '@/features/profile/profile-types';
 import { fetcher } from '@/lib/fetch';
 import { config } from '@/lib/config';
 
 const updateProfile = (request: UpdateProfileRequest, init?: RequestInit) =>
-    fetcher<UpdatedResponse>(`${config.API_URL}/manage`, {
+    fetcher<UpdatedResponse>(`${config.API_URL}/profile`, {
         ...init,
         method: 'PUT',
         body: JSON.stringify(request)

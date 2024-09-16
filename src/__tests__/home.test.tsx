@@ -20,6 +20,6 @@ describe('home page', () => {
         const registerLink = screen.getByRole('link', { name: 'Get Started' });
         fireEvent.click(registerLink);
 
-        expect(mockRouter.asPath).toBe('/register');
+        expect(mockRouter.asPath).toBe('/account/register');
     });
 });

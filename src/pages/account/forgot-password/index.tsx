@@ -26,7 +26,7 @@ const ForgotPasswordPage = () => {
                         'Instructions as to how to reset your password have been sent to you via email.'
                     );
 
-                    return router.push('/login');
+                    return router.push('/account/login');
                 }
             }
         );

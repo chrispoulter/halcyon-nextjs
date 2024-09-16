@@ -46,7 +46,7 @@ const App = ({
                                     );
 
                                     return signOut({
-                                        callbackUrl: `/login?callbackUrl=${callbackUrl}`
+                                        callbackUrl: `/account/login?callbackUrl=${callbackUrl}`
                                     });
 
                                 case 403:
@@ -75,7 +75,7 @@ const App = ({
                                     );
 
                                     return signOut({
-                                        callbackUrl: `/login?callbackUrl=${callbackUrl}`
+                                        callbackUrl: `/account/login?callbackUrl=${callbackUrl}`
                                     });
 
                                 case 403:
