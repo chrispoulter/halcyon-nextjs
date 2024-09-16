@@ -15,7 +15,7 @@ import {
 import { useDeleteAccount } from '@/features/profile/hooks/use-delete-account';
 import { auth } from '@/lib/auth';
 
-const MyAccountPage = () => {
+const ProfilePage = () => {
     const { data } = useGetProfile();
 
     const version = data?.version;
@@ -75,4 +75,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     };
 };
 
-export default MyAccountPage;
+export default ProfilePage;
