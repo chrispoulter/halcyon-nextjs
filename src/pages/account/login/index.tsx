@@ -17,7 +17,7 @@ const LoginPage = () => {
         const signInResult = await signIn('credentials', {
             ...values,
             callbackUrl: '/',
-            redirect: false,
+            redirect: false
         });
 
         if (signInResult?.ok) {

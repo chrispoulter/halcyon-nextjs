@@ -5,7 +5,7 @@ import { Role } from '@/lib/roles';
 declare module 'next-auth' {
     interface User {
         accessToken: string;
-        id?: string;
+        id: string;
         emailAddress: string;
         firstName: string;
         lastName: string;
