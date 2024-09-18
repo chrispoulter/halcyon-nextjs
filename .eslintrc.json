@@ -7,6 +7,16 @@
         "prettier"
     ],
     "plugins": ["@typescript-eslint"],
+    "overrides": [
+        {
+            "files": ["**/__tests__/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
+            "plugins": ["vitest", "testing-library"],
+            "extends": [
+                "plugin:vitest/recommended",
+                "plugin:testing-library/react"
+            ]
+        }
+    ],
     "rules": {
         "@typescript-eslint/no-explicit-any": 0
     }
