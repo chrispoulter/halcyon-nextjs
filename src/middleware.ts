@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { withAuth } from 'next-auth/middleware';
 import { isAuthorized, isUserAdministrator } from '@/lib/roles';
+import { auth } from '@/lib/auth';
 
 const protectedRoutes = [
     {
@@ -9,7 +9,15 @@ const protectedRoutes = [
     }
 ];
 
-export default withAuth(req => {
+export default auth(req => {
+    const user = req.auth?.user;
+
+    if (!user) {
+        return NextResponse.redirect(
+            new URL('/account/login', req.nextUrl.origin)
+        );
+    }
+
     const matchedRoute = protectedRoutes.find(route =>
         req.nextUrl.pathname.startsWith(route.path)
     );
@@ -18,8 +26,8 @@ export default withAuth(req => {
         return NextResponse.next();
     }
 
-    if (!isAuthorized(req.nextauth.token!, matchedRoute.roles)) {
-        return NextResponse.rewrite(new URL('/403', req.url));
+    if (!isAuthorized(user, matchedRoute.roles)) {
+        return NextResponse.rewrite(new URL('/403', req.nextUrl.origin));
     }
 
     return NextResponse.next();

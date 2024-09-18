@@ -1,9 +1,4 @@
-import {
-    GetServerSidePropsContext,
-    NextApiRequest,
-    NextApiResponse
-} from 'next';
-import { AuthOptions, getServerSession } from 'next-auth';
+import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { jwtVerify } from 'jose';
 import { z } from 'zod';
@@ -27,7 +22,7 @@ const schema = z.object({
     password: z.string({ message: 'Password is a required field' })
 });
 
-export const authOptions: AuthOptions = {
+export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         CredentialsProvider({
             name: 'Credentials',
@@ -96,7 +91,7 @@ export const authOptions: AuthOptions = {
             if (session.user) {
                 session.accessToken = token.accessToken;
                 session.user.id = token.sub!;
-                session.user.email = token.email;
+                session.user.email = token.email!;
                 session.user.name = token.name;
                 session.user.image = token.picture;
                 session.user.roles = token.roles;
@@ -109,11 +104,4 @@ export const authOptions: AuthOptions = {
         signIn: '/account/login',
         error: '/500'
     }
-};
-
-export const auth = (
-    ...args:
-        | [GetServerSidePropsContext['req'], GetServerSidePropsContext['res']]
-        | [NextApiRequest, NextApiResponse]
-        | []
-) => getServerSession(...args, authOptions);
+});

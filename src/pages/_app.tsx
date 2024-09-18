@@ -41,12 +41,8 @@ const App = ({
                         if (error instanceof FetchError) {
                             switch (error.status) {
                                 case 401:
-                                    const callbackUrl = encodeURIComponent(
-                                        router.asPath
-                                    );
-
                                     return signOut({
-                                        callbackUrl: `/account/login?callbackUrl=${callbackUrl}`
+                                        callbackUrl: '/account/login'
                                     });
 
                                 case 403:
@@ -70,12 +66,8 @@ const App = ({
 
                             switch (error.status) {
                                 case 401:
-                                    const callbackUrl = encodeURIComponent(
-                                        router.asPath
-                                    );
-
                                     return signOut({
-                                        callbackUrl: `/account/login?callbackUrl=${callbackUrl}`
+                                        callbackUrl: '/account/login'
                                     });
 
                                 case 403:

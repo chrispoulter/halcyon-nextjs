@@ -97,16 +97,12 @@ const UsersPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-    req,
-    res,
-    query
-}) => {
-    const session = await auth(req, res);
+export const getServerSideProps: GetServerSideProps = async context => {
+    const session = await auth(context);
 
     const queryClient = new QueryClient();
 
-    const params = schema.parse(query);
+    const params = schema.parse(context.query);
     const request = { ...params, size: PAGE_SIZE };
 
     await queryClient.prefetchQuery({

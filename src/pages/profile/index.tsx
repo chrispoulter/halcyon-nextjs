@@ -52,8 +52,8 @@ const ProfilePage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-    const session = await auth(req, res);
+export const getServerSideProps: GetServerSideProps = async context => {
+    const session = await auth(context);
 
     const queryClient = new QueryClient();
 
