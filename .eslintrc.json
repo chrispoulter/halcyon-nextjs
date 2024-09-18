@@ -15,6 +15,11 @@
                 "plugin:vitest/recommended",
                 "plugin:testing-library/react"
             ]
+        },
+        {
+            "files": ["**/tests/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
+            "plugins": ["playwright"],
+            "extends": "plugin:playwright/recommended"
         }
     ],
     "rules": {
