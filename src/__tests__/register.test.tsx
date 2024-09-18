@@ -2,9 +2,9 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { signIn } from 'next-auth/react';
 import { randomUUID } from 'crypto';
+import { queryWrapper } from '@/__tests__/test-utils';
 import { UpdatedResponse } from '@/features/common/common-types';
 import { RegisterFormValues } from '@/features/account/components/register-form';
-import { queryWrapper } from '@/lib/test-utils';
 import RegisterPage from '@/pages/account/register';
 
 const fillRegisterForm = (

@@ -5,8 +5,8 @@ import {
     waitForElementToBeRemoved
 } from '@testing-library/react';
 import { randomUUID } from 'crypto';
+import { queryWrapper } from '@/__tests__/test-utils';
 import { GetProfileResponse } from '@/features/profile/profile-types';
-import { queryWrapper } from '@/lib/test-utils';
 import ProfilePage from '@/pages/profile';
 
 const response: GetProfileResponse = {
