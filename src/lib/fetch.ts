@@ -19,7 +19,7 @@ export const fetcher = async <TResponse>(url: string, init?: RequestInit) => {
         }
     });
 
-    const isJson = result.headers.get('content-type')?.includes('json');
+    const isJson = result.headers.get('Content-Type')?.includes('json');
 
     const response: TResponse = isJson ? await result.json() : undefined;
 
