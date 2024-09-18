@@ -54,7 +54,7 @@ global.fetch = vi.fn().mockResolvedValueOnce({
     headers: new Headers({
         'Content-Type': 'application/json'
     }),
-    json: vi.fn().mockResolvedValue(response)
+    json: () => Promise.resolve(response)
 });
 
 describe('register page', () => {
