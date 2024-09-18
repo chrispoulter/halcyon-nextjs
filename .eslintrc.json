@@ -7,19 +7,6 @@
         "prettier"
     ],
     "plugins": ["@typescript-eslint"],
-    "overrides": [
-        {
-            "files": [
-                "**/__tests__/**/*.[jt]s?(x)",
-                "**/?(*.)+(test).[jt]s?(x)"
-            ],
-            "plugins": ["jest", "testing-library"],
-            "extends": [
-                "plugin:jest/recommended",
-                "plugin:testing-library/react"
-            ]
-        }
-    ],
     "rules": {
         "@typescript-eslint/no-explicit-any": 0
     }
