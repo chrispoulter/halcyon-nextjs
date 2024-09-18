@@ -2,7 +2,7 @@
     "recommendations": [
         "mikestead.dotenv",
         "dbaeumer.vscode-eslint",
-        "Orta.vscode-jest",
+        "vitest.explorer",
         "ms-playwright.playwright",
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss"

@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import mockRouter from 'next-router-mock';
 import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider';
@@ -8,10 +9,11 @@ describe('home page', () => {
         render(<HomePage />);
 
         const heading = screen.getByRole('heading', {
+            level: 1,
             name: 'Welcome!'
         });
 
-        expect(heading).toBeInTheDocument();
+        expect(heading).toBeDefined();
     });
 
     it('should render a register link', () => {
@@ -20,6 +22,7 @@ describe('home page', () => {
         const registerLink = screen.getByRole('link', { name: 'Get Started' });
         fireEvent.click(registerLink);
 
+        expect(registerLink).toBeDefined();
         expect(mockRouter.asPath).toBe('/account/register');
     });
 });

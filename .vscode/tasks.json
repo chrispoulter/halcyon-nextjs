@@ -24,7 +24,7 @@
             "script": "test",
             "problemMatcher": [],
             "label": "npm: test",
-            "detail": "jest --ci",
+            "detail": "vitest",
             "group": {
                 "kind": "test",
                 "isDefault": true

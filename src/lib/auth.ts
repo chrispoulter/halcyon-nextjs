@@ -5,9 +5,20 @@ import {
 } from 'next';
 import { AuthOptions, getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { JwtPayload, verify } from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 import { z } from 'zod';
 import { config } from '@/lib/config';
+import { Role } from '@/lib/roles';
+
+const secretKey = new TextEncoder().encode(config.JWT_SECURITY_KEY);
+
+type JwtPayload = {
+    sub: string;
+    email: string;
+    given_name: string;
+    family_name: string;
+    roles?: Role | Role[];
+};
 
 const schema = z.object({
     emailAddress: z
@@ -46,14 +57,18 @@ export const authOptions: AuthOptions = {
 
                 const accessToken = await response.text();
 
-                const payload = verify(accessToken, config.JWT_SECURITY_KEY, {
-                    issuer: config.JWT_ISSUER,
-                    audience: config.JWT_AUDIENCE
-                }) as JwtPayload;
+                const { payload } = await jwtVerify<JwtPayload>(
+                    accessToken,
+                    secretKey,
+                    {
+                        audience: config.JWT_AUDIENCE,
+                        issuer: config.JWT_ISSUER
+                    }
+                );
 
                 return {
                     accessToken,
-                    id: payload.sub!,
+                    id: payload.sub,
                     emailAddress: payload.email,
                     firstName: payload.given_name,
                     lastName: payload.family_name,

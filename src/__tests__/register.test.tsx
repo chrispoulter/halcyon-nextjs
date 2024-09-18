@@ -1,5 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import fetchMock from 'jest-fetch-mock';
 import { signIn } from 'next-auth/react';
 import { randomUUID } from 'crypto';
 import { UpdatedResponse } from '@/features/common/common-types';
@@ -47,17 +47,18 @@ const fillRegisterForm = (
     });
 };
 
+const response: UpdatedResponse = { id: 'user-1' };
+
+global.fetch = vi.fn().mockResolvedValueOnce({
+    ok: true,
+    headers: new Headers({
+        'Content-Type': 'application/json'
+    }),
+    json: vi.fn().mockResolvedValue(response)
+});
+
 describe('register page', () => {
-    beforeEach(jest.clearAllMocks);
-    beforeEach(fetchMock.resetMocks);
-
     it('should register user when form submitted', async () => {
-        const response: UpdatedResponse = { id: 'user-1' };
-
-        fetchMock.mockResponse(JSON.stringify(response), {
-            headers: { 'content-type': 'application/json' }
-        });
-
         render(<RegisterPage />, { wrapper: queryWrapper });
 
         fillRegisterForm({
@@ -71,7 +72,7 @@ describe('register page', () => {
         const registerButton = screen.getByRole('button', { name: 'Submit' });
         fireEvent.click(registerButton);
 
-        await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(signIn).toHaveBeenCalledTimes(1);
     });
 });

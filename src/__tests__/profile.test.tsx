@@ -1,9 +1,9 @@
+import { describe, expect, it, vi } from 'vitest';
 import {
     render,
     screen,
     waitForElementToBeRemoved
 } from '@testing-library/react';
-import fetchMock from 'jest-fetch-mock';
 import { randomUUID } from 'crypto';
 import { GetProfileResponse } from '@/features/profile/profile-types';
 import { queryWrapper } from '@/lib/test-utils';
@@ -18,16 +18,15 @@ const response: GetProfileResponse = {
     version: 1234
 };
 
+global.fetch = vi.fn().mockResolvedValueOnce({
+    ok: true,
+    headers: new Headers({
+        'Content-Type': 'application/json'
+    }),
+    json: vi.fn().mockResolvedValue(response)
+});
+
 describe('profile page', () => {
-    beforeEach(jest.clearAllMocks);
-    beforeEach(fetchMock.resetMocks);
-
-    beforeEach(() =>
-        fetchMock.mockResponse(JSON.stringify(response), {
-            headers: { 'content-type': 'application/json' }
-        })
-    );
-
     it('should render personal details', async () => {
         render(<ProfilePage />, { wrapper: queryWrapper });
 
@@ -35,6 +34,6 @@ describe('profile page', () => {
         await waitForElementToBeRemoved(loading);
 
         const emailAddress = screen.getByText(response.emailAddress);
-        expect(emailAddress).toBeInTheDocument();
+        expect(emailAddress).toBeDefined();
     });
 });
