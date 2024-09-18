@@ -10,7 +10,7 @@ describe('home page', () => {
 
         const heading = screen.getByRole('heading', {
             level: 1,
-            name: /welcome!/i
+            name: 'Welcome!'
         });
 
         expect(heading).toBeDefined();
@@ -19,7 +19,7 @@ describe('home page', () => {
     it('should render a register link', () => {
         render(<HomePage />, { wrapper: MemoryRouterProvider });
 
-        const registerLink = screen.getByRole('link', { name: /get started/i });
+        const registerLink = screen.getByRole('link', { name: 'Get Started' });
         fireEvent.click(registerLink);
 
         expect(registerLink).toBeDefined();
