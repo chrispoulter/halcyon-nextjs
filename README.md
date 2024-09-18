@@ -22,6 +22,6 @@ JWT_SECURITY_KEY=super_secret_key_that_should_be_changed
 JWT_ISSUER=HalcyonApi
 JWT_AUDIENCE=HalcyonClient
 
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=super_secret_key_that_should_be_changed
+AUTH_URL=http://localhost:3000
+AUTH_SECRET=super_secret_key_that_should_be_changed
 ```
