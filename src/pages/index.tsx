@@ -70,9 +70,9 @@ const HomePage = () => (
     </>
 );
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => ({
+export const getServerSideProps: GetServerSideProps = async context => ({
     props: {
-        session: await auth(req, res)
+        session: await auth(context)
     }
 });
 

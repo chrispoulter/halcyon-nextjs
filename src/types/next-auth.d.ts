@@ -1,10 +1,11 @@
-import { DefaultUser } from 'next-auth';
+import { type DefaultSession } from 'next-auth';
+import 'next-auth/jwt';
 import { Role } from '@/lib/roles';
 
 declare module 'next-auth' {
     interface User {
         accessToken: string;
-        id: string;
+        id?: string;
         emailAddress: string;
         firstName: string;
         lastName: string;
@@ -15,7 +16,7 @@ declare module 'next-auth' {
         accessToken: string;
         user: {
             roles?: Role[];
-        } & DefaultUser;
+        } & DefaultSession['user'];
     }
 }
 

@@ -139,14 +139,10 @@ const UpdateUserPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-    req,
-    res,
-    params
-}) => {
-    const session = await auth(req, res);
+export const getServerSideProps: GetServerSideProps = async context => {
+    const session = await auth(context);
 
-    const id = params?.id as string;
+    const id = context.params?.id as string;
 
     const queryClient = new QueryClient();
 
