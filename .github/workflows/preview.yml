@@ -2,7 +2,7 @@ name: Preview Build and Deploy
 
 on:
     pull_request:
-        branches: ['feature/**', 'bugfix/**']
+        branches: ['main']
     workflow_dispatch:
 
 env:
