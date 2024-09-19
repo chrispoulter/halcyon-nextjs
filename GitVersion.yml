@@ -1,4 +1,0 @@
-mode: ContinuousDelivery
-branches:
-    master:
-        regex: ^master$|^main$
