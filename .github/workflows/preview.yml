@@ -1,7 +1,7 @@
 name: Preview Build and Deploy
 
 on:
-    push:
+    pull-request:
         branches: ['feature/**', 'bugfix/**']
     workflow_dispatch:
 
