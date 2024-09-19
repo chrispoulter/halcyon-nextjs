@@ -46,8 +46,11 @@ jobs:
                   versionSpec: '6.x'
 
             - name: Determine Version
-              id: gitversion
+              id: version_step
               uses: gittools/actions/gitversion/execute@v3.0.0
+              with:
+                  overrideConfig: |
+                      next-version=1.0.0
 
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
@@ -67,13 +70,13 @@ jobs:
               with:
                   file: ./Dockerfile
                   tags: |
-                      ghcr.io/${{ env.REPO }}:${{ steps.gitversion.outputs.semVer }}
+                      ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}
                       ghcr.io/${{ env.REPO }}:latest
                   context: .
                   push: true
                   provenance: false
                   build-args: |
-                      VERSION=${{ steps.gitversion.outputs.semVer }}
+                      VERSION=${{ steps.version_step.outputs.semVer }}
 
     deploy:
         runs-on: ubuntu-latest
