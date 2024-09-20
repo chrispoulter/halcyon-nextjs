@@ -21,7 +21,7 @@ import { FetchError } from '@/lib/fetch';
 
 import '@/styles/globals.css';
 
-const font = Open_Sans({ subsets: ['latin'] });
+const openSans = Open_Sans({ subsets: ['latin'] });
 
 const App = ({
     Component,
@@ -98,15 +98,8 @@ const App = ({
     );
 
     return (
-        <>
+        <div className={openSans.className}>
             <Meta />
-
-            <style jsx global>{`
-                :root {
-                    --base-font: ${font.style.fontFamily};
-                }
-            `}</style>
-
             <SessionProvider session={session}>
                 <QueryClientProvider client={queryClient}>
                     <HydrationBoundary state={dehydratedState}>
@@ -122,7 +115,7 @@ const App = ({
                 </QueryClientProvider>
             </SessionProvider>
             <Toaster />
-        </>
+        </div>
     );
 };
 
