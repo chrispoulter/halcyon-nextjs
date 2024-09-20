@@ -11,7 +11,7 @@
             ]
         },
         {
-            "files": ["**/tests/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
+            "files": ["**/e2e/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
             "plugins": ["playwright"],
             "extends": "plugin:playwright/recommended"
         }
