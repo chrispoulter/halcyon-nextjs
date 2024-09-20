@@ -1,12 +1,6 @@
 {
     "root": true,
-    "parser": "@typescript-eslint/parser",
-    "extends": [
-        "next/core-web-vitals",
-        "plugin:@typescript-eslint/recommended",
-        "prettier"
-    ],
-    "plugins": ["@typescript-eslint"],
+    "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
     "overrides": [
         {
             "files": ["**/__tests__/**/*.{test,spec}.?(c|m)[jt]s?(x)"],

@@ -36,7 +36,9 @@ export const Input = ({
             }
         });
 
-        onClear && onClear();
+        if (onClear) {
+            onClear();
+        }
     };
 
     const value = field.value || '';
