@@ -21,7 +21,10 @@ import { FetchError } from '@/lib/fetch';
 
 import '@/styles/globals.css';
 
-const openSans = Open_Sans({ subsets: ['latin'] });
+const openSans = Open_Sans({
+    subsets: ['latin'],
+    variable: '--font-open-sans'
+});
 
 const App = ({
     Component,
@@ -98,7 +101,7 @@ const App = ({
     );
 
     return (
-        <div className={openSans.className}>
+        <div className={`${openSans.variable} font-sans`}>
             <Meta />
             <SessionProvider session={session}>
                 <QueryClientProvider client={queryClient}>
