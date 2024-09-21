@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
 
 const config: Config = {
     darkMode: 'class',
@@ -14,7 +15,7 @@ const config: Config = {
             }
         }
     },
-    plugins: [require('@tailwindcss/forms')]
+    plugins: [forms]
 };
 
 export default config;
