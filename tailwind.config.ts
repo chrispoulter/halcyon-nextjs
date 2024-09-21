@@ -8,7 +8,7 @@ const config: Config = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['var(--font-open-sans)', ...defaultTheme.fontFamily.sans]
+                sans: [ ...defaultTheme.fontFamily.sans]
             },
             minHeight: {
                 96: '24rem'
