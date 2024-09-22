@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss';
-import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
 
 const config: Config = {
@@ -8,7 +7,7 @@ const config: Config = {
     theme: {
         extend: {
             fontFamily: {
-                sans: [ ...defaultTheme.fontFamily.sans]
+                sans: ['var(--font-open-sans)', 'sans-serif']
             },
             minHeight: {
                 96: '24rem'

@@ -101,7 +101,13 @@ const App = ({
     );
 
     return (
-        <div className={`${openSans.variable} font-sans`}>
+        <>
+            <style jsx global>{`
+                :root {
+                    --font-open-sans: ${openSans.style.fontFamily};
+                }
+            `}</style>
+
             <Meta />
             <SessionProvider session={session}>
                 <QueryClientProvider client={queryClient}>
@@ -118,7 +124,7 @@ const App = ({
                 </QueryClientProvider>
             </SessionProvider>
             <Toaster />
-        </div>
+        </>
     );
 };
 
