@@ -45,10 +45,10 @@ export const Meta = ({
             href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#333" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#111827" />
         <meta name="apple-mobile-web-app-title" content="Halcyon" />
         <meta name="application-name" content="Halcyon" />
-        <meta name="msapplication-TileColor" content="#333" />
-        <meta name="theme-color" content="#333" />
+        <meta name="msapplication-TileColor" content="#111827" />
+        <meta name="theme-color" content="#111827" />
     </Head>
 );
