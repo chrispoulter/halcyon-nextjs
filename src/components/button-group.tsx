@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 type ButtonGroupProps = React.PropsWithChildren<{
     align?: 'left' | 'right';
@@ -14,7 +14,7 @@ export const ButtonGroup = ({
 }: ButtonGroupProps) => (
     <div
         role={role}
-        className={clsx(
+        className={cn(
             'flex flex-col gap-2 sm:flex-row',
             {
                 'justify-end': align === 'right',

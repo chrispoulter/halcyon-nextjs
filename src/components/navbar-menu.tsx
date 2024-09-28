@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import clsx from 'clsx';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { MenuIcon } from '@/components/menu-icon';
 import { isAuthorized, isUserAdministrator } from '@/lib/roles';
+import { cn } from '@/lib/utils';
 
 type NavbarMenuOption = {
     href: string;
@@ -70,7 +70,7 @@ export const NavbarMenu = () => (
 
                 <PopoverPanel
                     static
-                    className={clsx(
+                    className={cn(
                         'flex basis-full flex-col gap-1 p-1 sm:ml-auto sm:flex sm:basis-auto sm:flex-row sm:items-center sm:p-0',
                         {
                             hidden: !open

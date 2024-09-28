@@ -1,7 +1,7 @@
-import clsx from 'clsx';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { SortIcon } from '@/components/sort-icon';
 import { UserSort } from '@/features/user/user-types';
+import { cn } from '@/lib/utils';
 
 const options = [
     {
@@ -50,7 +50,7 @@ export const SortUserDropdown = ({
                             type="button"
                             onClick={() => onSelect(value)}
                             disabled={disabled}
-                            className={clsx(
+                            className={cn(
                                 'w-full px-5 py-3 text-left text-sm text-gray-800',
                                 {
                                     'bg-gray-200': focus,

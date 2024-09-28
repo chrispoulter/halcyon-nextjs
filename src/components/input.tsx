@@ -1,6 +1,6 @@
-import clsx from 'clsx';
 import { Control, useController } from 'react-hook-form';
 import { CloseIcon } from '@/components/close-icon';
+import { cn } from '@/lib/utils';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     control: Control<any, any>;
@@ -46,16 +46,13 @@ export const Input = ({
     const isSearch = type === 'search' && value;
 
     return (
-        <div className={clsx('w-full', className)}>
+        <div className={cn('w-full', className)}>
             <label
                 htmlFor={field.name}
-                className={clsx(
-                    'mb-2 block text-sm font-medium text-gray-800',
-                    {
-                        'text-red-600': error,
-                        'sr-only': hideLabel
-                    }
-                )}
+                className={cn('mb-2 block text-sm font-medium text-gray-800', {
+                    'text-red-600': error,
+                    'sr-only': hideLabel
+                })}
             >
                 {label}
             </label>
@@ -68,7 +65,7 @@ export const Input = ({
                     type={type}
                     value={value}
                     aria-invalid={!!error}
-                    className={clsx(
+                    className={cn(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
                         {
                             'border-red-600 bg-red-50 focus:border-red-600 focus:ring-red-500':

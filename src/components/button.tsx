@@ -1,5 +1,5 @@
-import clsx from 'clsx';
 import { LoadingIcon } from '@/components/loading-icon';
+import { cn } from '@/lib/utils';
 
 type ButtonProps = React.PropsWithChildren<{
     variant?: 'primary' | 'danger' | 'warning' | 'secondary';
@@ -21,7 +21,7 @@ export const Button = ({
         {...props}
         type={type}
         disabled={loading || disabled}
-        className={clsx(
+        className={cn(
             'relative h-full w-full bg-cyan-600 px-5 py-2 font-light focus:outline-none focus:ring-1 sm:w-auto sm:py-1',
             {
                 'bg-cyan-600 text-white hover:bg-cyan-700 focus:bg-cyan-700 focus:ring-cyan-500':
@@ -43,7 +43,7 @@ export const Button = ({
         )}
 
         <div
-            className={clsx({
+            className={cn({
                 invisible: loading
             })}
         >

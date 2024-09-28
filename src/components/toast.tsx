@@ -1,6 +1,6 @@
 import rht, { resolveValue, useToaster } from 'react-hot-toast';
-import clsx from 'clsx';
 import { CloseIcon } from '@/components/close-icon';
+import { cn } from '@/lib/utils';
 
 export const Toaster = () => {
     const { toasts } = useToaster({ duration: 5000 });
@@ -17,7 +17,7 @@ export const Toaster = () => {
                     <div
                         key={toast.id}
                         role="alert"
-                        className={clsx(
+                        className={cn(
                             'pointer-events-auto flex w-full items-center justify-between border px-5 py-3 text-sm font-normal shadow sm:max-w-sm',
                             {
                                 'border-green-800 bg-green-50 text-green-800':
@@ -32,7 +32,7 @@ export const Toaster = () => {
                             type="button"
                             onClick={() => rht.dismiss(toast.id)}
                             aria-label="Close"
-                            className={clsx(
+                            className={cn(
                                 '-mr-4 mb-auto px-2 py-1 focus:text-cyan-700 focus:outline-none focus:ring-1 focus:ring-cyan-500',
                                 {
                                     'text-green-800 hover:text-green-900 focus:text-green-900':
