@@ -1,6 +1,6 @@
-import clsx from 'clsx';
 import { Control, useController } from 'react-hook-form';
 import { Switch } from '@headlessui/react';
+import { cn } from '@/lib/utils';
 
 type ToggleGroupOption = {
     value: any;
@@ -50,7 +50,7 @@ export const ToggleGroup = ({
                         onChange={checked => onChange(option.value, checked)}
                         onBlur={field.onBlur}
                         disabled={disabled}
-                        className={clsx(
+                        className={cn(
                             'mb-2 flex w-full items-center justify-between gap-5 border px-5 py-3 text-left focus:outline-none focus:ring-1 focus:ring-cyan-500 sm:py-2',
                             {
                                 'cursor-not-allowed opacity-50': disabled
@@ -65,7 +65,7 @@ export const ToggleGroup = ({
                             </small>
                         </div>
                         <div
-                            className={clsx(
+                            className={cn(
                                 'inline-flex h-6 w-11 shrink-0 items-center rounded-full',
                                 {
                                     'bg-cyan-600': isChecked,
@@ -74,7 +74,7 @@ export const ToggleGroup = ({
                             )}
                         >
                             <span
-                                className={clsx(
+                                className={cn(
                                     'inline-block h-4 w-4 rounded-full bg-white transition-transform',
                                     {
                                         'translate-x-6': isChecked,

@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 type ContainerProps = React.PropsWithChildren<{
     role?: string;
@@ -8,7 +8,7 @@ type ContainerProps = React.PropsWithChildren<{
 export const Container = ({ role, className, children }: ContainerProps) => (
     <section
         role={role}
-        className={clsx('container mx-auto max-w-screen-md p-3', className)}
+        className={cn('container mx-auto max-w-screen-md p-3', className)}
     >
         {children}
     </section>

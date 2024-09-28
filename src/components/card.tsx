@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 type CardProps = React.PropsWithChildren<{
     role?: string;
@@ -6,7 +6,7 @@ type CardProps = React.PropsWithChildren<{
 }>;
 
 export const Card = ({ role, className, children }: CardProps) => (
-    <div role={role} className={clsx('border p-5', className)}>
+    <div role={role} className={cn('border p-5', className)}>
         {children}
     </div>
 );

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import clsx from 'clsx';
 import { Control, useController } from 'react-hook-form';
 import { currentYear, monthNames } from '@/lib/dates';
+import { cn } from '@/lib/utils';
 
 type DatePickerProps = {
     control: Control<any, any>;
@@ -69,15 +69,12 @@ export const DatePicker = ({
     };
 
     return (
-        <div className={clsx('w-full', className)}>
+        <div className={cn('w-full', className)}>
             <label
                 htmlFor={`${name}.date`}
-                className={clsx(
-                    'mb-2 block text-sm font-medium text-gray-800',
-                    {
-                        'text-red-600': error
-                    }
-                )}
+                className={cn('mb-2 block text-sm font-medium text-gray-800', {
+                    'text-red-600': error
+                })}
             >
                 {label}
             </label>
@@ -93,7 +90,7 @@ export const DatePicker = ({
                     autoComplete={autoComplete && autoComplete[0]}
                     onChange={event => handleDay(event.target.value)}
                     onBlur={field.onBlur}
-                    className={clsx(
+                    className={cn(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
                         {
                             'border-red-600 bg-red-50 focus:border-red-600 focus:ring-red-500':
@@ -118,7 +115,7 @@ export const DatePicker = ({
                     autoComplete={autoComplete && autoComplete[1]}
                     onChange={event => handleMonth(event.target.value)}
                     onBlur={field.onBlur}
-                    className={clsx(
+                    className={cn(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
                         {
                             'border-red-600 bg-red-50 focus:border-red-600 focus:ring-red-500':
@@ -146,7 +143,7 @@ export const DatePicker = ({
                     autoComplete={autoComplete && autoComplete[2]}
                     onChange={event => handleYear(event.target.value)}
                     onBlur={field.onBlur}
-                    className={clsx(
+                    className={cn(
                         'block w-full border border-gray-300 bg-gray-50 p-2 text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm',
                         {
                             'border-red-600 bg-red-50 focus:border-red-600 focus:ring-red-500':
