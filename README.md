@@ -75,7 +75,7 @@ To build the project for production:
 npm run build
 ```
 
-This command will create an optimized build in the .next folder.
+This command will create an optimized build in the `.next` folder.
 
 ## Testing
 
