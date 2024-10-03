@@ -12,7 +12,7 @@ export const Meta = ({
     app = 'Halcyon',
     title,
     separator = ' // ',
-    description = 'A Next.js web project template with a sense of peace and tranquillity.',
+    description = 'A Next.js web project template. Built with a sense of peace and tranquillity.',
     keywords = 'react, docker, typescript, eslint, nextjs, prettier, tailwindcss, next-auth, zod, react-query, react-hook-form, playwright, headless-ui, react-hot-toast, vitest, tanstack-query, authjs, pages-router'
 }: MetaProps) => (
     <Head>
