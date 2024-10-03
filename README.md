@@ -57,15 +57,13 @@ AUTH_URL=http://localhost:3000
 AUTH_SECRET=super_secret_key_that_should_be_changed
 ```
 
-### Run the application
+### Run the development server
 
 ```
 npm run dev
 ```
 
-### Access the UI
-
-Once running, you can access the application at http://localhost:3000
+Open http://localhost:3000 in your browser to see the project running.
 
 ## Testing
 
@@ -85,3 +83,11 @@ To run end-to-end tests:
 npm run playwright:install
 npm run playwright:test
 ```
+
+## Contributing
+
+Feel free to submit issues or pull requests to improve the template. Ensure that you follow the coding standards and test your changes before submission.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
