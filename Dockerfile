@@ -8,15 +8,6 @@ ENV HUSKY=0
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-FROM base AS dev
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-ARG VERSION=1.0.0
-ENV NEXT_PUBLIC_VERSION=${VERSION}
-ENV NEXT_TELEMETRY_DISABLED=1
-
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
