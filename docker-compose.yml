@@ -3,9 +3,12 @@ services:
         image: halcyon:dev
         build:
             context: .
+            target: dev
             args:
                 VERSION: 1.0.0-docker
+        command: npm run dev
         environment:
+            WATCHPACK_POLLING: true
             NEXT_SERVER_API_URL: http://host.docker.internal:5257
             NEXT_PUBLIC_API_URL: http://localhost:5257
             JWT_SECURITY_KEY: super_secret_key_that_should_be_changed
@@ -17,6 +20,9 @@ services:
             - 3000:3000
         networks:
             - halcyon-network
+        volumes:
+            - $USERPROFILE/Source/halcyon/src:/app/src
+            - $USERPROFILE/Source/halcyon/public:/app/public
 
     halcyon-api:
         image: ghcr.io/chrispoulter/halcyon-api:latest
