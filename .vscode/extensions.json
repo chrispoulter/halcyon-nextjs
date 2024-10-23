@@ -4,7 +4,6 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "mikestead.dotenv",
-        "ms-azuretools.vscode-docker",
         "ms-playwright.playwright",
         "vitest.explorer"
     ]
