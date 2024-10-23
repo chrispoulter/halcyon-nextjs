@@ -21,8 +21,8 @@ services:
         networks:
             - halcyon-network
         volumes:
-            - $USERPROFILE/Source/halcyon/src:/app/src
-            - $USERPROFILE/Source/halcyon/public:/app/public
+            - ./src:/app/src
+            - ./public:/app/public
 
     halcyon-api:
         image: ghcr.io/chrispoulter/halcyon-api:latest
