@@ -18,7 +18,7 @@ const eslintConfig = [
     ...compat.extends('next/core-web-vitals', 'next/typescript'),
     eslintPluginPrettierRecommended,
     {
-        files: ['src/tests/**'],
+        files: ['src/__tests__/**'],
         plugins: {
             vitest
         },
