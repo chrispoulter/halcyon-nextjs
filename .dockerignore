@@ -10,13 +10,13 @@ playwright-report
 test-results
 .dockerignore
 .env*
-.eslintrc.json
 .gitattributes
 .gitignore
 .lintstagedrc.js
 .prettierrc.json
 docker-compose*.yml
 Dockerfile
+eslint.config.js
 LICENSE
 next-env.d.ts
 playwright.config.ts

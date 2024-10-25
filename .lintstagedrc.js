@@ -5,6 +5,8 @@ const buildEslintCommand = filenames =>
         .map(f => relative(process.cwd(), f))
         .join(' --file ')}`;
 
-export default {
+const config = {
     '*.{js,jsx,ts,tsx}': [buildEslintCommand]
 };
+
+export default config;
