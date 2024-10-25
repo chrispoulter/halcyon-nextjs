@@ -30,7 +30,8 @@ const config = [
         ...playwright.configs['flat/recommended'],
         files: ['e2e/**'],
         rules: {
-            ...playwright.configs['flat/recommended'].rules
+            ...playwright.configs['flat/recommended'].rules,
+            'playwright/no-standalone-expect': 0
         }
     },
     {
