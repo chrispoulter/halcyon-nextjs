@@ -4,6 +4,7 @@ import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import vitest from 'eslint-plugin-vitest';
+import testingLibrary from 'eslint-plugin-testing-library';
 import playwright from 'eslint-plugin-playwright';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -25,6 +26,10 @@ const config = [
         rules: {
             ...vitest.configs.recommended.rules
         }
+    },
+    {
+        files: ['src/__tests__/**'],
+        ...testingLibrary.configs['flat/react']
     },
     {
         ...playwright.configs['flat/recommended'],
