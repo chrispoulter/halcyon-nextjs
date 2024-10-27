@@ -21,12 +21,12 @@
             "runtimeArgs": ["run", "dev"],
             "skipFiles": ["<node_internals>/**"],
             "serverReadyAction": {
-              "action": "debugWithChrome",
-              "killOnServerStop": true,
-              "pattern": "- Local:.+(https?://.+)",
-              "uriFormat": "%s",
-              "webRoot": "${workspaceFolder}"
+                "action": "debugWithChrome",
+                "killOnServerStop": true,
+                "pattern": "- Local:.+(https?://.+)",
+                "uriFormat": "%s",
+                "webRoot": "${workspaceFolder}"
             }
-          }
+        }
     ]
 }
