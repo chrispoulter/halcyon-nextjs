@@ -51,7 +51,7 @@ services:
         volumes:
             - postgres:/var/lib/postgresql/data
         healthcheck:
-            test: [ 'CMD', 'pg_isready' ]
+            test: ['CMD', 'pg_isready']
             interval: 10s
             timeout: 5s
             retries: 3
@@ -65,7 +65,7 @@ services:
         volumes:
             - rabbitmq:/var/lib/rabbitmq
         healthcheck:
-            test: [ 'CMD', 'rabbitmqctl', 'status' ]
+            test: ['CMD', 'rabbitmqctl', 'status']
             interval: 10s
             timeout: 5s
             retries: 3
