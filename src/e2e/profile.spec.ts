@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.use({ storageState: 'playwright/.auth/user.json' });
+test.use({ storageState: './playwright/.auth/user.json' });
 
 test.describe('profile page', () => {
     test('should render personal details', async ({ page }) => {

@@ -92,13 +92,13 @@ npm run test
 After installing the project dependencies, run the following command to install Playwright and its browser dependencies:
 
 ```
-npm run playwright:install
+npm run e2e:install
 ```
 
 To execute the E2E tests, use the following command:
 
 ```
-npm run playwright:test
+npm run e2e:test
 ```
 
 ## Linting & Formatting
