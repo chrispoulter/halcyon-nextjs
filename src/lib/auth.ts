@@ -46,8 +46,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     }
                 );
 
+                // console.log('response', response);
+
                 if (!response.ok) {
-                    throw new Error('The credentials provided were invalid.');
+                    switch (response.status) {
+                        case 401:
+                            throw new Error(
+                                'The credentials provided were invalid.'
+                            );
+
+                        case 429:
+                            throw new Error(
+                                'Sorry, the server is currently experiencing a high load. Please try again later.'
+                            );
+
+                        default:
+                            throw new Error(
+                                'Sorry, something went wrong. Please try again later.'
+                            );
+                    }
                 }
 
                 const accessToken = await response.text();
