@@ -50,7 +50,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
                 if (!response.ok) {
                     switch (response.status) {
-                        case 401:
+                        case 400:
                             throw new Error(
                                 'The credentials provided were invalid.'
                             );
