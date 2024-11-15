@@ -23,8 +23,6 @@ const LoginPage = () => {
             return router.push('/');
         }
 
-        // console.log('signInResult', signInResult);
-
         return toast.error('The credentials provided were invalid.');
     };
 

@@ -22,10 +22,6 @@ const schema = z.object({
     password: z.string({ message: 'Password is a required field' })
 });
 
-class ExternalProviderError extends CredentialsSignin {
-    code = 'external_provider_error';
-}
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         CredentialsProvider({
@@ -50,10 +46,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     }
                 );
 
-                // console.log('response', response);
-
                 if (!response.ok) {
-                    throw new ExternalProviderError(response.statusText);
+                    throw new CredentialsSignin(response.statusText);
                 }
 
                 const accessToken = await response.text();
