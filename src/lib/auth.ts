@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { jwtVerify } from 'jose';
 import { z } from 'zod';
@@ -22,6 +22,10 @@ const schema = z.object({
     password: z.string({ message: 'Password is a required field' })
 });
 
+class ExternalProviderError extends CredentialsSignin {
+    code = 'external_provider_error';
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         CredentialsProvider({
@@ -34,7 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 const result = await schema.safeParseAsync(credentials);
 
                 if (!result.success) {
-                    throw new Error(result.error.issues[0].message);
+                    throw new CredentialsSignin(result.error.issues[0].message);
                 }
 
                 const response = await fetch(
@@ -49,22 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 // console.log('response', response);
 
                 if (!response.ok) {
-                    switch (response.status) {
-                        case 400:
-                            throw new Error(
-                                'The credentials provided were invalid.'
-                            );
-
-                        case 429:
-                            throw new Error(
-                                'Sorry, the server is currently experiencing a high load. Please try again later.'
-                            );
-
-                        default:
-                            throw new Error(
-                                'Sorry, something went wrong. Please try again later.'
-                            );
-                    }
+                    throw new ExternalProviderError(response.statusText);
                 }
 
                 const accessToken = await response.text();
