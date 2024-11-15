@@ -55,7 +55,7 @@ const App = ({
                                     return router.push('/404', router.asPath);
 
                                 case 429:
-                                    return router.push('/403', router.asPath);
+                                    return router.push('/429', router.asPath);
 
                                 default:
                                     return router.push('/500', router.asPath);
