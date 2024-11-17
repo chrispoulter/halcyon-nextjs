@@ -8,8 +8,11 @@ import { ButtonGroup } from '@/components/button-group';
 const schema = z.object({
     emailAddress: z
         .string({ message: 'Email Address is a required field' })
+        .min(1, 'Email Address is a required field')
         .email('Email Address must be a valid email'),
-    password: z.string({ message: 'Password is a required field' })
+    password: z
+        .string({ message: 'Password is a required field' })
+        .min(1, 'Password is a required field')
 });
 
 export type LoginFormValues = z.infer<typeof schema>;

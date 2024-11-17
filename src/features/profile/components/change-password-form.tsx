@@ -10,16 +10,16 @@ import { GetProfileResponse } from '@/features/profile/profile-types';
 
 const schema = z
     .object({
-        currentPassword: z.string({
-            message: 'Current Password is a required field'
-        }),
+        currentPassword: z
+            .string({ message: 'Current Password is a required field' })
+            .min(1, 'Current Password is a required field'),
         newPassword: z
             .string({ message: 'New Password is a required field' })
             .min(8, 'New Password must be at least 8 characters')
             .max(50, 'New Password must be no more than 50 characters'),
-        confirmNewPassword: z.string({
-            message: 'Confirm New Password is a required field'
-        })
+        confirmNewPassword: z
+            .string({ message: 'Confirm New Password is a required field' })
+            .min(1, 'Confirm New Password is a required field')
     })
     .refine(data => data.newPassword === data.confirmNewPassword, {
         message: 'Passwords do not match',
