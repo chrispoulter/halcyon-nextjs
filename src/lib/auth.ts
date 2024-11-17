@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { CredentialsSignin } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { jwtVerify } from 'jose';
 import { z } from 'zod';
@@ -18,8 +18,11 @@ type JwtPayload = {
 const schema = z.object({
     emailAddress: z
         .string({ message: 'Email Address is a required field' })
+        .min(1, 'Email Address is a required field')
         .email('Email Address must be a valid email'),
-    password: z.string({ message: 'Password is a required field' })
+    password: z
+        .string({ message: 'Password is a required field' })
+        .min(1, 'Password is a required field')
 });
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -34,7 +37,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 const result = await schema.safeParseAsync(credentials);
 
                 if (!result.success) {
-                    throw new Error(result.error.issues[0].message);
+                    throw new CredentialsSignin(result.error.issues[0].message);
                 }
 
                 const response = await fetch(
@@ -47,7 +50,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 );
 
                 if (!response.ok) {
-                    throw new Error('The credentials provided were invalid.');
+                    throw new CredentialsSignin(response.statusText);
                 }
 
                 const accessToken = await response.text();

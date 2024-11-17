@@ -54,6 +54,9 @@ const App = ({
                                 case 404:
                                     return router.push('/404', router.asPath);
 
+                                case 429:
+                                    return router.push('/429', router.asPath);
+
                                 default:
                                     return router.push('/500', router.asPath);
                             }
@@ -81,6 +84,11 @@ const App = ({
                                 case 404:
                                     return toast.error(
                                         'Sorry, the resource you were looking for could not be found.'
+                                    );
+
+                                case 429:
+                                    return toast.error(
+                                        'Sorry, the server is currently experiencing a high load. Please try again later.'
                                     );
 
                                 default:
