@@ -17,6 +17,7 @@ export const Toaster = () => {
                     <div
                         key={toast.id}
                         role="alert"
+                        aria-live="polite"
                         className={cn(
                             'pointer-events-auto flex w-full items-center justify-between border px-5 py-3 text-sm font-normal shadow sm:max-w-sm',
                             {
