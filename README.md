@@ -4,33 +4,33 @@ A Next.js web project template 👷 Built with a sense of peace and tranquillity
 
 ## Features
 
--   Next.js
-    [https://nextjs.org/](https://nextjs.org/)
--   TanStack Query
-    [https://tanstack.com/query](https://tanstack.com/query)
--   React Hook Form
-    [https://react-hook-form.com/](https://react-hook-form.com/)
--   Zod
-    [https://zod.dev/](https://zod.dev/)
--   Auth.js
-    [https://authjs.dev/](https://authjs.dev/)
--   Tailwind CSS
-    [https://tailwindcss.com/](https://tailwindcss.com/)
--   Vitest
-    [https://vitest.dev/](https://vitest.dev/)
--   Playwright
-    [https://playwright.dev/](https://playwright.dev/)
--   Docker
-    [https://www.docker.com/](https://www.docker.com/)
--   GitHub Actions
-    [https://github.com/features/actions](https://github.com/features/actions)
+- Next.js
+  [https://nextjs.org/](https://nextjs.org/)
+- TanStack Query
+  [https://tanstack.com/query](https://tanstack.com/query)
+- React Hook Form
+  [https://react-hook-form.com/](https://react-hook-form.com/)
+- Zod
+  [https://zod.dev/](https://zod.dev/)
+- Auth.js
+  [https://authjs.dev/](https://authjs.dev/)
+- Tailwind CSS
+  [https://tailwindcss.com/](https://tailwindcss.com/)
+- Vitest
+  [https://vitest.dev/](https://vitest.dev/)
+- Playwright
+  [https://playwright.dev/](https://playwright.dev/)
+- Docker
+  [https://www.docker.com/](https://www.docker.com/)
+- GitHub Actions
+  [https://github.com/features/actions](https://github.com/features/actions)
 
 ## Getting Started
 
 ### Prerequisites
 
--   Halcyon API
-    [https://github.com/chrispoulter/halcyon-api](https://github.com/chrispoulter/halcyon-api)
+- Halcyon API
+  [https://github.com/chrispoulter/halcyon-api](https://github.com/chrispoulter/halcyon-api)
 
 ### Install dependencies
 

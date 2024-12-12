@@ -56,7 +56,7 @@ services:
             - postgres:/var/lib/postgresql/data
         restart: always
         healthcheck:
-            test: [ 'CMD', 'pg_isready' ]
+            test: ['CMD', 'pg_isready']
             interval: 10s
             timeout: 5s
             retries: 3
@@ -71,7 +71,7 @@ services:
             - rabbitmq:/var/lib/rabbitmq
         restart: always
         healthcheck:
-            test: [ 'CMD', 'rabbitmqctl', 'status' ]
+            test: ['CMD', 'rabbitmqctl', 'status']
             interval: 10s
             timeout: 5s
             retries: 3
@@ -85,7 +85,7 @@ services:
             - redis:/data
         restart: always
         healthcheck:
-            test: [ 'CMD', 'redis-cli', 'ping' ]
+            test: ['CMD', 'redis-cli', 'ping']
             interval: 10s
             timeout: 5s
             retries: 3
