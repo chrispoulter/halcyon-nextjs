@@ -58,7 +58,7 @@ const NavbarMenuOptions = () => {
 };
 
 export const NavbarMenu = () => (
-    <Popover as={React.Fragment}>
+    <Popover className="contents">
         {({ open }) => (
             <>
                 <PopoverButton
