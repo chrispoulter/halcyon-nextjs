@@ -4,10 +4,7 @@
         "**/.next": true,
         "**/.swc": true,
         "**/*.tsbuildinfo": true,
-        "**/next-env.d.ts": true,
-        "**/playwright": true,
-        "**/playwright-report": true,
-        "**/test-results": true
+        "**/next-env.d.ts": true
     },
     "files.associations": {
         "*.css": "tailwindcss"

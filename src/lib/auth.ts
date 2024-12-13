@@ -53,7 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     throw new CredentialsSignin(response.statusText);
                 }
 
-                const accessToken = await response.text();
+                const { accessToken } = await response.json();
 
                 const { payload } = await jwtVerify<JwtPayload>(
                     accessToken,
