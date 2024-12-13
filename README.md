@@ -16,10 +16,6 @@ A Next.js web project template 👷 Built with a sense of peace and tranquillity
   [https://authjs.dev/](https://authjs.dev/)
 - Tailwind CSS
   [https://tailwindcss.com/](https://tailwindcss.com/)
-- Vitest
-  [https://vitest.dev/](https://vitest.dev/)
-- Playwright
-  [https://playwright.dev/](https://playwright.dev/)
 - Docker
   [https://www.docker.com/](https://www.docker.com/)
 - GitHub Actions
@@ -76,30 +72,6 @@ npm run build
 ```
 
 This command will create an optimized build in the `.next` folder.
-
-## Testing
-
-### Unit Tests (Vitest)
-
-To run unit tests:
-
-```
-npm run test
-```
-
-### End-to-End Tests (Playwright)
-
-After installing the project dependencies, run the following command to install Playwright and its browser dependencies:
-
-```
-npm run e2e:install
-```
-
-To execute the E2E tests, use the following command:
-
-```
-npm run e2e:test
-```
 
 ## Linting & Formatting
 

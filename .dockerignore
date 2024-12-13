@@ -5,8 +5,6 @@
 .swc
 .vscode
 node_modules
-playwright-report
-test-results
 .dockerignore
 .env*
 .gitattributes
@@ -18,8 +16,5 @@ Dockerfile
 eslint.config.js
 LICENSE
 next-env.d.ts
-playwright.config.ts
 README.md
 *.tsbuildinfo
-vite.config.ts
-vitestSetup.ts
