@@ -13,7 +13,7 @@ export const Meta = ({
     title,
     separator = ' // ',
     description = 'A Next.js web project template. Built with a sense of peace and tranquillity.',
-    keywords = 'react, docker, typescript, eslint, nextjs, prettier, tailwindcss, next-auth, zod, react-query, react-hook-form, playwright, headless-ui, react-hot-toast, vitest, tanstack-query, authjs, pages-router'
+    keywords = 'react, docker, typescript, eslint, nextjs, prettier, tailwindcss, next-auth, zod, react-query, react-hook-form, headless-ui, react-hot-toast, tanstack-query, authjs, pages-router'
 }: MetaProps) => (
     <Head>
         <title>{[title, app].filter(v => !!v).join(separator)}</title>
