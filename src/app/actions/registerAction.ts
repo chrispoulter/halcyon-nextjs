@@ -45,7 +45,7 @@ const actionSchema = z
 
 export async function registerAction(data: unknown) {
     return await trace
-        .getTracer('halcyon-web')
+        .getTracer('halcyon')
         .startActiveSpan('registerAction', async (span) => {
             try {
                 const request = actionSchema.safeParse(data);

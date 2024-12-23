@@ -25,7 +25,7 @@ const actionSchema = z.object({
 
 export async function getUserAction(data: unknown) {
     return await trace
-        .getTracer('halcyon-web')
+        .getTracer('halcyon')
         .startActiveSpan('getUserAction', async (span) => {
             try {
                 const session = await verifySession([

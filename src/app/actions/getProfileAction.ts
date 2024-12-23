@@ -14,7 +14,7 @@ export type GetProfileResponse = {
 
 export async function getProfileAction() {
     return await trace
-        .getTracer('halcyon-web')
+        .getTracer('halcyon')
         .startActiveSpan('getProfileAction', async (span) => {
             try {
                 const session = await verifySession();

@@ -12,7 +12,7 @@ const actionSchema = z.object({
 
 export async function forgotPasswordAction(data: unknown) {
     return await trace
-        .getTracer('halcyon-web')
+        .getTracer('halcyon')
         .startActiveSpan('forgotPasswordAction', async (span) => {
             try {
                 const request = actionSchema.safeParse(data);

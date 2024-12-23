@@ -4,7 +4,7 @@ import { trace } from '@opentelemetry/api';
 
 export async function getApiHealthAction() {
     return await trace
-        .getTracer('halcyon-web')
+        .getTracer('halcyon')
         .startActiveSpan('getApiHealth', async (span) => {
             try {
                 const response = await fetch(

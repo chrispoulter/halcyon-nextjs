@@ -33,7 +33,7 @@ const actionSchema = z.object({
 
 export async function updateProfileAction(data: unknown) {
     return await trace
-        .getTracer('halcyon-web')
+        .getTracer('halcyon')
         .startActiveSpan('updateProfileAction', async (span) => {
             try {
                 const session = await verifySession();

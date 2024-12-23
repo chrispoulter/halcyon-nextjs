@@ -1,5 +1,6 @@
 'use server';
 
+import { Role } from '@/lib/definitions';
 import { createSession } from '@/lib/session';
 import { trace } from '@opentelemetry/api';
 import { jwtVerify } from 'jose';
@@ -24,7 +25,7 @@ type JwtPayload = {
     email: string;
     given_name: string;
     family_name: string;
-    roles: string | string[];
+    roles?: Role | Role[];
 };
 
 const securityKey = process.env.JWT_SECURITY_KEY;
@@ -32,7 +33,7 @@ const encodedSecurityKey = new TextEncoder().encode(securityKey);
 
 export async function loginAction(data: unknown) {
     return await trace
-        .getTracer('halcyon-web')
+        .getTracer('halcyon')
         .startActiveSpan('loginAction', async (span) => {
             try {
                 const request = actionSchema.safeParse(data);

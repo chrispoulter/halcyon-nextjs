@@ -20,7 +20,7 @@ const actionSchema = z.object({
 
 export async function resetPasswordAction(data: unknown) {
     return await trace
-        .getTracer('halcyon-web')
+        .getTracer('halcyon')
         .startActiveSpan('resetPasswordAction', async (span) => {
             try {
                 const request = actionSchema.safeParse(data);
