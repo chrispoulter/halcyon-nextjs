@@ -70,6 +70,8 @@ const formSchema = z
         path: ['confirmPassword'],
     });
 
+type CreateUserFormValues = z.infer<typeof formSchema>;
+
 type CreateUserFormProps = {
     className?: string;
 };
@@ -77,7 +79,7 @@ type CreateUserFormProps = {
 export function CreateUserForm({ className }: CreateUserFormProps) {
     const router = useRouter();
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<CreateUserFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             emailAddress: '',
@@ -90,7 +92,7 @@ export function CreateUserForm({ className }: CreateUserFormProps) {
         },
     });
 
-    async function onSubmit(data: z.infer<typeof formSchema>) {
+    async function onSubmit(data: CreateUserFormValues) {
         const result = await createUserAction(data);
 
         toast({

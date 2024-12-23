@@ -58,6 +58,8 @@ const formSchema = z
         path: ['confirmPassword'],
     });
 
+type RegisterFormValues = z.infer<typeof formSchema>;
+
 type RegisterFormProps = {
     className?: string;
 };
@@ -65,7 +67,7 @@ type RegisterFormProps = {
 export function RegisterForm({ className }: RegisterFormProps) {
     const router = useRouter();
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<RegisterFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             emailAddress: '',
@@ -77,7 +79,7 @@ export function RegisterForm({ className }: RegisterFormProps) {
         },
     });
 
-    async function onSubmit(data: z.infer<typeof formSchema>) {
+    async function onSubmit(data: RegisterFormValues) {
         const result = await registerAction(data);
 
         toast({

@@ -37,6 +37,8 @@ const formSchema = z
         path: ['confirmNewPassword'],
     });
 
+type ResetPasswordFormValues = z.infer<typeof formSchema>;
+
 type ResetPasswordFormProps = {
     token: string;
     className?: string;
@@ -48,7 +50,7 @@ export function ResetPasswordForm({
 }: ResetPasswordFormProps) {
     const router = useRouter();
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<ResetPasswordFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             emailAddress: '',
@@ -57,7 +59,7 @@ export function ResetPasswordForm({
         },
     });
 
-    async function onSubmit(data: z.infer<typeof formSchema>) {
+    async function onSubmit(data: ResetPasswordFormValues) {
         const result = await resetPasswordAction({ ...data, token });
 
         toast({

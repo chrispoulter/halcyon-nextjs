@@ -28,6 +28,8 @@ const formSchema = z.object({
         .min(1, 'Password is a required field'),
 });
 
+type LoginFormValues = z.infer<typeof formSchema>;
+
 type LoginFormProps = {
     className?: string;
 };
@@ -35,7 +37,7 @@ type LoginFormProps = {
 export function LoginForm({ className }: LoginFormProps) {
     const router = useRouter();
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<LoginFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             emailAddress: '',
@@ -43,7 +45,7 @@ export function LoginForm({ className }: LoginFormProps) {
         },
     });
 
-    async function onSubmit(data: z.infer<typeof formSchema>) {
+    async function onSubmit(data: LoginFormValues) {
         const result = await loginAction(data);
 
         toast({

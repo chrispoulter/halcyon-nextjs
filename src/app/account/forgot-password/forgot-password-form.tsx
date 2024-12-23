@@ -25,6 +25,8 @@ const formSchema = z.object({
         .email('Email Address must be a valid email'),
 });
 
+type ForgotPasswordFormValues = z.infer<typeof formSchema>;
+
 type ForgotPasswordFormProps = {
     className?: string;
 };
@@ -32,14 +34,14 @@ type ForgotPasswordFormProps = {
 export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
     const router = useRouter();
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<ForgotPasswordFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             emailAddress: '',
         },
     });
 
-    async function onSubmit(data: z.infer<typeof formSchema>) {
+    async function onSubmit(data: ForgotPasswordFormValues) {
         const result = await forgotPasswordAction(data);
 
         toast({

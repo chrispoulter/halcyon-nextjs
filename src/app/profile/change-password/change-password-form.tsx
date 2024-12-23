@@ -37,6 +37,8 @@ const formSchema = z
         path: ['confirmNewPassword'],
     });
 
+type ChangePasswordFormValues = z.infer<typeof formSchema>;
+
 type ChangePasswordFormProps = {
     className?: string;
 };
@@ -44,7 +46,7 @@ type ChangePasswordFormProps = {
 export function ChangePasswordForm({ className }: ChangePasswordFormProps) {
     const router = useRouter();
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<ChangePasswordFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             currentPassword: '',
@@ -53,7 +55,7 @@ export function ChangePasswordForm({ className }: ChangePasswordFormProps) {
         },
     });
 
-    async function onSubmit(data: z.infer<typeof formSchema>) {
+    async function onSubmit(data: ChangePasswordFormValues) {
         const result = await changePasswordAction(data);
 
         toast({

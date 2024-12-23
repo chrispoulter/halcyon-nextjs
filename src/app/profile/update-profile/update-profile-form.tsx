@@ -46,6 +46,8 @@ const formSchema = z.object({
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
 });
 
+type UpdateProfileFormValues = z.infer<typeof formSchema>;
+
 type UpdateProfileFormProps = {
     profile: GetProfileResponse;
     className?: string;
@@ -57,12 +59,12 @@ export function UpdateProfileForm({
 }: UpdateProfileFormProps) {
     const router = useRouter();
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<UpdateProfileFormValues>({
         resolver: zodResolver(formSchema),
         values: profile,
     });
 
-    async function onSubmit(data: z.infer<typeof formSchema>) {
+    async function onSubmit(data: UpdateProfileFormValues) {
         const result = await updateProfileAction(data);
 
         toast({

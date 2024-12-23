@@ -60,6 +60,8 @@ const formSchema = z.object({
         .optional(),
 });
 
+type UpdateUserFormValues = z.infer<typeof formSchema>;
+
 type UpdateUserFormProps = {
     user: GetUserResponse;
     className?: string;
@@ -68,12 +70,12 @@ type UpdateUserFormProps = {
 export function UpdateUserForm({ user, className }: UpdateUserFormProps) {
     const router = useRouter();
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<UpdateUserFormValues>({
         resolver: zodResolver(formSchema),
         values: user,
     });
 
-    async function onSubmit(data: z.infer<typeof formSchema>) {
+    async function onSubmit(data: UpdateUserFormValues) {
         const result = await updateUserAction({ ...data, id: user.id });
 
         toast({
