@@ -39,9 +39,10 @@ export function UserMenu({ session, onLogout }: UserMenu) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <UserAvatar session={session}>
+                <Button variant="ghost" className="h-10 w-10 rounded-full">
+                    <UserAvatar session={session} />
                     <span className="sr-only">Toggle profile menu</span>
-                </UserAvatar>
+                </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel className="flex flex-col gap-2">
