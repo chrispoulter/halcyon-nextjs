@@ -7,13 +7,13 @@ type UserAvatarProps = {
     children?: React.ReactNode;
 };
 
-export function UserAvatar({ session, children }: UserAvatarProps) {
+export function UserAvatar({ session, children, ...props }: UserAvatarProps) {
     const hashedEmail = createHash('sha256')
         .update(session.emailAddress.trim().toLowerCase())
         .digest('hex');
 
     return (
-        <Avatar>
+        <Avatar {...props}>
             <AvatarImage
                 src={`https://www.gravatar.com/avatar/${hashedEmail}?d=404`}
                 alt={`${session.firstName} ${session.lastName}`}
