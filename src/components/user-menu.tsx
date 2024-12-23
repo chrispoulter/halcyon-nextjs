@@ -11,6 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { HasPersmission } from '@/components/has-permission';
 import { UserAvatar } from '@/components/user-avatar';
 import { UserRoles } from '@/components/user-roles';
 import { Role, SessionPayload } from '@/lib/definitions';
@@ -62,19 +63,21 @@ export function UserMenu({ session, onLogout }: UserMenu) {
                     </Link>
                 </DropdownMenuItem>
 
-                {[Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR].some(
-                    (value) => session.roles?.includes(value)
-                ) && (
-                    <>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                            <Link href="/user">
-                                <Settings />
-                                <span>User Management</span>
-                            </Link>
-                        </DropdownMenuItem>
-                    </>
-                )}
+                <HasPersmission
+                    session={session}
+                    requiredRoles={[
+                        Role.SYSTEM_ADMINISTRATOR,
+                        Role.USER_ADMINISTRATOR,
+                    ]}
+                >
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                        <Link href="/user">
+                            <Settings />
+                            <span>User Management</span>
+                        </Link>
+                    </DropdownMenuItem>
+                </HasPersmission>
 
                 <DropdownMenuSeparator />
 
