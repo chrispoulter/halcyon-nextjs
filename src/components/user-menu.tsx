@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { User, LogOut, Settings } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -13,7 +12,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { UserAvatar } from '@/components/user-avatar';
-import { Role, roles, SessionPayload } from '@/lib/definitions';
+import { UserRoles } from '@/components/user-roles';
+import { Role, SessionPayload } from '@/lib/definitions';
 
 type UserMenu = {
     session?: SessionPayload;
@@ -44,19 +44,13 @@ export function UserMenu({ session, onLogout }: UserMenu) {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel className="flex flex-col gap-2">
-                    <span className="truncate">System Adminstrator</span>
+                    <span className="truncate">
+                        {session.firstName} {session.lastName}
+                    </span>
                     <span className="truncate text-sm text-muted-foreground">
                         {session.emailAddress}
                     </span>
-                    {(session.roles ?? []).map((role) => (
-                        <Badge
-                            key={role}
-                            variant="secondary"
-                            className="justify-center"
-                        >
-                            {roles[role].title}
-                        </Badge>
-                    ))}
+                    <UserRoles roles={session.roles} />
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />

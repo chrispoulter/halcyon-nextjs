@@ -8,7 +8,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
-import { Role, roles } from '@/lib/definitions';
+import { Role, roleDetails } from '@/lib/definitions';
 
 type RoleFormFieldProps = {
     field: string;
@@ -26,7 +26,7 @@ export function RoleFormField({ field }: RoleFormFieldProps) {
 
                 return (
                     <>
-                        {Object.entries(roles).map(
+                        {Object.entries(roleDetails).map(
                             ([role, { title, description }]) => (
                                 <FormItem
                                     key={role}

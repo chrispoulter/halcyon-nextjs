@@ -4,7 +4,7 @@ import { AlertCircle } from 'lucide-react';
 import { searchUsersAction } from '@/app/actions/searchUsersAction';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { roles } from '@/lib/definitions';
+import { UserRoles } from '@/components/user-roles';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -65,15 +65,7 @@ export default async function UserSearch({
                                 Locked
                             </Badge>
                         )}
-                        {user.roles?.map((role) => (
-                            <Badge
-                                key={role}
-                                variant="secondary"
-                                className="justify-center"
-                            >
-                                {roles[role].title}
-                            </Badge>
-                        ))}
+                        <UserRoles roles={user.roles} />
                     </div>
                 </Link>
             ))}

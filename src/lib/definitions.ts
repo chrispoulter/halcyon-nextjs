@@ -3,7 +3,7 @@ export enum Role {
     USER_ADMINISTRATOR = 'USER_ADMINISTRATOR',
 }
 
-export const roles = {
+export const roleDetails = {
     [Role.SYSTEM_ADMINISTRATOR]: {
         title: 'System Administrator',
         description: 'A system administrator has access to the entire system.',
