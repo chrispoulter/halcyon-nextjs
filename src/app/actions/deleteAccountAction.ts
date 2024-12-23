@@ -24,17 +24,14 @@ export async function deleteAccountAction(data: unknown) {
                     };
                 }
 
-                const response = await fetch(
-                    `${process.env.services__api__https__0}/profile`,
-                    {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${session.accessToken}`,
-                        },
-                        body: JSON.stringify(request.data),
-                    }
-                );
+                const response = await fetch(`${process.env.API_URL}/profile`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${session.accessToken}`,
+                    },
+                    body: JSON.stringify(request.data),
+                });
 
                 if (!response.ok) {
                     return {

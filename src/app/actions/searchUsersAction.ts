@@ -65,7 +65,7 @@ export async function searchUsersAction(data: unknown) {
                     .join('&');
 
                 const response = await fetch(
-                    `${process.env.services__api__https__0}/user?${params}`,
+                    `${process.env.API_URL}/user?${params}`,
                     {
                         method: 'GET',
                         headers: {

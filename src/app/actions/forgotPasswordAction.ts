@@ -24,7 +24,7 @@ export async function forgotPasswordAction(data: unknown) {
                 }
 
                 const response = await fetch(
-                    `${process.env.services__api__https__0}/account/forgot-password`,
+                    `${process.env.API_URL}/account/forgot-password`,
                     {
                         method: 'PUT',
                         headers: {

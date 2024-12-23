@@ -34,7 +34,7 @@ export async function unlockUserAction(data: unknown) {
                 const { id, ...rest } = request.data;
 
                 const response = await fetch(
-                    `${process.env.services__api__https__0}/user/${id}/unlock`,
+                    `${process.env.API_URL}/user/${id}/unlock`,
                     {
                         method: 'PUT',
                         headers: {

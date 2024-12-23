@@ -45,7 +45,7 @@ export async function loginAction(data: unknown) {
                 }
 
                 const response = await fetch(
-                    `${process.env.services__api__https__0}/account/login`,
+                    `${process.env.API_URL}/account/login`,
                     {
                         method: 'POST',
                         headers: {

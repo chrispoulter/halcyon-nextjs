@@ -7,9 +7,7 @@ export async function getApiHealthAction() {
         .getTracer('halcyon')
         .startActiveSpan('getApiHealth', async (span) => {
             try {
-                const response = await fetch(
-                    `${process.env.services__api__https__0}/health`
-                );
+                const response = await fetch(`${process.env.API_URL}/health`);
 
                 if (!response.ok) {
                     return {

@@ -31,7 +31,7 @@ export async function changePasswordAction(data: unknown) {
                 }
 
                 const response = await fetch(
-                    `${process.env.services__api__https__0}/profile/change-password`,
+                    `${process.env.API_URL}/profile/change-password`,
                     {
                         method: 'PUT',
                         headers: {

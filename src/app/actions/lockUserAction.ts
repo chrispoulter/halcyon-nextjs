@@ -34,7 +34,7 @@ export async function lockUserAction(data: unknown) {
                 const { id, ...rest } = request.data;
 
                 const response = await fetch(
-                    `${process.env.services__api__https__0}/user/${id}/lock`,
+                    `${process.env.API_URL}/user/${id}/lock`,
                     {
                         method: 'PUT',
                         headers: {

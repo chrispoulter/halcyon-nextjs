@@ -19,14 +19,11 @@ export async function getProfileAction() {
             try {
                 const session = await verifySession();
 
-                const response = await fetch(
-                    `${process.env.services__api__https__0}/profile`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${session.accessToken}`,
-                        },
-                    }
-                );
+                const response = await fetch(`${process.env.API_URL}/profile`, {
+                    headers: {
+                        Authorization: `Bearer ${session.accessToken}`,
+                    },
+                });
 
                 if (!response.ok) {
                     return {

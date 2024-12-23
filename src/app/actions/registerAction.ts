@@ -57,7 +57,7 @@ export async function registerAction(data: unknown) {
                 }
 
                 const response = await fetch(
-                    `${process.env.services__api__https__0}/account/register`,
+                    `${process.env.API_URL}/account/register`,
                     {
                         method: 'POST',
                         headers: {

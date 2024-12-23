@@ -46,17 +46,14 @@ export async function updateProfileAction(data: unknown) {
                     };
                 }
 
-                const response = await fetch(
-                    `${process.env.services__api__https__0}/profile`,
-                    {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${session.accessToken}`,
-                        },
-                        body: JSON.stringify(request.data),
-                    }
-                );
+                const response = await fetch(`${process.env.API_URL}/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${session.accessToken}`,
+                    },
+                    body: JSON.stringify(request.data),
+                });
 
                 if (!response.ok) {
                     return {

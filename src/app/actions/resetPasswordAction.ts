@@ -32,7 +32,7 @@ export async function resetPasswordAction(data: unknown) {
                 }
 
                 const response = await fetch(
-                    `${process.env.services__api__https__0}/account/reset-password`,
+                    `${process.env.API_URL}/account/reset-password`,
                     {
                         method: 'PUT',
                         headers: {

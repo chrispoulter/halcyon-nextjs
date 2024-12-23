@@ -63,7 +63,7 @@ export async function updateUserAction(data: unknown) {
                 const { id, ...rest } = request.data;
 
                 const response = await fetch(
-                    `${process.env.services__api__https__0}/user/${id}`,
+                    `${process.env.API_URL}/user/${id}`,
                     {
                         method: 'PUT',
                         headers: {

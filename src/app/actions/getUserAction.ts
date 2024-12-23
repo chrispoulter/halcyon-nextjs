@@ -42,7 +42,7 @@ export async function getUserAction(data: unknown) {
                 }
 
                 const response = await fetch(
-                    `${process.env.services__api__https__0}/user/${request.data.id}`,
+                    `${process.env.API_URL}/user/${request.data.id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${session.accessToken}`,

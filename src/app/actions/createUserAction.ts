@@ -64,17 +64,14 @@ export async function createUserAction(data: unknown) {
                     };
                 }
 
-                const response = await fetch(
-                    `${process.env.services__api__https__0}/user`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${session.accessToken}`,
-                        },
-                        body: JSON.stringify(request.data),
-                    }
-                );
+                const response = await fetch(`${process.env.API_URL}/user`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${session.accessToken}`,
+                    },
+                    body: JSON.stringify(request.data),
+                });
 
                 if (!response.ok) {
                     return {
