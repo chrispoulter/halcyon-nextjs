@@ -10,14 +10,14 @@
         {
             "type": "npm",
             "script": "build",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
             "dependsOn": "npm: install",
             "problemMatcher": [],
             "label": "npm: build",
-            "detail": "next build"
+            "detail": "next build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

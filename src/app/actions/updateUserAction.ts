@@ -1,0 +1,90 @@
+'use server';
+
+import { trace } from '@opentelemetry/api';
+import { z } from 'zod';
+import { isInPast } from '@/lib/dates';
+import { Role } from '@/lib/definitions';
+import { verifySession } from '@/lib/session';
+
+const actionSchema = z.object({
+    id: z
+        .string({ message: 'Id must be a valid string' })
+        .min(1, 'Id is a required field')
+        .uuid('Id must be a valid UUID'),
+    emailAddress: z
+        .string({ message: 'Email Address must be a valid string' })
+        .min(1, 'Email Address is a required field')
+        .max(254, 'Password must be no more than 254 characters')
+        .email('Email Address must be a valid email'),
+    firstName: z
+        .string({
+            message: 'Confirm Password is a required field',
+        })
+        .min(1, 'First Name is a required field')
+        .max(50, 'First Name must be no more than 50 characters'),
+    lastName: z
+        .string({ message: 'Last Name must be a valid string' })
+        .min(1, 'Last Name is a required field')
+        .max(50, 'Last Name must be no more than 50 characters'),
+    dateOfBirth: z
+        .string({
+            message: 'Date of Birth must be a valid string',
+        })
+        .min(1, 'Date Of Birth is a required field')
+        .date('Date Of Birth must be a valid date')
+        .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
+    roles: z
+        .array(
+            z.nativeEnum(Role, { message: 'Role must be a valid system role' }),
+            { message: 'Role must be a valid array' }
+        )
+        .optional(),
+    version: z.string({ message: 'Version must be a valid string' }).optional(),
+});
+
+export async function updateUserAction(data: unknown) {
+    return await trace
+        .getTracer('halcyon-web')
+        .startActiveSpan('updateUserAction', async (span) => {
+            try {
+                const session = await verifySession([
+                    Role.SYSTEM_ADMINISTRATOR,
+                    Role.USER_ADMINISTRATOR,
+                ]);
+
+                const request = actionSchema.safeParse(data);
+
+                if (!request.success) {
+                    return {
+                        errors: request.error.flatten().fieldErrors,
+                    };
+                }
+
+                const { id, ...rest } = request.data;
+
+                const response = await fetch(
+                    `${process.env.services__api__https__0}/user/${id}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${session.accessToken}`,
+                        },
+                        body: JSON.stringify(rest),
+                    }
+                );
+
+                if (!response.ok) {
+                    return {
+                        errors: [
+                            'An error occurred while processing your request',
+                        ],
+                    };
+                }
+
+                return await response.json();
+            } finally {
+                span.end();
+            }
+        });
+}

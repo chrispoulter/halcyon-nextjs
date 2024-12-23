@@ -6,14 +6,12 @@ A Next.js web project template 👷 Built with a sense of peace and tranquillity
 
 - Next.js
   [https://nextjs.org/](https://nextjs.org/)
-- TanStack Query
-  [https://tanstack.com/query](https://tanstack.com/query)
+- Shadcn UI
+  [https://ui.shadcn.com/](https://ui.shadcn.com/)
 - React Hook Form
   [https://react-hook-form.com/](https://react-hook-form.com/)
 - Zod
   [https://zod.dev/](https://zod.dev/)
-- Auth.js
-  [https://authjs.dev/](https://authjs.dev/)
 - Tailwind CSS
   [https://tailwindcss.com/](https://tailwindcss.com/)
 - Docker
@@ -41,16 +39,13 @@ npm install
 For local development, you'll need to create a `.env.local` file in the root of the project to define the environment variables. This file is ignored by Git, so the secrets will not be committed to the repository.
 
 ```
-NEXT_PUBLIC_VERSION=1.0.0-local
-
-NEXT_PUBLIC_API_URL=http://localhost:5257
+API_URL=http://localhost:5257
 
 JWT_SECURITY_KEY=super_secret_key_that_should_be_changed
 JWT_ISSUER=HalcyonApi
 JWT_AUDIENCE=HalcyonClient
 
-AUTH_URL=http://localhost:3000
-AUTH_SECRET=super_secret_key_that_should_be_changed
+SESSION_SECRET=super_secret_key_that_should_be_changed
 ```
 
 ### Running the development server

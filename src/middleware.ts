@@ -1,38 +1,18 @@
-import { NextResponse } from 'next/server';
-import { isAuthorized, isUserAdministrator } from '@/lib/roles';
-import { auth } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
+import { getSession } from '@/lib/session';
 
-const protectedRoutes = [
-    {
-        path: '/user',
-        roles: isUserAdministrator
-    }
-];
+export default async function middleware(req: NextRequest) {
+    const session = await getSession();
 
-export default auth(req => {
-    const user = req.auth?.user;
-
-    if (!user) {
+    if (!session) {
         return NextResponse.redirect(
-            new URL('/account/login', req.nextUrl.origin)
+            new URL('/account/login?middleware=1', req.nextUrl)
         );
     }
 
-    const matchedRoute = protectedRoutes.find(route =>
-        req.nextUrl.pathname.startsWith(route.path)
-    );
-
-    if (!matchedRoute) {
-        return NextResponse.next();
-    }
-
-    if (!isAuthorized(user, matchedRoute.roles)) {
-        return NextResponse.rewrite(new URL('/403', req.nextUrl.origin));
-    }
-
     return NextResponse.next();
-});
+}
 
 export const config = {
-    matcher: ['/user/:path*', '/profile/:path*']
+    matcher: ['/profile/:path*', '/user/:path*'],
 };
