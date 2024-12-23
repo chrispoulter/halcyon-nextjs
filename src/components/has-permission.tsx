@@ -6,7 +6,11 @@ type HasPermissionProps = {
     children: React.ReactNode;
 };
 
-export function HasPersmission({ session, requiredRoles, children }: HasPermissionProps) {
+export function HasPersmission({
+    session,
+    requiredRoles,
+    children,
+}: HasPermissionProps) {
     const hasPermission = requiredRoles.some((value) =>
         session.roles?.includes(value)
     );

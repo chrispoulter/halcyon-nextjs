@@ -77,8 +77,8 @@ export function ChangePasswordForm({ className }: ChangePasswordFormProps) {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField
-                        field="password"
-                        label="Password"
+                        field="newPassword"
+                        label="New Password"
                         type="password"
                         maxLength={50}
                         autoComplete="new-password"
@@ -86,8 +86,8 @@ export function ChangePasswordForm({ className }: ChangePasswordFormProps) {
                         className="flex-1"
                     />
                     <TextFormField
-                        field="confirmPassword"
-                        label="Confirm Password"
+                        field="confirmNewPassword"
+                        label="Confirm New Password"
                         type="password"
                         maxLength={50}
                         autoComplete="new-password"
@@ -96,13 +96,13 @@ export function ChangePasswordForm({ className }: ChangePasswordFormProps) {
                     />
                 </div>
 
-                <Button asChild variant="secondary" className="w-full">
-                    <Link href="/profile">Cancel</Link>
-                </Button>
+                <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                    <Button asChild variant="outline">
+                        <Link href="/profile">Cancel</Link>
+                    </Button>
 
-                <Button type="submit" className="w-full">
-                    Submit
-                </Button>
+                    <Button type="submit">Submit</Button>
+                </div>
             </form>
         </Form>
     );

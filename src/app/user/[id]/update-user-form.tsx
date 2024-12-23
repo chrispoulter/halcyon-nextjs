@@ -123,21 +123,21 @@ export function UpdateUserForm({ user, className }: UpdateUserFormProps) {
 
                 <RoleFormField field="roles" />
 
-                <Button asChild variant="secondary" className="w-full">
-                    <Link href="/user">Cancel</Link>
-                </Button>
+                <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                    <Button asChild variant="outline">
+                        <Link href="/user">Cancel</Link>
+                    </Button>
 
-                {user.isLockedOut ? (
-                    <UnlockUserButton user={user} className="w-full" />
-                ) : (
-                    <LockUserButton user={user} className="w-full" />
-                )}
+                    {user.isLockedOut ? (
+                        <UnlockUserButton user={user} />
+                    ) : (
+                        <LockUserButton user={user} />
+                    )}
 
-                <DeleteUserButton user={user} className="w-full" />
+                    <DeleteUserButton user={user} />
 
-                <Button type="submit" className="w-full">
-                    Submit
-                </Button>
+                    <Button type="submit">Submit</Button>
+                </div>
             </form>
         </Form>
     );

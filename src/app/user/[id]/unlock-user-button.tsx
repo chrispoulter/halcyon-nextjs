@@ -38,7 +38,7 @@ export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="outline" className={className}>
+                <Button variant="secondary" className={className}>
                     Unlock
                 </Button>
             </AlertDialogTrigger>

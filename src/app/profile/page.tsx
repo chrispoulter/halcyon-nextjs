@@ -38,18 +38,30 @@ export default async function Profile() {
                 Personal Details
             </h2>
 
-            <p className="mt-6 font-semibold leading-7">Email Address</p>
-            <p className="leading-7">{profile.emailAddress}</p>
+            <dl>
+                <dt className="mt-6 text-sm font-medium leading-none">
+                    Email Address
+                </dt>
+                <dd className="ttruncate mt-1 text-sm text-muted-foreground">
+                    {profile.emailAddress}
+                </dd>
+                <dt className="mt-6 text-sm font-medium leading-none">Name</dt>
+                <dd className="mt-1 truncate text-sm text-muted-foreground">
+                    {profile.firstName} {profile.lastName}
+                </dd>
+                <dt className="mt-6 text-sm font-medium leading-none">
+                    Date Of Birth
+                </dt>
+                <dd className="mt-1 truncate text-sm text-muted-foreground">
+                    {toLocaleString(profile.dateOfBirth)}
+                </dd>
+            </dl>
 
-            <p className="mt-6 font-semibold leading-7">Name</p>
-            <p className="leading-7">
-                {profile.firstName} {profile.lastName}
-            </p>
-
-            <p className="mt-6 font-semibold leading-7">Date Of Birth</p>
-            <p className="leading-7">{toLocaleString(profile.dateOfBirth)}</p>
-
-            <Button asChild variant="secondary" className="mt-6">
+            <Button
+                asChild
+                variant="secondary"
+                className="mt-6 w-full sm:w-auto"
+            >
                 <Link href="/profile/update-profile">Update Profile</Link>
             </Button>
 
@@ -63,7 +75,11 @@ export default async function Profile() {
                 regular basis.
             </p>
 
-            <Button asChild variant="secondary" className="mt-6">
+            <Button
+                asChild
+                variant="secondary"
+                className="mt-6 w-full sm:w-auto"
+            >
                 <Link href="/profile/change-password">Change Password</Link>
             </Button>
 
@@ -76,7 +92,7 @@ export default async function Profile() {
                 be removed. Please be certain.
             </p>
 
-            <DeleteAccountButton className="mt-6" />
+            <DeleteAccountButton className="mt-6 w-full sm:w-auto" />
         </main>
     );
 }

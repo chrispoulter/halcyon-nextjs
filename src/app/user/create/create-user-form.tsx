@@ -161,13 +161,13 @@ export function CreateUserForm({ className }: CreateUserFormProps) {
 
                 <RoleFormField field="roles" />
 
-                <Button asChild variant="secondary" className="w-full">
-                    <Link href="/user">Cancel</Link>
-                </Button>
+                <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                    <Button asChild variant="outline">
+                        <Link href="/user">Cancel</Link>
+                    </Button>
 
-                <Button type="submit" className="w-full">
-                    Submit
-                </Button>
+                    <Button type="submit">Submit</Button>
+                </div>
             </form>
         </Form>
     );

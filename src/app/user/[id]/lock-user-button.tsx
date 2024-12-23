@@ -38,7 +38,7 @@ export function LockUserButton({ user, className }: LockUserButtonProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="outline" className={className}>
+                <Button variant="secondary" className={className}>
                     Lock
                 </Button>
             </AlertDialogTrigger>

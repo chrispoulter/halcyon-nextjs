@@ -61,9 +61,9 @@ export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
                     required
                 />
 
-                <Button type="submit" className="w-full">
-                    Submit
-                </Button>
+                <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                    <Button type="submit">Submit</Button>
+                </div>
             </form>
         </Form>
     );

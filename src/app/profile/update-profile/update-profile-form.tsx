@@ -111,13 +111,13 @@ export function UpdateProfileForm({
                     required
                 />
 
-                <Button asChild variant="secondary" className="w-full">
-                    <Link href="/profile">Cancel</Link>
-                </Button>
+                <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                    <Button asChild variant="outline">
+                        <Link href="/profile">Cancel</Link>
+                    </Button>
 
-                <Button type="submit" className="w-full">
-                    Submit
-                </Button>
+                    <Button type="submit">Submit</Button>
+                </div>
             </form>
         </Form>
     );
