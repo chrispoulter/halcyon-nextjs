@@ -14,7 +14,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Role, SessionPayload } from '@/lib/definitions';
+import { Role, roles, SessionPayload } from '@/lib/definitions';
 
 type UserMenu = {
     session?: SessionPayload;
@@ -64,7 +64,7 @@ export function UserMenu({ session, onLogout }: UserMenu) {
                             variant="secondary"
                             className="justify-center"
                         >
-                            {role}
+                            {roles[role].title}
                         </Badge>
                     ))}
                 </DropdownMenuLabel>
