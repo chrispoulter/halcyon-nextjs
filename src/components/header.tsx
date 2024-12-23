@@ -15,7 +15,9 @@ export async function Header() {
             >
                 Halcyon
             </Link>
+
             <ModeToggle />
+
             <UserMenu session={session} onLogout={logoutAction} />
         </header>
     );

@@ -1,9 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { createHash } from 'crypto';
 import { User, LogOut, Settings } from 'lucide-react';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +12,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { UserAvatar } from '@/components/user-avatar';
 import { Role, roles, SessionPayload } from '@/lib/definitions';
 
 type UserMenu = {
@@ -36,21 +35,12 @@ export function UserMenu({ session, onLogout }: UserMenu) {
         );
     }
 
-    const hashedEmail = createHash('sha256')
-        .update(session.emailAddress.trim().toLowerCase())
-        .digest('hex');
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Avatar>
-                    <AvatarImage
-                        src={`https://www.gravatar.com/avatar/${hashedEmail}?d=mp`}
-                        alt={`${session.firstName} ${session.lastName}`}
-                    />
-                    <AvatarFallback>{`${session.firstName[0]} ${session.lastName[0]}`}</AvatarFallback>
+                <UserAvatar session={session}>
                     <span className="sr-only">Toggle profile menu</span>
-                </Avatar>
+                </UserAvatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel className="flex flex-col gap-2">
