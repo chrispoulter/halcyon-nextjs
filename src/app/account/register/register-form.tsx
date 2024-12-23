@@ -5,16 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { registerAction } from '@/app/actions/registerAction';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
+import { DateFormField } from '@/components/date-form-field';
+import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 import { cn } from '@/lib/utils';
@@ -70,7 +64,6 @@ export function RegisterForm({ className }: RegisterFormProps) {
     const form = useForm<RegisterFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            emailAddress: '',
             password: '',
             confirmPassword: '',
             firstName: '',
@@ -97,121 +90,62 @@ export function RegisterForm({ className }: RegisterFormProps) {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className={cn('space-y-6', className)}
             >
-                <FormField
-                    control={form.control}
-                    name="emailAddress"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email Address</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="email"
-                                    maxLength={254}
-                                    autoComplete="username"
-                                    required
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                <TextFormField
+                    field="emailAddress"
+                    label="Email Address"
+                    type="email"
+                    maxLength={254}
+                    autoComplete="username"
+                    required
                 />
+
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem className="flex-1">
-                                <FormLabel>Password</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        type="password"
-                                        maxLength={50}
-                                        autoComplete="new-password"
-                                        required
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                    <TextFormField
+                        field="password"
+                        label="Password"
+                        type="password"
+                        maxLength={50}
+                        autoComplete="new-password"
+                        required
+                        className="flex-1"
                     />
-                    <FormField
-                        control={form.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                            <FormItem className="flex-1">
-                                <FormLabel>Confirm Password</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        type="password"
-                                        maxLength={50}
-                                        autoComplete="new-password"
-                                        required
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                    <TextFormField
+                        field="confirmPassword"
+                        label="Confirm Password"
+                        type="password"
+                        maxLength={50}
+                        autoComplete="new-password"
+                        required
+                        className="flex-1"
                     />
                 </div>
+
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <FormField
-                        control={form.control}
-                        name="firstName"
-                        render={({ field }) => (
-                            <FormItem className="flex-1">
-                                <FormLabel>First Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        maxLength={50}
-                                        autoComplete="given-name"
-                                        required
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                    <TextFormField
+                        field="firstName"
+                        label="First Name"
+                        maxLength={50}
+                        autoComplete="given-name"
+                        required
+                        className="flex-1"
                     />
-                    <FormField
-                        control={form.control}
-                        name="lastName"
-                        render={({ field }) => (
-                            <FormItem className="flex-1">
-                                <FormLabel>Last Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        maxLength={50}
-                                        autoComplete="family-name"
-                                        required
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                    <TextFormField
+                        field="lastName"
+                        label="Last Name"
+                        maxLength={50}
+                        autoComplete="family-name"
+                        required
+                        className="flex-1"
                     />
                 </div>
-                <FormField
-                    control={form.control}
-                    name="dateOfBirth"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Date Of Birth</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="date"
-                                    autoComplete="bday"
-                                    required
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+
+                <DateFormField
+                    field="dateOfBirth"
+                    label="Date Of Birth"
+                    autoComplete="bday"
+                    required
                 />
+
                 <Button type="submit" className="w-full">
                     Submit
                 </Button>

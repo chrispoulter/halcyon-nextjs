@@ -5,17 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { loginAction } from '@/app/actions/loginAction';
-import { toast } from '@/hooks/use-toast';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
+import { TextFormField } from '@/components/text-form-field';
+import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
@@ -63,44 +56,24 @@ export function LoginForm({ className }: LoginFormProps) {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className={cn('space-y-6', className)}
             >
-                <FormField
-                    control={form.control}
-                    name="emailAddress"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email Address</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="email"
-                                    maxLength={254}
-                                    autoComplete="username"
-                                    required
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                <TextFormField
+                    field="emailAddress"
+                    label="Email Address"
+                    type="email"
+                    maxLength={254}
+                    autoComplete="username"
+                    required
                 />
-                <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="password"
-                                    maxLength={50}
-                                    autoComplete="current-password"
-                                    required
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+
+                <TextFormField
+                    field="password"
+                    label="Password"
+                    type="password"
+                    maxLength={50}
+                    autoComplete="current-password"
+                    required
                 />
+
                 <Button type="submit" className="w-full">
                     Submit
                 </Button>

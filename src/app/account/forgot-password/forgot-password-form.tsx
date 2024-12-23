@@ -5,16 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { forgotPasswordAction } from '@/app/actions/forgotPasswordAction';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
+import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -59,25 +52,15 @@ export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className={cn('space-y-6', className)}
             >
-                <FormField
-                    control={form.control}
-                    name="emailAddress"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email Address</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="email"
-                                    maxLength={254}
-                                    autoComplete="username"
-                                    required
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                <TextFormField
+                    field="emailAddress"
+                    label="Email Address"
+                    type="email"
+                    maxLength={254}
+                    autoComplete="username"
+                    required
                 />
+
                 <Button type="submit" className="w-full">
                     Submit
                 </Button>

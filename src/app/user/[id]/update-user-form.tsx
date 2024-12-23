@@ -10,18 +10,11 @@ import { updateUserAction } from '@/app/actions/updateUserAction';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
 import { LockUserButton } from '@/app/user/[id]/lock-user-button';
 import { UnlockUserButton } from '@/app/user/[id]/unlock-user-button';
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
+import { DateFormField } from '@/components/date-form-field';
+import { RoleFormField } from '@/components/role-form-field';
+import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 import { Role } from '@/lib/definitions';
@@ -93,171 +86,55 @@ export function UpdateUserForm({ user, className }: UpdateUserFormProps) {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className={cn('space-y-6', className)}
             >
-                <FormField
-                    control={form.control}
-                    name="emailAddress"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email Address</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="email"
-                                    maxLength={254}
-                                    autoComplete="username"
-                                    required
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                <TextFormField
+                    field="emailAddress"
+                    label="Email Address"
+                    type="email"
+                    maxLength={254}
+                    autoComplete="username"
+                    required
                 />
+
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <FormField
-                        control={form.control}
-                        name="firstName"
-                        render={({ field }) => (
-                            <FormItem className="flex-1">
-                                <FormLabel>First Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        maxLength={50}
-                                        autoComplete="given-name"
-                                        required
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                    <TextFormField
+                        field="firstName"
+                        label="First Name"
+                        maxLength={50}
+                        autoComplete="given-name"
+                        required
+                        className="flex-1"
                     />
-                    <FormField
-                        control={form.control}
-                        name="lastName"
-                        render={({ field }) => (
-                            <FormItem className="flex-1">
-                                <FormLabel>Last Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        maxLength={50}
-                                        autoComplete="family-name"
-                                        required
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                    <TextFormField
+                        field="lastName"
+                        label="Last Name"
+                        maxLength={50}
+                        autoComplete="family-name"
+                        required
+                        className="flex-1"
                     />
                 </div>
-                <FormField
-                    control={form.control}
-                    name="dateOfBirth"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Date Of Birth</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="date"
-                                    autoComplete="bday"
-                                    required
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+
+                <DateFormField
+                    field="dateOfBirth"
+                    label="Date Of Birth"
+                    autoComplete="bday"
+                    required
                 />
-                <FormField
-                    control={form.control}
-                    name="roles"
-                    render={({ field }) => {
-                        const currentValue = field.value || [];
 
-                        return (
-                            <>
-                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                                    <div className="space-y-0.5">
-                                        <FormLabel className="text-base">
-                                            System Administrator
-                                        </FormLabel>
-                                        <FormDescription>
-                                            A system administrator has access to
-                                            the entire system.
-                                        </FormDescription>
-                                    </div>
-                                    <FormControl>
-                                        <Switch
-                                            checked={field.value?.includes(
-                                                Role.SYSTEM_ADMINISTRATOR
-                                            )}
-                                            onCheckedChange={(checked) => {
-                                                if (checked) {
-                                                    return field.onChange([
-                                                        ...currentValue,
-                                                        Role.SYSTEM_ADMINISTRATOR,
-                                                    ]);
-                                                }
+                <RoleFormField field="roles" />
 
-                                                return field.onChange(
-                                                    currentValue.filter(
-                                                        (role) =>
-                                                            role !==
-                                                            Role.SYSTEM_ADMINISTRATOR
-                                                    )
-                                                );
-                                            }}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                                    <div className="space-y-0.5">
-                                        <FormLabel className="text-base">
-                                            User Administrator
-                                        </FormLabel>
-                                        <FormDescription>
-                                            A user administrator can create /
-                                            update / delete users.
-                                        </FormDescription>
-                                    </div>
-                                    <FormControl>
-                                        <Switch
-                                            checked={field.value?.includes(
-                                                Role.USER_ADMINISTRATOR
-                                            )}
-                                            onCheckedChange={(checked) => {
-                                                if (checked) {
-                                                    return field.onChange([
-                                                        ...currentValue,
-                                                        Role.USER_ADMINISTRATOR,
-                                                    ]);
-                                                }
-
-                                                return field.onChange(
-                                                    currentValue.filter(
-                                                        (role) =>
-                                                            role !==
-                                                            Role.USER_ADMINISTRATOR
-                                                    )
-                                                );
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            </>
-                        );
-                    }}
-                />
                 <Button asChild variant="secondary" className="w-full">
                     <Link href="/user">Cancel</Link>
                 </Button>
+
                 {user.isLockedOut ? (
                     <UnlockUserButton user={user} className="w-full" />
                 ) : (
                     <LockUserButton user={user} className="w-full" />
                 )}
+
                 <DeleteUserButton user={user} className="w-full" />
+
                 <Button type="submit" className="w-full">
                     Submit
                 </Button>
