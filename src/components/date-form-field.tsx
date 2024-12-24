@@ -20,7 +20,7 @@ type DateFormFieldProps = {
     label: string;
     required?: boolean;
     autoComplete?: [string, string, string];
-    classname?: string;
+    className?: string;
 };
 
 export function DateFormField({
@@ -28,6 +28,7 @@ export function DateFormField({
     label,
     required,
     autoComplete,
+    className,
 }: DateFormFieldProps) {
     const form = useFormContext();
 
@@ -52,7 +53,7 @@ export function DateFormField({
                     field.onChange(`${value}-${month}-${day}`);
 
                 return (
-                    <FormItem>
+                    <FormItem className={className}>
                         <FormLabel>{label}</FormLabel>
                         <div className="flex gap-2">
                             <div className="flex-1">
