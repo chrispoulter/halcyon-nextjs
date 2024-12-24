@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { logoutAction } from '@/app/actions/logoutAction';
 import { ModeToggle } from '@/components/mode-toggle';
-import { UserMenu } from '@/components/user-menu';
+import { UserNav } from '@/components/user-nav';
 import { getSession } from '@/lib/session';
 
 export async function Header() {
@@ -18,7 +18,7 @@ export async function Header() {
 
             <ModeToggle />
 
-            <UserMenu session={session} onLogout={logoutAction} />
+            <UserNav session={session} onLogout={logoutAction} />
         </header>
     );
 }

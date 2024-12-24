@@ -16,12 +16,12 @@ import { UserAvatar } from '@/components/user-avatar';
 import { UserStatus } from '@/components/user-status';
 import { Role, SessionPayload } from '@/lib/definitions';
 
-type UserMenu = {
+type UserNavProps = {
     session?: SessionPayload;
     onLogout: () => void;
 };
 
-export function UserMenu({ session, onLogout }: UserMenu) {
+export function UserNav({ session, onLogout }: UserNavProps) {
     if (!session) {
         return (
             <nav className="flex items-center gap-2">
@@ -46,12 +46,12 @@ export function UserMenu({ session, onLogout }: UserMenu) {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel className="flex flex-col gap-2">
-                    <span className="truncate">
+                    <div className="truncate text-sm font-medium leading-none">
                         {session.firstName} {session.lastName}
-                    </span>
-                    <span className="truncate text-sm text-muted-foreground">
+                    </div>
+                    <div className="truncate text-sm text-muted-foreground">
                         {session.emailAddress}
-                    </span>
+                    </div>
                     <UserStatus user={session} className="sm:flex-col" />
                 </DropdownMenuLabel>
 
