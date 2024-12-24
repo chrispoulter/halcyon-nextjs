@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { User, LogOut, Settings } from 'lucide-react';
+import { User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -11,10 +11,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { HasPersmission } from '@/components/has-permission';
 import { UserAvatar } from '@/components/user-avatar';
 import { UserStatus } from '@/components/user-status';
-import { Role, SessionPayload } from '@/lib/definitions';
+import { SessionPayload } from '@/lib/definitions';
 
 type UserNavProps = {
     session?: SessionPayload;
@@ -24,15 +23,9 @@ type UserNavProps = {
 export function UserNav({ session, onLogout }: UserNavProps) {
     if (!session) {
         return (
-            <nav className="flex items-center gap-2">
-                <Button asChild variant="secondary">
-                    <Link href="/account/register">Register</Link>
-                </Button>
-
-                <Button asChild variant="secondary">
-                    <Link href="/account/login">Login</Link>
-                </Button>
-            </nav>
+            <Button asChild variant="secondary">
+                <Link href="/account/login">Login</Link>
+            </Button>
         );
     }
 
@@ -63,22 +56,6 @@ export function UserNav({ session, onLogout }: UserNavProps) {
                         <span>My Account</span>
                     </Link>
                 </DropdownMenuItem>
-
-                <HasPersmission
-                    session={session}
-                    requiredRoles={[
-                        Role.SYSTEM_ADMINISTRATOR,
-                        Role.USER_ADMINISTRATOR,
-                    ]}
-                >
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                        <Link href="/user">
-                            <Settings />
-                            <span>User Management</span>
-                        </Link>
-                    </DropdownMenuItem>
-                </HasPersmission>
 
                 <DropdownMenuSeparator />
 
