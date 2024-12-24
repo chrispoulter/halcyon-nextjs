@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { HasPersmission } from '@/components/has-permission';
 import { UserAvatar } from '@/components/user-avatar';
-import { UserRoles } from '@/components/user-roles';
+import { UserStatus } from '@/components/user-status';
 import { Role, SessionPayload } from '@/lib/definitions';
 
 type UserMenu = {
@@ -52,7 +52,7 @@ export function UserMenu({ session, onLogout }: UserMenu) {
                     <span className="truncate text-sm text-muted-foreground">
                         {session.emailAddress}
                     </span>
-                    <UserRoles roles={session.roles} />
+                    <UserStatus user={session} className="sm:flex-col" />
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />

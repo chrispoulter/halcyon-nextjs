@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { AlertCircle } from 'lucide-react';
 import { searchUsersAction } from '@/app/actions/searchUsersAction';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     Pagination,
@@ -12,7 +11,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
-import { UserRoles } from '@/components/user-roles';
+import { UserStatus } from '@/components/user-status';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -58,29 +57,23 @@ export default async function UserSearch({
                 <Link href="/user/create">Create User</Link>
             </Button>
 
-            {result.items.map((user) => (
-                <Link
-                    key={user.id}
-                    href={`/user/${user.id}`}
-                    className="block border p-6"
-                >
-                    <div className="block font-semibold leading-7">
-                        {user.firstName} {user.lastName}
-                    </div>
-                    <div className="block leading-7">{user.emailAddress}</div>
-                    <div className="flex flex-col gap-2">
-                        {user.isLockedOut && (
-                            <Badge
-                                variant="destructive"
-                                className="justify-center"
-                            >
-                                Locked
-                            </Badge>
-                        )}
-                        <UserRoles roles={user.roles} />
-                    </div>
-                </Link>
-            ))}
+            <div className="space-y-2">
+                {result.items.map((user) => (
+                    <Link
+                        key={user.id}
+                        href={`/user/${user.id}`}
+                        className="block space-y-2 rounded-lg border p-3 transition-all focus-within:bg-accent hover:bg-accent"
+                    >
+                        <div className="truncate text-sm font-medium leading-none">
+                            {user.firstName} {user.lastName}
+                        </div>
+                        <div className="truncate text-sm text-muted-foreground">
+                            {user.emailAddress}
+                        </div>
+                        <UserStatus user={user} />
+                    </Link>
+                ))}
+            </div>
 
             {result.hasPreviousPage || result.hasNextPage ? (
                 <Pagination>
