@@ -19,23 +19,26 @@ export default async function Login() {
 
             <LoginForm />
 
-            <p className="leading-7">
-                Not already a member?{' '}
-                <Link
-                    href="/account/register"
-                    className="font-medium text-primary underline underline-offset-4"
-                >
-                    Register now
-                </Link>{' '}
-                <br />
-                Forgotten your password?{' '}
-                <Link
-                    href="/account/forgot-password"
-                    className="font-medium text-primary underline underline-offset-4"
-                >
-                    Request reset
-                </Link>
-            </p>
+            <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">
+                    Not already a member?{' '}
+                    <Link
+                        href="/account/register"
+                        className="underline underline-offset-4 hover:text-primary"
+                    >
+                        Register now
+                    </Link>
+                </p>
+                <p className="text-sm text-muted-foreground">
+                    Forgotten your password?{' '}
+                    <Link
+                        href="/account/forgot-password"
+                        className="underline underline-offset-4 hover:text-primary"
+                    >
+                        Request reset
+                    </Link>
+                </p>
+            </div>
         </main>
     );
 }

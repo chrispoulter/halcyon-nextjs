@@ -40,11 +40,11 @@ export default async function ChangePassword() {
 
             <ChangePasswordForm />
 
-            <p className="leading-7">
+            <p className="text-sm text-muted-foreground">
                 Forgotten your password?{' '}
                 <Link
                     href="/account/forgot-password"
-                    className="font-medium text-primary underline underline-offset-4"
+                    className="underline underline-offset-4 hover:text-primary"
                 >
                     Request reset
                 </Link>

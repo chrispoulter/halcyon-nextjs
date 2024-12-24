@@ -20,11 +20,11 @@ export default async function Register() {
 
             <RegisterForm />
 
-            <p className="leading-7">
+            <p className="text-sm text-muted-foreground">
                 Already have an account?{' '}
                 <Link
                     href="/account/login"
-                    className="font-medium text-primary underline underline-offset-4"
+                    className="underline underline-offset-4 hover:text-primary"
                 >
                     Log in now
                 </Link>
