@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { AlertCircle } from 'lucide-react';
 import { searchUsersAction } from '@/app/actions/searchUsersAction';
+import { UserCard } from '@/app/user/user-card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,7 +12,6 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
-import { UserStatus } from '@/components/user-status';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -59,19 +59,7 @@ export default async function UserSearch({
 
             <div className="space-y-2">
                 {result.items.map((user) => (
-                    <Link
-                        key={user.id}
-                        href={`/user/${user.id}`}
-                        className="block space-y-2 rounded-lg border p-3 transition-all focus-within:bg-accent hover:bg-accent"
-                    >
-                        <div className="truncate text-sm font-medium leading-none">
-                            {user.firstName} {user.lastName}
-                        </div>
-                        <div className="truncate text-sm text-muted-foreground">
-                            {user.emailAddress}
-                        </div>
-                        <UserStatus user={user} />
-                    </Link>
+                    <UserCard key={user.id} user={user} />
                 ))}
             </div>
 

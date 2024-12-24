@@ -5,15 +5,17 @@ import { z } from 'zod';
 import { Role } from '@/lib/definitions';
 import { verifySession } from '@/lib/session';
 
-type SearchUsersResponse = {
-    items: {
-        id: string;
-        emailAddress: string;
-        firstName: string;
-        lastName: string;
-        isLockedOut: boolean;
-        roles?: Role[];
-    }[];
+export type SearchUsersItem = {
+    id: string;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    isLockedOut: boolean;
+    roles?: Role[];
+};
+
+export type SearchUsersResponse = {
+    items: SearchUsersItem[];
     hasNextPage: boolean;
     hasPreviousPage: boolean;
 };
