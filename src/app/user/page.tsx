@@ -4,8 +4,15 @@ import { AlertCircle } from 'lucide-react';
 import { searchUsersAction } from '@/app/actions/searchUsersAction';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { UserRoles } from '@/components/user-roles';
 import { Button } from '@/components/ui/button';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination';
+import { UserRoles } from '@/components/user-roles';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -42,16 +49,12 @@ export default async function UserSearch({
     }
 
     return (
-        <main className="mx-auto max-w-screen-sm p-6">
+        <main className="mx-auto max-w-screen-sm space-y-6 p-6">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 Users
             </h1>
 
-            <Button
-                asChild
-                variant="secondary"
-                className="mt-6 w-full sm:w-auto"
-            >
+            <Button asChild variant="secondary" className="w-full sm:w-auto">
                 <Link href="/user/create">Create User</Link>
             </Button>
 
@@ -59,7 +62,7 @@ export default async function UserSearch({
                 <Link
                     key={user.id}
                     href={`/user/${user.id}`}
-                    className="mt-6 block border p-6"
+                    className="block border p-6"
                 >
                     <div className="block font-semibold leading-7">
                         {user.firstName} {user.lastName}
@@ -78,6 +81,43 @@ export default async function UserSearch({
                     </div>
                 </Link>
             ))}
+
+            {result.hasPreviousPage || result.hasNextPage ? (
+                <Pagination>
+                    <PaginationContent>
+                        {result.hasPreviousPage && (
+                            <PaginationItem>
+                                <PaginationPrevious
+                                    href={{
+                                        pathname: '/user',
+                                        query: {
+                                            page: parseInt(page ?? 1) - 1,
+                                            size,
+                                            sort,
+                                            search,
+                                        },
+                                    }}
+                                />
+                            </PaginationItem>
+                        )}
+                        {result.hasNextPage && (
+                            <PaginationItem>
+                                <PaginationNext
+                                    href={{
+                                        pathname: '/user',
+                                        query: {
+                                            page: parseInt(page ?? '1') + 1,
+                                            size,
+                                            sort,
+                                            search,
+                                        },
+                                    }}
+                                />
+                            </PaginationItem>
+                        )}
+                    </PaginationContent>
+                </Pagination>
+            ) : null}
         </main>
     );
 }
