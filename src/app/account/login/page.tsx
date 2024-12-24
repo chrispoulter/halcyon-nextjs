@@ -8,18 +8,18 @@ export const metadata: Metadata = {
 
 export default async function Login() {
     return (
-        <main className="mx-auto max-w-screen-sm p-6">
-            <h1 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight">
+        <main className="mx-auto max-w-screen-sm space-y-6 p-6">
+            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 Login
             </h1>
 
-            <p className="mt-6 leading-7">
+            <p className="leading-7">
                 Enter your email address below to login to your account.
             </p>
 
-            <LoginForm className="mt-6" />
+            <LoginForm />
 
-            <p className="mt-6 leading-7">
+            <p className="leading-7">
                 Not already a member?{' '}
                 <Link
                     href="/account/register"

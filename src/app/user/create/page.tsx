@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default async function CreateUser() {
     return (
         <main className="mx-auto max-w-screen-sm p-6">
-            <h1 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight">
+            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 Create User
             </h1>
 

@@ -53,7 +53,7 @@ export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction onClick={onUnlock}>
-                        Unlock
+                        Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

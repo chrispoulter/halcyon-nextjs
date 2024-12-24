@@ -52,7 +52,7 @@ export function DeleteAccountButton({ className }: DeleteAccountButtonProps) {
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction onClick={onDelete}>
-                        Delete
+                        Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

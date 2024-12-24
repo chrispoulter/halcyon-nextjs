@@ -54,7 +54,7 @@ export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction onClick={onDelete}>
-                        Delete
+                        Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

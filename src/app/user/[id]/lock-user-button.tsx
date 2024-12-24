@@ -52,7 +52,9 @@ export function LockUserButton({ user, className }: LockUserButtonProps) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={onLock}>Lock</AlertDialogAction>
+                    <AlertDialogAction onClick={onLock}>
+                        Continue
+                    </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
