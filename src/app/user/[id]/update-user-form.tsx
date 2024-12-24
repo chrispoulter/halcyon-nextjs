@@ -117,7 +117,7 @@ export function UpdateUserForm({ user, className }: UpdateUserFormProps) {
                 <DateFormField
                     field="dateOfBirth"
                     label="Date Of Birth"
-                    autoComplete="bday"
+                    autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
                 />
 

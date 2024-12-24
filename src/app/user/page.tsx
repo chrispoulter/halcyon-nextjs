@@ -5,6 +5,7 @@ import { searchUsersAction } from '@/app/actions/searchUsersAction';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { UserRoles } from '@/components/user-roles';
+import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -45,6 +46,14 @@ export default async function UserSearch({
             <h1 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight">
                 Users
             </h1>
+
+            <Button
+                asChild
+                variant="secondary"
+                className="mt-6 w-full sm:w-auto"
+            >
+                <Link href="/user/create">Create User</Link>
+            </Button>
 
             {result.items.map((user) => (
                 <Link

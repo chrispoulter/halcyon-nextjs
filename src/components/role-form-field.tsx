@@ -27,44 +27,48 @@ export function RoleFormField({ field }: RoleFormFieldProps) {
                 return (
                     <>
                         {Object.entries(roleDetails).map(
-                            ([role, { title, description }]) => (
-                                <FormItem
-                                    key={role}
-                                    className="flex flex-row items-center justify-between rounded-lg border p-4"
-                                >
-                                    <div className="space-y-0.5">
-                                        <FormLabel className="text-base">
-                                            {title}
-                                        </FormLabel>
-                                        <FormDescription>
-                                            {description}
-                                        </FormDescription>
-                                    </div>
-                                    <FormControl>
-                                        <Switch
-                                            checked={field.value?.includes(
-                                                role
-                                            )}
-                                            onCheckedChange={(checked) => {
-                                                if (checked) {
-                                                    return field.onChange([
-                                                        ...currentValue,
-                                                        role,
-                                                    ]);
-                                                }
+                            ([role, { title, description }]) => {
+                                const checked = field.value?.includes(role);
 
-                                                return field.onChange(
-                                                    currentValue.filter(
-                                                        (currentRole: Role) =>
-                                                            currentRole !== role
-                                                    )
-                                                );
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )
+                                const onCheckChanged = (checked: boolean) => {
+                                    if (checked) {
+                                        return field.onChange([
+                                            ...currentValue,
+                                            role,
+                                        ]);
+                                    }
+
+                                    return field.onChange(
+                                        currentValue.filter(
+                                            (currentRole: Role) =>
+                                                currentRole !== role
+                                        )
+                                    );
+                                };
+
+                                return (
+                                    <FormItem
+                                        key={role}
+                                        className="flex flex-row items-center justify-between rounded-lg border p-4"
+                                    >
+                                        <div className="space-y-0.5">
+                                            <FormLabel className="text-base">
+                                                {title}
+                                            </FormLabel>
+                                            <FormDescription>
+                                                {description}
+                                            </FormDescription>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={checked}
+                                                onCheckedChange={onCheckChanged}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                );
+                            }
                         )}
                     </>
                 );
