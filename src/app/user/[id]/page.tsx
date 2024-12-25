@@ -29,17 +29,20 @@ export default async function ResetPassword({ params }: { params: Params }) {
     }
 
     return (
-        <main className="mx-auto max-w-screen-sm p-6">
+        <main className="mx-auto max-w-screen-sm space-y-6 p-6">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                Update User
+                User
             </h1>
+            <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight">
+                Update
+            </h2>
 
-            <p className="mt-6 leading-7">
+            <p className="leading-7">
                 Update the user&apos;s details below. The email address is used
                 to login to the account.
             </p>
 
-            <UpdateUserForm user={user} className="mt-6" />
+            <UpdateUserForm user={user} />
         </main>
     );
 }

@@ -54,7 +54,7 @@ export default async function UserSearch({
             </h1>
 
             <Button asChild variant="secondary" className="w-full sm:w-auto">
-                <Link href="/user/create">Create User</Link>
+                <Link href="/user/create">Create New</Link>
             </Button>
 
             <div className="space-y-2">
