@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 import { deleteAccountAction } from '@/app/actions/deleteAccountAction';
 import {
     AlertDialog,
@@ -23,20 +24,34 @@ type DeleteAccountButtonProps = {
 export function DeleteAccountButton({ className }: DeleteAccountButtonProps) {
     const router = useRouter();
 
-    async function onDelete() {
-        const result = await deleteAccountAction({});
+    const { execute, isPending } = useAction(deleteAccountAction, {
+        onSuccess() {
+            toast({
+                title: 'Your account has been deleted.',
+            });
 
-        toast({
-            title: 'Your account has been deleted.',
-            description: JSON.stringify(result),
-        });
+            router.push('/');
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        router.push('/');
+    function onDelete() {
+        execute({});
     }
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="destructive" className={className}>
+                <Button
+                    variant="destructive"
+                    disabled={isPending}
+                    className={className}
+                >
                     Delete Account
                 </Button>
             </AlertDialogTrigger>

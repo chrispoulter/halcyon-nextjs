@@ -19,6 +19,7 @@ type DateFormFieldProps = {
     field: string;
     label: string;
     required?: boolean;
+    disabled?: boolean;
     autoComplete?: [string, string, string];
     className?: string;
 };
@@ -27,6 +28,7 @@ export function DateFormField({
     field,
     label,
     required,
+    disabled,
     autoComplete,
     className,
 }: DateFormFieldProps) {
@@ -61,6 +63,7 @@ export function DateFormField({
                                     onValueChange={onDayChange}
                                     defaultValue={day}
                                     required={required}
+                                    disabled={disabled}
                                     autoComplete={
                                         autoComplete && autoComplete[0]
                                     }
@@ -93,6 +96,7 @@ export function DateFormField({
                                     onValueChange={onMonthChange}
                                     defaultValue={month}
                                     required={required}
+                                    disabled={disabled}
                                     autoComplete={
                                         autoComplete && autoComplete[1]
                                     }
@@ -123,6 +127,7 @@ export function DateFormField({
                                     onValueChange={onYearChange}
                                     defaultValue={year}
                                     required={required}
+                                    disabled={disabled}
                                     autoComplete={
                                         autoComplete && autoComplete[2]
                                     }

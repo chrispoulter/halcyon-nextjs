@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useAction } from 'next-safe-action/hooks';
 import { registerAction } from '@/app/actions/registerAction';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -60,15 +61,24 @@ export function RegisterForm() {
         },
     });
 
-    async function onSubmit(data: RegisterFormValues) {
-        const result = await registerAction(data);
+    const { execute, isPending } = useAction(registerAction, {
+        onSuccess() {
+            toast({
+                title: 'User successfully registered.',
+            });
 
-        toast({
-            title: 'User successfully registered.',
-            description: JSON.stringify(result),
-        });
+            router.push('/account/login');
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        router.push('/account/login');
+    function onSubmit(data: RegisterFormValues) {
+        execute(data);
     }
 
     return (
@@ -85,6 +95,7 @@ export function RegisterForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -96,6 +107,7 @@ export function RegisterForm() {
                         autoComplete="new-password"
                         required
                         className="flex-1"
+                        disabled={isPending}
                     />
                     <TextFormField
                         field="confirmPassword"
@@ -105,6 +117,7 @@ export function RegisterForm() {
                         autoComplete="new-password"
                         required
                         className="flex-1"
+                        disabled={isPending}
                     />
                 </div>
 
@@ -116,6 +129,7 @@ export function RegisterForm() {
                         autoComplete="given-name"
                         required
                         className="flex-1"
+                        disabled={isPending}
                     />
                     <TextFormField
                         field="lastName"
@@ -124,6 +138,7 @@ export function RegisterForm() {
                         autoComplete="family-name"
                         required
                         className="flex-1"
+                        disabled={isPending}
                     />
                 </div>
 
@@ -132,10 +147,13 @@ export function RegisterForm() {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={isPending}>
+                        Submit
+                    </Button>
                 </div>
             </form>
         </Form>

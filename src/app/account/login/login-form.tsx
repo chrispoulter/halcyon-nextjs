@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useAction } from 'next-safe-action/hooks';
 import { loginAction } from '@/app/actions/loginAction';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -32,15 +33,20 @@ export function LoginForm() {
         },
     });
 
-    async function onSubmit(data: LoginFormValues) {
-        const result = await loginAction(data);
+    const { execute, isPending } = useAction(loginAction, {
+        onSuccess() {
+            router.push('/');
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        toast({
-            title: 'You have been successfully logged in.',
-            description: JSON.stringify(result),
-        });
-
-        router.push('/');
+    function onSubmit(data: LoginFormValues) {
+        execute(data);
     }
 
     return (
@@ -57,6 +63,7 @@ export function LoginForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
+                    disabled={isPending}
                 />
 
                 <TextFormField
@@ -66,10 +73,13 @@ export function LoginForm() {
                     maxLength={50}
                     autoComplete="current-password"
                     required
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={isPending}>
+                        Submit
+                    </Button>
                 </div>
             </form>
         </Form>

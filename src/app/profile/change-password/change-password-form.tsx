@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useAction } from 'next-safe-action/hooks';
 import { changePasswordAction } from '@/app/actions/changePasswordAction';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -43,15 +44,24 @@ export function ChangePasswordForm() {
         },
     });
 
-    async function onSubmit(data: ChangePasswordFormValues) {
-        const result = await changePasswordAction(data);
+    const { execute, isPending } = useAction(changePasswordAction, {
+        onSuccess() {
+            toast({
+                title: 'Your password has been changed.',
+            });
 
-        toast({
-            title: 'Your password has been changed.',
-            description: JSON.stringify(result),
-        });
+            router.push('/profile');
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        router.push('/profile');
+    function onSubmit(data: ChangePasswordFormValues) {
+        execute(data);
     }
 
     return (
@@ -68,6 +78,7 @@ export function ChangePasswordForm() {
                     maxLength={50}
                     autoComplete="current-password"
                     required
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -79,6 +90,7 @@ export function ChangePasswordForm() {
                         autoComplete="new-password"
                         required
                         className="flex-1"
+                        disabled={isPending}
                     />
                     <TextFormField
                         field="confirmNewPassword"
@@ -88,6 +100,7 @@ export function ChangePasswordForm() {
                         autoComplete="new-password"
                         required
                         className="flex-1"
+                        disabled={isPending}
                     />
                 </div>
 
@@ -96,7 +109,9 @@ export function ChangePasswordForm() {
                         <Link href="/profile">Cancel</Link>
                     </Button>
 
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={isPending}>
+                        Submit
+                    </Button>
                 </div>
             </form>
         </Form>

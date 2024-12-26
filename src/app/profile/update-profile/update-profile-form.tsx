@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useAction } from 'next-safe-action/hooks';
 import { GetProfileResponse } from '@/app/actions/getProfileAction';
 import { updateProfileAction } from '@/app/actions/updateProfileAction';
 import { Form } from '@/components/ui/form';
@@ -48,15 +49,24 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
         values: profile,
     });
 
-    async function onSubmit(data: UpdateProfileFormValues) {
-        const result = await updateProfileAction(data);
+    const { execute, isPending } = useAction(updateProfileAction, {
+        onSuccess() {
+            toast({
+                title: 'Your profile has been updated.',
+            });
 
-        toast({
-            title: 'Your profile has been updated.',
-            description: JSON.stringify(result),
-        });
+            router.push('/profile');
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        router.push('/profile');
+    function onSubmit(data: UpdateProfileFormValues) {
+        execute(data);
     }
 
     return (
@@ -73,6 +83,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                     maxLength={254}
                     autoComplete="username"
                     required
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -83,6 +94,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                         autoComplete="given-name"
                         required
                         className="flex-1"
+                        disabled={isPending}
                     />
                     <TextFormField
                         field="lastName"
@@ -91,6 +103,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                         autoComplete="family-name"
                         required
                         className="flex-1"
+                        disabled={isPending}
                     />
                 </div>
 
@@ -99,6 +112,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
@@ -106,7 +120,9 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                         <Link href="/profile">Cancel</Link>
                     </Button>
 
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={isPending}>
+                        Submit
+                    </Button>
                 </div>
             </form>
         </Form>

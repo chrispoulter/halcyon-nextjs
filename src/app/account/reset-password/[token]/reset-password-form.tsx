@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useAction } from 'next-safe-action/hooks';
 import { resetPasswordAction } from '@/app/actions/resetPasswordAction';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -46,15 +47,24 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         },
     });
 
-    async function onSubmit(data: ResetPasswordFormValues) {
-        const result = await resetPasswordAction({ ...data, token });
+    const { execute, isPending } = useAction(resetPasswordAction, {
+        onSuccess() {
+            toast({
+                title: 'Your password has been reset.',
+            });
 
-        toast({
-            title: 'Your password has been reset.',
-            description: JSON.stringify(result),
-        });
+            router.push('/account/login');
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        router.push('/account/login');
+    function onSubmit(data: ResetPasswordFormValues) {
+        execute({ ...data, token });
     }
 
     return (
@@ -71,6 +81,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                     maxLength={254}
                     autoComplete="username"
                     required
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -82,6 +93,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                         autoComplete="new-password"
                         required
                         className="flex-1"
+                        disabled={isPending}
                     />
                     <TextFormField
                         field="confirmNewPassword"
@@ -91,11 +103,14 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                         autoComplete="new-password"
                         required
                         className="flex-1"
+                        disabled={isPending}
                     />
                 </div>
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={isPending}>
+                        Submit
+                    </Button>
                 </div>
             </form>
         </Form>
