@@ -1,9 +1,9 @@
 'use server';
 
-import { trace } from '@opentelemetry/api';
 import { z } from 'zod';
+import { actionClient } from '@/lib/safe-action';
 
-const actionSchema = z.object({
+const schema = z.object({
     token: z
         .string({ message: 'Token must be a valid string' })
         .uuid('Token must be a valid UUID'),
@@ -16,41 +16,27 @@ const actionSchema = z.object({
         .max(50, 'New Password must be no more than 50 characters'),
 });
 
-export async function resetPasswordAction(data: unknown) {
-    return await trace
-        .getTracer('halcyon')
-        .startActiveSpan('resetPasswordAction', async (span) => {
-            try {
-                const request = actionSchema.safeParse(data);
+type ResetPasswordResponse = {
+    id: string;
+};
 
-                if (!request.success) {
-                    return {
-                        errors: request.error.flatten().fieldErrors,
-                    };
-                }
-
-                const response = await fetch(
-                    `${process.env.API_URL}/account/reset-password`,
-                    {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(request.data),
-                    }
-                );
-
-                if (!response.ok) {
-                    return {
-                        errors: [
-                            'An error occurred while processing your request',
-                        ],
-                    };
-                }
-
-                return await response.json();
-            } finally {
-                span.end();
+export const resetPasswordAction = actionClient
+    .schema(schema)
+    .action(async ({ parsedInput }) => {
+        const response = await fetch(
+            `${process.env.API_URL}/account/reset-password`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(parsedInput),
             }
-        });
-}
+        );
+
+        if (!response.ok) {
+            throw new Error('An error occurred while processing your request');
+        }
+
+        return (await response.json()) as ResetPasswordResponse;
+    });

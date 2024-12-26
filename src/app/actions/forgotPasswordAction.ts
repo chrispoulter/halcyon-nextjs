@@ -26,6 +26,4 @@ export const forgotPasswordAction = actionClient
         if (!response.ok) {
             throw new Error('An error occurred while processing your request');
         }
-
-        return { success: 'Your forgot password request has been received' };
     });

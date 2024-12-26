@@ -1,10 +1,10 @@
 'use server';
 
-import { trace } from '@opentelemetry/api';
 import { z } from 'zod';
 import { isInPast } from '@/lib/dates';
+import { actionClient } from '@/lib/safe-action';
 
-const actionSchema = z
+const schema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
@@ -36,41 +36,27 @@ const actionSchema = z
         path: ['confirmPassword'],
     });
 
-export async function registerAction(data: unknown) {
-    return await trace
-        .getTracer('halcyon')
-        .startActiveSpan('registerAction', async (span) => {
-            try {
-                const request = actionSchema.safeParse(data);
+type RegisterResponse = {
+    id: string;
+};
 
-                if (!request.success) {
-                    return {
-                        errors: request.error.flatten().fieldErrors,
-                    };
-                }
-
-                const response = await fetch(
-                    `${process.env.API_URL}/account/register`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(request.data),
-                    }
-                );
-
-                if (!response.ok) {
-                    return {
-                        errors: [
-                            'An error occurred while processing your request',
-                        ],
-                    };
-                }
-
-                return await response.json();
-            } finally {
-                span.end();
+export const registerAction = actionClient
+    .schema(schema)
+    .action(async ({ parsedInput }) => {
+        const response = await fetch(
+            `${process.env.API_URL}/account/register`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(parsedInput),
             }
-        });
-}
+        );
+
+        if (!response.ok) {
+            throw new Error('An error occurred while processing your request');
+        }
+
+        return (await response.json()) as RegisterResponse;
+    });

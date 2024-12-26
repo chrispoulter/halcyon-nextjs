@@ -1,51 +1,36 @@
 'use server';
 
-import { trace } from '@opentelemetry/api';
 import { z } from 'zod';
-import { verifySession } from '@/lib/session';
-import { deleteSession } from '@/lib/session';
+import { actionClient } from '@/lib/safe-action';
+import { verifySession, deleteSession } from '@/lib/session';
 
-const actionSchema = z.object({
+const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-export async function deleteAccountAction(data: unknown) {
-    return await trace
-        .getTracer('halcyon')
-        .startActiveSpan('deleteAccountAction', async (span) => {
-            try {
-                const session = await verifySession();
+type DeleteAccountResponse = {
+    id: string;
+};
 
-                const request = actionSchema.safeParse(data);
+export const deleteAccountAction = actionClient
+    .schema(schema)
+    .action(async ({ parsedInput }) => {
+        const session = await verifySession();
 
-                if (!request.success) {
-                    return {
-                        errors: request.error.flatten().fieldErrors,
-                    };
-                }
-
-                const response = await fetch(`${process.env.API_URL}/profile`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${session.accessToken}`,
-                    },
-                    body: JSON.stringify(request.data),
-                });
-
-                if (!response.ok) {
-                    return {
-                        errors: [
-                            'An error occurred while processing your request',
-                        ],
-                    };
-                }
-
-                deleteSession();
-
-                return await response.json();
-            } finally {
-                span.end();
-            }
+        const response = await fetch(`${process.env.API_URL}/profile`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${session.accessToken}`,
+            },
+            body: JSON.stringify(parsedInput),
         });
-}
+
+        if (!response.ok) {
+            throw new Error('An error occurred while processing your request');
+        }
+
+        deleteSession();
+
+        return (await response.json()) as DeleteAccountResponse;
+    });

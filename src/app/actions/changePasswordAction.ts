@@ -1,10 +1,10 @@
 'use server';
 
-import { trace } from '@opentelemetry/api';
 import { z } from 'zod';
+import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
-const actionSchema = z.object({
+const schema = z.object({
     currentPassword: z
         .string({ message: 'Current Password must be a valid string' })
         .min(1, 'Current Password is a required field'),
@@ -15,44 +15,30 @@ const actionSchema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-export async function changePasswordAction(data: unknown) {
-    return await trace
-        .getTracer('halcyon')
-        .startActiveSpan('changePasswordAction', async (span) => {
-            try {
-                const session = await verifySession();
+type ChangePasswordResponse = {
+    id: string;
+};
 
-                const request = actionSchema.safeParse(data);
+export const changePasswordAction = actionClient
+    .schema(schema)
+    .action(async ({ parsedInput }) => {
+        const session = await verifySession();
 
-                if (!request.success) {
-                    return {
-                        errors: request.error.flatten().fieldErrors,
-                    };
-                }
-
-                const response = await fetch(
-                    `${process.env.API_URL}/profile/change-password`,
-                    {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${session.accessToken}`,
-                        },
-                        body: JSON.stringify(request.data),
-                    }
-                );
-
-                if (!response.ok) {
-                    return {
-                        errors: [
-                            'An error occurred while processing your request',
-                        ],
-                    };
-                }
-
-                return await response.json();
-            } finally {
-                span.end();
+        const response = await fetch(
+            `${process.env.API_URL}/profile/change-password`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${session.accessToken}`,
+                },
+                body: JSON.stringify(parsedInput),
             }
-        });
-}
+        );
+
+        if (!response.ok) {
+            throw new Error('An error occurred while processing your request');
+        }
+
+        return (await response.json()) as ChangePasswordResponse;
+    });

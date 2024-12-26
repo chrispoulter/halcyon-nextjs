@@ -1,12 +1,12 @@
 'use server';
 
-import { trace } from '@opentelemetry/api';
 import { z } from 'zod';
 import { isInPast } from '@/lib/dates';
 import { Role } from '@/lib/definitions';
+import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
-const actionSchema = z.object({
+const schema = z.object({
     id: z
         .string({ message: 'Id must be a valid string' })
         .uuid('Id must be a valid UUID'),
@@ -40,44 +40,30 @@ const actionSchema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-export async function createUserAction(data: unknown) {
-    return await trace
-        .getTracer('halcyon')
-        .startActiveSpan('createUserAction', async (span) => {
-            try {
-                const session = await verifySession([
-                    Role.SYSTEM_ADMINISTRATOR,
-                    Role.USER_ADMINISTRATOR,
-                ]);
+type CreateUserResponse = {
+    id: string;
+};
 
-                const request = actionSchema.safeParse(data);
+export const createUserAction = actionClient
+    .schema(schema)
+    .action(async ({ parsedInput }) => {
+        const session = await verifySession([
+            Role.SYSTEM_ADMINISTRATOR,
+            Role.USER_ADMINISTRATOR,
+        ]);
 
-                if (!request.success) {
-                    return {
-                        errors: request.error.flatten().fieldErrors,
-                    };
-                }
-
-                const response = await fetch(`${process.env.API_URL}/user`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${session.accessToken}`,
-                    },
-                    body: JSON.stringify(request.data),
-                });
-
-                if (!response.ok) {
-                    return {
-                        errors: [
-                            'An error occurred while processing your request',
-                        ],
-                    };
-                }
-
-                return await response.json();
-            } finally {
-                span.end();
-            }
+        const response = await fetch(`${process.env.API_URL}/user`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${session.accessToken}`,
+            },
+            body: JSON.stringify(parsedInput),
         });
-}
+
+        if (!response.ok) {
+            throw new Error('An error occurred while processing your request');
+        }
+
+        return (await response.json()) as CreateUserResponse;
+    });
