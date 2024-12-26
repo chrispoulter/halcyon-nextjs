@@ -21,10 +21,6 @@ const routes = [
         label: 'About',
     },
     {
-        href: '/contact',
-        label: 'Contact',
-    },
-    {
         href: '/user',
         label: 'Users',
         role: [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR],
