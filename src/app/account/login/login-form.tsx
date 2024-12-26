@@ -13,7 +13,6 @@ import { toast } from '@/hooks/use-toast';
 const formSchema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
-        .min(1, 'Email Address is a required field')
         .email('Email Address must be a valid email'),
     password: z
         .string({ message: 'Password must be a valid string' })

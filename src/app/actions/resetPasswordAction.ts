@@ -6,11 +6,9 @@ import { z } from 'zod';
 const actionSchema = z.object({
     token: z
         .string({ message: 'Token must be a valid string' })
-        .min(1, 'Token is a required field')
         .uuid('Token must be a valid UUID'),
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
-        .min(1, 'Email Address is a required field')
         .email('Email Address must be a valid email'),
     newPassword: z
         .string({ message: 'New Password must be a valid string' })

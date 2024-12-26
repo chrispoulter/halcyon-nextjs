@@ -19,7 +19,6 @@ export type GetUserResponse = {
 const actionSchema = z.object({
     id: z
         .string({ message: 'Id must be a valid string' })
-        .min(1, 'Id is a required field')
         .uuid('Id must be a valid UUID'),
 });
 

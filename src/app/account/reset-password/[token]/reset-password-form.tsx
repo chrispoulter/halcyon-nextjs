@@ -14,14 +14,13 @@ const formSchema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
-            .min(1, 'Email Address is a required field')
             .email('Email Address must be a valid email'),
         newPassword: z
-            .string({ message: 'New Password is a required field' })
+            .string({ message: 'New Password must be a valid string' })
             .min(8, 'New Password must be at least 8 characters')
             .max(50, 'New Password must be no more than 50 characters'),
         confirmNewPassword: z
-            .string({ message: 'Confirm New Password is a required field' })
+            .string({ message: 'Confirm New Password must be a valid string' })
             .min(1, 'Confirm New Password is a required field'),
     })
     .refine((data) => data.newPassword === data.confirmNewPassword, {

@@ -14,14 +14,14 @@ import { toast } from '@/hooks/use-toast';
 const formSchema = z
     .object({
         currentPassword: z
-            .string({ message: 'Current Password is a required field' })
+            .string({ message: 'Current Password must be a valid string' })
             .min(1, 'Current Password is a required field'),
         newPassword: z
-            .string({ message: 'New Password is a required field' })
+            .string({ message: 'New Password must be a valid string' })
             .min(8, 'New Password must be at least 8 characters')
             .max(50, 'New Password must be no more than 50 characters'),
         confirmNewPassword: z
-            .string({ message: 'Confirm New Password is a required field' })
+            .string({ message: 'Confirm New Password must be a valid string' })
             .min(1, 'Confirm New Password is a required field'),
     })
     .refine((data) => data.newPassword === data.confirmNewPassword, {

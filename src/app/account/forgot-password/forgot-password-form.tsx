@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useAction } from 'next-safe-action/hooks';
 import { forgotPasswordAction } from '@/app/actions/forgotPasswordAction';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,6 @@ import { toast } from '@/hooks/use-toast';
 const formSchema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
-        .min(1, 'Email Address is a required field')
         .email('Email Address must be a valid email'),
 });
 
@@ -29,15 +29,24 @@ export function ForgotPasswordForm() {
         },
     });
 
-    async function onSubmit(data: ForgotPasswordFormValues) {
-        const result = await forgotPasswordAction(data);
+    const { execute, isPending } = useAction(forgotPasswordAction, {
+        onSuccess() {
+            toast({
+                title: 'Instructions as to how to reset your password have been sent to you via email.',
+            });
 
-        toast({
-            title: 'Instructions as to how to reset your password have been sent to you via email.',
-            description: JSON.stringify(result),
-        });
+            router.push('/account/login');
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        router.push('/account/login');
+    function onSubmit(data: ForgotPasswordFormValues) {
+        execute(data);
     }
 
     return (
@@ -54,10 +63,13 @@ export function ForgotPasswordForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={isPending}>
+                        Submit
+                    </Button>
                 </div>
             </form>
         </Form>

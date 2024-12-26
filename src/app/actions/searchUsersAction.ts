@@ -39,7 +39,7 @@ const actionSchema = z.object({
         .max(50, 'Size must be less than 50')
         .optional(),
     sort: z
-        .nativeEnum(UserSort, { message: 'Sort must be a valid string' })
+        .nativeEnum(UserSort, { message: 'Sort must be a valid user sort' })
         .optional(),
 });
 

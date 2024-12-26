@@ -26,7 +26,7 @@ import { Input } from '@/components/ui/input';
 const formSchema = z.object({
     search: z
         .string({
-            message: 'Search is a required field',
+            message: 'Search must be a valid string',
         })
         .optional(),
 });

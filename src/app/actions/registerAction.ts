@@ -8,22 +8,16 @@ const actionSchema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
-            .min(1, 'Email Address is a required field')
-            .max(254, 'Password must be no more than 254 characters')
             .email('Email Address must be a valid email'),
         password: z
             .string({ message: 'Password must be a valid string' })
             .min(8, 'Password must be at least 8 characters')
             .max(50, 'Password must be no more than 50 characters'),
         confirmPassword: z
-            .string({
-                message: 'Confirm Password is a required field',
-            })
+            .string({ message: 'Confirm Password must be a valid string' })
             .min(1, 'Confirm Password is a required field'),
         firstName: z
-            .string({
-                message: 'Confirm Password is a required field',
-            })
+            .string({ message: 'First Name must be a valid string' })
             .min(1, 'First Name is a required field')
             .max(50, 'First Name must be no more than 50 characters'),
         lastName: z
@@ -34,7 +28,6 @@ const actionSchema = z
             .string({
                 message: 'Date of Birth must be a valid string',
             })
-            .min(1, 'Date Of Birth is a required field')
             .date('Date Of Birth must be a valid date')
             .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
     })
