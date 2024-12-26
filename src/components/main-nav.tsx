@@ -32,24 +32,21 @@ type MainNavProps = {
 };
 
 export function MainNav({ session }: MainNavProps) {
+    const routeLinks = routes
+        .filter((route) =>
+            route.role
+                ? route.role.some((value) => session?.roles?.includes(value))
+                : true
+        )
+        .map((route) => (
+            <Button key={route.href} asChild variant="link">
+                <Link href={route.href}>{route.label}</Link>
+            </Button>
+        ));
+
     return (
         <>
-            <nav className="hidden gap-2 sm:flex">
-                {routes
-                    .filter((route) =>
-                        route.role
-                            ? route.role.some((value) =>
-                                  session?.roles?.includes(value)
-                              )
-                            : true
-                    )
-                    .map((route) => (
-                        <Button key={route.href} asChild variant="link">
-                            <Link href={route.href}>{route.label}</Link>
-                        </Button>
-                    ))}
-            </nav>
-
+            <nav className="hidden gap-2 sm:flex">{routeLinks}</nav>
             <Drawer>
                 <DrawerTrigger asChild>
                     <Button variant="outline" size="icon" className="sm:hidden">
@@ -66,25 +63,7 @@ export function MainNav({ session }: MainNavProps) {
                             </DrawerDescription>
                         </DrawerHeader>
                         <nav className="flex flex-col items-stretch justify-center gap-2 p-4">
-                            {routes
-                                .filter((route) =>
-                                    route.role
-                                        ? route.role.some((value) =>
-                                              session?.roles?.includes(value)
-                                          )
-                                        : true
-                                )
-                                .map((route) => (
-                                    <Button
-                                        key={route.href}
-                                        asChild
-                                        variant="link"
-                                    >
-                                        <Link href={route.href}>
-                                            {route.label}
-                                        </Link>
-                                    </Button>
-                                ))}
+                            {routeLinks}
                         </nav>
                     </div>
                 </DrawerContent>
