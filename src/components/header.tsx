@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import { logoutAction } from '@/app/actions/logoutAction';
 import { Button } from '@/components/ui/button';
-import { HasPermission } from '@/components/has-permission';
+import { MainNav } from '@/components/main-nav';
 import { ModeToggle } from '@/components/mode-toggle';
 import { UserNav } from '@/components/user-nav';
-import { Role } from '@/lib/definitions';
 import { getSession } from '@/lib/session';
 
 export async function Header() {
@@ -24,22 +23,8 @@ export async function Header() {
                 </div>
 
                 <div className="ml-auto flex items-center gap-2">
-                    <nav className="flex gap-2">
-                        <HasPermission
-                            session={session}
-                            requiredRoles={[
-                                Role.SYSTEM_ADMINISTRATOR,
-                                Role.USER_ADMINISTRATOR,
-                            ]}
-                        >
-                            <Button asChild variant="link">
-                                <Link href="/user">Users</Link>
-                            </Button>
-                        </HasPermission>
-                    </nav>
-
+                    <MainNav session={session} />
                     <ModeToggle />
-
                     <UserNav session={session} onLogout={logoutAction} />
                 </div>
             </div>
