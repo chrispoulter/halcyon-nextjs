@@ -39,7 +39,7 @@ export function UserNav({ session, onLogout }: UserNavProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel className="flex flex-col gap-2">
-                    <div className="truncate text-sm font-medium leading-none">
+                    <div className="truncate text-sm font-medium leading-tight">
                         {session.firstName} {session.lastName}
                     </div>
                     <div className="truncate text-sm text-muted-foreground">
