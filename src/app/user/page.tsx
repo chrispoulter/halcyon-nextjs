@@ -7,26 +7,33 @@ import { UserPagination } from '@/app/user/user-pagination';
 import { UserCard } from '@/app/user/user-card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { z } from 'zod';
 
 export const metadata: Metadata = {
     title: 'Users',
 };
 
 type SearchParams = Promise<{
-    page: string;
-    size: string;
+    page?: number;
+    size?: number;
     sort: string;
     search: string;
 }>;
+
+const searchParamsSchema = z.object({
+    search: z.string().catch(''),
+    page: z.coerce.number().int().positive().catch(1),
+    sort: z.string().catch('NAME_ASC'),
+});
 
 export default async function UserSearch({
     searchParams,
 }: {
     searchParams: SearchParams;
 }) {
-    const { page, size, sort, search } = await searchParams;
-
-    const result = await searchUsersAction({ page, size, sort, search });
+    const params = await searchParams;
+    const request = searchParamsSchema.parse(params);
+    const result = await searchUsersAction({ ...request, size: 10 });
 
     if ('errors' in result) {
         return (
@@ -52,12 +59,7 @@ export default async function UserSearch({
                 <Link href="/user/create">Create New</Link>
             </Button>
 
-            <SearchUserForm
-                sort={sort}
-                search={search}
-                page={page}
-                size={size}
-            />
+            <SearchUserForm sort={request.sort} search={request.search} />
 
             <div className="space-y-2">
                 {result.items.map((user) => (
@@ -68,10 +70,7 @@ export default async function UserSearch({
             <UserPagination
                 hasPreviousPage={result.hasPreviousPage}
                 hasNextPage={result.hasNextPage}
-                sort={sort}
-                search={search}
-                page={parseInt(page ?? 1)}
-                size={size}
+                page={request.page}
             />
         </main>
     );

@@ -1,3 +1,7 @@
+'use client';
+
+import { useCallback } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 import {
     Pagination,
     PaginationContent,
@@ -7,22 +11,32 @@ import {
 } from '@/components/ui/pagination';
 
 type SearchUserFormProps = {
-    hasPreviousPage: any;
-    hasNextPage: any;
-    page: any;
-    size: any;
-    sort: any;
-    search: any;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    page?: number;
 };
 
 export function UserPagination({
     hasPreviousPage,
     hasNextPage,
-    page,
-    size,
-    sort,
-    search,
+    page = 1,
 }: SearchUserFormProps) {
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    const createQueryString = useCallback(
+        (name: string, value?: number) => {
+            const params = new URLSearchParams(searchParams.toString());
+            if (value) {
+                params.set(name, value.toString());
+            } else {
+                params.delete(name);
+            }
+            return params.toString();
+        },
+        [searchParams]
+    );
+
     if (!hasPreviousPage && !hasNextPage) {
         return null;
     }
@@ -33,30 +47,14 @@ export function UserPagination({
                 {hasPreviousPage && (
                     <PaginationItem>
                         <PaginationPrevious
-                            href={{
-                                pathname: '/user',
-                                query: {
-                                    page: page - 1,
-                                    size,
-                                    sort,
-                                    search,
-                                },
-                            }}
+                            href={`${pathname}?${createQueryString('page', page - 1)}`}
                         />
                     </PaginationItem>
                 )}
                 {hasNextPage && (
                     <PaginationItem>
                         <PaginationNext
-                            href={{
-                                pathname: '/user',
-                                query: {
-                                    page: page + 1,
-                                    size,
-                                    sort,
-                                    search,
-                                },
-                            }}
+                            href={`${pathname}?${createQueryString('page', page + 1)}`}
                         />
                     </PaginationItem>
                 )}

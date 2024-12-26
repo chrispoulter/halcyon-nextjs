@@ -1,6 +1,8 @@
 'use client';
 
+import { useCallback } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -60,18 +62,15 @@ const sortOptions = [
 ];
 
 type SearchUserFormProps = {
-    page?: any;
-    size?: any;
-    sort?: any;
-    search?: any;
+    search: string;
+    sort: string;
 };
 
-export function SearchUserForm({
-    page,
-    size,
-    sort,
-    search,
-}: SearchUserFormProps) {
+export function SearchUserForm({ search, sort }: SearchUserFormProps) {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
     const form = useForm<SearchUserFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -79,9 +78,21 @@ export function SearchUserForm({
         },
     });
 
-    const onSubmit = (data: SearchUserFormValues) => {
-        console.log('data', data);
-    };
+    const createQueryString = useCallback(
+        (name: string, value?: string) => {
+            const params = new URLSearchParams(searchParams.toString());
+            if (value) {
+                params.set(name, value);
+            } else {
+                params.delete(name);
+            }
+            return params.toString();
+        },
+        [searchParams]
+    );
+
+    const onSubmit = (data: SearchUserFormValues) =>
+        router.push(`${pathname}?${createQueryString('search', data.search)}`);
 
     return (
         <Form {...form}>
@@ -122,15 +133,7 @@ export function SearchUserForm({
                                 disabled={sort === value}
                             >
                                 <Link
-                                    href={{
-                                        pathname: '/user',
-                                        query: {
-                                            page,
-                                            size,
-                                            sort: value,
-                                            search,
-                                        },
-                                    }}
+                                    href={`${pathname}?${createQueryString('sort', value)}`}
                                 >
                                     <Icon />
                                     <span>{label}</span>
