@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -15,11 +17,21 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Form } from '@/components/ui/form';
 
 const formSchema = z.object({
-    search: z.string().optional(),
+    search: z
+        .string({
+            message: 'Search is a required field',
+        })
+        .optional(),
 });
 
 type SearchUserFormValues = z.infer<typeof formSchema>;
@@ -63,25 +75,41 @@ export function SearchUserForm({
     const form = useForm<SearchUserFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            search: '',
+            search,
         },
     });
 
-    function onSubmit(data: SearchUserFormValues) {
-        console.log(data);
-    }
+    const onSubmit = (data: SearchUserFormValues) => {
+        console.log('data', data);
+    };
 
     return (
         <Form {...form}>
             <form
                 noValidate
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex w-full items-center space-x-2"
+                className="flex space-x-2"
             >
-                <Input type="search" placeholder="Search..." />
+                <FormField
+                    control={form.control}
+                    name="search"
+                    render={({ field }) => (
+                        <FormItem className="w-full">
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type="search"
+                                    placeholder="Search Users..."
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button size="icon">
+                        <Button variant="secondary" size="icon">
                             <ArrowDownWideNarrow />
                             <span className="sr-only">Toggle sort</span>
                         </Button>
@@ -111,7 +139,8 @@ export function SearchUserForm({
                         ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <Button type="submit" size="icon">
+
+                <Button type="submit" variant="secondary" size="icon">
                     <Search />
                     <span className="sr-only">Search users</span>
                 </Button>
