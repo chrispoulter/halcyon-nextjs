@@ -6,12 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import {
-    ArrowDownAZ,
-    ArrowDownWideNarrow,
-    ArrowUpAZ,
-    Search,
-} from 'lucide-react';
+import { ArrowDownWideNarrow, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -42,22 +37,18 @@ const sortOptions = [
     {
         value: 'NAME_ASC',
         label: 'Name A-Z',
-        icon: ArrowDownAZ,
     },
     {
         value: 'NAME_DESC',
         label: 'Name Z-A',
-        icon: ArrowUpAZ,
     },
     {
         value: 'EMAIL_ADDRESS_ASC',
         label: 'Email Address A-Z',
-        icon: ArrowDownAZ,
     },
     {
         value: 'EMAIL_ADDRESS_DESC',
         label: 'Email Address Z-A',
-        icon: ArrowUpAZ,
     },
 ];
 
@@ -126,7 +117,7 @@ export function SearchUserForm({ search, sort }: SearchUserFormProps) {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
-                        {sortOptions.map(({ label, value, icon: Icon }) => (
+                        {sortOptions.map(({ label, value }) => (
                             <DropdownMenuItem
                                 key={value}
                                 asChild
@@ -135,8 +126,7 @@ export function SearchUserForm({ search, sort }: SearchUserFormProps) {
                                 <Link
                                     href={`${pathname}?${createQueryString('sort', value)}`}
                                 >
-                                    <Icon />
-                                    <span>{label}</span>
+                                    {label}
                                 </Link>
                             </DropdownMenuItem>
                         ))}
