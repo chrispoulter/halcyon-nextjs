@@ -13,7 +13,6 @@ import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
-import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
     emailAddress: z
@@ -44,13 +43,9 @@ type UpdateProfileFormValues = z.infer<typeof formSchema>;
 
 type UpdateProfileFormProps = {
     profile: GetProfileResponse;
-    className?: string;
 };
 
-export function UpdateProfileForm({
-    profile,
-    className,
-}: UpdateProfileFormProps) {
+export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
     const router = useRouter();
 
     const form = useForm<UpdateProfileFormValues>({
@@ -74,7 +69,7 @@ export function UpdateProfileForm({
             <form
                 noValidate
                 onSubmit={form.handleSubmit(onSubmit)}
-                className={cn('space-y-6', className)}
+                className="space-y-6"
             >
                 <TextFormField
                     field="emailAddress"

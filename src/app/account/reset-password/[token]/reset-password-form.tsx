@@ -9,7 +9,6 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 
 const formSchema = z
     .object({
@@ -34,13 +33,9 @@ type ResetPasswordFormValues = z.infer<typeof formSchema>;
 
 type ResetPasswordFormProps = {
     token: string;
-    className?: string;
 };
 
-export function ResetPasswordForm({
-    token,
-    className,
-}: ResetPasswordFormProps) {
+export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     const router = useRouter();
 
     const form = useForm<ResetPasswordFormValues>({
@@ -68,7 +63,7 @@ export function ResetPasswordForm({
             <form
                 noValidate
                 onSubmit={form.handleSubmit(onSubmit)}
-                className={cn('space-y-6', className)}
+                className="space-y-6"
             >
                 <TextFormField
                     field="emailAddress"

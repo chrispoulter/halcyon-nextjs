@@ -18,7 +18,6 @@ import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 import { Role } from '@/lib/definitions';
-import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
     emailAddress: z
@@ -57,10 +56,9 @@ type UpdateUserFormValues = z.infer<typeof formSchema>;
 
 type UpdateUserFormProps = {
     user: GetUserResponse;
-    className?: string;
 };
 
-export function UpdateUserForm({ user, className }: UpdateUserFormProps) {
+export function UpdateUserForm({ user }: UpdateUserFormProps) {
     const router = useRouter();
 
     const form = useForm<UpdateUserFormValues>({
@@ -84,7 +82,7 @@ export function UpdateUserForm({ user, className }: UpdateUserFormProps) {
             <form
                 noValidate
                 onSubmit={form.handleSubmit(onSubmit)}
-                className={cn('space-y-6', className)}
+                className="space-y-6"
             >
                 <TextFormField
                     field="emailAddress"

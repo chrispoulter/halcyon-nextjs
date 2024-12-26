@@ -9,7 +9,6 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
     emailAddress: z
@@ -23,11 +22,7 @@ const formSchema = z.object({
 
 type LoginFormValues = z.infer<typeof formSchema>;
 
-type LoginFormProps = {
-    className?: string;
-};
-
-export function LoginForm({ className }: LoginFormProps) {
+export function LoginForm() {
     const router = useRouter();
 
     const form = useForm<LoginFormValues>({
@@ -54,7 +49,7 @@ export function LoginForm({ className }: LoginFormProps) {
             <form
                 noValidate
                 onSubmit={form.handleSubmit(onSubmit)}
-                className={cn('space-y-6', className)}
+                className="space-y-6"
             >
                 <TextFormField
                     field="emailAddress"

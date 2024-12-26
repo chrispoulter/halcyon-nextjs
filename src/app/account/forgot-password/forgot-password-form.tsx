@@ -9,7 +9,6 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
     emailAddress: z
@@ -20,11 +19,7 @@ const formSchema = z.object({
 
 type ForgotPasswordFormValues = z.infer<typeof formSchema>;
 
-type ForgotPasswordFormProps = {
-    className?: string;
-};
-
-export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
+export function ForgotPasswordForm() {
     const router = useRouter();
 
     const form = useForm<ForgotPasswordFormValues>({
@@ -50,7 +45,7 @@ export function ForgotPasswordForm({ className }: ForgotPasswordFormProps) {
             <form
                 noValidate
                 onSubmit={form.handleSubmit(onSubmit)}
-                className={cn('space-y-6', className)}
+                className="space-y-6"
             >
                 <TextFormField
                     field="emailAddress"

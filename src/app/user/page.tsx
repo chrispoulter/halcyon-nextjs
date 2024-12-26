@@ -1,30 +1,12 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import {
-    AlertCircle,
-    ArrowDownAZ,
-    ArrowDownWideNarrow,
-    ArrowUpAZ,
-    Search,
-} from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { searchUsersAction } from '@/app/actions/searchUsersAction';
+import { SearchUserForm } from '@/app/user/search-user-form';
+import { UserPagination } from '@/app/user/user-pagination';
 import { UserCard } from '@/app/user/user-card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationNext,
-    PaginationPrevious,
-} from '@/components/ui/pagination';
-import { Input } from '@/components/ui/input';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -36,29 +18,6 @@ type SearchParams = Promise<{
     sort: string;
     search: string;
 }>;
-
-const sortOptions = [
-    {
-        value: 'NAME_ASC',
-        label: 'Name A-Z',
-        icon: ArrowDownAZ,
-    },
-    {
-        value: 'NAME_DESC',
-        label: 'Name Z-A',
-        icon: ArrowUpAZ,
-    },
-    {
-        value: 'EMAIL_ADDRESS_ASC',
-        label: 'Email Address A-Z',
-        icon: ArrowDownAZ,
-    },
-    {
-        value: 'EMAIL_ADDRESS_DESC',
-        label: 'Email Address Z-A',
-        icon: ArrowUpAZ,
-    },
-];
 
 export default async function UserSearch({
     searchParams,
@@ -93,45 +52,12 @@ export default async function UserSearch({
                 <Link href="/user/create">Create New</Link>
             </Button>
 
-            <div className="flex w-full items-center space-x-2">
-                <Input type="search" placeholder="Search..." />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button size="icon">
-                            <ArrowDownWideNarrow />
-                            <span className="sr-only">Toggle sort</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                        {sortOptions.map(({ label, value, icon: Icon }) => (
-                            <DropdownMenuItem
-                                key={value}
-                                asChild
-                                disabled={sort === value}
-                            >
-                                <Link
-                                    href={{
-                                        pathname: '/user',
-                                        query: {
-                                            page,
-                                            size,
-                                            sort: value,
-                                            search,
-                                        },
-                                    }}
-                                >
-                                    <Icon />
-                                    <span>{label}</span>
-                                </Link>
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <Button type="submit" size="icon">
-                    <Search />
-                    <span className="sr-only">Search users</span>
-                </Button>
-            </div>
+            <SearchUserForm
+                sort={sort}
+                search={search}
+                page={page}
+                size={size}
+            />
 
             <div className="space-y-2">
                 {result.items.map((user) => (
@@ -139,42 +65,14 @@ export default async function UserSearch({
                 ))}
             </div>
 
-            {result.hasPreviousPage || result.hasNextPage ? (
-                <Pagination>
-                    <PaginationContent>
-                        {result.hasPreviousPage && (
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    href={{
-                                        pathname: '/user',
-                                        query: {
-                                            page: parseInt(page ?? 1) - 1,
-                                            size,
-                                            sort,
-                                            search,
-                                        },
-                                    }}
-                                />
-                            </PaginationItem>
-                        )}
-                        {result.hasNextPage && (
-                            <PaginationItem>
-                                <PaginationNext
-                                    href={{
-                                        pathname: '/user',
-                                        query: {
-                                            page: parseInt(page ?? '1') + 1,
-                                            size,
-                                            sort,
-                                            search,
-                                        },
-                                    }}
-                                />
-                            </PaginationItem>
-                        )}
-                    </PaginationContent>
-                </Pagination>
-            ) : null}
+            <UserPagination
+                hasPreviousPage={result.hasPreviousPage}
+                hasNextPage={result.hasNextPage}
+                sort={sort}
+                search={search}
+                page={parseInt(page ?? 1)}
+                size={size}
+            />
         </main>
     );
 }

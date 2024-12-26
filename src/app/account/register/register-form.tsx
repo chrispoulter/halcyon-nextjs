@@ -11,7 +11,6 @@ import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
-import { cn } from '@/lib/utils';
 
 const formSchema = z
     .object({
@@ -54,11 +53,7 @@ const formSchema = z
 
 type RegisterFormValues = z.infer<typeof formSchema>;
 
-type RegisterFormProps = {
-    className?: string;
-};
-
-export function RegisterForm({ className }: RegisterFormProps) {
+export function RegisterForm() {
     const router = useRouter();
 
     const form = useForm<RegisterFormValues>({
@@ -88,7 +83,7 @@ export function RegisterForm({ className }: RegisterFormProps) {
             <form
                 noValidate
                 onSubmit={form.handleSubmit(onSubmit)}
-                className={cn('space-y-6', className)}
+                className="space-y-6"
             >
                 <TextFormField
                     field="emailAddress"
