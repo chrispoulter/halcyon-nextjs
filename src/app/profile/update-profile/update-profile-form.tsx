@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import type { GetProfileResponse } from '@/app/profile/profile-definitions';
+import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { updateProfileAction } from '@/app/profile/actions/update-profile-action';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';

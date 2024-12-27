@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { z } from 'zod';
 import { AlertCircle } from 'lucide-react';
 import { searchUsersAction } from '@/app/user/actions/search-users-action';
-import { UserSort } from '@/app/user/user-definitions';
+import { UserSort } from '@/app/user/user-types';
 import { SearchUserForm } from '@/app/user/search-user-form';
-import { UserPagination } from '@/app/user/user-pagination';
-import { UserCard } from '@/app/user/user-card';
+import { SearchUserPagination } from '@/app/user/search-user-pagination';
+import { SearchUserCard } from '@/app/user/search-user-card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 
@@ -76,11 +76,11 @@ export default async function UserSearch({
 
             <div className="space-y-2">
                 {data.items.map((user) => (
-                    <UserCard key={user.id} user={user} />
+                    <SearchUserCard key={user.id} user={user} />
                 ))}
             </div>
 
-            <UserPagination
+            <SearchUserPagination
                 hasPreviousPage={data.hasPreviousPage}
                 hasNextPage={data.hasNextPage}
                 page={request.page}

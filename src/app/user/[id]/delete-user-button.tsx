@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import type { GetUserResponse } from '@/app/user/user-definitions';
+import type { GetUserResponse } from '@/app/user/user-types';
 import { deleteUserAction } from '@/app/user/actions/delete-user-action';
 import {
     AlertDialog,

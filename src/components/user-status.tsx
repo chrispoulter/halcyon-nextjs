@@ -1,4 +1,4 @@
-import { Role, roleDetails } from '@/app/user/user-definitions';
+import { Role, roleDetails } from '@/app/user/user-types';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 

@@ -1,11 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import {
-    Role,
-    SearchUsersResponse,
-    UserSort,
-} from '@/app/user/user-definitions';
+import { Role, SearchUsersResponse, UserSort } from '@/app/user/user-types';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';

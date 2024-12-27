@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import { Role } from '@/app/user/user-definitions';
+import { Role } from '@/app/user/user-types';
 import { createUserAction } from '@/app/user/actions/create-user-action';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';

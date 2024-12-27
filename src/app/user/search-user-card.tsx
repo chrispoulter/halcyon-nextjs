@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import type { SearchUsersItem } from '@/app/user/user-definitions';
+import type { SearchUsersItem } from '@/app/user/user-types';
 import { UserStatus } from '@/components/user-status';
 
-type UserCardProps = {
+type SearchUserCardProps = {
     user: SearchUsersItem;
 };
 
-export function UserCard({ user }: UserCardProps) {
+export function SearchUserCard({ user }: SearchUserCardProps) {
     return (
         <Link
             key={user.id}

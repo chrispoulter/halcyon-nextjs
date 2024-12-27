@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { DeleteAccountResponse } from '@/app/profile/profile-definitions';
+import { DeleteAccountResponse } from '@/app/profile/profile-types';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession, deleteSession } from '@/lib/session';

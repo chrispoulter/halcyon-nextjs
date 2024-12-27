@@ -10,17 +10,17 @@ import {
     PaginationPrevious,
 } from '@/components/ui/pagination';
 
-type SearchUserFormProps = {
+type SearchUserPaginationProps = {
     hasPreviousPage: boolean;
     hasNextPage: boolean;
     page?: number;
 };
 
-export function UserPagination({
+export function SearchUserPagination({
     hasPreviousPage,
     hasNextPage,
     page = 1,
-}: SearchUserFormProps) {
+}: SearchUserPaginationProps) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
