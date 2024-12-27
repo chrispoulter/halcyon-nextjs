@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { AlertCircle } from 'lucide-react';
-import { getUserAction } from '@/app/actions/getUserAction';
+import { getUserAction } from '@/app/user/actions/get-user-action';
 import { UpdateUserForm } from '@/app/user/[id]/update-user-form';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 

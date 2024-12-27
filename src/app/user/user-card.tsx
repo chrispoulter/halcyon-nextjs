@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { SearchUsersItem } from '@/app/actions/searchUsersAction';
+import type { SearchUsersItem } from '@/app/user/actions/user-definitions';
 import { UserStatus } from '@/components/user-status';
 
 type UserCardProps = {

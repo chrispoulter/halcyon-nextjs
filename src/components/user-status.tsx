@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Role, roleDetails } from '@/lib/definitions';
+import { Role, roleDetails } from '@/lib/session-definitions';
 import { cn } from '@/lib/utils';
 
 type UserStatusProps = {

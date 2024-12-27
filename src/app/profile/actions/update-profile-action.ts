@@ -1,15 +1,12 @@
 'use server';
 
 import { z } from 'zod';
+import { UpdateProfileResponse } from '@/app/profile/actions/profile-definitions';
 import { isInPast } from '@/lib/dates';
-import { Role } from '@/lib/definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
 const schema = z.object({
-    id: z
-        .string({ message: 'Id must be a valid string' })
-        .uuid('Id must be a valid UUID'),
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -27,41 +24,26 @@ const schema = z.object({
         })
         .date('Date Of Birth must be a valid date')
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
-    roles: z
-        .array(
-            z.nativeEnum(Role, { message: 'Role must be a valid user role' }),
-            { message: 'Role must be a valid array' }
-        )
-        .optional(),
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-type UpdateUserResponse = {
-    id: string;
-};
-
-export const updateUserAction = actionClient
+export const updateProfileAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        const session = await verifySession([
-            Role.SYSTEM_ADMINISTRATOR,
-            Role.USER_ADMINISTRATOR,
-        ]);
+        const session = await verifySession();
 
-        const { id, ...rest } = parsedInput;
-
-        const response = await fetch(`${process.env.API_URL}/user/${id}`, {
+        const response = await fetch(`${process.env.API_URL}/profile`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${session.accessToken}`,
             },
-            body: JSON.stringify(rest),
+            body: JSON.stringify(parsedInput),
         });
 
         if (!response.ok) {
             throw new Error('An error occurred while processing your request');
         }
 
-        return (await response.json()) as UpdateUserResponse;
+        return (await response.json()) as UpdateProfileResponse;
     });

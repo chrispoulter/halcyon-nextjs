@@ -1,19 +1,19 @@
 'use server';
 
 import { z } from 'zod';
+import { UpdateUserResponse } from '@/app/user/actions/user-definitions';
 import { isInPast } from '@/lib/dates';
-import { Role } from '@/lib/definitions';
+import { Role } from '@/lib/session-definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
 const schema = z.object({
+    id: z
+        .string({ message: 'Id must be a valid string' })
+        .uuid('Id must be a valid UUID'),
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
-    password: z
-        .string({ message: 'Password must be a valid string' })
-        .min(8, 'Password must be at least 8 characters')
-        .max(50, 'Password must be no more than 50 characters'),
     firstName: z
         .string({ message: 'First Name must be a valid string' })
         .min(1, 'First Name is a required field')
@@ -37,11 +37,7 @@ const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-type CreateUserResponse = {
-    id: string;
-};
-
-export const createUserAction = actionClient
+export const updateUserAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
         const session = await verifySession([
@@ -49,18 +45,20 @@ export const createUserAction = actionClient
             Role.USER_ADMINISTRATOR,
         ]);
 
-        const response = await fetch(`${process.env.API_URL}/user`, {
-            method: 'POST',
+        const { id, ...rest } = parsedInput;
+
+        const response = await fetch(`${process.env.API_URL}/user/${id}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${session.accessToken}`,
             },
-            body: JSON.stringify(parsedInput),
+            body: JSON.stringify(rest),
         });
 
         if (!response.ok) {
             throw new Error('An error occurred while processing your request');
         }
 
-        return (await response.json()) as CreateUserResponse;
+        return (await response.json()) as UpdateUserResponse;
     });

@@ -1,7 +1,8 @@
 'use server';
 
 import { z } from 'zod';
-import { Role } from '@/lib/definitions';
+import { GetUserResponse } from '@/app/user/actions/user-definitions';
+import { Role } from '@/lib/session-definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
@@ -10,17 +11,6 @@ const schema = z.object({
         .string({ message: 'Id must be a valid string' })
         .uuid('Id must be a valid UUID'),
 });
-
-export type GetUserResponse = {
-    id: string;
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    isLockedOut: boolean;
-    roles?: Role[];
-    version: string;
-};
 
 export const getUserAction = actionClient
     .schema(schema)

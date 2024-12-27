@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import { GetUserResponse } from '@/app/actions/getUserAction';
-import { updateUserAction } from '@/app/actions/updateUserAction';
+import type { GetUserResponse } from '@/app/user/actions/user-definitions';
+import { updateUserAction } from '@/app/user/actions/update-user-action';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
 import { LockUserButton } from '@/app/user/[id]/lock-user-button';
 import { UnlockUserButton } from '@/app/user/[id]/unlock-user-button';
@@ -19,7 +19,7 @@ import { RoleFormField } from '@/components/role-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
-import { Role } from '@/lib/definitions';
+import { Role } from '@/lib/session-definitions';
 
 const formSchema = z.object({
     emailAddress: z

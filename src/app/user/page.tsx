@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { z } from 'zod';
 import { AlertCircle } from 'lucide-react';
-import { searchUsersAction } from '@/app/actions/searchUsersAction';
-import { UserSort } from '@/app/actions/userSort';
+import { searchUsersAction } from '@/app/user/actions/search-users-action';
+import { UserSort } from '@/app/user/actions/user-definitions';
 import { SearchUserForm } from '@/app/user/search-user-form';
 import { UserPagination } from '@/app/user/user-pagination';
 import { UserCard } from '@/app/user/user-card';
@@ -68,11 +68,11 @@ export default async function UserSearch({
                 Users
             </h1>
 
+            <SearchUserForm sort={request.sort} search={request.search} />
+
             <Button asChild variant="secondary" className="w-full sm:w-auto">
                 <Link href="/user/create">Create New</Link>
             </Button>
-
-            <SearchUserForm sort={request.sort} search={request.search} />
 
             <div className="space-y-2">
                 {data.items.map((user) => (

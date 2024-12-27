@@ -2,7 +2,10 @@
 
 import { z } from 'zod';
 import { jwtVerify } from 'jose';
-import { Role } from '@/lib/definitions';
+import {
+    LoginResponse,
+    JwtPayload,
+} from '@/app/account/actions/account-definitions';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
@@ -14,18 +17,6 @@ const schema = z.object({
         .string({ message: 'Password must be a valid string' })
         .min(1, 'Password is a required field'),
 });
-
-type LoginResponse = {
-    accessToken: string;
-};
-
-type JwtPayload = {
-    sub: string;
-    email: string;
-    given_name: string;
-    family_name: string;
-    roles?: Role | Role[];
-};
 
 const securityKey = process.env.JWT_SECURITY_KEY;
 const encodedSecurityKey = new TextEncoder().encode(securityKey);
@@ -45,7 +36,7 @@ export const loginAction = actionClient
             throw new Error('An error occurred while processing your request');
         }
 
-        const result = (await response.json()) as LoginResponse;
+        const result: LoginResponse = await response.json();
 
         const { payload } = await jwtVerify<JwtPayload>(
             result.accessToken,

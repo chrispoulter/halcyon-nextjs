@@ -1,8 +1,11 @@
 'use server';
 
 import { z } from 'zod';
-import { UserSort } from '@/app/actions/userSort';
-import { Role } from '@/lib/definitions';
+import {
+    SearchUsersResponse,
+    UserSort,
+} from '@/app/user/actions/user-definitions';
+import { Role } from '@/lib/session-definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
@@ -21,21 +24,6 @@ const schema = z.object({
         .nativeEnum(UserSort, { message: 'Sort must be a valid user sort' })
         .optional(),
 });
-
-export type SearchUsersItem = {
-    id: string;
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    isLockedOut: boolean;
-    roles?: Role[];
-};
-
-export type SearchUsersResponse = {
-    items: SearchUsersItem[];
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-};
 
 export const searchUsersAction = actionClient
     .schema(schema)

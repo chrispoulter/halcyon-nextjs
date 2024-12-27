@@ -1,6 +1,7 @@
 'use server';
 
 import { z } from 'zod';
+import { RegisterResponse } from '@/app/account/actions/account-definitions';
 import { isInPast } from '@/lib/dates';
 import { actionClient } from '@/lib/safe-action';
 
@@ -35,10 +36,6 @@ const schema = z
         message: 'Passwords do not match',
         path: ['confirmPassword'],
     });
-
-type RegisterResponse = {
-    id: string;
-};
 
 export const registerAction = actionClient
     .schema(schema)

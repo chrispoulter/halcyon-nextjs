@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { logoutAction } from '@/app/actions/logoutAction';
+import { logoutAction } from '@/app/account/actions/logout-action';
 import { Button } from '@/components/ui/button';
 import { MainNav } from '@/components/main-nav';
 import { ModeToggle } from '@/components/mode-toggle';

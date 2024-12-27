@@ -7,14 +7,14 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import { createUserAction } from '@/app/actions/createUserAction';
+import { createUserAction } from '@/app/user/actions/create-user-action';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { DateFormField } from '@/components/date-form-field';
 import { RoleFormField } from '@/components/role-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
-import { Role } from '@/lib/definitions';
+import { Role } from '@/lib/session-definitions';
 import { isInPast } from '@/lib/dates';
 
 const formSchema = z

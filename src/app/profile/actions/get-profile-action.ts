@@ -1,16 +1,8 @@
 'use server';
 
+import { GetProfileResponse } from '@/app/profile/actions/profile-definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
-
-export type GetProfileResponse = {
-    id: string;
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    version: string;
-};
 
 export const getProfileAction = actionClient.action(async () => {
     const session = await verifySession();

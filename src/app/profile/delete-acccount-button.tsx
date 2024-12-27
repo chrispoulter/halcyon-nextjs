@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import { deleteAccountAction } from '@/app/actions/deleteAccountAction';
+import { deleteAccountAction } from '@/app/profile/actions/delete-account-action';
 import {
     AlertDialog,
     AlertDialogAction,

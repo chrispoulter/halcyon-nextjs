@@ -8,7 +8,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
-import { Role, roleDetails } from '@/lib/definitions';
+import { Role, roleDetails } from '@/lib/session-definitions';
 
 type RoleFormFieldProps = {
     field: string;

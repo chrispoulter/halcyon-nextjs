@@ -1,6 +1,7 @@
 'use server';
 
 import { z } from 'zod';
+import { ChangePasswordResponse } from '@/app/profile/actions/profile-definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
@@ -14,10 +15,6 @@ const schema = z.object({
         .max(50, 'New Password must be no more than 50 characters'),
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
-
-type ChangePasswordResponse = {
-    id: string;
-};
 
 export const changePasswordAction = actionClient
     .schema(schema)

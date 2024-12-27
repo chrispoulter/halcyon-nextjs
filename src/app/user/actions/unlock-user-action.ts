@@ -1,7 +1,8 @@
 'use server';
 
 import { z } from 'zod';
-import { Role } from '@/lib/definitions';
+import { UnlockUserResponse } from '@/app/user/actions/user-definitions';
+import { Role } from '@/lib/session-definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
@@ -12,11 +13,7 @@ const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-type DeleteUserResponse = {
-    id: string;
-};
-
-export const deleteUserAction = actionClient
+export const unlockUserAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
         const session = await verifySession([
@@ -26,18 +23,21 @@ export const deleteUserAction = actionClient
 
         const { id, ...rest } = parsedInput;
 
-        const response = await fetch(`${process.env.API_URL}/user/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${session.accessToken}`,
-            },
-            body: JSON.stringify(rest),
-        });
+        const response = await fetch(
+            `${process.env.API_URL}/user/${id}/unlock`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${session.accessToken}`,
+                },
+                body: JSON.stringify(rest),
+            }
+        );
 
         if (!response.ok) {
             throw new Error('An error occurred while processing your request');
         }
 
-        return (await response.json()) as DeleteUserResponse;
+        return (await response.json()) as UnlockUserResponse;
     });

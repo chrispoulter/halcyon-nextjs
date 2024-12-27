@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import { registerAction } from '@/app/actions/registerAction';
+import { registerAction } from '@/app/account/actions/register-action';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { DateFormField } from '@/components/date-form-field';

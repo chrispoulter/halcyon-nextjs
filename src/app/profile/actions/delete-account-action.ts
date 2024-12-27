@@ -1,16 +1,13 @@
 'use server';
 
 import { z } from 'zod';
+import { DeleteAccountResponse } from '@/app/profile/actions/profile-definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession, deleteSession } from '@/lib/session';
 
 const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
-
-type DeleteAccountResponse = {
-    id: string;
-};
 
 export const deleteAccountAction = actionClient
     .schema(schema)

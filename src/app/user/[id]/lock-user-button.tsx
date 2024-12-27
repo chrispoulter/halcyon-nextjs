@@ -3,8 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import { GetUserResponse } from '@/app/actions/getUserAction';
-import { lockUserAction } from '@/app/actions/lockUserAction';
+import type { GetUserResponse } from '@/app/user/actions/user-definitions';
+import { lockUserAction } from '@/app/user/actions/lock-user-action';
 import {
     AlertDialog,
     AlertDialogAction,

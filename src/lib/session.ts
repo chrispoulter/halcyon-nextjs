@@ -4,7 +4,7 @@ import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { redirect, unauthorized } from 'next/navigation';
 import { SignJWT, jwtVerify } from 'jose';
-import { Role, SessionPayload } from '@/lib/definitions';
+import { Role, SessionPayload } from '@/lib/session-definitions';
 
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
