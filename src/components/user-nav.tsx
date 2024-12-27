@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { type SessionPayload, Role, roleDetails } from '@/lib/session-types';
+import { type SessionPayload, Role, roles } from '@/lib/session-types';
 
 type UserNavProps = {
     session?: SessionPayload;
@@ -58,7 +58,7 @@ export function UserNav({ session, onLogout }: UserNavProps) {
                     <div className="flex flex-col gap-2">
                         {session.roles?.map((role) => (
                             <Badge key={role} className="justify-center">
-                                {roleDetails[role as Role].title}
+                                {roles[role as Role].title}
                             </Badge>
                         ))}
                     </div>

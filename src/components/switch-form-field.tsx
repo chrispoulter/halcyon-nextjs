@@ -8,17 +8,18 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
-import { Role, roleDetails } from '@/lib/session-types';
 
-type RoleFormFieldProps<TFieldValues extends FieldValues> = {
+type SwitchFormFieldProps<TFieldValues extends FieldValues> = {
     field: FieldPath<TFieldValues>;
+    options: Record<string, { title: string; description: string }>;
     disabled?: boolean;
 };
 
-export function RoleFormField<TFieldValues extends FieldValues>({
+export function SwitchFormField<TFieldValues extends FieldValues>({
     field,
+    options,
     disabled,
-}: RoleFormFieldProps<TFieldValues>) {
+}: SwitchFormFieldProps<TFieldValues>) {
     const form = useFormContext<TFieldValues>();
 
     return (
@@ -30,29 +31,29 @@ export function RoleFormField<TFieldValues extends FieldValues>({
 
                 return (
                     <>
-                        {Object.entries(roleDetails).map(
-                            ([role, { title, description }]) => {
-                                const checked = field.value?.includes(role);
+                        {Object.entries(options).map(
+                            ([key, { title, description }]) => {
+                                const checked = field.value?.includes(key);
 
                                 const onCheckChanged = (checked: boolean) => {
                                     if (checked) {
                                         return field.onChange([
                                             ...currentValue,
-                                            role,
+                                            key,
                                         ]);
                                     }
 
                                     return field.onChange(
                                         currentValue.filter(
-                                            (currentRole: Role) =>
-                                                currentRole !== role
+                                            (currentRole: string) =>
+                                                currentRole !== key
                                         )
                                     );
                                 };
 
                                 return (
                                     <FormItem
-                                        key={role}
+                                        key={key}
                                         className="flex flex-row items-center justify-between rounded-lg border p-4"
                                     >
                                         <div className="space-y-0.5">

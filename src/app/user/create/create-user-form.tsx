@@ -11,11 +11,11 @@ import { createUserAction } from '@/app/user/actions/create-user-action';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { DateFormField } from '@/components/date-form-field';
-import { RoleFormField } from '@/components/role-form-field';
+import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
-import { Role } from '@/lib/session-types';
+import { Role, roles } from '@/lib/session-types';
 
 const schema = z
     .object({
@@ -166,8 +166,9 @@ export function CreateUserForm() {
                     disabled={isPending}
                 />
 
-                <RoleFormField<CreateUserFormValues>
+                <SwitchFormField<CreateUserFormValues>
                     field="roles"
+                    options={roles}
                     disabled={isPending}
                 />
 

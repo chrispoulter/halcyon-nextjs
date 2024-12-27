@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { SearchUsersItem } from '@/app/user/user-types';
 import { Badge } from '@/components/ui/badge';
-import { roleDetails } from '@/lib/session-types';
+import { roles } from '@/lib/session-types';
 
 type UserCardProps = {
     user: SearchUsersItem;
@@ -28,7 +28,7 @@ export function UserCard({ user }: UserCardProps) {
                 )}
                 {user.roles?.map((role) => (
                     <Badge key={role} className="justify-center">
-                        {roleDetails[role].title}
+                        {roles[role].title}
                     </Badge>
                 ))}
             </div>
