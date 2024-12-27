@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form';
+import { FieldPath, FieldValues, useFormContext } from 'react-hook-form';
 import {
     FormControl,
     FormField,
@@ -15,8 +15,8 @@ import {
 } from '@/components/ui/select';
 import { currentYear, monthNames } from '@/lib/dates';
 
-type DateFormFieldProps = {
-    field: string;
+type DateFormFieldProps<TFieldValues extends FieldValues> = {
+    field: FieldPath<TFieldValues>;
     label: string;
     required?: boolean;
     disabled?: boolean;
@@ -24,15 +24,15 @@ type DateFormFieldProps = {
     className?: string;
 };
 
-export function DateFormField({
+export function DateFormField<TFieldValues extends FieldValues>({
     field,
     label,
     required,
     disabled,
     autoComplete,
     className,
-}: DateFormFieldProps) {
-    const form = useFormContext();
+}: DateFormFieldProps<TFieldValues>) {
+    const form = useFormContext<TFieldValues>();
 
     return (
         <FormField

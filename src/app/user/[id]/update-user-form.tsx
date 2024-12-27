@@ -90,7 +90,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
             >
-                <TextFormField
+                <TextFormField<UpdateUserFormValues>
                     field="emailAddress"
                     label="Email Address"
                     type="email"
@@ -101,7 +101,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField
+                    <TextFormField<UpdateUserFormValues>
                         field="firstName"
                         label="First Name"
                         maxLength={50}
@@ -110,7 +110,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         disabled={isPending}
                         className="flex-1"
                     />
-                    <TextFormField
+                    <TextFormField<UpdateUserFormValues>
                         field="lastName"
                         label="Last Name"
                         maxLength={50}
@@ -121,7 +121,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     />
                 </div>
 
-                <DateFormField
+                <DateFormField<UpdateUserFormValues>
                     field="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
@@ -129,7 +129,10 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     disabled={isPending}
                 />
 
-                <RoleFormField field="roles" disabled={isPending} />
+                <RoleFormField<UpdateUserFormValues>
+                    field="roles"
+                    disabled={isPending}
+                />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button asChild variant="outline" className="min-w-32">

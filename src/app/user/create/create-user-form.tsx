@@ -104,7 +104,7 @@ export function CreateUserForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
             >
-                <TextFormField
+                <TextFormField<CreateUserFormValues>
                     field="emailAddress"
                     label="Email Address"
                     type="email"
@@ -115,7 +115,7 @@ export function CreateUserForm() {
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField
+                    <TextFormField<CreateUserFormValues>
                         field="password"
                         label="Password"
                         type="password"
@@ -125,7 +125,7 @@ export function CreateUserForm() {
                         disabled={isPending}
                         className="flex-1"
                     />
-                    <TextFormField
+                    <TextFormField<CreateUserFormValues>
                         field="confirmPassword"
                         label="Confirm Password"
                         type="password"
@@ -138,7 +138,7 @@ export function CreateUserForm() {
                 </div>
 
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField
+                    <TextFormField<CreateUserFormValues>
                         field="firstName"
                         label="First Name"
                         maxLength={50}
@@ -147,7 +147,7 @@ export function CreateUserForm() {
                         disabled={isPending}
                         className="flex-1"
                     />
-                    <TextFormField
+                    <TextFormField<CreateUserFormValues>
                         field="lastName"
                         label="Last Name"
                         maxLength={50}
@@ -158,7 +158,7 @@ export function CreateUserForm() {
                     />
                 </div>
 
-                <DateFormField
+                <DateFormField<CreateUserFormValues>
                     field="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
@@ -166,7 +166,10 @@ export function CreateUserForm() {
                     disabled={isPending}
                 />
 
-                <RoleFormField field="roles" disabled={isPending} />
+                <RoleFormField<CreateUserFormValues>
+                    field="roles"
+                    disabled={isPending}
+                />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button asChild variant="outline">

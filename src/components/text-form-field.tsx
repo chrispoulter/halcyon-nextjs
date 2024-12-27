@@ -1,5 +1,5 @@
 import { InputHTMLAttributes } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FieldPath, FieldValues, useFormContext } from 'react-hook-form';
 import {
     FormControl,
     FormField,
@@ -9,18 +9,18 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-type TextFormFieldProps = {
-    field: string;
+type TextFormFieldProps<TFieldValues extends FieldValues> = {
+    field: FieldPath<TFieldValues>;
     label: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export function TextFormField({
+export function TextFormField<TFieldValues extends FieldValues>({
     field,
     label,
     className,
     ...props
-}: TextFormFieldProps) {
-    const form = useFormContext();
+}: TextFormFieldProps<TFieldValues>) {
+    const form = useFormContext<TFieldValues>();
 
     return (
         <FormField

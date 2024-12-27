@@ -57,7 +57,7 @@ export function LoginForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
             >
-                <TextFormField
+                <TextFormField<LoginFormValues>
                     field="emailAddress"
                     label="Email Address"
                     type="email"
@@ -67,7 +67,7 @@ export function LoginForm() {
                     disabled={isPending}
                 />
 
-                <TextFormField
+                <TextFormField<LoginFormValues>
                     field="password"
                     label="Password"
                     type="password"

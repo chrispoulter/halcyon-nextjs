@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form';
+import { FieldPath, FieldValues, useFormContext } from 'react-hook-form';
 import {
     FormControl,
     FormDescription,
@@ -10,13 +10,16 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Role, roleDetails } from '@/lib/session-types';
 
-type RoleFormFieldProps = {
-    field: string;
+type RoleFormFieldProps<TFieldValues extends FieldValues> = {
+    field: FieldPath<TFieldValues>;
     disabled?: boolean;
 };
 
-export function RoleFormField({ field, disabled }: RoleFormFieldProps) {
-    const form = useFormContext();
+export function RoleFormField<TFieldValues extends FieldValues>({
+    field,
+    disabled,
+}: RoleFormFieldProps<TFieldValues>) {
+    const form = useFormContext<TFieldValues>();
 
     return (
         <FormField

@@ -77,7 +77,7 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
             >
-                <TextFormField
+                <TextFormField<ChangePasswordFormValues>
                     field="currentPassword"
                     label="Current Password"
                     type="password"
@@ -88,7 +88,7 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField
+                    <TextFormField<ChangePasswordFormValues>
                         field="newPassword"
                         label="New Password"
                         type="password"
@@ -98,7 +98,7 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
                         disabled={isPending}
                         className="flex-1"
                     />
-                    <TextFormField
+                    <TextFormField<ChangePasswordFormValues>
                         field="confirmNewPassword"
                         label="Confirm New Password"
                         type="password"

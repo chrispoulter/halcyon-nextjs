@@ -75,7 +75,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
             >
-                <TextFormField
+                <TextFormField<ResetPasswordFormValues>
                     field="emailAddress"
                     label="Email Address"
                     type="email"
@@ -86,7 +86,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField
+                    <TextFormField<ResetPasswordFormValues>
                         field="newPassword"
                         label="New Password"
                         type="password"
@@ -96,7 +96,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                         disabled={isPending}
                         className="flex-1"
                     />
-                    <TextFormField
+                    <TextFormField<ResetPasswordFormValues>
                         field="confirmNewPassword"
                         label="Confirm New Password"
                         type="password"

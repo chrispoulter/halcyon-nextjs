@@ -90,7 +90,7 @@ export function RegisterForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
             >
-                <TextFormField
+                <TextFormField<RegisterFormValues>
                     field="emailAddress"
                     label="Email Address"
                     type="email"
@@ -101,7 +101,7 @@ export function RegisterForm() {
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField
+                    <TextFormField<RegisterFormValues>
                         field="password"
                         label="Password"
                         type="password"
@@ -111,7 +111,7 @@ export function RegisterForm() {
                         disabled={isPending}
                         className="flex-1"
                     />
-                    <TextFormField
+                    <TextFormField<RegisterFormValues>
                         field="confirmPassword"
                         label="Confirm Password"
                         type="password"
@@ -124,7 +124,7 @@ export function RegisterForm() {
                 </div>
 
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField
+                    <TextFormField<RegisterFormValues>
                         field="firstName"
                         label="First Name"
                         maxLength={50}
@@ -133,7 +133,7 @@ export function RegisterForm() {
                         disabled={isPending}
                         className="flex-1"
                     />
-                    <TextFormField
+                    <TextFormField<RegisterFormValues>
                         field="lastName"
                         label="Last Name"
                         maxLength={50}
@@ -144,7 +144,7 @@ export function RegisterForm() {
                     />
                 </div>
 
-                <DateFormField
+                <DateFormField<RegisterFormValues>
                     field="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}

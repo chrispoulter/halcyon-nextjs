@@ -57,7 +57,7 @@ export function ForgotPasswordForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
             >
-                <TextFormField
+                <TextFormField<ForgotPasswordFormValues>
                     field="emailAddress"
                     label="Email Address"
                     type="email"
