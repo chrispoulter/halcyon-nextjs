@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { createHash } from 'crypto';
-import { Role, roleDetails } from '@/app/user/user-types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -14,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { SessionPayload } from '@/lib/session-types';
+import { type SessionPayload, Role, roleDetails } from '@/lib/session-types';
 
 type UserNavProps = {
     session?: SessionPayload;

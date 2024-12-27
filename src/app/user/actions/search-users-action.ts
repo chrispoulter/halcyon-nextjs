@@ -1,14 +1,11 @@
 'use server';
 
 import { z } from 'zod';
-import {
-    type SearchUsersResponse,
-    Role,
-    UserSort,
-} from '@/app/user/user-types';
+import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
+import { Role } from '@/lib/session-types';
 
 const schema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).optional(),

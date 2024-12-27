@@ -1,10 +1,11 @@
 'use server';
 
 import { z } from 'zod';
-import { type DeleteUserResponse, Role } from '@/app/user/user-types';
+import type { DeleteUserResponse } from '@/app/user/user-types';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
+import { Role } from '@/lib/session-types';
 
 const schema = z.object({
     id: z

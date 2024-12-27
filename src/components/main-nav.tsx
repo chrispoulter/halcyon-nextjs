@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
-import { Role } from '@/app/user/user-types';
 import { Button } from '@/components/ui/button';
 import {
     Drawer,
@@ -10,7 +9,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from '@/components/ui/drawer';
-import type { SessionPayload } from '@/lib/session-types';
+import { type SessionPayload, Role } from '@/lib/session-types';
 
 const routes = [
     {

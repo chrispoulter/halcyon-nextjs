@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import { type GetUserResponse, Role } from '@/app/user/user-types';
+import type { GetUserResponse } from '@/app/user/user-types';
 import { updateUserAction } from '@/app/user/actions/update-user-action';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
 import { LockUserButton } from '@/app/user/[id]/lock-user-button';
@@ -19,6 +19,7 @@ import { RoleFormField } from '@/components/role-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
+import { Role } from '@/lib/session-types';
 
 const schema = z.object({
     emailAddress: z

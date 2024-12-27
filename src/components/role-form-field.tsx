@@ -1,5 +1,4 @@
 import { useFormContext } from 'react-hook-form';
-import { Role, roleDetails } from '@/app/user/user-types';
 import {
     FormControl,
     FormDescription,
@@ -9,6 +8,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
+import { Role, roleDetails } from '@/lib/session-types';
 
 type RoleFormFieldProps = {
     field: string;

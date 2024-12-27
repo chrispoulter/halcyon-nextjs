@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { roleDetails, type SearchUsersItem } from '@/app/user/user-types';
+import type { SearchUsersItem } from '@/app/user/user-types';
 import { Badge } from '@/components/ui/badge';
+import { roleDetails } from '@/lib/session-types';
 
 type UserCardProps = {
     user: SearchUsersItem;

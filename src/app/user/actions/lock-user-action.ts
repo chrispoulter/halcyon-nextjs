@@ -1,10 +1,11 @@
 'use server';
 
 import { z } from 'zod';
-import { type LockUserResponse, Role } from '@/app/user/user-types';
+import type { LockUserResponse } from '@/app/user/user-types';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
+import { Role } from '@/lib/session-types';
 
 const schema = z.object({
     id: z
