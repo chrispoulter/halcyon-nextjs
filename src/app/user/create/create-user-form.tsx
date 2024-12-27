@@ -15,7 +15,7 @@ import { RoleFormField } from '@/components/role-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
-import { Role } from '@/lib/session-definitions';
+import { Role } from '@/lib/definitions';
 
 const schema = z
     .object({

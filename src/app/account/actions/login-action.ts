@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { jwtVerify } from 'jose';
 import {
     LoginResponse,
-    JwtPayload,
+    ApiTokenPayload,
 } from '@/app/account/actions/account-definitions';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
@@ -37,10 +37,10 @@ export const loginAction = actionClient
             throw new Error('An error occurred while processing your request');
         }
 
-        const result: LoginResponse = await response.json();
+        const { accessToken }: LoginResponse = await response.json();
 
-        const { payload } = await jwtVerify<JwtPayload>(
-            result.accessToken,
+        const { payload } = await jwtVerify<ApiTokenPayload>(
+            accessToken,
             encodedSecurityKey,
             {
                 audience: config.JWT_AUDIENCE,
@@ -49,7 +49,7 @@ export const loginAction = actionClient
         );
 
         await createSession({
-            accessToken: result.accessToken,
+            accessToken,
             id: payload.sub,
             emailAddress: payload.email,
             firstName: payload.given_name,
@@ -59,6 +59,4 @@ export const loginAction = actionClient
                     ? [payload.roles]
                     : payload.roles || [],
         });
-
-        return result;
     });

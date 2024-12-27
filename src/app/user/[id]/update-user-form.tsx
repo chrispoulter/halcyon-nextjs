@@ -18,8 +18,8 @@ import { DateFormField } from '@/components/date-form-field';
 import { RoleFormField } from '@/components/role-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
+import { Role } from '@/lib/definitions';
 import { isInPast } from '@/lib/dates';
-import { Role } from '@/lib/session-definitions';
 
 const schema = z.object({
     emailAddress: z

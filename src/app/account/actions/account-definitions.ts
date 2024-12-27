@@ -1,15 +1,13 @@
-import { Role } from '@/lib/session-definitions';
-
-export type LoginResponse = {
-    accessToken: string;
-};
-
-export type JwtPayload = {
+export type ApiTokenPayload = {
     sub: string;
     email: string;
     given_name: string;
     family_name: string;
-    roles?: Role | Role[];
+    roles?: string | string[];
+};
+
+export type LoginResponse = {
+    accessToken: string;
 };
 
 export type RegisterResponse = {

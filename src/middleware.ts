@@ -6,7 +6,7 @@ export default async function middleware(req: NextRequest) {
 
     if (!session) {
         return NextResponse.redirect(
-            new URL('/account/login?middleware=1', req.nextUrl)
+            new URL('/account/login?md=1', req.nextUrl)
         );
     }
 

@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { UserAvatar } from '@/components/user-avatar';
 import { UserStatus } from '@/components/user-status';
-import { SessionPayload } from '@/lib/session-definitions';
+import { SessionPayload } from '@/lib/definitions';
 
 type UserNavProps = {
     session?: SessionPayload;

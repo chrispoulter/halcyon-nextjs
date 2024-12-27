@@ -6,9 +6,9 @@ import {
     UserSort,
 } from '@/app/user/actions/user-definitions';
 import { config } from '@/lib/config';
+import { Role } from '@/lib/definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
-import { Role } from '@/lib/session-definitions';
 
 const schema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).optional(),

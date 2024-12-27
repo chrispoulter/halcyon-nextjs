@@ -9,7 +9,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from '@/components/ui/drawer';
-import { Role, SessionPayload } from '@/lib/session-definitions';
+import { Role, SessionPayload } from '@/lib/definitions';
 
 const routes = [
     {

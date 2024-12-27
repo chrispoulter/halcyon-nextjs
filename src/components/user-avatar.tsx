@@ -1,6 +1,6 @@
 import { createHash } from 'crypto';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { SessionPayload } from '@/lib/session-definitions';
+import { SessionPayload } from '@/lib/definitions';
 
 type UserAvatarProps = {
     session: SessionPayload;
