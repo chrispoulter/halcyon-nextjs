@@ -170,7 +170,7 @@ export function CreateUserForm() {
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button asChild variant="outline">
-                        <Link href="/user" className="min-w-36">
+                        <Link href="/user" className="min-w-32">
                             Cancel
                         </Link>
                     </Button>
@@ -178,7 +178,7 @@ export function CreateUserForm() {
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="min-w-36"
+                        className="min-w-32"
                     >
                         {isPending ? (
                             <Loader2 className="animate-spin" />

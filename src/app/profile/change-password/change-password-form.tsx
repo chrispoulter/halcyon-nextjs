@@ -112,7 +112,7 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button asChild variant="outline">
-                        <Link href="/profile" className="min-w-36">
+                        <Link href="/profile" className="min-w-32">
                             Cancel
                         </Link>
                     </Button>
@@ -120,7 +120,7 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="min-w-36"
+                        className="min-w-32"
                     >
                         {isPending ? (
                             <Loader2 className="animate-spin" />

@@ -132,7 +132,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                 <RoleFormField field="roles" disabled={isPending} />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button asChild variant="outline" className="min-w-36">
+                    <Button asChild variant="outline" className="min-w-32">
                         <Link href="/user">Cancel</Link>
                     </Button>
 
@@ -140,26 +140,26 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         <UnlockUserButton
                             user={user}
                             disabled={isPending}
-                            className="min-w-36"
+                            className="min-w-32"
                         />
                     ) : (
                         <LockUserButton
                             user={user}
                             disabled={isPending}
-                            className="min-w-36"
+                            className="min-w-32"
                         />
                     )}
 
                     <DeleteUserButton
                         user={user}
                         disabled={isPending}
-                        className="min-w-36"
+                        className="min-w-32"
                     />
 
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="min-w-36"
+                        className="min-w-32"
                     >
                         {isPending ? (
                             <Loader2 className="animate-spin" />

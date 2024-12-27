@@ -62,7 +62,7 @@ export default async function Profile() {
             <Button
                 asChild
                 variant="secondary"
-                className="w-full min-w-36 sm:w-auto"
+                className="w-full min-w-32 sm:w-auto"
             >
                 <Link href="/profile/update-profile">Update Profile</Link>
             </Button>
@@ -80,7 +80,7 @@ export default async function Profile() {
             <Button
                 asChild
                 variant="secondary"
-                className="w-full min-w-36 sm:w-auto"
+                className="w-full min-w-32 sm:w-auto"
             >
                 <Link href="/profile/change-password">Change Password</Link>
             </Button>
@@ -94,7 +94,7 @@ export default async function Profile() {
                 be removed. Please be certain.
             </p>
 
-            <DeleteAccountButton className="w-full min-w-36 sm:w-auto" />
+            <DeleteAccountButton className="w-full min-w-32 sm:w-auto" />
         </main>
     );
 }
