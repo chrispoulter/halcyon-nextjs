@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { logoutAction } from '@/app/account/actions/logout-action';
 import { Button } from '@/components/ui/button';
-import { MainNav } from '@/components/main-nav';
 import { ModeToggle } from '@/components/mode-toggle';
-import { UserNav } from '@/components/user-nav';
+import { NavbarMenu } from '@/components/navbar-menu';
+import { ProfileDropdown } from '@/components/profile-dropdown';
 import { getSession } from '@/lib/session';
 
 export async function Header() {
@@ -23,9 +23,12 @@ export async function Header() {
                 </div>
 
                 <div className="ml-auto flex items-center gap-2">
-                    <MainNav session={session} />
+                    <NavbarMenu session={session} />
                     <ModeToggle />
-                    <UserNav session={session} onLogout={logoutAction} />
+                    <ProfileDropdown
+                        session={session}
+                        onLogout={logoutAction}
+                    />
                 </div>
             </div>
         </header>

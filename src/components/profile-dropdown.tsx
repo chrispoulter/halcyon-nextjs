@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { User, LogOut } from 'lucide-react';
+import { createHash } from 'crypto';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -11,16 +13,15 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { UserAvatar } from '@/components/user-avatar';
 import { UserStatus } from '@/components/user-status';
 import type { SessionPayload } from '@/lib/session-types';
 
-type UserNavProps = {
+type ProfileDropdownProps = {
     session?: SessionPayload;
     onLogout: () => void;
 };
 
-export function UserNav({ session, onLogout }: UserNavProps) {
+export function ProfileDropdown({ session, onLogout }: ProfileDropdownProps) {
     if (!session) {
         return (
             <Button asChild variant="secondary">
@@ -29,11 +30,21 @@ export function UserNav({ session, onLogout }: UserNavProps) {
         );
     }
 
+    const hashedEmail = createHash('sha256')
+        .update(session.emailAddress.trim().toLowerCase())
+        .digest('hex');
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-10 w-10 rounded-full">
-                    <UserAvatar session={session} />
+                    <Avatar>
+                        <AvatarImage
+                            src={`https://www.gravatar.com/avatar/${hashedEmail}?d=404`}
+                            alt={`${session.firstName} ${session.lastName}`}
+                        />
+                        <AvatarFallback>{`${session.firstName[0]} ${session.lastName[0]}`}</AvatarFallback>
+                    </Avatar>
                     <span className="sr-only">Toggle profile menu</span>
                 </Button>
             </DropdownMenuTrigger>

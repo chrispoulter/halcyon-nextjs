@@ -28,11 +28,11 @@ const routes = [
     },
 ];
 
-type MainNavProps = {
+type NavbarMenuProps = {
     session?: SessionPayload;
 };
 
-export function MainNav({ session }: MainNavProps) {
+export function NavbarMenu({ session }: NavbarMenuProps) {
     const routeLinks = routes
         .filter((route) =>
             route.role
