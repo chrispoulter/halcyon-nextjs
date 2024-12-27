@@ -1,13 +1,14 @@
 'use server';
 
 import { GetProfileResponse } from '@/app/profile/actions/profile-definitions';
+import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
 export const getProfileAction = actionClient.action(async () => {
     const session = await verifySession();
 
-    const response = await fetch(`${process.env.API_URL}/profile`, {
+    const response = await fetch(`${config.API_URL}/profile`, {
         headers: {
             Authorization: `Bearer ${session.accessToken}`,
         },

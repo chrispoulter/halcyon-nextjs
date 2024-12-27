@@ -2,9 +2,10 @@
 
 import { z } from 'zod';
 import { DeleteUserResponse } from '@/app/user/actions/user-definitions';
-import { Role } from '@/lib/session-definitions';
+import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
+import { Role } from '@/lib/session-definitions';
 
 const schema = z.object({
     id: z
@@ -23,7 +24,7 @@ export const deleteUserAction = actionClient
 
         const { id, ...rest } = parsedInput;
 
-        const response = await fetch(`${process.env.API_URL}/user/${id}`, {
+        const response = await fetch(`${config.API_URL}/user/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -14,10 +14,10 @@ import { DateFormField } from '@/components/date-form-field';
 import { RoleFormField } from '@/components/role-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
-import { Role } from '@/lib/session-definitions';
 import { isInPast } from '@/lib/dates';
+import { Role } from '@/lib/session-definitions';
 
-const formSchema = z
+const schema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
@@ -59,13 +59,13 @@ const formSchema = z
         path: ['confirmPassword'],
     });
 
-type CreateUserFormValues = z.infer<typeof formSchema>;
+type CreateUserFormValues = z.infer<typeof schema>;
 
 export function CreateUserForm() {
     const router = useRouter();
 
     const form = useForm<CreateUserFormValues>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             emailAddress: '',
             password: '',

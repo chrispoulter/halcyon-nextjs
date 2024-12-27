@@ -2,9 +2,10 @@
 
 import { z } from 'zod';
 import { LockUserResponse } from '@/app/user/actions/user-definitions';
-import { Role } from '@/lib/session-definitions';
+import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
+import { Role } from '@/lib/session-definitions';
 
 const schema = z.object({
     id: z
@@ -23,7 +24,7 @@ export const lockUserAction = actionClient
 
         const { id, ...rest } = parsedInput;
 
-        const response = await fetch(`${process.env.API_URL}/user/${id}/lock`, {
+        const response = await fetch(`${config.API_URL}/user/${id}/lock`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

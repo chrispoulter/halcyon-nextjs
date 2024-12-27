@@ -2,9 +2,10 @@
 
 import { z } from 'zod';
 import { UnlockUserResponse } from '@/app/user/actions/user-definitions';
-import { Role } from '@/lib/session-definitions';
+import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
+import { Role } from '@/lib/session-definitions';
 
 const schema = z.object({
     id: z
@@ -23,17 +24,14 @@ export const unlockUserAction = actionClient
 
         const { id, ...rest } = parsedInput;
 
-        const response = await fetch(
-            `${process.env.API_URL}/user/${id}/unlock`,
-            {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${session.accessToken}`,
-                },
-                body: JSON.stringify(rest),
-            }
-        );
+        const response = await fetch(`${config.API_URL}/user/${id}/unlock`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${session.accessToken}`,
+            },
+            body: JSON.stringify(rest),
+        });
 
         if (!response.ok) {
             throw new Error('An error occurred while processing your request');

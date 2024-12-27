@@ -6,6 +6,7 @@ import {
     LoginResponse,
     JwtPayload,
 } from '@/app/account/actions/account-definitions';
+import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
@@ -18,13 +19,13 @@ const schema = z.object({
         .min(1, 'Password is a required field'),
 });
 
-const securityKey = process.env.JWT_SECURITY_KEY;
+const securityKey = config.JWT_SECURITY_KEY;
 const encodedSecurityKey = new TextEncoder().encode(securityKey);
 
 export const loginAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        const response = await fetch(`${process.env.API_URL}/account/login`, {
+        const response = await fetch(`${config.API_URL}/account/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,8 +43,8 @@ export const loginAction = actionClient
             result.accessToken,
             encodedSecurityKey,
             {
-                audience: process.env.JWT_AUDIENCE,
-                issuer: process.env.JWT_ISSUER,
+                audience: config.JWT_AUDIENCE,
+                issuer: config.JWT_ISSUER,
             }
         );
 

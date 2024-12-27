@@ -4,9 +4,10 @@ import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { redirect, unauthorized } from 'next/navigation';
 import { SignJWT, jwtVerify } from 'jose';
+import { config } from '@/lib/config';
 import { Role, SessionPayload } from '@/lib/session-definitions';
 
-const secretKey = process.env.SESSION_SECRET;
+const secretKey = config.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
 async function encrypt(payload: SessionPayload) {

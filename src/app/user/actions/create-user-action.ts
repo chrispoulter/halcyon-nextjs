@@ -2,10 +2,11 @@
 
 import { z } from 'zod';
 import { CreateUserResponse } from '@/app/user/actions/user-definitions';
+import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
-import { Role } from '@/lib/session-definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
+import { Role } from '@/lib/session-definitions';
 
 const schema = z.object({
     emailAddress: z
@@ -46,7 +47,7 @@ export const createUserAction = actionClient
             Role.USER_ADMINISTRATOR,
         ]);
 
-        const response = await fetch(`${process.env.API_URL}/user`, {
+        const response = await fetch(`${config.API_URL}/user`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

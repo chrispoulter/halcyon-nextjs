@@ -1,3 +1,4 @@
+import { config } from '@/lib/config';
 import { currentYear } from '@/lib/dates';
 
 export function Footer() {
@@ -14,7 +15,9 @@ export function Footer() {
                     </a>{' '}
                     {currentYear}
                 </div>
-                <div className="text-sm font-medium leading-none">v1.0.0</div>
+                <div className="text-sm font-medium leading-none">
+                    v{config.VERSION}
+                </div>
             </div>
         </footer>
     );

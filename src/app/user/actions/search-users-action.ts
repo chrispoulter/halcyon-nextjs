@@ -5,9 +5,10 @@ import {
     SearchUsersResponse,
     UserSort,
 } from '@/app/user/actions/user-definitions';
-import { Role } from '@/lib/session-definitions';
+import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
+import { Role } from '@/lib/session-definitions';
 
 const schema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).optional(),
@@ -38,7 +39,7 @@ export const searchUsersAction = actionClient
             .map((pair) => pair.map(encodeURIComponent).join('='))
             .join('&');
 
-        const response = await fetch(`${process.env.API_URL}/user?${params}`, {
+        const response = await fetch(`${config.API_URL}/user?${params}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${session.accessToken}`,

@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 import { ChangePasswordResponse } from '@/app/profile/actions/profile-definitions';
+import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
@@ -22,7 +23,7 @@ export const changePasswordAction = actionClient
         const session = await verifySession();
 
         const response = await fetch(
-            `${process.env.API_URL}/profile/change-password`,
+            `${config.API_URL}/profile/change-password`,
             {
                 method: 'PUT',
                 headers: {

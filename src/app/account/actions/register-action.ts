@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 import { RegisterResponse } from '@/app/account/actions/account-definitions';
+import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
 import { actionClient } from '@/lib/safe-action';
 
@@ -40,16 +41,13 @@ const schema = z
 export const registerAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        const response = await fetch(
-            `${process.env.API_URL}/account/register`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(parsedInput),
-            }
-        );
+        const response = await fetch(`${config.API_URL}/account/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(parsedInput),
+        });
 
         if (!response.ok) {
             throw new Error('An error occurred while processing your request');

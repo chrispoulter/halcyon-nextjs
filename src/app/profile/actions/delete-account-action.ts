@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 import { DeleteAccountResponse } from '@/app/profile/actions/profile-definitions';
+import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession, deleteSession } from '@/lib/session';
 
@@ -14,7 +15,7 @@ export const deleteAccountAction = actionClient
     .action(async ({ parsedInput }) => {
         const session = await verifySession();
 
-        const response = await fetch(`${process.env.API_URL}/profile`, {
+        const response = await fetch(`${config.API_URL}/profile`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
