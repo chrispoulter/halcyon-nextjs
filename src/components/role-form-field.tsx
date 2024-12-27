@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { Role, roleDetails } from '@/app/user/actions/user-definitions';
+import { Role, roleDetails } from '@/app/user/user-definitions';
 import {
     FormControl,
     FormDescription,

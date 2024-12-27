@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
-import { Role } from '@/app/user/actions/user-definitions';
+import { Role } from '@/app/user/user-definitions';
 import { Button } from '@/components/ui/button';
 import {
     Drawer,

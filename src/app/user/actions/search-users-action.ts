@@ -5,7 +5,7 @@ import {
     Role,
     SearchUsersResponse,
     UserSort,
-} from '@/app/user/actions/user-definitions';
+} from '@/app/user/user-definitions';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';

@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { ChangePasswordResponse } from '@/app/profile/actions/profile-definitions';
+import { ChangePasswordResponse } from '@/app/profile/profile-definitions';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';

@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { UpdateProfileResponse } from '@/app/profile/actions/profile-definitions';
+import { UpdateProfileResponse } from '@/app/profile/profile-definitions';
 import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
 import { actionClient } from '@/lib/safe-action';

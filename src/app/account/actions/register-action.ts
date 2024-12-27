@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { RegisterResponse } from '@/app/account/actions/account-definitions';
+import { RegisterResponse } from '@/app/account/account-definitions';
 import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
 import { actionClient } from '@/lib/safe-action';

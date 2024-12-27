@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { ResetPasswordResponse } from '@/app/account/actions/account-definitions';
+import { ResetPasswordResponse } from '@/app/account/account-definitions';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 

@@ -5,7 +5,7 @@ import { jwtVerify } from 'jose';
 import {
     LoginResponse,
     ApiTokenPayload,
-} from '@/app/account/actions/account-definitions';
+} from '@/app/account/account-definitions';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';

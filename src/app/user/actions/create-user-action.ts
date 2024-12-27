@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { CreateUserResponse } from '@/app/user/actions/user-definitions';
+import { CreateUserResponse } from '@/app/user/user-definitions';
 import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
 import { Role } from '@/lib/definitions';

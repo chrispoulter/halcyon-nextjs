@@ -1,6 +1,6 @@
 'use server';
 
-import { GetProfileResponse } from '@/app/profile/actions/profile-definitions';
+import { GetProfileResponse } from '@/app/profile/profile-definitions';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
