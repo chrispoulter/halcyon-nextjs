@@ -28,7 +28,7 @@ export const deleteAccountAction = actionClient
             throw new Error('An error occurred while processing your request');
         }
 
-        deleteSession();
+        await deleteSession();
 
         return (await response.json()) as DeleteAccountResponse;
     });
