@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { AlertCircle } from 'lucide-react';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
-import { DeleteAccountButton } from '@/app/profile/delete-acccount-button';
+import { DeleteAccountButton } from '@/app/profile/delete-account-button';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { toLocaleString } from '@/lib/dates';
