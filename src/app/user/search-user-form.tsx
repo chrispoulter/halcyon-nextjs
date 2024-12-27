@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { ArrowDownWideNarrow, Search } from 'lucide-react';
-import { UserSort } from '@/app/actions/searchUsersAction';
+import { UserSort } from '@/app/actions/userSort';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,

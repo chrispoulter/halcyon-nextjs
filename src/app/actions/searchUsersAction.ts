@@ -1,16 +1,10 @@
 'use server';
 
 import { z } from 'zod';
+import { UserSort } from '@/app/actions/userSort';
 import { Role } from '@/lib/definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
-
-export enum UserSort {
-    EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
-    EMAIL_ADDRESS_DESC = 'EMAIL_ADDRESS_DESC',
-    NAME_ASC = 'NAME_ASC',
-    NAME_DESC = 'NAME_DESC',
-}
 
 const schema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).optional(),
