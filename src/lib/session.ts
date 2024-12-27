@@ -2,7 +2,7 @@ import 'server-only';
 
 import { cache } from 'react';
 import { cookies } from 'next/headers';
-import { redirect, unauthorized } from 'next/navigation';
+import { forbidden, redirect } from 'next/navigation';
 import { SignJWT, jwtVerify } from 'jose';
 import { config } from '@/lib/config';
 import type { Role, SessionPayload } from '@/lib/session-types';
@@ -71,7 +71,7 @@ export const verifySession = cache(async (roles?: Role[]) => {
     }
 
     if (!roles.some((value) => session.roles?.includes(value))) {
-        return unauthorized();
+        return forbidden();
     }
 
     return session;
