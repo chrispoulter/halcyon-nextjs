@@ -10,18 +10,15 @@ import {
     PaginationPrevious,
 } from '@/components/ui/pagination';
 
-type SearchUserPaginationProps = {
+type PagerProps = {
     hasPreviousPage: boolean;
     hasNextPage: boolean;
     page?: number;
 };
 
-export function SearchUserPagination({
-    hasPreviousPage,
-    hasNextPage,
-    page = 1,
-}: SearchUserPaginationProps) {
+export function Pager({ hasPreviousPage, hasNextPage, page = 1 }: PagerProps) {
     const pathname = usePathname();
+
     const searchParams = useSearchParams();
 
     const createQueryString = useCallback(

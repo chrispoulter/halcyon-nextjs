@@ -1,20 +1,12 @@
 'use client';
 
 import { useCallback } from 'react';
-import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { ArrowDownWideNarrow, Search } from 'lucide-react';
-import { UserSort } from '@/app/user/user-types';
+import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
     Form,
     FormControl,
@@ -34,33 +26,15 @@ const schema = z.object({
 
 type SearchUserFormValues = z.infer<typeof schema>;
 
-const sortOptions = [
-    {
-        value: UserSort.NAME_ASC,
-        label: 'Name A-Z',
-    },
-    {
-        value: UserSort.NAME_DESC,
-        label: 'Name Z-A',
-    },
-    {
-        value: UserSort.EMAIL_ADDRESS_ASC,
-        label: 'Email Address A-Z',
-    },
-    {
-        value: UserSort.EMAIL_ADDRESS_DESC,
-        label: 'Email Address Z-A',
-    },
-];
-
 type SearchUserFormProps = {
     search: string;
-    sort: string;
 };
 
-export function SearchUserForm({ search, sort }: SearchUserFormProps) {
+export function SearchUserForm({ search }: SearchUserFormProps) {
     const router = useRouter();
+
     const pathname = usePathname();
+
     const searchParams = useSearchParams();
 
     const form = useForm<SearchUserFormValues>({
@@ -91,7 +65,7 @@ export function SearchUserForm({ search, sort }: SearchUserFormProps) {
             <form
                 noValidate
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex space-x-2"
+                className="flex w-full gap-2"
             >
                 <FormField
                     control={form.control}
@@ -109,31 +83,6 @@ export function SearchUserForm({ search, sort }: SearchUserFormProps) {
                         </FormItem>
                     )}
                 />
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" size="icon">
-                            <ArrowDownWideNarrow />
-                            <span className="sr-only">Toggle sort</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                        {sortOptions.map(({ label, value }) => (
-                            <DropdownMenuItem
-                                key={value}
-                                asChild
-                                disabled={sort === value}
-                            >
-                                <Link
-                                    href={`${pathname}?${createQueryString('sort', value)}`}
-                                >
-                                    {label}
-                                </Link>
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-
                 <Button type="submit" variant="secondary" size="icon">
                     <Search />
                     <span className="sr-only">Search users</span>

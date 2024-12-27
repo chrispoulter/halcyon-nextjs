@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { User, LogOut } from 'lucide-react';
 import { createHash } from 'crypto';
+import { Role, roleDetails } from '@/app/user/user-types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -13,7 +15,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { UserStatus } from '@/components/user-status';
 import type { SessionPayload } from '@/lib/session-types';
 
 type ProfileDropdownProps = {
@@ -56,7 +57,13 @@ export function ProfileDropdown({ session, onLogout }: ProfileDropdownProps) {
                     <div className="truncate text-sm text-muted-foreground">
                         {session.emailAddress}
                     </div>
-                    <UserStatus user={session} className="sm:flex-col" />
+                    <div className="flex flex-col gap-2">
+                        {session.roles?.map((role) => (
+                            <Badge key={role} className="justify-center">
+                                {roleDetails[role as Role].title}
+                            </Badge>
+                        ))}
+                    </div>
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
