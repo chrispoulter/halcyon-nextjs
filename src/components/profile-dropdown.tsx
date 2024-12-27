@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { User, LogOut } from 'lucide-react';
 import { createHash } from 'crypto';
 import { Role, roleDetails } from '@/app/user/user-types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -69,18 +68,12 @@ export function ProfileDropdown({ session, onLogout }: ProfileDropdownProps) {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem asChild>
-                    <Link href="/profile">
-                        <User />
-                        <span>My Account</span>
-                    </Link>
+                    <Link href="/profile">My Account</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={onLogout}>
-                    <LogOut />
-                    <span>Log out</span>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={onLogout}>Log out</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );
