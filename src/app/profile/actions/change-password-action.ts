@@ -3,8 +3,7 @@
 import { z } from 'zod';
 import type { ChangePasswordResponse } from '@/app/profile/profile-types';
 import { config } from '@/lib/config';
-import { actionClient } from '@/lib/safe-action';
-import { verifySession } from '@/lib/session';
+import { authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
     currentPassword: z
@@ -17,18 +16,16 @@ const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-export const changePasswordAction = actionClient
+export const changePasswordAction = authActionClient()
     .schema(schema)
-    .action(async ({ parsedInput }) => {
-        const session = await verifySession();
-
+    .action(async ({ parsedInput, ctx: { accessToken } }) => {
         const response = await fetch(
             `${config.API_URL}/profile/change-password`,
             {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${session.accessToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(parsedInput),
             }

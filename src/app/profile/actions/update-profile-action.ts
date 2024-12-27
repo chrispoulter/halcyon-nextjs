@@ -4,8 +4,7 @@ import { z } from 'zod';
 import type { UpdateProfileResponse } from '@/app/profile/profile-types';
 import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
-import { actionClient } from '@/lib/safe-action';
-import { verifySession } from '@/lib/session';
+import { authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
     emailAddress: z
@@ -28,16 +27,14 @@ const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-export const updateProfileAction = actionClient
+export const updateProfileAction = authActionClient()
     .schema(schema)
-    .action(async ({ parsedInput }) => {
-        const session = await verifySession();
-
+    .action(async ({ parsedInput, ctx: { accessToken } }) => {
         const response = await fetch(`${config.API_URL}/profile`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${session.accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify(parsedInput),
         });

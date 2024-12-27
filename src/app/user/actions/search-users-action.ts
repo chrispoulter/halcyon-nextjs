@@ -3,8 +3,7 @@
 import { z } from 'zod';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
 import { config } from '@/lib/config';
-import { actionClient } from '@/lib/safe-action';
-import { verifySession } from '@/lib/session';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -23,14 +22,12 @@ const schema = z.object({
         .optional(),
 });
 
-export const searchUsersAction = actionClient
+export const searchUsersAction = authActionClient([
+    Role.SYSTEM_ADMINISTRATOR,
+    Role.USER_ADMINISTRATOR,
+])
     .schema(schema)
-    .action(async ({ parsedInput }) => {
-        const session = await verifySession([
-            Role.SYSTEM_ADMINISTRATOR,
-            Role.USER_ADMINISTRATOR,
-        ]);
-
+    .action(async ({ parsedInput, ctx: { accessToken } }) => {
         const params = Object.entries(parsedInput)
             .filter((pair) => !!pair[1])
             .map((pair) => pair.map(encodeURIComponent).join('='))
@@ -39,7 +36,7 @@ export const searchUsersAction = actionClient
         const response = await fetch(`${config.API_URL}/user?${params}`, {
             method: 'GET',
             headers: {
-                Authorization: `Bearer ${session.accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
             },
         });
 

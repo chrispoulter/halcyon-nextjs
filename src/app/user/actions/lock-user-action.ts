@@ -3,8 +3,7 @@
 import { z } from 'zod';
 import type { LockUserResponse } from '@/app/user/user-types';
 import { config } from '@/lib/config';
-import { actionClient } from '@/lib/safe-action';
-import { verifySession } from '@/lib/session';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -14,19 +13,17 @@ const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-export const lockUserAction = actionClient
+export const lockUserAction = authActionClient([
+    Role.SYSTEM_ADMINISTRATOR,
+    Role.USER_ADMINISTRATOR,
+])
     .schema(schema)
-    .action(async ({ parsedInput: { id, ...rest } }) => {
-        const session = await verifySession([
-            Role.SYSTEM_ADMINISTRATOR,
-            Role.USER_ADMINISTRATOR,
-        ]);
-
+    .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
         const response = await fetch(`${config.API_URL}/user/${id}/lock`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${session.accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify(rest),
         });

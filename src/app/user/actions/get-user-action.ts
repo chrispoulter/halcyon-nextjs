@@ -3,8 +3,7 @@
 import { z } from 'zod';
 import type { GetUserResponse } from '@/app/user/user-types';
 import { config } from '@/lib/config';
-import { actionClient } from '@/lib/safe-action';
-import { verifySession } from '@/lib/session';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -13,17 +12,15 @@ const schema = z.object({
         .uuid('Id must be a valid UUID'),
 });
 
-export const getUserAction = actionClient
+export const getUserAction = authActionClient([
+    Role.SYSTEM_ADMINISTRATOR,
+    Role.USER_ADMINISTRATOR,
+])
     .schema(schema)
-    .action(async ({ parsedInput: { id } }) => {
-        const session = await verifySession([
-            Role.SYSTEM_ADMINISTRATOR,
-            Role.USER_ADMINISTRATOR,
-        ]);
-
+    .action(async ({ parsedInput: { id }, ctx: { accessToken } }) => {
         const response = await fetch(`${config.API_URL}/user/${id}`, {
             headers: {
-                Authorization: `Bearer ${session.accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
             },
         });
 
