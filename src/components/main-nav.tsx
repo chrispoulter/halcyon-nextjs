@@ -10,7 +10,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from '@/components/ui/drawer';
-import { SessionPayload } from '@/lib/definitions';
+import type { SessionPayload } from '@/lib/session-types';
 
 const routes = [
     {

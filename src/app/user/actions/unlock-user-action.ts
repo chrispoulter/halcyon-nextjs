@@ -1,7 +1,8 @@
 'use server';
 
 import { z } from 'zod';
-import { Role, UnlockUserResponse } from '@/app/user/user-types';
+import type { UnlockUserResponse } from '@/app/user/user-types';
+import { Role } from '@/app/user/user-types';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';

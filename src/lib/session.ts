@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { redirect, unauthorized } from 'next/navigation';
 import { SignJWT, jwtVerify } from 'jose';
 import { config } from '@/lib/config';
-import { SessionPayload } from '@/lib/definitions';
+import type { SessionPayload } from '@/lib/session-types';
 
 const secretKey = config.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);

@@ -1,7 +1,8 @@
 'use server';
 
 import { z } from 'zod';
-import { Role, UpdateUserResponse } from '@/app/user/user-types';
+import type { UpdateUserResponse } from '@/app/user/user-types';
+import { Role } from '@/app/user/user-types';
 import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
 import { actionClient } from '@/lib/safe-action';

@@ -1,6 +1,6 @@
 'use server';
 
-import { GetProfileResponse } from '@/app/profile/profile-types';
+import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
