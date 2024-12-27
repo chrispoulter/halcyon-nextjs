@@ -1,9 +1,11 @@
+import { Role } from '@/lib/session-types';
+
 export type ApiTokenPayload = {
     sub: string;
     email: string;
     given_name: string;
     family_name: string;
-    roles?: string | string[];
+    roles?: Role | Role[];
 };
 
 export type LoginResponse = {

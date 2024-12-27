@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { redirect, unauthorized } from 'next/navigation';
 import { SignJWT, jwtVerify } from 'jose';
 import { config } from '@/lib/config';
-import type { SessionPayload } from '@/lib/session-types';
+import type { Role, SessionPayload } from '@/lib/session-types';
 
 const secretKey = config.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
@@ -59,7 +59,7 @@ export const getSession = cache(async () => {
     return await decrypt(cookie);
 });
 
-export const verifySession = cache(async (roles?: string[]) => {
+export const verifySession = cache(async (roles?: Role[]) => {
     const session = await getSession();
 
     if (!session) {

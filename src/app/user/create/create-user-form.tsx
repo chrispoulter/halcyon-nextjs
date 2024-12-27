@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import { Role } from '@/app/user/user-types';
 import { createUserAction } from '@/app/user/actions/create-user-action';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -16,6 +15,7 @@ import { RoleFormField } from '@/components/role-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
+import { Role } from '@/lib/session-types';
 
 const schema = z
     .object({
@@ -111,6 +111,7 @@ export function CreateUserForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -121,6 +122,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="new-password"
                         required
+                        disabled={isPending}
                         className="flex-1"
                     />
                     <TextFormField
@@ -130,6 +132,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="new-password"
                         required
+                        disabled={isPending}
                         className="flex-1"
                     />
                 </div>
@@ -141,6 +144,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="given-name"
                         required
+                        disabled={isPending}
                         className="flex-1"
                     />
                     <TextFormField
@@ -149,6 +153,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="family-name"
                         required
+                        disabled={isPending}
                         className="flex-1"
                     />
                 </div>
@@ -158,9 +163,10 @@ export function CreateUserForm() {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
+                    disabled={isPending}
                 />
 
-                <RoleFormField field="roles" />
+                <RoleFormField field="roles" disabled={isPending} />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button asChild variant="outline">
