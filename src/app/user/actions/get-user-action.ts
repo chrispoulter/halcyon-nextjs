@@ -15,20 +15,17 @@ const schema = z.object({
 
 export const getUserAction = actionClient
     .schema(schema)
-    .action(async ({ parsedInput }) => {
+    .action(async ({ parsedInput: { id } }) => {
         const session = await verifySession([
             Role.SYSTEM_ADMINISTRATOR,
             Role.USER_ADMINISTRATOR,
         ]);
 
-        const response = await fetch(
-            `${config.API_URL}/user/${parsedInput.id}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${session.accessToken}`,
-                },
-            }
-        );
+        const response = await fetch(`${config.API_URL}/user/${id}`, {
+            headers: {
+                Authorization: `Bearer ${session.accessToken}`,
+            },
+        });
 
         if (!response.ok) {
             throw new Error('An error occurred while processing your request');

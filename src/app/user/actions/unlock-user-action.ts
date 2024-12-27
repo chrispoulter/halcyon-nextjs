@@ -16,13 +16,11 @@ const schema = z.object({
 
 export const unlockUserAction = actionClient
     .schema(schema)
-    .action(async ({ parsedInput }) => {
+    .action(async ({ parsedInput: { id, ...rest } }) => {
         const session = await verifySession([
             Role.SYSTEM_ADMINISTRATOR,
             Role.USER_ADMINISTRATOR,
         ]);
-
-        const { id, ...rest } = parsedInput;
 
         const response = await fetch(`${config.API_URL}/user/${id}/unlock`, {
             method: 'PUT',
