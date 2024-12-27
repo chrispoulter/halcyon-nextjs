@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 import { GetUserResponse } from '@/app/actions/getUserAction';
 import { unlockUserAction } from '@/app/actions/unlockUserAction';
 import {
@@ -19,26 +20,45 @@ import { toast } from '@/hooks/use-toast';
 
 type UnlockUserButtonProps = {
     user: GetUserResponse;
+    disabled?: boolean;
     className?: string;
 };
 
-export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
+export function UnlockUserButton({
+    user,
+    disabled,
+    className,
+}: UnlockUserButtonProps) {
     const router = useRouter();
 
-    async function onUnlock() {
-        const result = await unlockUserAction({ id: user.id });
+    const { execute, isPending } = useAction(unlockUserAction, {
+        onSuccess() {
+            toast({
+                title: 'User successfully unlocked.',
+            });
 
-        toast({
-            title: 'User successfully unlocked.',
-            description: JSON.stringify(result),
-        });
+            router.refresh();
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        router.refresh();
+    function onUnlock() {
+        execute({ id: user.id });
     }
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="secondary" className={className}>
+                <Button
+                    variant="secondary"
+                    disabled={isPending || disabled}
+                    className={className}
+                >
                     Unlock
                 </Button>
             </AlertDialogTrigger>
@@ -52,7 +72,10 @@ export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={onUnlock}>
+                    <AlertDialogAction
+                        disabled={isPending || disabled}
+                        onClick={onUnlock}
+                    >
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

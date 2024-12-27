@@ -93,8 +93,8 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                         maxLength={50}
                         autoComplete="given-name"
                         required
-                        className="flex-1"
                         disabled={isPending}
+                        className="flex-1"
                     />
                     <TextFormField
                         field="lastName"
@@ -102,8 +102,8 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                         maxLength={50}
                         autoComplete="family-name"
                         required
-                        className="flex-1"
                         disabled={isPending}
+                        className="flex-1"
                     />
                 </div>
 

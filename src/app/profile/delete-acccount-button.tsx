@@ -66,7 +66,7 @@ export function DeleteAccountButton({ className }: DeleteAccountButtonProps) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={onDelete}>
+                    <AlertDialogAction disabled={isPending} onClick={onDelete}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

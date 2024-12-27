@@ -12,9 +12,10 @@ import { Role, roleDetails } from '@/lib/definitions';
 
 type RoleFormFieldProps = {
     field: string;
+    disabled?: boolean;
 };
 
-export function RoleFormField({ field }: RoleFormFieldProps) {
+export function RoleFormField({ field, disabled }: RoleFormFieldProps) {
     const form = useFormContext();
 
     return (
@@ -63,6 +64,7 @@ export function RoleFormField({ field }: RoleFormFieldProps) {
                                             <Switch
                                                 checked={checked}
                                                 onCheckedChange={onCheckChanged}
+                                                disabled={disabled}
                                             />
                                         </FormControl>
                                         <FormMessage />

@@ -89,8 +89,8 @@ export function ChangePasswordForm() {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        className="flex-1"
                         disabled={isPending}
+                        className="flex-1"
                     />
                     <TextFormField
                         field="confirmNewPassword"
@@ -99,8 +99,8 @@ export function ChangePasswordForm() {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        className="flex-1"
                         disabled={isPending}
+                        className="flex-1"
                     />
                 </div>
 

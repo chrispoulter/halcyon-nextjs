@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useAction } from 'next-safe-action/hooks';
 import { GetUserResponse } from '@/app/actions/getUserAction';
 import { updateUserAction } from '@/app/actions/updateUserAction';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
@@ -61,15 +62,24 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
         values: user,
     });
 
-    async function onSubmit(data: UpdateUserFormValues) {
-        const result = await updateUserAction({ ...data, id: user.id });
+    const { execute, isPending } = useAction(updateUserAction, {
+        onSuccess() {
+            toast({
+                title: 'User successfully updated.',
+            });
 
-        toast({
-            title: 'User successfully updated.',
-            description: JSON.stringify(result),
-        });
+            router.push('/user');
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        router.push('/user');
+    function onSubmit(data: UpdateUserFormValues) {
+        execute({ ...data, id: user.id });
     }
 
     return (
@@ -86,6 +96,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     maxLength={254}
                     autoComplete="username"
                     required
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -95,6 +106,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         maxLength={50}
                         autoComplete="given-name"
                         required
+                        disabled={isPending}
                         className="flex-1"
                     />
                     <TextFormField
@@ -103,6 +115,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         maxLength={50}
                         autoComplete="family-name"
                         required
+                        disabled={isPending}
                         className="flex-1"
                     />
                 </div>
@@ -112,9 +125,10 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
+                    disabled={isPending}
                 />
 
-                <RoleFormField field="roles" />
+                <RoleFormField field="roles" disabled={isPending} />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button asChild variant="outline">
@@ -122,14 +136,16 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     </Button>
 
                     {user.isLockedOut ? (
-                        <UnlockUserButton user={user} />
+                        <UnlockUserButton user={user} disabled={isPending} />
                     ) : (
-                        <LockUserButton user={user} />
+                        <LockUserButton user={user} disabled={isPending} />
                     )}
 
-                    <DeleteUserButton user={user} />
+                    <DeleteUserButton user={user} disabled={isPending} />
 
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={isPending}>
+                        Submit
+                    </Button>
                 </div>
             </form>
         </Form>

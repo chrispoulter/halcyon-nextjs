@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 import { GetUserResponse } from '@/app/actions/getUserAction';
 import { lockUserAction } from '@/app/actions/lockUserAction';
 import {
@@ -19,26 +20,45 @@ import { toast } from '@/hooks/use-toast';
 
 type LockUserButtonProps = {
     user: GetUserResponse;
+    disabled?: boolean;
     className?: string;
 };
 
-export function LockUserButton({ user, className }: LockUserButtonProps) {
+export function LockUserButton({
+    user,
+    disabled,
+    className,
+}: LockUserButtonProps) {
     const router = useRouter();
 
-    async function onLock() {
-        const result = await lockUserAction({ id: user.id });
+    const { execute, isPending } = useAction(lockUserAction, {
+        onSuccess() {
+            toast({
+                title: 'User successfully locked.',
+            });
 
-        toast({
-            title: 'User successfully locked.',
-            description: JSON.stringify(result),
-        });
+            router.refresh();
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        router.refresh();
+    function onLock() {
+        execute({ id: user.id });
     }
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="secondary" className={className}>
+                <Button
+                    variant="secondary"
+                    disabled={isPending || disabled}
+                    className={className}
+                >
                     Lock
                 </Button>
             </AlertDialogTrigger>
@@ -52,7 +72,10 @@ export function LockUserButton({ user, className }: LockUserButtonProps) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={onLock}>
+                    <AlertDialogAction
+                        disabled={isPending || disabled}
+                        onClick={onLock}
+                    >
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>
