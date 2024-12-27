@@ -16,12 +16,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 import type { SessionPayload } from '@/lib/session-types';
 
-type ProfileDropdownProps = {
+type UserNavProps = {
     session?: SessionPayload;
     onLogout: () => void;
 };
 
-export function ProfileDropdown({ session, onLogout }: ProfileDropdownProps) {
+export function UserNav({ session, onLogout }: UserNavProps) {
     if (!session) {
         return (
             <Button asChild variant="secondary">
