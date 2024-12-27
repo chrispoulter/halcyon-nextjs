@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAction } from 'next-safe-action/hooks';
+import { Loader2 } from 'lucide-react';
 import { registerAction } from '@/app/actions/registerAction';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -53,6 +54,7 @@ export function RegisterForm() {
     const form = useForm<RegisterFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            emailAddress: '',
             password: '',
             confirmPassword: '',
             firstName: '',
@@ -151,8 +153,16 @@ export function RegisterForm() {
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button type="submit" disabled={isPending}>
-                        Submit
+                    <Button
+                        type="submit"
+                        disabled={isPending}
+                        className="min-w-32"
+                    >
+                        {isPending ? (
+                            <Loader2 className="animate-spin" />
+                        ) : (
+                            'Submit'
+                        )}
                     </Button>
                 </div>
             </form>
