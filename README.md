@@ -48,6 +48,7 @@ JWT_ISSUER=HalcyonApi
 JWT_AUDIENCE=HalcyonClient
 
 SESSION_SECRET=super_secret_key_that_should_be_changed
+SESSION_EXPIRES_IN=3600
 ```
 
 ### Running the development server
