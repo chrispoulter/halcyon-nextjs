@@ -1,11 +1,8 @@
 import type { MetadataRoute } from 'next';
-import { headers } from 'next/headers';
+import { getSiteUrl } from '@/lib/helpers';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const headersList = await headers();
-    const protocol = headersList.get('x-forwarded-proto') || 'http';
-    const host = headersList.get('host') || 'localhost:3000';
-    const siteUrl = `${protocol}://${host}`;
+    const siteUrl = await getSiteUrl();
 
     return [
         {
