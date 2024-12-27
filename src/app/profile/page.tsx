@@ -12,21 +12,23 @@ export const metadata: Metadata = {
 };
 
 export default async function Profile() {
-    const profile = await getProfileAction();
+    const result = await getProfileAction();
 
-    if ('errors' in profile) {
+    if (!result?.data) {
         return (
             <main className="mx-auto max-w-screen-sm p-6">
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        {JSON.stringify(profile.errors)}
+                        {JSON.stringify(result)}
                     </AlertDescription>
                 </Alert>
             </main>
         );
     }
+
+    const profile = result.data;
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
@@ -57,7 +59,11 @@ export default async function Profile() {
                 </dd>
             </dl>
 
-            <Button asChild variant="secondary" className="w-full sm:w-auto">
+            <Button
+                asChild
+                variant="secondary"
+                className="w-full min-w-36 sm:w-auto"
+            >
                 <Link href="/profile/update-profile">Update Profile</Link>
             </Button>
 
@@ -71,7 +77,11 @@ export default async function Profile() {
                 regular basis.
             </p>
 
-            <Button asChild variant="secondary" className="w-full sm:w-auto">
+            <Button
+                asChild
+                variant="secondary"
+                className="w-full min-w-36 sm:w-auto"
+            >
                 <Link href="/profile/change-password">Change Password</Link>
             </Button>
 
@@ -84,7 +94,7 @@ export default async function Profile() {
                 be removed. Please be certain.
             </p>
 
-            <DeleteAccountButton className="w-full sm:w-auto" />
+            <DeleteAccountButton className="w-full min-w-36 sm:w-auto" />
         </main>
     );
 }

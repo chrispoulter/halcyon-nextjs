@@ -10,21 +10,23 @@ export const metadata: Metadata = {
 };
 
 export default async function ChangePassword() {
-    const profile = await getProfileAction();
+    const result = await getProfileAction();
 
-    if ('errors' in profile) {
+    if (!result?.data) {
         return (
             <main className="mx-auto max-w-screen-sm p-6">
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        {JSON.stringify(profile.errors)}
+                        {JSON.stringify(result)}
                     </AlertDescription>
                 </Alert>
             </main>
         );
     }
+
+    const profile = result.data;
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
@@ -38,7 +40,7 @@ export default async function ChangePassword() {
                 change your password on a regular basis.
             </p>
 
-            <ChangePasswordForm />
+            <ChangePasswordForm profile={profile} />
 
             <p className="text-sm text-muted-foreground">
                 Forgotten your password?{' '}

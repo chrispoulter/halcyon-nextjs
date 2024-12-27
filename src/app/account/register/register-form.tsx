@@ -156,7 +156,7 @@ export function RegisterForm() {
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="min-w-32"
+                        className="min-w-36"
                     >
                         {isPending ? (
                             <Loader2 className="animate-spin" />

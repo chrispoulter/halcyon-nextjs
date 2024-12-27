@@ -9,21 +9,23 @@ export const metadata: Metadata = {
 };
 
 export default async function UpdateProfile() {
-    const profile = await getProfileAction();
+    const result = await getProfileAction();
 
-    if ('errors' in profile) {
+    if (!result?.data) {
         return (
             <main className="mx-auto max-w-screen-sm p-6">
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        {JSON.stringify(profile.errors)}
+                        {JSON.stringify(result)}
                     </AlertDescription>
                 </Alert>
             </main>
         );
     }
+
+    const profile = result.data;
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
