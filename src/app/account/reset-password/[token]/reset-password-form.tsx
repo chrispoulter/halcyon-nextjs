@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 
-const formSchema = z
+const schema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
@@ -30,7 +30,7 @@ const formSchema = z
         path: ['confirmNewPassword'],
     });
 
-type ResetPasswordFormValues = z.infer<typeof formSchema>;
+type ResetPasswordFormValues = z.infer<typeof schema>;
 
 type ResetPasswordFormProps = {
     token: string;
@@ -40,7 +40,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     const router = useRouter();
 
     const form = useForm<ResetPasswordFormValues>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             emailAddress: '',
             newPassword: '',

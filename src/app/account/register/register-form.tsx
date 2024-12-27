@@ -14,7 +14,7 @@ import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 
-const formSchema = z
+const schema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
@@ -46,13 +46,13 @@ const formSchema = z
         path: ['confirmPassword'],
     });
 
-type RegisterFormValues = z.infer<typeof formSchema>;
+type RegisterFormValues = z.infer<typeof schema>;
 
 export function RegisterForm() {
     const router = useRouter();
 
     const form = useForm<RegisterFormValues>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             emailAddress: '',
             password: '',

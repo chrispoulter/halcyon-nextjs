@@ -21,7 +21,7 @@ import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 import { Role } from '@/lib/session-definitions';
 
-const formSchema = z.object({
+const schema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -49,7 +49,7 @@ const formSchema = z.object({
         .optional(),
 });
 
-type UpdateUserFormValues = z.infer<typeof formSchema>;
+type UpdateUserFormValues = z.infer<typeof schema>;
 
 type UpdateUserFormProps = {
     user: GetUserResponse;
@@ -59,7 +59,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
     const router = useRouter();
 
     const form = useForm<UpdateUserFormValues>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(schema),
         values: user,
     });
 

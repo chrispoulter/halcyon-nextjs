@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
 
-const formSchema = z
+const schema = z
     .object({
         currentPassword: z
             .string({ message: 'Current Password must be a valid string' })
@@ -32,7 +32,7 @@ const formSchema = z
         path: ['confirmNewPassword'],
     });
 
-type ChangePasswordFormValues = z.infer<typeof formSchema>;
+type ChangePasswordFormValues = z.infer<typeof schema>;
 
 type ChangePasswordFormProps = {
     profile: GetProfileResponse;
@@ -42,7 +42,7 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
     const router = useRouter();
 
     const form = useForm<ChangePasswordFormValues>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             currentPassword: '',
             newPassword: '',

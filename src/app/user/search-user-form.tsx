@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-const formSchema = z.object({
+const schema = z.object({
     search: z
         .string({
             message: 'Search must be a valid string',
@@ -32,7 +32,7 @@ const formSchema = z.object({
         .optional(),
 });
 
-type SearchUserFormValues = z.infer<typeof formSchema>;
+type SearchUserFormValues = z.infer<typeof schema>;
 
 const sortOptions = [
     {
@@ -64,7 +64,7 @@ export function SearchUserForm({ search, sort }: SearchUserFormProps) {
     const searchParams = useSearchParams();
 
     const form = useForm<SearchUserFormValues>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             search,
         },
