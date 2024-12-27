@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import type { GetUserResponse } from '@/app/user/actions/user-definitions';
+import { Role } from '@/app/user/actions/user-definitions';
 import { updateUserAction } from '@/app/user/actions/update-user-action';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
 import { LockUserButton } from '@/app/user/[id]/lock-user-button';
@@ -18,7 +19,6 @@ import { DateFormField } from '@/components/date-form-field';
 import { RoleFormField } from '@/components/role-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { toast } from '@/hooks/use-toast';
-import { Role } from '@/lib/definitions';
 import { isInPast } from '@/lib/dates';
 
 const schema = z.object({

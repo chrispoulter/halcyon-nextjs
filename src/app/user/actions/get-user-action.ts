@@ -1,9 +1,8 @@
 'use server';
 
 import { z } from 'zod';
-import { GetUserResponse } from '@/app/user/actions/user-definitions';
+import { Role, GetUserResponse } from '@/app/user/actions/user-definitions';
 import { config } from '@/lib/config';
-import { Role } from '@/lib/definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
