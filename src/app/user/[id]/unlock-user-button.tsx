@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
+import { Loader2 } from 'lucide-react';
 import { GetUserResponse } from '@/app/actions/getUserAction';
 import { unlockUserAction } from '@/app/actions/unlockUserAction';
 import {
@@ -59,7 +60,11 @@ export function UnlockUserButton({
                     disabled={isPending || disabled}
                     className={className}
                 >
-                    Unlock
+                    {isPending ? (
+                        <Loader2 className="animate-spin" />
+                    ) : (
+                        'Unlock'
+                    )}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>

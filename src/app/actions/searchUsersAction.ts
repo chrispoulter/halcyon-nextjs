@@ -5,7 +5,7 @@ import { Role } from '@/lib/definitions';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
-enum UserSort {
+export enum UserSort {
     EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
     EMAIL_ADDRESS_DESC = 'EMAIL_ADDRESS_DESC',
     NAME_ASC = 'NAME_ASC',
@@ -43,7 +43,7 @@ export type SearchUsersResponse = {
     hasPreviousPage: boolean;
 };
 
-export const getUserAction = actionClient
+export const searchUsersAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
         const session = await verifySession([

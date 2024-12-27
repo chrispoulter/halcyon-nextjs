@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
+import { Loader2 } from 'lucide-react';
 import { GetUserResponse } from '@/app/actions/getUserAction';
 import { deleteUserAction } from '@/app/actions/deleteUserAction';
 import {
@@ -59,7 +60,11 @@ export function DeleteUserButton({
                     disabled={isPending || disabled}
                     className={className}
                 >
-                    Delete
+                    {isPending ? (
+                        <Loader2 className="animate-spin" />
+                    ) : (
+                        'Delete'
+                    )}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>

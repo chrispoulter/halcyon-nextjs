@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useAction } from 'next-safe-action/hooks';
+import { Loader2 } from 'lucide-react';
 import { GetUserResponse } from '@/app/actions/getUserAction';
 import { updateUserAction } from '@/app/actions/updateUserAction';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
@@ -41,7 +42,7 @@ const formSchema = z.object({
     roles: z
         .array(
             z.nativeEnum(Role, {
-                message: 'Role must be a valid system role',
+                message: 'Role must be a valid user role',
             }),
             { message: 'Role must be a valid array' }
         )
@@ -131,20 +132,40 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                 <RoleFormField field="roles" disabled={isPending} />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button asChild variant="outline">
+                    <Button asChild variant="outline" className="min-w-36">
                         <Link href="/user">Cancel</Link>
                     </Button>
 
                     {user.isLockedOut ? (
-                        <UnlockUserButton user={user} disabled={isPending} />
+                        <UnlockUserButton
+                            user={user}
+                            disabled={isPending}
+                            className="min-w-36"
+                        />
                     ) : (
-                        <LockUserButton user={user} disabled={isPending} />
+                        <LockUserButton
+                            user={user}
+                            disabled={isPending}
+                            className="min-w-36"
+                        />
                     )}
 
-                    <DeleteUserButton user={user} disabled={isPending} />
+                    <DeleteUserButton
+                        user={user}
+                        disabled={isPending}
+                        className="min-w-36"
+                    />
 
-                    <Button type="submit" disabled={isPending}>
-                        Submit
+                    <Button
+                        type="submit"
+                        disabled={isPending}
+                        className="min-w-36"
+                    >
+                        {isPending ? (
+                            <Loader2 className="animate-spin" />
+                        ) : (
+                            'Submit'
+                        )}
                     </Button>
                 </div>
             </form>

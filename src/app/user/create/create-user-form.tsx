@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useAction } from 'next-safe-action/hooks';
+import { Loader2 } from 'lucide-react';
 import { createUserAction } from '@/app/actions/createUserAction';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -46,7 +48,7 @@ const formSchema = z
         roles: z
             .array(
                 z.nativeEnum(Role, {
-                    message: 'Role must be a valid system role',
+                    message: 'Role must be a valid user role',
                 }),
                 { message: 'Role must be a valid array' }
             )
@@ -75,15 +77,24 @@ export function CreateUserForm() {
         },
     });
 
-    async function onSubmit(data: CreateUserFormValues) {
-        const result = await createUserAction(data);
+    const { execute, isPending } = useAction(createUserAction, {
+        onSuccess() {
+            toast({
+                title: 'User successfully created.',
+            });
 
-        toast({
-            title: 'User successfully created.',
-            description: JSON.stringify(result),
-        });
+            router.push('/user');
+        },
+        onError() {
+            toast({
+                variant: 'destructive',
+                title: 'An error occurred while processing your request.',
+            });
+        },
+    });
 
-        router.push('/user');
+    function onSubmit(data: CreateUserFormValues) {
+        execute(data);
     }
 
     return (
@@ -153,10 +164,22 @@ export function CreateUserForm() {
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button asChild variant="outline">
-                        <Link href="/user">Cancel</Link>
+                        <Link href="/user" className="min-w-36">
+                            Cancel
+                        </Link>
                     </Button>
 
-                    <Button type="submit">Submit</Button>
+                    <Button
+                        type="submit"
+                        disabled={isPending}
+                        className="min-w-36"
+                    >
+                        {isPending ? (
+                            <Loader2 className="animate-spin" />
+                        ) : (
+                            'Submit'
+                        )}
+                    </Button>
                 </div>
             </form>
         </Form>

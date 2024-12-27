@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { ArrowDownWideNarrow, Search } from 'lucide-react';
+import { UserSort } from '@/app/actions/searchUsersAction';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -35,19 +36,19 @@ type SearchUserFormValues = z.infer<typeof formSchema>;
 
 const sortOptions = [
     {
-        value: 'NAME_ASC',
+        value: UserSort.NAME_ASC,
         label: 'Name A-Z',
     },
     {
-        value: 'NAME_DESC',
+        value: UserSort.NAME_DESC,
         label: 'Name Z-A',
     },
     {
-        value: 'EMAIL_ADDRESS_ASC',
+        value: UserSort.EMAIL_ADDRESS_ASC,
         label: 'Email Address A-Z',
     },
     {
-        value: 'EMAIL_ADDRESS_DESC',
+        value: UserSort.EMAIL_ADDRESS_DESC,
         label: 'Email Address Z-A',
     },
 ];

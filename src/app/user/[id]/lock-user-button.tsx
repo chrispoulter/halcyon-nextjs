@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
+import { Loader2 } from 'lucide-react';
 import { GetUserResponse } from '@/app/actions/getUserAction';
 import { lockUserAction } from '@/app/actions/lockUserAction';
 import {
@@ -59,7 +60,7 @@ export function LockUserButton({
                     disabled={isPending || disabled}
                     className={className}
                 >
-                    Lock
+                    {isPending ? <Loader2 className="animate-spin" /> : 'Lock'}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>

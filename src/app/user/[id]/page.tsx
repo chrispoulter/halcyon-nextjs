@@ -12,21 +12,23 @@ type Params = Promise<{ id: string }>;
 
 export default async function ResetPassword({ params }: { params: Params }) {
     const { id } = await params;
-    const user = await getUserAction({ id });
+    const result = await getUserAction({ id });
 
-    if ('errors' in user) {
+    if (!result?.data) {
         return (
             <main className="mx-auto max-w-screen-sm p-6">
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        {JSON.stringify(user.errors)}
+                        {JSON.stringify(result)}
                     </AlertDescription>
                 </Alert>
             </main>
         );
     }
+
+    const user = result.data;
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">

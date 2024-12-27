@@ -29,7 +29,7 @@ const schema = z.object({
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
     roles: z
         .array(
-            z.nativeEnum(Role, { message: 'Role must be a valid system role' }),
+            z.nativeEnum(Role, { message: 'Role must be a valid user role' }),
             { message: 'Role must be a valid array' }
         )
         .optional(),
