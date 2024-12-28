@@ -24,6 +24,10 @@ export const getUserAction = authActionClient([
             },
         });
 
+        if (response.status === 404) {
+            return null;
+        }
+
         if (!response.ok) {
             throw new Error('An error occurred while processing your request');
         }

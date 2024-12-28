@@ -18,7 +18,7 @@ export default function Forbidden() {
             </p>
 
             <Button asChild className="w-full" variant="secondary">
-                <Link href="/user">Home</Link>
+                <Link href="/">Home</Link>
             </Button>
         </main>
     );
