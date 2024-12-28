@@ -51,9 +51,9 @@ export default async function UserSearch({
     if (
         result?.serverError ||
         result?.validationErrors ||
-        result?.bindArgsValidationErrors
+        result?.bindArgsValidationErrors ||
+        !result?.data
     ) {
-        console.log('result', result);
         return (
             <main className="mx-auto max-w-screen-sm p-6">
                 <Alert variant="destructive">
@@ -61,20 +61,6 @@ export default async function UserSearch({
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
                         An error occurred while processing your request.
-                    </AlertDescription>
-                </Alert>
-            </main>
-        );
-    }
-
-    if (!result?.data) {
-        return (
-            <main className="mx-auto max-w-screen-sm p-6">
-                <Alert>
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>No users could be found.</AlertTitle>
-                    <AlertDescription>
-                        <Link href="/user/create">Create a new user?</Link>
                     </AlertDescription>
                 </Alert>
             </main>
@@ -98,11 +84,21 @@ export default async function UserSearch({
                 <Link href="/user/create">Create New</Link>
             </Button>
 
-            <div className="space-y-2">
-                {data.items.map((user) => (
-                    <UserCard key={user.id} user={user} />
-                ))}
-            </div>
+            {data.items.length ? (
+                <div className="space-y-2">
+                    {data.items.map((user) => (
+                        <UserCard key={user.id} user={user} />
+                    ))}
+                </div>
+            ) : (
+                <Alert>
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>No Results</AlertTitle>
+                    <AlertDescription>
+                        No users could be found.
+                    </AlertDescription>
+                </Alert>
+            )}
 
             <Pager
                 hasPreviousPage={data.hasPreviousPage}

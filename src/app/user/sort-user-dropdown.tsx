@@ -1,6 +1,5 @@
 'use client';
 
-import { useCallback } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowDownWideNarrow } from 'lucide-react';
@@ -41,18 +40,7 @@ export function SortUserDropdown({ sort }: SortUserDropdownProps) {
 
     const searchParams = useSearchParams();
 
-    const createQueryString = useCallback(
-        (name: string, value?: string) => {
-            const params = new URLSearchParams(searchParams.toString());
-            if (value) {
-                params.set(name, value);
-            } else {
-                params.delete(name);
-            }
-            return params.toString();
-        },
-        [searchParams]
-    );
+    const query = Object.fromEntries(searchParams.entries());
 
     return (
         <DropdownMenu>
@@ -70,7 +58,13 @@ export function SortUserDropdown({ sort }: SortUserDropdownProps) {
                         disabled={sort === value}
                     >
                         <Link
-                            href={`${pathname}?${createQueryString('sort', value)}`}
+                            href={{
+                                pathname,
+                                query: {
+                                    ...query,
+                                    sort: value,
+                                },
+                            }}
                         >
                             {label}
                         </Link>
