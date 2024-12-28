@@ -80,7 +80,11 @@ export default async function UserSearch({
                 <SortUserDropdown sort={request.sort} />
             </div>
 
-            <Button asChild variant="secondary" className="w-full sm:w-auto">
+            <Button
+                asChild
+                variant="secondary"
+                className="w-full min-w-32 sm:w-auto"
+            >
                 <Link href="/user/create">Create New</Link>
             </Button>
 
