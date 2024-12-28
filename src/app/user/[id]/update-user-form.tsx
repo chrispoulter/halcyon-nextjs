@@ -9,6 +9,9 @@ import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import type { GetUserResponse } from '@/app/user/user-types';
 import { updateUserAction } from '@/app/user/actions/update-user-action';
+import { deleteUserAction } from '@/app/user/actions/delete-user-action';
+import { lockUserAction } from '@/app/user/actions/lock-user-action';
+import { unlockUserAction } from '@/app/user/actions/unlock-user-action';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
 import { LockUserButton } from '@/app/user/[id]/lock-user-button';
 import { UnlockUserButton } from '@/app/user/[id]/unlock-user-button';
@@ -63,24 +66,96 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
         values: user,
     });
 
-    const { execute, isPending } = useAction(updateUserAction, {
-        onSuccess() {
-            toast({
-                title: 'User successfully updated.',
-            });
+    const { execute: updateUser, isPending: isUpdating } = useAction(
+        updateUserAction,
+        {
+            onSuccess() {
+                toast({
+                    title: 'User successfully updated.',
+                });
 
-            router.push('/user');
-        },
-        onError() {
-            toast({
-                variant: 'destructive',
-                title: 'An error occurred while processing your request.',
-            });
-        },
-    });
+                router.push('/user');
+            },
+            onError() {
+                toast({
+                    variant: 'destructive',
+                    title: 'An error occurred while processing your request.',
+                });
+            },
+        }
+    );
+
+    const { execute: deleteUser, isPending: isDeleting } = useAction(
+        deleteUserAction,
+        {
+            onSuccess() {
+                toast({
+                    title: 'User successfully deleted.',
+                });
+
+                router.push('/user');
+            },
+            onError() {
+                toast({
+                    variant: 'destructive',
+                    title: 'An error occurred while processing your request.',
+                });
+            },
+        }
+    );
+
+    const { execute: lockUser, isPending: isLocking } = useAction(
+        lockUserAction,
+        {
+            onSuccess() {
+                toast({
+                    title: 'User successfully locked.',
+                });
+
+                router.refresh();
+            },
+            onError() {
+                toast({
+                    variant: 'destructive',
+                    title: 'An error occurred while processing your request.',
+                });
+            },
+        }
+    );
+
+    const { execute: unlockUser, isPending: isUnlocking } = useAction(
+        unlockUserAction,
+        {
+            onSuccess() {
+                toast({
+                    title: 'User successfully unlocked.',
+                });
+
+                router.refresh();
+            },
+            onError() {
+                toast({
+                    variant: 'destructive',
+                    title: 'An error occurred while processing your request.',
+                });
+            },
+        }
+    );
 
     function onSubmit(data: UpdateUserFormValues) {
-        execute({ ...data, id: user.id });
+        updateUser({ ...data, id: user.id });
+    }
+
+    function onDelete() {
+        deleteUser({ id: user.id });
+    }
+
+    function onLock() {
+        lockUser({ id: user.id });
+    }
+
+    function onUnlock() {
+        unlockUser({ id: user.id });
     }
 
     return (
@@ -97,7 +172,9 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isPending}
+                    disabled={
+                        isUpdating || isDeleting || isLocking || isUnlocking
+                    }
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -107,7 +184,9 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         maxLength={50}
                         autoComplete="given-name"
                         required
-                        disabled={isPending}
+                        disabled={
+                            isUpdating || isDeleting || isLocking || isUnlocking
+                        }
                         className="flex-1"
                     />
                     <TextFormField<UpdateUserFormValues>
@@ -116,7 +195,9 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         maxLength={50}
                         autoComplete="family-name"
                         required
-                        disabled={isPending}
+                        disabled={
+                            isUpdating || isDeleting || isLocking || isUnlocking
+                        }
                         className="flex-1"
                     />
                 </div>
@@ -126,13 +207,17 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
-                    disabled={isPending}
+                    disabled={
+                        isUpdating || isDeleting || isLocking || isUnlocking
+                    }
                 />
 
                 <SwitchFormField<UpdateUserFormValues>
                     field="roles"
                     options={roles}
-                    disabled={isPending}
+                    disabled={
+                        isUpdating || isDeleting || isLocking || isUnlocking
+                    }
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
@@ -142,30 +227,33 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
 
                     {user.isLockedOut ? (
                         <UnlockUserButton
-                            user={user}
-                            disabled={isPending}
+                            onUnlock={onUnlock}
+                            loading={isUnlocking}
+                            disabled={isUpdating || isDeleting || isLocking}
                             className="min-w-32"
                         />
                     ) : (
                         <LockUserButton
-                            user={user}
-                            disabled={isPending}
+                            onLock={onLock}
+                            loading={isLocking}
+                            disabled={isUpdating || isDeleting || isUnlocking}
                             className="min-w-32"
                         />
                     )}
 
                     <DeleteUserButton
-                        user={user}
-                        disabled={isPending}
+                        onDelete={onDelete}
+                        loading={isDeleting}
+                        disabled={isUpdating || isLocking || isUnlocking}
                         className="min-w-32"
                     />
 
                     <Button
                         type="submit"
-                        disabled={isPending}
+                        disabled={isDeleting || isLocking || isUnlocking}
                         className="min-w-32"
                     >
-                        {isPending ? (
+                        {isUpdating ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Submit'

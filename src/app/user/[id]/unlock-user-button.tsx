@@ -1,10 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
-import type { GetUserResponse } from '@/app/user/user-types';
-import { unlockUserAction } from '@/app/user/actions/unlock-user-action';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -17,54 +13,29 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { toast } from '@/hooks/use-toast';
 
 type UnlockUserButtonProps = {
-    user: GetUserResponse;
+    onUnlock: () => void;
+    loading?: boolean;
     disabled?: boolean;
     className?: string;
 };
 
 export function UnlockUserButton({
-    user,
+    onUnlock,
+    loading,
     disabled,
     className,
 }: UnlockUserButtonProps) {
-    const router = useRouter();
-
-    const { execute, isPending } = useAction(unlockUserAction, {
-        onSuccess() {
-            toast({
-                title: 'User successfully unlocked.',
-            });
-
-            router.refresh();
-        },
-        onError() {
-            toast({
-                variant: 'destructive',
-                title: 'An error occurred while processing your request.',
-            });
-        },
-    });
-
-    function onUnlock() {
-        execute({ id: user.id });
-    }
-
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <Button
                     variant="secondary"
-                    disabled={isPending || disabled}
+                    disabled={loading || disabled}
                     className={className}
                 >
-                    {isPending ? (
-                        <Loader2 className="animate-spin" />
-                    ) : (
-                        'Unlock'
-                    )}
+                    {loading ? <Loader2 className="animate-spin" /> : 'Unlock'}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -78,7 +49,7 @@ export function UnlockUserButton({
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                        disabled={isPending || disabled}
+                        disabled={loading || disabled}
                         onClick={onUnlock}
                     >
                         Continue
