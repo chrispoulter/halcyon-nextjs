@@ -10,11 +10,11 @@ import type { Role, SessionPayload } from '@/lib/session-types';
 const secretKey = config.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
-async function encrypt(payload: SessionPayload, expiresAt: Date) {
+async function encrypt(payload: SessionPayload) {
     return new SignJWT(payload)
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
-        .setExpirationTime(expiresAt)
+        .setExpirationTime('7d')
         .sign(encodedKey);
 }
 
@@ -36,8 +36,8 @@ async function decrypt(
 }
 
 export async function createSession(payload: SessionPayload) {
-    const expiresAt = new Date(Date.now() + config.SESSION_EXPIRES_IN * 1000);
-    const session = await encrypt(payload, expiresAt);
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const session = await encrypt(payload);
     const cookieStore = await cookies();
 
     cookieStore.set('session', session, {
