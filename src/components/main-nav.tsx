@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -32,6 +35,8 @@ type MainNavProps = {
 };
 
 export function MainNav({ session }: MainNavProps) {
+    const [open, setOpen] = useState(false);
+
     const routeLinks = routes
         .filter((route) =>
             route.role
@@ -40,14 +45,16 @@ export function MainNav({ session }: MainNavProps) {
         )
         .map((route) => (
             <Button key={route.href} asChild variant="link">
-                <Link href={route.href}>{route.label}</Link>
+                <Link href={route.href} onClick={() => setOpen(false)}>
+                    {route.label}
+                </Link>
             </Button>
         ));
 
     return (
         <>
             <nav className="hidden gap-2 sm:flex">{routeLinks}</nav>
-            <Drawer>
+            <Drawer open={open} onOpenChange={setOpen}>
                 <DrawerTrigger asChild>
                     <Button variant="outline" size="icon" className="sm:hidden">
                         <Menu />
