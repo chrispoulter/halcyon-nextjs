@@ -43,7 +43,7 @@ export function SearchUserForm({ search }: SearchUserFormProps) {
         },
     });
 
-    const onSubmit = (data: SearchUserFormValues) => {
+    function onSubmit(data: SearchUserFormValues) {
         const params = new URLSearchParams(searchParams.toString());
 
         params.delete('page');
@@ -54,7 +54,7 @@ export function SearchUserForm({ search }: SearchUserFormProps) {
         }
 
         return router.push(`${pathname}?${params.toString()}`);
-    };
+    }
 
     return (
         <Form {...form}>

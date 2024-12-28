@@ -35,7 +35,7 @@ export function SwitchFormField<TFieldValues extends FieldValues>({
                             ([key, { title, description }]) => {
                                 const checked = field.value?.includes(key);
 
-                                const onCheckChanged = (checked: boolean) => {
+                                function onCheckChanged(checked: boolean) {
                                     if (checked) {
                                         return field.onChange([
                                             ...currentValue,
@@ -49,7 +49,7 @@ export function SwitchFormField<TFieldValues extends FieldValues>({
                                                 currentRole !== key
                                         )
                                     );
-                                };
+                                }
 
                                 return (
                                     <FormItem

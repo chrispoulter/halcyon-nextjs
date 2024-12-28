@@ -45,14 +45,17 @@ export function DateFormField<TFieldValues extends FieldValues>({
 
                 const year = field.value?.split('-')[0] ?? '';
 
-                const onDayChange = (value: string) =>
+                function onDayChange(value: string) {
                     field.onChange(`${year}-${month}-${value}`);
+                }
 
-                const onMonthChange = (value: string) =>
+                function onMonthChange(value: string) {
                     field.onChange(`${year}-${value}-${day}`);
+                }
 
-                const onYearChange = (value: string) =>
+                function onYearChange(value: string) {
                     field.onChange(`${value}-${month}-${day}`);
+                }
 
                 return (
                     <FormItem className={className}>

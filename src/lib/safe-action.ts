@@ -6,8 +6,9 @@ export const actionClient = createSafeActionClient({
     defaultValidationErrorsShape: 'flattened',
 });
 
-export const authActionClient = (roles?: Role[]) =>
-    actionClient.use(async ({ next }) => {
+export function authActionClient(roles?: Role[]) {
+    return actionClient.use(async ({ next }) => {
         const { accessToken } = await verifySession(roles);
         return next({ ctx: { accessToken } });
     });
+}
