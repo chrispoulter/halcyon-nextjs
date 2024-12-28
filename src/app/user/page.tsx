@@ -47,21 +47,41 @@ export default async function UserSearch({
     const request = searchParamsSchema.parse(params);
     const result = await searchUsersAction({ ...request, size: PAGE_SIZE });
 
-    if (!result?.data) {
+    //TODO: Can this be handled by error page??????
+    if (
+        result?.serverError ||
+        result?.validationErrors ||
+        result?.bindArgsValidationErrors
+    ) {
+        console.log('result', result);
         return (
             <main className="mx-auto max-w-screen-sm p-6">
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        {JSON.stringify(result)}
+                        An error occurred while processing your request.
                     </AlertDescription>
                 </Alert>
             </main>
         );
     }
 
-    const data = result?.data;
+    if (!result?.data) {
+        return (
+            <main className="mx-auto max-w-screen-sm p-6">
+                <Alert>
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>No users could be found.</AlertTitle>
+                    <AlertDescription>
+                        <Link href="/user/create">Create a new user?</Link>
+                    </AlertDescription>
+                </Alert>
+            </main>
+        );
+    }
+
+    const data = result.data;
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">

@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { AlertCircle } from 'lucide-react';
 import { getUserAction } from '@/app/user/actions/get-user-action';
 import { UpdateUserForm } from '@/app/user/[id]/update-user-form';
@@ -14,18 +15,27 @@ export default async function ResetPassword({ params }: { params: Params }) {
     const { id } = await params;
     const result = await getUserAction({ id });
 
-    if (!result?.data) {
+    if (
+        result?.serverError ||
+        result?.validationErrors ||
+        result?.bindArgsValidationErrors
+    ) {
+        console.log('result', result);
         return (
             <main className="mx-auto max-w-screen-sm p-6">
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        {JSON.stringify(result)}
+                        An error occurred while processing your request.
                     </AlertDescription>
                 </Alert>
             </main>
         );
+    }
+
+    if (!result?.data) {
+        return notFound();
     }
 
     const user = result.data;

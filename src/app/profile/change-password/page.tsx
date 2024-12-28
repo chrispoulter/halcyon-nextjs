@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { AlertCircle } from 'lucide-react';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
@@ -12,18 +13,27 @@ export const metadata: Metadata = {
 export default async function ChangePassword() {
     const result = await getProfileAction();
 
-    if (!result?.data) {
+    if (
+        result?.serverError ||
+        result?.validationErrors ||
+        result?.bindArgsValidationErrors
+    ) {
+        console.log('result', result);
         return (
             <main className="mx-auto max-w-screen-sm p-6">
                 <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        {JSON.stringify(result)}
+                        An error occurred while processing your request.
                     </AlertDescription>
                 </Alert>
             </main>
         );
+    }
+
+    if (!result?.data) {
+        return notFound();
     }
 
     const profile = result.data;
