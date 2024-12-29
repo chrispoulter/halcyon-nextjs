@@ -17,11 +17,7 @@ export default function Forbidden() {
                 Sorry, you do not have access to this resource.
             </p>
 
-            <Button
-                asChild
-                variant="secondary"
-                className="w-full min-w-32 sm:w-auto"
-            >
+            <Button asChild className="w-full min-w-32 sm:w-auto">
                 <Link href="/">Home</Link>
             </Button>
         </main>

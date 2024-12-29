@@ -53,11 +53,7 @@ export default async function Profile() {
                 </dd>
             </dl>
 
-            <Button
-                asChild
-                variant="secondary"
-                className="w-full min-w-32 sm:w-auto"
-            >
+            <Button asChild className="w-full min-w-32 sm:w-auto">
                 <Link href="/profile/update-profile">Update Profile</Link>
             </Button>
 
@@ -71,11 +67,7 @@ export default async function Profile() {
                 regular basis.
             </p>
 
-            <Button
-                asChild
-                variant="secondary"
-                className="w-full min-w-32 sm:w-auto"
-            >
+            <Button asChild className="w-full min-w-32 sm:w-auto">
                 <Link href="/profile/change-password">Change Password</Link>
             </Button>
 
