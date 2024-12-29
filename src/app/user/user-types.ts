@@ -7,17 +7,15 @@ export enum UserSort {
     NAME_DESC = 'NAME_DESC',
 }
 
-export type SearchUsersItem = {
-    id: string;
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    isLockedOut: boolean;
-    roles?: Role[];
-};
-
 export type SearchUsersResponse = {
-    items: SearchUsersItem[];
+    items: {
+        id: string;
+        emailAddress: string;
+        firstName: string;
+        lastName: string;
+        isLockedOut: boolean;
+        roles?: Role[];
+    }[];
     hasNextPage: boolean;
     hasPreviousPage: boolean;
 };
