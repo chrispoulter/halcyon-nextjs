@@ -1,8 +1,10 @@
 'use server';
 
+// import { forbidden, notFound, redirect } from 'next/navigation';
 import { z } from 'zod';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
 import { config } from '@/lib/config';
+import { FetchError } from '@/lib/errors';
 import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
@@ -40,8 +42,28 @@ export const searchUsersAction = authActionClient([
             },
         });
 
-        if (!response.ok) {
-            throw new Error('An error occurred while processing your request');
+        switch (response.status) {
+            case 200:
+                break;
+
+            // case 401:
+            //     return forbidden();
+            // //    await deleteSession();
+            // //    return redirect('/account/login');
+
+            // case 403:
+            //     return forbidden();
+
+            // case 404:
+            //     return notFound();
+
+            default:
+                const content =
+                    response.headers.get('Content-Type') === 'application/json'
+                        ? await response.json()
+                        : await response.text();
+
+                throw new FetchError(response, content);
         }
 
         return (await response.json()) as SearchUsersResponse;

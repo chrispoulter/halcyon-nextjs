@@ -10,6 +10,7 @@ import { UserCard } from '@/app/user/user-card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Pager } from '@/components/pager';
+import { ServerActionError } from '@/components/server-action-error';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -47,24 +48,8 @@ export default async function UserSearch({
     const request = searchParamsSchema.parse(params);
     const result = await searchUsersAction({ ...request, size: PAGE_SIZE });
 
-    //TODO: Can this be handled by error page??????
-    if (
-        result?.serverError ||
-        result?.validationErrors ||
-        result?.bindArgsValidationErrors ||
-        !result?.data
-    ) {
-        return (
-            <main className="mx-auto max-w-screen-sm p-6">
-                <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>
-                        An error occurred while processing your request.
-                    </AlertDescription>
-                </Alert>
-            </main>
-        );
+    if (result?.serverError || result?.validationErrors || !result?.data) {
+        return <ServerActionError result={result} />;
     }
 
     const data = result.data;

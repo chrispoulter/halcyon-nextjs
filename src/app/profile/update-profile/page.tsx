@@ -1,9 +1,8 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { AlertCircle } from 'lucide-react';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { UpdateProfileForm } from '@/app/profile/update-profile/update-profile-form';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { ServerActionError } from '@/components/server-action-error';
 
 export const metadata: Metadata = {
     title: 'Update Profile',
@@ -12,23 +11,8 @@ export const metadata: Metadata = {
 export default async function UpdateProfile() {
     const result = await getProfileAction();
 
-    if (
-        result?.serverError ||
-        result?.validationErrors ||
-        result?.bindArgsValidationErrors
-    ) {
-        console.log('result', result);
-        return (
-            <main className="mx-auto max-w-screen-sm p-6">
-                <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>
-                        An error occurred while processing your request.
-                    </AlertDescription>
-                </Alert>
-            </main>
-        );
+    if (result?.serverError || result?.validationErrors) {
+        return <ServerActionError result={result} />;
     }
 
     if (!result?.data) {
