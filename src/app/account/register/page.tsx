@@ -24,7 +24,7 @@ export default async function Register() {
                 Already have an account?{' '}
                 <Link
                     href="/account/login"
-                    className="underline underline-offset-4 hover:text-primary"
+                    className="underline underline-offset-4"
                 >
                     Log in now
                 </Link>

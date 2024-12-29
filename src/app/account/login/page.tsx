@@ -24,7 +24,7 @@ export default async function Login() {
                     Not already a member?{' '}
                     <Link
                         href="/account/register"
-                        className="underline underline-offset-4 hover:text-primary"
+                        className="underline underline-offset-4"
                     >
                         Register now
                     </Link>
@@ -33,7 +33,7 @@ export default async function Login() {
                     Forgotten your password?{' '}
                     <Link
                         href="/account/forgot-password"
-                        className="underline underline-offset-4 hover:text-primary"
+                        className="underline underline-offset-4"
                     >
                         Request reset
                     </Link>

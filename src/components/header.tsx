@@ -14,7 +14,7 @@ export async function Header() {
                 <div className="flex items-center gap-2">
                     <Link
                         href="/"
-                        className="scroll-m-20 text-xl font-semibold tracking-tight underline-offset-4 hover:underline"
+                        className="scroll-m-20 text-xl font-semibold tracking-tight"
                     >
                         Halcyon
                     </Link>

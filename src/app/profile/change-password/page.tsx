@@ -40,7 +40,7 @@ export default async function ChangePassword() {
                 Forgotten your password?{' '}
                 <Link
                     href="/account/forgot-password"
-                    className="underline underline-offset-4 hover:text-primary"
+                    className="underline underline-offset-4"
                 >
                     Request reset
                 </Link>
