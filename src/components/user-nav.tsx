@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { type SessionPayload, Role, roles } from '@/lib/session-types';
+import { type SessionPayload, roles } from '@/lib/session-types';
 
 type UserNavProps = {
     session?: SessionPayload;
@@ -48,12 +48,14 @@ export function UserNav({ session, onLogout }: UserNavProps) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel className="flex flex-col gap-2">
-                    <div className="truncate text-sm font-medium leading-tight">
-                        {session.firstName} {session.lastName}
-                    </div>
-                    <div className="truncate text-sm text-muted-foreground">
-                        {session.emailAddress}
+                <DropdownMenuLabel className="space-y-2">
+                    <div className="space-y-0.5">
+                        <div className="truncate text-sm font-medium">
+                            {session.firstName} {session.lastName}
+                        </div>
+                        <div className="truncate text-sm text-muted-foreground">
+                            {session.emailAddress}
+                        </div>
                     </div>
                     <div className="flex flex-col gap-2">
                         {session.roles?.map((role) => (
@@ -62,7 +64,7 @@ export function UserNav({ session, onLogout }: UserNavProps) {
                                 variant="secondary"
                                 className="justify-center"
                             >
-                                {roles[role as Role].title}
+                                {roles[role].title}
                             </Badge>
                         ))}
                     </div>
