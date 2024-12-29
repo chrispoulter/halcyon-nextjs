@@ -57,7 +57,11 @@ export function UserNav({ session, onLogout }: UserNavProps) {
                     </div>
                     <div className="flex flex-col gap-2">
                         {session.roles?.map((role) => (
-                            <Badge key={role} className="justify-center">
+                            <Badge
+                                key={role}
+                                variant="secondary"
+                                className="justify-center"
+                            >
                                 {roles[role as Role].title}
                             </Badge>
                         ))}

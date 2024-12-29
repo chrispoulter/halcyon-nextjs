@@ -27,7 +27,11 @@ export function UserCard({ user }: UserCardProps) {
                     </Badge>
                 )}
                 {user.roles?.map((role) => (
-                    <Badge key={role} className="justify-center">
+                    <Badge
+                        key={role}
+                        variant="secondary"
+                        className="justify-center"
+                    >
                         {roles[role].title}
                     </Badge>
                 ))}
