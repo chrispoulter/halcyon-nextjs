@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { logoutAction } from '@/app/account/actions/logout-action';
-import { Button } from '@/components/ui/button';
 import { ModeToggle } from '@/components/mode-toggle';
 import { MainNav } from '@/components/main-nav';
 import { UserNav } from '@/components/user-nav';
@@ -13,13 +12,12 @@ export async function Header() {
         <header className="mb-6 border-b">
             <div className="mx-auto flex max-w-screen-sm items-center gap-2 px-6 py-4 sm:px-0">
                 <div className="flex items-center gap-2">
-                    <Button
-                        asChild
-                        variant="link"
-                        className="scroll-m-20 text-xl font-semibold tracking-tight"
+                    <Link
+                        href="/"
+                        className="scroll-m-20 text-xl font-semibold tracking-tight underline-offset-4 hover:underline"
                     >
-                        <Link href="/">Halcyon</Link>
-                    </Button>
+                        Halcyon
+                    </Link>
                 </div>
 
                 <div className="ml-auto flex items-center gap-2">
