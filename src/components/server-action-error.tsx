@@ -8,13 +8,26 @@ import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 type ServerActionErrorProps<T extends z.ZodType> = {
-    result?: SafeActionResult<
-        string,
-        T,
-        readonly T[],
-        ValidationErrors<T>,
-        BindArgsValidationErrors<readonly T[]>
-    >;
+    result?:
+        | SafeActionResult<
+              string,
+              T,
+              readonly T[],
+              ValidationErrors<T>,
+              BindArgsValidationErrors<readonly T[]>
+          >
+        | SafeActionResult<
+              string,
+              undefined,
+              readonly [],
+              | {
+                    formErrors: string[];
+                    fieldErrors: object;
+                }
+              | undefined,
+              readonly []
+          >
+        | undefined;
 };
 
 export function ServerActionError<T extends z.ZodType>({

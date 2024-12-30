@@ -18,29 +18,42 @@ export function authActionClient(roles?: Role[]) {
 }
 
 export function isActionSuccessful<T extends z.ZodType>(
-    action?: SafeActionResult<
-        string,
-        T,
-        readonly T[],
-        ValidationErrors<T>,
-        BindArgsValidationErrors<readonly T[]>
-    >
-): action is {
+    result?:
+        | SafeActionResult<
+              string,
+              T,
+              readonly T[],
+              ValidationErrors<T>,
+              BindArgsValidationErrors<readonly T[]>
+          >
+        | SafeActionResult<
+              string,
+              undefined,
+              readonly [],
+              | {
+                    formErrors: string[];
+                    fieldErrors: object;
+                }
+              | undefined,
+              readonly []
+          >
+        | undefined
+): result is {
     data: T;
 } {
-    if (!action) {
+    if (!result) {
         return false;
     }
 
-    if (action.serverError) {
+    if (result.serverError) {
         return false;
     }
 
-    if (action.validationErrors) {
+    if (result.validationErrors) {
         return false;
     }
 
-    if (action.bindArgsValidationErrors) {
+    if (result.bindArgsValidationErrors) {
         return false;
     }
 
