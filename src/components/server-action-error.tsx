@@ -1,38 +1,31 @@
-import { SafeActionResult } from 'next-safe-action';
-import { z } from 'zod';
+import {
+    FlattenedBindArgsValidationErrors,
+    FlattenedValidationErrors,
+    SafeActionResult,
+    ValidationErrors,
+} from 'next-safe-action';
+import { Schema } from 'next-safe-action/adapters/types';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-type FlattenedSafeActionResult<TSchema extends z.ZodType, TData> =
+type FlattenedSafeActionResult<S extends Schema, Data> =
     | SafeActionResult<
           string,
-          TSchema | undefined,
-          readonly TSchema[] | readonly [],
-          | {
-                formErrors: string[];
-                fieldErrors: {
-                    [key: string]: string[] | undefined;
-                };
-            }
-          | undefined,
-          | readonly []
-          | readonly {
-                formErrors: string[];
-                fieldErrors: {
-                    [key: string]: string[] | undefined;
-                };
-            }[],
-          TData
+          S,
+          readonly S[],
+          FlattenedValidationErrors<ValidationErrors<any>>,
+          FlattenedBindArgsValidationErrors<readonly ValidationErrors<any>[]>,
+          Data
       >
     | undefined;
 
-type ServerActionErrorProps<TSchema extends z.ZodType, TData> = {
-    result?: FlattenedSafeActionResult<TSchema, TData>;
+type ServerActionErrorProps<S extends Schema, Data> = {
+    result?: FlattenedSafeActionResult<S, Data>;
 };
 
-export function ServerActionError<TSchema extends z.ZodType, TData>({
+export function ServerActionError<S extends Schema, Data>({
     result,
-}: ServerActionErrorProps<TSchema, TData>) {
+}: ServerActionErrorProps<S, Data>) {
     return (
         <div className="mx-auto max-w-screen-sm p-6">
             <Alert variant="destructive">
@@ -46,9 +39,9 @@ export function ServerActionError<TSchema extends z.ZodType, TData>({
     );
 }
 
-export function ServerActionErrorMessage<TSchema extends z.ZodType, TData>({
+export function ServerActionErrorMessage<S extends Schema, Data>({
     result,
-}: ServerActionErrorProps<TSchema, TData>) {
+}: ServerActionErrorProps<S, Data>) {
     if (result?.bindArgsValidationErrors) {
         const flattenedErrors = result.bindArgsValidationErrors.flatMap(
             (item) => [
@@ -87,10 +80,10 @@ export function ServerActionErrorMessage<TSchema extends z.ZodType, TData>({
     );
 }
 
-export function isServerActionSuccessful<TSchema extends z.ZodType, TData>(
-    result?: FlattenedSafeActionResult<TSchema, TData>
+export function isServerActionSuccessful<S extends Schema, Data>(
+    result?: FlattenedSafeActionResult<S, Data>
 ): result is {
-    data: TData;
+    data: Data;
 } {
     if (!result) {
         return false;
