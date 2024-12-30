@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { ChangePasswordForm } from '@/app/profile/change-password/change-password-form';
 import { ServerActionError } from '@/components/server-action-error';
+import { isActionSuccessful } from '@/lib/errors';
 
 export const metadata: Metadata = {
     title: 'Change Password',
@@ -12,15 +13,15 @@ export const metadata: Metadata = {
 export default async function ChangePassword() {
     const result = await getProfileAction();
 
-    if (result?.serverError || result?.validationErrors) {
+    if (!isActionSuccessful(result)) {
         return <ServerActionError result={result} />;
     }
 
-    if (!result?.data) {
+    const profile = result.data;
+
+    if (!profile) {
         return notFound();
     }
-
-    const profile = result.data;
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">

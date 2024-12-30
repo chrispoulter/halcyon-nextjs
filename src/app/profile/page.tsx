@@ -6,6 +6,7 @@ import { DeleteAccountButton } from '@/app/profile/delete-account-button';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 import { toLocaleString } from '@/lib/dates';
+import { isActionSuccessful } from '@/lib/errors';
 
 export const metadata: Metadata = {
     title: 'My Account',
@@ -14,15 +15,15 @@ export const metadata: Metadata = {
 export default async function Profile() {
     const result = await getProfileAction();
 
-    if (result?.serverError || result?.validationErrors) {
+    if (!isActionSuccessful(result)) {
         return <ServerActionError result={result} />;
     }
 
-    if (!result?.data) {
+    const profile = result.data;
+
+    if (!profile) {
         return notFound();
     }
-
-    const profile = result.data;
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">

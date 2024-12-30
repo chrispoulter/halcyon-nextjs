@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getUserAction } from '@/app/user/actions/get-user-action';
 import { UpdateUserForm } from '@/app/user/[id]/update-user-form';
 import { ServerActionError } from '@/components/server-action-error';
+import { isActionSuccessful } from '@/lib/errors';
 
 export const metadata: Metadata = {
     title: 'Update User',
@@ -14,15 +15,15 @@ export default async function UpdateUser({ params }: { params: Params }) {
     const { id } = await params;
     const result = await getUserAction({ id });
 
-    if (result?.serverError || result?.validationErrors) {
+    if (!isActionSuccessful(result)) {
         return <ServerActionError result={result} />;
     }
 
-    if (!result?.data) {
+    const user = result.data;
+
+    if (!user) {
         return notFound();
     }
-
-    const user = result.data;
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">

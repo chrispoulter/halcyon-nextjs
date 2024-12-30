@@ -11,6 +11,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Pager } from '@/components/pager';
 import { ServerActionError } from '@/components/server-action-error';
+import { isActionSuccessful } from '@/lib/errors';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -48,7 +49,7 @@ export default async function UserSearch({
     const request = searchParamsSchema.parse(params);
     const result = await searchUsersAction({ ...request, size: PAGE_SIZE });
 
-    if (result?.serverError || result?.validationErrors || !result?.data) {
+    if (!isActionSuccessful(result)) {
         return <ServerActionError result={result} />;
     }
 
