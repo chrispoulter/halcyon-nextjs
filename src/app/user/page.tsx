@@ -47,7 +47,12 @@ export default async function UserSearch({
 }) {
     const params = await searchParams;
     const request = searchParamsSchema.parse(params);
-    const result = await searchUsersAction({ ...request, size: PAGE_SIZE });
+    const result = await searchUsersAction({
+        ...request,
+        size: PAGE_SIZE,
+        // page: 'asdsadasdsa' as any,
+        // size: 'sdfdsfdsf' as any,
+    });
 
     if (!isActionSuccessful(result)) {
         return <ServerActionError result={result} />;

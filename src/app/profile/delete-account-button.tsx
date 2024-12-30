@@ -16,6 +16,7 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 
 type DeleteAccountButtonProps = {
@@ -28,15 +29,17 @@ export function DeleteAccountButton({ className }: DeleteAccountButtonProps) {
     const { execute, isPending } = useAction(deleteAccountAction, {
         onSuccess() {
             toast({
-                title: 'Your account has been deleted.',
+                title: 'Success',
+                description: 'Your account has been deleted.',
             });
 
             router.push('/');
         },
-        onError() {
+        onError({ error }) {
             toast({
                 variant: 'destructive',
-                title: 'An error occurred while processing your request.',
+                title: 'Error',
+                description: <ServerActionErrorMessage result={error} />,
             });
         },
     });

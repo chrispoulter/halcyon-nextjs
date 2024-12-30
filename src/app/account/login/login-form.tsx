@@ -10,6 +10,7 @@ import { loginAction } from '@/app/account/actions/login-action';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 
 const schema = z.object({
@@ -38,10 +39,11 @@ export function LoginForm() {
         onSuccess() {
             router.push('/');
         },
-        onError() {
+        onError({ error }) {
             toast({
                 variant: 'destructive',
-                title: 'An error occurred while processing your request.',
+                title: 'Error',
+                description: <ServerActionErrorMessage result={error} />,
             });
         },
     });

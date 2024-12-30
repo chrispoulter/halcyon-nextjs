@@ -10,6 +10,7 @@ import { forgotPasswordAction } from '@/app/account/actions/forgot-password-acti
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 
 const schema = z.object({
@@ -33,15 +34,18 @@ export function ForgotPasswordForm() {
     const { execute, isPending } = useAction(forgotPasswordAction, {
         onSuccess() {
             toast({
-                title: 'Instructions as to how to reset your password have been sent to you via email.',
+                title: 'Success',
+                description:
+                    'Instructions as to how to reset your password have been sent to you via email.',
             });
 
             router.push('/account/login');
         },
-        onError() {
+        onError({ error }) {
             toast({
                 variant: 'destructive',
-                title: 'An error occurred while processing your request.',
+                title: 'Error',
+                description: <ServerActionErrorMessage result={error} />,
             });
         },
     });

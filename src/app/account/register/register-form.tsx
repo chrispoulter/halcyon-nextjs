@@ -11,6 +11,7 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 
@@ -66,15 +67,17 @@ export function RegisterForm() {
     const { execute, isPending } = useAction(registerAction, {
         onSuccess() {
             toast({
-                title: 'User successfully registered.',
+                title: 'Success',
+                description: 'User successfully registered.',
             });
 
             router.push('/account/login');
         },
-        onError() {
+        onError({ error }) {
             toast({
                 variant: 'destructive',
-                title: 'An error occurred while processing your request.',
+                title: 'Error',
+                description: <ServerActionErrorMessage result={error} />,
             });
         },
     });

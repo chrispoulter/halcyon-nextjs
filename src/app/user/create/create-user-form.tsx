@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { DateFormField } from '@/components/date-form-field';
 import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
@@ -80,15 +81,17 @@ export function CreateUserForm() {
     const { execute, isPending } = useAction(createUserAction, {
         onSuccess() {
             toast({
-                title: 'User successfully created.',
+                title: 'Success',
+                description: 'User successfully created.',
             });
 
             router.push('/user');
         },
-        onError() {
+        onError({ error }) {
             toast({
                 variant: 'destructive',
-                title: 'An error occurred while processing your request.',
+                title: 'Error',
+                description: <ServerActionErrorMessage result={error} />,
             });
         },
     });

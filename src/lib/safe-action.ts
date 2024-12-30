@@ -2,9 +2,7 @@ import { createSafeActionClient } from 'next-safe-action';
 import { verifySession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
 
-export const actionClient = createSafeActionClient({
-    defaultValidationErrorsShape: 'flattened',
-});
+export const actionClient = createSafeActionClient();
 
 export function authActionClient(roles?: Role[]) {
     return actionClient.use(async ({ next }) => {

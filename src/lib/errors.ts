@@ -1,31 +1,29 @@
-import { SafeActionResult } from 'next-safe-action';
+import {
+    BindArgsValidationErrors,
+    SafeActionResult,
+    ValidationErrors,
+} from 'next-safe-action';
 import { z } from 'zod';
 
-export class FetchError extends Error {
+export type ProblemDetails = {
+    type: string;
+    title: string;
     status: number;
-    statusText: string;
-    content: any;
+    traceId: string;
+    errors?: Record<string, string[]>;
+};
 
-    constructor(response: Response, content: any) {
-        super(`${response.status} - ${response.statusText}`);
-        this.name = 'FetchError';
-        this.status = response.status;
-        this.statusText = response.statusText;
-        this.content = content;
-
-        if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, FetchError);
-        }
-    }
-}
-export const isActionSuccessful = <T extends z.ZodType>(
-    action?: SafeActionResult<string, T, readonly [], any, any>
+export function isActionSuccessful<T extends z.ZodType>(
+    action?: SafeActionResult<
+        string,
+        T,
+        readonly T[],
+        ValidationErrors<T>,
+        BindArgsValidationErrors<readonly T[]>
+    >
 ): action is {
     data: T;
-    serverError: undefined;
-    validationError: undefined;
-    bindArgsValidationErrors: undefined;
-} => {
+} {
     if (!action) {
         return false;
     }
@@ -43,4 +41,4 @@ export const isActionSuccessful = <T extends z.ZodType>(
     }
 
     return true;
-};
+}
