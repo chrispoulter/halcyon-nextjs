@@ -11,7 +11,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Pager } from '@/components/pager';
 import { ServerActionError } from '@/components/server-action-error';
-import { isActionSuccessful } from '@/lib/errors';
+import { isActionSuccessful } from '@/lib/safe-action';
 
 export const metadata: Metadata = {
     title: 'Users',

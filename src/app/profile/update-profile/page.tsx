@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { UpdateProfileForm } from '@/app/profile/update-profile/update-profile-form';
 import { ServerActionError } from '@/components/server-action-error';
-import { isActionSuccessful } from '@/lib/errors';
+import { isActionSuccessful } from '@/lib/safe-action';
 
 export const metadata: Metadata = {
     title: 'Update Profile',

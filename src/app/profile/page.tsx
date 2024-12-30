@@ -6,7 +6,7 @@ import { DeleteAccountButton } from '@/app/profile/delete-account-button';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 import { toLocaleString } from '@/lib/dates';
-import { isActionSuccessful } from '@/lib/errors';
+import { isActionSuccessful } from '@/lib/safe-action';
 
 export const metadata: Metadata = {
     title: 'My Account',
