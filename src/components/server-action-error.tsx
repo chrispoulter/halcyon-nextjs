@@ -88,9 +88,7 @@ export function ServerActionErrorMessage<T extends z.ZodType>({
 
 export function isServerActionSuccessful<T extends z.ZodType>(
     result?: FlattenedSafeActionResult<T>
-): result is {
-    data: T;
-} {
+) {
     if (!result) {
         return false;
     }

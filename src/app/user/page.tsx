@@ -59,7 +59,7 @@ export default async function UserSearch({
         return <ServerActionError result={result} />;
     }
 
-    const data = result.data;
+    const data = result?.data;
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
