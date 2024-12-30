@@ -79,7 +79,6 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                 router.push('/user');
             },
             onError({ error }) {
-                console.log('error', error);
                 toast({
                     variant: 'destructive',
                     title: 'Error',
