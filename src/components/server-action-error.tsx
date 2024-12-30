@@ -8,16 +8,14 @@ import { Schema } from 'next-safe-action/adapters/types';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-type FlattenedSafeActionResult<S extends Schema, Data> =
-    | SafeActionResult<
-          string,
-          S,
-          readonly S[],
-          FlattenedValidationErrors<ValidationErrors<any>>,
-          FlattenedBindArgsValidationErrors<readonly ValidationErrors<any>[]>,
-          Data
-      >
-    | undefined;
+type FlattenedSafeActionResult<S extends Schema, Data> = SafeActionResult<
+    string,
+    S,
+    readonly S[],
+    FlattenedValidationErrors<ValidationErrors<any>>,
+    FlattenedBindArgsValidationErrors<readonly ValidationErrors<any>[]>,
+    Data
+>;
 
 type ServerActionErrorProps<S extends Schema, Data> = {
     result?: FlattenedSafeActionResult<S, Data>;
