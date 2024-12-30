@@ -19,7 +19,7 @@ export default async function ChangePassword() {
         return <ServerActionError result={result} />;
     }
 
-    const profile = result?.data;
+    const profile = result.data;
 
     if (!profile) {
         return notFound();

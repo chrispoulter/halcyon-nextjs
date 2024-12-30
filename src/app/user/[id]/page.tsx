@@ -21,7 +21,7 @@ export default async function UpdateUser({ params }: { params: Params }) {
         return <ServerActionError result={result} />;
     }
 
-    const user = result?.data;
+    const user = result.data;
 
     if (!user) {
         return notFound();

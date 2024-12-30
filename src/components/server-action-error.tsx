@@ -3,11 +3,11 @@ import { z } from 'zod';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-type FlattenedSafeActionResult<T extends z.ZodType> =
+type FlattenedSafeActionResult<TSchema extends z.ZodType, TData> =
     | SafeActionResult<
           string,
-          T | undefined,
-          readonly T[] | readonly [],
+          TSchema | undefined,
+          readonly TSchema[] | readonly [],
           | {
                 formErrors: string[];
                 fieldErrors: {
@@ -21,17 +21,18 @@ type FlattenedSafeActionResult<T extends z.ZodType> =
                 fieldErrors: {
                     [key: string]: string[] | undefined;
                 };
-            }[]
+            }[],
+          TData
       >
     | undefined;
 
-type ServerActionErrorProps<T extends z.ZodType> = {
-    result?: FlattenedSafeActionResult<T>;
+type ServerActionErrorProps<TSchema extends z.ZodType, TData> = {
+    result?: FlattenedSafeActionResult<TSchema, TData>;
 };
 
-export function ServerActionError<T extends z.ZodType>({
+export function ServerActionError<TSchema extends z.ZodType, TData>({
     result,
-}: ServerActionErrorProps<T>) {
+}: ServerActionErrorProps<TSchema, TData>) {
     return (
         <div className="mx-auto max-w-screen-sm p-6">
             <Alert variant="destructive">
@@ -45,9 +46,9 @@ export function ServerActionError<T extends z.ZodType>({
     );
 }
 
-export function ServerActionErrorMessage<T extends z.ZodType>({
+export function ServerActionErrorMessage<TSchema extends z.ZodType, TData>({
     result,
-}: ServerActionErrorProps<T>) {
+}: ServerActionErrorProps<TSchema, TData>) {
     if (result?.bindArgsValidationErrors) {
         const flattenedErrors = result.bindArgsValidationErrors.flatMap(
             (item) => [
@@ -86,9 +87,11 @@ export function ServerActionErrorMessage<T extends z.ZodType>({
     );
 }
 
-export function isServerActionSuccessful<T extends z.ZodType>(
-    result?: FlattenedSafeActionResult<T>
-) {
+export function isServerActionSuccessful<TSchema extends z.ZodType, TData>(
+    result?: FlattenedSafeActionResult<TSchema, TData>
+): result is {
+    data: TData;
+} {
     if (!result) {
         return false;
     }
