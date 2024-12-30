@@ -36,27 +36,16 @@ export function ServerActionError<T extends z.ZodType>({
 export function ServerActionErrorMessage<T extends z.ZodType>({
     result,
 }: ServerActionErrorProps<T>) {
-    if (!result) {
-        return null;
+    if (result?.validationErrors) {
+        return JSON.stringify(result.validationErrors);
     }
 
-    const { serverError, validationErrors, bindArgsValidationErrors } = result;
-
-    if (serverError) {
-        return serverError;
+    if (result?.bindArgsValidationErrors) {
+        return JSON.stringify(result.bindArgsValidationErrors);
     }
 
-    if (validationErrors) {
-        return JSON.stringify(validationErrors);
-    }
-
-    if (bindArgsValidationErrors) {
-        return JSON.stringify(bindArgsValidationErrors);
-    }
-
-    if (bindArgsValidationErrors) {
-        return JSON.stringify(bindArgsValidationErrors);
-    }
-
-    return 'An error occurred while processing your request.';
+    return (
+        result?.serverError ||
+        'An error occurred while processing your request.'
+    );
 }
