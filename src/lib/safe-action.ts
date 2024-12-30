@@ -21,21 +21,15 @@ export function isActionSuccessful<T extends z.ZodType>(
     result?:
         | SafeActionResult<
               string,
-              T,
-              readonly T[],
-              ValidationErrors<T>,
-              BindArgsValidationErrors<readonly T[]>
-          >
-        | SafeActionResult<
-              string,
-              undefined,
-              readonly [],
+              T | undefined,
+              readonly T[] | readonly [],
+              | ValidationErrors<T>
               | {
                     formErrors: string[];
                     fieldErrors: object;
                 }
               | undefined,
-              readonly []
+              BindArgsValidationErrors<readonly T[]> | readonly []
           >
         | undefined
 ): result is {
