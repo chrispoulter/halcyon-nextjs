@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { getUserAction } from '@/app/user/actions/get-user-action';
 import { UpdateUserForm } from '@/app/user/[id]/update-user-form';
 import {
-    isActionSuccessful,
+    isServerActionSuccessful,
     ServerActionError,
 } from '@/components/server-action-error';
 
@@ -17,7 +17,7 @@ export default async function UpdateUser({ params }: { params: Params }) {
     const { id } = await params;
     const result = await getUserAction({ id });
 
-    if (!isActionSuccessful(result)) {
+    if (!isServerActionSuccessful(result)) {
         return <ServerActionError result={result} />;
     }
 

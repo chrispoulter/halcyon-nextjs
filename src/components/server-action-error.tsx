@@ -15,7 +15,13 @@ type FlattenedSafeActionResult<T extends z.ZodType> =
                 };
             }
           | undefined,
-          readonly []
+          | readonly []
+          | readonly {
+                formErrors: string[];
+                fieldErrors: {
+                    [key: string]: string[] | undefined;
+                };
+            }[]
       >
     | undefined;
 
@@ -42,16 +48,33 @@ export function ServerActionError<T extends z.ZodType>({
 export function ServerActionErrorMessage<T extends z.ZodType>({
     result,
 }: ServerActionErrorProps<T>) {
-    if (result?.validationErrors) {
+    if (result?.bindArgsValidationErrors) {
+        const flattenedErrors = result.bindArgsValidationErrors.flatMap(
+            (item) => [
+                ...item.formErrors,
+                ...Object.values(item.fieldErrors).flat(),
+            ]
+        );
+
         return (
             <ul className="ml-6 list-disc space-y-0.5">
-                {[
-                    ...result.validationErrors.formErrors,
-                    ...Object.values(
-                        result.validationErrors.fieldErrors
-                    ).flat(),
-                ].map((error) => (
-                    <li key={error}>{error}</li>
+                {flattenedErrors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                ))}
+            </ul>
+        );
+    }
+
+    if (result?.validationErrors) {
+        const flattenedErrors = [
+            ...result.validationErrors.formErrors,
+            ...Object.values(result.validationErrors.fieldErrors).flat(),
+        ];
+
+        return (
+            <ul className="ml-6 list-disc space-y-0.5">
+                {flattenedErrors.map((error, index) => (
+                    <li key={index}>{error}</li>
                 ))}
             </ul>
         );
@@ -63,7 +86,7 @@ export function ServerActionErrorMessage<T extends z.ZodType>({
     );
 }
 
-export function isActionSuccessful<T extends z.ZodType>(
+export function isServerActionSuccessful<T extends z.ZodType>(
     result?: FlattenedSafeActionResult<T>
 ): result is {
     data: T;
@@ -72,11 +95,15 @@ export function isActionSuccessful<T extends z.ZodType>(
         return false;
     }
 
-    if (result.serverError) {
+    if (result.bindArgsValidationErrors) {
         return false;
     }
 
     if (result.validationErrors) {
+        return false;
+    }
+
+    if (result.serverError) {
         return false;
     }
 

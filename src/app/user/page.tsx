@@ -11,7 +11,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Pager } from '@/components/pager';
 import {
-    isActionSuccessful,
+    isServerActionSuccessful,
     ServerActionError,
 } from '@/components/server-action-error';
 
@@ -49,12 +49,13 @@ export default async function UserSearch({
 }) {
     const params = await searchParams;
     const request = searchParamsSchema.parse(params);
+
     const result = await searchUsersAction({
         ...request,
         size: PAGE_SIZE,
     });
 
-    if (!isActionSuccessful(result)) {
+    if (!isServerActionSuccessful(result)) {
         return <ServerActionError result={result} />;
     }
 

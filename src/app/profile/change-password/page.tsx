@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { ChangePasswordForm } from '@/app/profile/change-password/change-password-form';
 import {
-    isActionSuccessful,
+    isServerActionSuccessful,
     ServerActionError,
 } from '@/components/server-action-error';
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function ChangePassword() {
     const result = await getProfileAction();
 
-    if (!isActionSuccessful(result)) {
+    if (!isServerActionSuccessful(result)) {
         return <ServerActionError result={result} />;
     }
 
