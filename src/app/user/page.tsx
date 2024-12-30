@@ -10,8 +10,10 @@ import { UserCard } from '@/app/user/user-card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Pager } from '@/components/pager';
-import { ServerActionError } from '@/components/server-action-error';
-import { isActionSuccessful } from '@/lib/safe-action';
+import {
+    isActionSuccessful,
+    ServerActionError,
+} from '@/components/server-action-error';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -50,8 +52,6 @@ export default async function UserSearch({
     const result = await searchUsersAction({
         ...request,
         size: PAGE_SIZE,
-        // page: 'asdsadasdsa' as any,
-        // size: 'sdfdsfdsf' as any,
     });
 
     if (!isActionSuccessful(result)) {

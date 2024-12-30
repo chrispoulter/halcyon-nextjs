@@ -1,27 +1,26 @@
-import {
-    BindArgsValidationErrors,
-    SafeActionResult,
-    ValidationErrors,
-} from 'next-safe-action';
+import { SafeActionResult } from 'next-safe-action';
 import { z } from 'zod';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
+type FlattenedSafeActionResult<T extends z.ZodType> =
+    | SafeActionResult<
+          string,
+          T | undefined,
+          readonly T[] | readonly [],
+          | {
+                formErrors: string[];
+                fieldErrors: {
+                    [key: string]: string[] | undefined;
+                };
+            }
+          | undefined,
+          readonly []
+      >
+    | undefined;
+
 type ServerActionErrorProps<T extends z.ZodType> = {
-    result?:
-        | SafeActionResult<
-              string,
-              T | undefined,
-              readonly T[] | readonly [],
-              | ValidationErrors<T>
-              | {
-                    formErrors: string[];
-                    fieldErrors: object;
-                }
-              | undefined,
-              BindArgsValidationErrors<readonly T[]> | readonly []
-          >
-        | undefined;
+    result?: FlattenedSafeActionResult<T>;
 };
 
 export function ServerActionError<T extends z.ZodType>({
@@ -44,15 +43,42 @@ export function ServerActionErrorMessage<T extends z.ZodType>({
     result,
 }: ServerActionErrorProps<T>) {
     if (result?.validationErrors) {
-        return JSON.stringify(result.validationErrors);
-    }
-
-    if (result?.bindArgsValidationErrors) {
-        return JSON.stringify(result.bindArgsValidationErrors);
+        return (
+            <ul className="ml-6 list-disc space-y-0.5">
+                {[
+                    ...result.validationErrors.formErrors,
+                    ...Object.values(
+                        result.validationErrors.fieldErrors
+                    ).flat(),
+                ].map((error) => (
+                    <li key={error}>{error}</li>
+                ))}
+            </ul>
+        );
     }
 
     return (
         result?.serverError ||
         'An error occurred while processing your request.'
     );
+}
+
+export function isActionSuccessful<T extends z.ZodType>(
+    result?: FlattenedSafeActionResult<T>
+): result is {
+    data: T;
+} {
+    if (!result) {
+        return false;
+    }
+
+    if (result.serverError) {
+        return false;
+    }
+
+    if (result.validationErrors) {
+        return false;
+    }
+
+    return true;
 }
