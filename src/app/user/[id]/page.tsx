@@ -15,6 +15,7 @@ type Params = Promise<{ id: string }>;
 
 export default async function UpdateUser({ params }: { params: Params }) {
     const { id } = await params;
+
     const result = await getUserAction({ id });
 
     if (!isServerActionSuccessful(result)) {

@@ -48,6 +48,7 @@ export default async function UserSearch({
     searchParams: SearchParams;
 }) {
     const params = await searchParams;
+
     const request = searchParamsSchema.parse(params);
 
     const result = await searchUsersAction({
