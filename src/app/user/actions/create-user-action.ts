@@ -2,9 +2,9 @@
 
 import { z } from 'zod';
 import { CreateUserResponse } from '@/app/user/user-types';
-import { config } from '@/lib/config';
+import { fetcher } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
-import { ActionError, authActionClient } from '@/lib/safe-action';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -44,28 +44,9 @@ export const createUserAction = authActionClient([
 ])
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        const response = await fetch(`${config.API_URL}/user`, {
+        return await fetcher<CreateUserResponse>('/user', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify(parsedInput),
+            accessToken,
+            json: parsedInput,
         });
-
-        if (!response.ok) {
-            const error = response.headers
-                .get('content-type')
-                ?.includes('application/problem+json')
-                ? await response.json()
-                : await response.text();
-
-            throw new ActionError(
-                error?.title ||
-                    error ||
-                    `${response.status} ${response.statusText}`
-            );
-        }
-
-        return (await response.json()) as CreateUserResponse;
     });

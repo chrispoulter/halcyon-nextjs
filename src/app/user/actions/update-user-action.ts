@@ -2,9 +2,9 @@
 
 import { z } from 'zod';
 import type { UpdateUserResponse } from '@/app/user/user-types';
-import { config } from '@/lib/config';
+import { fetcher } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
-import { ActionError, authActionClient } from '@/lib/safe-action';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -42,29 +42,10 @@ export const updateUserAction = authActionClient([
     Role.USER_ADMINISTRATOR,
 ])
     .schema(schema)
-    .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
-        const response = await fetch(`${config.API_URL}/user/${id}`, {
+    .action(async ({ parsedInput: { id, ...json }, ctx: { accessToken } }) => {
+        return await fetcher<UpdateUserResponse>(`/user/${id}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify(rest),
+            accessToken,
+            json,
         });
-
-        if (!response.ok) {
-            const error = response.headers
-                .get('content-type')
-                ?.includes('application/problem+json')
-                ? await response.json()
-                : await response.text();
-
-            throw new ActionError(
-                error?.title ||
-                    error ||
-                    `${response.status} ${response.statusText}`
-            );
-        }
-
-        return (await response.json()) as UpdateUserResponse;
     });

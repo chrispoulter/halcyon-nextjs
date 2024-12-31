@@ -2,8 +2,8 @@
 
 import { z } from 'zod';
 import type { DeleteUserResponse } from '@/app/user/user-types';
-import { config } from '@/lib/config';
-import { ActionError, authActionClient } from '@/lib/safe-action';
+import { fetcher } from '@/lib/api-client';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -18,29 +18,10 @@ export const deleteUserAction = authActionClient([
     Role.USER_ADMINISTRATOR,
 ])
     .schema(schema)
-    .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
-        const response = await fetch(`${config.API_URL}/user/${id}`, {
+    .action(async ({ parsedInput: { id, ...json }, ctx: { accessToken } }) => {
+        return await fetcher<DeleteUserResponse>(`/user/${id}`, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify(rest),
+            accessToken,
+            json,
         });
-
-        if (!response.ok) {
-            const error = response.headers
-                .get('content-type')
-                ?.includes('application/problem+json')
-                ? await response.json()
-                : await response.text();
-
-            throw new ActionError(
-                error?.title ||
-                    error ||
-                    `${response.status} ${response.statusText}`
-            );
-        }
-
-        return (await response.json()) as DeleteUserResponse;
     });

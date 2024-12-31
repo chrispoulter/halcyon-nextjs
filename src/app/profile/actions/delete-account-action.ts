@@ -2,8 +2,8 @@
 
 import { z } from 'zod';
 import type { DeleteAccountResponse } from '@/app/profile/profile-types';
-import { config } from '@/lib/config';
-import { ActionError, authActionClient } from '@/lib/safe-action';
+import { fetcher } from '@/lib/api-client';
+import { authActionClient } from '@/lib/safe-action';
 import { deleteSession } from '@/lib/session';
 
 const schema = z.object({
@@ -13,30 +13,13 @@ const schema = z.object({
 export const deleteAccountAction = authActionClient()
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        const response = await fetch(`${config.API_URL}/profile`, {
+        const result = await fetcher<DeleteAccountResponse>('/profile', {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify(parsedInput),
+            accessToken,
+            json: parsedInput,
         });
-
-        if (!response.ok) {
-            const error = response.headers
-                .get('content-type')
-                ?.includes('application/problem+json')
-                ? await response.json()
-                : await response.text();
-
-            throw new ActionError(
-                error?.title ||
-                    error ||
-                    `${response.status} ${response.statusText}`
-            );
-        }
 
         await deleteSession();
 
-        return (await response.json()) as DeleteAccountResponse;
+        return result;
     });

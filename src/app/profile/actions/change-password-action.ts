@@ -2,8 +2,8 @@
 
 import { z } from 'zod';
 import type { ChangePasswordResponse } from '@/app/profile/profile-types';
-import { config } from '@/lib/config';
-import { ActionError, authActionClient } from '@/lib/safe-action';
+import { fetcher } from '@/lib/api-client';
+import { authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
     currentPassword: z
@@ -19,31 +19,12 @@ const schema = z.object({
 export const changePasswordAction = authActionClient()
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        const response = await fetch(
-            `${config.API_URL}/profile/change-password`,
+        return await fetcher<ChangePasswordResponse>(
+            '/profile/change-password',
             {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(parsedInput),
+                accessToken,
+                json: parsedInput,
             }
         );
-
-        if (!response.ok) {
-            const error = response.headers
-                .get('content-type')
-                ?.includes('application/problem+json')
-                ? await response.json()
-                : await response.text();
-
-            throw new ActionError(
-                error?.title ||
-                    error ||
-                    `${response.status} ${response.statusText}`
-            );
-        }
-
-        return (await response.json()) as ChangePasswordResponse;
     });

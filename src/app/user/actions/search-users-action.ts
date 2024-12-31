@@ -2,8 +2,8 @@
 
 import { z } from 'zod';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
-import { config } from '@/lib/config';
-import { ActionError, authActionClient } from '@/lib/safe-action';
+import { fetcher } from '@/lib/api-client';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -28,31 +28,8 @@ export const searchUsersAction = authActionClient([
 ])
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        const params = Object.entries(parsedInput)
-            .filter((pair) => !!pair[1])
-            .map((pair) => pair.map(encodeURIComponent).join('='))
-            .join('&');
-
-        const response = await fetch(`${config.API_URL}/user?${params}`, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
+        return await fetcher<SearchUsersResponse>('/user', {
+            accessToken,
+            params: parsedInput,
         });
-
-        if (!response.ok) {
-            const error = response.headers
-                .get('content-type')
-                ?.includes('application/problem+json')
-                ? await response.json()
-                : await response.text();
-
-            throw new ActionError(
-                error?.title ||
-                    error ||
-                    `${response.status} ${response.statusText}`
-            );
-        }
-
-        return (await response.json()) as SearchUsersResponse;
     });
