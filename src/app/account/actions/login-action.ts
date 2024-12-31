@@ -6,7 +6,7 @@ import type {
     LoginResponse,
     ApiTokenPayload,
 } from '@/app/account/account-types';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
@@ -26,10 +26,10 @@ const encodedSecurityKey = new TextEncoder().encode(securityKey);
 export const loginAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        const { accessToken } = await fetcher<LoginResponse>('/account/login', {
-            method: 'POST',
-            json: parsedInput,
-        });
+        const { accessToken } = await apiClient.post<LoginResponse>(
+            '/account/login',
+            parsedInput
+        );
 
         const { payload } = await jwtVerify<ApiTokenPayload>(
             accessToken,

@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import type { DeleteAccountResponse } from '@/app/profile/profile-types';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { authActionClient } from '@/lib/safe-action';
 import { deleteSession } from '@/lib/session';
 
@@ -13,11 +13,13 @@ const schema = z.object({
 export const deleteAccountAction = authActionClient()
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        const result = await fetcher<DeleteAccountResponse>('/profile', {
-            method: 'DELETE',
-            accessToken,
-            json: parsedInput,
-        });
+        const result = await apiClient.delete<DeleteAccountResponse>(
+            '/profile',
+            parsedInput,
+            {
+                Authorization: `Bearer ${accessToken}`,
+            }
+        );
 
         await deleteSession();
 

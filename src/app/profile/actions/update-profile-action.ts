@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import type { UpdateProfileResponse } from '@/app/profile/profile-types';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
 import { authActionClient } from '@/lib/safe-action';
 
@@ -30,9 +30,11 @@ const schema = z.object({
 export const updateProfileAction = authActionClient()
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await fetcher<UpdateProfileResponse>('/profile', {
-            method: 'PUT',
-            accessToken,
-            json: parsedInput,
-        });
+        return await apiClient.put<UpdateProfileResponse>(
+            '/profile',
+            parsedInput,
+            {
+                Authorization: `Bearer ${accessToken}`,
+            }
+        );
     });

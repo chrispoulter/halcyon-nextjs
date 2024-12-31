@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import type { UpdateUserResponse } from '@/app/user/user-types';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
 import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
@@ -42,10 +42,8 @@ export const updateUserAction = authActionClient([
     Role.USER_ADMINISTRATOR,
 ])
     .schema(schema)
-    .action(async ({ parsedInput: { id, ...json }, ctx: { accessToken } }) => {
-        return await fetcher<UpdateUserResponse>(`/user/${id}`, {
-            method: 'PUT',
-            accessToken,
-            json,
+    .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
+        return await apiClient.put<UpdateUserResponse>(`/user/${id}`, rest, {
+            Authorization: `Bearer ${accessToken}`,
         });
     });

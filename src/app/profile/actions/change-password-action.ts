@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import type { ChangePasswordResponse } from '@/app/profile/profile-types';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -19,12 +19,11 @@ const schema = z.object({
 export const changePasswordAction = authActionClient()
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await fetcher<ChangePasswordResponse>(
+        return await apiClient.put<ChangePasswordResponse>(
             '/profile/change-password',
+            parsedInput,
             {
-                method: 'PUT',
-                accessToken,
-                json: parsedInput,
+                Authorization: `Bearer ${accessToken}`,
             }
         );
     });

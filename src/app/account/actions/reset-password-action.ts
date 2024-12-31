@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import type { ResetPasswordResponse } from '@/app/account/account-types';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { actionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -21,8 +21,8 @@ const schema = z.object({
 export const resetPasswordAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        return await fetcher<ResetPasswordResponse>('/account/reset-password', {
-            method: 'PUT',
-            json: parsedInput,
-        });
+        return await apiClient.put<ResetPasswordResponse>(
+            'account/reset-password',
+            parsedInput
+        );
     });

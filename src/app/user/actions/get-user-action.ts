@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import type { GetUserResponse } from '@/app/user/user-types';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
@@ -18,7 +18,7 @@ export const getUserAction = authActionClient([
 ])
     .schema(schema)
     .action(async ({ parsedInput: { id }, ctx: { accessToken } }) => {
-        return await fetcher<GetUserResponse>(`/user/${id}`, {
-            accessToken,
+        return await apiClient.get<GetUserResponse>(`/user/${id}`, undefined, {
+            Authorization: `Bearer ${accessToken}`,
         });
     });

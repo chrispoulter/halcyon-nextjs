@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { CreateUserResponse } from '@/app/user/user-types';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
 import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
@@ -44,9 +44,7 @@ export const createUserAction = authActionClient([
 ])
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await fetcher<CreateUserResponse>('/user', {
-            method: 'POST',
-            accessToken,
-            json: parsedInput,
+        return await apiClient.post<CreateUserResponse>('/user', parsedInput, {
+            Authorization: `Bearer ${accessToken}`,
         });
     });

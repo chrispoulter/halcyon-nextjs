@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { actionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -13,8 +13,5 @@ const schema = z.object({
 export const forgotPasswordAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        return await fetcher('/account/forgot-password', {
-            method: 'PUT',
-            json: parsedInput,
-        });
+        return await apiClient.put('/account/forgot-password', parsedInput);
     });

@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import type { DeleteUserResponse } from '@/app/user/user-types';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
@@ -18,10 +18,8 @@ export const deleteUserAction = authActionClient([
     Role.USER_ADMINISTRATOR,
 ])
     .schema(schema)
-    .action(async ({ parsedInput: { id, ...json }, ctx: { accessToken } }) => {
-        return await fetcher<DeleteUserResponse>(`/user/${id}`, {
-            method: 'DELETE',
-            accessToken,
-            json,
+    .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
+        return await apiClient.delete<DeleteUserResponse>(`/user/${id}`, rest, {
+            Authorization: `Bearer ${accessToken}`,
         });
     });

@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
-import { fetcher } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
@@ -28,8 +28,7 @@ export const searchUsersAction = authActionClient([
 ])
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await fetcher<SearchUsersResponse>('/user', {
-            accessToken,
-            params: parsedInput,
+        return await apiClient.get<SearchUsersResponse>('/user', parsedInput, {
+            Authorization: `Bearer ${accessToken}`,
         });
     });
