@@ -16,7 +16,7 @@ class ApiClient {
     ): Promise<T | undefined> {
         const querystring = params
             ? Object.entries(params)
-                  .filter((pair) => !!pair[1])
+                  .filter(([, value]) => !!value)
                   .map((pair) => pair.map(encodeURIComponent).join('='))
                   .join('&')
             : '';
