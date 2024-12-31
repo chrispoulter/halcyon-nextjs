@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { ChangePasswordForm } from '@/app/profile/change-password/change-password-form';
@@ -19,12 +18,6 @@ export default async function ChangePassword() {
         return <ServerActionError result={result} />;
     }
 
-    const profile = result.data;
-
-    if (!profile) {
-        return notFound();
-    }
-
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -37,7 +30,7 @@ export default async function ChangePassword() {
                 change your password on a regular basis.
             </p>
 
-            <ChangePasswordForm profile={profile} />
+            <ChangePasswordForm profile={result.data} />
 
             <p className="text-sm text-muted-foreground">
                 Forgotten your password?{' '}

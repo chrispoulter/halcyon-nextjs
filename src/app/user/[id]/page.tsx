@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { getUserAction } from '@/app/user/actions/get-user-action';
 import { UpdateUserForm } from '@/app/user/[id]/update-user-form';
 import {
@@ -23,10 +22,6 @@ export default async function UpdateUser({ params }: { params: Params }) {
     }
 
     const user = result.data;
-
-    if (!user) {
-        return notFound();
-    }
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">

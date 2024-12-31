@@ -23,18 +23,13 @@ const encodedSecurityKey = new TextEncoder().encode(securityKey);
 export const loginAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        const result = await apiClient.post<LoginResponse>(
+        const { accessToken } = await apiClient.post<LoginResponse>(
             '/account/login',
             parsedInput
         );
 
-        //TODO: Handle 404 response
-        if (!result) {
-            throw new Error('Invalid response from server');
-        }
-
         const { payload } = await jwtVerify<TokenPayload>(
-            result.accessToken,
+            accessToken,
             encodedSecurityKey,
             {
                 audience: config.JWT_AUDIENCE,
@@ -43,7 +38,7 @@ export const loginAction = actionClient
         );
 
         await createSession({
-            accessToken: result.accessToken,
+            accessToken,
             id: payload.sub,
             emailAddress: payload.email,
             firstName: payload.given_name,

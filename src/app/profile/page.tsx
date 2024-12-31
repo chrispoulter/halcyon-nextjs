@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { DeleteAccountButton } from '@/app/profile/delete-account-button';
@@ -22,10 +21,6 @@ export default async function Profile() {
     }
 
     const profile = result.data;
-
-    if (!profile) {
-        return notFound();
-    }
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">

@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { UpdateProfileForm } from '@/app/profile/update-profile/update-profile-form';
 import {
@@ -19,10 +18,6 @@ export default async function UpdateProfile() {
     }
 
     const profile = result.data;
-
-    if (!profile) {
-        return notFound();
-    }
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
