@@ -1,6 +1,6 @@
 import { Role } from '@/lib/session-types';
 
-export type ApiTokenPayload = {
+export type TokenPayload = {
     sub: string;
     email: string;
     given_name: string;

@@ -10,13 +10,13 @@ class ApiClient {
     private async request<T>(
         endpoint: string,
         method: string,
+        params?: Record<string, string | number | boolean>,
         body?: Record<string, unknown>,
-        headers: Record<string, string> = {},
-        params?: Record<string, string | number | boolean>
-    ): Promise<T | null> {
+        headers: Record<string, string> = {}
+    ): Promise<T | undefined> {
         const querystring = params
             ? Object.entries(params)
-                  .filter((_, value) => !!value)
+                  .filter((pair) => !!pair[1])
                   .map((pair) => pair.map(encodeURIComponent).join('='))
                   .join('&')
             : '';
@@ -35,7 +35,7 @@ class ApiClient {
         const response = await fetch(url, options);
 
         if (response.status === 404) {
-            return null;
+            return undefined;
         }
 
         if (!response.ok) {
@@ -61,32 +61,32 @@ class ApiClient {
         endpoint: string,
         params?: Record<string, string | number | boolean>,
         headers?: Record<string, string>
-    ): Promise<T | null> {
-        return this.request<T>(endpoint, 'GET', undefined, headers, params);
+    ): Promise<T | undefined> {
+        return this.request<T>(endpoint, 'GET', params, undefined, headers);
     }
 
     public post<T>(
         endpoint: string,
         body: Record<string, unknown>,
         headers?: Record<string, string>
-    ): Promise<T | null> {
-        return this.request<T>(endpoint, 'POST', body, headers, undefined);
+    ): Promise<T | undefined> {
+        return this.request<T>(endpoint, 'POST', undefined, body, headers);
     }
 
     public put<T>(
         endpoint: string,
         body: Record<string, unknown>,
         headers?: Record<string, string>
-    ): Promise<T | null> {
-        return this.request<T>(endpoint, 'PUT', body, headers, undefined);
+    ): Promise<T | undefined> {
+        return this.request<T>(endpoint, 'PUT', undefined, body, headers);
     }
 
     public delete<T>(
         endpoint: string,
         body?: Record<string, unknown>,
         headers?: Record<string, string>
-    ): Promise<T | null> {
-        return this.request<T>(endpoint, 'DELETE', body, headers, undefined);
+    ): Promise<T | undefined> {
+        return this.request<T>(endpoint, 'DELETE', undefined, body, headers);
     }
 }
 

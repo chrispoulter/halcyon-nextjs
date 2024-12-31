@@ -2,10 +2,7 @@
 
 import { z } from 'zod';
 import { jwtVerify } from 'jose';
-import type {
-    LoginResponse,
-    ApiTokenPayload,
-} from '@/app/account/account-types';
+import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
 import { apiClient } from '@/lib/api-client';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
@@ -26,13 +23,18 @@ const encodedSecurityKey = new TextEncoder().encode(securityKey);
 export const loginAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        const { accessToken } = await apiClient.post<LoginResponse>(
+        const result = await apiClient.post<LoginResponse>(
             '/account/login',
             parsedInput
         );
 
-        const { payload } = await jwtVerify<ApiTokenPayload>(
-            accessToken,
+        //TODO: Handle 404 response
+        if (!result) {
+            throw new Error('Invalid response from server');
+        }
+
+        const { payload } = await jwtVerify<TokenPayload>(
+            result.accessToken,
             encodedSecurityKey,
             {
                 audience: config.JWT_AUDIENCE,
@@ -41,7 +43,7 @@ export const loginAction = actionClient
         );
 
         await createSession({
-            accessToken,
+            accessToken: result.accessToken,
             id: payload.sub,
             emailAddress: payload.email,
             firstName: payload.given_name,
