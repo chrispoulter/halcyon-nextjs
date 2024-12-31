@@ -63,7 +63,7 @@ export const verifySession = cache(async (roles?: Role[]) => {
     const session = await getSession();
 
     if (!session) {
-        return redirect('/account/login?vs=1');
+        return redirect('/account/login');
     }
 
     if (!roles) {

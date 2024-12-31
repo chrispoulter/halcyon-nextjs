@@ -5,9 +5,7 @@ export default async function middleware(req: NextRequest) {
     const session = await getSession();
 
     if (!session) {
-        return NextResponse.redirect(
-            new URL('/account/login?md=1', req.nextUrl)
-        );
+        return NextResponse.redirect(new URL('/account/login', req.nextUrl));
     }
 
     return NextResponse.next();
