@@ -1,4 +1,6 @@
-import { config } from './config';
+import 'server-only';
+
+import { config } from '@/lib/config';
 
 class ApiClient {
     private baseUrl: string;
