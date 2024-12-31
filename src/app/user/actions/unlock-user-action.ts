@@ -20,7 +20,7 @@ export const unlockUserAction = authActionClient([
     .schema(schema)
     .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
         return await apiClient.put<UnlockUserResponse>(
-            `user/${id}/unlock`,
+            `/user/${id}/unlock`,
             rest,
             {
                 Authorization: `Bearer ${accessToken}`,

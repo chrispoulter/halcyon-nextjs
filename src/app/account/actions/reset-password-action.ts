@@ -22,7 +22,7 @@ export const resetPasswordAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
         return await apiClient.put<ResetPasswordResponse>(
-            'account/reset-password',
+            '/account/reset-password',
             parsedInput
         );
     });

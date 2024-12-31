@@ -19,7 +19,7 @@ export const lockUserAction = authActionClient([
 ])
     .schema(schema)
     .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
-        return await apiClient.put<LockUserResponse>(`user/${id}/lock`, rest, {
+        return await apiClient.put<LockUserResponse>(`/user/${id}/lock`, rest, {
             Authorization: `Bearer ${accessToken}`,
         });
     });
