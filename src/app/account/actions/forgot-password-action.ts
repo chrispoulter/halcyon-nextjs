@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { config } from '@/lib/config';
-import { actionClient } from '@/lib/safe-action';
+import { actionClient, ActionError } from '@/lib/safe-action';
 
 const schema = z.object({
     emailAddress: z
@@ -25,6 +25,16 @@ export const forgotPasswordAction = actionClient
         );
 
         if (!response.ok) {
-            throw new Error('An error occurred while processing your request');
+            const error = response.headers
+                .get('content-type')
+                ?.includes('application/problem+json')
+                ? await response.json()
+                : await response.text();
+
+            throw new ActionError(
+                error?.title ||
+                    error ||
+                    `${response.status} ${response.statusText}`
+            );
         }
     });

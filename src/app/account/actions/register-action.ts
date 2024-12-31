@@ -4,7 +4,7 @@ import { z } from 'zod';
 import type { RegisterResponse } from '@/app/account/account-types';
 import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
-import { actionClient } from '@/lib/safe-action';
+import { actionClient, ActionError } from '@/lib/safe-action';
 
 const schema = z
     .object({
@@ -50,7 +50,17 @@ export const registerAction = actionClient
         });
 
         if (!response.ok) {
-            throw new Error('An error occurred while processing your request');
+            const error = response.headers
+                .get('content-type')
+                ?.includes('application/problem+json')
+                ? await response.json()
+                : await response.text();
+
+            throw new ActionError(
+                error?.title ||
+                    error ||
+                    `${response.status} ${response.statusText}`
+            );
         }
 
         return (await response.json()) as RegisterResponse;

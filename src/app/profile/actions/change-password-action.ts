@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import type { ChangePasswordResponse } from '@/app/profile/profile-types';
 import { config } from '@/lib/config';
-import { authActionClient } from '@/lib/safe-action';
+import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
     currentPassword: z
@@ -32,7 +32,17 @@ export const changePasswordAction = authActionClient()
         );
 
         if (!response.ok) {
-            throw new Error('An error occurred while processing your request');
+            const error = response.headers
+                .get('content-type')
+                ?.includes('application/problem+json')
+                ? await response.json()
+                : await response.text();
+
+            throw new ActionError(
+                error?.title ||
+                    error ||
+                    `${response.status} ${response.statusText}`
+            );
         }
 
         return (await response.json()) as ChangePasswordResponse;

@@ -7,7 +7,7 @@ import type {
     ApiTokenPayload,
 } from '@/app/account/account-types';
 import { config } from '@/lib/config';
-import { actionClient } from '@/lib/safe-action';
+import { actionClient, ActionError } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
 const schema = z.object({
@@ -34,7 +34,17 @@ export const loginAction = actionClient
         });
 
         if (!response.ok) {
-            throw new Error('An error occurred while processing your request');
+            const error = response.headers
+                .get('content-type')
+                ?.includes('application/problem+json')
+                ? await response.json()
+                : await response.text();
+
+            throw new ActionError(
+                error?.title ||
+                    error ||
+                    `${response.status} ${response.statusText}`
+            );
         }
 
         const { accessToken }: LoginResponse = await response.json();
