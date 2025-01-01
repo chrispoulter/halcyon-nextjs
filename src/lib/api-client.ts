@@ -34,8 +34,6 @@ class ApiClient {
             body: body ? JSON.stringify(body) : undefined,
         };
 
-        // await new Promise((resolve) => setTimeout(resolve, 5000));
-
         const response = await fetch(url, options);
 
         if (!response.ok) {
