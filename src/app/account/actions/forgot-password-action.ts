@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { apiClient } from '@/lib/api-client';
+import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -13,5 +13,18 @@ const schema = z.object({
 export const forgotPasswordAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        return await apiClient.put('/account/forgot-password', parsedInput);
+        const response = await fetch(
+            `${config.API_URL}/account/forgot-password`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(parsedInput),
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+        }
     });

@@ -1,9 +1,11 @@
 'use server';
 
+import { forbidden, redirect } from 'next/navigation';
 import { z } from 'zod';
 import type { UnlockUserResponse } from '@/app/user/user-types';
-import { apiClient } from '@/lib/api-client';
+import { config } from '@/lib/config';
 import { authActionClient } from '@/lib/safe-action';
+import { deleteSession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -19,11 +21,30 @@ export const unlockUserAction = authActionClient([
 ])
     .schema(schema)
     .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
-        return await apiClient.put<UnlockUserResponse>(
-            `/user/${id}/unlock`,
-            rest,
-            {
+        const response = await fetch(`${config.API_URL}/user/${id}/unlock`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(rest),
+        });
+
+        if (!response.ok) {
+            switch (response.status) {
+                case 401:
+                    await deleteSession();
+                    return redirect('/account/login');
+
+                case 403:
+                    return forbidden();
+
+                default:
+                    throw new Error(
+                        `HTTP ${response.status} ${response.statusText}`
+                    );
             }
-        );
+        }
+
+        return (await response.json()) as UnlockUserResponse;
     });

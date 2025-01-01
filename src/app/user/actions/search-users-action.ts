@@ -1,8 +1,9 @@
 'use server';
 
+import { forbidden, unauthorized } from 'next/navigation';
 import { z } from 'zod';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
-import { apiClient } from '@/lib/api-client';
+import { config } from '@/lib/config';
 import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
@@ -28,7 +29,34 @@ export const searchUsersAction = authActionClient([
 ])
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.get<SearchUsersResponse>('/user', parsedInput, {
-            Authorization: `Bearer ${accessToken}`,
-        });
+        const params = new URLSearchParams(
+            parsedInput as Record<string, string>
+        );
+
+        const response = await fetch(
+            `${config.API_URL}/user?${params.toString()}`,
+            {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+
+        if (!response.ok) {
+            switch (response.status) {
+                case 401:
+                                        return unauthorized();
+                    
+                case 403:
+                    return forbidden();
+
+                default:
+                    throw new Error(
+                        `HTTP ${response.status} ${response.statusText}`
+                    );
+            }
+        }
+
+        return (await response.json()) as SearchUsersResponse;
     });

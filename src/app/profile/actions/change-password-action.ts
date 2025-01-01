@@ -1,9 +1,11 @@
 'use server';
 
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import type { ChangePasswordResponse } from '@/app/profile/profile-types';
-import { apiClient } from '@/lib/api-client';
+import { config } from '@/lib/config';
 import { authActionClient } from '@/lib/safe-action';
+import { deleteSession } from '@/lib/session';
 
 const schema = z.object({
     currentPassword: z
@@ -19,11 +21,30 @@ const schema = z.object({
 export const changePasswordAction = authActionClient()
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.put<ChangePasswordResponse>(
-            '/profile/change-password',
-            parsedInput,
+        const response = await fetch(
+            `${config.API_URL}/profile/change-password`,
             {
-                Authorization: `Bearer ${accessToken}`,
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(parsedInput),
             }
         );
+
+        if (!response.ok) {
+            switch (response.status) {
+                case 401:
+                    await deleteSession();
+                    return redirect('/account/login');
+
+                default:
+                    throw new Error(
+                        `HTTP ${response.status} ${response.statusText}`
+                    );
+            }
+        }
+
+        return (await response.json()) as ChangePasswordResponse;
     });

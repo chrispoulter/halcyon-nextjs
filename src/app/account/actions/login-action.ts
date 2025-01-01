@@ -3,7 +3,6 @@
 import { z } from 'zod';
 import { jwtVerify } from 'jose';
 import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
-import { apiClient } from '@/lib/api-client';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
@@ -23,10 +22,19 @@ const encodedSecurityKey = new TextEncoder().encode(securityKey);
 export const loginAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        const { accessToken } = await apiClient.post<LoginResponse>(
-            '/account/login',
-            parsedInput
-        );
+        const response = await fetch(`${config.API_URL}/account/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(parsedInput),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+        }
+
+        const { accessToken } = (await response.json()) as LoginResponse;
 
         const { payload } = await jwtVerify<TokenPayload>(
             accessToken,

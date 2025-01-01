@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import type { RegisterResponse } from '@/app/account/account-types';
-import { apiClient } from '@/lib/api-client';
+import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
 import { actionClient } from '@/lib/safe-action';
 
@@ -41,8 +41,17 @@ const schema = z
 export const registerAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        return await apiClient.post<RegisterResponse>(
-            '/account/register',
-            parsedInput
-        );
+        const response = await fetch(`${config.API_URL}/account/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(parsedInput),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+        }
+
+        return (await response.json()) as RegisterResponse;
     });

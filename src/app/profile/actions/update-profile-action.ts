@@ -1,10 +1,12 @@
 'use server';
 
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import type { UpdateProfileResponse } from '@/app/profile/profile-types';
-import { apiClient } from '@/lib/api-client';
+import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
 import { authActionClient } from '@/lib/safe-action';
+import { deleteSession } from '@/lib/session';
 
 const schema = z.object({
     emailAddress: z
@@ -30,11 +32,27 @@ const schema = z.object({
 export const updateProfileAction = authActionClient()
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.put<UpdateProfileResponse>(
-            '/profile',
-            parsedInput,
-            {
+        const response = await fetch(`${config.API_URL}/profile`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(parsedInput),
+        });
+
+        if (!response.ok) {
+            switch (response.status) {
+                case 401:
+                    await deleteSession();
+                    return redirect('/account/login');
+
+                default:
+                    throw new Error(
+                        `HTTP ${response.status} ${response.statusText}`
+                    );
             }
-        );
+        }
+
+        return (await response.json()) as UpdateProfileResponse;
     });
