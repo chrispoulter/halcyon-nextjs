@@ -16,7 +16,7 @@ export const getProfileAction = authActionClient().action(
         if (!response.ok) {
             switch (response.status) {
                 case 401:
-                    return unauthorized();
+                    unauthorized();
 
                 default:
                     throw new Error(

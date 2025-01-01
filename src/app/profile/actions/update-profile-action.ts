@@ -45,7 +45,7 @@ export const updateProfileAction = authActionClient()
             switch (response.status) {
                 case 401:
                     await deleteSession();
-                    return redirect('/account/login');
+                    redirect('/account/login');
 
                 default:
                     throw new Error(

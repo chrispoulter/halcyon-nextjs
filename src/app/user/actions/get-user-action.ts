@@ -29,10 +29,10 @@ export const getUserAction = authActionClient([
         if (!response.ok) {
             switch (response.status) {
                 case 401:
-                    return unauthorized();
+                    unauthorized();
 
                 case 403:
-                    return forbidden();
+                    forbidden();
 
                 default:
                     throw new Error(

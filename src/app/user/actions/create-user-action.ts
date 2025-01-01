@@ -59,10 +59,10 @@ export const createUserAction = authActionClient([
             switch (response.status) {
                 case 401:
                     await deleteSession();
-                    return redirect('/account/login');
+                    redirect('/account/login');
 
                 case 403:
-                    return forbidden();
+                    forbidden();
 
                 default:
                     throw new Error(

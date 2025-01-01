@@ -63,7 +63,7 @@ export const verifySession = cache(async (roles?: Role[]) => {
     const session = await getSession();
 
     if (!session) {
-        return redirect('/account/login');
+        redirect('/account/login');
     }
 
     if (!roles) {
@@ -71,7 +71,7 @@ export const verifySession = cache(async (roles?: Role[]) => {
     }
 
     if (!roles.some((value) => session.roles?.includes(value))) {
-        return forbidden();
+        forbidden();
     }
 
     return session;

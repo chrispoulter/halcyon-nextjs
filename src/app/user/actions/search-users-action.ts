@@ -46,10 +46,10 @@ export const searchUsersAction = authActionClient([
         if (!response.ok) {
             switch (response.status) {
                 case 401:
-                                        return unauthorized();
-                    
+                    unauthorized();
+
                 case 403:
-                    return forbidden();
+                    forbidden();
 
                 default:
                     throw new Error(
