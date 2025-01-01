@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { config } from '@/lib/config';
-import { actionClient } from '@/lib/safe-action';
+import { actionClient, ActionError } from '@/lib/safe-action';
 
 const schema = z.object({
     emailAddress: z
@@ -25,6 +25,15 @@ export const forgotPasswordAction = actionClient
         );
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('application/problem+json')) {
+                const problem = await response.json();
+                throw new ActionError(problem.title);
+            }
+
+            throw new ActionError(
+                `HTTP ${response.status} ${response.statusText}`
+            );
         }
     });

@@ -1,12 +1,10 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import type { UpdateProfileResponse } from '@/app/profile/profile-types';
 import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
-import { authActionClient } from '@/lib/safe-action';
-import { deleteSession } from '@/lib/session';
+import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
     emailAddress: z
@@ -36,22 +34,22 @@ export const updateProfileAction = authActionClient()
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}INVALID`,
+                Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify(parsedInput),
         });
 
         if (!response.ok) {
-            switch (response.status) {
-                case 401:
-                    await deleteSession();
-                    redirect('/account/login');
+            const contentType = response.headers.get('content-type') || '';
 
-                default:
-                    throw new Error(
-                        `HTTP ${response.status} ${response.statusText}`
-                    );
+            if (contentType.includes('application/problem+json')) {
+                const problem = await response.json();
+                throw new ActionError(problem.title);
             }
+
+            throw new ActionError(
+                `HTTP ${response.status} ${response.statusText}`
+            );
         }
 
         return (await response.json()) as UpdateProfileResponse;

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { jwtVerify } from 'jose';
 import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
 import { config } from '@/lib/config';
-import { actionClient } from '@/lib/safe-action';
+import { actionClient, ActionError } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
 const schema = z.object({
@@ -31,7 +31,16 @@ export const loginAction = actionClient
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('application/problem+json')) {
+                const problem = await response.json();
+                throw new ActionError(problem.title);
+            }
+
+            throw new ActionError(
+                `HTTP ${response.status} ${response.statusText}`
+            );
         }
 
         const { accessToken } = (await response.json()) as LoginResponse;

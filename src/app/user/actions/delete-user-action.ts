@@ -1,11 +1,9 @@
 'use server';
 
-import { forbidden, redirect } from 'next/navigation';
 import { z } from 'zod';
 import type { DeleteUserResponse } from '@/app/user/user-types';
 import { config } from '@/lib/config';
-import { authActionClient } from '@/lib/safe-action';
-import { deleteSession } from '@/lib/session';
+import { ActionError, authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -31,20 +29,16 @@ export const deleteUserAction = authActionClient([
         });
 
         if (!response.ok) {
-            switch (response.status) {
-                case 401:
-                    await deleteSession();
-                    redirect('/account/login');
+            const contentType = response.headers.get('content-type') || '';
 
-                case 403:
-                    forbidden();
-
-                default:
-                    throw new Error(
-                        `HTTP ${response.status} ${response.statusText}`
-                    );
+            if (contentType.includes('application/problem+json')) {
+                const problem = await response.json();
+                throw new ActionError(problem.title);
             }
-        }
 
+            throw new ActionError(
+                `HTTP ${response.status} ${response.statusText}`
+            );
+        }
         return (await response.json()) as DeleteUserResponse;
     });

@@ -4,7 +4,7 @@ import { forbidden, unauthorized } from 'next/navigation';
 import { z } from 'zod';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
 import { config } from '@/lib/config';
-import { authActionClient } from '@/lib/safe-action';
+import { ActionError, authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -36,7 +36,6 @@ export const searchUsersAction = authActionClient([
         const response = await fetch(
             `${config.API_URL}/user?${params.toString()}`,
             {
-                method: 'GET',
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
@@ -52,7 +51,15 @@ export const searchUsersAction = authActionClient([
                     forbidden();
 
                 default:
-                    throw new Error(
+                    const contentType =
+                        response.headers.get('content-type') || '';
+
+                    if (contentType.includes('application/problem+json')) {
+                        const problem = await response.json();
+                        throw new ActionError(problem.title);
+                    }
+
+                    throw new ActionError(
                         `HTTP ${response.status} ${response.statusText}`
                     );
             }

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import type { RegisterResponse } from '@/app/account/account-types';
 import { config } from '@/lib/config';
 import { isInPast } from '@/lib/dates';
-import { actionClient } from '@/lib/safe-action';
+import { actionClient, ActionError } from '@/lib/safe-action';
 
 const schema = z
     .object({
@@ -50,7 +50,16 @@ export const registerAction = actionClient
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status} ${response.statusText}`);
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('application/problem+json')) {
+                const problem = await response.json();
+                throw new ActionError(problem.title);
+            }
+
+            throw new ActionError(
+                `HTTP ${response.status} ${response.statusText}`
+            );
         }
 
         return (await response.json()) as RegisterResponse;
