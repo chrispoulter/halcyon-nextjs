@@ -36,7 +36,7 @@ export const updateProfileAction = authActionClient()
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}INVALID`,
             },
             body: JSON.stringify(parsedInput),
         });

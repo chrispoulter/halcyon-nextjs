@@ -14,7 +14,8 @@ export default function Unauthorized() {
             </h1>
 
             <p className="leading-7">
-                Sorry, you do not have access to this resource.
+                Sorry, there was a problem with your session. Please log out and
+                log back in.
             </p>
 
             <Button

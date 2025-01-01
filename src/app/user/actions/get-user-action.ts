@@ -22,7 +22,7 @@ export const getUserAction = authActionClient([
         const response = await fetch(`${config.API_URL}/user/${id}`, {
             method: 'GET',
             headers: {
-                Authorization: `Bearer ${accessToken}2`,
+                Authorization: `Bearer ${accessToken}INVALID`,
             },
         });
 
