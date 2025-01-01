@@ -18,6 +18,8 @@ export default async function ChangePassword() {
         return <ServerActionError result={result} />;
     }
 
+    const profile = result.data;
+
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -30,7 +32,7 @@ export default async function ChangePassword() {
                 change your password on a regular basis.
             </p>
 
-            <ChangePasswordForm profile={result.data} />
+            <ChangePasswordForm profile={profile} />
 
             <p className="text-sm text-muted-foreground">
                 Forgotten your password?{' '}

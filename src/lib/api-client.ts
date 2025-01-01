@@ -36,9 +36,9 @@ class ApiClient {
 
         const response = await fetch(url, options);
 
-        if (!response.ok) {
-            const contentType = response.headers.get('Content-Type') || '';
+        const contentType = response.headers.get('Content-Type') || '';
 
+        if (!response.ok) {
             if (contentType.includes('application/problem+json')) {
                 const problem = await response.json();
 
@@ -53,7 +53,11 @@ class ApiClient {
             );
         }
 
-        return response.json();
+        if (contentType.includes('application/json')) {
+            return await response.json();
+        }
+
+        return (await response.text()) as T;
     }
 
     public get<T>(
