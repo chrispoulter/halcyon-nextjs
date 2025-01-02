@@ -18,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-import { isServerActionSuccessful } from '@/lib/action-types';
+import { isServerActionSuccess } from '@/lib/action-types';
 
 type DeleteAccountButtonProps = {
     className?: string;
@@ -33,7 +33,7 @@ export function DeleteAccountButton({ className }: DeleteAccountButtonProps) {
         startDeleting(async () => {
             const result = await deleteAccountAction({});
 
-            if (!isServerActionSuccessful(result)) {
+            if (!isServerActionSuccess(result)) {
                 toast({
                     variant: 'destructive',
                     title: 'Error',

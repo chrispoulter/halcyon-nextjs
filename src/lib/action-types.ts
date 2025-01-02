@@ -6,7 +6,7 @@ export type ServerActionResult<Data = unknown> = {
     validationErrors?: z.inferFlattenedErrors<z.ZodType<any, any, any>>;
 };
 
-export function isServerActionSuccessful<Data>(
+export function isServerActionSuccess<Data>(
     result?: ServerActionResult<Data>
 ): result is {
     data: Data;

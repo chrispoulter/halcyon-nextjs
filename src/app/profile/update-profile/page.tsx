@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { UpdateProfileForm } from '@/app/profile/update-profile/update-profile-form';
 import { ServerActionError } from '@/components/server-action-error';
-import { isServerActionSuccessful } from '@/lib/action-types';
+import { isServerActionSuccess } from '@/lib/action-types';
 
 export const metadata: Metadata = {
     title: 'Update Profile',
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function UpdateProfile() {
     const result = await getProfileAction();
 
-    if (!isServerActionSuccessful(result)) {
+    if (!isServerActionSuccess(result)) {
         return <ServerActionError result={result} />;
     }
 

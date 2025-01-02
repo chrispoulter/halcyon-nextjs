@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-import { isServerActionSuccessful } from '@/lib/action-types';
+import { isServerActionSuccess } from '@/lib/action-types';
 
 const schema = z
     .object({
@@ -52,7 +52,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     async function onSubmit(data: ResetPasswordFormValues) {
         const result = await resetPasswordAction({ ...data, token });
 
-        if (!isServerActionSuccessful(result)) {
+        if (!isServerActionSuccess(result)) {
             toast({
                 variant: 'destructive',
                 title: 'Error',

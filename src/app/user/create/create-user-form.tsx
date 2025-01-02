@@ -14,7 +14,7 @@ import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-import { isServerActionSuccessful } from '@/lib/action-types';
+import { isServerActionSuccess } from '@/lib/action-types';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
@@ -81,7 +81,7 @@ export function CreateUserForm() {
     async function onSubmit(data: CreateUserFormValues) {
         const result = await createUserAction(data);
 
-        if (!isServerActionSuccessful(result)) {
+        if (!isServerActionSuccess(result)) {
             toast({
                 variant: 'destructive',
                 title: 'Error',

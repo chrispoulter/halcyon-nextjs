@@ -22,7 +22,7 @@ import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-import { isServerActionSuccessful } from '@/lib/action-types';
+import { isServerActionSuccess } from '@/lib/action-types';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
@@ -71,7 +71,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
     async function onSubmit(data: UpdateUserFormValues) {
         const result = await updateUserAction({ ...data, id: user.id });
 
-        if (!isServerActionSuccessful(result)) {
+        if (!isServerActionSuccess(result)) {
             toast({
                 variant: 'destructive',
                 title: 'Error',
@@ -95,7 +95,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
         startDeleting(async () => {
             const result = await deleteUserAction({ id: user.id });
 
-            if (!isServerActionSuccessful(result)) {
+            if (!isServerActionSuccess(result)) {
                 toast({
                     variant: 'destructive',
                     title: 'Error',
@@ -120,7 +120,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
         startLocking(async () => {
             const result = await lockUserAction({ id: user.id });
 
-            if (!isServerActionSuccessful(result)) {
+            if (!isServerActionSuccess(result)) {
                 toast({
                     variant: 'destructive',
                     title: 'Error',
@@ -145,7 +145,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
         startUnlocking(async () => {
             const result = await unlockUserAction({ id: user.id });
 
-            if (!isServerActionSuccessful(result)) {
+            if (!isServerActionSuccess(result)) {
                 toast({
                     variant: 'destructive',
                     title: 'Error',

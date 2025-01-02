@@ -14,7 +14,7 @@ import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-import { isServerActionSuccessful } from '@/lib/action-types';
+import { isServerActionSuccess } from '@/lib/action-types';
 import { isInPast } from '@/lib/dates';
 
 const schema = z.object({
@@ -54,7 +54,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
     async function onSubmit(data: UpdateProfileFormValues) {
         const result = await updateProfileAction(data);
 
-        if (!isServerActionSuccessful(result)) {
+        if (!isServerActionSuccess(result)) {
             toast({
                 variant: 'destructive',
                 title: 'Error',

@@ -4,7 +4,7 @@ import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { DeleteAccountButton } from '@/app/profile/delete-account-button';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
-import { isServerActionSuccessful } from '@/lib/action-types';
+import { isServerActionSuccess } from '@/lib/action-types';
 import { toLocaleString } from '@/lib/dates';
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default async function Profile() {
     const result = await getProfileAction();
 
-    if (!isServerActionSuccessful(result)) {
+    if (!isServerActionSuccess(result)) {
         return <ServerActionError result={result} />;
     }
 

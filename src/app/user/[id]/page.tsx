@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { getUserAction } from '@/app/user/actions/get-user-action';
 import { UpdateUserForm } from '@/app/user/[id]/update-user-form';
 import { ServerActionError } from '@/components/server-action-error';
-import { isServerActionSuccessful } from '@/lib/action-types';
+import { isServerActionSuccess } from '@/lib/action-types';
 
 export const metadata: Metadata = {
     title: 'Update User',
@@ -15,7 +15,7 @@ export default async function UpdateUser({ params }: { params: Params }) {
 
     const result = await getUserAction({ id });
 
-    if (!isServerActionSuccessful(result)) {
+    if (!isServerActionSuccess(result)) {
         return <ServerActionError result={result} />;
     }
 
