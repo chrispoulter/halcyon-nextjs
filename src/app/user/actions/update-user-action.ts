@@ -58,15 +58,7 @@ export async function updateUserAction(
 
     const { id, ...rest } = parsedInput.data;
 
-    const result = await apiClient.put<UpdateUserResponse>(
-        `/user/${id}`,
-        rest,
-        {
-            Authorization: `Bearer ${accessToken}`,
-        }
-    );
-
-    return {
-        data: result,
-    };
+    return await apiClient.put<UpdateUserResponse>(`/user/${id}`, rest, {
+        Authorization: `Bearer ${accessToken}`,
+    });
 }

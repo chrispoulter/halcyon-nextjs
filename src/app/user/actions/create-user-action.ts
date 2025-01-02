@@ -57,15 +57,7 @@ export async function createUserAction(
         };
     }
 
-    const result = await apiClient.post<CreateUserResponse>(
-        '/user',
-        parsedInput.data,
-        {
-            Authorization: `Bearer ${accessToken}`,
-        }
-    );
-
-    return {
-        data: result,
-    };
+    return await apiClient.post<CreateUserResponse>('/user', parsedInput.data, {
+        Authorization: `Bearer ${accessToken}`,
+    });
 }

@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import type { DeleteAccountResponse } from '@/app/profile/profile-types';
 import { ServerActionResult } from '@/lib/action-types';
-import { apiClient } from '@/lib/api-client';
+import { apiClient, isApiClientResultSuccess } from '@/lib/api-client';
 import { deleteSession, verifySession } from '@/lib/session';
 
 const schema = z.object({
@@ -33,9 +33,9 @@ export async function deleteAccountAction(
         }
     );
 
-    await deleteSession();
+    if (isApiClientResultSuccess(result)) {
+        await deleteSession();
+    }
 
-    return {
-        data: result,
-    };
+    return result;
 }

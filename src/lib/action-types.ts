@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export type ServerActionResult<Data = unknown> = {
     data?: Data;
-    serverError?: string;
+    error?: string;
     validationErrors?: z.inferFlattenedErrors<z.ZodType<any, any, any>>;
 };
 
@@ -19,7 +19,7 @@ export function isServerActionSuccess<Data>(
         return false;
     }
 
-    if (result.serverError) {
+    if (result.error) {
         return false;
     }
 

@@ -34,15 +34,7 @@ export async function deleteUserAction(
 
     const { id, ...rest } = parsedInput.data;
 
-    const result = await apiClient.delete<DeleteUserResponse>(
-        `/user/${id}`,
-        rest,
-        {
-            Authorization: `Bearer ${accessToken}`,
-        }
-    );
-
-    return {
-        data: result,
-    };
+    return await apiClient.delete<DeleteUserResponse>(`/user/${id}`, rest, {
+        Authorization: `Bearer ${accessToken}`,
+    });
 }

@@ -31,12 +31,8 @@ export async function resetPasswordAction(
         };
     }
 
-    const result = await apiClient.put<ResetPasswordResponse>(
+    return await apiClient.put<ResetPasswordResponse>(
         '/account/reset-password',
         parsedInput.data
     );
-
-    return {
-        data: result,
-    };
 }

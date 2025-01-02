@@ -43,15 +43,11 @@ export async function updateProfileAction(
         };
     }
 
-    const result = await apiClient.put<UpdateProfileResponse>(
+    return await apiClient.put<UpdateProfileResponse>(
         '/profile',
         parsedInput.data,
         {
             Authorization: `Bearer ${accessToken}`,
         }
     );
-
-    return {
-        data: result,
-    };
 }

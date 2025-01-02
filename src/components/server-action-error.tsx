@@ -40,8 +40,5 @@ export function ServerActionErrorMessage<Data>({
         );
     }
 
-    return (
-        result?.serverError ||
-        'An error occurred while processing your request.'
-    );
+    return result?.error || 'An error occurred while processing your request.';
 }

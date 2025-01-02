@@ -51,12 +51,8 @@ export async function registerAction(
         };
     }
 
-    const result = await apiClient.post<RegisterResponse>(
+    return await apiClient.post<RegisterResponse>(
         '/account/register',
         parsedInput.data
     );
-
-    return {
-        data: result,
-    };
 }

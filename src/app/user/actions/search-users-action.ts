@@ -41,15 +41,7 @@ export async function searchUsersAction(
         };
     }
 
-    const result = await apiClient.get<SearchUsersResponse>(
-        '/user',
-        parsedInput.data,
-        {
-            Authorization: `Bearer ${accessToken}`,
-        }
-    );
-
-    return {
-        data: result,
-    };
+    return await apiClient.get<SearchUsersResponse>('/user', parsedInput.data, {
+        Authorization: `Bearer ${accessToken}`,
+    });
 }

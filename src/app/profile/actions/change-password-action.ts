@@ -32,15 +32,11 @@ export async function changePasswordAction(
         };
     }
 
-    const result = await apiClient.put<ChangePasswordResponse>(
+    return await apiClient.put<ChangePasswordResponse>(
         '/profile/change-password',
         parsedInput.data,
         {
             Authorization: `Bearer ${accessToken}`,
         }
     );
-
-    return {
-        data: result,
-    };
 }

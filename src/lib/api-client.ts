@@ -1,11 +1,22 @@
 import { forbidden, notFound, unauthorized } from 'next/navigation';
 import { config } from '@/lib/config';
 
-export class ApiClientError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'ApiClientError';
+type ApliClientResult<Data> = { data?: Data; error?: string };
+
+export function isApiClientResultSuccess<Data>(
+    result?: ApliClientResult<Data>
+): result is {
+    data: Data;
+} {
+    if (!result) {
+        return false;
     }
+
+    if (result.error) {
+        return false;
+    }
+
+    return true;
 }
 
 class ApiClient {
@@ -15,14 +26,14 @@ class ApiClient {
         this.baseUrl = baseUrl;
     }
 
-    private async fetch<T>(
+    private async fetch<Data>(
         path: string,
         method: string,
         params?: Record<string, string | number | boolean>,
         body?: Record<string, unknown>,
         headers: Record<string, string> = {},
         doNotThrowError = false
-    ): Promise<T> {
+    ): Promise<ApliClientResult<Data>> {
         const url = new URL(path, this.baseUrl);
 
         if (params) {
@@ -62,52 +73,52 @@ class ApiClient {
                 default:
                     if (contentType.includes('application/problem+json')) {
                         const problem = await response.json();
-                        throw new ApiClientError(problem.title);
+                        return { error: problem.title };
                     }
 
-                    throw new ApiClientError(
-                        `HTTP ${response.status} ${response.statusText}`
-                    );
+                    return {
+                        error: `HTTP ${response.status} ${response.statusText}`,
+                    };
             }
         }
 
         if (contentType.includes('application/json')) {
-            return (await response.json()) as T;
+            return { data: await response.json() };
         }
 
-        return (await response.text()) as T;
+        return { data: (await response.text()) as Data };
     }
 
-    get<T>(
+    get<Data>(
         path: string,
         params: Record<string, string | number | boolean> = {},
         headers: Record<string, string> = {}
-    ): Promise<T> {
-        return this.fetch<T>(path, 'GET', params, undefined, headers, true);
+    ): Promise<ApliClientResult<Data>> {
+        return this.fetch<Data>(path, 'GET', params, undefined, headers, true);
     }
 
-    post<T>(
+    post<Data>(
         path: string,
         body: Record<string, unknown>,
         headers: Record<string, string> = {}
-    ): Promise<T> {
-        return this.fetch<T>(path, 'POST', undefined, body, headers);
+    ): Promise<ApliClientResult<Data>> {
+        return this.fetch<Data>(path, 'POST', undefined, body, headers);
     }
 
-    put<T>(
+    put<Data>(
         path: string,
         body: Record<string, unknown>,
         headers: Record<string, string> = {}
-    ): Promise<T> {
-        return this.fetch<T>(path, 'PUT', undefined, body, headers);
+    ): Promise<ApliClientResult<Data>> {
+        return this.fetch<Data>(path, 'PUT', undefined, body, headers);
     }
 
-    delete<T>(
+    delete<Data>(
         path: string,
         body: Record<string, unknown>,
         headers: Record<string, string> = {}
-    ): Promise<T> {
-        return this.fetch<T>(path, 'DELETE', undefined, body, headers);
+    ): Promise<ApliClientResult<Data>> {
+        return this.fetch<Data>(path, 'DELETE', undefined, body, headers);
     }
 }
 

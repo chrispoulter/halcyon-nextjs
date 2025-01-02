@@ -33,15 +33,7 @@ export async function getUserAction(
 
     const { id } = parsedInput.data;
 
-    const result = await apiClient.get<GetUserResponse>(
-        `/user/${id}`,
-        undefined,
-        {
-            Authorization: `Bearer ${accessToken}`,
-        }
-    );
-
-    return {
-        data: result,
-    };
+    return await apiClient.get<GetUserResponse>(`/user/${id}`, undefined, {
+        Authorization: `Bearer ${accessToken}`,
+    });
 }

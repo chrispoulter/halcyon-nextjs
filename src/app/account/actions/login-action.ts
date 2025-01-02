@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { jwtVerify } from 'jose';
 import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
 import { ServerActionResult } from '@/lib/action-types';
-import { apiClient } from '@/lib/api-client';
+import { apiClient, isApiClientResultSuccess } from '@/lib/api-client';
 import { config } from '@/lib/config';
 import { createSession } from '@/lib/session';
 
@@ -33,10 +33,16 @@ export async function loginAction(
         };
     }
 
-    const { accessToken } = await apiClient.post<LoginResponse>(
+    const result = await apiClient.post<LoginResponse>(
         '/account/login',
         parsedInput.data
     );
+
+    if (!isApiClientResultSuccess(result)) {
+        return { error: result.error };
+    }
+
+    const { accessToken } = result.data;
 
     const { payload } = await jwtVerify<TokenPayload>(
         accessToken,

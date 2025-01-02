@@ -34,15 +34,7 @@ export async function unlockUserAction(
 
     const { id, ...rest } = parsedInput.data;
 
-    const result = await apiClient.put<UnlockUserResponse>(
-        `/user/${id}/unlock`,
-        rest,
-        {
-            Authorization: `Bearer ${accessToken}`,
-        }
-    );
-
-    return {
-        data: result,
-    };
+    return await apiClient.put<UnlockUserResponse>(`/user/${id}/unlock`, rest, {
+        Authorization: `Bearer ${accessToken}`,
+    });
 }

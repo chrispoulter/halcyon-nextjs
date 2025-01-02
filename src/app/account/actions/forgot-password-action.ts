@@ -23,7 +23,5 @@ export async function forgotPasswordAction(
         };
     }
 
-    await apiClient.put('/account/forgot-password', parsedInput.data);
-
-    return {};
+    return await apiClient.put('/account/forgot-password', parsedInput.data);
 }

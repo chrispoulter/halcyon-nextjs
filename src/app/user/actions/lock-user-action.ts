@@ -34,15 +34,7 @@ export async function lockUserAction(
 
     const { id, ...rest } = parsedInput.data;
 
-    const result = await apiClient.put<LockUserResponse>(
-        `/user/${id}/lock`,
-        rest,
-        {
-            Authorization: `Bearer ${accessToken}`,
-        }
-    );
-
-    return {
-        data: result,
-    };
+    return await apiClient.put<LockUserResponse>(`/user/${id}/lock`, rest, {
+        Authorization: `Bearer ${accessToken}`,
+    });
 }

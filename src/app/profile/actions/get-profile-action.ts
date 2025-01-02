@@ -10,15 +10,7 @@ export async function getProfileAction(): Promise<
 > {
     const { accessToken } = await verifySession();
 
-    const result = await apiClient.get<GetProfileResponse>(
-        '/profile',
-        undefined,
-        {
-            Authorization: `Bearer ${accessToken}`,
-        }
-    );
-
-    return {
-        data: result,
-    };
+    return await apiClient.get<GetProfileResponse>('/profile', undefined, {
+        Authorization: `Bearer ${accessToken}`,
+    });
 }
