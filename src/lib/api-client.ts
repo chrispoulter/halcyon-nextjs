@@ -1,5 +1,5 @@
+import { forbidden, notFound, unauthorized } from 'next/navigation';
 import { config } from '@/lib/config';
-import { forbidden, unauthorized } from 'next/navigation';
 
 export class ApiClientError extends Error {
     constructor(message: string) {
@@ -20,7 +20,8 @@ class ApiClient {
         method: string,
         params?: Record<string, string | number | boolean>,
         body?: Record<string, unknown>,
-        headers: Record<string, string> = {}
+        headers: Record<string, string> = {},
+        doNotThrowError = false
     ): Promise<T> {
         const url = new URL(path, this.baseUrl);
 
@@ -44,17 +45,20 @@ class ApiClient {
         if (!response.ok) {
             switch (response.status) {
                 case 401:
-                    unauthorized();
-
-                case 403:
-                    forbidden();
-
-                case 404:
-                    if (method === 'GET') {
-                        return undefined as T;
+                    if (doNotThrowError) {
+                        return unauthorized();
                     }
 
-                    break;
+                case 403:
+                    if (doNotThrowError) {
+                        return forbidden();
+                    }
+
+                case 404:
+                    if (doNotThrowError) {
+                        return notFound();
+                    }
+
                 default:
                     if (contentType.includes('application/problem+json')) {
                         const problem = await response.json();
@@ -79,7 +83,7 @@ class ApiClient {
         params: Record<string, string | number | boolean> = {},
         headers: Record<string, string> = {}
     ): Promise<T> {
-        return this.fetch<T>(path, 'GET', params, undefined, headers);
+        return this.fetch<T>(path, 'GET', params, undefined, headers, true);
     }
 
     post<T>(
