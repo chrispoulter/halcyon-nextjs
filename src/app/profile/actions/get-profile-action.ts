@@ -1,13 +1,24 @@
 'use server';
 
 import type { GetProfileResponse } from '@/app/profile/profile-types';
+import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
-import { authActionClient } from '@/lib/safe-action';
+import { verifySession } from '@/lib/session';
 
-export const getProfileAction = authActionClient().action(
-    async ({ ctx: { accessToken } }) => {
-        return await apiClient.get<GetProfileResponse>('/profile', undefined, {
+export async function getProfileAction(): Promise<
+    ServerActionResult<GetProfileResponse>
+> {
+    const { accessToken } = await verifySession();
+
+    const result = await apiClient.get<GetProfileResponse>(
+        '/profile',
+        undefined,
+        {
             Authorization: `Bearer ${accessToken}`,
-        });
-    }
-);
+        }
+    );
+
+    return {
+        data: result,
+    };
+}

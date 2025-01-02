@@ -2,9 +2,10 @@
 
 import { z } from 'zod';
 import type { UnlockUserResponse } from '@/app/user/user-types';
+import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
-import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
+import { verifySession } from '@/lib/session';
 
 const schema = z.object({
     id: z
@@ -13,17 +14,35 @@ const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-export const unlockUserAction = authActionClient([
-    Role.SYSTEM_ADMINISTRATOR,
-    Role.USER_ADMINISTRATOR,
-])
-    .schema(schema)
-    .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
-        return await apiClient.put<UnlockUserResponse>(
-            `/user/${id}/unlock`,
-            rest,
-            {
-                Authorization: `Bearer ${accessToken}`,
-            }
-        );
-    });
+type UnlockUserActionValues = z.infer<typeof schema>;
+
+export async function unlockUserAction(
+    input: UnlockUserActionValues
+): Promise<ServerActionResult<UnlockUserResponse>> {
+    const { accessToken } = await verifySession([
+        Role.SYSTEM_ADMINISTRATOR,
+        Role.USER_ADMINISTRATOR,
+    ]);
+
+    const parsedInput = await schema.safeParseAsync(input);
+
+    if (!parsedInput.success) {
+        return {
+            validationErrors: parsedInput.error.flatten(),
+        };
+    }
+
+    const { id, ...rest } = parsedInput.data;
+
+    const result = await apiClient.put<UnlockUserResponse>(
+        `/user/${id}/unlock`,
+        rest,
+        {
+            Authorization: `Bearer ${accessToken}`,
+        }
+    );
+
+    return {
+        data: result,
+    };
+}

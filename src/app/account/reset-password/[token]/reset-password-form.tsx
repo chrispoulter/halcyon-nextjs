@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import { resetPasswordAction } from '@/app/account/actions/reset-password-action';
 import { Form } from '@/components/ui/form';
@@ -12,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
+import { isServerActionSuccessful } from '@/lib/action-types';
 
 const schema = z
     .object({
@@ -49,27 +49,28 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         },
     });
 
-    const { execute, isPending } = useAction(resetPasswordAction, {
-        onSuccess() {
-            toast({
-                title: 'Success',
-                description: 'Your password has been reset.',
-            });
+    async function onSubmit(data: ResetPasswordFormValues) {
+        const result = await resetPasswordAction({ ...data, token });
 
-            router.push('/account/login');
-        },
-        onError({ error }) {
+        if (!isServerActionSuccessful(result)) {
             toast({
                 variant: 'destructive',
                 title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
+                description: <ServerActionErrorMessage result={result} />,
             });
-        },
-    });
 
-    function onSubmit(data: ResetPasswordFormValues) {
-        execute({ ...data, token });
+            return;
+        }
+
+        toast({
+            title: 'Success',
+            description: 'Your password has been reset.',
+        });
+
+        router.push('/account/login');
     }
+
+    const { isSubmitting } = form.formState;
 
     return (
         <Form {...form}>
@@ -85,7 +86,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -96,7 +97,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                     <TextFormField<ResetPasswordFormValues>
@@ -106,7 +107,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                 </div>
@@ -114,10 +115,10 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button
                         type="submit"
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="min-w-32"
                     >
-                        {isPending ? (
+                        {isSubmitting ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Submit'

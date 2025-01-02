@@ -3,9 +3,9 @@
 import { z } from 'zod';
 import { jwtVerify } from 'jose';
 import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
+import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
 import { config } from '@/lib/config';
-import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
 const schema = z.object({
@@ -17,35 +17,47 @@ const schema = z.object({
         .min(1, 'Password is a required field'),
 });
 
+type LoginActionValues = z.infer<typeof schema>;
+
 const securityKey = config.JWT_SECURITY_KEY;
 const encodedSecurityKey = new TextEncoder().encode(securityKey);
 
-export const loginAction = actionClient
-    .schema(schema)
-    .action(async ({ parsedInput }) => {
-        const { accessToken } = await apiClient.post<LoginResponse>(
-            '/account/login',
-            parsedInput
-        );
+export async function loginAction(
+    input: LoginActionValues
+): Promise<ServerActionResult> {
+    const parsedInput = await schema.safeParseAsync(input);
 
-        const { payload } = await jwtVerify<TokenPayload>(
-            accessToken,
-            encodedSecurityKey,
-            {
-                audience: config.JWT_AUDIENCE,
-                issuer: config.JWT_ISSUER,
-            }
-        );
+    if (!parsedInput.success) {
+        return {
+            validationErrors: parsedInput.error.flatten(),
+        };
+    }
 
-        await createSession({
-            accessToken,
-            id: payload.sub,
-            emailAddress: payload.email,
-            firstName: payload.given_name,
-            lastName: payload.family_name,
-            roles:
-                typeof payload.roles === 'string'
-                    ? [payload.roles]
-                    : payload.roles || [],
-        });
+    const { accessToken } = await apiClient.post<LoginResponse>(
+        '/account/login',
+        parsedInput.data
+    );
+
+    const { payload } = await jwtVerify<TokenPayload>(
+        accessToken,
+        encodedSecurityKey,
+        {
+            audience: config.JWT_AUDIENCE,
+            issuer: config.JWT_ISSUER,
+        }
+    );
+
+    await createSession({
+        accessToken,
+        id: payload.sub,
+        emailAddress: payload.email,
+        firstName: payload.given_name,
+        lastName: payload.family_name,
+        roles:
+            typeof payload.roles === 'string'
+                ? [payload.roles]
+                : payload.roles || [],
     });
+
+    return {};
+}

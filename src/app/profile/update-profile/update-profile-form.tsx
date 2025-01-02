@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { updateProfileAction } from '@/app/profile/actions/update-profile-action';
@@ -15,6 +14,7 @@ import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
+import { isServerActionSuccessful } from '@/lib/action-types';
 import { isInPast } from '@/lib/dates';
 
 const schema = z.object({
@@ -51,27 +51,28 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
         values: profile,
     });
 
-    const { execute, isPending } = useAction(updateProfileAction, {
-        onSuccess() {
-            toast({
-                title: 'Success',
-                description: 'Your profile has been updated.',
-            });
+    async function onSubmit(data: UpdateProfileFormValues) {
+        const result = await updateProfileAction(data);
 
-            router.push('/profile');
-        },
-        onError({ error }) {
+        if (!isServerActionSuccessful(result)) {
             toast({
                 variant: 'destructive',
                 title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
+                description: <ServerActionErrorMessage result={result} />,
             });
-        },
-    });
 
-    function onSubmit(data: UpdateProfileFormValues) {
-        execute(data);
+            return;
+        }
+
+        toast({
+            title: 'Success',
+            description: 'Your profile has been updated.',
+        });
+
+        router.push('/profile');
     }
+
+    const { isSubmitting } = form.formState;
 
     return (
         <Form {...form}>
@@ -87,7 +88,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -97,7 +98,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                         maxLength={50}
                         autoComplete="given-name"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                     <TextFormField<UpdateProfileFormValues>
@@ -106,7 +107,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                         maxLength={50}
                         autoComplete="family-name"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                 </div>
@@ -116,7 +117,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
@@ -128,10 +129,10 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
 
                     <Button
                         type="submit"
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="min-w-32"
                     >
-                        {isPending ? (
+                        {isSubmitting ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Submit'

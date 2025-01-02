@@ -2,9 +2,10 @@
 
 import { z } from 'zod';
 import type { GetUserResponse } from '@/app/user/user-types';
+import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
-import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
+import { verifySession } from '@/lib/session';
 
 const schema = z.object({
     id: z
@@ -12,13 +13,35 @@ const schema = z.object({
         .uuid('Id must be a valid UUID'),
 });
 
-export const getUserAction = authActionClient([
-    Role.SYSTEM_ADMINISTRATOR,
-    Role.USER_ADMINISTRATOR,
-])
-    .schema(schema)
-    .action(async ({ parsedInput: { id }, ctx: { accessToken } }) => {
-        return await apiClient.get<GetUserResponse>(`/user/${id}`, undefined, {
+type GetUserActionValues = z.infer<typeof schema>;
+
+export async function getUserAction(
+    input: GetUserActionValues
+): Promise<ServerActionResult<GetUserResponse>> {
+    const { accessToken } = await verifySession([
+        Role.SYSTEM_ADMINISTRATOR,
+        Role.USER_ADMINISTRATOR,
+    ]);
+
+    const parsedInput = await schema.safeParseAsync(input);
+
+    if (!parsedInput.success) {
+        return {
+            validationErrors: parsedInput.error.flatten(),
+        };
+    }
+
+    const { id } = parsedInput.data;
+
+    const result = await apiClient.get<GetUserResponse>(
+        `/user/${id}`,
+        undefined,
+        {
             Authorization: `Bearer ${accessToken}`,
-        });
-    });
+        }
+    );
+
+    return {
+        data: result,
+    };
+}

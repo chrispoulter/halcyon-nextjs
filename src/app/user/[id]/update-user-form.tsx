@@ -1,11 +1,11 @@
 'use client';
 
+import { useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import type { GetUserResponse } from '@/app/user/user-types';
 import { updateUserAction } from '@/app/user/actions/update-user-action';
@@ -22,6 +22,7 @@ import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
+import { isServerActionSuccessful } from '@/lib/action-types';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
@@ -67,105 +68,103 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
         values: user,
     });
 
-    const { execute: updateUser, isPending: isUpdating } = useAction(
-        updateUserAction,
-        {
-            onSuccess() {
-                toast({
-                    title: 'Success',
-                    description: 'User successfully updated.',
-                });
+    async function onSubmit(data: UpdateUserFormValues) {
+        const result = await updateUserAction({ ...data, id: user.id });
 
-                router.push('/user');
-            },
-            onError({ error }) {
+        if (!isServerActionSuccessful(result)) {
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: <ServerActionErrorMessage result={result} />,
+            });
+
+            return;
+        }
+
+        toast({
+            title: 'Success',
+            description: 'User successfully updated.',
+        });
+
+        router.push('/user');
+    }
+
+    const [isDeleting, startDeleting] = useTransition();
+
+    async function onDelete() {
+        startDeleting(async () => {
+            const result = await deleteUserAction({ id: user.id });
+
+            if (!isServerActionSuccessful(result)) {
                 toast({
                     variant: 'destructive',
                     title: 'Error',
-                    description: <ServerActionErrorMessage result={error} />,
-                });
-            },
-        }
-    );
-
-    const { execute: deleteUser, isPending: isDeleting } = useAction(
-        deleteUserAction,
-        {
-            onSuccess() {
-                toast({
-                    title: 'Success',
-                    description: 'User successfully deleted.',
+                    description: <ServerActionErrorMessage result={result} />,
                 });
 
-                router.push('/user');
-            },
-            onError({ error }) {
+                return;
+            }
+
+            toast({
+                title: 'Success',
+                description: 'User successfully deleted.',
+            });
+
+            router.push('/user');
+        });
+    }
+
+    const [isLocking, startLocking] = useTransition();
+
+    async function onLock() {
+        startLocking(async () => {
+            const result = await lockUserAction({ id: user.id });
+
+            if (!isServerActionSuccessful(result)) {
                 toast({
                     variant: 'destructive',
                     title: 'Error',
-                    description: <ServerActionErrorMessage result={error} />,
-                });
-            },
-        }
-    );
-
-    const { execute: lockUser, isPending: isLocking } = useAction(
-        lockUserAction,
-        {
-            onSuccess() {
-                toast({
-                    title: 'Success',
-                    description: 'User successfully locked.',
+                    description: <ServerActionErrorMessage result={result} />,
                 });
 
-                router.refresh();
-            },
-            onError({ error }) {
-                toast({
-                    variant: 'destructive',
-                    title: 'Error',
-                    description: <ServerActionErrorMessage result={error} />,
-                });
-            },
-        }
-    );
+                return;
+            }
 
-    const { execute: unlockUser, isPending: isUnlocking } = useAction(
-        unlockUserAction,
-        {
-            onSuccess() {
-                toast({
-                    title: 'Success',
-                    description: 'User successfully unlocked.',
-                });
+            toast({
+                title: 'Success',
+                description: 'User successfully locked.',
+            });
 
-                router.refresh();
-            },
-            onError({ error }) {
+            router.refresh();
+        });
+    }
+
+    const [isUnlocking, startUnlocking] = useTransition();
+
+    async function onUnlock() {
+        startUnlocking(async () => {
+            const result = await unlockUserAction({ id: user.id });
+
+            if (!isServerActionSuccessful(result)) {
                 toast({
                     variant: 'destructive',
                     title: 'Error',
-                    description: <ServerActionErrorMessage result={error} />,
+                    description: <ServerActionErrorMessage result={result} />,
                 });
-            },
-        }
-    );
 
-    function onSubmit(data: UpdateUserFormValues) {
-        updateUser({ ...data, id: user.id });
+                return;
+            }
+
+            toast({
+                title: 'Success',
+                description: 'User successfully locked.',
+            });
+
+            router.refresh();
+        });
     }
 
-    function onDelete() {
-        deleteUser({ id: user.id });
-    }
-
-    function onLock() {
-        lockUser({ id: user.id });
-    }
-
-    function onUnlock() {
-        unlockUser({ id: user.id });
-    }
+    const { isSubmitting } = form.formState;
 
     return (
         <Form {...form}>
@@ -182,7 +181,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     autoComplete="username"
                     required
                     disabled={
-                        isUpdating || isDeleting || isLocking || isUnlocking
+                        isSubmitting || isDeleting || isLocking || isUnlocking
                     }
                 />
 
@@ -194,7 +193,10 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         autoComplete="given-name"
                         required
                         disabled={
-                            isUpdating || isDeleting || isLocking || isUnlocking
+                            isSubmitting ||
+                            isDeleting ||
+                            isLocking ||
+                            isUnlocking
                         }
                         className="flex-1"
                     />
@@ -205,7 +207,10 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         autoComplete="family-name"
                         required
                         disabled={
-                            isUpdating || isDeleting || isLocking || isUnlocking
+                            isSubmitting ||
+                            isDeleting ||
+                            isLocking ||
+                            isUnlocking
                         }
                         className="flex-1"
                     />
@@ -217,7 +222,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
                     disabled={
-                        isUpdating || isDeleting || isLocking || isUnlocking
+                        isSubmitting || isDeleting || isLocking || isUnlocking
                     }
                 />
 
@@ -225,7 +230,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     field="roles"
                     options={roles}
                     disabled={
-                        isUpdating || isDeleting || isLocking || isUnlocking
+                        isSubmitting || isDeleting || isLocking || isUnlocking
                     }
                 />
 
@@ -238,14 +243,14 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         <UnlockUserButton
                             onUnlock={onUnlock}
                             loading={isUnlocking}
-                            disabled={isUpdating || isDeleting || isLocking}
+                            disabled={isSubmitting || isDeleting || isLocking}
                             className="min-w-32"
                         />
                     ) : (
                         <LockUserButton
                             onLock={onLock}
                             loading={isLocking}
-                            disabled={isUpdating || isDeleting || isUnlocking}
+                            disabled={isSubmitting || isDeleting || isUnlocking}
                             className="min-w-32"
                         />
                     )}
@@ -253,7 +258,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     <DeleteUserButton
                         onDelete={onDelete}
                         loading={isDeleting}
-                        disabled={isUpdating || isLocking || isUnlocking}
+                        disabled={isSubmitting || isLocking || isUnlocking}
                         className="min-w-32"
                     />
 
@@ -262,7 +267,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         disabled={isDeleting || isLocking || isUnlocking}
                         className="min-w-32"
                     >
-                        {isUpdating ? (
+                        {isSubmitting ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Submit'

@@ -2,9 +2,9 @@
 
 import { z } from 'zod';
 import type { RegisterResponse } from '@/app/account/account-types';
+import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
-import { actionClient } from '@/lib/safe-action';
 
 const schema = z
     .object({
@@ -38,11 +38,25 @@ const schema = z
         path: ['confirmPassword'],
     });
 
-export const registerAction = actionClient
-    .schema(schema)
-    .action(async ({ parsedInput }) => {
-        return await apiClient.post<RegisterResponse>(
-            '/account/register',
-            parsedInput
-        );
-    });
+type RegisterActionValues = z.infer<typeof schema>;
+
+export async function registerAction(
+    input: RegisterActionValues
+): Promise<ServerActionResult<RegisterResponse>> {
+    const parsedInput = await schema.safeParseAsync(input);
+
+    if (!parsedInput.success) {
+        return {
+            validationErrors: parsedInput.error.flatten(),
+        };
+    }
+
+    const result = await apiClient.post<RegisterResponse>(
+        '/account/register',
+        parsedInput.data
+    );
+
+    return {
+        data: result,
+    };
+}

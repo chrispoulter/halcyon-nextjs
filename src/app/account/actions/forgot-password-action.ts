@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { apiClient } from '@/lib/api-client';
-import { actionClient } from '@/lib/safe-action';
+import { ServerActionResult } from '@/lib/action-types';
 
 const schema = z.object({
     emailAddress: z
@@ -10,8 +10,20 @@ const schema = z.object({
         .email('Email Address must be a valid email'),
 });
 
-export const forgotPasswordAction = actionClient
-    .schema(schema)
-    .action(async ({ parsedInput }) => {
-        return await apiClient.put('/account/forgot-password', parsedInput);
-    });
+type ForgotPasswordActionValues = z.infer<typeof schema>;
+
+export async function forgotPasswordAction(
+    input: ForgotPasswordActionValues
+): Promise<ServerActionResult> {
+    const parsedInput = await schema.safeParseAsync(input);
+
+    if (!parsedInput.success) {
+        return {
+            validationErrors: parsedInput.error.flatten(),
+        };
+    }
+
+    await apiClient.put('/account/forgot-password', parsedInput.data);
+
+    return {};
+}

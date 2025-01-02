@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import { loginAction } from '@/app/account/actions/login-action';
 import { Form } from '@/components/ui/form';
@@ -12,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
+import { isServerActionSuccessful } from '@/lib/action-types';
 
 const schema = z.object({
     emailAddress: z
@@ -35,22 +35,23 @@ export function LoginForm() {
         },
     });
 
-    const { execute, isPending } = useAction(loginAction, {
-        onSuccess() {
-            router.push('/');
-        },
-        onError({ error }) {
+    async function onSubmit(data: LoginFormValues) {
+        const result = await loginAction(data);
+
+        if (!isServerActionSuccessful(result)) {
             toast({
                 variant: 'destructive',
                 title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
+                description: <ServerActionErrorMessage result={result} />,
             });
-        },
-    });
 
-    function onSubmit(data: LoginFormValues) {
-        execute(data);
+            return;
+        }
+
+        router.push('/');
     }
+
+    const { isSubmitting } = form.formState;
 
     return (
         <Form {...form}>
@@ -66,7 +67,7 @@ export function LoginForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <TextFormField<LoginFormValues>
@@ -76,16 +77,16 @@ export function LoginForm() {
                     maxLength={50}
                     autoComplete="current-password"
                     required
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button
                         type="submit"
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="min-w-32"
                     >
-                        {isPending ? (
+                        {isSubmitting ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Submit'

@@ -2,8 +2,9 @@
 
 import { z } from 'zod';
 import type { ChangePasswordResponse } from '@/app/profile/profile-types';
+import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
-import { authActionClient } from '@/lib/safe-action';
+import { verifySession } from '@/lib/session';
 
 const schema = z.object({
     currentPassword: z
@@ -16,14 +17,30 @@ const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-export const changePasswordAction = authActionClient()
-    .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.put<ChangePasswordResponse>(
-            '/profile/change-password',
-            parsedInput,
-            {
-                Authorization: `Bearer ${accessToken}`,
-            }
-        );
-    });
+type ChangePasswordActionValues = z.infer<typeof schema>;
+
+export async function changePasswordAction(
+    input: ChangePasswordActionValues
+): Promise<ServerActionResult<ChangePasswordResponse>> {
+    const { accessToken } = await verifySession();
+
+    const parsedInput = await schema.safeParseAsync(input);
+
+    if (!parsedInput.success) {
+        return {
+            validationErrors: parsedInput.error.flatten(),
+        };
+    }
+
+    const result = await apiClient.put<ChangePasswordResponse>(
+        '/profile/change-password',
+        parsedInput.data,
+        {
+            Authorization: `Bearer ${accessToken}`,
+        }
+    );
+
+    return {
+        data: result,
+    };
+}

@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import { registerAction } from '@/app/account/actions/register-action';
 import { Form } from '@/components/ui/form';
@@ -13,6 +12,7 @@ import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
+import { isServerActionSuccessful } from '@/lib/action-types';
 import { isInPast } from '@/lib/dates';
 
 const schema = z
@@ -64,27 +64,28 @@ export function RegisterForm() {
         },
     });
 
-    const { execute, isPending } = useAction(registerAction, {
-        onSuccess() {
-            toast({
-                title: 'Success',
-                description: 'User successfully registered.',
-            });
+    async function onSubmit(data: RegisterFormValues) {
+        const result = await registerAction(data);
 
-            router.push('/account/login');
-        },
-        onError({ error }) {
+        if (!isServerActionSuccessful(result)) {
             toast({
                 variant: 'destructive',
                 title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
+                description: <ServerActionErrorMessage result={result} />,
             });
-        },
-    });
 
-    function onSubmit(data: RegisterFormValues) {
-        execute(data);
+            return;
+        }
+
+        toast({
+            title: 'Success',
+            description: 'User successfully registered.',
+        });
+
+        router.push('/account/login');
     }
+
+    const { isSubmitting } = form.formState;
 
     return (
         <Form {...form}>
@@ -100,7 +101,7 @@ export function RegisterForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -111,7 +112,7 @@ export function RegisterForm() {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                     <TextFormField<RegisterFormValues>
@@ -121,7 +122,7 @@ export function RegisterForm() {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                 </div>
@@ -133,7 +134,7 @@ export function RegisterForm() {
                         maxLength={50}
                         autoComplete="given-name"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                     <TextFormField<RegisterFormValues>
@@ -142,7 +143,7 @@ export function RegisterForm() {
                         maxLength={50}
                         autoComplete="family-name"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                 </div>
@@ -152,16 +153,16 @@ export function RegisterForm() {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button
                         type="submit"
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="min-w-32"
                     >
-                        {isPending ? (
+                        {isSubmitting ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Submit'

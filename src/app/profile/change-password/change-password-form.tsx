@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { changePasswordAction } from '@/app/profile/actions/change-password-action';
@@ -14,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
+import { isServerActionSuccessful } from '@/lib/action-types';
 
 const schema = z
     .object({
@@ -51,27 +51,28 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
         },
     });
 
-    const { execute, isPending } = useAction(changePasswordAction, {
-        onSuccess() {
-            toast({
-                title: 'Success',
-                description: 'Your password has been changed.',
-            });
+    async function onSubmit(data: ChangePasswordFormValues) {
+        const result = await changePasswordAction(data);
 
-            router.push('/profile');
-        },
-        onError({ error }) {
+        if (!isServerActionSuccessful(result)) {
             toast({
                 variant: 'destructive',
                 title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
+                description: <ServerActionErrorMessage result={result} />,
             });
-        },
-    });
 
-    function onSubmit(data: ChangePasswordFormValues) {
-        execute(data);
+            return;
+        }
+
+        toast({
+            title: 'Success',
+            description: 'Your password has been changed.',
+        });
+
+        router.push('/profile');
     }
+
+    const { isSubmitting } = form.formState;
 
     return (
         <Form {...form}>
@@ -87,7 +88,7 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
                     maxLength={50}
                     autoComplete="current-password"
                     required
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -98,7 +99,7 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                     <TextFormField<ChangePasswordFormValues>
@@ -108,7 +109,7 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                 </div>
@@ -122,10 +123,10 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
 
                     <Button
                         type="submit"
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="min-w-32"
                     >
-                        {isPending ? (
+                        {isSubmitting ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Submit'

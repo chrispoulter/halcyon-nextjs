@@ -2,9 +2,10 @@
 
 import { z } from 'zod';
 import { CreateUserResponse } from '@/app/user/user-types';
+import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
-import { authActionClient } from '@/lib/safe-action';
+import { verifySession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -38,13 +39,33 @@ const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-export const createUserAction = authActionClient([
-    Role.SYSTEM_ADMINISTRATOR,
-    Role.USER_ADMINISTRATOR,
-])
-    .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.post<CreateUserResponse>('/user', parsedInput, {
+type CreateUserActionValues = z.infer<typeof schema>;
+
+export async function createUserAction(
+    input: CreateUserActionValues
+): Promise<ServerActionResult<CreateUserResponse>> {
+    const { accessToken } = await verifySession([
+        Role.SYSTEM_ADMINISTRATOR,
+        Role.USER_ADMINISTRATOR,
+    ]);
+
+    const parsedInput = await schema.safeParseAsync(input);
+
+    if (!parsedInput.success) {
+        return {
+            validationErrors: parsedInput.error.flatten(),
+        };
+    }
+
+    const result = await apiClient.post<CreateUserResponse>(
+        '/user',
+        parsedInput.data,
+        {
             Authorization: `Bearer ${accessToken}`,
-        });
-    });
+        }
+    );
+
+    return {
+        data: result,
+    };
+}

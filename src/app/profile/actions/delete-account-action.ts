@@ -2,26 +2,40 @@
 
 import { z } from 'zod';
 import type { DeleteAccountResponse } from '@/app/profile/profile-types';
+import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
-import { authActionClient } from '@/lib/safe-action';
-import { deleteSession } from '@/lib/session';
+import { deleteSession, verifySession } from '@/lib/session';
 
 const schema = z.object({
     version: z.string({ message: 'Version must be a valid string' }).optional(),
 });
 
-export const deleteAccountAction = authActionClient()
-    .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        const result = await apiClient.delete<DeleteAccountResponse>(
-            '/profile',
-            parsedInput,
-            {
-                Authorization: `Bearer ${accessToken}`,
-            }
-        );
+type DeleteAccountActionValues = z.infer<typeof schema>;
 
-        await deleteSession();
+export async function deleteAccountAction(
+    input: DeleteAccountActionValues
+): Promise<ServerActionResult<DeleteAccountResponse>> {
+    const { accessToken } = await verifySession();
 
-        return result;
-    });
+    const parsedInput = await schema.safeParseAsync(input);
+
+    if (!parsedInput.success) {
+        return {
+            validationErrors: parsedInput.error.flatten(),
+        };
+    }
+
+    const result = await apiClient.delete<DeleteAccountResponse>(
+        '/profile',
+        parsedInput.data,
+        {
+            Authorization: `Bearer ${accessToken}`,
+        }
+    );
+
+    await deleteSession();
+
+    return {
+        data: result,
+    };
+}

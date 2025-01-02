@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import { createUserAction } from '@/app/user/actions/create-user-action';
 import { Form } from '@/components/ui/form';
@@ -15,6 +14,7 @@ import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
+import { isServerActionSuccessful } from '@/lib/action-types';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
@@ -78,27 +78,28 @@ export function CreateUserForm() {
         },
     });
 
-    const { execute, isPending } = useAction(createUserAction, {
-        onSuccess() {
-            toast({
-                title: 'Success',
-                description: 'User successfully created.',
-            });
+    async function onSubmit(data: CreateUserFormValues) {
+        const result = await createUserAction(data);
 
-            router.push('/user');
-        },
-        onError({ error }) {
+        if (!isServerActionSuccessful(result)) {
             toast({
                 variant: 'destructive',
                 title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
+                description: <ServerActionErrorMessage result={result} />,
             });
-        },
-    });
 
-    function onSubmit(data: CreateUserFormValues) {
-        execute(data);
+            return;
+        }
+
+        toast({
+            title: 'Success',
+            description: 'User successfully created.',
+        });
+
+        router.push('/user');
     }
+
+    const { isSubmitting } = form.formState;
 
     return (
         <Form {...form}>
@@ -114,7 +115,7 @@ export function CreateUserForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -125,7 +126,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                     <TextFormField<CreateUserFormValues>
@@ -135,7 +136,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                 </div>
@@ -147,7 +148,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="given-name"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                     <TextFormField<CreateUserFormValues>
@@ -156,7 +157,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="family-name"
                         required
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                 </div>
@@ -166,13 +167,13 @@ export function CreateUserForm() {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <SwitchFormField<CreateUserFormValues>
                     field="roles"
                     options={roles}
-                    disabled={isPending}
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
@@ -184,10 +185,10 @@ export function CreateUserForm() {
 
                     <Button
                         type="submit"
-                        disabled={isPending}
+                        disabled={isSubmitting}
                         className="min-w-32"
                     >
-                        {isPending ? (
+                        {isSubmitting ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Submit'
