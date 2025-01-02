@@ -2,9 +2,9 @@
 
 import { z } from 'zod';
 import type { RegisterResponse } from '@/app/account/account-types';
-import { config } from '@/lib/config';
+import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
-import { actionClient, ActionError } from '@/lib/safe-action';
+import { actionClient } from '@/lib/safe-action';
 
 const schema = z
     .object({
@@ -41,26 +41,8 @@ const schema = z
 export const registerAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        const response = await fetch(`${config.API_URL}/account/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(parsedInput),
-        });
-
-        if (!response.ok) {
-            const contentType = response.headers.get('content-type') || '';
-
-            if (contentType.includes('application/problem+json')) {
-                const problem = await response.json();
-                throw new ActionError(problem.title);
-            }
-
-            throw new ActionError(
-                `HTTP ${response.status} ${response.statusText}`
-            );
-        }
-
-        return (await response.json()) as RegisterResponse;
+        return await apiClient.post<RegisterResponse>(
+            '/account/register',
+            parsedInput
+        );
     });

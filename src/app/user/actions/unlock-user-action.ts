@@ -2,8 +2,8 @@
 
 import { z } from 'zod';
 import type { UnlockUserResponse } from '@/app/user/user-types';
-import { config } from '@/lib/config';
-import { ActionError, authActionClient } from '@/lib/safe-action';
+import { apiClient } from '@/lib/api-client';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
 const schema = z.object({
@@ -19,27 +19,11 @@ export const unlockUserAction = authActionClient([
 ])
     .schema(schema)
     .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
-        const response = await fetch(`${config.API_URL}/user/${id}/unlock`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
+        return await apiClient.put<UnlockUserResponse>(
+            `/user/${id}/unlock`,
+            rest,
+            {
                 Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify(rest),
-        });
-
-        if (!response.ok) {
-            const contentType = response.headers.get('content-type') || '';
-
-            if (contentType.includes('application/problem+json')) {
-                const problem = await response.json();
-                throw new ActionError(problem.title);
             }
-
-            throw new ActionError(
-                `HTTP ${response.status} ${response.statusText}`
-            );
-        }
-
-        return (await response.json()) as UnlockUserResponse;
+        );
     });

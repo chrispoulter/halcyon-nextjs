@@ -2,20 +2,14 @@ import {
     createSafeActionClient,
     DEFAULT_SERVER_ERROR_MESSAGE,
 } from 'next-safe-action';
+import { ApiClientError } from '@/lib/api-client';
 import { verifySession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
-
-export class ActionError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'ActionError';
-    }
-}
 
 export const actionClient = createSafeActionClient({
     defaultValidationErrorsShape: 'flattened',
     handleServerError(e) {
-        if (e instanceof ActionError) {
+        if (e instanceof ApiClientError) {
             return e.message;
         }
 

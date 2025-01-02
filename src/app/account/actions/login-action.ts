@@ -3,8 +3,9 @@
 import { z } from 'zod';
 import { jwtVerify } from 'jose';
 import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
+import { apiClient } from '@/lib/api-client';
 import { config } from '@/lib/config';
-import { actionClient, ActionError } from '@/lib/safe-action';
+import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
 const schema = z.object({
@@ -22,28 +23,10 @@ const encodedSecurityKey = new TextEncoder().encode(securityKey);
 export const loginAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        const response = await fetch(`${config.API_URL}/account/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(parsedInput),
-        });
-
-        if (!response.ok) {
-            const contentType = response.headers.get('content-type') || '';
-
-            if (contentType.includes('application/problem+json')) {
-                const problem = await response.json();
-                throw new ActionError(problem.title);
-            }
-
-            throw new ActionError(
-                `HTTP ${response.status} ${response.statusText}`
-            );
-        }
-
-        const { accessToken } = (await response.json()) as LoginResponse;
+        const { accessToken } = await apiClient.post<LoginResponse>(
+            '/account/login',
+            parsedInput
+        );
 
         const { payload } = await jwtVerify<TokenPayload>(
             accessToken,

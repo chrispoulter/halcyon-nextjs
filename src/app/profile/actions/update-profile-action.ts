@@ -2,9 +2,9 @@
 
 import { z } from 'zod';
 import type { UpdateProfileResponse } from '@/app/profile/profile-types';
-import { config } from '@/lib/config';
+import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
-import { ActionError, authActionClient } from '@/lib/safe-action';
+import { authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
     emailAddress: z
@@ -30,27 +30,11 @@ const schema = z.object({
 export const updateProfileAction = authActionClient()
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        const response = await fetch(`${config.API_URL}/profile`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
+        return await apiClient.put<UpdateProfileResponse>(
+            '/profile',
+            parsedInput,
+            {
                 Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify(parsedInput),
-        });
-
-        if (!response.ok) {
-            const contentType = response.headers.get('content-type') || '';
-
-            if (contentType.includes('application/problem+json')) {
-                const problem = await response.json();
-                throw new ActionError(problem.title);
             }
-
-            throw new ActionError(
-                `HTTP ${response.status} ${response.statusText}`
-            );
-        }
-
-        return (await response.json()) as UpdateProfileResponse;
+        );
     });
