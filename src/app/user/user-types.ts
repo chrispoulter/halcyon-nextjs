@@ -28,7 +28,7 @@ export type GetUserResponse = {
     dateOfBirth: string;
     isLockedOut: boolean;
     roles?: Role[];
-    version: string;
+    version: number;
 };
 
 export type CreateUserResponse = {

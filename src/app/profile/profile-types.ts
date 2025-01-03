@@ -4,7 +4,7 @@ export type GetProfileResponse = {
     firstName: string;
     lastName: string;
     dateOfBirth: string;
-    version: string;
+    version: number;
 };
 
 export type UpdateProfileResponse = {
