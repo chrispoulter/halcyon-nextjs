@@ -52,7 +52,10 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
     });
 
     async function onSubmit(data: UpdateProfileFormValues) {
-        const result = await updateProfileAction(data);
+        const result = await updateProfileAction({
+            ...data,
+            version: profile.version,
+        });
 
         if (!isServerActionSuccess(result)) {
             toast({

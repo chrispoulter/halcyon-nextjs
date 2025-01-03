@@ -39,7 +39,7 @@ type ChangePasswordFormProps = {
     profile: GetProfileResponse;
 };
 
-export function ChangePasswordForm({}: ChangePasswordFormProps) {
+export function ChangePasswordForm({ profile }: ChangePasswordFormProps) {
     const router = useRouter();
 
     const form = useForm<ChangePasswordFormValues>({
@@ -52,7 +52,10 @@ export function ChangePasswordForm({}: ChangePasswordFormProps) {
     });
 
     async function onSubmit(data: ChangePasswordFormValues) {
-        const result = await changePasswordAction(data);
+        const result = await changePasswordAction({
+            ...data,
+            version: profile.version,
+        });
 
         if (!isServerActionSuccess(result)) {
             toast({

@@ -11,7 +11,7 @@ const schema = z.object({
     id: z
         .string({ message: 'Id must be a valid string' })
         .uuid('Id must be a valid UUID'),
-    version: z.string({ message: 'Version must be a valid string' }).optional(),
+    version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
 type LockUserActionValues = z.infer<typeof schema>;

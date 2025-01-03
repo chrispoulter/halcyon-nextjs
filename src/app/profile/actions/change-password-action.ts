@@ -14,7 +14,7 @@ const schema = z.object({
         .string({ message: 'New Password must be a valid string' })
         .min(8, 'New Password must be at least 8 characters')
         .max(50, 'New Password must be no more than 50 characters'),
-    version: z.string({ message: 'Version must be a valid string' }).optional(),
+    version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
 type ChangePasswordActionValues = z.infer<typeof schema>;

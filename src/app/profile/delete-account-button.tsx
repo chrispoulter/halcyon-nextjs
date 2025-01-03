@@ -4,6 +4,7 @@ import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { deleteAccountAction } from '@/app/profile/actions/delete-account-action';
+import { GetProfileResponse } from '@/app/profile/profile-types';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -21,17 +22,23 @@ import { toast } from '@/hooks/use-toast';
 import { isServerActionSuccess } from '@/lib/action-types';
 
 type DeleteAccountButtonProps = {
+    profile: GetProfileResponse;
     className?: string;
 };
 
-export function DeleteAccountButton({ className }: DeleteAccountButtonProps) {
+export function DeleteAccountButton({
+    profile,
+    className,
+}: DeleteAccountButtonProps) {
     const router = useRouter();
 
     const [isPending, startTransition] = useTransition();
 
     async function onDelete() {
         startTransition(async () => {
-            const result = await deleteAccountAction({});
+            const result = await deleteAccountAction({
+                version: profile.version,
+            });
 
             if (!isServerActionSuccess(result)) {
                 toast({

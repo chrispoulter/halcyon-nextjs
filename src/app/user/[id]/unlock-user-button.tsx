@@ -38,7 +38,10 @@ export function UnlockUserButton({
 
     async function onUnlock() {
         startTransition(async () => {
-            const result = await unlockUserAction({ id: user.id });
+            const result = await unlockUserAction({
+                id: user.id,
+                version: user.version,
+            });
 
             if (!isServerActionSuccess(result)) {
                 toast({

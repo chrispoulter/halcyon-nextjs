@@ -65,7 +65,11 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
     });
 
     async function onSubmit(data: UpdateUserFormValues) {
-        const result = await updateUserAction({ ...data, id: user.id });
+        const result = await updateUserAction({
+            ...data,
+            id: user.id,
+            version: user.version,
+        });
 
         if (!isServerActionSuccess(result)) {
             toast({

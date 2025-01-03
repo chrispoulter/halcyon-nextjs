@@ -76,7 +76,10 @@ export default async function Profile() {
                 be removed. Please be certain.
             </p>
 
-            <DeleteAccountButton className="w-full min-w-32 sm:w-auto" />
+            <DeleteAccountButton
+                profile={profile}
+                className="w-full min-w-32 sm:w-auto"
+            />
         </main>
     );
 }

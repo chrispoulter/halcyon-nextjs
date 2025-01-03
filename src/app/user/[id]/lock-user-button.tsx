@@ -38,7 +38,10 @@ export function LockUserButton({
 
     async function onLock() {
         startTransition(async () => {
-            const result = await lockUserAction({ id: user.id });
+            const result = await lockUserAction({
+                id: user.id,
+                version: user.version,
+            });
 
             if (!isServerActionSuccess(result)) {
                 toast({

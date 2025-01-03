@@ -25,7 +25,7 @@ const schema = z.object({
         })
         .date('Date Of Birth must be a valid date')
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
-    version: z.string({ message: 'Version must be a valid string' }).optional(),
+    version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
 type UpdateProfileActionValues = z.infer<typeof schema>;

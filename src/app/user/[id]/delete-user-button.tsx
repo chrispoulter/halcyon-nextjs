@@ -38,7 +38,10 @@ export function DeleteUserButton({
 
     async function onDelete() {
         startTransition(async () => {
-            const result = await deleteUserAction({ id: user.id });
+            const result = await deleteUserAction({
+                id: user.id,
+                version: user.version,
+            });
 
             if (!isServerActionSuccess(result)) {
                 toast({

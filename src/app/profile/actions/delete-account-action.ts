@@ -7,7 +7,7 @@ import { apiClient, isApiClientResultSuccess } from '@/lib/api-client';
 import { deleteSession, verifySession } from '@/lib/session';
 
 const schema = z.object({
-    version: z.string({ message: 'Version must be a valid string' }).optional(),
+    version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
 type DeleteAccountActionValues = z.infer<typeof schema>;

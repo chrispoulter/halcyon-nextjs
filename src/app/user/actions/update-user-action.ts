@@ -35,7 +35,7 @@ const schema = z.object({
             { message: 'Role must be a valid array' }
         )
         .optional(),
-    version: z.string({ message: 'Version must be a valid string' }).optional(),
+    version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
 type UpdateUserActionValues = z.infer<typeof schema>;
