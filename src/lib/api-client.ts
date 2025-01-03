@@ -57,17 +57,17 @@ class ApiClient {
             switch (response.status) {
                 case 401:
                     if (doNotThrowError) {
-                        return unauthorized();
+                        unauthorized();
                     }
 
                 case 403:
                     if (doNotThrowError) {
-                        return forbidden();
+                        forbidden();
                     }
 
                 case 404:
                     if (doNotThrowError) {
-                        return notFound();
+                        notFound();
                     }
 
                 default:
