@@ -34,10 +34,10 @@ export function LockUserButton({
 }: LockUserButtonProps) {
     const router = useRouter();
 
-    const [isLocking, startLocking] = useTransition();
+    const [isPending, startTransition] = useTransition();
 
     async function onLock() {
-        startLocking(async () => {
+        startTransition(async () => {
             const result = await lockUserAction({ id: user.id });
 
             if (!isServerActionSuccess(result)) {
@@ -64,10 +64,10 @@ export function LockUserButton({
             <AlertDialogTrigger asChild>
                 <Button
                     variant="secondary"
-                    disabled={isLocking || disabled}
+                    disabled={isPending || disabled}
                     className={className}
                 >
-                    {isLocking ? <Loader2 className="animate-spin" /> : 'Lock'}
+                    {isPending ? <Loader2 className="animate-spin" /> : 'Lock'}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -81,7 +81,7 @@ export function LockUserButton({
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                        disabled={isLocking || disabled}
+                        disabled={isPending || disabled}
                         onClick={onLock}
                     >
                         Continue

@@ -27,10 +27,10 @@ type DeleteAccountButtonProps = {
 export function DeleteAccountButton({ className }: DeleteAccountButtonProps) {
     const router = useRouter();
 
-    const [isDeleting, startDeleting] = useTransition();
+    const [isPending, startTransition] = useTransition();
 
     async function onDelete() {
-        startDeleting(async () => {
+        startTransition(async () => {
             const result = await deleteAccountAction({});
 
             if (!isServerActionSuccess(result)) {
@@ -57,10 +57,10 @@ export function DeleteAccountButton({ className }: DeleteAccountButtonProps) {
             <AlertDialogTrigger asChild>
                 <Button
                     variant="destructive"
-                    disabled={isDeleting}
+                    disabled={isPending}
                     className={className}
                 >
-                    {isDeleting ? (
+                    {isPending ? (
                         <Loader2 className="animate-spin" />
                     ) : (
                         'Delete Account'
@@ -78,7 +78,7 @@ export function DeleteAccountButton({ className }: DeleteAccountButtonProps) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction disabled={isDeleting} onClick={onDelete}>
+                    <AlertDialogAction disabled={isPending} onClick={onDelete}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

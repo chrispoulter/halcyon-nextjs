@@ -34,10 +34,10 @@ export function UnlockUserButton({
 }: UnlockUserButtonProps) {
     const router = useRouter();
 
-    const [isUnlocking, startUnlocking] = useTransition();
+    const [isPending, startTransition] = useTransition();
 
     async function onUnlock() {
-        startUnlocking(async () => {
+        startTransition(async () => {
             const result = await unlockUserAction({ id: user.id });
 
             if (!isServerActionSuccess(result)) {
@@ -63,10 +63,10 @@ export function UnlockUserButton({
             <AlertDialogTrigger asChild>
                 <Button
                     variant="secondary"
-                    disabled={isUnlocking || disabled}
+                    disabled={isPending || disabled}
                     className={className}
                 >
-                    {isUnlocking ? (
+                    {isPending ? (
                         <Loader2 className="animate-spin" />
                     ) : (
                         'Unlock'
@@ -84,7 +84,7 @@ export function UnlockUserButton({
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                        disabled={isUnlocking || disabled}
+                        disabled={isPending || disabled}
                         onClick={onUnlock}
                     >
                         Continue

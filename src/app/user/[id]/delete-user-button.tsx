@@ -34,10 +34,10 @@ export function DeleteUserButton({
 }: DeleteUserButtonProps) {
     const router = useRouter();
 
-    const [isDeleting, startDeleting] = useTransition();
+    const [isPending, startTransition] = useTransition();
 
     async function onDelete() {
-        startDeleting(async () => {
+        startTransition(async () => {
             const result = await deleteUserAction({ id: user.id });
 
             if (!isServerActionSuccess(result)) {
@@ -64,10 +64,10 @@ export function DeleteUserButton({
             <AlertDialogTrigger asChild>
                 <Button
                     variant="destructive"
-                    disabled={isDeleting || disabled}
+                    disabled={isPending || disabled}
                     className={className}
                 >
-                    {isDeleting ? (
+                    {isPending ? (
                         <Loader2 className="animate-spin" />
                     ) : (
                         'Delete'
@@ -86,7 +86,7 @@ export function DeleteUserButton({
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                        disabled={isDeleting || disabled}
+                        disabled={isPending || disabled}
                         onClick={onDelete}
                     >
                         Continue
