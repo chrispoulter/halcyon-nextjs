@@ -1,6 +1,10 @@
 'use client';
 
+import { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
+import { lockUserAction } from '@/app/user/actions/lock-user-action';
+import { GetUserResponse } from '@/app/user/user-types';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,29 +17,57 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { toast } from '@/hooks/use-toast';
+import { isServerActionSuccess } from '@/lib/action-types';
 
 type LockUserButtonProps = {
-    onLock: () => void;
-    loading?: boolean;
+    user: GetUserResponse;
     disabled?: boolean;
     className?: string;
 };
 
 export function LockUserButton({
-    onLock,
-    loading,
+    user,
     disabled,
     className,
 }: LockUserButtonProps) {
+    const router = useRouter();
+
+    const [isLocking, startLocking] = useTransition();
+
+    async function onLock() {
+        startLocking(async () => {
+            const result = await lockUserAction({ id: user.id });
+
+            if (!isServerActionSuccess(result)) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: <ServerActionErrorMessage result={result} />,
+                });
+
+                return;
+            }
+
+            toast({
+                title: 'Success',
+                description: 'User successfully locked.',
+            });
+
+            router.refresh();
+        });
+    }
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <Button
                     variant="secondary"
-                    disabled={loading || disabled}
+                    disabled={isLocking || disabled}
                     className={className}
                 >
-                    {loading ? <Loader2 className="animate-spin" /> : 'Lock'}
+                    {isLocking ? <Loader2 className="animate-spin" /> : 'Lock'}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -49,7 +81,7 @@ export function LockUserButton({
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                        disabled={loading || disabled}
+                        disabled={isLocking || disabled}
                         onClick={onLock}
                     >
                         Continue

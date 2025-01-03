@@ -1,6 +1,10 @@
 'use client';
 
+import { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
+import { deleteUserAction } from '@/app/user/actions/delete-user-action';
+import { GetUserResponse } from '@/app/user/user-types';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,29 +17,61 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { toast } from '@/hooks/use-toast';
+import { isServerActionSuccess } from '@/lib/action-types';
 
 type DeleteUserButtonProps = {
-    onDelete: () => void;
-    loading?: boolean;
+    user: GetUserResponse;
     disabled?: boolean;
     className?: string;
 };
 
 export function DeleteUserButton({
-    onDelete,
-    loading,
+    user,
     disabled,
     className,
 }: DeleteUserButtonProps) {
+    const router = useRouter();
+
+    const [isDeleting, startDeleting] = useTransition();
+
+    async function onDelete() {
+        startDeleting(async () => {
+            const result = await deleteUserAction({ id: user.id });
+
+            if (!isServerActionSuccess(result)) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: <ServerActionErrorMessage result={result} />,
+                });
+
+                return;
+            }
+
+            toast({
+                title: 'Success',
+                description: 'User successfully deleted.',
+            });
+
+            router.push('/user');
+        });
+    }
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <Button
                     variant="destructive"
-                    disabled={loading || disabled}
+                    disabled={isDeleting || disabled}
                     className={className}
                 >
-                    {loading ? <Loader2 className="animate-spin" /> : 'Delete'}
+                    {isDeleting ? (
+                        <Loader2 className="animate-spin" />
+                    ) : (
+                        'Delete'
+                    )}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -50,7 +86,7 @@ export function DeleteUserButton({
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                        disabled={loading || disabled}
+                        disabled={isDeleting || disabled}
                         onClick={onDelete}
                     >
                         Continue

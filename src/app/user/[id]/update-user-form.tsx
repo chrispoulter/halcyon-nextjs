@@ -1,6 +1,5 @@
 'use client';
 
-import { useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,9 +8,6 @@ import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import type { GetUserResponse } from '@/app/user/user-types';
 import { updateUserAction } from '@/app/user/actions/update-user-action';
-import { deleteUserAction } from '@/app/user/actions/delete-user-action';
-import { lockUserAction } from '@/app/user/actions/lock-user-action';
-import { unlockUserAction } from '@/app/user/actions/unlock-user-action';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
 import { LockUserButton } from '@/app/user/[id]/lock-user-button';
 import { UnlockUserButton } from '@/app/user/[id]/unlock-user-button';
@@ -89,81 +85,6 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
         router.push('/user');
     }
 
-    const [isDeleting, startDeleting] = useTransition();
-
-    async function onDelete() {
-        startDeleting(async () => {
-            const result = await deleteUserAction({ id: user.id });
-
-            if (!isServerActionSuccess(result)) {
-                toast({
-                    variant: 'destructive',
-                    title: 'Error',
-                    description: <ServerActionErrorMessage result={result} />,
-                });
-
-                return;
-            }
-
-            toast({
-                title: 'Success',
-                description: 'User successfully deleted.',
-            });
-
-            router.push('/user');
-        });
-    }
-
-    const [isLocking, startLocking] = useTransition();
-
-    async function onLock() {
-        startLocking(async () => {
-            const result = await lockUserAction({ id: user.id });
-
-            if (!isServerActionSuccess(result)) {
-                toast({
-                    variant: 'destructive',
-                    title: 'Error',
-                    description: <ServerActionErrorMessage result={result} />,
-                });
-
-                return;
-            }
-
-            toast({
-                title: 'Success',
-                description: 'User successfully locked.',
-            });
-
-            router.refresh();
-        });
-    }
-
-    const [isUnlocking, startUnlocking] = useTransition();
-
-    async function onUnlock() {
-        startUnlocking(async () => {
-            const result = await unlockUserAction({ id: user.id });
-
-            if (!isServerActionSuccess(result)) {
-                toast({
-                    variant: 'destructive',
-                    title: 'Error',
-                    description: <ServerActionErrorMessage result={result} />,
-                });
-
-                return;
-            }
-
-            toast({
-                title: 'Success',
-                description: 'User successfully locked.',
-            });
-
-            router.refresh();
-        });
-    }
-
     const { isSubmitting } = form.formState;
 
     return (
@@ -180,9 +101,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={
-                        isSubmitting || isDeleting || isLocking || isUnlocking
-                    }
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -192,12 +111,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         maxLength={50}
                         autoComplete="given-name"
                         required
-                        disabled={
-                            isSubmitting ||
-                            isDeleting ||
-                            isLocking ||
-                            isUnlocking
-                        }
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                     <TextFormField<UpdateUserFormValues>
@@ -206,12 +120,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         maxLength={50}
                         autoComplete="family-name"
                         required
-                        disabled={
-                            isSubmitting ||
-                            isDeleting ||
-                            isLocking ||
-                            isUnlocking
-                        }
+                        disabled={isSubmitting}
                         className="flex-1"
                     />
                 </div>
@@ -221,17 +130,13 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
-                    disabled={
-                        isSubmitting || isDeleting || isLocking || isUnlocking
-                    }
+                    disabled={isSubmitting}
                 />
 
                 <SwitchFormField<UpdateUserFormValues>
                     field="roles"
                     options={roles}
-                    disabled={
-                        isSubmitting || isDeleting || isLocking || isUnlocking
-                    }
+                    disabled={isSubmitting}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
@@ -241,30 +146,27 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
 
                     {user.isLockedOut ? (
                         <UnlockUserButton
-                            onUnlock={onUnlock}
-                            loading={isUnlocking}
-                            disabled={isSubmitting || isDeleting || isLocking}
+                            user={user}
+                            disabled={isSubmitting}
                             className="min-w-32"
                         />
                     ) : (
                         <LockUserButton
-                            onLock={onLock}
-                            loading={isLocking}
-                            disabled={isSubmitting || isDeleting || isUnlocking}
+                            user={user}
+                            disabled={isSubmitting}
                             className="min-w-32"
                         />
                     )}
 
                     <DeleteUserButton
-                        onDelete={onDelete}
-                        loading={isDeleting}
-                        disabled={isSubmitting || isLocking || isUnlocking}
+                        user={user}
+                        disabled={isSubmitting}
                         className="min-w-32"
                     />
 
                     <Button
                         type="submit"
-                        disabled={isDeleting || isLocking || isUnlocking}
+                        disabled={isSubmitting}
                         className="min-w-32"
                     >
                         {isSubmitting ? (

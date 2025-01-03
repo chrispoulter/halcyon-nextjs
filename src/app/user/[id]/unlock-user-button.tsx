@@ -1,6 +1,10 @@
 'use client';
 
+import { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
+import { unlockUserAction } from '@/app/user/actions/unlock-user-action';
+import { GetUserResponse } from '@/app/user/user-types';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,29 +17,60 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { toast } from '@/hooks/use-toast';
+import { isServerActionSuccess } from '@/lib/action-types';
 
 type UnlockUserButtonProps = {
-    onUnlock: () => void;
-    loading?: boolean;
+    user: GetUserResponse;
     disabled?: boolean;
     className?: string;
 };
 
 export function UnlockUserButton({
-    onUnlock,
-    loading,
+    user,
     disabled,
     className,
 }: UnlockUserButtonProps) {
+    const router = useRouter();
+
+    const [isUnlocking, startUnlocking] = useTransition();
+
+    async function onUnlock() {
+        startUnlocking(async () => {
+            const result = await unlockUserAction({ id: user.id });
+
+            if (!isServerActionSuccess(result)) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: <ServerActionErrorMessage result={result} />,
+                });
+
+                return;
+            }
+
+            toast({
+                title: 'Success',
+                description: 'User successfully locked.',
+            });
+
+            router.refresh();
+        });
+    }
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <Button
                     variant="secondary"
-                    disabled={loading || disabled}
+                    disabled={isUnlocking || disabled}
                     className={className}
                 >
-                    {loading ? <Loader2 className="animate-spin" /> : 'Unlock'}
+                    {isUnlocking ? (
+                        <Loader2 className="animate-spin" />
+                    ) : (
+                        'Unlock'
+                    )}
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -49,7 +84,7 @@ export function UnlockUserButton({
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                        disabled={loading || disabled}
+                        disabled={isUnlocking || disabled}
                         onClick={onUnlock}
                     >
                         Continue
