@@ -149,24 +149,12 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     </Button>
 
                     {user.isLockedOut ? (
-                        <UnlockUserButton
-                            user={user}
-                            disabled={isSubmitting}
-                            className="min-w-32"
-                        />
+                        <UnlockUserButton user={user} className="min-w-32" />
                     ) : (
-                        <LockUserButton
-                            user={user}
-                            disabled={isSubmitting}
-                            className="min-w-32"
-                        />
+                        <LockUserButton user={user} className="min-w-32" />
                     )}
 
-                    <DeleteUserButton
-                        user={user}
-                        disabled={isSubmitting}
-                        className="min-w-32"
-                    />
+                    <DeleteUserButton user={user} className="min-w-32" />
 
                     <Button
                         type="submit"

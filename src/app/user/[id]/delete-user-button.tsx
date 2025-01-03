@@ -23,15 +23,10 @@ import { isServerActionSuccess } from '@/lib/action-types';
 
 type DeleteUserButtonProps = {
     user: GetUserResponse;
-    disabled?: boolean;
     className?: string;
 };
 
-export function DeleteUserButton({
-    user,
-    disabled,
-    className,
-}: DeleteUserButtonProps) {
+export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
     const router = useRouter();
 
     const [isPending, startTransition] = useTransition();
@@ -67,7 +62,7 @@ export function DeleteUserButton({
             <AlertDialogTrigger asChild>
                 <Button
                     variant="destructive"
-                    disabled={isPending || disabled}
+                    disabled={isPending}
                     className={className}
                 >
                     {isPending ? (
@@ -88,10 +83,7 @@ export function DeleteUserButton({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                        disabled={isPending || disabled}
-                        onClick={onDelete}
-                    >
+                    <AlertDialogAction disabled={isPending} onClick={onDelete}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

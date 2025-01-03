@@ -23,15 +23,10 @@ import { isServerActionSuccess } from '@/lib/action-types';
 
 type LockUserButtonProps = {
     user: GetUserResponse;
-    disabled?: boolean;
     className?: string;
 };
 
-export function LockUserButton({
-    user,
-    disabled,
-    className,
-}: LockUserButtonProps) {
+export function LockUserButton({ user, className }: LockUserButtonProps) {
     const router = useRouter();
 
     const [isPending, startTransition] = useTransition();
@@ -67,7 +62,7 @@ export function LockUserButton({
             <AlertDialogTrigger asChild>
                 <Button
                     variant="secondary"
-                    disabled={isPending || disabled}
+                    disabled={isPending}
                     className={className}
                 >
                     {isPending ? <Loader2 className="animate-spin" /> : 'Lock'}
@@ -83,10 +78,7 @@ export function LockUserButton({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                        disabled={isPending || disabled}
-                        onClick={onLock}
-                    >
+                    <AlertDialogAction disabled={isPending} onClick={onLock}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

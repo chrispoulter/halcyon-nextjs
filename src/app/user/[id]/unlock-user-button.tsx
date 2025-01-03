@@ -23,15 +23,10 @@ import { isServerActionSuccess } from '@/lib/action-types';
 
 type UnlockUserButtonProps = {
     user: GetUserResponse;
-    disabled?: boolean;
     className?: string;
 };
 
-export function UnlockUserButton({
-    user,
-    disabled,
-    className,
-}: UnlockUserButtonProps) {
+export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
     const router = useRouter();
 
     const [isPending, startTransition] = useTransition();
@@ -66,7 +61,7 @@ export function UnlockUserButton({
             <AlertDialogTrigger asChild>
                 <Button
                     variant="secondary"
-                    disabled={isPending || disabled}
+                    disabled={isPending}
                     className={className}
                 >
                     {isPending ? (
@@ -86,10 +81,7 @@ export function UnlockUserButton({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                        disabled={isPending || disabled}
-                        onClick={onUnlock}
-                    >
+                    <AlertDialogAction disabled={isPending} onClick={onUnlock}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>
