@@ -6,7 +6,7 @@ import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
 
-const schema = z
+const actionSchema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
@@ -38,12 +38,12 @@ const schema = z
         path: ['confirmPassword'],
     });
 
-type RegisterActionValues = z.infer<typeof schema>;
+type RegisterActionValues = z.infer<typeof actionSchema>;
 
 export async function registerAction(
     input: RegisterActionValues
 ): Promise<ServerActionResult<RegisterResponse>> {
-    const parsedInput = await schema.safeParseAsync(input);
+    const parsedInput = await actionSchema.safeParseAsync(input);
 
     if (!parsedInput.success) {
         return {

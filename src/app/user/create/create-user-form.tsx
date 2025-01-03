@@ -18,7 +18,7 @@ import { isServerActionSuccess } from '@/lib/action-types';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
-const schema = z
+const formSchema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
@@ -60,13 +60,13 @@ const schema = z
         path: ['confirmPassword'],
     });
 
-type CreateUserFormValues = z.infer<typeof schema>;
+type CreateUserFormValues = z.infer<typeof formSchema>;
 
 export function CreateUserForm() {
     const router = useRouter();
 
     const form = useForm<CreateUserFormValues>({
-        resolver: zodResolver(schema),
+        resolver: zodResolver(formSchema),
         defaultValues: {
             emailAddress: '',
             password: '',

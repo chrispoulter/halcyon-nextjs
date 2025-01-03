@@ -6,7 +6,7 @@ import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
 import { verifySession } from '@/lib/session';
 
-const schema = z.object({
+const actionSchema = z.object({
     currentPassword: z
         .string({ message: 'Current Password must be a valid string' })
         .min(1, 'Current Password is a required field'),
@@ -17,14 +17,14 @@ const schema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-type ChangePasswordActionValues = z.infer<typeof schema>;
+type ChangePasswordActionValues = z.infer<typeof actionSchema>;
 
 export async function changePasswordAction(
     input: ChangePasswordActionValues
 ): Promise<ServerActionResult<ChangePasswordResponse>> {
     const { accessToken } = await verifySession();
 
-    const parsedInput = await schema.safeParseAsync(input);
+    const parsedInput = await actionSchema.safeParseAsync(input);
 
     if (!parsedInput.success) {
         return {

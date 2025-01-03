@@ -8,7 +8,7 @@ import { isInPast } from '@/lib/dates';
 import { verifySession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
 
-const schema = z.object({
+const actionSchema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -39,7 +39,7 @@ const schema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-type CreateUserActionValues = z.infer<typeof schema>;
+type CreateUserActionValues = z.infer<typeof actionSchema>;
 
 export async function createUserAction(
     input: CreateUserActionValues
@@ -49,7 +49,7 @@ export async function createUserAction(
         Role.USER_ADMINISTRATOR,
     ]);
 
-    const parsedInput = await schema.safeParseAsync(input);
+    const parsedInput = await actionSchema.safeParseAsync(input);
 
     if (!parsedInput.success) {
         return {

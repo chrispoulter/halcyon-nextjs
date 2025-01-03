@@ -13,7 +13,7 @@ import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 import { isServerActionSuccess } from '@/lib/action-types';
 
-const schema = z.object({
+const formSchema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -22,13 +22,13 @@ const schema = z.object({
         .min(1, 'Password is a required field'),
 });
 
-type LoginFormValues = z.infer<typeof schema>;
+type LoginFormValues = z.infer<typeof formSchema>;
 
 export function LoginForm() {
     const router = useRouter();
 
     const form = useForm<LoginFormValues>({
-        resolver: zodResolver(schema),
+        resolver: zodResolver(formSchema),
         defaultValues: {
             emailAddress: '',
             password: '',

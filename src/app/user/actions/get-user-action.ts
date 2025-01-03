@@ -7,13 +7,13 @@ import { apiClient } from '@/lib/api-client';
 import { Role } from '@/lib/session-types';
 import { verifySession } from '@/lib/session';
 
-const schema = z.object({
+const actionSchema = z.object({
     id: z
         .string({ message: 'Id must be a valid string' })
         .uuid('Id must be a valid UUID'),
 });
 
-type GetUserActionValues = z.infer<typeof schema>;
+type GetUserActionValues = z.infer<typeof actionSchema>;
 
 export async function getUserAction(
     input: GetUserActionValues
@@ -23,7 +23,7 @@ export async function getUserAction(
         Role.USER_ADMINISTRATOR,
     ]);
 
-    const parsedInput = await schema.safeParseAsync(input);
+    const parsedInput = await actionSchema.safeParseAsync(input);
 
     if (!parsedInput.success) {
         return {

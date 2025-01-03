@@ -22,7 +22,7 @@ import { isServerActionSuccess } from '@/lib/action-types';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
-const schema = z.object({
+const formSchema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -50,7 +50,7 @@ const schema = z.object({
         .optional(),
 });
 
-type UpdateUserFormValues = z.infer<typeof schema>;
+type UpdateUserFormValues = z.infer<typeof formSchema>;
 
 type UpdateUserFormProps = {
     user: GetUserResponse;
@@ -60,7 +60,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
     const router = useRouter();
 
     const form = useForm<UpdateUserFormValues>({
-        resolver: zodResolver(schema),
+        resolver: zodResolver(formSchema),
         values: user,
     });
 

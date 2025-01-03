@@ -8,7 +8,7 @@ import { isInPast } from '@/lib/dates';
 import { Role } from '@/lib/session-types';
 import { verifySession } from '@/lib/session';
 
-const schema = z.object({
+const actionSchema = z.object({
     id: z
         .string({ message: 'Id must be a valid string' })
         .uuid('Id must be a valid UUID'),
@@ -38,7 +38,7 @@ const schema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-type UpdateUserActionValues = z.infer<typeof schema>;
+type UpdateUserActionValues = z.infer<typeof actionSchema>;
 
 export async function updateUserAction(
     input: UpdateUserActionValues
@@ -48,7 +48,7 @@ export async function updateUserAction(
         Role.USER_ADMINISTRATOR,
     ]);
 
-    const parsedInput = await schema.safeParseAsync(input);
+    const parsedInput = await actionSchema.safeParseAsync(input);
 
     if (!parsedInput.success) {
         return {

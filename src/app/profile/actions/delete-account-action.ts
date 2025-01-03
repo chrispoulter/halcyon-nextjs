@@ -6,18 +6,18 @@ import { ServerActionResult } from '@/lib/action-types';
 import { apiClient, isApiClientResultSuccess } from '@/lib/api-client';
 import { deleteSession, verifySession } from '@/lib/session';
 
-const schema = z.object({
+const actionSchema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-type DeleteAccountActionValues = z.infer<typeof schema>;
+type DeleteAccountActionValues = z.infer<typeof actionSchema>;
 
 export async function deleteAccountAction(
     input: DeleteAccountActionValues
 ): Promise<ServerActionResult<DeleteAccountResponse>> {
     const { accessToken } = await verifySession();
 
-    const parsedInput = await schema.safeParseAsync(input);
+    const parsedInput = await actionSchema.safeParseAsync(input);
 
     if (!parsedInput.success) {
         return {

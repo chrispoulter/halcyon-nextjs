@@ -5,7 +5,7 @@ import type { ResetPasswordResponse } from '@/app/account/account-types';
 import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
 
-const schema = z.object({
+const actionSchema = z.object({
     token: z
         .string({ message: 'Token must be a valid string' })
         .uuid('Token must be a valid UUID'),
@@ -18,12 +18,12 @@ const schema = z.object({
         .max(50, 'New Password must be no more than 50 characters'),
 });
 
-type ResetPasswordActionValues = z.infer<typeof schema>;
+type ResetPasswordActionValues = z.infer<typeof actionSchema>;
 
 export async function resetPasswordAction(
     input: ResetPasswordActionValues
 ): Promise<ServerActionResult<ResetPasswordResponse>> {
-    const parsedInput = await schema.safeParseAsync(input);
+    const parsedInput = await actionSchema.safeParseAsync(input);
 
     if (!parsedInput.success) {
         return {

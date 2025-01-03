@@ -7,7 +7,7 @@ import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
 import { verifySession } from '@/lib/session';
 
-const schema = z.object({
+const actionSchema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -28,14 +28,14 @@ const schema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-type UpdateProfileActionValues = z.infer<typeof schema>;
+type UpdateProfileActionValues = z.infer<typeof actionSchema>;
 
 export async function updateProfileAction(
     input: UpdateProfileActionValues
 ): Promise<ServerActionResult<UpdateProfileResponse>> {
     const { accessToken } = await verifySession();
 
-    const parsedInput = await schema.safeParseAsync(input);
+    const parsedInput = await actionSchema.safeParseAsync(input);
 
     if (!parsedInput.success) {
         return {

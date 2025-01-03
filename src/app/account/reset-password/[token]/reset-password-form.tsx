@@ -13,7 +13,7 @@ import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 import { isServerActionSuccess } from '@/lib/action-types';
 
-const schema = z
+const formSchema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
@@ -31,7 +31,7 @@ const schema = z
         path: ['confirmNewPassword'],
     });
 
-type ResetPasswordFormValues = z.infer<typeof schema>;
+type ResetPasswordFormValues = z.infer<typeof formSchema>;
 
 type ResetPasswordFormProps = {
     token: string;
@@ -41,7 +41,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     const router = useRouter();
 
     const form = useForm<ResetPasswordFormValues>({
-        resolver: zodResolver(schema),
+        resolver: zodResolver(formSchema),
         defaultValues: {
             emailAddress: '',
             newPassword: '',

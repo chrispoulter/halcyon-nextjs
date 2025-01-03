@@ -17,7 +17,7 @@ import { toast } from '@/hooks/use-toast';
 import { isServerActionSuccess } from '@/lib/action-types';
 import { isInPast } from '@/lib/dates';
 
-const schema = z.object({
+const formSchema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -37,7 +37,7 @@ const schema = z.object({
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
 });
 
-type UpdateProfileFormValues = z.infer<typeof schema>;
+type UpdateProfileFormValues = z.infer<typeof formSchema>;
 
 type UpdateProfileFormProps = {
     profile: GetProfileResponse;
@@ -47,7 +47,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
     const router = useRouter();
 
     const form = useForm<UpdateProfileFormValues>({
-        resolver: zodResolver(schema),
+        resolver: zodResolver(formSchema),
         values: profile,
     });
 

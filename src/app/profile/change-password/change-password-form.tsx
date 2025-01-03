@@ -15,7 +15,7 @@ import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 import { isServerActionSuccess } from '@/lib/action-types';
 
-const schema = z
+const formSchema = z
     .object({
         currentPassword: z
             .string({ message: 'Current Password must be a valid string' })
@@ -33,7 +33,7 @@ const schema = z
         path: ['confirmNewPassword'],
     });
 
-type ChangePasswordFormValues = z.infer<typeof schema>;
+type ChangePasswordFormValues = z.infer<typeof formSchema>;
 
 type ChangePasswordFormProps = {
     profile: GetProfileResponse;
@@ -43,7 +43,7 @@ export function ChangePasswordForm({ profile }: ChangePasswordFormProps) {
     const router = useRouter();
 
     const form = useForm<ChangePasswordFormValues>({
-        resolver: zodResolver(schema),
+        resolver: zodResolver(formSchema),
         defaultValues: {
             currentPassword: '',
             newPassword: '',

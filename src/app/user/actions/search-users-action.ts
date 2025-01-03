@@ -7,7 +7,7 @@ import { apiClient } from '@/lib/api-client';
 import { verifySession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
 
-const schema = z.object({
+const actionSchema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).optional(),
     page: z.coerce
         .number({ message: 'Page must be a valid number' })
@@ -23,7 +23,7 @@ const schema = z.object({
         .optional(),
 });
 
-type SearchUsersActionValues = z.infer<typeof schema>;
+type SearchUsersActionValues = z.infer<typeof actionSchema>;
 
 export async function searchUsersAction(
     input: SearchUsersActionValues
@@ -33,7 +33,7 @@ export async function searchUsersAction(
         Role.USER_ADMINISTRATOR,
     ]);
 
-    const parsedInput = await schema.safeParseAsync(input);
+    const parsedInput = await actionSchema.safeParseAsync(input);
 
     if (!parsedInput.success) {
         return {

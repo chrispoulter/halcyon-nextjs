@@ -8,7 +8,7 @@ import { apiClient, isApiClientResultSuccess } from '@/lib/api-client';
 import { config } from '@/lib/config';
 import { createSession } from '@/lib/session';
 
-const schema = z.object({
+const actionSchema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -17,7 +17,7 @@ const schema = z.object({
         .min(1, 'Password is a required field'),
 });
 
-type LoginActionValues = z.infer<typeof schema>;
+type LoginActionValues = z.infer<typeof actionSchema>;
 
 const securityKey = config.JWT_SECURITY_KEY;
 const encodedSecurityKey = new TextEncoder().encode(securityKey);
@@ -25,7 +25,7 @@ const encodedSecurityKey = new TextEncoder().encode(securityKey);
 export async function loginAction(
     input: LoginActionValues
 ): Promise<ServerActionResult> {
-    const parsedInput = await schema.safeParseAsync(input);
+    const parsedInput = await actionSchema.safeParseAsync(input);
 
     if (!parsedInput.success) {
         return {
