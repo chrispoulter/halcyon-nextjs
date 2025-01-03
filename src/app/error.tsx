@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
@@ -10,10 +11,8 @@ export const metadata: Metadata = {
 
 export default function Error({
     error,
-    reset,
 }: {
     error: Error & { digest?: string };
-    reset: () => void;
 }) {
     useEffect(() => {
         // Log the error to an error reporting service
@@ -30,8 +29,8 @@ export default function Error({
                 Sorry, something went wrong. Please try again later.
             </p>
 
-            <Button onClick={reset} className="w-full min-w-32 sm:w-auto">
-                Try Again
+            <Button asChild className="w-full min-w-32 sm:w-auto">
+                <Link href="/">Home</Link>
             </Button>
         </main>
     );
