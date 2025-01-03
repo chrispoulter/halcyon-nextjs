@@ -1,8 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { createHash } from 'crypto';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +12,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { type SessionPayload, roles } from '@/lib/session-types';
+import { UserAvatar } from './user-avatar';
 
 type UserNavProps = {
     session?: SessionPayload;
@@ -29,21 +28,11 @@ export function UserNav({ session, onLogout }: UserNavProps) {
         );
     }
 
-    const hashedEmail = createHash('sha256')
-        .update(session.emailAddress.trim().toLowerCase())
-        .digest('hex');
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-10 w-10 rounded-full">
-                    <Avatar>
-                        <AvatarImage
-                            src={`https://www.gravatar.com/avatar/${hashedEmail}?d=404`}
-                            alt={`${session.firstName} ${session.lastName}`}
-                        />
-                        <AvatarFallback>{`${session.firstName[0]} ${session.lastName[0]}`}</AvatarFallback>
-                    </Avatar>
+                    <UserAvatar session={session} />
                     <span className="sr-only">Toggle profile menu</span>
                 </Button>
             </DropdownMenuTrigger>
