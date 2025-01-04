@@ -1,18 +1,31 @@
 import Link from 'next/link';
-import { NavbarMenu } from '@/components/navbar-menu';
-import { ProfileDropdown } from '@/components/profile-dropdown';
+import { logoutAction } from '@/app/account/actions/logout-action';
+import { ModeToggle } from '@/components/mode-toggle';
+import { MainNav } from '@/components/main-nav';
+import { UserNav } from '@/components/user-nav';
+import { getSession } from '@/lib/session';
 
-export const Header = () => (
-    <header className="mb-3 bg-zinc-800">
-        <nav className="container mx-auto flex max-w-screen-md flex-wrap items-center justify-between gap-2 p-1">
-            <Link
-                href="/"
-                className="p-2 text-xl font-light leading-normal text-gray-100 focus:outline-none focus:ring-1 focus:ring-cyan-500"
-            >
-                Halcyon
-            </Link>
-            <ProfileDropdown />
-            <NavbarMenu />
-        </nav>
-    </header>
-);
+export async function Header() {
+    const session = await getSession();
+
+    return (
+        <header className="mb-6 border-b">
+            <div className="mx-auto flex max-w-screen-sm items-center gap-2 px-6 py-4 sm:px-0">
+                <div className="flex items-center gap-2">
+                    <Link
+                        href="/"
+                        className="scroll-m-20 text-xl font-semibold tracking-tight"
+                    >
+                        Halcyon
+                    </Link>
+                </div>
+
+                <div className="ml-auto flex items-center gap-2">
+                    <MainNav session={session} />
+                    <ModeToggle />
+                    <UserNav session={session} onLogout={logoutAction} />
+                </div>
+            </div>
+        </header>
+    );
+}

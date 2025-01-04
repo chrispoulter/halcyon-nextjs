@@ -5,29 +5,30 @@ export const monthNames = Array.from({ length: 12 }, (_, i) => {
     return date.toLocaleString('en', { month: 'long' });
 });
 
-export const now = () => {
-    const now = new Date();
-    now.setUTCHours(0, 0, 0, 0);
-    return now;
-};
-
-export const toLocaleString = (value: string) =>
-    new Date(`${value}T00:00:00.000Z`).toLocaleString('en', {
+export function toLocaleString(value: string) {
+    return new Date(`${value}T00:00:00.000Z`).toLocaleString('en', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
     });
+}
 
-export const toDate = (value: string) => {
+function toDate(value: string) {
     const isoString = `${value}T00:00:00.000Z`;
     const date = new Date(isoString);
 
     return !isNaN(date.getTime()) && isoString === date.toISOString()
         ? date
         : undefined;
-};
+}
 
-export const isInPast = (value: string) => {
+function startOfUtcDay() {
+    const now = new Date();
+    now.setUTCHours(0, 0, 0, 0);
+    return now;
+}
+
+export function isInPast(value: string) {
     if (!value) {
         return false;
     }
@@ -38,5 +39,5 @@ export const isInPast = (value: string) => {
         return false;
     }
 
-    return date < now();
-};
+    return date < startOfUtcDay();
+}

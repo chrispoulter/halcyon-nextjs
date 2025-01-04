@@ -1,16 +1,24 @@
-import { TextLink } from '@/components/text-link';
-import { currentYear } from '@/lib/dates';
 import { config } from '@/lib/config';
+import { currentYear } from '@/lib/dates';
 
-export const Footer = () => (
-    <footer className="container mx-auto mb-3 mt-8 flex max-w-screen-md justify-between border-t p-3 text-sm text-gray-400">
-        <p>
-            &copy;{' '}
-            <TextLink href="https://www.chrispoulter.com">
-                Chris Poulter
-            </TextLink>{' '}
-            {currentYear}
-        </p>
-        <p>v{config.VERSION}</p>
-    </footer>
-);
+export function Footer() {
+    return (
+        <footer className="mt-6 border-t">
+            <div className="mx-auto flex max-w-screen-sm flex-col justify-between gap-2 p-6 text-center sm:flex-row sm:text-left">
+                <div className="text-sm font-medium leading-none">
+                    &copy;{' '}
+                    <a
+                        href="http://www.chrispoulter.com"
+                        className="font-medium text-primary underline underline-offset-4"
+                    >
+                        Chris Poulter
+                    </a>{' '}
+                    {currentYear}
+                </div>
+                <div className="text-sm font-medium leading-none">
+                    v{config.VERSION}
+                </div>
+            </div>
+        </footer>
+    );
+}

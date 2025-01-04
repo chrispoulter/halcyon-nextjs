@@ -1,52 +1,61 @@
-import { Button } from '@/components/button';
-import { ButtonGroup } from '@/components/button-group';
-import { ButtonGroupSkeleton } from '@/components/button-group-skeleton';
+'use client';
+
+import { usePathname, useSearchParams } from 'next/navigation';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination';
 
 type PagerProps = {
-    isLoading?: boolean;
-    isFetching?: boolean;
-    hasNextPage?: boolean;
-    hasPreviousPage?: boolean;
-    onNextPage: () => void;
-    onPreviousPage: () => void;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    page?: number;
 };
 
-export const Pager = ({
-    isLoading,
-    isFetching,
-    hasNextPage,
-    hasPreviousPage,
-    onNextPage,
-    onPreviousPage
-}: PagerProps) => {
-    if (isLoading) {
-        return <ButtonGroupSkeleton />;
-    }
+export function Pager({ hasPreviousPage, hasNextPage, page = 1 }: PagerProps) {
+    const pathname = usePathname();
 
-    if (!hasNextPage && !hasPreviousPage) {
+    const searchParams = useSearchParams();
+
+    const query = Object.fromEntries(searchParams.entries());
+
+    if (!hasPreviousPage && !hasNextPage) {
         return null;
     }
 
     return (
-        <ButtonGroup>
-            {hasPreviousPage && (
-                <Button
-                    variant="secondary"
-                    disabled={isFetching}
-                    onClick={onPreviousPage}
-                >
-                    Previous
-                </Button>
-            )}
-            {hasNextPage && (
-                <Button
-                    variant="secondary"
-                    disabled={isFetching}
-                    onClick={onNextPage}
-                >
-                    Next
-                </Button>
-            )}
-        </ButtonGroup>
+        <Pagination>
+            <PaginationContent>
+                {hasPreviousPage && (
+                    <PaginationItem>
+                        <PaginationPrevious
+                            href={{
+                                pathname,
+                                query: {
+                                    ...query,
+                                    page: page - 1,
+                                },
+                            }}
+                        />
+                    </PaginationItem>
+                )}
+                {hasNextPage && (
+                    <PaginationItem>
+                        <PaginationNext
+                            href={{
+                                pathname,
+                                query: {
+                                    ...query,
+                                    page: page + 1,
+                                },
+                            }}
+                        />
+                    </PaginationItem>
+                )}
+            </PaginationContent>
+        </Pagination>
     );
-};
+}

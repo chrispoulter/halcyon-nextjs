@@ -11,13 +11,11 @@ services:
         command: npm run dev
         environment:
             WATCHPACK_POLLING: true
-            NEXT_SERVER_API_URL: http://host.docker.internal:5257
-            NEXT_PUBLIC_API_URL: http://localhost:5257
+            API_URL: http://host.docker.internal:5257
             JWT_SECURITY_KEY: super_secret_key_that_should_be_changed
             JWT_ISSUER: HalcyonApi
             JWT_AUDIENCE: HalcyonClient
-            AUTH_URL: http://localhost:3000
-            AUTH_SECRET: super_secret_key_that_should_be_changed
+            SESSION_SECRET: super_secret_key_that_should_be_changed
         ports:
             - 3000:3000
         volumes:
