@@ -8,14 +8,17 @@ import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
-const actionSchema = z.object({
-    emailAddress: z
-        .string({ message: 'Email Address must be a valid string' })
-        .email('Email Address must be a valid email'),
-    password: z
-        .string({ message: 'Password must be a valid string' })
-        .min(1, 'Password is a required field'),
-});
+const actionSchema = z.object(
+    {
+        emailAddress: z
+            .string({ message: 'Email Address must be a valid string' })
+            .email('Email Address must be a valid email'),
+        password: z
+            .string({ message: 'Password must be a valid string' })
+            .min(1, 'Password is a required field'),
+    },
+    { message: 'Action Input is required' }
+);
 
 const securityKey = config.JWT_SECURITY_KEY;
 const encodedKey = new TextEncoder().encode(securityKey);

@@ -7,12 +7,17 @@ import { actionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 import { verifySession } from '@/lib/session';
 
-const actionSchema = z.object({
-    id: z
-        .string({ message: 'Id must be a valid string' })
-        .uuid('Id must be a valid UUID'),
-    version: z.number({ message: 'Version must be a valid number' }).optional(),
-});
+const actionSchema = z.object(
+    {
+        id: z
+            .string({ message: 'Id must be a valid string' })
+            .uuid('Id must be a valid UUID'),
+        version: z
+            .number({ message: 'Version must be a valid number' })
+            .optional(),
+    },
+    { message: 'Action Input is required' }
+);
 
 export const lockUserAction = actionClient
     .schema(actionSchema)

@@ -7,21 +7,26 @@ import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
 
-const actionSchema = z.object({
-    search: z.string({ message: 'Search must be a valid string' }).optional(),
-    page: z.coerce
-        .number({ message: 'Page must be a valid number' })
-        .min(1, 'Page must be greater than zero')
-        .optional(),
-    size: z.coerce
-        .number({ message: 'Size must be a valid number' })
-        .min(1, 'Size must be greater than zero')
-        .max(50, 'Size must be less than 50')
-        .optional(),
-    sort: z
-        .nativeEnum(UserSort, { message: 'Sort must be a valid user sort' })
-        .optional(),
-});
+const actionSchema = z.object(
+    {
+        search: z
+            .string({ message: 'Search must be a valid string' })
+            .optional(),
+        page: z.coerce
+            .number({ message: 'Page must be a valid number' })
+            .min(1, 'Page must be greater than zero')
+            .optional(),
+        size: z.coerce
+            .number({ message: 'Size must be a valid number' })
+            .min(1, 'Size must be greater than zero')
+            .max(50, 'Size must be less than 50')
+            .optional(),
+        sort: z
+            .nativeEnum(UserSort, { message: 'Sort must be a valid user sort' })
+            .optional(),
+    },
+    { message: 'Action Input is required' }
+);
 
 export const searchUsersAction = actionClient
     .schema(actionSchema)

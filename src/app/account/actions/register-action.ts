@@ -7,32 +7,37 @@ import { isInPast } from '@/lib/dates';
 import { actionClient } from '@/lib/safe-action';
 
 const actionSchema = z
-    .object({
-        emailAddress: z
-            .string({ message: 'Email Address must be a valid string' })
-            .email('Email Address must be a valid email'),
-        password: z
-            .string({ message: 'Password must be a valid string' })
-            .min(8, 'Password must be at least 8 characters')
-            .max(50, 'Password must be no more than 50 characters'),
-        confirmPassword: z
-            .string({ message: 'Confirm Password must be a valid string' })
-            .min(1, 'Confirm Password is a required field'),
-        firstName: z
-            .string({ message: 'First Name must be a valid string' })
-            .min(1, 'First Name is a required field')
-            .max(50, 'First Name must be no more than 50 characters'),
-        lastName: z
-            .string({ message: 'Last Name must be a valid string' })
-            .min(1, 'Last Name is a required field')
-            .max(50, 'Last Name must be no more than 50 characters'),
-        dateOfBirth: z
-            .string({
-                message: 'Date of Birth must be a valid string',
-            })
-            .date('Date Of Birth must be a valid date')
-            .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
-    })
+    .object(
+        {
+            emailAddress: z
+                .string({ message: 'Email Address must be a valid string' })
+                .email('Email Address must be a valid email'),
+            password: z
+                .string({ message: 'Password must be a valid string' })
+                .min(8, 'Password must be at least 8 characters')
+                .max(50, 'Password must be no more than 50 characters'),
+            confirmPassword: z
+                .string({ message: 'Confirm Password must be a valid string' })
+                .min(1, 'Confirm Password is a required field'),
+            firstName: z
+                .string({ message: 'First Name must be a valid string' })
+                .min(1, 'First Name is a required field')
+                .max(50, 'First Name must be no more than 50 characters'),
+            lastName: z
+                .string({ message: 'Last Name must be a valid string' })
+                .min(1, 'Last Name is a required field')
+                .max(50, 'Last Name must be no more than 50 characters'),
+            dateOfBirth: z
+                .string({
+                    message: 'Date of Birth must be a valid string',
+                })
+                .date('Date Of Birth must be a valid date')
+                .refine(isInPast, {
+                    message: 'Date Of Birth must be in the past',
+                }),
+        },
+        { message: 'Action Input is required' }
+    )
     .refine((data) => data.password === data.confirmPassword, {
         message: 'Passwords do not match',
         path: ['confirmPassword'],
