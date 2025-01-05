@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { logoutAction } from '@/app/account/actions/logout-action';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,16 +17,19 @@ import { type SessionPayload, roles } from '@/lib/session-types';
 
 type UserNavProps = {
     session?: SessionPayload;
-    onLogout: () => void;
 };
 
-export function UserNav({ session, onLogout }: UserNavProps) {
+export function UserNav({ session }: UserNavProps) {
     if (!session) {
         return (
             <Button asChild variant="secondary">
                 <Link href="/account/login">Login</Link>
             </Button>
         );
+    }
+
+    function onLogout() {
+        logoutAction();
     }
 
     return (

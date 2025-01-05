@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { logoutAction } from '@/app/account/actions/logout-action';
 import { ModeToggle } from '@/components/mode-toggle';
 import { MainNav } from '@/components/main-nav';
 import { UserNav } from '@/components/user-nav';
@@ -23,7 +22,7 @@ export async function Header() {
                 <div className="ml-auto flex items-center gap-2">
                     <MainNav session={session} />
                     <ModeToggle />
-                    <UserNav session={session} onLogout={logoutAction} />
+                    <UserNav session={session} />
                 </div>
             </div>
         </header>
