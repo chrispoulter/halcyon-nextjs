@@ -50,6 +50,4 @@ export const loginAction = actionClient
                     ? [payload.roles]
                     : payload.roles || [],
         });
-
-        return {};
     });
