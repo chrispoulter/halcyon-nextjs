@@ -7,14 +7,11 @@ import { actionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 import { verifySession } from '@/lib/session';
 
-const actionSchema = z.object(
-    {
-        id: z
-            .string({ message: 'Id must be a valid string' })
-            .uuid('Id must be a valid UUID'),
-    },
-    { message: 'Action Input is required' }
-);
+const actionSchema = z.object({
+    id: z
+        .string({ message: 'Id must be a valid string' })
+        .uuid('Id must be a valid UUID'),
+});
 
 export const getUserAction = actionClient
     .schema(actionSchema)

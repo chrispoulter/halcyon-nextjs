@@ -6,21 +6,16 @@ import { apiClient } from '@/lib/api-client';
 import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 
-const actionSchema = z.object(
-    {
-        currentPassword: z
-            .string({ message: 'Current Password must be a valid string' })
-            .min(1, 'Current Password is a required field'),
-        newPassword: z
-            .string({ message: 'New Password must be a valid string' })
-            .min(8, 'New Password must be at least 8 characters')
-            .max(50, 'New Password must be no more than 50 characters'),
-        version: z
-            .number({ message: 'Version must be a valid number' })
-            .optional(),
-    },
-    { message: 'Action Input is required' }
-);
+const actionSchema = z.object({
+    currentPassword: z
+        .string({ message: 'Current Password must be a valid string' })
+        .min(1, 'Current Password is a required field'),
+    newPassword: z
+        .string({ message: 'New Password must be a valid string' })
+        .min(8, 'New Password must be at least 8 characters')
+        .max(50, 'New Password must be no more than 50 characters'),
+    version: z.number({ message: 'Version must be a valid number' }).optional(),
+});
 
 export const changePasswordAction = actionClient
     .schema(actionSchema)

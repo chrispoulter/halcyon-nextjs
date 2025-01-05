@@ -6,14 +6,9 @@ import { apiClient } from '@/lib/api-client';
 import { actionClient } from '@/lib/safe-action';
 import { deleteSession, verifySession } from '@/lib/session';
 
-const actionSchema = z.object(
-    {
-        version: z
-            .number({ message: 'Version must be a valid number' })
-            .optional(),
-    },
-    { message: 'Action Input is required' }
-);
+const actionSchema = z.object({
+    version: z.number({ message: 'Version must be a valid number' }).optional(),
+});
 
 export const deleteAccountAction = actionClient
     .schema(actionSchema)
