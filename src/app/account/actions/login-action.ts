@@ -20,7 +20,7 @@ const actionSchema = z.object({
 type LoginActionValues = z.infer<typeof actionSchema>;
 
 const securityKey = config.JWT_SECURITY_KEY;
-const encodedSecurityKey = new TextEncoder().encode(securityKey);
+const encodedKey = new TextEncoder().encode(securityKey);
 
 export async function loginAction(
     input: LoginActionValues
@@ -44,21 +44,14 @@ export async function loginAction(
 
     const { accessToken } = result.data;
 
-    const { payload } = await jwtVerify<TokenPayload>(
-        accessToken,
-        encodedSecurityKey,
-        {
-            audience: config.JWT_AUDIENCE,
-            issuer: config.JWT_ISSUER,
-        }
-    );
+    const { payload } = await jwtVerify<TokenPayload>(accessToken, encodedKey, {
+        audience: config.JWT_AUDIENCE,
+        issuer: config.JWT_ISSUER,
+    });
 
     await createSession({
+        ...payload,
         accessToken,
-        id: payload.sub,
-        emailAddress: payload.email,
-        firstName: payload.given_name,
-        lastName: payload.family_name,
         roles:
             typeof payload.roles === 'string'
                 ? [payload.roles]

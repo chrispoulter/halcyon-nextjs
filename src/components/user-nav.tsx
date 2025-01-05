@@ -40,10 +40,10 @@ export function UserNav({ session, onLogout }: UserNavProps) {
                 <DropdownMenuLabel className="space-y-2">
                     <div className="space-y-0.5">
                         <div className="truncate text-sm font-medium">
-                            {session.firstName} {session.lastName}
+                            {session.given_name} {session.family_name}
                         </div>
                         <div className="truncate text-sm text-muted-foreground">
-                            {session.emailAddress}
+                            {session.email}
                         </div>
                     </div>
                     <div className="flex flex-col gap-2">

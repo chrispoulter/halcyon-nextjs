@@ -6,6 +6,7 @@ export type TokenPayload = {
     given_name: string;
     family_name: string;
     roles?: Role | Role[];
+    exp: number;
 };
 
 export type LoginResponse = {

@@ -16,9 +16,10 @@ export const roles = {
 
 export type SessionPayload = {
     accessToken: string;
-    id: string;
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
+    sub: string;
+    email: string;
+    given_name: string;
+    family_name: string;
     roles?: Role[];
+    exp: number;
 };
