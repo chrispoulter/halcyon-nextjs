@@ -1,7 +1,7 @@
 'use client';
 
-import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import { lockUserAction } from '@/app/user/actions/lock-user-action';
 import { GetUserResponse } from '@/app/user/user-types';
@@ -19,7 +19,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-import { isServerActionSuccess } from '@/lib/action-types';
 
 type LockUserButtonProps = {
     user: GetUserResponse;
@@ -29,31 +28,28 @@ type LockUserButtonProps = {
 export function LockUserButton({ user, className }: LockUserButtonProps) {
     const router = useRouter();
 
-    const [isPending, startTransition] = useTransition();
-
-    async function onLock() {
-        startTransition(async () => {
-            const result = await lockUserAction({
-                id: user.id,
-                version: user.version,
-            });
-
-            if (!isServerActionSuccess(result)) {
-                toast({
-                    variant: 'destructive',
-                    title: 'Error',
-                    description: <ServerActionErrorMessage result={result} />,
-                });
-
-                return;
-            }
-
+    const { execute, isPending } = useAction(lockUserAction, {
+        onSuccess: () => {
             toast({
                 title: 'Success',
                 description: 'User successfully locked.',
             });
 
             router.refresh();
+        },
+        onError: ({ error }) => {
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: <ServerActionErrorMessage result={error} />,
+            });
+        },
+    });
+
+    function onLock() {
+        execute({
+            id: user.id,
+            version: user.version,
         });
     }
 

@@ -2,9 +2,9 @@
 
 import { z } from 'zod';
 import type { UpdateUserResponse } from '@/app/user/user-types';
-import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
+import { actionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 import { verifySession } from '@/lib/session';
 
@@ -38,27 +38,17 @@ const actionSchema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-type UpdateUserActionValues = z.infer<typeof actionSchema>;
+export const updateUserAction = actionClient
+    .schema(actionSchema)
+    .action(async ({ parsedInput }) => {
+        const { accessToken } = await verifySession([
+            Role.SYSTEM_ADMINISTRATOR,
+            Role.USER_ADMINISTRATOR,
+        ]);
 
-export async function updateUserAction(
-    input: UpdateUserActionValues
-): Promise<ServerActionResult<UpdateUserResponse>> {
-    const { accessToken } = await verifySession([
-        Role.SYSTEM_ADMINISTRATOR,
-        Role.USER_ADMINISTRATOR,
-    ]);
+        const { id, ...rest } = parsedInput;
 
-    const parsedInput = await actionSchema.safeParseAsync(input);
-
-    if (!parsedInput.success) {
-        return {
-            validationErrors: parsedInput.error.flatten(),
-        };
-    }
-
-    const { id, ...rest } = parsedInput.data;
-
-    return await apiClient.put<UpdateUserResponse>(`/user/${id}`, rest, {
-        Authorization: `Bearer ${accessToken}`,
+        return await apiClient.put<UpdateUserResponse>(`/user/${id}`, rest, {
+            Authorization: `Bearer ${accessToken}`,
+        });
     });
-}

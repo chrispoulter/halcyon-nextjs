@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -11,7 +12,6 @@ import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-import { isServerActionSuccess } from '@/lib/action-types';
 
 const formSchema = z.object({
     emailAddress: z
@@ -35,23 +35,22 @@ export function LoginForm() {
         },
     });
 
-    async function onSubmit(data: LoginFormValues) {
-        const result = await loginAction(data);
-
-        if (!isServerActionSuccess(result)) {
+    const { execute, isPending } = useAction(loginAction, {
+        onSuccess: () => {
+            router.push('/');
+        },
+        onError: ({ error }) => {
             toast({
                 variant: 'destructive',
                 title: 'Error',
-                description: <ServerActionErrorMessage result={result} />,
+                description: <ServerActionErrorMessage result={error} />,
             });
+        },
+    });
 
-            return;
-        }
-
-        router.push('/');
+    function onSubmit(data: LoginFormValues) {
+        execute(data);
     }
-
-    const { isSubmitting } = form.formState;
 
     return (
         <Form {...form}>
@@ -67,7 +66,7 @@ export function LoginForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isSubmitting}
+                    disabled={isPending}
                 />
 
                 <TextFormField<LoginFormValues>
@@ -77,16 +76,16 @@ export function LoginForm() {
                     maxLength={50}
                     autoComplete="current-password"
                     required
-                    disabled={isSubmitting}
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isPending}
                         className="min-w-32"
                     >
-                        {isSubmitting ? (
+                        {isPending ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Submit'

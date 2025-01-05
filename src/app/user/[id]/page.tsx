@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
 import { getUserAction } from '@/app/user/actions/get-user-action';
 import { UpdateUserForm } from '@/app/user/[id]/update-user-form';
-import { ServerActionError } from '@/components/server-action-error';
-import { isServerActionSuccess } from '@/lib/action-types';
+import {
+    isServerActionSuccess,
+    ServerActionError,
+} from '@/components/server-action-error';
 
 export const metadata: Metadata = {
     title: 'Update User',

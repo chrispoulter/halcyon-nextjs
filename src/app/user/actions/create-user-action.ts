@@ -2,9 +2,9 @@
 
 import { z } from 'zod';
 import { CreateUserResponse } from '@/app/user/user-types';
-import { ServerActionResult } from '@/lib/action-types';
 import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
+import { actionClient } from '@/lib/safe-action';
 import { verifySession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
 
@@ -39,25 +39,15 @@ const actionSchema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-type CreateUserActionValues = z.infer<typeof actionSchema>;
+export const createUserAction = actionClient
+    .schema(actionSchema)
+    .action(async ({ parsedInput }) => {
+        const { accessToken } = await verifySession([
+            Role.SYSTEM_ADMINISTRATOR,
+            Role.USER_ADMINISTRATOR,
+        ]);
 
-export async function createUserAction(
-    input: CreateUserActionValues
-): Promise<ServerActionResult<CreateUserResponse>> {
-    const { accessToken } = await verifySession([
-        Role.SYSTEM_ADMINISTRATOR,
-        Role.USER_ADMINISTRATOR,
-    ]);
-
-    const parsedInput = await actionSchema.safeParseAsync(input);
-
-    if (!parsedInput.success) {
-        return {
-            validationErrors: parsedInput.error.flatten(),
-        };
-    }
-
-    return await apiClient.post<CreateUserResponse>('/user', parsedInput.data, {
-        Authorization: `Bearer ${accessToken}`,
+        return await apiClient.post<CreateUserResponse>('/user', parsedInput, {
+            Authorization: `Bearer ${accessToken}`,
+        });
     });
-}

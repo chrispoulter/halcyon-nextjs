@@ -1,7 +1,7 @@
 'use client';
 
-import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 import { Loader2 } from 'lucide-react';
 import { deleteUserAction } from '@/app/user/actions/delete-user-action';
 import { GetUserResponse } from '@/app/user/user-types';
@@ -19,7 +19,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-import { isServerActionSuccess } from '@/lib/action-types';
 
 type DeleteUserButtonProps = {
     user: GetUserResponse;
@@ -29,31 +28,28 @@ type DeleteUserButtonProps = {
 export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
     const router = useRouter();
 
-    const [isPending, startTransition] = useTransition();
-
-    async function onDelete() {
-        startTransition(async () => {
-            const result = await deleteUserAction({
-                id: user.id,
-                version: user.version,
-            });
-
-            if (!isServerActionSuccess(result)) {
-                toast({
-                    variant: 'destructive',
-                    title: 'Error',
-                    description: <ServerActionErrorMessage result={result} />,
-                });
-
-                return;
-            }
-
+    const { execute, isPending } = useAction(deleteUserAction, {
+        onSuccess: () => {
             toast({
                 title: 'Success',
                 description: 'User successfully deleted.',
             });
 
             router.push('/user');
+        },
+        onError: ({ error }) => {
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: <ServerActionErrorMessage result={error} />,
+            });
+        },
+    });
+
+    function onDelete() {
+        execute({
+            id: user.id,
+            version: user.version,
         });
     }
 
