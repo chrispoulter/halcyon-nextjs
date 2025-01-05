@@ -21,4 +21,5 @@ export type SessionPayload = {
     firstName: string;
     lastName: string;
     roles?: Role[];
+    expiresAt: number;
 };
