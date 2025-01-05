@@ -50,16 +50,12 @@ export async function loginAction(
     });
 
     await createSession({
+        ...payload,
         accessToken,
-        id: payload.sub,
-        emailAddress: payload.email,
-        firstName: payload.given_name,
-        lastName: payload.family_name,
         roles:
             typeof payload.roles === 'string'
                 ? [payload.roles]
                 : payload.roles || [],
-        expiresAt: payload.exp,
     });
 
     return {};
