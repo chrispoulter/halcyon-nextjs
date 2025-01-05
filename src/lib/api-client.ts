@@ -1,22 +1,11 @@
 import { forbidden, notFound, unauthorized } from 'next/navigation';
 import { config } from '@/lib/config';
 
-type ApliClientResult<Data> = { data?: Data; error?: string };
-
-export function isApiClientResultSuccess<Data>(
-    result?: ApliClientResult<Data>
-): result is {
-    data: Data;
-} {
-    if (!result) {
-        return false;
+export class ApiClientError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'ApiClientError';
     }
-
-    if (result.error) {
-        return false;
-    }
-
-    return true;
 }
 
 class ApiClient {
@@ -33,7 +22,7 @@ class ApiClient {
         body?: Record<string, unknown>,
         headers: Record<string, string> = {},
         doNotThrowError = false
-    ): Promise<ApliClientResult<Data>> {
+    ): Promise<Data> {
         const url = new URL(path, this.baseUrl);
 
         if (params) {
@@ -73,27 +62,27 @@ class ApiClient {
                 default:
                     if (contentType.includes('application/problem+json')) {
                         const problem = await response.json();
-                        return { error: problem.title };
+                        throw new ApiClientError(problem.title);
                     }
 
-                    return {
-                        error: `HTTP ${response.status} ${response.statusText}`,
-                    };
+                    throw new ApiClientError(
+                        `HTTP ${response.status} ${response.statusText}`
+                    );
             }
         }
 
         if (contentType.includes('application/json')) {
-            return { data: await response.json() };
+            return await response.json();
         }
 
-        return { data: (await response.text()) as Data };
+        return (await response.text()) as Data;
     }
 
     get<Data>(
         path: string,
         params: Record<string, string | number | boolean> = {},
         headers: Record<string, string> = {}
-    ): Promise<ApliClientResult<Data>> {
+    ): Promise<Data> {
         return this.fetch<Data>(path, 'GET', params, undefined, headers, true);
     }
 
@@ -101,7 +90,7 @@ class ApiClient {
         path: string,
         body: Record<string, unknown>,
         headers: Record<string, string> = {}
-    ): Promise<ApliClientResult<Data>> {
+    ): Promise<Data> {
         return this.fetch<Data>(path, 'POST', undefined, body, headers);
     }
 
@@ -109,7 +98,7 @@ class ApiClient {
         path: string,
         body: Record<string, unknown>,
         headers: Record<string, string> = {}
-    ): Promise<ApliClientResult<Data>> {
+    ): Promise<Data> {
         return this.fetch<Data>(path, 'PUT', undefined, body, headers);
     }
 
@@ -117,7 +106,7 @@ class ApiClient {
         path: string,
         body: Record<string, unknown>,
         headers: Record<string, string> = {}
-    ): Promise<ApliClientResult<Data>> {
+    ): Promise<Data> {
         return this.fetch<Data>(path, 'DELETE', undefined, body, headers);
     }
 }

@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import type { DeleteAccountResponse } from '@/app/profile/profile-types';
-import { apiClient, isApiClientResultSuccess } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { actionClient } from '@/lib/safe-action';
 import { deleteSession, verifySession } from '@/lib/session';
 
@@ -23,7 +23,7 @@ export const deleteAccountAction = actionClient
             }
         );
 
-        if (isApiClientResultSuccess(result)) {
-            await deleteSession();
-        }
+        await deleteSession();
+
+        return result;
     });

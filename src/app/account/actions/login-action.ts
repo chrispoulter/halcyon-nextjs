@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { jwtVerify } from 'jose';
 import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
-import { apiClient, isApiClientResultSuccess } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
@@ -28,11 +28,7 @@ export const loginAction = actionClient
             parsedInput
         );
 
-        if (!isApiClientResultSuccess(result)) {
-            return { error: result.error };
-        }
-
-        const { accessToken } = result.data;
+        const { accessToken } = result;
 
         const { payload } = await jwtVerify<TokenPayload>(
             accessToken,

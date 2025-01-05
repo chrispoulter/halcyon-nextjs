@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useAction } from 'next-safe-action/hooks';
+import { logoutAction } from '@/app/account/actions/logout-action';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,15 +13,30 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { UserAvatar } from '@/components/user-avatar';
+import { toast } from '@/hooks/use-toast';
 import { type SessionPayload, roles } from '@/lib/session-types';
-import { UserAvatar } from './user-avatar';
 
 type UserNavProps = {
     session?: SessionPayload;
-    onLogout: () => void;
 };
 
-export function UserNav({ session, onLogout }: UserNavProps) {
+export function UserNav({ session }: UserNavProps) {
+    const { execute, isPending } = useAction(logoutAction, {
+        onError: ({ error }) => {
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: <ServerActionErrorMessage result={error} />,
+            });
+        },
+    });
+
+    function onLogout() {
+        execute();
+    }
+
     if (!session) {
         return (
             <Button asChild variant="secondary">
@@ -67,7 +84,9 @@ export function UserNav({ session, onLogout }: UserNavProps) {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={onLogout}>Log out</DropdownMenuItem>
+                <DropdownMenuItem onClick={onLogout} disabled={isPending}>
+                    Log out
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );
