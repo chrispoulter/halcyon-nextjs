@@ -11,8 +11,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { UserAvatar } from '@/components/user-avatar';
 import { type SessionPayload, roles } from '@/lib/session-types';
-import { UserAvatar } from './user-avatar';
 
 type UserNavProps = {
     session?: SessionPayload;
