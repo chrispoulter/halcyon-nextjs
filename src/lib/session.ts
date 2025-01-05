@@ -2,10 +2,16 @@ import 'server-only';
 
 import { cache } from 'react';
 import { cookies } from 'next/headers';
-import { forbidden, redirect } from 'next/navigation';
 import { SignJWT, jwtVerify } from 'jose';
 import { config } from '@/lib/config';
 import type { Role, SessionPayload } from '@/lib/session-types';
+
+export class SessionError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'SessionError';
+    }
+}
 
 const sessionSecret = config.SESSION_SECRET;
 const encodedSecret = new TextEncoder().encode(sessionSecret);
@@ -63,7 +69,7 @@ export const verifySession = cache(async (roles?: Role[]) => {
     const session = await getSession();
 
     if (!session) {
-        redirect('/account/login');
+        throw new SessionError('Unauthorized');
     }
 
     if (!roles) {
@@ -71,7 +77,7 @@ export const verifySession = cache(async (roles?: Role[]) => {
     }
 
     if (!roles.some((value) => session.roles?.includes(value))) {
-        forbidden();
+        throw new SessionError('Forbidden');
     }
 
     return session;

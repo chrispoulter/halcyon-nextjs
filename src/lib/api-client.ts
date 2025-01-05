@@ -1,4 +1,3 @@
-import { forbidden, notFound, unauthorized } from 'next/navigation';
 import { config } from '@/lib/config';
 
 export class ApiClientError extends Error {
@@ -20,8 +19,7 @@ class ApiClient {
         method: string,
         params?: Record<string, string | number | boolean>,
         body?: Record<string, unknown>,
-        headers: Record<string, string> = {},
-        doNotThrowError = false
+        headers: Record<string, string> = {}
     ): Promise<Data> {
         const url = new URL(path, this.baseUrl);
 
@@ -43,32 +41,14 @@ class ApiClient {
         const contentType = response.headers.get('content-type') || '';
 
         if (!response.ok) {
-            switch (response.status) {
-                case 401:
-                    if (doNotThrowError) {
-                        unauthorized();
-                    }
-
-                case 403:
-                    if (doNotThrowError) {
-                        forbidden();
-                    }
-
-                case 404:
-                    if (doNotThrowError) {
-                        notFound();
-                    }
-
-                default:
-                    if (contentType.includes('application/problem+json')) {
-                        const problem = await response.json();
-                        throw new ApiClientError(problem.title);
-                    }
-
-                    throw new ApiClientError(
-                        `HTTP ${response.status} ${response.statusText}`
-                    );
+            if (contentType.includes('application/problem+json')) {
+                const problem = await response.json();
+                throw new ApiClientError(problem.title);
             }
+
+            throw new ApiClientError(
+                `HTTP ${response.status} ${response.statusText}`
+            );
         }
 
         if (contentType.includes('application/json')) {
@@ -83,7 +63,7 @@ class ApiClient {
         params: Record<string, string | number | boolean> = {},
         headers: Record<string, string> = {}
     ): Promise<Data> {
-        return this.fetch<Data>(path, 'GET', params, undefined, headers, true);
+        return this.fetch<Data>(path, 'GET', params, undefined, headers);
     }
 
     post<Data>(
