@@ -4,10 +4,9 @@ import { z } from 'zod';
 import type { UpdateProfileResponse } from '@/app/profile/profile-types';
 import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
-import { actionClient } from '@/lib/safe-action';
-import { verifySession } from '@/lib/session';
+import { authActionClient } from '@/lib/safe-action';
 
-const actionSchema = z.object({
+const schema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -28,11 +27,9 @@ const actionSchema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-export const updateProfileAction = actionClient
-    .schema(actionSchema)
-    .action(async ({ parsedInput }) => {
-        const { accessToken } = await verifySession();
-
+export const updateProfileAction = authActionClient()
+    .schema(schema)
+    .action(async ({ parsedInput, ctx: { accessToken } }) => {
         return await apiClient.put<UpdateProfileResponse>(
             '/profile',
             parsedInput,

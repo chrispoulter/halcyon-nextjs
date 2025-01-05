@@ -3,11 +3,10 @@
 import { z } from 'zod';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
 import { apiClient } from '@/lib/api-client';
-import { actionClient } from '@/lib/safe-action';
-import { verifySession } from '@/lib/session';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
-const actionSchema = z.object({
+const schema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).optional(),
     page: z.coerce
         .number({ message: 'Page must be a valid number' })
@@ -23,14 +22,11 @@ const actionSchema = z.object({
         .optional(),
 });
 
-export const searchUsersAction = actionClient
-    .schema(actionSchema)
-    .action(async ({ parsedInput }) => {
-        const { accessToken } = await verifySession([
-            Role.SYSTEM_ADMINISTRATOR,
-            Role.USER_ADMINISTRATOR,
-        ]);
+const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
+export const searchUsersAction = authActionClient(roles)
+    .schema(schema)
+    .action(async ({ parsedInput, ctx: { accessToken } }) => {
         return await apiClient.get<SearchUsersResponse>('/user', parsedInput, {
             Authorization: `Bearer ${accessToken}`,
         });

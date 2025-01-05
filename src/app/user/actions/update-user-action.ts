@@ -4,11 +4,10 @@ import { z } from 'zod';
 import type { UpdateUserResponse } from '@/app/user/user-types';
 import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
-import { actionClient } from '@/lib/safe-action';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
-import { verifySession } from '@/lib/session';
 
-const actionSchema = z.object({
+const schema = z.object({
     id: z
         .string({ message: 'Id must be a valid string' })
         .uuid('Id must be a valid UUID'),
@@ -40,14 +39,11 @@ const actionSchema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-export const updateUserAction = actionClient
-    .schema(actionSchema)
-    .action(async ({ parsedInput }) => {
-        const { accessToken } = await verifySession([
-            Role.SYSTEM_ADMINISTRATOR,
-            Role.USER_ADMINISTRATOR,
-        ]);
+const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
+export const updateUserAction = authActionClient(roles)
+    .schema(schema)
+    .action(async ({ parsedInput, ctx: { accessToken } }) => {
         const { id, ...rest } = parsedInput;
 
         return await apiClient.put<UpdateUserResponse>(`/user/${id}`, rest, {

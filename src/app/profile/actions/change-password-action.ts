@@ -3,10 +3,9 @@
 import { z } from 'zod';
 import type { ChangePasswordResponse } from '@/app/profile/profile-types';
 import { apiClient } from '@/lib/api-client';
-import { actionClient } from '@/lib/safe-action';
-import { verifySession } from '@/lib/session';
+import { authActionClient } from '@/lib/safe-action';
 
-const actionSchema = z.object({
+const schema = z.object({
     currentPassword: z
         .string({ message: 'Current Password must be a valid string' })
         .min(1, 'Current Password is a required field'),
@@ -17,11 +16,9 @@ const actionSchema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-export const changePasswordAction = actionClient
-    .schema(actionSchema)
-    .action(async ({ parsedInput }) => {
-        const { accessToken } = await verifySession();
-
+export const changePasswordAction = authActionClient()
+    .schema(schema)
+    .action(async ({ parsedInput, ctx: { accessToken } }) => {
         return await apiClient.put<ChangePasswordResponse>(
             '/profile/change-password',
             parsedInput,

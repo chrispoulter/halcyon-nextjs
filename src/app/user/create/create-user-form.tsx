@@ -19,7 +19,7 @@ import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
-const formSchema = z
+const schema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
@@ -61,13 +61,13 @@ const formSchema = z
         path: ['confirmPassword'],
     });
 
-type CreateUserFormValues = z.infer<typeof formSchema>;
+type CreateUserFormValues = z.infer<typeof schema>;
 
 export function CreateUserForm() {
     const router = useRouter();
 
     const form = useForm<CreateUserFormValues>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             emailAddress: '',
             password: '',

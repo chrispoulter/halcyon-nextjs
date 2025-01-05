@@ -4,11 +4,10 @@ import { z } from 'zod';
 import { CreateUserResponse } from '@/app/user/user-types';
 import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
-import { actionClient } from '@/lib/safe-action';
-import { verifySession } from '@/lib/session';
+import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/session-types';
 
-const actionSchema = z.object({
+const schema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -41,14 +40,11 @@ const actionSchema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-export const createUserAction = actionClient
-    .schema(actionSchema)
-    .action(async ({ parsedInput }) => {
-        const { accessToken } = await verifySession([
-            Role.SYSTEM_ADMINISTRATOR,
-            Role.USER_ADMINISTRATOR,
-        ]);
+const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
+export const createUserAction = authActionClient(roles)
+    .schema(schema)
+    .action(async ({ parsedInput, ctx: { accessToken } }) => {
         return await apiClient.post<CreateUserResponse>('/user', parsedInput, {
             Authorization: `Bearer ${accessToken}`,
         });

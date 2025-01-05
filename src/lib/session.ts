@@ -4,7 +4,7 @@ import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
 import { config } from '@/lib/config';
-import type { Role, SessionPayload } from '@/lib/session-types';
+import type { SessionPayload } from '@/lib/session-types';
 
 export class SessionError extends Error {
     constructor(message: string) {
@@ -63,22 +63,4 @@ export async function deleteSession() {
 export const getSession = cache(async () => {
     const cookie = (await cookies()).get('session')?.value;
     return await decrypt(cookie);
-});
-
-export const verifySession = cache(async (roles?: Role[]) => {
-    const session = await getSession();
-
-    if (!session) {
-        throw new SessionError('Unauthorized');
-    }
-
-    if (!roles) {
-        return session;
-    }
-
-    if (!roles.some((value) => session.roles?.includes(value))) {
-        throw new SessionError('Forbidden');
-    }
-
-    return session;
 });

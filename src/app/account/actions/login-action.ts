@@ -8,7 +8,7 @@ import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
-const actionSchema = z.object({
+const schema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
@@ -21,7 +21,7 @@ const securityKey = config.JWT_SECURITY_KEY;
 const encodedKey = new TextEncoder().encode(securityKey);
 
 export const loginAction = actionClient
-    .schema(actionSchema)
+    .schema(schema)
     .action(async ({ parsedInput }) => {
         const result = await apiClient.post<LoginResponse>(
             '/account/login',

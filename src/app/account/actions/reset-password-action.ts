@@ -5,7 +5,7 @@ import type { ResetPasswordResponse } from '@/app/account/account-types';
 import { apiClient } from '@/lib/api-client';
 import { actionClient } from '@/lib/safe-action';
 
-const actionSchema = z.object({
+const schema = z.object({
     token: z
         .string({ message: 'Token must be a valid string' })
         .uuid('Token must be a valid UUID'),
@@ -19,7 +19,7 @@ const actionSchema = z.object({
 });
 
 export const resetPasswordAction = actionClient
-    .schema(actionSchema)
+    .schema(schema)
     .action(async ({ parsedInput }) => {
         return await apiClient.put<ResetPasswordResponse>(
             '/account/reset-password',

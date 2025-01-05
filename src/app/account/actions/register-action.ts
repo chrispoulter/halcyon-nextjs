@@ -6,7 +6,7 @@ import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
 import { actionClient } from '@/lib/safe-action';
 
-const actionSchema = z
+const schema = z
     .object({
         emailAddress: z
             .string({ message: 'Email Address must be a valid string' })
@@ -41,7 +41,7 @@ const actionSchema = z
     });
 
 export const registerAction = actionClient
-    .schema(actionSchema)
+    .schema(schema)
     .action(async ({ parsedInput }) => {
         return await apiClient.post<RegisterResponse>(
             '/account/register',

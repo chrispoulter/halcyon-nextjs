@@ -2,13 +2,12 @@
 
 import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { apiClient } from '@/lib/api-client';
-import { actionClient } from '@/lib/safe-action';
-import { verifySession } from '@/lib/session';
+import { authActionClient } from '@/lib/safe-action';
 
-export const getProfileAction = actionClient.action(async () => {
-    const { accessToken } = await verifySession();
-
-    return await apiClient.get<GetProfileResponse>('/profile', undefined, {
-        Authorization: `Bearer ${accessToken}`,
-    });
-});
+export const getProfileAction = authActionClient().action(
+    async ({ ctx: { accessToken } }) => {
+        return await apiClient.get<GetProfileResponse>('/profile', undefined, {
+            Authorization: `Bearer ${accessToken}`,
+        });
+    }
+);

@@ -26,7 +26,7 @@ const routes = [
     {
         href: '/user',
         label: 'Users',
-        role: [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR],
+        roles: [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR],
     },
 ];
 
@@ -39,8 +39,8 @@ export function MainNav({ session }: MainNavProps) {
 
     const routeLinks = routes
         .filter((route) =>
-            route.role
-                ? route.role.some((value) => session?.roles?.includes(value))
+            route.roles
+                ? route.roles.some((value) => session?.roles?.includes(value))
                 : true
         )
         .map((route) => (

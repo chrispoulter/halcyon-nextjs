@@ -13,19 +13,19 @@ import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 
-const formSchema = z.object({
+const schema = z.object({
     emailAddress: z
         .string({ message: 'Email Address must be a valid string' })
         .email('Email Address must be a valid email'),
 });
 
-type ForgotPasswordFormValues = z.infer<typeof formSchema>;
+type ForgotPasswordFormValues = z.infer<typeof schema>;
 
 export function ForgotPasswordForm() {
     const router = useRouter();
 
     const form = useForm<ForgotPasswordFormValues>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             emailAddress: '',
         },
