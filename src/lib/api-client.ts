@@ -1,22 +1,10 @@
-import { forbidden, notFound, unauthorized } from 'next/navigation';
 import { config } from '@/lib/config';
 
-type ApliClientResult<Data> = { data?: Data; error?: string };
-
-export function isApiClientResultSuccess<Data>(
-    result?: ApliClientResult<Data>
-): result is {
-    data: Data;
-} {
-    if (!result) {
-        return false;
+export class ApiClientError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'ApiClientError';
     }
-
-    if (result.error) {
-        return false;
-    }
-
-    return true;
 }
 
 class ApiClient {
@@ -31,9 +19,8 @@ class ApiClient {
         method: string,
         params?: Record<string, string | number | boolean>,
         body?: Record<string, unknown>,
-        headers: Record<string, string> = {},
-        doNotThrowError = false
-    ): Promise<ApliClientResult<Data>> {
+        headers: Record<string, string> = {}
+    ): Promise<Data> {
         const url = new URL(path, this.baseUrl);
 
         if (params) {
@@ -54,54 +41,36 @@ class ApiClient {
         const contentType = response.headers.get('content-type') || '';
 
         if (!response.ok) {
-            switch (response.status) {
-                case 401:
-                    if (doNotThrowError) {
-                        unauthorized();
-                    }
-
-                case 403:
-                    if (doNotThrowError) {
-                        forbidden();
-                    }
-
-                case 404:
-                    if (doNotThrowError) {
-                        notFound();
-                    }
-
-                default:
-                    if (contentType.includes('application/problem+json')) {
-                        const problem = await response.json();
-                        return { error: problem.title };
-                    }
-
-                    return {
-                        error: `HTTP ${response.status} ${response.statusText}`,
-                    };
+            if (contentType.includes('application/problem+json')) {
+                const problem = await response.json();
+                throw new ApiClientError(problem.title);
             }
+
+            throw new ApiClientError(
+                `HTTP ${response.status} ${response.statusText}`
+            );
         }
 
         if (contentType.includes('application/json')) {
-            return { data: await response.json() };
+            return await response.json();
         }
 
-        return { data: (await response.text()) as Data };
+        return (await response.text()) as Data;
     }
 
     get<Data>(
         path: string,
         params: Record<string, string | number | boolean> = {},
         headers: Record<string, string> = {}
-    ): Promise<ApliClientResult<Data>> {
-        return this.fetch<Data>(path, 'GET', params, undefined, headers, true);
+    ): Promise<Data> {
+        return this.fetch<Data>(path, 'GET', params, undefined, headers);
     }
 
     post<Data>(
         path: string,
         body: Record<string, unknown>,
         headers: Record<string, string> = {}
-    ): Promise<ApliClientResult<Data>> {
+    ): Promise<Data> {
         return this.fetch<Data>(path, 'POST', undefined, body, headers);
     }
 
@@ -109,7 +78,7 @@ class ApiClient {
         path: string,
         body: Record<string, unknown>,
         headers: Record<string, string> = {}
-    ): Promise<ApliClientResult<Data>> {
+    ): Promise<Data> {
         return this.fetch<Data>(path, 'PUT', undefined, body, headers);
     }
 
@@ -117,7 +86,7 @@ class ApiClient {
         path: string,
         body: Record<string, unknown>,
         headers: Record<string, string> = {}
-    ): Promise<ApliClientResult<Data>> {
+    ): Promise<Data> {
         return this.fetch<Data>(path, 'DELETE', undefined, body, headers);
     }
 }

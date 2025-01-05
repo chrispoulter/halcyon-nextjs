@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -11,7 +12,6 @@ import { Button } from '@/components/ui/button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-import { isServerActionSuccess } from '@/lib/action-types';
 
 const formSchema = z.object({
     emailAddress: z
@@ -31,29 +31,28 @@ export function ForgotPasswordForm() {
         },
     });
 
-    async function onSubmit(data: ForgotPasswordFormValues) {
-        const result = await forgotPasswordAction(data);
+    const { execute, isPending } = useAction(forgotPasswordAction, {
+        onSuccess: () => {
+            toast({
+                title: 'Success',
+                description:
+                    'Instructions as to how to reset your password have been sent to you via email.',
+            });
 
-        if (!isServerActionSuccess(result)) {
+            router.push('/account/login');
+        },
+        onError: ({ error }) => {
             toast({
                 variant: 'destructive',
                 title: 'Error',
-                description: <ServerActionErrorMessage result={result} />,
+                description: <ServerActionErrorMessage result={error} />,
             });
+        },
+    });
 
-            return;
-        }
-
-        toast({
-            title: 'Success',
-            description:
-                'Instructions as to how to reset your password have been sent to you via email.',
-        });
-
-        router.push('/account/login');
+    function onSubmit(data: ForgotPasswordFormValues) {
+        execute(data);
     }
-
-    const { isSubmitting } = form.formState;
 
     return (
         <Form {...form}>
@@ -69,16 +68,16 @@ export function ForgotPasswordForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isSubmitting}
+                    disabled={isPending}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isPending}
                         className="min-w-32"
                     >
-                        {isSubmitting ? (
+                        {isPending ? (
                             <Loader2 className="animate-spin" />
                         ) : (
                             'Submit'

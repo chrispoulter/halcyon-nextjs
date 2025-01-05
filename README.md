@@ -6,6 +6,8 @@ A Next.js web project template 👷 Built with a sense of peace and tranquillity
 
 - Next.js
   [https://nextjs.org/](https://nextjs.org/)
+- Next Safe Action
+  [https://next-safe-action.dev/](https://next-safe-action.dev/)
 - Shadcn UI
   [https://ui.shadcn.com/](https://ui.shadcn.com/)
 - React Hook Form

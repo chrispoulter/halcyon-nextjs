@@ -3,9 +3,9 @@
 import { z } from 'zod';
 import { jwtVerify } from 'jose';
 import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
-import { ServerActionResult } from '@/lib/action-types';
-import { apiClient, isApiClientResultSuccess } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import { config } from '@/lib/config';
+import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
 const actionSchema = z.object({
@@ -17,46 +17,34 @@ const actionSchema = z.object({
         .min(1, 'Password is a required field'),
 });
 
-type LoginActionValues = z.infer<typeof actionSchema>;
-
 const securityKey = config.JWT_SECURITY_KEY;
 const encodedKey = new TextEncoder().encode(securityKey);
 
-export async function loginAction(
-    input: LoginActionValues
-): Promise<ServerActionResult> {
-    const parsedInput = await actionSchema.safeParseAsync(input);
+export const loginAction = actionClient
+    .schema(actionSchema)
+    .action(async ({ parsedInput }) => {
+        const result = await apiClient.post<LoginResponse>(
+            '/account/login',
+            parsedInput
+        );
 
-    if (!parsedInput.success) {
-        return {
-            validationErrors: parsedInput.error.flatten(),
-        };
-    }
+        const { accessToken } = result;
 
-    const result = await apiClient.post<LoginResponse>(
-        '/account/login',
-        parsedInput.data
-    );
+        const { payload } = await jwtVerify<TokenPayload>(
+            accessToken,
+            encodedKey,
+            {
+                audience: config.JWT_AUDIENCE,
+                issuer: config.JWT_ISSUER,
+            }
+        );
 
-    if (!isApiClientResultSuccess(result)) {
-        return { error: result.error };
-    }
-
-    const { accessToken } = result.data;
-
-    const { payload } = await jwtVerify<TokenPayload>(accessToken, encodedKey, {
-        audience: config.JWT_AUDIENCE,
-        issuer: config.JWT_ISSUER,
+        await createSession({
+            ...payload,
+            accessToken,
+            roles:
+                typeof payload.roles === 'string'
+                    ? [payload.roles]
+                    : payload.roles || [],
+        });
     });
-
-    await createSession({
-        ...payload,
-        accessToken,
-        roles:
-            typeof payload.roles === 'string'
-                ? [payload.roles]
-                : payload.roles || [],
-    });
-
-    return {};
-}

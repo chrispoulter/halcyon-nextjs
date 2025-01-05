@@ -2,8 +2,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { ChangePasswordForm } from '@/app/profile/change-password/change-password-form';
-import { ServerActionError } from '@/components/server-action-error';
-import { isServerActionSuccess } from '@/lib/action-types';
+import {
+    isServerActionSuccess,
+    ServerActionError,
+} from '@/components/server-action-error';
 
 export const metadata: Metadata = {
     title: 'Change Password',

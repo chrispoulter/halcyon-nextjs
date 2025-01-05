@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { UpdateProfileForm } from '@/app/profile/update-profile/update-profile-form';
-import { ServerActionError } from '@/components/server-action-error';
-import { isServerActionSuccess } from '@/lib/action-types';
+import {
+    isServerActionSuccess,
+    ServerActionError,
+} from '@/components/server-action-error';
 
 export const metadata: Metadata = {
     title: 'Update Profile',
