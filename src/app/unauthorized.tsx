@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
-import { LogoutButton } from '@/components/logout-button';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
     title: 'Unauthorized',
@@ -13,11 +14,12 @@ export default function Unauthorized() {
             </h1>
 
             <p className="leading-7">
-                Sorry, there was a problem with your session. Please log out and
-                log back in.
+                Sorry, something went wrong. Please try logging in again.
             </p>
 
-            <LogoutButton />
+            <Button asChild className="w-full min-w-32 sm:w-auto">
+                <Link href="/">Home</Link>
+            </Button>
         </main>
     );
 }
