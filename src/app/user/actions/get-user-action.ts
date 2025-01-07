@@ -16,12 +16,8 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const getUserAction = authActionClient(roles)
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.get<GetUserResponse>(
-            `/user/${parsedInput.id}`,
-            undefined,
-            {
-                Authorization: `Bearer ${accessToken}`,
-            }
-        );
+    .action(async ({ parsedInput: { id }, ctx: { accessToken } }) => {
+        return await apiClient.get<GetUserResponse>(`/user/${id}`, undefined, {
+            Authorization: `Bearer ${accessToken}`,
+        });
     });

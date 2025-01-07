@@ -43,9 +43,7 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const updateUserAction = authActionClient(roles)
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        const { id, ...rest } = parsedInput;
-
+    .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
         return await apiClient.put<UpdateUserResponse>(`/user/${id}`, rest, {
             Authorization: `Bearer ${accessToken}`,
         });

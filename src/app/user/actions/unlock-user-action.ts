@@ -17,9 +17,7 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const unlockUserAction = authActionClient(roles)
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        const { id, ...rest } = parsedInput;
-
+    .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
         return await apiClient.put<UnlockUserResponse>(
             `/user/${id}/unlock`,
             rest,

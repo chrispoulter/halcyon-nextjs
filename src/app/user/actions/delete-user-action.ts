@@ -17,12 +17,8 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const deleteUserAction = authActionClient(roles)
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.delete<DeleteUserResponse>(
-            `/user/${parsedInput.id}`,
-            parsedInput,
-            {
-                Authorization: `Bearer ${accessToken}`,
-            }
-        );
+    .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
+        return await apiClient.delete<DeleteUserResponse>(`/user/${id}`, rest, {
+            Authorization: `Bearer ${accessToken}`,
+        });
     });
