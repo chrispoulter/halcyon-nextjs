@@ -1,23 +1,13 @@
 import { Metadata } from 'next';
-import { getProfileAction } from '@/app/profile/actions/get-profile-action';
+import { getProfile } from '@/app/profile/actions/get-profile-action';
 import { UpdateProfileForm } from '@/app/profile/update-profile/update-profile-form';
-import {
-    isServerActionSuccess,
-    ServerActionError,
-} from '@/components/server-action-error';
 
 export const metadata: Metadata = {
     title: 'Update Profile',
 };
 
 export default async function UpdateProfile() {
-    const result = await getProfileAction();
-
-    if (!isServerActionSuccess(result)) {
-        return <ServerActionError result={result} />;
-    }
-
-    const profile = result.data;
+    const profile = await getProfile();
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">

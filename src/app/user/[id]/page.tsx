@@ -1,10 +1,6 @@
 import { Metadata } from 'next';
-import { getUserAction } from '@/app/user/actions/get-user-action';
+import { getUser } from '@/app/user/actions/get-user-action';
 import { UpdateUserForm } from '@/app/user/[id]/update-user-form';
-import {
-    isServerActionSuccess,
-    ServerActionError,
-} from '@/components/server-action-error';
 
 export const metadata: Metadata = {
     title: 'Update User',
@@ -15,13 +11,7 @@ type Params = Promise<{ id: string }>;
 export default async function UpdateUser({ params }: { params: Params }) {
     const { id } = await params;
 
-    const result = await getUserAction({ id });
-
-    if (!isServerActionSuccess(result)) {
-        return <ServerActionError result={result} />;
-    }
-
-    const user = result.data;
+    const user = await getUser(id);
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">

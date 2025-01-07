@@ -1,23 +1,44 @@
 'use server';
 
-import { z } from 'zod';
+import { forbidden, notFound, redirect } from 'next/navigation';
 import type { GetUserResponse } from '@/app/user/user-types';
-import { apiClient } from '@/lib/api-client';
-import { authActionClient } from '@/lib/safe-action';
+import { apiClient, ApiClientError } from '@/lib/api-client';
+import { deleteSession, getSession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
-
-const schema = z.object({
-    id: z
-        .string({ message: 'Id must be a valid string' })
-        .uuid('Id must be a valid UUID'),
-});
 
 const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
-export const getUserAction = authActionClient(roles)
-    .schema(schema)
-    .action(async ({ parsedInput: { id }, ctx: { accessToken } }) => {
+export const getUser = async (id: string) => {
+    const session = await getSession();
+
+    if (!session) {
+        await deleteSession();
+        redirect('/account/login');
+    }
+
+    if (!roles.some((value) => session.roles?.includes(value))) {
+        forbidden();
+    }
+
+    try {
         return await apiClient.get<GetUserResponse>(`/user/${id}`, undefined, {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${session.accessToken}`,
         });
-    });
+    } catch (error) {
+        if (error instanceof ApiClientError) {
+            switch (error.status) {
+                case 401:
+                    await deleteSession();
+                    redirect('/account/login');
+
+                case 403:
+                    forbidden();
+
+                case 404:
+                    notFound();
+            }
+        }
+
+        throw error;
+    }
+};

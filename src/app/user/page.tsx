@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { z } from 'zod';
 import { AlertCircle } from 'lucide-react';
-import { searchUsersAction } from '@/app/user/actions/search-users-action';
+import { searchUsers } from '@/app/user/actions/search-users-action';
 import { UserSort } from '@/app/user/user-types';
 import { SearchUserForm } from '@/app/user/search-user-form';
 import { SortUserDropdown } from '@/app/user/sort-user-dropdown';
@@ -10,10 +10,6 @@ import { UserCard } from '@/app/user/user-card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Pager } from '@/components/pager';
-import {
-    isServerActionSuccess,
-    ServerActionError,
-} from '@/components/server-action-error';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -40,8 +36,6 @@ const searchParamsSchema = z.object({
         .catch(UserSort.NAME_ASC),
 });
 
-const PAGE_SIZE = 10;
-
 export default async function UserSearch({
     searchParams,
 }: {
@@ -51,16 +45,7 @@ export default async function UserSearch({
 
     const request = searchParamsSchema.parse(params);
 
-    const result = await searchUsersAction({
-        ...request,
-        size: PAGE_SIZE,
-    });
-
-    if (!isServerActionSuccess(result)) {
-        return <ServerActionError result={result} />;
-    }
-
-    const data = result.data;
+    const data = await searchUsers(request);
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
