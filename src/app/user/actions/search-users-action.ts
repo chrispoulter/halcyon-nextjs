@@ -8,7 +8,7 @@ import { Role } from '@/lib/session-types';
 
 const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
-const size = 10;
+const PAGE_SIZE = 10;
 
 export const searchUsers = async (request: {
     page?: number;
@@ -29,7 +29,7 @@ export const searchUsers = async (request: {
     try {
         return await apiClient.get<SearchUsersResponse>(
             '/user',
-            { ...request, size },
+            { ...request, size: PAGE_SIZE },
             {
                 Authorization: `Bearer ${session.accessToken}`,
             }
