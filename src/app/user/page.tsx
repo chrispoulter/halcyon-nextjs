@@ -36,6 +36,8 @@ const searchParamsSchema = z.object({
         .catch(UserSort.NAME_ASC),
 });
 
+const PAGE_SIZE = 10;
+
 export default async function UserSearch({
     searchParams,
 }: {
@@ -45,7 +47,10 @@ export default async function UserSearch({
 
     const request = searchParamsSchema.parse(params);
 
-    const data = await searchUsers(request);
+    const data = await searchUsers({
+        ...request,
+        size: PAGE_SIZE,
+    });
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
