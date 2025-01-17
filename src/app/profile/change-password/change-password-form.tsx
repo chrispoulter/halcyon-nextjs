@@ -84,7 +84,7 @@ export function ChangePasswordForm({ profile }: ChangePasswordFormProps) {
                 className="space-y-6"
             >
                 <TextFormField<ChangePasswordFormValues>
-                    field="currentPassword"
+                    name="currentPassword"
                     label="Current Password"
                     type="password"
                     maxLength={50}
@@ -95,7 +95,7 @@ export function ChangePasswordForm({ profile }: ChangePasswordFormProps) {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<ChangePasswordFormValues>
-                        field="newPassword"
+                        name="newPassword"
                         label="New Password"
                         type="password"
                         maxLength={50}
@@ -105,7 +105,7 @@ export function ChangePasswordForm({ profile }: ChangePasswordFormProps) {
                         className="flex-1"
                     />
                     <TextFormField<ChangePasswordFormValues>
-                        field="confirmNewPassword"
+                        name="confirmNewPassword"
                         label="Confirm New Password"
                         type="password"
                         maxLength={50}

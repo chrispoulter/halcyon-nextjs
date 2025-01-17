@@ -108,7 +108,7 @@ export function CreateUserForm() {
                 className="space-y-6"
             >
                 <TextFormField<CreateUserFormValues>
-                    field="emailAddress"
+                    name="emailAddress"
                     label="Email Address"
                     type="email"
                     maxLength={254}
@@ -119,7 +119,7 @@ export function CreateUserForm() {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<CreateUserFormValues>
-                        field="password"
+                        name="password"
                         label="Password"
                         type="password"
                         maxLength={50}
@@ -129,7 +129,7 @@ export function CreateUserForm() {
                         className="flex-1"
                     />
                     <TextFormField<CreateUserFormValues>
-                        field="confirmPassword"
+                        name="confirmPassword"
                         label="Confirm Password"
                         type="password"
                         maxLength={50}
@@ -142,7 +142,7 @@ export function CreateUserForm() {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<CreateUserFormValues>
-                        field="firstName"
+                        name="firstName"
                         label="First Name"
                         maxLength={50}
                         autoComplete="given-name"
@@ -151,7 +151,7 @@ export function CreateUserForm() {
                         className="flex-1"
                     />
                     <TextFormField<CreateUserFormValues>
-                        field="lastName"
+                        name="lastName"
                         label="Last Name"
                         maxLength={50}
                         autoComplete="family-name"
@@ -162,7 +162,7 @@ export function CreateUserForm() {
                 </div>
 
                 <DateFormField<CreateUserFormValues>
-                    field="dateOfBirth"
+                    name="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
@@ -170,7 +170,7 @@ export function CreateUserForm() {
                 />
 
                 <SwitchFormField<CreateUserFormValues>
-                    field="roles"
+                    name="roles"
                     options={roles}
                     disabled={isPending}
                 />

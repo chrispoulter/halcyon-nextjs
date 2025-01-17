@@ -61,7 +61,7 @@ export function ForgotPasswordForm() {
                 className="space-y-6"
             >
                 <TextFormField<ForgotPasswordFormValues>
-                    field="emailAddress"
+                    name="emailAddress"
                     label="Email Address"
                     type="email"
                     maxLength={254}

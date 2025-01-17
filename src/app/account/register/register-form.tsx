@@ -93,7 +93,7 @@ export function RegisterForm() {
                 className="space-y-6"
             >
                 <TextFormField<RegisterFormValues>
-                    field="emailAddress"
+                    name="emailAddress"
                     label="Email Address"
                     type="email"
                     maxLength={254}
@@ -104,7 +104,7 @@ export function RegisterForm() {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<RegisterFormValues>
-                        field="password"
+                        name="password"
                         label="Password"
                         type="password"
                         maxLength={50}
@@ -114,7 +114,7 @@ export function RegisterForm() {
                         className="flex-1"
                     />
                     <TextFormField<RegisterFormValues>
-                        field="confirmPassword"
+                        name="confirmPassword"
                         label="Confirm Password"
                         type="password"
                         maxLength={50}
@@ -127,7 +127,7 @@ export function RegisterForm() {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<RegisterFormValues>
-                        field="firstName"
+                        name="firstName"
                         label="First Name"
                         maxLength={50}
                         autoComplete="given-name"
@@ -136,7 +136,7 @@ export function RegisterForm() {
                         className="flex-1"
                     />
                     <TextFormField<RegisterFormValues>
-                        field="lastName"
+                        name="lastName"
                         label="Last Name"
                         maxLength={50}
                         autoComplete="family-name"
@@ -147,7 +147,7 @@ export function RegisterForm() {
                 </div>
 
                 <DateFormField<RegisterFormValues>
-                    field="dateOfBirth"
+                    name="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required

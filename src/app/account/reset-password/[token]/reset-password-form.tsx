@@ -78,7 +78,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                 className="space-y-6"
             >
                 <TextFormField<ResetPasswordFormValues>
-                    field="emailAddress"
+                    name="emailAddress"
                     label="Email Address"
                     type="email"
                     maxLength={254}
@@ -89,7 +89,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<ResetPasswordFormValues>
-                        field="newPassword"
+                        name="newPassword"
                         label="New Password"
                         type="password"
                         maxLength={50}
@@ -99,7 +99,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                         className="flex-1"
                     />
                     <TextFormField<ResetPasswordFormValues>
-                        field="confirmNewPassword"
+                        name="confirmNewPassword"
                         label="Confirm New Password"
                         type="password"
                         maxLength={50}

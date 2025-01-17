@@ -59,7 +59,7 @@ export function LoginForm() {
                 className="space-y-6"
             >
                 <TextFormField<LoginFormValues>
-                    field="emailAddress"
+                    name="emailAddress"
                     label="Email Address"
                     type="email"
                     maxLength={254}
@@ -69,7 +69,7 @@ export function LoginForm() {
                 />
 
                 <TextFormField<LoginFormValues>
-                    field="password"
+                    name="password"
                     label="Password"
                     type="password"
                     maxLength={50}

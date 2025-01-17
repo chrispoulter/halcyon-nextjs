@@ -98,7 +98,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                 className="space-y-6"
             >
                 <TextFormField<UpdateUserFormValues>
-                    field="emailAddress"
+                    name="emailAddress"
                     label="Email Address"
                     type="email"
                     maxLength={254}
@@ -109,7 +109,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<UpdateUserFormValues>
-                        field="firstName"
+                        name="firstName"
                         label="First Name"
                         maxLength={50}
                         autoComplete="given-name"
@@ -118,7 +118,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         className="flex-1"
                     />
                     <TextFormField<UpdateUserFormValues>
-                        field="lastName"
+                        name="lastName"
                         label="Last Name"
                         maxLength={50}
                         autoComplete="family-name"
@@ -129,7 +129,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                 </div>
 
                 <DateFormField<UpdateUserFormValues>
-                    field="dateOfBirth"
+                    name="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
@@ -137,7 +137,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                 />
 
                 <SwitchFormField<UpdateUserFormValues>
-                    field="roles"
+                    name="roles"
                     options={roles}
                     disabled={isPending}
                 />
