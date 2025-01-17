@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
-import { Loader2 } from 'lucide-react';
 import { deleteUserAction } from '@/app/user/actions/delete-user-action';
 import { GetUserResponse } from '@/app/user/user-types';
 import {
@@ -16,7 +15,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/loading-button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 
@@ -56,17 +55,13 @@ export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button
+                <LoadingButton
                     variant="destructive"
-                    disabled={isPending}
+                    loading={isPending}
                     className={className}
                 >
-                    {isPending ? (
-                        <Loader2 className="animate-spin" />
-                    ) : (
-                        'Delete'
-                    )}
-                </Button>
+                    Delete
+                </LoadingButton>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

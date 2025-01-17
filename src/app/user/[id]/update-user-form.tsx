@@ -6,7 +6,6 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
 import type { GetUserResponse } from '@/app/user/user-types';
 import { updateUserAction } from '@/app/user/actions/update-user-action';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
@@ -14,6 +13,7 @@ import { LockUserButton } from '@/app/user/[id]/lock-user-button';
 import { UnlockUserButton } from '@/app/user/[id]/unlock-user-button';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/loading-button';
 import { DateFormField } from '@/components/date-form-field';
 import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
@@ -155,17 +155,13 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
 
                     <DeleteUserButton user={user} className="min-w-32" />
 
-                    <Button
+                    <LoadingButton
                         type="submit"
-                        disabled={isPending}
+                        loading={isPending}
                         className="min-w-32"
                     >
-                        {isPending ? (
-                            <Loader2 className="animate-spin" />
-                        ) : (
-                            'Submit'
-                        )}
-                    </Button>
+                        Submit
+                    </LoadingButton>
                 </div>
             </form>
         </Form>
