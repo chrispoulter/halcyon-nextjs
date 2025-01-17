@@ -3,7 +3,7 @@
 import { forbidden, redirect } from 'next/navigation';
 import { type SearchUsersResponse } from '@/app/user/user-types';
 import { apiClient, ApiClientError } from '@/lib/api-client';
-import { deleteSession, getSession } from '@/lib/session';
+import { getSession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
 
 const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
@@ -17,7 +17,6 @@ export const searchUsers = async (request: {
     const session = await getSession();
 
     if (!session) {
-        await deleteSession();
         redirect('/account/login');
     }
 
@@ -33,7 +32,6 @@ export const searchUsers = async (request: {
         if (error instanceof ApiClientError) {
             switch (error.status) {
                 case 401:
-                    await deleteSession();
                     redirect('/account/login');
 
                 case 403:
