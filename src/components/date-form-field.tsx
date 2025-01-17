@@ -39,9 +39,8 @@ export function DateFormField<TFieldValues extends FieldValues>({
             control={form.control}
             name={field}
             render={({ field }) => {
-                const day = field.value?.split('-')[2] ?? '';
-                const month = field.value?.split('-')[1] ?? '';
-                const year = field.value?.split('-')[0] ?? '';
+                const [year = '', month = '', day = ''] =
+                    field.value?.split('-');
 
                 function onDayChange(value: string) {
                     field.onChange(`${year}-${month}-${value}`);
