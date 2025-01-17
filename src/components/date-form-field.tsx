@@ -32,11 +32,11 @@ export function DateFormField<TFieldValues extends FieldValues>({
     autoComplete,
     className,
 }: DateFormFieldProps<TFieldValues>) {
-    const form = useFormContext<TFieldValues>();
+    const { control } = useFormContext<TFieldValues>();
 
     return (
         <FormField
-            control={form.control}
+            control={control}
             name={field}
             render={({ field }) => {
                 const [year = '', month = '', day = ''] =

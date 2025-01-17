@@ -20,11 +20,11 @@ export function TextFormField<TFieldValues extends FieldValues>({
     className,
     ...props
 }: TextFormFieldProps<TFieldValues>) {
-    const form = useFormContext<TFieldValues>();
+    const { control } = useFormContext<TFieldValues>();
 
     return (
         <FormField
-            control={form.control}
+            control={control}
             name={field}
             render={({ field }) => (
                 <FormItem className={className}>

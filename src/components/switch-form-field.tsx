@@ -20,11 +20,11 @@ export function SwitchFormField<TFieldValues extends FieldValues>({
     options,
     disabled,
 }: SwitchFormFieldProps<TFieldValues>) {
-    const form = useFormContext<TFieldValues>();
+    const { control } = useFormContext<TFieldValues>();
 
     return (
         <FormField
-            control={form.control}
+            control={control}
             name={field}
             render={({ field }) => {
                 const currentValue = field.value || [];
