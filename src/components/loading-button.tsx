@@ -6,10 +6,11 @@ type LoadingButtonProps = { loading?: boolean } & ButtonProps;
 export function LoadingButton({
     loading,
     children,
+    disabled,
     ...rest
 }: LoadingButtonProps) {
     return (
-        <Button {...rest}>
+        <Button {...rest} disabled={disabled || loading}>
             {loading ? <Loader2 className="animate-spin" /> : children}
         </Button>
     );
