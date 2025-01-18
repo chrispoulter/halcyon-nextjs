@@ -38,19 +38,19 @@ export function DateFormField<TFieldValues extends FieldValues>({
         <FormField
             control={control}
             name={name}
-            render={({ field }) => {
-                const [year, month, day] = (field.value || '--').split('-');
+            render={({ field: { name, value = '--', onChange } }) => {
+                const [year, month, day] = value.split('-');
 
                 function onDayChange(value: string) {
-                    field.onChange(`${year}-${month}-${value}`);
+                    onChange(`${year}-${month}-${value}`);
                 }
 
                 function onMonthChange(value: string) {
-                    field.onChange(`${year}-${value}-${day}`);
+                    onChange(`${year}-${value}-${day}`);
                 }
 
                 function onYearChange(value: string) {
-                    field.onChange(`${value}-${month}-${day}`);
+                    onChange(`${value}-${month}-${day}`);
                 }
 
                 return (
@@ -100,7 +100,7 @@ export function DateFormField<TFieldValues extends FieldValues>({
                                         autoComplete && autoComplete[1]
                                     }
                                 >
-                                    <FormControl id={`${field.name}-month`}>
+                                    <FormControl id={`${name}-month`}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Month..." />
                                         </SelectTrigger>
@@ -131,7 +131,7 @@ export function DateFormField<TFieldValues extends FieldValues>({
                                         autoComplete && autoComplete[2]
                                     }
                                 >
-                                    <FormControl id={`${field.name}-year`}>
+                                    <FormControl id={`${name}-year`}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Year..." />
                                         </SelectTrigger>
