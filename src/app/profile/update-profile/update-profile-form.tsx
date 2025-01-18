@@ -6,16 +6,15 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { updateProfileAction } from '@/app/profile/actions/update-profile-action';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/loading-button';
 import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-
 import { isInPast } from '@/lib/dates';
 
 const schema = z.object({
@@ -85,7 +84,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                 className="space-y-6"
             >
                 <TextFormField<UpdateProfileFormValues>
-                    field="emailAddress"
+                    name="emailAddress"
                     label="Email Address"
                     type="email"
                     maxLength={254}
@@ -96,7 +95,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<UpdateProfileFormValues>
-                        field="firstName"
+                        name="firstName"
                         label="First Name"
                         maxLength={50}
                         autoComplete="given-name"
@@ -105,7 +104,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                         className="flex-1"
                     />
                     <TextFormField<UpdateProfileFormValues>
-                        field="lastName"
+                        name="lastName"
                         label="Last Name"
                         maxLength={50}
                         autoComplete="family-name"
@@ -116,7 +115,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                 </div>
 
                 <DateFormField<UpdateProfileFormValues>
-                    field="dateOfBirth"
+                    name="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
@@ -130,17 +129,13 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                         </Link>
                     </Button>
 
-                    <Button
+                    <LoadingButton
                         type="submit"
-                        disabled={isPending}
+                        loading={isPending}
                         className="min-w-32"
                     >
-                        {isPending ? (
-                            <Loader2 className="animate-spin" />
-                        ) : (
-                            'Submit'
-                        )}
-                    </Button>
+                        Submit
+                    </LoadingButton>
                 </div>
             </form>
         </Form>

@@ -5,10 +5,9 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
 import { resetPasswordAction } from '@/app/account/actions/reset-password-action';
 import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/loading-button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
@@ -79,7 +78,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                 className="space-y-6"
             >
                 <TextFormField<ResetPasswordFormValues>
-                    field="emailAddress"
+                    name="emailAddress"
                     label="Email Address"
                     type="email"
                     maxLength={254}
@@ -90,7 +89,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<ResetPasswordFormValues>
-                        field="newPassword"
+                        name="newPassword"
                         label="New Password"
                         type="password"
                         maxLength={50}
@@ -100,7 +99,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                         className="flex-1"
                     />
                     <TextFormField<ResetPasswordFormValues>
-                        field="confirmNewPassword"
+                        name="confirmNewPassword"
                         label="Confirm New Password"
                         type="password"
                         maxLength={50}
@@ -112,17 +111,13 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                 </div>
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button
+                    <LoadingButton
                         type="submit"
-                        disabled={isPending}
+                        loading={isPending}
                         className="min-w-32"
                     >
-                        {isPending ? (
-                            <Loader2 className="animate-spin" />
-                        ) : (
-                            'Submit'
-                        )}
-                    </Button>
+                        Submit
+                    </LoadingButton>
                 </div>
             </form>
         </Form>

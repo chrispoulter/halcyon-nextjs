@@ -5,15 +5,13 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
 import { registerAction } from '@/app/account/actions/register-action';
 import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/loading-button';
 import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
-
 import { isInPast } from '@/lib/dates';
 
 const schema = z
@@ -95,7 +93,7 @@ export function RegisterForm() {
                 className="space-y-6"
             >
                 <TextFormField<RegisterFormValues>
-                    field="emailAddress"
+                    name="emailAddress"
                     label="Email Address"
                     type="email"
                     maxLength={254}
@@ -106,7 +104,7 @@ export function RegisterForm() {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<RegisterFormValues>
-                        field="password"
+                        name="password"
                         label="Password"
                         type="password"
                         maxLength={50}
@@ -116,7 +114,7 @@ export function RegisterForm() {
                         className="flex-1"
                     />
                     <TextFormField<RegisterFormValues>
-                        field="confirmPassword"
+                        name="confirmPassword"
                         label="Confirm Password"
                         type="password"
                         maxLength={50}
@@ -129,7 +127,7 @@ export function RegisterForm() {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField<RegisterFormValues>
-                        field="firstName"
+                        name="firstName"
                         label="First Name"
                         maxLength={50}
                         autoComplete="given-name"
@@ -138,7 +136,7 @@ export function RegisterForm() {
                         className="flex-1"
                     />
                     <TextFormField<RegisterFormValues>
-                        field="lastName"
+                        name="lastName"
                         label="Last Name"
                         maxLength={50}
                         autoComplete="family-name"
@@ -149,7 +147,7 @@ export function RegisterForm() {
                 </div>
 
                 <DateFormField<RegisterFormValues>
-                    field="dateOfBirth"
+                    name="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
@@ -157,17 +155,13 @@ export function RegisterForm() {
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button
+                    <LoadingButton
                         type="submit"
-                        disabled={isPending}
+                        loading={isPending}
                         className="min-w-32"
                     >
-                        {isPending ? (
-                            <Loader2 className="animate-spin" />
-                        ) : (
-                            'Submit'
-                        )}
-                    </Button>
+                        Submit
+                    </LoadingButton>
                 </div>
             </form>
         </Form>

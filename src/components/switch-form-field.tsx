@@ -10,22 +10,22 @@ import {
 import { Switch } from '@/components/ui/switch';
 
 type SwitchFormFieldProps<TFieldValues extends FieldValues> = {
-    field: FieldPath<TFieldValues>;
+    name: FieldPath<TFieldValues>;
     options: Record<string, { title: string; description: string }>;
     disabled?: boolean;
 };
 
 export function SwitchFormField<TFieldValues extends FieldValues>({
-    field,
+    name,
     options,
     disabled,
 }: SwitchFormFieldProps<TFieldValues>) {
-    const form = useFormContext<TFieldValues>();
+    const { control } = useFormContext<TFieldValues>();
 
     return (
         <FormField
-            control={form.control}
-            name={field}
+            control={control}
+            name={name}
             render={({ field }) => {
                 const currentValue = field.value || [];
 

@@ -16,7 +16,7 @@ import {
 import { currentYear, monthNames } from '@/lib/dates';
 
 type DateFormFieldProps<TFieldValues extends FieldValues> = {
-    field: FieldPath<TFieldValues>;
+    name: FieldPath<TFieldValues>;
     label: string;
     required?: boolean;
     disabled?: boolean;
@@ -25,23 +25,22 @@ type DateFormFieldProps<TFieldValues extends FieldValues> = {
 };
 
 export function DateFormField<TFieldValues extends FieldValues>({
-    field,
+    name,
     label,
     required,
     disabled,
     autoComplete,
     className,
 }: DateFormFieldProps<TFieldValues>) {
-    const form = useFormContext<TFieldValues>();
+    const { control } = useFormContext<TFieldValues>();
 
     return (
         <FormField
-            control={form.control}
-            name={field}
+            control={control}
+            name={name}
             render={({ field }) => {
-                const day = field.value?.split('-')[2] ?? '';
-                const month = field.value?.split('-')[1] ?? '';
-                const year = field.value?.split('-')[0] ?? '';
+                const [year = '', month = '', day = ''] =
+                    field.value?.split('-');
 
                 function onDayChange(value: string) {
                     field.onChange(`${year}-${month}-${value}`);

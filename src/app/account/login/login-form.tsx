@@ -5,10 +5,9 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
 import { loginAction } from '@/app/account/actions/login-action';
 import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/loading-button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
@@ -60,7 +59,7 @@ export function LoginForm() {
                 className="space-y-6"
             >
                 <TextFormField<LoginFormValues>
-                    field="emailAddress"
+                    name="emailAddress"
                     label="Email Address"
                     type="email"
                     maxLength={254}
@@ -70,7 +69,7 @@ export function LoginForm() {
                 />
 
                 <TextFormField<LoginFormValues>
-                    field="password"
+                    name="password"
                     label="Password"
                     type="password"
                     maxLength={50}
@@ -80,17 +79,13 @@ export function LoginForm() {
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button
+                    <LoadingButton
                         type="submit"
-                        disabled={isPending}
+                        loading={isPending}
                         className="min-w-32"
                     >
-                        {isPending ? (
-                            <Loader2 className="animate-spin" />
-                        ) : (
-                            'Submit'
-                        )}
-                    </Button>
+                        Submit
+                    </LoadingButton>
                 </div>
             </form>
         </Form>
