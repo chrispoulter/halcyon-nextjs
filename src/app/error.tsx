@@ -29,7 +29,7 @@ export default function Error({
                 Sorry, something went wrong. Please try again later.
             </p>
 
-            <Button asChild className="w-full min-w-32 sm:w-auto">
+            <Button asChild className="w-full sm:w-auto">
                 <Link href="/">Home</Link>
             </Button>
         </main>
