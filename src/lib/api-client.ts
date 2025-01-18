@@ -1,7 +1,10 @@
 import { config } from '@/lib/config';
 
 export class ApiClientError extends Error {
-    constructor(message: string) {
+    constructor(
+        message: string,
+        public status?: number
+    ) {
         super(message);
         this.name = 'ApiClientError';
     }
@@ -43,11 +46,12 @@ class ApiClient {
         if (!response.ok) {
             if (contentType.includes('application/problem+json')) {
                 const problem = await response.json();
-                throw new ApiClientError(problem.title);
+                throw new ApiClientError(problem.title, problem.status);
             }
 
             throw new ApiClientError(
-                `HTTP ${response.status} ${response.statusText}`
+                `HTTP ${response.status} ${response.statusText}`,
+                response.status
             );
         }
 

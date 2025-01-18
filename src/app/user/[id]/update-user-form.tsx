@@ -143,23 +143,19 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button asChild variant="outline" className="min-w-32">
+                    <Button asChild variant="outline">
                         <Link href="/user">Cancel</Link>
                     </Button>
 
                     {user.isLockedOut ? (
-                        <UnlockUserButton user={user} className="min-w-32" />
+                        <UnlockUserButton user={user} />
                     ) : (
-                        <LockUserButton user={user} className="min-w-32" />
+                        <LockUserButton user={user} />
                     )}
 
-                    <DeleteUserButton user={user} className="min-w-32" />
+                    <DeleteUserButton user={user} />
 
-                    <LoadingButton
-                        type="submit"
-                        loading={isPending}
-                        className="min-w-32"
-                    >
+                    <LoadingButton type="submit" loading={isPending}>
                         Submit
                     </LoadingButton>
                 </div>

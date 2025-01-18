@@ -6,13 +6,6 @@ import { SignJWT, jwtVerify } from 'jose';
 import { config } from '@/lib/config';
 import type { SessionPayload } from '@/lib/session-types';
 
-export class SessionError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'SessionError';
-    }
-}
-
 const sessionSecret = config.SESSION_SECRET;
 const encodedSecret = new TextEncoder().encode(sessionSecret);
 

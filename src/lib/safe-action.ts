@@ -2,18 +2,26 @@ import {
     createSafeActionClient,
     DEFAULT_SERVER_ERROR_MESSAGE,
 } from 'next-safe-action';
+import { forbidden, notFound, redirect } from 'next/navigation';
 import { ApiClientError } from '@/lib/api-client';
-import { getSession, SessionError } from '@/lib/session';
+import { getSession } from '@/lib/session';
 import { Role } from '@/lib/session-types';
 
 export const actionClient = createSafeActionClient({
     defaultValidationErrorsShape: 'flattened',
     handleServerError: (error) => {
-        if (error instanceof SessionError) {
-            return error.message;
-        }
-
         if (error instanceof ApiClientError) {
+            switch (error.status) {
+                case 401:
+                    redirect('/account/login');
+
+                case 403:
+                    forbidden();
+
+                case 404:
+                    notFound();
+            }
+
             return error.message;
         }
 
@@ -26,11 +34,11 @@ export const authActionClient = (roles?: Role[]) =>
         const session = await getSession();
 
         if (!session) {
-            throw new SessionError('Unauthorized');
+            redirect('/account/login');
         }
 
         if (roles && !roles.some((value) => session.roles?.includes(value))) {
-            throw new SessionError('Forbidden');
+            forbidden();
         }
 
         const { accessToken } = session;

@@ -124,16 +124,10 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <Button asChild variant="outline">
-                        <Link href="/profile" className="min-w-32">
-                            Cancel
-                        </Link>
+                        <Link href="/profile">Cancel</Link>
                     </Button>
 
-                    <LoadingButton
-                        type="submit"
-                        loading={isPending}
-                        className="min-w-32"
-                    >
+                    <LoadingButton type="submit" loading={isPending}>
                         Submit
                     </LoadingButton>
                 </div>

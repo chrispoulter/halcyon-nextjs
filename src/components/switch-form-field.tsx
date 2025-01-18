@@ -26,28 +26,20 @@ export function SwitchFormField<TFieldValues extends FieldValues>({
         <FormField
             control={control}
             name={name}
-            render={({ field }) => {
-                const currentValue = field.value || [];
-
+            render={({ field: { value = [] as string[], onChange } }) => {
                 return (
                     <>
                         {Object.entries(options).map(
                             ([key, { title, description }]) => {
-                                const checked = field.value?.includes(key);
+                                const checked = value.includes(key);
 
                                 function onCheckChanged(checked: boolean) {
                                     if (checked) {
-                                        return field.onChange([
-                                            ...currentValue,
-                                            key,
-                                        ]);
+                                        return onChange([...value, key]);
                                     }
 
-                                    return field.onChange(
-                                        currentValue.filter(
-                                            (currentRole: string) =>
-                                                currentRole !== key
-                                        )
+                                    return onChange(
+                                        value.filter((item) => item !== key)
                                     );
                                 }
 

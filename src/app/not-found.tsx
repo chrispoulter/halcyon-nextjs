@@ -17,7 +17,7 @@ export default function NotFound() {
                 Sorry, the resource you were looking for could not be found.
             </p>
 
-            <Button asChild className="w-full min-w-32 sm:w-auto">
+            <Button asChild className="w-full sm:w-auto">
                 <Link href="/">Home</Link>
             </Button>
         </main>

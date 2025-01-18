@@ -111,11 +111,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                 </div>
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <LoadingButton
-                        type="submit"
-                        loading={isPending}
-                        className="min-w-32"
-                    >
+                    <LoadingButton type="submit" loading={isPending}>
                         Submit
                     </LoadingButton>
                 </div>
