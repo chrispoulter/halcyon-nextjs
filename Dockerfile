@@ -3,9 +3,6 @@ FROM node:20-alpine AS base
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV HUSKY=0
 
-ARG VERSION=1.0.0
-ENV VERSION=${VERSION}
-
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app

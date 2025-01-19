@@ -6,8 +6,6 @@ services:
         build:
             context: .
             target: dev
-            args:
-                VERSION: 1.0.0-docker
         command: npm run dev
         environment:
             WATCHPACK_POLLING: true

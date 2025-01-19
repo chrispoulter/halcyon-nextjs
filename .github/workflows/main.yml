@@ -38,6 +38,7 @@ jobs:
 
             - name: Build and lint
               run: |
+                  npm version "${{ steps.version_step.outputs.semVer }}" --no-git-tag-version
                   npm ci
                   npm run lint
                   npm run build
@@ -65,5 +66,3 @@ jobs:
                   context: .
                   push: true
                   provenance: false
-                  build-args: |
-                      VERSION=${{ steps.version_step.outputs.semVer }}
