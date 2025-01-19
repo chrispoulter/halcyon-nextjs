@@ -1,4 +1,3 @@
-import { InputHTMLAttributes } from 'react';
 import { FieldPath, FieldValues, useFormContext } from 'react-hook-form';
 import {
     FormControl,
@@ -12,7 +11,13 @@ import { Input } from '@/components/ui/input';
 type TextFormFieldProps<TFieldValues extends FieldValues> = {
     name: FieldPath<TFieldValues>;
     label: string;
-} & InputHTMLAttributes<HTMLInputElement>;
+    type?: string;
+    maxLength?: number;
+    autoComplete?: string;
+    required?: boolean;
+    disabled?: boolean;
+    className?: string;
+};
 
 export function TextFormField<TFieldValues extends FieldValues>({
     name,
