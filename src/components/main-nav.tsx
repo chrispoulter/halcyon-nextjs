@@ -57,10 +57,8 @@ export function MainNav({ session }: MainNavProps) {
                 <DrawerContent>
                     <div className="mx-auto w-full max-w-sm">
                         <DrawerHeader className="sr-only">
-                            <DrawerTitle>Main Menu</DrawerTitle>
-                            <DrawerDescription>
-                                Main menu navigation links
-                            </DrawerDescription>
+                            <DrawerTitle>Halcyon</DrawerTitle>
+                            <DrawerDescription>Main Menu</DrawerDescription>
                         </DrawerHeader>
                         <nav className="flex flex-col items-stretch justify-center gap-2 p-4">
                             {routeLinks}
