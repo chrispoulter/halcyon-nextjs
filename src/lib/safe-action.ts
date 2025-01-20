@@ -32,7 +32,7 @@ export const actionClient = createSafeActionClient({
         }
 
         // Log the error to an error reporting service
-        console.error(error.message, utils.metadata);
+        console.error(error, utils.metadata);
 
         return DEFAULT_SERVER_ERROR_MESSAGE;
     },
