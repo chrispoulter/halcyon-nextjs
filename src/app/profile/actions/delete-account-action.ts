@@ -11,6 +11,7 @@ const schema = z.object({
 });
 
 export const deleteAccountAction = authActionClient()
+    .metadata({ actionName: 'deleteAccountAction' })
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
         const result = await apiClient.delete<DeleteAccountResponse>(

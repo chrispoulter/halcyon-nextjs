@@ -19,6 +19,7 @@ const schema = z.object({
 });
 
 export const resetPasswordAction = actionClient
+    .metadata({ actionName: 'resetPasswordAction' })
     .schema(schema)
     .action(async ({ parsedInput }) => {
         return await apiClient.put<ResetPasswordResponse>(

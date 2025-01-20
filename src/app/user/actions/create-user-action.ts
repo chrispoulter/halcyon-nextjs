@@ -43,6 +43,7 @@ const schema = z.object({
 const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const createUserAction = authActionClient(roles)
+    .metadata({ actionName: 'createUserAction' })
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
         return await apiClient.post<CreateUserResponse>('/user', parsedInput, {

@@ -41,6 +41,7 @@ const schema = z
     });
 
 export const registerAction = actionClient
+    .metadata({ actionName: 'registerAction' })
     .schema(schema)
     .action(async ({ parsedInput }) => {
         return await apiClient.post<RegisterResponse>(

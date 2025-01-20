@@ -17,6 +17,7 @@ const schema = z.object({
 });
 
 export const changePasswordAction = authActionClient()
+    .metadata({ actionName: 'changePasswordAction' })
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
         return await apiClient.put<ChangePasswordResponse>(

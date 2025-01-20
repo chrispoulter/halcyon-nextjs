@@ -16,6 +16,7 @@ const schema = z.object({
 const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const unlockUserAction = authActionClient(roles)
+    .metadata({ actionName: 'unlockUserAction' })
     .schema(schema)
     .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
         return await apiClient.put<UnlockUserResponse>(

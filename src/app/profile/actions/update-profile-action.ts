@@ -28,6 +28,7 @@ const schema = z.object({
 });
 
 export const updateProfileAction = authActionClient()
+    .metadata({ actionName: 'updateProfileAction' })
     .schema(schema)
     .action(async ({ parsedInput, ctx: { accessToken } }) => {
         return await apiClient.put<UpdateProfileResponse>(

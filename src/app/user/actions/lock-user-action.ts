@@ -16,6 +16,7 @@ const schema = z.object({
 const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const lockUserAction = authActionClient(roles)
+    .metadata({ actionName: 'lockUserAction' })
     .schema(schema)
     .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
         return await apiClient.put<LockUserResponse>(`/user/${id}/lock`, rest, {

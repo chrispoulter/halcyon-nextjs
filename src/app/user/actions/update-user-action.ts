@@ -42,6 +42,7 @@ const schema = z.object({
 const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const updateUserAction = authActionClient(roles)
+    .metadata({ actionName: 'updateUserAction' })
     .schema(schema)
     .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
         return await apiClient.put<UpdateUserResponse>(`/user/${id}`, rest, {

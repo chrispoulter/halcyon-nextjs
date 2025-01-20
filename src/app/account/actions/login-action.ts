@@ -21,6 +21,7 @@ const securityKey = config.JWT_SECURITY_KEY;
 const encodedKey = new TextEncoder().encode(securityKey);
 
 export const loginAction = actionClient
+    .metadata({ actionName: 'loginAction' })
     .schema(schema)
     .action(async ({ parsedInput }) => {
         const result = await apiClient.post<LoginResponse>(

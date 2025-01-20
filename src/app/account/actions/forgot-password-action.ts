@@ -11,6 +11,7 @@ const schema = z.object({
 });
 
 export const forgotPasswordAction = actionClient
+    .metadata({ actionName: 'forgotPasswordAction' })
     .schema(schema)
     .action(async ({ parsedInput }) => {
         return await apiClient.put('/account/forgot-password', parsedInput);

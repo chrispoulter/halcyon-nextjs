@@ -2,6 +2,7 @@ import {
     createSafeActionClient,
     DEFAULT_SERVER_ERROR_MESSAGE,
 } from 'next-safe-action';
+import { z } from 'zod';
 import { forbidden, notFound, redirect } from 'next/navigation';
 import { ApiClientError } from '@/lib/api-client';
 import { getSession } from '@/lib/session';
@@ -9,7 +10,12 @@ import { Role } from '@/lib/session-types';
 
 export const actionClient = createSafeActionClient({
     defaultValidationErrorsShape: 'flattened',
-    handleServerError: (error) => {
+    defineMetadataSchema() {
+        return z.object({
+            actionName: z.string(),
+        });
+    },
+    handleServerError: (error, utils) => {
         if (error instanceof ApiClientError) {
             switch (error.status) {
                 case 401:
@@ -24,6 +30,9 @@ export const actionClient = createSafeActionClient({
 
             return error.message;
         }
+
+        // Log the error to an error reporting service
+        console.error(error.message, utils.metadata);
 
         return DEFAULT_SERVER_ERROR_MESSAGE;
     },
