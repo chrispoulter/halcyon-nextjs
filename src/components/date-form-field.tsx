@@ -34,6 +34,8 @@ export function DateFormField<TFieldValues extends FieldValues>({
 }: DateFormFieldProps<TFieldValues>) {
     const { control } = useFormContext<TFieldValues>();
 
+    const [dayAuto, monthAuto, yearAuto] = autoComplete || [];
+
     return (
         <FormField
             control={control}
@@ -63,9 +65,7 @@ export function DateFormField<TFieldValues extends FieldValues>({
                                     defaultValue={day}
                                     required={required}
                                     disabled={disabled}
-                                    autoComplete={
-                                        autoComplete && autoComplete[0]
-                                    }
+                                    autoComplete={dayAuto}
                                 >
                                     <FormControl>
                                         <SelectTrigger>
@@ -96,9 +96,7 @@ export function DateFormField<TFieldValues extends FieldValues>({
                                     defaultValue={month}
                                     required={required}
                                     disabled={disabled}
-                                    autoComplete={
-                                        autoComplete && autoComplete[1]
-                                    }
+                                    autoComplete={monthAuto}
                                 >
                                     <FormControl id={`${name}-month`}>
                                         <SelectTrigger>
@@ -127,9 +125,7 @@ export function DateFormField<TFieldValues extends FieldValues>({
                                     defaultValue={year}
                                     required={required}
                                     disabled={disabled}
-                                    autoComplete={
-                                        autoComplete && autoComplete[2]
-                                    }
+                                    autoComplete={yearAuto}
                                 >
                                     <FormControl id={`${name}-year`}>
                                         <SelectTrigger>
