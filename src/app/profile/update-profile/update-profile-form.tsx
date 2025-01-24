@@ -83,7 +83,8 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
             >
-                <TextFormField<UpdateProfileFormValues>
+                <TextFormField
+                    control={form.control}
                     name="emailAddress"
                     label="Email Address"
                     type="email"
@@ -94,7 +95,8 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField<UpdateProfileFormValues>
+                    <TextFormField
+                        control={form.control}
                         name="firstName"
                         label="First Name"
                         maxLength={50}
@@ -103,7 +105,8 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                         disabled={isPending}
                         className="flex-1"
                     />
-                    <TextFormField<UpdateProfileFormValues>
+                    <TextFormField
+                        control={form.control}
                         name="lastName"
                         label="Last Name"
                         maxLength={50}
@@ -114,7 +117,8 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
                     />
                 </div>
 
-                <DateFormField<UpdateProfileFormValues>
+                <DateFormField
+                    control={form.control}
                     name="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}

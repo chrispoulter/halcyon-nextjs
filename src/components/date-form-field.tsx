@@ -1,4 +1,4 @@
-import { FieldPath, FieldValues, useFormContext } from 'react-hook-form';
+import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import {
     FormControl,
     FormField,
@@ -16,15 +16,14 @@ import {
 import { currentYear, monthNames } from '@/lib/dates';
 
 type DateFormFieldProps<TFieldValues extends FieldValues> = {
-    name: FieldPath<TFieldValues>;
     label: string;
     required?: boolean;
-    disabled?: boolean;
     autoComplete?: [string, string, string];
     className?: string;
-};
+} & UseControllerProps<TFieldValues>;
 
 export function DateFormField<TFieldValues extends FieldValues>({
+    control,
     name,
     label,
     required,
@@ -32,8 +31,6 @@ export function DateFormField<TFieldValues extends FieldValues>({
     autoComplete,
     className,
 }: DateFormFieldProps<TFieldValues>) {
-    const { control } = useFormContext<TFieldValues>();
-
     const [dayAuto, monthAuto, yearAuto] = autoComplete || [];
 
     return (

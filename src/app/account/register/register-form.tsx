@@ -92,7 +92,8 @@ export function RegisterForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
             >
-                <TextFormField<RegisterFormValues>
+                <TextFormField
+                    control={form.control}
                     name="emailAddress"
                     label="Email Address"
                     type="email"
@@ -103,7 +104,8 @@ export function RegisterForm() {
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField<RegisterFormValues>
+                    <TextFormField
+                        control={form.control}
                         name="password"
                         label="Password"
                         type="password"
@@ -113,7 +115,7 @@ export function RegisterForm() {
                         disabled={isPending}
                         className="flex-1"
                     />
-                    <TextFormField<RegisterFormValues>
+                    <TextFormField
                         name="confirmPassword"
                         label="Confirm Password"
                         type="password"
@@ -126,7 +128,8 @@ export function RegisterForm() {
                 </div>
 
                 <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField<RegisterFormValues>
+                    <TextFormField
+                        control={form.control}
                         name="firstName"
                         label="First Name"
                         maxLength={50}
@@ -135,7 +138,7 @@ export function RegisterForm() {
                         disabled={isPending}
                         className="flex-1"
                     />
-                    <TextFormField<RegisterFormValues>
+                    <TextFormField
                         name="lastName"
                         label="Last Name"
                         maxLength={50}
@@ -146,7 +149,8 @@ export function RegisterForm() {
                     />
                 </div>
 
-                <DateFormField<RegisterFormValues>
+                <DateFormField
+                    control={form.control}
                     name="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}

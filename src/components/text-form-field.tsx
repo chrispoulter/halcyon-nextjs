@@ -1,4 +1,4 @@
-import { FieldPath, FieldValues, useFormContext } from 'react-hook-form';
+import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import {
     FormControl,
     FormField,
@@ -9,24 +9,21 @@ import {
 import { Input } from '@/components/ui/input';
 
 type TextFormFieldProps<TFieldValues extends FieldValues> = {
-    name: FieldPath<TFieldValues>;
     label: string;
     type?: string;
     maxLength?: number;
     autoComplete?: string;
     required?: boolean;
-    disabled?: boolean;
     className?: string;
-};
+} & UseControllerProps<TFieldValues>;
 
 export function TextFormField<TFieldValues extends FieldValues>({
+    control,
     name,
     label,
     className,
     ...props
 }: TextFormFieldProps<TFieldValues>) {
-    const { control } = useFormContext<TFieldValues>();
-
     return (
         <FormField
             control={control}

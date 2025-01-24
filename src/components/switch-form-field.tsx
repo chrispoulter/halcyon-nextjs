@@ -1,4 +1,4 @@
-import { FieldPath, FieldValues, useFormContext } from 'react-hook-form';
+import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import {
     FormControl,
     FormDescription,
@@ -10,18 +10,15 @@ import {
 import { Switch } from '@/components/ui/switch';
 
 type SwitchFormFieldProps<TFieldValues extends FieldValues> = {
-    name: FieldPath<TFieldValues>;
     options: Record<string, { title: string; description: string }>;
-    disabled?: boolean;
-};
+} & UseControllerProps<TFieldValues>;
 
 export function SwitchFormField<TFieldValues extends FieldValues>({
+    control,
     name,
     options,
     disabled,
 }: SwitchFormFieldProps<TFieldValues>) {
-    const { control } = useFormContext<TFieldValues>();
-
     return (
         <FormField
             control={control}
