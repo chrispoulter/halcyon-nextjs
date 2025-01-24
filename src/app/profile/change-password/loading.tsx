@@ -15,8 +15,8 @@ export default function ChangePasswordLoading() {
                 </div>
 
                 <div className="flex flex-col justify-end gap-2 sm:flex-row">
-                    <Skeleton className="h-10 w-full sm:w-36" />
-                    <Skeleton className="h-10 w-full sm:w-36" />
+                    <Skeleton className="h-10 w-full sm:w-32" />
+                    <Skeleton className="h-10 w-full sm:w-32" />
                 </div>
             </div>
 
