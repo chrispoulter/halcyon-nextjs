@@ -57,7 +57,7 @@ export function UserNav({ session }: UserNavProps) {
                 <DropdownMenuLabel className="space-y-2">
                     <div className="space-y-0.5">
                         <div className="truncate text-sm font-medium">
-                            {session.given_name} {session.family_name}
+                            {session.name}
                         </div>
                         <div className="truncate text-sm text-muted-foreground">
                             {session.email}
