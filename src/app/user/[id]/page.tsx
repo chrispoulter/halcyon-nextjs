@@ -1,4 +1,3 @@
-import { Metadata } from 'next';
 import { getUserAction } from '@/app/user/actions/get-user-action';
 import { UpdateUserForm } from '@/app/user/[id]/update-user-form';
 import {
@@ -6,11 +5,21 @@ import {
     ServerActionError,
 } from '@/components/server-action-error';
 
-export const metadata: Metadata = {
-    title: 'Update User',
-};
-
 type Params = Promise<{ id: string }>;
+
+export async function generateMetadata({ params }: { params: Params }) {
+    const { id } = await params;
+
+    const result = await getUserAction({ id });
+
+    if (!isServerActionSuccess(result)) {
+        return { title: 'Update User' };
+    }
+
+    return {
+        title: `${result.data.firstName} ${result.data.lastName}`,
+    };
+}
 
 export default async function UpdateUser({ params }: { params: Params }) {
     const { id } = await params;
