@@ -44,14 +44,12 @@ export const loginAction = actionClient
         const image = await getGravatarUrl(payload.email);
 
         await createSession({
+            ...payload,
             accessToken,
-            email: payload.email,
-            name: `${payload.given_name} ${payload.family_name}`,
             image,
             roles:
                 typeof payload.roles === 'string'
                     ? [payload.roles]
                     : payload.roles || [],
-            exp: payload.exp,
         });
     });

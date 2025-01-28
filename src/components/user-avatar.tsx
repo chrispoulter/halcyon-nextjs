@@ -8,8 +8,13 @@ type UserAvatarProps = {
 export function UserAvatar({ session }: UserAvatarProps) {
     return (
         <Avatar>
-            <AvatarImage src={session.image} alt={session.name} />
-            <AvatarFallback>{session.name[0]}</AvatarFallback>
+            <AvatarImage
+                src={session.image}
+                alt={`${session.given_name} ${session.family_name}`}
+            />
+            <AvatarFallback>
+                {session.given_name[0]} {session.family_name[0]}
+            </AvatarFallback>
         </Avatar>
     );
 }
