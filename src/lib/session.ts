@@ -17,12 +17,10 @@ async function encrypt(payload: SessionPayload) {
         .sign(encodedSecret);
 }
 
-async function decrypt(
-    session: string | undefined = ''
-): Promise<SessionPayload | undefined> {
+async function decrypt(value = ''): Promise<SessionPayload | undefined> {
     try {
         const { payload } = await jwtVerify<SessionPayload>(
-            session,
+            value,
             encodedSecret,
             {
                 algorithms: ['HS256'],
@@ -35,9 +33,9 @@ async function decrypt(
 }
 
 export async function createSession(payload: SessionPayload) {
-    const expires = new Date(payload.exp * 1000);
-    const session = await encrypt(payload);
     const cookieStore = await cookies();
+    const session = await encrypt(payload);
+    const expires = new Date(payload.exp * 1000);
 
     cookieStore.set('session', session, {
         httpOnly: true,
@@ -54,6 +52,7 @@ export async function deleteSession() {
 }
 
 export const getSession = cache(async () => {
-    const cookie = (await cookies()).get('session')?.value;
-    return await decrypt(cookie);
+    const cookieStore = await cookies();
+    const cookie = cookieStore.get('session');
+    return await decrypt(cookie?.value);
 });

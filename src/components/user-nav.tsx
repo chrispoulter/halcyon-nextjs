@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { logoutAction } from '@/app/account/actions/logout-action';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,7 +14,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { UserAvatar } from '@/components/user-avatar';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toast } from '@/hooks/use-toast';
 import { type SessionPayload, roles } from '@/lib/session-types';
@@ -49,7 +49,11 @@ export function UserNav({ session }: UserNavProps) {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-10 w-10 rounded-full">
-                    <UserAvatar session={session} />
+                    <Avatar>
+                        <AvatarFallback>
+                            {session.given_name[0]} {session.family_name[0]}
+                        </AvatarFallback>
+                    </Avatar>
                     <span className="sr-only">Toggle profile menu</span>
                 </Button>
             </DropdownMenuTrigger>

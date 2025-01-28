@@ -5,7 +5,6 @@ import { jwtVerify } from 'jose';
 import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
 import { apiClient } from '@/lib/api-client';
 import { config } from '@/lib/config';
-import { getGravatarUrl } from '@/lib/gravatar';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
@@ -41,12 +40,9 @@ export const loginAction = actionClient
             }
         );
 
-        const image = await getGravatarUrl(payload.email);
-
         await createSession({
             ...payload,
             accessToken,
-            image,
             roles:
                 typeof payload.roles === 'string'
                     ? [payload.roles]
