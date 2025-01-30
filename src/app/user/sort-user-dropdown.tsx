@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowDownWideNarrow } from 'lucide-react';
 import { UserSort } from '@/app/user/user-types';
@@ -36,8 +36,6 @@ type SortUserDropdownProps = {
 };
 
 export function SortUserDropdown({ sort }: SortUserDropdownProps) {
-    const pathname = usePathname();
-
     const searchParams = useSearchParams();
 
     const query = Object.fromEntries(searchParams.entries());
@@ -59,7 +57,6 @@ export function SortUserDropdown({ sort }: SortUserDropdownProps) {
                     >
                         <Link
                             href={{
-                                pathname,
                                 query: {
                                     ...query,
                                     sort: value,

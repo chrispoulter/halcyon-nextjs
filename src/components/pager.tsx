@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import {
     Pagination,
     PaginationContent,
@@ -16,8 +16,6 @@ type PagerProps = {
 };
 
 export function Pager({ hasPreviousPage, hasNextPage, page = 1 }: PagerProps) {
-    const pathname = usePathname();
-
     const searchParams = useSearchParams();
 
     const query = Object.fromEntries(searchParams.entries());
@@ -33,7 +31,6 @@ export function Pager({ hasPreviousPage, hasNextPage, page = 1 }: PagerProps) {
                     <PaginationItem>
                         <PaginationPrevious
                             href={{
-                                pathname,
                                 query: {
                                     ...query,
                                     page: page - 1,
@@ -46,7 +43,6 @@ export function Pager({ hasPreviousPage, hasNextPage, page = 1 }: PagerProps) {
                     <PaginationItem>
                         <PaginationNext
                             href={{
-                                pathname,
                                 query: {
                                     ...query,
                                     page: page + 1,
