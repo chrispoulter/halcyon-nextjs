@@ -4,8 +4,8 @@ import { z } from 'zod';
 import { AlertCircle } from 'lucide-react';
 import { searchUsersAction } from '@/app/user/actions/search-users-action';
 import { UserSort } from '@/app/user/user-types';
-import { SearchUserForm } from '@/app/user/search-user-form';
-import { SortUserDropdown } from '@/app/user/sort-user-dropdown';
+import { SearchUsersForm } from '@/app/user/search-users-form';
+import { SortUsersDropdown } from '@/app/user/sort-users-dropdown';
 import { UserCard } from '@/app/user/user-card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -42,7 +42,7 @@ const searchParamsSchema = z.object({
 
 const PAGE_SIZE = 10;
 
-export default async function UserSearch({
+export default async function SearchUsers({
     searchParams,
 }: {
     searchParams: SearchParams;
@@ -69,8 +69,8 @@ export default async function UserSearch({
             </h1>
 
             <div className="flex gap-2">
-                <SearchUserForm search={request.search} />
-                <SortUserDropdown sort={request.sort} />
+                <SearchUsersForm search={request.search} />
+                <SortUsersDropdown sort={request.sort} />
             </div>
 
             <Button asChild className="w-full sm:w-auto">

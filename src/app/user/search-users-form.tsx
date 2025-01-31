@@ -23,25 +23,25 @@ const schema = z.object({
         .optional(),
 });
 
-type SearchUserFormValues = z.infer<typeof schema>;
+type SearchUsersFormValues = z.infer<typeof schema>;
 
-type SearchUserFormProps = {
+type SearchUsersFormProps = {
     search: string;
 };
 
-export function SearchUserForm({ search }: SearchUserFormProps) {
+export function SearchUsersForm({ search }: SearchUsersFormProps) {
     const router = useRouter();
 
     const searchParams = useSearchParams();
 
-    const form = useForm<SearchUserFormValues>({
+    const form = useForm<SearchUsersFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             search,
         },
     });
 
-    function onSubmit(data: SearchUserFormValues) {
+    function onSubmit(data: SearchUsersFormValues) {
         const params = new URLSearchParams(searchParams.toString());
 
         params.delete('page');
