@@ -42,7 +42,7 @@ const searchParamsSchema = z.object({
 
 const PAGE_SIZE = 10;
 
-export default async function SearchUsers({
+export default async function SearchUsersPage({
     searchParams,
 }: {
     searchParams: SearchParams;

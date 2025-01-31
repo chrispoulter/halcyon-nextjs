@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: 'Update Profile',
 };
 
-export default async function UpdateProfile() {
+export default async function UpdateProfilePage() {
     const result = await getProfileAction();
 
     if (!isServerActionSuccess(result)) {

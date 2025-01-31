@@ -5,7 +5,7 @@ export const metadata: Metadata = {
     title: 'Create User',
 };
 
-export default async function CreateUser() {
+export default async function CreateUserPage() {
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">

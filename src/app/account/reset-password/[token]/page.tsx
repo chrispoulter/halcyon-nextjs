@@ -7,7 +7,11 @@ export const metadata: Metadata = {
 
 type Params = Promise<{ token: string }>;
 
-export default async function ResetPassword({ params }: { params: Params }) {
+export default async function ResetPasswordPage({
+    params,
+}: {
+    params: Params;
+}) {
     const { token } = await params;
 
     return (

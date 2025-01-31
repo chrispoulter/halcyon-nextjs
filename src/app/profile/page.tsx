@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: 'My Account',
 };
 
-export default async function Profile() {
+export default async function ProfilePage() {
     const result = await getProfileAction();
 
     if (!isServerActionSuccess(result)) {

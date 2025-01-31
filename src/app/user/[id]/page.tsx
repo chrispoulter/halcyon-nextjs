@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Params }) {
     };
 }
 
-export default async function UpdateUser({ params }: { params: Params }) {
+export default async function UpdateUserPage({ params }: { params: Params }) {
     const { id } = await params;
 
     const result = await getUserAction({ id });

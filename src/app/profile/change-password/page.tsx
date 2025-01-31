@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: 'Change Password',
 };
 
-export default async function ChangePassword() {
+export default async function ChangePasswordPage() {
     const result = await getProfileAction();
 
     if (!isServerActionSuccess(result)) {
