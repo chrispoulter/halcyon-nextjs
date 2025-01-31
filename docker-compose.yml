@@ -1,8 +1,8 @@
-name: halcyon
+name: halcyon-next
 
 services:
-    halcyon:
-        image: halcyon:dev
+    halcyon-next:
+        image: halcyon-next:dev
         build:
             context: .
             target: dev
