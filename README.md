@@ -43,10 +43,6 @@ For local development, you'll need to create a `.env.local` file in the root of 
 ```
 API_URL=http://localhost:5257
 
-JWT_SECURITY_KEY=super_secret_key_that_should_be_changed
-JWT_ISSUER=HalcyonApi
-JWT_AUDIENCE=HalcyonClient
-
 SESSION_SECRET=super_secret_key_that_should_be_changed
 ```
 

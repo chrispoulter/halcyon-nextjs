@@ -1,10 +1,9 @@
 'use server';
 
 import { z } from 'zod';
-import { jwtVerify } from 'jose';
+import { decodeJwt } from 'jose';
 import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
 import { apiClient } from '@/lib/api-client';
-import { config } from '@/lib/config';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
 
@@ -17,9 +16,6 @@ const schema = z.object({
         .min(1, 'Password is a required field'),
 });
 
-const securityKey = config.JWT_SECURITY_KEY;
-const encodedKey = new TextEncoder().encode(securityKey);
-
 export const loginAction = actionClient
     .metadata({ actionName: 'loginAction' })
     .schema(schema)
@@ -31,14 +27,7 @@ export const loginAction = actionClient
 
         const { accessToken } = result;
 
-        const { payload } = await jwtVerify<TokenPayload>(
-            accessToken,
-            encodedKey,
-            {
-                audience: config.JWT_AUDIENCE,
-                issuer: config.JWT_ISSUER,
-            }
-        );
+        const payload = decodeJwt<TokenPayload>(accessToken);
 
         await createSession({
             ...payload,

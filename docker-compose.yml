@@ -10,9 +10,6 @@ services:
         environment:
             WATCHPACK_POLLING: true
             API_URL: http://host.docker.internal:5257
-            JWT_SECURITY_KEY: super_secret_key_that_should_be_changed
-            JWT_ISSUER: HalcyonApi
-            JWT_AUDIENCE: HalcyonClient
             SESSION_SECRET: super_secret_key_that_should_be_changed
         ports:
             - 3000:3000
