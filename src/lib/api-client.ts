@@ -41,6 +41,9 @@ class ApiClient {
             body: body ? JSON.stringify(body) : undefined,
         });
 
+        // wait for 3 seconds
+        // await new Promise((resolve) => setTimeout(resolve, 3000));
+
         const contentType = response.headers.get('content-type') || '';
 
         if (!response.ok) {

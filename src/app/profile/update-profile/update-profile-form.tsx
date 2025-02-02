@@ -48,7 +48,7 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
 
     const form = useForm<UpdateProfileFormValues>({
         resolver: zodResolver(schema),
-        values: profile,
+        defaultValues: profile,
     });
 
     const { execute, isPending } = useAction(updateProfileAction, {
