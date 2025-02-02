@@ -61,7 +61,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
 
     const form = useForm<UpdateUserFormValues>({
         resolver: zodResolver(schema),
-        defaultValues: user,
+        values: user,
     });
 
     const { execute, isPending } = useAction(updateUserAction, {
