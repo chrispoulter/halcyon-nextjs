@@ -5,9 +5,11 @@ import {
     ServerActionError,
 } from '@/components/server-action-error';
 
-type Params = Promise<{ id: string }>;
+type UpdateUserPageProps = {
+    params: Promise<{ id: string }>;
+};
 
-export async function generateMetadata({ params }: { params: Params }) {
+export async function generateMetadata({ params }: UpdateUserPageProps) {
     const { id } = await params;
 
     const result = await getUserAction({ id });
@@ -21,7 +23,7 @@ export async function generateMetadata({ params }: { params: Params }) {
     };
 }
 
-export default async function UpdateUserPage({ params }: { params: Params }) {
+export default async function UpdateUserPage({ params }: UpdateUserPageProps) {
     const { id } = await params;
 
     const result = await getUserAction({ id });

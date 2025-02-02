@@ -15,16 +15,18 @@ import {
     ServerActionError,
 } from '@/components/server-action-error';
 
+type SearchUsersPageProps = {
+    searchParams: Promise<{
+        page?: number;
+        size?: number;
+        sort: string;
+        search: string;
+    }>;
+};
+
 export const metadata: Metadata = {
     title: 'Users',
 };
-
-type SearchParams = Promise<{
-    page?: number;
-    size?: number;
-    sort: string;
-    search: string;
-}>;
 
 const searchParamsSchema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).catch(''),
@@ -44,9 +46,7 @@ const PAGE_SIZE = 10;
 
 export default async function SearchUsersPage({
     searchParams,
-}: {
-    searchParams: SearchParams;
-}) {
+}: SearchUsersPageProps) {
     const params = await searchParams;
 
     const request = searchParamsSchema.parse(params);

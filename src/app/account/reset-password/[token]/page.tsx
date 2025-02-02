@@ -1,17 +1,17 @@
 import { Metadata } from 'next';
 import { ResetPasswordForm } from '@/app/account/reset-password/[token]/reset-password-form';
 
+type ResetPasswordPageProps = {
+    params: Promise<{ token: string }>;
+};
+
 export const metadata: Metadata = {
     title: 'Reset Password',
 };
 
-type Params = Promise<{ token: string }>;
-
 export default async function ResetPasswordPage({
     params,
-}: {
-    params: Params;
-}) {
+}: ResetPasswordPageProps) {
     const { token } = await params;
 
     return (
