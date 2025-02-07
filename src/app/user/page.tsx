@@ -42,7 +42,7 @@ const searchParamsSchema = z.object({
         .catch(UserSort.NAME_ASC),
 });
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 export default async function SearchUsersPage({
     searchParams,
