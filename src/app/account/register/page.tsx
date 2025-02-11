@@ -20,7 +20,7 @@ export default async function RegisterPage() {
 
             <RegisterForm />
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
                 Already have an account?{' '}
                 <Link
                     href="/account/login"

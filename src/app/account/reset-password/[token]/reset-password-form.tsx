@@ -5,12 +5,12 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import { resetPasswordAction } from '@/app/account/actions/reset-password-action';
 import { Form } from '@/components/ui/form';
 import { LoadingButton } from '@/components/loading-button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 
 const schema = z
     .object({
@@ -50,19 +50,11 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
     const { execute, isPending } = useAction(resetPasswordAction, {
         onSuccess: () => {
-            toast({
-                title: 'Success',
-                description: 'Your password has been reset.',
-            });
-
+            toast.success('Your password has been reset.');
             router.push('/account/login');
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 

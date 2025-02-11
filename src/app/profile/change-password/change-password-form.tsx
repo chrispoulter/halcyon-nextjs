@@ -6,6 +6,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { changePasswordAction } from '@/app/profile/actions/change-password-action';
 import { Form } from '@/components/ui/form';
@@ -13,7 +14,6 @@ import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/loading-button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 
 const schema = z
     .object({
@@ -53,19 +53,11 @@ export function ChangePasswordForm({ profile }: ChangePasswordFormProps) {
 
     const { execute, isPending } = useAction(changePasswordAction, {
         onSuccess: () => {
-            toast({
-                title: 'Success',
-                description: 'Your password has been changed.',
-            });
-
+            toast.success('Your password has been changed.');
             router.push('/profile');
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 

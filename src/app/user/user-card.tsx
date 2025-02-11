@@ -11,13 +11,13 @@ export function UserCard({ user }: UserCardProps) {
     return (
         <Link
             href={`/user/${user.id}`}
-            className="block space-y-2 rounded-lg border p-4 focus-within:bg-accent hover:bg-accent"
+            className="focus-within:bg-accent hover:bg-accent block space-y-2 rounded-lg border p-4"
         >
             <div className="space-y-0.5">
                 <div className="truncate text-base font-medium">
                     {user.firstName} {user.lastName}
                 </div>
-                <div className="truncate text-sm text-muted-foreground">
+                <div className="text-muted-foreground truncate text-sm">
                     {user.emailAddress}
                 </div>
             </div>

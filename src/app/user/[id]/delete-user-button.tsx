@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'sonner';
 import { deleteUserAction } from '@/app/user/actions/delete-user-action';
 import { GetUserResponse } from '@/app/user/user-types';
 import {
@@ -17,7 +18,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 
 type DeleteUserButtonProps = {
     user: GetUserResponse;
@@ -29,19 +29,11 @@ export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
 
     const { execute, isPending } = useAction(deleteUserAction, {
         onSuccess: () => {
-            toast({
-                title: 'Success',
-                description: 'User successfully deleted.',
-            });
-
+            toast.success('User successfully deleted.');
             router.push('/user');
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 

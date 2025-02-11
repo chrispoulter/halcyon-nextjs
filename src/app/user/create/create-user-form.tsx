@@ -6,6 +6,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import { createUserAction } from '@/app/user/actions/create-user-action';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,6 @@ import { DateFormField } from '@/components/date-form-field';
 import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
@@ -80,19 +80,11 @@ export function CreateUserForm() {
 
     const { execute, isPending } = useAction(createUserAction, {
         onSuccess: () => {
-            toast({
-                title: 'Success',
-                description: 'User successfully created.',
-            });
-
+            toast.success('User successfully created.');
             router.push('/user');
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 

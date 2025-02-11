@@ -5,12 +5,12 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import { forgotPasswordAction } from '@/app/account/actions/forgot-password-action';
 import { Form } from '@/components/ui/form';
 import { LoadingButton } from '@/components/loading-button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 
 const schema = z.object({
     emailAddress: z
@@ -32,20 +32,14 @@ export function ForgotPasswordForm() {
 
     const { execute, isPending } = useAction(forgotPasswordAction, {
         onSuccess: () => {
-            toast({
-                title: 'Success',
-                description:
-                    'Instructions as to how to reset your password have been sent to you via email.',
-            });
+            toast.success(
+                'Instructions as to how to reset your password have been sent to you via email.'
+            );
 
             router.push('/account/login');
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 

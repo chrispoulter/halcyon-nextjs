@@ -34,7 +34,7 @@ export default async function ChangePasswordPage() {
 
             <ChangePasswordForm profile={profile} />
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
                 Forgotten your password?{' '}
                 <Link
                     href="/account/forgot-password"
