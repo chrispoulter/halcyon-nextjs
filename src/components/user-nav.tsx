@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'sonner';
 import { logoutAction } from '@/app/account/actions/logout-action';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -15,7 +16,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 import { type SessionPayload, roles } from '@/lib/session-types';
 
 type UserNavProps = {
@@ -25,11 +25,7 @@ type UserNavProps = {
 export function UserNav({ session }: UserNavProps) {
     const { execute, isPending } = useAction(logoutAction, {
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 
@@ -63,7 +59,7 @@ export function UserNav({ session }: UserNavProps) {
                         <div className="truncate text-sm font-medium">
                             {session.given_name} {session.family_name}
                         </div>
-                        <div className="truncate text-sm text-muted-foreground">
+                        <div className="text-muted-foreground truncate text-sm">
                             {session.email}
                         </div>
                     </div>

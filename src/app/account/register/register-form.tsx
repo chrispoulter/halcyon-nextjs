@@ -5,13 +5,13 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import { registerAction } from '@/app/account/actions/register-action';
 import { Form } from '@/components/ui/form';
 import { LoadingButton } from '@/components/loading-button';
 import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 
 const schema = z
@@ -65,19 +65,11 @@ export function RegisterForm() {
 
     const { execute, isPending } = useAction(registerAction, {
         onSuccess: () => {
-            toast({
-                title: 'Success',
-                description: 'User successfully registered.',
-            });
-
+            toast.success('User successfully registered.');
             router.push('/account/login');
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 

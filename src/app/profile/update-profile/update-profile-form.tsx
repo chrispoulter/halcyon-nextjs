@@ -6,6 +6,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { updateProfileAction } from '@/app/profile/actions/update-profile-action';
 import { Form } from '@/components/ui/form';
@@ -14,7 +15,6 @@ import { LoadingButton } from '@/components/loading-button';
 import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 
 const schema = z.object({
@@ -53,19 +53,11 @@ export function UpdateProfileForm({ profile }: UpdateProfileFormProps) {
 
     const { execute, isPending } = useAction(updateProfileAction, {
         onSuccess: () => {
-            toast({
-                title: 'Success',
-                description: 'Your profile has been updated.',
-            });
-
+            toast.success('Your profile has been updated.');
             router.push('/profile');
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 

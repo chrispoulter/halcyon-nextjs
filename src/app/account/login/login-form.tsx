@@ -5,12 +5,12 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import { loginAction } from '@/app/account/actions/login-action';
 import { Form } from '@/components/ui/form';
 import { LoadingButton } from '@/components/loading-button';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 
 const schema = z.object({
     emailAddress: z
@@ -39,11 +39,7 @@ export function LoginForm() {
             router.push('/');
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 

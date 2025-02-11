@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'sonner';
 import { unlockUserAction } from '@/app/user/actions/unlock-user-action';
 import { GetUserResponse } from '@/app/user/user-types';
 import {
@@ -17,7 +18,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 
 type UnlockUserButtonProps = {
     user: GetUserResponse;
@@ -29,19 +29,11 @@ export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
 
     const { execute, isPending } = useAction(unlockUserAction, {
         onSuccess: () => {
-            toast({
-                title: 'Success',
-                description: 'User successfully locked.',
-            });
-
+            toast.success('User successfully unlocked.');
             router.refresh();
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 

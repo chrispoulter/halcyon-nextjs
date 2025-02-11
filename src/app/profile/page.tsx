@@ -33,20 +33,20 @@ export default async function ProfilePage() {
             </h2>
 
             <dl className="space-y-2">
-                <dt className="text-sm font-medium leading-none">
+                <dt className="text-sm leading-none font-medium">
                     Email Address
                 </dt>
-                <dd className="truncate text-sm text-muted-foreground">
+                <dd className="text-muted-foreground truncate text-sm">
                     {profile.emailAddress}
                 </dd>
-                <dt className="text-sm font-medium leading-none">Name</dt>
-                <dd className="truncate text-sm text-muted-foreground">
+                <dt className="text-sm leading-none font-medium">Name</dt>
+                <dd className="text-muted-foreground truncate text-sm">
                     {profile.firstName} {profile.lastName}
                 </dd>
-                <dt className="text-sm font-medium leading-none">
+                <dt className="text-sm leading-none font-medium">
                     Date Of Birth
                 </dt>
-                <dd className="truncate text-sm text-muted-foreground">
+                <dd className="text-muted-foreground truncate text-sm">
                     {toLocaleString(profile.dateOfBirth)}
                 </dd>
             </dl>

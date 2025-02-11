@@ -6,6 +6,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import type { GetUserResponse } from '@/app/user/user-types';
 import { updateUserAction } from '@/app/user/actions/update-user-action';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
@@ -18,7 +19,6 @@ import { DateFormField } from '@/components/date-form-field';
 import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
@@ -66,19 +66,11 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
 
     const { execute, isPending } = useAction(updateUserAction, {
         onSuccess: () => {
-            toast({
-                title: 'Success',
-                description: 'User successfully updated.',
-            });
-
+            toast.success('User successfully updated.');
             router.push('/user');
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 

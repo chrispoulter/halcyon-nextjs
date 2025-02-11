@@ -20,7 +20,7 @@ export default async function LoginPage() {
             <LoginForm />
 
             <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                     Not already a member?{' '}
                     <Link
                         href="/account/register"
@@ -29,7 +29,7 @@ export default async function LoginPage() {
                         Register now
                     </Link>
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                     Forgotten your password?{' '}
                     <Link
                         href="/account/forgot-password"

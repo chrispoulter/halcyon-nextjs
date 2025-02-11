@@ -3,7 +3,7 @@ import { Open_Sans as FontSans } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
 import './globals.css';
@@ -52,7 +52,7 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
             <body
                 className={cn(
-                    'min-h-screen bg-background font-sans antialiased',
+                    'bg-background min-h-screen font-sans antialiased',
                     fontSans.variable
                 )}
             >
@@ -65,7 +65,7 @@ export default function RootLayout({
                     <Header />
                     {children}
                     <Footer />
-                    <Toaster />
+                    <Toaster invert />
                 </ThemeProvider>
             </body>
         </html>

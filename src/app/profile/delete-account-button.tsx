@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'sonner';
 import { deleteAccountAction } from '@/app/profile/actions/delete-account-action';
 import { GetProfileResponse } from '@/app/profile/profile-types';
 import {
@@ -17,7 +18,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { toast } from '@/hooks/use-toast';
 
 type DeleteAccountButtonProps = {
     profile: GetProfileResponse;
@@ -32,19 +32,11 @@ export function DeleteAccountButton({
 
     const { execute, isPending } = useAction(deleteAccountAction, {
         onSuccess: () => {
-            toast({
-                title: 'Success',
-                description: 'Your account has been deleted.',
-            });
-
+            toast.success('Your account has been deleted.');
             router.push('/');
         },
         onError: ({ error }) => {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: <ServerActionErrorMessage result={error} />,
-            });
+            toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 
