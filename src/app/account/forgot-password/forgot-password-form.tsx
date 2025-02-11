@@ -1,16 +1,9 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-import { useAction } from 'next-safe-action/hooks';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { toast } from 'sonner';
-import { forgotPasswordAction } from '@/app/account/actions/forgot-password-action';
 import { Form } from '@/components/ui/form';
 import { LoadingButton } from '@/components/loading-button';
 import { TextFormField } from '@/components/text-form-field';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 const schema = z.object({
     emailAddress: z
@@ -18,34 +11,23 @@ const schema = z.object({
         .email('Email Address must be a valid email'),
 });
 
-type ForgotPasswordFormValues = z.infer<typeof schema>;
+export type ForgotPasswordFormValues = z.infer<typeof schema>;
 
-export function ForgotPasswordForm() {
-    const router = useRouter();
+type ForgotPasswordFormProps = {
+    loading?: boolean;
+    onSubmit: (data: ForgotPasswordFormValues) => void;
+};
 
+export function ForgotPasswordForm({
+    loading,
+    onSubmit,
+}: ForgotPasswordFormProps) {
     const form = useForm<ForgotPasswordFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             emailAddress: '',
         },
     });
-
-    const { execute, isPending } = useAction(forgotPasswordAction, {
-        onSuccess: () => {
-            toast.success(
-                'Instructions as to how to reset your password have been sent to you via email.'
-            );
-
-            router.push('/account/login');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
-
-    function onSubmit(data: ForgotPasswordFormValues) {
-        execute(data);
-    }
 
     return (
         <Form {...form}>
@@ -62,11 +44,11 @@ export function ForgotPasswordForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isPending}
+                    disabled={loading}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <LoadingButton type="submit" loading={isPending}>
+                    <LoadingButton type="submit" loading={loading}>
                         Submit
                     </LoadingButton>
                 </div>
