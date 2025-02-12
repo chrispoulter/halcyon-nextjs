@@ -1,10 +1,3 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-import { useAction } from 'next-safe-action/hooks';
-import { toast } from 'sonner';
-import { lockUserAction } from '@/app/user/actions/lock-user-action';
-import { GetUserResponse } from '@/app/user/user-types';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -17,39 +10,27 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 type LockUserButtonProps = {
-    user: GetUserResponse;
+    onClick: () => void;
+    disabled?: boolean;
+    loading?: boolean;
     className?: string;
 };
 
-export function LockUserButton({ user, className }: LockUserButtonProps) {
-    const router = useRouter();
-
-    const { execute, isPending } = useAction(lockUserAction, {
-        onSuccess: () => {
-            toast.success('User successfully locked.');
-            router.refresh();
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
-
-    function onLock() {
-        execute({
-            id: user.id,
-            version: user.version,
-        });
-    }
-
+export function LockUserButton({
+    onClick,
+    disabled,
+    loading,
+    className,
+}: LockUserButtonProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <LoadingButton
                     variant="secondary"
-                    loading={isPending}
+                    loading={loading}
+                    disabled={disabled}
                     className={className}
                 >
                     Lock
@@ -65,7 +46,10 @@ export function LockUserButton({ user, className }: LockUserButtonProps) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction disabled={isPending} onClick={onLock}>
+                    <AlertDialogAction
+                        disabled={disabled || loading}
+                        onClick={onClick}
+                    >
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

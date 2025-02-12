@@ -23,14 +23,14 @@ type UserNavProps = {
 };
 
 export function UserNav({ session }: UserNavProps) {
-    const { execute, isPending } = useAction(logoutAction, {
+    const { execute: logout, isPending: isSaving } = useAction(logoutAction, {
         onError: ({ error }) => {
             toast.error(<ServerActionErrorMessage result={error} />);
         },
     });
 
     function onLogout() {
-        execute();
+        logout();
     }
 
     if (!session) {
@@ -84,7 +84,7 @@ export function UserNav({ session }: UserNavProps) {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={onLogout} disabled={isPending}>
+                <DropdownMenuItem onClick={onLogout} disabled={isSaving}>
                     Log out
                 </DropdownMenuItem>
             </DropdownMenuContent>

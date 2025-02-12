@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Link from 'next/link';
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
@@ -41,7 +40,7 @@ function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
 type PaginationLinkProps = {
     isActive?: boolean;
 } & Pick<React.ComponentProps<typeof Button>, 'size'> &
-    React.ComponentProps<typeof Link>;
+    React.ComponentProps<'button'>;
 
 function PaginationLink({
     className,
@@ -50,7 +49,7 @@ function PaginationLink({
     ...props
 }: PaginationLinkProps) {
     return (
-        <Link
+        <button
             aria-current={isActive ? 'page' : undefined}
             data-slot="pagination-link"
             data-active={isActive}

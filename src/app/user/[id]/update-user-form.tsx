@@ -1,24 +1,12 @@
-'use client';
-
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { toast } from 'sonner';
 import type { GetUserResponse } from '@/app/user/user-types';
-import { updateUserAction } from '@/app/user/actions/update-user-action';
-import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
-import { LockUserButton } from '@/app/user/[id]/lock-user-button';
-import { UnlockUserButton } from '@/app/user/[id]/unlock-user-button';
 import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/loading-button';
 import { DateFormField } from '@/components/date-form-field';
 import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
@@ -50,37 +38,27 @@ const schema = z.object({
         .optional(),
 });
 
-type UpdateUserFormValues = z.infer<typeof schema>;
+export type UpdateUserFormValues = z.infer<typeof schema>;
 
 type UpdateUserFormProps = {
     user: GetUserResponse;
+    loading?: boolean;
+    disabled?: boolean;
+    onSubmit: (data: UpdateUserFormValues) => void;
+    children?: React.ReactNode;
 };
 
-export function UpdateUserForm({ user }: UpdateUserFormProps) {
-    const router = useRouter();
-
+export function UpdateUserForm({
+    user,
+    loading,
+    disabled,
+    onSubmit,
+    children,
+}: UpdateUserFormProps) {
     const form = useForm<UpdateUserFormValues>({
         resolver: zodResolver(schema),
         values: user,
     });
-
-    const { execute, isPending } = useAction(updateUserAction, {
-        onSuccess: () => {
-            toast.success('User successfully updated.');
-            router.push('/user');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
-
-    function onSubmit(data: UpdateUserFormValues) {
-        execute({
-            ...data,
-            id: user.id,
-            version: user.version,
-        });
-    }
 
     return (
         <Form {...form}>
@@ -97,7 +75,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isPending}
+                    disabled={loading || disabled}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -108,7 +86,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         maxLength={50}
                         autoComplete="given-name"
                         required
-                        disabled={isPending}
+                        disabled={loading || disabled}
                         className="flex-1"
                     />
                     <TextFormField
@@ -118,7 +96,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                         maxLength={50}
                         autoComplete="family-name"
                         required
-                        disabled={isPending}
+                        disabled={loading || disabled}
                         className="flex-1"
                     />
                 </div>
@@ -129,30 +107,24 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
-                    disabled={isPending}
+                    disabled={loading || disabled}
                 />
 
                 <SwitchFormField
                     control={form.control}
                     name="roles"
                     options={roles}
-                    disabled={isPending}
+                    disabled={loading || disabled}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button asChild variant="outline">
-                        <Link href="/user">Cancel</Link>
-                    </Button>
+                    {children}
 
-                    {user.isLockedOut ? (
-                        <UnlockUserButton user={user} />
-                    ) : (
-                        <LockUserButton user={user} />
-                    )}
-
-                    <DeleteUserButton user={user} />
-
-                    <LoadingButton type="submit" loading={isPending}>
+                    <LoadingButton
+                        type="submit"
+                        loading={loading}
+                        disabled={disabled}
+                    >
                         Submit
                     </LoadingButton>
                 </div>

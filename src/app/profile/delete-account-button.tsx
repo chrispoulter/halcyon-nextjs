@@ -1,10 +1,3 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-import { useAction } from 'next-safe-action/hooks';
-import { toast } from 'sonner';
-import { deleteAccountAction } from '@/app/profile/actions/delete-account-action';
-import { GetProfileResponse } from '@/app/profile/profile-types';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -17,41 +10,27 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 type DeleteAccountButtonProps = {
-    profile: GetProfileResponse;
+    onClick: () => void;
+    disabled?: boolean;
+    loading?: boolean;
     className?: string;
 };
 
 export function DeleteAccountButton({
-    profile,
+    onClick,
+    disabled,
+    loading,
     className,
 }: DeleteAccountButtonProps) {
-    const router = useRouter();
-
-    const { execute, isPending } = useAction(deleteAccountAction, {
-        onSuccess: () => {
-            toast.success('Your account has been deleted.');
-            router.push('/');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
-
-    function onDelete() {
-        execute({
-            version: profile.version,
-        });
-    }
-
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <LoadingButton
                     variant="destructive"
-                    loading={isPending}
+                    loading={loading}
+                    disabled={disabled}
                     className={className}
                 >
                     Delete Account
@@ -68,7 +47,10 @@ export function DeleteAccountButton({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction disabled={isPending} onClick={onDelete}>
+                    <AlertDialogAction
+                        disabled={disabled || loading}
+                        onClick={onClick}
+                    >
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>
