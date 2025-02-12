@@ -66,7 +66,6 @@ export function SearchUsers({ request, data }: SearchUsersProps) {
 
             <div className="flex gap-2">
                 <SearchUsersForm search={request.search} onSubmit={onSearch} />
-
                 <SortUsersDropdown sort={request.sort} onChange={onSort} />
             </div>
 
