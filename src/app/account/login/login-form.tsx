@@ -1,14 +1,9 @@
-import { useRouter } from 'next/navigation';
-import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { toast } from 'sonner';
-import { loginAction } from '@/app/account/actions/login-action';
 import { Form } from '@/components/ui/form';
 import { LoadingButton } from '@/components/loading-button';
 import { TextFormField } from '@/components/text-form-field';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 const schema = z.object({
     emailAddress: z
@@ -19,11 +14,14 @@ const schema = z.object({
         .min(1, 'Password is a required field'),
 });
 
-type LoginFormValues = z.infer<typeof schema>;
+export type LoginFormValues = z.infer<typeof schema>;
 
-export function LoginForm() {
-    const router = useRouter();
+type LoginFormProps = {
+    loading?: boolean;
+    onSubmit: (data: LoginFormValues) => void;
+};
 
+export function LoginForm({ loading, onSubmit }: LoginFormProps) {
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -31,20 +29,6 @@ export function LoginForm() {
             password: '',
         },
     });
-
-    const { execute: login, isPending: isSaving } = useAction(loginAction, {
-        onSuccess: () => {
-            router.push('/');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
-
-    function onSubmit(data: LoginFormValues) {
-        login(data);
-    }
-
     return (
         <Form {...form}>
             <form
@@ -60,7 +44,7 @@ export function LoginForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isSaving}
+                    disabled={loading}
                 />
 
                 <TextFormField
@@ -71,11 +55,11 @@ export function LoginForm() {
                     maxLength={50}
                     autoComplete="current-password"
                     required
-                    disabled={isSaving}
+                    disabled={loading}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <LoadingButton type="submit" loading={isSaving}>
+                    <LoadingButton type="submit" loading={loading}>
                         Submit
                     </LoadingButton>
                 </div>

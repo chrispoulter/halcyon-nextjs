@@ -15,7 +15,7 @@ type ProfileProps = {
     profile: GetProfileResponse;
 };
 
-export default function Profile({ profile }: ProfileProps) {
+export function Profile({ profile }: ProfileProps) {
     const router = useRouter();
 
     const { execute: deleteAccount, isPending: isDeleting } = useAction(
