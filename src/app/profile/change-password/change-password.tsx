@@ -19,18 +19,21 @@ type ChangePasswordProps = {
 export function ChangePassword({ profile }: ChangePasswordProps) {
     const router = useRouter();
 
-    const { execute, isPending } = useAction(changePasswordAction, {
-        onSuccess: () => {
-            toast.success('Your password has been changed.');
-            router.push('/profile');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
+    const { execute: changePassword, isPending: isSaving } = useAction(
+        changePasswordAction,
+        {
+            onSuccess: () => {
+                toast.success('Your password has been changed.');
+                router.push('/profile');
+            },
+            onError: ({ error }) => {
+                toast.error(<ServerActionErrorMessage result={error} />);
+            },
+        }
+    );
 
     function onSubmit(data: ChangePasswordFormValues) {
-        execute({
+        changePassword({
             ...data,
             version: profile.version,
         });
@@ -48,7 +51,7 @@ export function ChangePassword({ profile }: ChangePasswordProps) {
                 change your password on a regular basis.
             </p>
 
-            <ChangePasswordForm loading={isPending} onSubmit={onSubmit} />
+            <ChangePasswordForm loading={isSaving} onSubmit={onSubmit} />
 
             <p className="text-muted-foreground text-sm">
                 Forgotten your password?{' '}

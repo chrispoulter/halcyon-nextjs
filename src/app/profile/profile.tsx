@@ -18,18 +18,21 @@ type ProfileProps = {
 export default function Profile({ profile }: ProfileProps) {
     const router = useRouter();
 
-    const { execute, isPending } = useAction(deleteAccountAction, {
-        onSuccess: () => {
-            toast.success('Your account has been deleted.');
-            router.push('/');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
+    const { execute: deleteAccount, isPending: isDeleting } = useAction(
+        deleteAccountAction,
+        {
+            onSuccess: () => {
+                toast.success('Your account has been deleted.');
+                router.push('/');
+            },
+            onError: ({ error }) => {
+                toast.error(<ServerActionErrorMessage result={error} />);
+            },
+        }
+    );
 
     function onDelete() {
-        execute({
+        deleteAccount({
             version: profile.version,
         });
     }
@@ -91,7 +94,7 @@ export default function Profile({ profile }: ProfileProps) {
             </p>
 
             <DeleteAccountButton
-                loading={isPending}
+                loading={isDeleting}
                 onClick={onDelete}
                 className="w-full sm:w-auto"
             />

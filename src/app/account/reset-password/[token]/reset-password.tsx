@@ -17,18 +17,21 @@ type ResetPasswordProps = {
 export function ResetPassword({ token }: ResetPasswordProps) {
     const router = useRouter();
 
-    const { execute, isPending } = useAction(resetPasswordAction, {
-        onSuccess: () => {
-            toast.success('Your password has been reset.');
-            router.push('/account/login');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
+    const { execute: resetPassword, isPending: isSaving } = useAction(
+        resetPasswordAction,
+        {
+            onSuccess: () => {
+                toast.success('Your password has been reset.');
+                router.push('/account/login');
+            },
+            onError: ({ error }) => {
+                toast.error(<ServerActionErrorMessage result={error} />);
+            },
+        }
+    );
 
     function onSubmit(data: ResetPasswordFormValues) {
-        execute({ ...data, token });
+        resetPassword({ ...data, token });
     }
 
     return (
@@ -43,7 +46,7 @@ export function ResetPassword({ token }: ResetPasswordProps) {
                 change your password on a regular basis.
             </p>
 
-            <ResetPasswordForm loading={isPending} onSubmit={onSubmit} />
+            <ResetPasswordForm loading={isSaving} onSubmit={onSubmit} />
         </main>
     );
 }

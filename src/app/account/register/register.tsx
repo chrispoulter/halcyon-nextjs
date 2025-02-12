@@ -14,18 +14,21 @@ import { ServerActionErrorMessage } from '@/components/server-action-error';
 export function Register() {
     const router = useRouter();
 
-    const { execute, isPending } = useAction(registerAction, {
-        onSuccess: () => {
-            toast.success('User successfully registered.');
-            router.push('/account/login');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
+    const { execute: register, isPending: isSaving } = useAction(
+        registerAction,
+        {
+            onSuccess: () => {
+                toast.success('User successfully registered.');
+                router.push('/account/login');
+            },
+            onError: ({ error }) => {
+                toast.error(<ServerActionErrorMessage result={error} />);
+            },
+        }
+    );
 
     function onSubmit(data: RegisterFormValues) {
-        execute(data);
+        register(data);
     }
 
     return (
@@ -39,7 +42,7 @@ export function Register() {
                 available on this site.
             </p>
 
-            <RegisterForm loading={isPending} onSubmit={onSubmit} />
+            <RegisterForm loading={isSaving} onSubmit={onSubmit} />
 
             <p className="text-muted-foreground text-sm">
                 Already have an account?{' '}

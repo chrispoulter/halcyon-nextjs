@@ -13,21 +13,24 @@ import { ServerActionErrorMessage } from '@/components/server-action-error';
 export function ForgotPassword() {
     const router = useRouter();
 
-    const { execute, isPending } = useAction(forgotPasswordAction, {
-        onSuccess: () => {
-            toast.success(
-                'Instructions as to how to reset your password have been sent to you via email.'
-            );
+    const { execute: forgotPassword, isPending: isSaving } = useAction(
+        forgotPasswordAction,
+        {
+            onSuccess: () => {
+                toast.success(
+                    'Instructions as to how to reset your password have been sent to you via email.'
+                );
 
-            router.push('/account/login');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
+                router.push('/account/login');
+            },
+            onError: ({ error }) => {
+                toast.error(<ServerActionErrorMessage result={error} />);
+            },
+        }
+    );
 
     function onSubmit(data: ForgotPasswordFormValues) {
-        execute(data);
+        forgotPassword(data);
     }
 
     return (
@@ -40,7 +43,7 @@ export function ForgotPassword() {
                 Request a password reset link by providing your email address.
             </p>
 
-            <ForgotPasswordForm loading={isPending} onSubmit={onSubmit} />
+            <ForgotPasswordForm loading={isSaving} onSubmit={onSubmit} />
         </main>
     );
 }

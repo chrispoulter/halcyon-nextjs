@@ -1,20 +1,13 @@
-'use client';
-
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { toast } from 'sonner';
-import { createUserAction } from '@/app/user/actions/create-user-action';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/loading-button';
 import { DateFormField } from '@/components/date-form-field';
 import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { isInPast } from '@/lib/dates';
 import { Role, roles } from '@/lib/session-types';
 
@@ -60,11 +53,14 @@ const schema = z
         path: ['confirmPassword'],
     });
 
-type CreateUserFormValues = z.infer<typeof schema>;
+export type CreateUserFormValues = z.infer<typeof schema>;
 
-export function CreateUserForm() {
-    const router = useRouter();
+type CreateUserFormProps = {
+    loading?: boolean;
+    onSubmit: (data: CreateUserFormValues) => void;
+};
 
+export function CreateUserForm({ loading, onSubmit }: CreateUserFormProps) {
     const form = useForm<CreateUserFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -77,20 +73,6 @@ export function CreateUserForm() {
             roles: [],
         },
     });
-
-    const { execute, isPending } = useAction(createUserAction, {
-        onSuccess: () => {
-            toast.success('User successfully created.');
-            router.push('/user');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
-
-    function onSubmit(data: CreateUserFormValues) {
-        execute(data);
-    }
 
     return (
         <Form {...form}>
@@ -107,7 +89,7 @@ export function CreateUserForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isPending}
+                    disabled={loading}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -119,7 +101,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        disabled={isPending}
+                        disabled={loading}
                         className="flex-1"
                     />
                     <TextFormField
@@ -130,7 +112,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="new-password"
                         required
-                        disabled={isPending}
+                        disabled={loading}
                         className="flex-1"
                     />
                 </div>
@@ -143,7 +125,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="given-name"
                         required
-                        disabled={isPending}
+                        disabled={loading}
                         className="flex-1"
                     />
                     <TextFormField
@@ -153,7 +135,7 @@ export function CreateUserForm() {
                         maxLength={50}
                         autoComplete="family-name"
                         required
-                        disabled={isPending}
+                        disabled={loading}
                         className="flex-1"
                     />
                 </div>
@@ -164,14 +146,14 @@ export function CreateUserForm() {
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
-                    disabled={isPending}
+                    disabled={loading}
                 />
 
                 <SwitchFormField
                     control={form.control}
                     name="roles"
                     options={roles}
-                    disabled={isPending}
+                    disabled={loading}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
@@ -179,7 +161,7 @@ export function CreateUserForm() {
                         <Link href="/user">Cancel</Link>
                     </Button>
 
-                    <LoadingButton type="submit" loading={isPending}>
+                    <LoadingButton type="submit" loading={loading}>
                         Submit
                     </LoadingButton>
                 </div>

@@ -18,18 +18,21 @@ type ProfileProps = {
 export function UpdateProfile({ profile }: ProfileProps) {
     const router = useRouter();
 
-    const { execute, isPending } = useAction(updateProfileAction, {
-        onSuccess: () => {
-            toast.success('Your profile has been updated.');
-            router.push('/profile');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
+    const { execute: updateProfile, isPending: isSaving } = useAction(
+        updateProfileAction,
+        {
+            onSuccess: () => {
+                toast.success('Your profile has been updated.');
+                router.push('/profile');
+            },
+            onError: ({ error }) => {
+                toast.error(<ServerActionErrorMessage result={error} />);
+            },
+        }
+    );
 
     function onSubmit(data: UpdateProfileFormValues) {
-        execute({
+        updateProfile({
             ...data,
             version: profile.version,
         });
@@ -47,7 +50,7 @@ export function UpdateProfile({ profile }: ProfileProps) {
 
             <UpdateProfileForm
                 values={profile}
-                loading={isPending}
+                loading={isSaving}
                 onSubmit={onSubmit}
             />
         </main>

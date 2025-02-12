@@ -1,10 +1,3 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-import { useAction } from 'next-safe-action/hooks';
-import { toast } from 'sonner';
-import { deleteUserAction } from '@/app/user/actions/delete-user-action';
-import { GetUserResponse } from '@/app/user/user-types';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -17,39 +10,27 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 type DeleteUserButtonProps = {
-    user: GetUserResponse;
+    onClick: () => void;
+    disabled?: boolean;
+    loading?: boolean;
     className?: string;
 };
 
-export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
-    const router = useRouter();
-
-    const { execute, isPending } = useAction(deleteUserAction, {
-        onSuccess: () => {
-            toast.success('User successfully deleted.');
-            router.push('/user');
-        },
-        onError: ({ error }) => {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
-
-    function onDelete() {
-        execute({
-            id: user.id,
-            version: user.version,
-        });
-    }
-
+export function DeleteUserButton({
+    onClick,
+    disabled,
+    loading,
+    className,
+}: DeleteUserButtonProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <LoadingButton
                     variant="destructive"
-                    loading={isPending}
+                    loading={loading}
+                    disabled={disabled}
                     className={className}
                 >
                     Delete
@@ -66,7 +47,10 @@ export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction disabled={isPending} onClick={onDelete}>
+                    <AlertDialogAction
+                        disabled={disabled || loading}
+                        onClick={onClick}
+                    >
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

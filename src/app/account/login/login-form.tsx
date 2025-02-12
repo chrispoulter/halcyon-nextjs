@@ -1,5 +1,3 @@
-'use client';
-
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,7 +32,7 @@ export function LoginForm() {
         },
     });
 
-    const { execute, isPending } = useAction(loginAction, {
+    const { execute: login, isPending: isSaving } = useAction(loginAction, {
         onSuccess: () => {
             router.push('/');
         },
@@ -44,7 +42,7 @@ export function LoginForm() {
     });
 
     function onSubmit(data: LoginFormValues) {
-        execute(data);
+        login(data);
     }
 
     return (
@@ -62,7 +60,7 @@ export function LoginForm() {
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={isPending}
+                    disabled={isSaving}
                 />
 
                 <TextFormField
@@ -73,11 +71,11 @@ export function LoginForm() {
                     maxLength={50}
                     autoComplete="current-password"
                     required
-                    disabled={isPending}
+                    disabled={isSaving}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <LoadingButton type="submit" loading={isPending}>
+                    <LoadingButton type="submit" loading={isSaving}>
                         Submit
                     </LoadingButton>
                 </div>
