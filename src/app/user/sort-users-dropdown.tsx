@@ -1,5 +1,3 @@
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { ArrowDownWideNarrow } from 'lucide-react';
 import { UserSort } from '@/app/user/user-types';
 import { Button } from '@/components/ui/button';
@@ -31,17 +29,19 @@ const sortOptions = [
 
 type SortUsersDropdownProps = {
     sort?: UserSort;
+    onChange: (sort: UserSort) => void;
+    disabled?: boolean;
 };
 
-export function SortUsersDropdown({ sort }: SortUsersDropdownProps) {
-    const searchParams = useSearchParams();
-
-    const query = Object.fromEntries(searchParams.entries());
-
+export function SortUsersDropdown({
+    sort,
+    onChange,
+    disabled,
+}: SortUsersDropdownProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="secondary" size="icon">
+                <Button variant="secondary" size="icon" disabled={disabled}>
                     <ArrowDownWideNarrow />
                     <span className="sr-only">Toggle sort</span>
                 </Button>
@@ -50,19 +50,10 @@ export function SortUsersDropdown({ sort }: SortUsersDropdownProps) {
                 {sortOptions.map(({ label, value }) => (
                     <DropdownMenuItem
                         key={value}
-                        asChild
                         disabled={sort === value}
+                        onClick={() => onChange(value)}
                     >
-                        <Link
-                            href={{
-                                query: {
-                                    ...query,
-                                    sort: value,
-                                },
-                            }}
-                        >
-                            {label}
-                        </Link>
+                        {label}
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>

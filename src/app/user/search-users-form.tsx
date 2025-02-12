@@ -1,4 +1,3 @@
-import { useRouter, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -21,36 +20,25 @@ const schema = z.object({
         .optional(),
 });
 
-type SearchUsersFormValues = z.infer<typeof schema>;
+export type SearchUsersFormValues = z.infer<typeof schema>;
 
 type SearchUsersFormProps = {
-    search: string;
+    search?: string;
+    onSubmit: (data: SearchUsersFormValues) => void;
+    disabled?: boolean;
 };
 
-export function SearchUsersForm({ search }: SearchUsersFormProps) {
-    const router = useRouter();
-
-    const searchParams = useSearchParams();
-
+export function SearchUsersForm({
+    search = '',
+    onSubmit,
+    disabled,
+}: SearchUsersFormProps) {
     const form = useForm<SearchUsersFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             search,
         },
     });
-
-    function onSubmit(data: SearchUsersFormValues) {
-        const params = new URLSearchParams(searchParams.toString());
-
-        params.delete('page');
-        params.delete('search');
-
-        if (data.search) {
-            params.set('search', data.search);
-        }
-
-        return router.push(`?${params.toString()}`);
-    }
 
     return (
         <Form {...form}>
@@ -69,13 +57,19 @@ export function SearchUsersForm({ search }: SearchUsersFormProps) {
                                     {...field}
                                     type="search"
                                     placeholder="Search Users..."
+                                    disabled={disabled}
                                 />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <Button type="submit" variant="secondary" size="icon">
+                <Button
+                    type="submit"
+                    variant="secondary"
+                    size="icon"
+                    disabled={disabled}
+                >
                     <Search />
                     <span className="sr-only">Search users</span>
                 </Button>
