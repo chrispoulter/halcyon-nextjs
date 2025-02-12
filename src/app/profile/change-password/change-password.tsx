@@ -10,6 +10,7 @@ import {
     ChangePasswordFormValues,
 } from '@/app/profile/change-password/change-password-form';
 import { GetProfileResponse } from '@/app/profile/profile-types';
+import { Button } from '@/components/ui/button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 type ChangePasswordProps = {
@@ -51,7 +52,11 @@ export function ChangePassword({ profile }: ChangePasswordProps) {
                 change your password on a regular basis.
             </p>
 
-            <ChangePasswordForm loading={isSaving} onSubmit={onSubmit} />
+            <ChangePasswordForm loading={isSaving} onSubmit={onSubmit}>
+                <Button asChild variant="outline">
+                    <Link href="/profile">Cancel</Link>
+                </Button>
+            </ChangePasswordForm>
 
             <p className="text-muted-foreground text-sm">
                 Forgotten your password?{' '}

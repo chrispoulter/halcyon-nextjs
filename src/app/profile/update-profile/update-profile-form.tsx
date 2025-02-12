@@ -1,9 +1,7 @@
-import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/loading-button';
 import { DateFormField } from '@/components/date-form-field';
 import { TextFormField } from '@/components/text-form-field';
@@ -35,12 +33,14 @@ type UpdateProfileFormProps = {
     values: UpdateProfileFormValues;
     loading?: boolean;
     onSubmit: (data: UpdateProfileFormValues) => void;
+    children?: React.ReactNode;
 };
 
 export function UpdateProfileForm({
     values,
     loading,
     onSubmit,
+    children,
 }: UpdateProfileFormProps) {
     const form = useForm<UpdateProfileFormValues>({
         resolver: zodResolver(schema),
@@ -98,9 +98,7 @@ export function UpdateProfileForm({
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button asChild variant="outline">
-                        <Link href="/profile">Cancel</Link>
-                    </Button>
+                    {children}
 
                     <LoadingButton type="submit" loading={loading}>
                         Submit

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { createUserAction } from '@/app/user/actions/create-user-action';
@@ -8,6 +9,7 @@ import {
     CreateUserForm,
     CreateUserFormValues,
 } from '@/app/user/create/create-user-form';
+import { Button } from '@/components/ui/button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 export function CreateUser() {
@@ -44,7 +46,11 @@ export function CreateUser() {
                 features available on this site.
             </p>
 
-            <CreateUserForm loading={isSaving} onSubmit={onSubmit} />
+            <CreateUserForm loading={isSaving} onSubmit={onSubmit}>
+                <Button asChild variant="outline">
+                    <Link href="/user">Cancel</Link>
+                </Button>
+            </CreateUserForm>
         </main>
     );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { updateProfileAction } from '@/app/profile/actions/update-profile-action';
@@ -10,6 +11,7 @@ import {
 } from '@/app/profile/update-profile/update-profile-form';
 import { GetProfileResponse } from '@/app/profile/profile-types';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { Button } from '@/components/ui/button';
 
 type ProfileProps = {
     profile: GetProfileResponse;
@@ -52,7 +54,11 @@ export function UpdateProfile({ profile }: ProfileProps) {
                 values={profile}
                 loading={isSaving}
                 onSubmit={onSubmit}
-            />
+            >
+                <Button asChild variant="outline">
+                    <Link href="/profile">Cancel</Link>
+                </Button>
+            </UpdateProfileForm>
         </main>
     );
 }

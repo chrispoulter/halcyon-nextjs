@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { updateUserAction } from '@/app/user/actions/update-user-action';
@@ -15,6 +16,7 @@ import { UnlockUserButton } from '@/app/user/[id]/unlock-user-button';
 import { LockUserButton } from '@/app/user/[id]/lock-user-button';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
 import { GetUserResponse } from '@/app/user/user-types';
+import { Button } from '@/components/ui/button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 type UpdateUserProps = {
@@ -125,6 +127,10 @@ export function UpdateUser({ user }: UpdateUserProps) {
                 disabled={isLocking || isUnlocking || isDeleting}
                 onSubmit={onSubmit}
             >
+                <Button asChild variant="outline">
+                    <Link href="/user">Cancel</Link>
+                </Button>
+
                 {user.isLockedOut ? (
                     <UnlockUserButton
                         loading={isUnlocking}

@@ -1,10 +1,8 @@
-import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import type { GetUserResponse } from '@/app/user/user-types';
 import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/loading-button';
 import { DateFormField } from '@/components/date-form-field';
 import { SwitchFormField } from '@/components/switch-form-field';
@@ -120,10 +118,6 @@ export function UpdateUserForm({
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <Button asChild variant="outline">
-                        <Link href="/user">Cancel</Link>
-                    </Button>
-
                     {children}
 
                     <LoadingButton
