@@ -2,9 +2,6 @@ FROM node:20-alpine AS base
 
 ENV HUSKY=0
 
-ARG VERSION=1.0.0
-ENV VITE_VERSION=${VERSION}
-
 FROM base AS deps
 WORKDIR /app
 
