@@ -24,7 +24,7 @@ COPY --from=builder /app/default.conf.template /etc/nginx/templates/default.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY --from=builder /app/entrypoint.sh /docker-entrypoint.d/entrypoint.sh
 
-RUN chmod +x /docker-entrypoint.d/entrypoint.sh
+RUN ["chmod", "755", "/docker-entrypoint.d/entrypoint.sh"]
 
 EXPOSE 80
 
