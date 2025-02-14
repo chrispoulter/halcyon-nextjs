@@ -1,21 +1,22 @@
 name: halcyon
 
 services:
-    halcyon-next:
-        image: halcyon-next:dev
+    halcyon:
+        # image: ghcr.io/chrispoulter/halcyon:latest
+        image: halcyon:latest
         build:
-            context: .
-            target: dev
-        command: npm run dev
+          context: ${USERPROFILE}/Source/halcyon
+        #   target: dev
+        # command: npm run dev -- --host=0.0.0.0 --port=5173
         environment:
-            WATCHPACK_POLLING: true
-            API_URL: http://host.docker.internal:5257
-            SESSION_SECRET: super_secret_key_that_should_be_changed
+            # USE_POLLING: true
+            VITE_API_URL: http://localhost:5257
+            VITE_PORT: 5173
         ports:
-            - 3000:3000
-        volumes:
-            - ./src:/app/src
-            - ./public:/app/public
+        - 5173:5173
+        # volumes:
+        #   - ${USERPROFILE}/Source/halcyon/src:/app/src
+        #   - ${USERPROFILE}/Source/halcyon/public:/app/public
 
     halcyon-api:
         image: ghcr.io/chrispoulter/halcyon-api:latest
