@@ -1,4 +1,3 @@
 node_modules
-.next
+dist
 .env*
-next-env.d.ts
