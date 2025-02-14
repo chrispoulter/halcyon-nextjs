@@ -19,7 +19,6 @@ export default defineConfig(({ mode }) => {
             },
         },
         server: {
-            port: parseInt(env.VITE_PORT),
             watch: {
                 usePolling: env.USE_POLLING === 'true',
             },

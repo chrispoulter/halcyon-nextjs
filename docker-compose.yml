@@ -2,21 +2,19 @@ name: halcyon
 
 services:
     halcyon:
-        # image: ghcr.io/chrispoulter/halcyon:latest
-        image: halcyon:latest
+        image: halcyon:dev
         build:
-          context: ${USERPROFILE}/Source/halcyon
-        #   target: dev
-        # command: npm run dev -- --host=0.0.0.0 --port=5173
+            context: .
+            target: dev
+        command: npm run dev -- --host=0.0.0.0 --port=5173
         environment:
-            # USE_POLLING: true
+            USE_POLLING: true
             VITE_API_URL: http://localhost:5257
-            VITE_PORT: 5173
         ports:
-        - 5173:5173
-        # volumes:
-        #   - ${USERPROFILE}/Source/halcyon/src:/app/src
-        #   - ${USERPROFILE}/Source/halcyon/public:/app/public
+            - 5173:5173
+        volumes:
+            - ./src:/app/src
+            - ./public:/app/public
 
     halcyon-api:
         image: ghcr.io/chrispoulter/halcyon-api:latest
@@ -50,7 +48,7 @@ services:
             - postgres:/var/lib/postgresql/data
         restart: always
         healthcheck:
-            test: ['CMD', 'pg_isready']
+            test: [ 'CMD', 'pg_isready' ]
             interval: 10s
             timeout: 5s
             retries: 3
@@ -65,7 +63,7 @@ services:
             - rabbitmq:/var/lib/rabbitmq
         restart: always
         healthcheck:
-            test: ['CMD', 'rabbitmqctl', 'status']
+            test: [ 'CMD', 'rabbitmqctl', 'status' ]
             interval: 10s
             timeout: 5s
             retries: 3
@@ -78,7 +76,7 @@ services:
             - redis:/data
         restart: always
         healthcheck:
-            test: ['CMD', 'redis-cli', 'ping']
+            test: [ 'CMD', 'redis-cli', 'ping' ]
             interval: 10s
             timeout: 5s
             retries: 3
