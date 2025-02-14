@@ -65,5 +65,3 @@ jobs:
                   context: .
                   push: true
                   provenance: false
-                  build-args: |
-                      VERSION=${{ steps.version_step.outputs.semVer }}
