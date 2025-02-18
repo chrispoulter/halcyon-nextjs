@@ -48,7 +48,6 @@ export function SearchUsersForm({
                 className="flex w-full gap-2"
             >
                 <FormField
-                    control={form.control}
                     name="search"
                     render={({ field }) => (
                         <FormItem className="w-full">

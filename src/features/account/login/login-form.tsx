@@ -38,7 +38,6 @@ export function LoginForm({ loading, onSubmit }: LoginFormProps) {
                 className="space-y-6"
             >
                 <TextFormField
-                    control={form.control}
                     name="emailAddress"
                     label="Email Address"
                     type="email"
@@ -49,7 +48,6 @@ export function LoginForm({ loading, onSubmit }: LoginFormProps) {
                 />
 
                 <TextFormField
-                    control={form.control}
                     name="password"
                     label="Password"
                     type="password"

@@ -1,4 +1,3 @@
-import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import {
     FormControl,
     FormField,
@@ -15,27 +14,27 @@ import {
 } from '@/components/ui/select';
 import { currentYear, monthNames } from '@/lib/dates';
 
-type DateFormFieldProps<TFieldValues extends FieldValues> = {
+type DateFormFieldProps = {
+    name: string;
     label: string;
     required?: boolean;
+    disabled?: boolean;
     autoComplete?: [string, string, string];
     className?: string;
-} & UseControllerProps<TFieldValues>;
+};
 
-export function DateFormField<TFieldValues extends FieldValues>({
-    control,
+export function DateFormField({
     name,
     label,
     required,
     disabled,
     autoComplete,
     className,
-}: DateFormFieldProps<TFieldValues>) {
+}: DateFormFieldProps) {
     const [dayAuto, monthAuto, yearAuto] = autoComplete || [];
 
     return (
         <FormField
-            control={control}
             name={name}
             render={({ field: { name, value = '--', onChange } }) => {
                 const [year, month, day] = value.split('-');
@@ -101,18 +100,16 @@ export function DateFormField<TFieldValues extends FieldValues>({
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        {Array.from({ length: 12 }).map(
-                                            (_, index) => (
-                                                <SelectItem
-                                                    key={index}
-                                                    value={(index + 1)
-                                                        .toString()
-                                                        .padStart(2, '0')}
-                                                >
-                                                    {monthNames[index]}
-                                                </SelectItem>
-                                            )
-                                        )}
+                                        {monthNames.map((_, index) => (
+                                            <SelectItem
+                                                key={index}
+                                                value={(index + 1)
+                                                    .toString()
+                                                    .padStart(2, '0')}
+                                            >
+                                                {monthNames[index]}
+                                            </SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </div>

@@ -1,4 +1,3 @@
-import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import {
     FormControl,
     FormDescription,
@@ -9,21 +8,21 @@ import {
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 
-type SwitchFormFieldProps<TFieldValues extends FieldValues> = {
+type SwitchFormFieldProps = {
+    name: string;
+    disabled?: boolean;
     options: Record<string, { title: string; description: string }>;
-} & UseControllerProps<TFieldValues>;
+};
 
-export function SwitchFormField<TFieldValues extends FieldValues>({
-    control,
+export function SwitchFormField({
     name,
     options,
     disabled,
-}: SwitchFormFieldProps<TFieldValues>) {
+}: SwitchFormFieldProps) {
     return (
         <FormField
-            control={control}
             name={name}
-            render={({ field: { value = [] as string[], onChange } }) => {
+            render={({ field: { value = [], onChange } }) => {
                 return (
                     <>
                         {Object.entries(options).map(
@@ -36,7 +35,9 @@ export function SwitchFormField<TFieldValues extends FieldValues>({
                                     }
 
                                     return onChange(
-                                        value.filter((item) => item !== key)
+                                        value.filter(
+                                            (item: string) => item !== key
+                                        )
                                     );
                                 }
 
