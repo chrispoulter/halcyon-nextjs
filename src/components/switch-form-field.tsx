@@ -24,7 +24,7 @@ export function SwitchFormField({
             name={name}
             render={({ field: { value = [], onChange } }) => {
                 return (
-                    <>
+                    <FormItem>
                         {Object.entries(options).map(
                             ([key, { title, description }]) => {
                                 const checked = value.includes(key);
@@ -42,31 +42,34 @@ export function SwitchFormField({
                                 }
 
                                 return (
-                                    <FormItem
+                                    <div
                                         key={key}
                                         className="flex flex-row items-center justify-between rounded-lg border p-4"
                                     >
                                         <div className="space-y-0.5">
-                                            <FormLabel className="text-base">
+                                            <FormLabel
+                                                htmlFor={`${name}-${key}`}
+                                                className="text-base"
+                                            >
                                                 {title}
                                             </FormLabel>
                                             <FormDescription>
                                                 {description}
                                             </FormDescription>
                                         </div>
-                                        <FormControl>
+                                        <FormControl id={`${name}-${key}`}>
                                             <Switch
                                                 checked={checked}
                                                 onCheckedChange={onCheckChanged}
                                                 disabled={disabled}
                                             />
                                         </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
+                                    </div>
                                 );
                             }
                         )}
-                    </>
+                        <FormMessage />
+                    </FormItem>
                 );
             }}
         />
