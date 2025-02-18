@@ -20,7 +20,6 @@ type DateFormFieldProps = {
     required?: boolean;
     disabled?: boolean;
     autoComplete?: [string, string, string];
-    className?: string;
 };
 
 export function DateFormField({
@@ -29,7 +28,6 @@ export function DateFormField({
     required,
     disabled,
     autoComplete,
-    className,
 }: DateFormFieldProps) {
     const [dayAuto, monthAuto, yearAuto] = autoComplete || [];
 
@@ -52,7 +50,7 @@ export function DateFormField({
                 }
 
                 return (
-                    <FormItem className={className}>
+                    <FormItem>
                         <FormLabel>{label}</FormLabel>
                         <div className="flex gap-2">
                             <div className="flex-1">
