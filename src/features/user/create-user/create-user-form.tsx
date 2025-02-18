@@ -44,9 +44,7 @@ const schema = z
                 }),
                 { message: 'Role must be a valid array' }
             )
-            .refine((data) => data.length > 0, {
-                message: 'Role is a required field',
-            }),
+            .optional(),
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: 'Passwords do not match',
