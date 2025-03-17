@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
@@ -155,7 +157,6 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
 }
 
 export {
-    // eslint-disable-next-line react-refresh/only-export-components
     useFormField,
     Form,
     FormItem,

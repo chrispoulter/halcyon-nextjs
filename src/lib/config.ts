@@ -1,4 +1,5 @@
 export const config = {
-    VERSION: import.meta.env.npm_package_version,
-    VITE_API_URL: import.meta.env.VITE_API_URL,
+    VERSION: process.env.npm_package_version!,
+    API_URL: process.env.API_URL!,
+    SESSION_SECRET: process.env.SESSION_SECRET!,
 };

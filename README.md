@@ -1,17 +1,13 @@
-# Halcyon
+# Halcyon Next
 
-A react web project template 👷 Built with a sense of peace and tranquillity 🙏
+A Next.js web project template 👷 Built with a sense of peace and tranquillity 🙏
 
 ## Features
 
-- Vite
-  [https://vite.dev/](https://vite.dev/)
-- React
-  [https://react.dev/](https://react.dev/)
-- React Router
-  [https://reactrouter.com/](https://reactrouter.com/)
-- TanStack Query
-  [https://tanstack.com/query](https://tanstack.com/query)
+- Next.js
+  [https://nextjs.org/](https://nextjs.org/)
+- Next Safe Action
+  [https://next-safe-action.dev/](https://next-safe-action.dev/)
 - Shadcn UI
   [https://ui.shadcn.com/](https://ui.shadcn.com/)
 - React Hook Form
@@ -45,7 +41,9 @@ npm install
 For local development, you'll need to create a `.env.local` file in the root of the project to define the environment variables. This file is ignored by Git, so the secrets will not be committed to the repository.
 
 ```
-VITE_API_URL=http://localhost:5257
+API_URL=http://localhost:5257
+
+SESSION_SECRET=super_secret_key_that_should_be_changed
 ```
 
 ### Running the development server
@@ -56,7 +54,7 @@ Once the dependencies are installed, you can run the development server:
 npm run dev
 ```
 
-Open http://localhost:5173 in your browser to see the project running.
+Open http://localhost:3000 in your browser to see the project running.
 
 ## Building for Production
 
@@ -66,7 +64,7 @@ To build the project for production:
 npm run build
 ```
 
-This command will create an optimized build in the `dist` folder.
+This command will create an optimized build in the `.next` folder.
 
 ## Linting & Formatting
 

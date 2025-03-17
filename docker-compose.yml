@@ -6,12 +6,13 @@ services:
         build:
             context: .
             target: dev
-        command: npm run dev -- --host=0.0.0.0 --port=5173
+        command: npm run dev
         environment:
-            USE_POLLING: true
-            VITE_API_URL: http://localhost:5257
+            WATCHPACK_POLLING: true
+            API_URL: http://host.docker.internal:5257
+            SESSION_SECRET: super_secret_key_that_should_be_changed
         ports:
-            - 5173:5173
+            - 3000:3000
         volumes:
             - ./src:/app/src
             - ./public:/app/public

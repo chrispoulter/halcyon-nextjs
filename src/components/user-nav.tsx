@@ -1,4 +1,9 @@
-import { Link, useNavigate } from 'react-router';
+'use client';
+
+import Link from 'next/link';
+import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'sonner';
+import { logoutAction } from '@/app/account/actions/logout-action';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,23 +15,28 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useAuth } from '@/components/auth-provider';
-import { roles } from '@/lib/session-types';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { type SessionPayload, roles } from '@/lib/session-types';
 
-export function UserNav() {
-    const navigate = useNavigate();
+type UserNavProps = {
+    session?: SessionPayload;
+};
 
-    const { user, clearAuth } = useAuth();
+export function UserNav({ session }: UserNavProps) {
+    const { execute: logout, isPending: isSaving } = useAction(logoutAction, {
+        onError: ({ error }) => {
+            toast.error(<ServerActionErrorMessage result={error} />);
+        },
+    });
 
     function onLogout() {
-        clearAuth();
-        navigate('/');
+        logout();
     }
 
-    if (!user) {
+    if (!session) {
         return (
             <Button asChild variant="secondary">
-                <Link to="/account/login">Login</Link>
+                <Link href="/account/login">Login</Link>
             </Button>
         );
     }
@@ -37,7 +47,7 @@ export function UserNav() {
                 <Button variant="ghost" className="h-10 w-10 rounded-full">
                     <Avatar>
                         <AvatarFallback>
-                            {user.given_name[0]} {user.family_name[0]}
+                            {session.given_name[0]} {session.family_name[0]}
                         </AvatarFallback>
                     </Avatar>
                     <span className="sr-only">Toggle profile menu</span>
@@ -47,14 +57,14 @@ export function UserNav() {
                 <DropdownMenuLabel className="space-y-2">
                     <div className="space-y-0.5">
                         <div className="truncate text-sm font-medium">
-                            {user.given_name} {user.family_name}
+                            {session.given_name} {session.family_name}
                         </div>
                         <div className="text-muted-foreground truncate text-sm">
-                            {user.email}
+                            {session.email}
                         </div>
                     </div>
                     <div className="flex flex-col gap-2">
-                        {user.roles?.map((role) => (
+                        {session.roles?.map((role) => (
                             <Badge
                                 key={role}
                                 variant="secondary"
@@ -69,12 +79,14 @@ export function UserNav() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem asChild>
-                    <Link to="/profile">My Account</Link>
+                    <Link href="/profile">My Account</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={onLogout}>Log out</DropdownMenuItem>
+                <DropdownMenuItem onClick={onLogout} disabled={isSaving}>
+                    Log out
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );
