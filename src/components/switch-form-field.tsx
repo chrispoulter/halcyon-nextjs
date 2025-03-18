@@ -1,4 +1,3 @@
-import type { FieldValues, UseControllerProps } from 'react-hook-form';
 import {
     FormControl,
     FormDescription,
@@ -9,23 +8,23 @@ import {
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 
-type SwitchFormFieldProps<TFieldValues extends FieldValues> = {
+type SwitchFormFieldProps = {
+    name: string;
+    disabled?: boolean;
     options: Record<string, { title: string; description: string }>;
-} & UseControllerProps<TFieldValues>;
+};
 
-export function SwitchFormField<TFieldValues extends FieldValues>({
-    control,
+export function SwitchFormField({
     name,
     options,
     disabled,
-}: SwitchFormFieldProps<TFieldValues>) {
+}: SwitchFormFieldProps) {
     return (
         <FormField
-            control={control}
             name={name}
-            render={({ field: { value = [] as string[], onChange } }) => {
+            render={({ field: { value = [], onChange } }) => {
                 return (
-                    <>
+                    <FormItem>
                         {Object.entries(options).map(
                             ([key, { title, description }]) => {
                                 const checked = value.includes(key);
@@ -36,36 +35,41 @@ export function SwitchFormField<TFieldValues extends FieldValues>({
                                     }
 
                                     return onChange(
-                                        value.filter((item) => item !== key)
+                                        value.filter(
+                                            (item: string) => item !== key
+                                        )
                                     );
                                 }
 
                                 return (
-                                    <FormItem
+                                    <div
                                         key={key}
                                         className="flex flex-row items-center justify-between rounded-lg border p-4"
                                     >
                                         <div className="space-y-0.5">
-                                            <FormLabel className="text-base">
+                                            <FormLabel
+                                                htmlFor={`${name}-${key}`}
+                                                className="text-base"
+                                            >
                                                 {title}
                                             </FormLabel>
                                             <FormDescription>
                                                 {description}
                                             </FormDescription>
                                         </div>
-                                        <FormControl>
+                                        <FormControl id={`${name}-${key}`}>
                                             <Switch
                                                 checked={checked}
                                                 onCheckedChange={onCheckChanged}
                                                 disabled={disabled}
                                             />
                                         </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
+                                    </div>
                                 );
                             }
                         )}
-                    </>
+                        <FormMessage />
+                    </FormItem>
                 );
             }}
         />

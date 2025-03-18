@@ -51,7 +51,6 @@ export function ResetPasswordForm({
                 className="space-y-6"
             >
                 <TextFormField
-                    control={form.control}
                     name="emailAddress"
                     label="Email Address"
                     type="email"
@@ -63,7 +62,6 @@ export function ResetPasswordForm({
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField
-                        control={form.control}
                         name="newPassword"
                         label="New Password"
                         type="password"
@@ -74,7 +72,6 @@ export function ResetPasswordForm({
                         className="flex-1"
                     />
                     <TextFormField
-                        control={form.control}
                         name="confirmNewPassword"
                         label="Confirm New Password"
                         type="password"

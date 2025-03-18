@@ -67,7 +67,6 @@ export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
                 className="space-y-6"
             >
                 <TextFormField
-                    control={form.control}
                     name="emailAddress"
                     label="Email Address"
                     type="email"
@@ -79,7 +78,6 @@ export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField
-                        control={form.control}
                         name="password"
                         label="Password"
                         type="password"
@@ -103,7 +101,6 @@ export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
 
                 <div className="flex flex-col gap-6 sm:flex-row">
                     <TextFormField
-                        control={form.control}
                         name="firstName"
                         label="First Name"
                         maxLength={50}
@@ -124,7 +121,6 @@ export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
                 </div>
 
                 <DateFormField
-                    control={form.control}
                     name="dateOfBirth"
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
