@@ -16,7 +16,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { type SessionPayload, roles } from '@/lib/session-types';
+import { type SessionPayload, roles } from '@/lib/definitions';
 
 type UserNavProps = {
     session?: SessionPayload;

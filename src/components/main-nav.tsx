@@ -12,7 +12,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from '@/components/ui/drawer';
-import { type SessionPayload, Role } from '@/lib/session-types';
+import { type SessionPayload, Role } from '@/lib/definitions';
 
 const routes = [
     { href: '/', label: 'Home' },
