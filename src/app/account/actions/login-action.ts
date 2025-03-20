@@ -22,10 +22,10 @@ export const loginAction = actionClient
         console.log('request', parsedInput);
 
         await createSession({
-            userId: 'fake-id',
-            emailAddress: parsedInput.emailAddress,
-            firstName: 'John',
-            lastName: 'Doe',
+            sub: 'fake-id',
+            email: parsedInput.emailAddress,
+            given_name: 'John',
+            family_name: 'Doe',
             roles: [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR],
         });
     });

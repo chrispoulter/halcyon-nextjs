@@ -47,8 +47,8 @@ export function UserNav({ session }: UserNavProps) {
                 <Button variant="outline" size="icon" className="rounded-full">
                     <Avatar>
                         <AvatarFallback>
-                            {session.firstName[0]}
-                            {session.lastName[0]}
+                            {session.given_name[0]}
+                            {session.family_name[0]}
                         </AvatarFallback>
                     </Avatar>
                     <span className="sr-only">Toggle profile menu</span>
@@ -58,10 +58,10 @@ export function UserNav({ session }: UserNavProps) {
                 <DropdownMenuLabel className="space-y-2">
                     <div className="space-y-0.5">
                         <div className="truncate text-sm font-medium">
-                            {session.firstName} {session.lastName}
+                            {session.given_name} {session.family_name}
                         </div>
                         <div className="text-muted-foreground truncate text-sm">
-                            {session.emailAddress}
+                            {session.email}
                         </div>
                     </div>
                     <div className="flex flex-col gap-2">

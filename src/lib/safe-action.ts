@@ -59,7 +59,7 @@ export const authActionClient = (roles?: Role[]) =>
             forbidden();
         }
 
-        const { userId } = session;
+        const { sub: userId } = session;
 
         return next({ ctx: { userId } });
     });
