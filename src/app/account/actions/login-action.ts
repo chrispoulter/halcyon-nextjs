@@ -1,11 +1,9 @@
 'use server';
 
 import { z } from 'zod';
-import { decodeJwt } from 'jose';
-import type { LoginResponse, TokenPayload } from '@/app/account/account-types';
-import { apiClient } from '@/lib/api-client';
 import { actionClient } from '@/lib/safe-action';
 import { createSession } from '@/lib/session';
+import { Role } from '@/lib/definitions';
 
 const schema = z.object({
     emailAddress: z
@@ -20,21 +18,14 @@ export const loginAction = actionClient
     .metadata({ actionName: 'loginAction' })
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        const result = await apiClient.post<LoginResponse>(
-            '/account/login',
-            parsedInput
-        );
-
-        const { accessToken } = result;
-
-        const payload = decodeJwt<TokenPayload>(accessToken);
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('request', parsedInput);
 
         await createSession({
-            ...payload,
-            accessToken,
-            roles:
-                typeof payload.roles === 'string'
-                    ? [payload.roles]
-                    : payload.roles || [],
+            userId: 'fake-id',
+            emailAddress: parsedInput.emailAddress,
+            firstName: 'John',
+            lastName: 'Doe',
+            roles: [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR],
         });
     });

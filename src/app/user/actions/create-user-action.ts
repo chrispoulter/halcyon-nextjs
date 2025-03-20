@@ -2,10 +2,9 @@
 
 import { z } from 'zod';
 import { CreateUserResponse } from '@/app/user/user-types';
-import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
 import { authActionClient } from '@/lib/safe-action';
-import { Role } from '@/lib/session-types';
+import { Role } from '@/lib/definitions';
 
 const schema = z.object({
     emailAddress: z
@@ -45,8 +44,8 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 export const createUserAction = authActionClient(roles)
     .metadata({ actionName: 'createUserAction' })
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.post<CreateUserResponse>('/user', parsedInput, {
-            Authorization: `Bearer ${accessToken}`,
-        });
+    .action(async ({ parsedInput, ctx: { userId } }) => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('request', parsedInput, userId);
+        return { id: 'fake-id' } as CreateUserResponse;
     });

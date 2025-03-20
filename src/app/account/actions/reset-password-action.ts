@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import type { ResetPasswordResponse } from '@/app/account/account-types';
-import { apiClient } from '@/lib/api-client';
 import { actionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -22,8 +21,7 @@ export const resetPasswordAction = actionClient
     .metadata({ actionName: 'resetPasswordAction' })
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        return await apiClient.put<ResetPasswordResponse>(
-            '/account/reset-password',
-            parsedInput
-        );
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('request', parsedInput);
+        return { id: 'fake-id' } as ResetPasswordResponse;
     });

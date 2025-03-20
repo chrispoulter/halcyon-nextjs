@@ -23,11 +23,6 @@ A Next.js web project template 👷 Built with a sense of peace and tranquillity
 
 ## Getting Started
 
-### Prerequisites
-
-- Halcyon API
-  [https://github.com/chrispoulter/halcyon-api](https://github.com/chrispoulter/halcyon-api)
-
 ### Install dependencies
 
 Install NPM packages:
@@ -41,8 +36,7 @@ npm install
 For local development, you'll need to create a `.env.local` file in the root of the project to define the environment variables. This file is ignored by Git, so the secrets will not be committed to the repository.
 
 ```
-API_URL=http://localhost:5257
-
+SESSION_DURATION=86400
 SESSION_SECRET=super_secret_key_that_should_be_changed
 ```
 

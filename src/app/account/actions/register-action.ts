@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import type { RegisterResponse } from '@/app/account/account-types';
-import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
 import { actionClient } from '@/lib/safe-action';
 
@@ -44,8 +43,7 @@ export const registerAction = actionClient
     .metadata({ actionName: 'registerAction' })
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        return await apiClient.post<RegisterResponse>(
-            '/account/register',
-            parsedInput
-        );
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('request', parsedInput);
+        return { id: 'fake-id' } as RegisterResponse;
     });

@@ -1,7 +1,6 @@
 'use server';
 
 import { z } from 'zod';
-import { apiClient } from '@/lib/api-client';
 import { actionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -14,5 +13,6 @@ export const forgotPasswordAction = actionClient
     .metadata({ actionName: 'forgotPasswordAction' })
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        return await apiClient.put('/account/forgot-password', parsedInput);
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('request', parsedInput);
     });

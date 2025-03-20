@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import type { DeleteAccountResponse } from '@/app/profile/profile-types';
-import { apiClient } from '@/lib/api-client';
 import { authActionClient } from '@/lib/safe-action';
 import { deleteSession } from '@/lib/session';
 
@@ -13,16 +12,9 @@ const schema = z.object({
 export const deleteAccountAction = authActionClient()
     .metadata({ actionName: 'deleteAccountAction' })
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        const result = await apiClient.delete<DeleteAccountResponse>(
-            '/profile',
-            parsedInput,
-            {
-                Authorization: `Bearer ${accessToken}`,
-            }
-        );
-
+    .action(async ({ parsedInput, ctx: { userId } }) => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('request', parsedInput, userId);
         await deleteSession();
-
-        return result;
+        return { id: 'fake-id' } as DeleteAccountResponse;
     });

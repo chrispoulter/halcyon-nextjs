@@ -2,9 +2,8 @@
 
 import { z } from 'zod';
 import type { DeleteUserResponse } from '@/app/user/user-types';
-import { apiClient } from '@/lib/api-client';
 import { authActionClient } from '@/lib/safe-action';
-import { Role } from '@/lib/session-types';
+import { Role } from '@/lib/definitions';
 
 const schema = z.object({
     id: z
@@ -18,8 +17,8 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 export const deleteUserAction = authActionClient(roles)
     .metadata({ actionName: 'deleteUserAction' })
     .schema(schema)
-    .action(async ({ parsedInput: { id, ...rest }, ctx: { accessToken } }) => {
-        return await apiClient.delete<DeleteUserResponse>(`/user/${id}`, rest, {
-            Authorization: `Bearer ${accessToken}`,
-        });
+    .action(async ({ parsedInput: { id, ...rest }, ctx: { userId } }) => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('request', id, rest, userId);
+        return { id: 'fake-id' } as DeleteUserResponse;
     });

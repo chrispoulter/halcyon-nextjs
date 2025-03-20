@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import type { UpdateProfileResponse } from '@/app/profile/profile-types';
-import { apiClient } from '@/lib/api-client';
 import { isInPast } from '@/lib/dates';
 import { authActionClient } from '@/lib/safe-action';
 
@@ -30,12 +29,8 @@ const schema = z.object({
 export const updateProfileAction = authActionClient()
     .metadata({ actionName: 'updateProfileAction' })
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.put<UpdateProfileResponse>(
-            '/profile',
-            parsedInput,
-            {
-                Authorization: `Bearer ${accessToken}`,
-            }
-        );
+    .action(async ({ parsedInput, ctx: { userId } }) => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('request', parsedInput, userId);
+        return { id: 'fake-id' } as UpdateProfileResponse;
     });

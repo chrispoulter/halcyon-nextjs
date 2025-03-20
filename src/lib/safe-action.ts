@@ -4,9 +4,18 @@ import {
 } from 'next-safe-action';
 import { z } from 'zod';
 import { forbidden, notFound, redirect } from 'next/navigation';
-import { ApiClientError } from '@/lib/api-client';
 import { getSession } from '@/lib/session';
-import { Role } from '@/lib/session-types';
+import { Role } from '@/lib/definitions';
+
+export class ActionError extends Error {
+    constructor(
+        message: string,
+        public status?: number
+    ) {
+        super(message);
+        this.name = 'ActionError';
+    }
+}
 
 export const actionClient = createSafeActionClient({
     defaultValidationErrorsShape: 'flattened',
@@ -16,7 +25,7 @@ export const actionClient = createSafeActionClient({
         });
     },
     handleServerError: (error, utils) => {
-        if (error instanceof ApiClientError) {
+        if (error instanceof ActionError) {
             switch (error.status) {
                 case 401:
                     redirect('/account/login');
@@ -50,7 +59,7 @@ export const authActionClient = (roles?: Role[]) =>
             forbidden();
         }
 
-        const { accessToken } = session;
+        const { userId } = session;
 
-        return next({ ctx: { accessToken } });
+        return next({ ctx: { userId } });
     });

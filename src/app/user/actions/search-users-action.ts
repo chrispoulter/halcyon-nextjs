@@ -2,9 +2,8 @@
 
 import { z } from 'zod';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
-import { apiClient } from '@/lib/api-client';
 import { authActionClient } from '@/lib/safe-action';
-import { Role } from '@/lib/session-types';
+import { Role } from '@/lib/definitions';
 
 const schema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).optional(),
@@ -27,8 +26,13 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 export const searchUsersAction = authActionClient(roles)
     .metadata({ actionName: 'searchUsersAction' })
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.get<SearchUsersResponse>('/user', parsedInput, {
-            Authorization: `Bearer ${accessToken}`,
-        });
+    .action(async ({ parsedInput, ctx: { userId } }) => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('request', parsedInput, userId);
+
+        return {
+            items: [],
+            hasNextPage: false,
+            hasPreviousPage: false,
+        } as SearchUsersResponse;
     });

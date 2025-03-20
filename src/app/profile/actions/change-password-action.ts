@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import type { ChangePasswordResponse } from '@/app/profile/profile-types';
-import { apiClient } from '@/lib/api-client';
 import { authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -19,12 +18,8 @@ const schema = z.object({
 export const changePasswordAction = authActionClient()
     .metadata({ actionName: 'changePasswordAction' })
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { accessToken } }) => {
-        return await apiClient.put<ChangePasswordResponse>(
-            '/profile/change-password',
-            parsedInput,
-            {
-                Authorization: `Bearer ${accessToken}`,
-            }
-        );
+    .action(async ({ parsedInput, ctx: { userId } }) => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log('request', parsedInput, userId);
+        return { id: 'fake-id' } as ChangePasswordResponse;
     });
