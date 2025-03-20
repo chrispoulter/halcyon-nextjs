@@ -10,11 +10,11 @@ const sessionDuration = config.SESSION_DURATION;
 const sessionSecret = config.SESSION_SECRET;
 const encodedSecret = new TextEncoder().encode(sessionSecret);
 
-async function encrypt(payload: SessionPayload) {
+async function encrypt(payload: SessionPayload, expires: Date) {
     return new SignJWT(payload)
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
-        .setExpirationTime(sessionDuration)
+        .setExpirationTime(expires)
         .sign(encodedSecret);
 }
 
@@ -34,9 +34,9 @@ async function decrypt(value = ''): Promise<SessionPayload | undefined> {
 }
 
 export async function createSession(payload: SessionPayload) {
+    const expires = new Date(Date.now() + sessionDuration * 1000);
     const cookieStore = await cookies();
-    const session = await encrypt(payload);
-    const expires = new Date(sessionDuration * 1000);
+    const session = await encrypt(payload, expires);
 
     cookieStore.set('session', session, {
         httpOnly: true,
