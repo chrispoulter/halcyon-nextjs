@@ -34,10 +34,11 @@ export function UserNav() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-10 w-10 rounded-full">
+                <Button variant="outline" size="icon" className="rounded-full">
                     <Avatar>
                         <AvatarFallback>
-                            {user.given_name[0]} {user.family_name[0]}
+                            {user.given_name[0]}
+                            {user.family_name[0]}
                         </AvatarFallback>
                     </Avatar>
                     <span className="sr-only">Toggle profile menu</span>
