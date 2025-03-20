@@ -23,7 +23,7 @@ export function UserCard({ user }: UserCardProps) {
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
                 {user.isLockedOut && (
-                    <Badge variant="destructive" className="justify-center">
+                    <Badge variant="destructive" className="w-full sm:w-auto">
                         Locked
                     </Badge>
                 )}
@@ -31,7 +31,7 @@ export function UserCard({ user }: UserCardProps) {
                     <Badge
                         key={role}
                         variant="secondary"
-                        className="justify-center"
+                        className="w-full sm:w-auto"
                     >
                         {roles[role].title}
                     </Badge>

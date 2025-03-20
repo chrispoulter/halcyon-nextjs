@@ -68,7 +68,7 @@ export function UserNav({ session }: UserNavProps) {
                             <Badge
                                 key={role}
                                 variant="secondary"
-                                className="justify-center"
+                                className="w-full"
                             >
                                 {roles[role].title}
                             </Badge>
