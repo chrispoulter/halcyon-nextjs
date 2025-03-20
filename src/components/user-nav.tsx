@@ -44,10 +44,11 @@ export function UserNav({ session }: UserNavProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-10 w-10 rounded-full">
+                <Button variant="outline" size="icon" className="rounded-full">
                     <Avatar>
                         <AvatarFallback>
-                            {session.firstName[0]} {session.lastName[0]}
+                            {session.firstName[0]}
+                            {session.lastName[0]}
                         </AvatarFallback>
                     </Avatar>
                     <span className="sr-only">Toggle profile menu</span>
