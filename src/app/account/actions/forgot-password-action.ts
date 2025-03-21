@@ -5,9 +5,8 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { sendEmail } from '@/lib/email';
+import { EmailTemplate, sendEmail } from '@/lib/email';
 import { actionClient } from '@/lib/safe-action';
-import { getSiteUrl } from '@/lib/server-utils';
 
 const schema = z.object({
     emailAddress: z
@@ -27,7 +26,6 @@ export const forgotPasswordAction = actionClient
 
         if (user && !user.isLockedOut) {
             const passwordResetToken = randomUUID();
-            const baseUrl = await getSiteUrl();
 
             await db
                 .update(users)
@@ -36,10 +34,9 @@ export const forgotPasswordAction = actionClient
 
             await sendEmail({
                 to: user.emailAddress,
-                template: 'ResetPassword',
+                template: EmailTemplate.ResetPassword,
                 context: {
-                    siteUrl: baseUrl,
-                    passwordResetUrl: `${baseUrl}/account/reset-password/${passwordResetToken}`,
+                    passwordResetToken,
                 },
             });
         }
