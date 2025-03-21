@@ -32,9 +32,9 @@ export const loginAction = actionClient
             throw new ActionError('The credentials provided were invalid.');
         }
 
-        const verified = await verifyHash(parsedInput.password, user.password);
+        const verified = verifyHash(parsedInput.password, user.password);
 
-        if (verified) {
+        if (!verified) {
             throw new ActionError('The credentials provided were invalid.');
         }
 
