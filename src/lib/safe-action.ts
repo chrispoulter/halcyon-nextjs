@@ -27,12 +27,6 @@ export const actionClient = createSafeActionClient({
     handleServerError: (error, utils) => {
         if (error instanceof ActionError) {
             switch (error.status) {
-                case 401:
-                    redirect('/account/login');
-
-                case 403:
-                    forbidden();
-
                 case 404:
                     notFound();
             }

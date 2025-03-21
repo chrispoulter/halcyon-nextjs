@@ -1,6 +1,7 @@
-import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
-export const generateHash = (str: string) => bcrypt.hash(str, 10);
+export const generateHash = (str: string) =>
+    crypto.createHash('sha512').update(str).digest('hex');
 
 export const verifyHash = (str: string, hash: string) =>
-    bcrypt.compare(str, hash);
+    hash === crypto.createHash('sha512').update(str).digest('hex');
