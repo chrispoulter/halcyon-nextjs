@@ -3,12 +3,13 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { users } from '@/db/schema/users';
 import { Role } from '@/lib/definitions';
 import { generateHash } from '@/lib/hash';
+import { config } from '@/lib/config';
 
-const db = drizzle(process.env.DATABASE_URL!);
+const db = drizzle(config.DATABASE_URL);
 
 async function main() {
-    const emailAddress = process.env.SEED_EMAIL_ADDRESS!;
-    const password = generateHash(process.env.SEED_PASSWORD!);
+    const emailAddress = config.SEED_EMAIL_ADDRESS;
+    const password = generateHash(config.SEED_PASSWORD);
 
     const user: typeof users.$inferInsert = {
         emailAddress,
