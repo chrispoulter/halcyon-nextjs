@@ -1,10 +1,14 @@
 'use server';
 
 import { z } from 'zod';
+import { eq } from 'drizzle-orm';
 import { CreateUserResponse } from '@/app/user/user-types';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
-import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/definitions';
+import { generateHash } from '@/lib/hash';
+import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
     emailAddress: z
@@ -44,8 +48,23 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 export const createUserAction = authActionClient(roles)
     .metadata({ actionName: 'createUserAction' })
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { userId } }) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('request', parsedInput, userId);
-        return { id: 'fake-id' } as CreateUserResponse;
+    .action(async ({ parsedInput }) => {
+        const [existing] = await db
+            .select()
+            .from(users)
+            .where(eq(users.emailAddress, parsedInput.emailAddress))
+            .limit(1);
+
+        if (existing) {
+            throw new ActionError('User name is already taken.');
+        }
+
+        const password = await generateHash(parsedInput.password);
+
+        const [user] = await db
+            .insert(users)
+            .values({ ...parsedInput, password })
+            .returning({ id: users.id });
+
+        return { id: user.id } as CreateUserResponse;
     });

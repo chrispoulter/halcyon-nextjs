@@ -1,9 +1,12 @@
 'use server';
 
 import { z } from 'zod';
+import { eq } from 'drizzle-orm';
 import type { UpdateUserResponse } from '@/app/user/user-types';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
-import { authActionClient } from '@/lib/safe-action';
+import { ActionError, authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/definitions';
 
 const schema = z.object({
@@ -43,8 +46,39 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 export const updateUserAction = authActionClient(roles)
     .metadata({ actionName: 'updateUserAction' })
     .schema(schema)
-    .action(async ({ parsedInput: { id, ...rest }, ctx: { userId } }) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('request', id, rest, userId);
-        return { id: 'fake-id' } as UpdateUserResponse;
+    .action(async ({ parsedInput: { id, ...rest } }) => {
+        const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, id))
+            .limit(1);
+
+        if (!user) {
+            throw new ActionError('User not found.', 404);
+        }
+
+        // TODO: Validate version
+        if (!rest.version && rest.version !== rest.version) {
+            throw new ActionError(
+                'Data has been modified since entities were loaded.'
+            );
+        }
+
+        if (
+            rest.emailAddress.toLowerCase() !== user.emailAddress.toLowerCase()
+        ) {
+            const [existing] = await db
+                .select()
+                .from(users)
+                .where(eq(users.emailAddress, rest.emailAddress))
+                .limit(1);
+
+            if (existing) {
+                throw new ActionError('User name is already taken.');
+            }
+        }
+
+        await db.update(users).set(rest).where(eq(users.id, id));
+
+        return { id: user.id } as UpdateUserResponse;
     });

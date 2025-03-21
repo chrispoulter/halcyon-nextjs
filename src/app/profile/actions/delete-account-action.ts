@@ -1,8 +1,11 @@
 'use server';
 
 import { z } from 'zod';
+import { eq } from 'drizzle-orm';
 import type { DeleteAccountResponse } from '@/app/profile/profile-types';
-import { authActionClient } from '@/lib/safe-action';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
+import { ActionError, authActionClient } from '@/lib/safe-action';
 import { deleteSession } from '@/lib/session';
 
 const schema = z.object({
@@ -13,8 +16,29 @@ export const deleteAccountAction = authActionClient()
     .metadata({ actionName: 'deleteAccountAction' })
     .schema(schema)
     .action(async ({ parsedInput, ctx: { userId } }) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('request', parsedInput, userId);
+        const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, userId))
+            .limit(1);
+
+        if (!user || user.isLockedOut) {
+            throw new ActionError('User not found.', 404);
+        }
+
+        // TODO: Validate version
+        if (
+            !parsedInput.version &&
+            parsedInput.version !== parsedInput.version
+        ) {
+            throw new ActionError(
+                'Data has been modified since entities were loaded.'
+            );
+        }
+
+        await db.delete(users).where(eq(users.id, userId));
+
         await deleteSession();
-        return { id: 'fake-id' } as DeleteAccountResponse;
+
+        return { id: user.id } as DeleteAccountResponse;
     });

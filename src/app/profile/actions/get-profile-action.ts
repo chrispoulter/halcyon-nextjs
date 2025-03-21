@@ -1,20 +1,30 @@
 'use server';
 
+import { eq } from 'drizzle-orm';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
-import { authActionClient } from '@/lib/safe-action';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
+import { ActionError, authActionClient } from '@/lib/safe-action';
 
 export const getProfileAction = authActionClient()
     .metadata({ actionName: 'getProfileAction' })
     .action(async ({ ctx: { userId } }) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('request', userId);
+        const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, userId))
+            .limit(1);
+
+        if (!user || user.isLockedOut) {
+            throw new ActionError('User not found.', 404);
+        }
 
         return {
-            id: 'fake-id',
-            emailAddress: 'fake.name@example.com',
-            firstName: 'Fake',
-            lastName: 'Name',
-            dateOfBirth: '1970-01-01',
-            version: 1234,
+            id: user.id,
+            emailAddress: user.emailAddress,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            dateOfBirth: user.dateOfBirth,
+            // version: user.version,
         } as GetProfileResponse;
     });

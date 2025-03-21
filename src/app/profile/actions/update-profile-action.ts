@@ -1,9 +1,12 @@
 'use server';
 
 import { z } from 'zod';
+import { eq } from 'drizzle-orm';
 import type { UpdateProfileResponse } from '@/app/profile/profile-types';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
-import { authActionClient } from '@/lib/safe-action';
+import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
     emailAddress: z
@@ -30,7 +33,42 @@ export const updateProfileAction = authActionClient()
     .metadata({ actionName: 'updateProfileAction' })
     .schema(schema)
     .action(async ({ parsedInput, ctx: { userId } }) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('request', parsedInput, userId);
-        return { id: 'fake-id' } as UpdateProfileResponse;
+        const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, userId))
+            .limit(1);
+
+        if (!user || user.isLockedOut) {
+            throw new ActionError('User not found.', 404);
+        }
+
+        // TODO: Validate version
+        if (
+            !parsedInput.version &&
+            parsedInput.version !== parsedInput.version
+        ) {
+            throw new ActionError(
+                'Data has been modified since entities were loaded.'
+            );
+        }
+
+        if (
+            parsedInput.emailAddress.toLowerCase() !==
+            user.emailAddress.toLowerCase()
+        ) {
+            const [existing] = await db
+                .select()
+                .from(users)
+                .where(eq(users.emailAddress, parsedInput.emailAddress))
+                .limit(1);
+
+            if (existing) {
+                throw new ActionError('User name is already taken.');
+            }
+        }
+
+        await db.update(users).set(parsedInput).where(eq(users.id, userId));
+
+        return { id: user.id } as UpdateProfileResponse;
     });

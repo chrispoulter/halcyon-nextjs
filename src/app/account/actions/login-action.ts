@@ -1,9 +1,13 @@
 'use server';
 
 import { z } from 'zod';
-import { actionClient } from '@/lib/safe-action';
-import { createSession } from '@/lib/session';
+import { eq } from 'drizzle-orm';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
+import { actionClient, ActionError } from '@/lib/safe-action';
 import { Role } from '@/lib/definitions';
+import { verifyHash } from '@/lib/hash';
+import { createSession } from '@/lib/session';
 
 const schema = z.object({
     emailAddress: z
@@ -18,14 +22,33 @@ export const loginAction = actionClient
     .metadata({ actionName: 'loginAction' })
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('request', parsedInput);
+        const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.emailAddress, parsedInput.emailAddress))
+            .limit(1);
+
+        if (!user || !user.password) {
+            throw new ActionError('The credentials provided were invalid.');
+        }
+
+        const verified = await verifyHash(parsedInput.password, user.password);
+
+        if (verified) {
+            throw new ActionError('The credentials provided were invalid.');
+        }
+
+        if (user.isLockedOut) {
+            throw new ActionError(
+                'This account has been locked out, please try again later.'
+            );
+        }
 
         await createSession({
-            sub: 'fake-id',
-            email: parsedInput.emailAddress,
-            given_name: 'John',
-            family_name: 'Doe',
-            roles: [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR],
+            sub: user.id,
+            email: user.emailAddress,
+            given_name: user.firstName,
+            family_name: user.lastName,
+            roles: user.roles as Role[],
         });
     });

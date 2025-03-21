@@ -1,9 +1,12 @@
 'use server';
 
 import { z } from 'zod';
+import { eq } from 'drizzle-orm';
 import type { GetUserResponse } from '@/app/user/user-types';
-import { authActionClient } from '@/lib/safe-action';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
 import { Role } from '@/lib/definitions';
+import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
     id: z
@@ -16,17 +19,24 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 export const getUserAction = authActionClient(roles)
     .metadata({ actionName: 'getUserAction' })
     .schema(schema)
-    .action(async ({ parsedInput: { id }, ctx: { userId } }) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('request', id, userId);
+    .action(async ({ parsedInput: { id } }) => {
+        const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, id))
+            .limit(1);
+
+        if (!user) {
+            throw new ActionError('User not found.', 404);
+        }
 
         return {
-            id: 'fake-id',
-            emailAddress: 'fake.name@example.com',
-            firstName: 'Fake',
-            lastName: 'Name',
-            dateOfBirth: '1970-01-01',
-            roles: [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR],
-            version: 1234,
+            id: user.id,
+            emailAddress: user.emailAddress,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            dateOfBirth: user.dateOfBirth,
+            roles: user.roles,
+            // version: user.version,
         } as GetUserResponse;
     });

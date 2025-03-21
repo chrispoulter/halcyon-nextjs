@@ -1,8 +1,12 @@
 'use server';
 
 import { z } from 'zod';
+import { eq } from 'drizzle-orm';
 import type { ResetPasswordResponse } from '@/app/account/account-types';
-import { actionClient } from '@/lib/safe-action';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
+import { generateHash } from '@/lib/hash';
+import { actionClient, ActionError } from '@/lib/safe-action';
 
 const schema = z.object({
     token: z
@@ -21,7 +25,29 @@ export const resetPasswordAction = actionClient
     .metadata({ actionName: 'resetPasswordAction' })
     .schema(schema)
     .action(async ({ parsedInput }) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('request', parsedInput);
-        return { id: 'fake-id' } as ResetPasswordResponse;
+        const [user] = await db
+            .select()
+            .from(users)
+            .where(eq(users.emailAddress, parsedInput.emailAddress))
+            .limit(1);
+
+        if (
+            !user ||
+            user.isLockedOut ||
+            parsedInput.token !== user.passwordResetToken
+        ) {
+            throw new ActionError('Invalid token.');
+        }
+
+        const password = await generateHash(parsedInput.newPassword);
+
+        await db
+            .update(users)
+            .set({
+                password,
+                passwordResetToken: null,
+            })
+            .where(eq(users.id, user.id));
+
+        return { id: user.id } as ResetPasswordResponse;
     });

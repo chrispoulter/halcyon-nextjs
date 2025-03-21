@@ -1,7 +1,10 @@
 'use server';
 
 import { z } from 'zod';
+import { desc, count, ilike } from 'drizzle-orm';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
 import { authActionClient } from '@/lib/safe-action';
 import { Role } from '@/lib/definitions';
 
@@ -26,13 +29,57 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 export const searchUsersAction = authActionClient(roles)
     .metadata({ actionName: 'searchUsersAction' })
     .schema(schema)
-    .action(async ({ parsedInput, ctx: { userId } }) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log('request', parsedInput, userId);
+    .action(async ({ parsedInput: { search, page = 1, size = 10, sort } }) => {
+        const query = db.select().from(users);
+
+        const countQuery = db.select({ count: count() }).from(users);
+
+        if (search) {
+            query.where(ilike(users.emailAddress, `%${search}%`));
+            countQuery.where(ilike(users.emailAddress, `%${search}%`));
+        }
+
+        const [cr] = await countQuery;
+
+        const pageCount = Math.ceil(cr.count / size);
+
+        if (page > pageCount) {
+            return { items: [], hasNextPage: false, hasPreviousPage: true };
+        }
+
+        if (page > 1) {
+            query.offset((page - 1) * size);
+        }
+
+        query.limit(size);
+
+        switch (sort) {
+            case UserSort.EMAIL_ADDRESS_DESC:
+                query.orderBy(desc(users.emailAddress), users.id);
+                break;
+
+            case UserSort.EMAIL_ADDRESS_ASC:
+                query.orderBy(users.emailAddress, users.id);
+                break;
+
+            case UserSort.NAME_DESC:
+                query.orderBy(
+                    desc(users.firstName),
+                    desc(users.lastName),
+                    users.id
+                );
+                break;
+
+            default:
+                query.orderBy(users.firstName, users.lastName, users.id);
+                break;
+        }
+
+        const items = await query;
 
         return {
-            items: [],
-            hasNextPage: false,
-            hasPreviousPage: false,
+            items,
+            hasNextPage: page < pageCount,
+            hasPreviousPage: page > 1,
         } as SearchUsersResponse;
     });
