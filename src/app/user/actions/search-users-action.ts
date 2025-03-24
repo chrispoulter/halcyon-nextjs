@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { desc, count, sql } from 'drizzle-orm';
+import { desc, asc, sql, SQL } from 'drizzle-orm';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
@@ -30,60 +30,60 @@ export const searchUsersAction = authActionClient(roles)
     .metadata({ actionName: 'searchUsersAction' })
     .schema(schema)
     .action(async ({ parsedInput: { search, page = 1, size = 10, sort } }) => {
-        const query = db.select().from(users);
-
-        const countQuery = db.select({ count: count() }).from(users);
+        let where: SQL<unknown> | undefined;
 
         if (search) {
-            query.where(
-                sql`${users.searchVector} @@ websearch_to_tsquery('english', ${search})`
-            );
-            countQuery.where(
-                sql`${users.searchVector} @@ websearch_to_tsquery('english', ${search})`
-            );
+            where = sql`${users.searchVector} @@ websearch_to_tsquery('english', ${search})`;
         }
 
-        const [cr] = await countQuery;
+        const count = await db.$count(users, where);
 
-        const pageCount = Math.ceil(cr.count / size);
-
-        if (page > pageCount) {
-            return { items: [], hasNextPage: false, hasPreviousPage: true };
-        }
-
-        if (page > 1) {
-            query.offset((page - 1) * size);
-        }
-
-        query.limit(size);
+        const query = db.select().from(users).where(where);
 
         switch (sort) {
             case UserSort.EMAIL_ADDRESS_DESC:
-                query.orderBy(desc(users.emailAddress), users.id);
+                query.orderBy(desc(users.emailAddress), asc(users.id));
                 break;
 
             case UserSort.EMAIL_ADDRESS_ASC:
-                query.orderBy(users.emailAddress, users.id);
+                query.orderBy(asc(users.emailAddress), asc(users.id));
                 break;
 
             case UserSort.NAME_DESC:
                 query.orderBy(
                     desc(users.firstName),
                     desc(users.lastName),
-                    users.id
+                    asc(users.id)
                 );
                 break;
 
             default:
-                query.orderBy(users.firstName, users.lastName, users.id);
+                query.orderBy(
+                    asc(users.firstName),
+                    asc(users.lastName),
+                    asc(users.id)
+                );
                 break;
         }
 
-        const items = await query;
+        const skip = (page - 1) * size;
+        const result = await query.limit(size).offset(skip);
+
+        const pageCount = Math.floor((count + size - 1) / size);
+        const hasNextPage = page < pageCount;
+        const hasPreviousPage = page > 1;
 
         return {
-            items,
-            hasNextPage: page < pageCount,
-            hasPreviousPage: page > 1,
+            items: result.map((user) => ({
+                id: user.id,
+                emailAddress: user.emailAddress,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                dateOfBirth: user.dateOfBirth,
+                isLockedOut: user.isLockedOut,
+                roles: user.roles || undefined,
+            })),
+            hasNextPage,
+            hasPreviousPage,
         } as SearchUsersResponse;
     });
