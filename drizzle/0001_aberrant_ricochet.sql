@@ -1,0 +1,2 @@
+ALTER TABLE "users" ADD COLUMN "search_vector" "tsvector" GENERATED ALWAYS AS (to_tsvector('english', "users"."first_name" || ' ' || "users"."last_name" || ' ' || "users"."email_address")) STORED;--> statement-breakpoint
+CREATE INDEX "ix_users_search_vector" ON "users" USING gin ("search_vector");

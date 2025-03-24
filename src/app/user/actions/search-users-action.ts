@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { desc, count, ilike } from 'drizzle-orm';
+import { desc, count, sql } from 'drizzle-orm';
 import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
@@ -35,8 +35,12 @@ export const searchUsersAction = authActionClient(roles)
         const countQuery = db.select({ count: count() }).from(users);
 
         if (search) {
-            query.where(ilike(users.emailAddress, `%${search}%`));
-            countQuery.where(ilike(users.emailAddress, `%${search}%`));
+            query.where(
+                sql`${users.searchVector} @@ websearch_to_tsquery('english', ${search})`
+            );
+            countQuery.where(
+                sql`${users.searchVector} @@ websearch_to_tsquery('english', ${search})`
+            );
         }
 
         const [cr] = await countQuery;
