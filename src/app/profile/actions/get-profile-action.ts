@@ -1,6 +1,6 @@
 'use server';
 
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
@@ -17,7 +17,7 @@ export const getProfileAction = authActionClient()
                 lastName: users.lastName,
                 dateOfBirth: users.dateOfBirth,
                 isLockedOut: users.isLockedOut,
-                // version: users.version,
+                version: sql<number>`"xmin"`.mapWith(Number),
             })
             .from(users)
             .where(eq(users.id, userId))
@@ -33,6 +33,6 @@ export const getProfileAction = authActionClient()
             firstName: user.firstName,
             lastName: user.lastName,
             dateOfBirth: user.dateOfBirth,
-            // version: user.version,
+            version: user.version,
         } as GetProfileResponse;
     });

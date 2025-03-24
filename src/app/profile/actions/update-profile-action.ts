@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type { UpdateProfileResponse } from '@/app/profile/profile-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
@@ -38,7 +38,7 @@ export const updateProfileAction = authActionClient()
                 id: users.id,
                 emailAddress: users.emailAddress,
                 isLockedOut: users.isLockedOut,
-                // version: users.version,
+                version: sql<number>`"xmin"`.mapWith(Number),
             })
             .from(users)
             .where(eq(users.id, userId))
@@ -48,11 +48,7 @@ export const updateProfileAction = authActionClient()
             throw new ActionError('User not found.', 404);
         }
 
-        // TODO: Validate version
-        if (
-            !parsedInput.version &&
-            parsedInput.version !== parsedInput.version
-        ) {
+        if (!parsedInput.version && parsedInput.version !== user.version) {
             throw new ActionError(
                 'Data has been modified since entities were loaded.'
             );

@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type { UpdateUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
@@ -51,7 +51,7 @@ export const updateUserAction = authActionClient(roles)
             .select({
                 id: users.id,
                 emailAddress: users.emailAddress,
-                // version: users.version
+                version: sql<number>`"xmin"`.mapWith(Number),
             })
             .from(users)
             .where(eq(users.id, id))
@@ -61,8 +61,7 @@ export const updateUserAction = authActionClient(roles)
             throw new ActionError('User not found.', 404);
         }
 
-        // TODO: Validate version
-        if (!rest.version && rest.version !== rest.version) {
+        if (rest.version && rest.version !== user.version) {
             throw new ActionError(
                 'Data has been modified since entities were loaded.'
             );

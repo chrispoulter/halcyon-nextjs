@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type { LockUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
@@ -24,7 +24,7 @@ export const lockUserAction = authActionClient(roles)
         const [user] = await db
             .select({
                 id: users.id,
-                // version: users.version,
+                version: sql<number>`"xmin"`.mapWith(Number),
             })
             .from(users)
             .where(eq(users.id, id))
@@ -34,8 +34,7 @@ export const lockUserAction = authActionClient(roles)
             throw new ActionError('User not found.', 404);
         }
 
-        // TODO: Validate version
-        if (!rest.version && rest.version !== rest.version) {
+        if (rest.version && rest.version !== user.version) {
             throw new ActionError(
                 'Data has been modified since entities were loaded.'
             );

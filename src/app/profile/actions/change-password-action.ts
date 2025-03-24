@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type { ChangePasswordResponse } from '@/app/profile/profile-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
@@ -28,6 +28,7 @@ export const changePasswordAction = authActionClient()
                 id: users.id,
                 password: users.password,
                 isLockedOut: users.isLockedOut,
+                version: sql<number>`"xmin"`.mapWith(Number),
             })
             .from(users)
             .where(eq(users.id, userId))
@@ -37,11 +38,7 @@ export const changePasswordAction = authActionClient()
             throw new ActionError('User not found.', 404);
         }
 
-        // TODO: Validate version
-        if (
-            !parsedInput.version &&
-            parsedInput.version !== parsedInput.version
-        ) {
+        if (!parsedInput.version && parsedInput.version !== user.version) {
             throw new ActionError(
                 'Data has been modified since entities were loaded.'
             );

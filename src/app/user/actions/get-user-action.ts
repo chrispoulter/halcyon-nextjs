@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type { GetUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
@@ -29,7 +29,7 @@ export const getUserAction = authActionClient(roles)
                 dateOfBirth: users.dateOfBirth,
                 roles: users.roles,
                 isLockedOut: users.isLockedOut,
-                // version: users.version,
+                version: sql<number>`"xmin"`.mapWith(Number),
             })
             .from(users)
             .where(eq(users.id, id))
@@ -47,6 +47,6 @@ export const getUserAction = authActionClient(roles)
             dateOfBirth: user.dateOfBirth,
             roles: user.roles || undefined,
             isLockedOut: user.isLockedOut,
-            // version: user.version,
+            version: user.version,
         } as GetUserResponse;
     });
