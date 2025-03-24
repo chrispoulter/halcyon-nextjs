@@ -36,7 +36,8 @@ export const getUserAction = authActionClient(roles)
             firstName: user.firstName,
             lastName: user.lastName,
             dateOfBirth: user.dateOfBirth,
-            roles: user.roles,
+            roles: user.roles || undefined,
+            isLockedOut: user.isLockedOut,
             // version: user.version,
         } as GetUserResponse;
     });

@@ -45,7 +45,7 @@ export const registerAction = actionClient
             .where(eq(users.emailAddress, parsedInput.emailAddress))
             .limit(1);
 
-        if (!existing) {
+        if (existing) {
             throw new ActionError('User name is already taken.');
         }
 
