@@ -22,7 +22,10 @@ export const unlockUserAction = authActionClient(roles)
     .schema(schema)
     .action(async ({ parsedInput: { id, ...rest } }) => {
         const [user] = await db
-            .select()
+            .select({
+                id: users.id,
+                // version: users.version
+            })
             .from(users)
             .where(eq(users.id, id))
             .limit(1);

@@ -40,7 +40,7 @@ export const registerAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
         const [existing] = await db
-            .select()
+            .select({})
             .from(users)
             .where(eq(users.emailAddress, parsedInput.emailAddress))
             .limit(1);

@@ -24,7 +24,11 @@ export const changePasswordAction = authActionClient()
     .schema(schema)
     .action(async ({ parsedInput, ctx: { userId } }) => {
         const [user] = await db
-            .select()
+            .select({
+                id: users.id,
+                password: users.password,
+                isLockedOut: users.isLockedOut,
+            })
             .from(users)
             .where(eq(users.id, userId))
             .limit(1);

@@ -17,7 +17,11 @@ export const deleteAccountAction = authActionClient()
     .schema(schema)
     .action(async ({ parsedInput, ctx: { userId } }) => {
         const [user] = await db
-            .select()
+            .select({
+                id: users.id,
+                isLockedOut: users.isLockedOut,
+                // version: users.version,
+            })
             .from(users)
             .where(eq(users.id, userId))
             .limit(1);

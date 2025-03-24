@@ -38,7 +38,17 @@ export const searchUsersAction = authActionClient(roles)
 
         const count = await db.$count(users, where);
 
-        const query = db.select().from(users).where(where);
+        const query = db
+            .select({
+                id: users.id,
+                emailAddress: users.emailAddress,
+                firstName: users.firstName,
+                lastName: users.lastName,
+                isLockedOut: users.isLockedOut,
+                roles: users.roles,
+            })
+            .from(users)
+            .where(where);
 
         switch (sort) {
             case UserSort.EMAIL_ADDRESS_DESC:
@@ -79,7 +89,6 @@ export const searchUsersAction = authActionClient(roles)
                 emailAddress: user.emailAddress,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                dateOfBirth: user.dateOfBirth,
                 isLockedOut: user.isLockedOut,
                 roles: user.roles || undefined,
             })),

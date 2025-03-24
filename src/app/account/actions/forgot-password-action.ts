@@ -19,7 +19,11 @@ export const forgotPasswordAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
         const [user] = await db
-            .select()
+            .select({
+                id: users.id,
+                emailAddress: users.emailAddress,
+                isLockedOut: users.isLockedOut,
+            })
             .from(users)
             .where(eq(users.emailAddress, parsedInput.emailAddress))
             .limit(1);

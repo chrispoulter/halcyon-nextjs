@@ -23,7 +23,15 @@ export const loginAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
         const [user] = await db
-            .select()
+            .select({
+                id: users.id,
+                emailAddress: users.emailAddress,
+                password: users.password,
+                firstName: users.firstName,
+                lastName: users.lastName,
+                isLockedOut: users.isLockedOut,
+                roles: users.roles,
+            })
             .from(users)
             .where(eq(users.emailAddress, parsedInput.emailAddress))
             .limit(1);

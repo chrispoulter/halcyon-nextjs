@@ -21,7 +21,16 @@ export const getUserAction = authActionClient(roles)
     .schema(schema)
     .action(async ({ parsedInput: { id } }) => {
         const [user] = await db
-            .select()
+            .select({
+                id: users.id,
+                emailAddress: users.emailAddress,
+                firstName: users.firstName,
+                lastName: users.lastName,
+                dateOfBirth: users.dateOfBirth,
+                roles: users.roles,
+                isLockedOut: users.isLockedOut,
+                // version: users.version,
+            })
             .from(users)
             .where(eq(users.id, id))
             .limit(1);

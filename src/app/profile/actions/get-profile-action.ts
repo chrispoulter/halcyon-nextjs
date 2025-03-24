@@ -10,7 +10,15 @@ export const getProfileAction = authActionClient()
     .metadata({ actionName: 'getProfileAction' })
     .action(async ({ ctx: { userId } }) => {
         const [user] = await db
-            .select()
+            .select({
+                id: users.id,
+                emailAddress: users.emailAddress,
+                firstName: users.firstName,
+                lastName: users.lastName,
+                dateOfBirth: users.dateOfBirth,
+                isLockedOut: users.isLockedOut,
+                // version: users.version,
+            })
             .from(users)
             .where(eq(users.id, userId))
             .limit(1);

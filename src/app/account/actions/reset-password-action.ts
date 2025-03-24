@@ -26,7 +26,11 @@ export const resetPasswordAction = actionClient
     .schema(schema)
     .action(async ({ parsedInput }) => {
         const [user] = await db
-            .select()
+            .select({
+                id: users.id,
+                passwordResetToken: users.passwordResetToken,
+                isLockedOut: users.isLockedOut,
+            })
             .from(users)
             .where(eq(users.emailAddress, parsedInput.emailAddress))
             .limit(1);

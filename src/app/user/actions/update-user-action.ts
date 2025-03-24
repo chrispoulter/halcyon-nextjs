@@ -48,7 +48,11 @@ export const updateUserAction = authActionClient(roles)
     .schema(schema)
     .action(async ({ parsedInput: { id, ...rest } }) => {
         const [user] = await db
-            .select()
+            .select({
+                id: users.id,
+                emailAddress: users.emailAddress,
+                // version: users.version
+            })
             .from(users)
             .where(eq(users.id, id))
             .limit(1);
@@ -68,7 +72,7 @@ export const updateUserAction = authActionClient(roles)
             rest.emailAddress.toLowerCase() !== user.emailAddress.toLowerCase()
         ) {
             const [existing] = await db
-                .select()
+                .select({})
                 .from(users)
                 .where(eq(users.emailAddress, rest.emailAddress))
                 .limit(1);
