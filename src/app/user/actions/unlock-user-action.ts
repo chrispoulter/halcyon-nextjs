@@ -45,5 +45,7 @@ export const unlockUserAction = authActionClient(roles)
             .set({ isLockedOut: false })
             .where(eq(users.id, user.id));
 
-        return { id: user.id } as UnlockUserResponse;
+        const result: UnlockUserResponse = { id: user.id };
+
+        return result;
     });

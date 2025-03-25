@@ -40,5 +40,7 @@ export const deleteAccountAction = authActionClient()
 
         await deleteSession();
 
-        return { id: user.id } as DeleteAccountResponse;
+        const result: DeleteAccountResponse = { id: user.id };
+
+        return result;
     });

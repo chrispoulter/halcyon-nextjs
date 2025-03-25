@@ -39,14 +39,16 @@ export const getUserAction = authActionClient(roles)
             throw new ActionError('User not found.', 404);
         }
 
-        return {
+        const result: GetUserResponse = {
             id: user.id,
             emailAddress: user.emailAddress,
             firstName: user.firstName,
             lastName: user.lastName,
             dateOfBirth: user.dateOfBirth,
-            roles: user.roles || undefined,
+            roles: (user.roles as Role[]) || undefined,
             isLockedOut: user.isLockedOut,
             version: user.version,
-        } as GetUserResponse;
+        };
+
+        return result;
     });

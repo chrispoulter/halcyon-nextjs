@@ -46,5 +46,7 @@ export const deleteUserAction = authActionClient(roles)
 
         await db.delete(users).where(eq(users.id, user.id));
 
-        return { id: user.id } as DeleteUserResponse;
+        const result: DeleteUserResponse = { id: user.id };
+
+        return result;
     });

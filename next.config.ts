@@ -8,9 +8,6 @@ const nextConfig: NextConfig = {
     experimental: {
         authInterrupts: true,
     },
-    images: {
-        domains: ['www.gravatar.com'],
-    },
 };
 
 export default nextConfig;

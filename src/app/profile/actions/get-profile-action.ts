@@ -27,12 +27,14 @@ export const getProfileAction = authActionClient()
             throw new ActionError('User not found.', 404);
         }
 
-        return {
+        const result: GetProfileResponse = {
             id: user.id,
             emailAddress: user.emailAddress,
             firstName: user.firstName,
             lastName: user.lastName,
             dateOfBirth: user.dateOfBirth,
             version: user.version,
-        } as GetProfileResponse;
+        };
+
+        return result;
     });

@@ -83,5 +83,7 @@ export const updateUserAction = authActionClient(roles)
 
         await db.update(users).set(rest).where(eq(users.id, id));
 
-        return { id: user.id } as UpdateUserResponse;
+        const result: UpdateUserResponse = { id: user.id };
+
+        return result;
     });

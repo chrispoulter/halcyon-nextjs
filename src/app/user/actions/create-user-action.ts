@@ -66,5 +66,7 @@ export const createUserAction = authActionClient(roles)
             .values({ ...parsedInput, password })
             .returning({ id: users.id });
 
-        return { id: user.id } as CreateUserResponse;
+        const result: CreateUserResponse = { id: user.id };
+
+        return result;
     });

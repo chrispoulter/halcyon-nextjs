@@ -77,22 +77,24 @@ export const searchUsersAction = authActionClient(roles)
         }
 
         const skip = (page - 1) * size;
-        const result = await query.limit(size).offset(skip);
+        const data = await query.limit(size).offset(skip);
 
         const pageCount = Math.floor((count + size - 1) / size);
         const hasNextPage = page < pageCount;
         const hasPreviousPage = page > 1;
 
-        return {
-            items: result.map((user) => ({
+        const result: SearchUsersResponse = {
+            items: data.map((user) => ({
                 id: user.id,
                 emailAddress: user.emailAddress,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 isLockedOut: user.isLockedOut,
-                roles: user.roles || undefined,
+                roles: (user.roles as Role[]) || undefined,
             })),
             hasNextPage,
             hasPreviousPage,
-        } as SearchUsersResponse;
+        };
+
+        return result;
     });

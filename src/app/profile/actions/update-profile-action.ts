@@ -71,5 +71,7 @@ export const updateProfileAction = authActionClient()
 
         await db.update(users).set(parsedInput).where(eq(users.id, userId));
 
-        return { id: user.id } as UpdateProfileResponse;
+        const result: UpdateProfileResponse = { id: user.id };
+
+        return result;
     });

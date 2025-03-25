@@ -62,5 +62,7 @@ export const changePasswordAction = authActionClient()
             })
             .where(eq(users.id, userId));
 
-        return { id: user.id } as ChangePasswordResponse;
+        const result: ChangePasswordResponse = { id: user.id };
+
+        return result;
     });

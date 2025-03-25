@@ -56,5 +56,7 @@ export const registerAction = actionClient
             .values({ ...parsedInput, password })
             .returning({ id: users.id });
 
-        return { id: user.id } as RegisterResponse;
+        const result: RegisterResponse = { id: user.id };
+
+        return result;
     });

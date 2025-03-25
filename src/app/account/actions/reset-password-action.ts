@@ -53,5 +53,7 @@ export const resetPasswordAction = actionClient
             })
             .where(eq(users.id, user.id));
 
-        return { id: user.id } as ResetPasswordResponse;
+        const result: ResetPasswordResponse = { id: user.id };
+
+        return result;
     });
