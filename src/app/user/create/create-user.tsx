@@ -18,11 +18,11 @@ export function CreateUser() {
     const { execute: createUser, isPending: isSaving } = useAction(
         createUserAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success('User successfully created.');
                 router.push('/user');
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }

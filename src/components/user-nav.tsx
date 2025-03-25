@@ -24,7 +24,7 @@ type UserNavProps = {
 
 export function UserNav({ session }: UserNavProps) {
     const { execute: logout, isPending: isSaving } = useAction(logoutAction, {
-        onError: ({ error }) => {
+        onError({ error }) {
             toast.error(<ServerActionErrorMessage result={error} />);
         },
     });

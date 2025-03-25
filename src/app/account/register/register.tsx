@@ -17,11 +17,11 @@ export function Register() {
     const { execute: register, isPending: isSaving } = useAction(
         registerAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success('User successfully registered.');
                 router.push('/account/login');
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }

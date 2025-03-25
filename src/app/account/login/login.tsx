@@ -15,10 +15,10 @@ export function Login() {
     const router = useRouter();
 
     const { execute: login, isPending: isSaving } = useAction(loginAction, {
-        onSuccess: () => {
+        onSuccess() {
             router.push('/');
         },
-        onError: ({ error }) => {
+        onError({ error }) {
             toast.error(<ServerActionErrorMessage result={error} />);
         },
     });

@@ -23,11 +23,11 @@ export function UpdateProfile({ profile }: ProfileProps) {
     const { execute: updateProfile, isPending: isSaving } = useAction(
         updateProfileAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success('Your profile has been updated.');
                 router.push('/profile');
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }

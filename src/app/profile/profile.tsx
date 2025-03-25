@@ -21,11 +21,11 @@ export function Profile({ profile }: ProfileProps) {
     const { execute: deleteAccount, isPending: isDeleting } = useAction(
         deleteAccountAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success('Your account has been deleted.');
                 router.push('/');
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }

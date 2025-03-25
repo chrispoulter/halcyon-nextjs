@@ -29,11 +29,11 @@ export function UpdateUser({ user }: UpdateUserProps) {
     const { execute: updateUser, isPending: isUpdating } = useAction(
         updateUserAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success('User successfully updated.');
                 router.push('/user');
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }
@@ -42,11 +42,11 @@ export function UpdateUser({ user }: UpdateUserProps) {
     const { execute: lockUser, isPending: isLocking } = useAction(
         lockUserAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success('User successfully locked.');
                 router.refresh();
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }
@@ -55,11 +55,11 @@ export function UpdateUser({ user }: UpdateUserProps) {
     const { execute: unlockUser, isPending: isUnlocking } = useAction(
         unlockUserAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success('User successfully unlocked.');
                 router.refresh();
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }
@@ -68,11 +68,11 @@ export function UpdateUser({ user }: UpdateUserProps) {
     const { execute: deleteUser, isPending: isDeleting } = useAction(
         deleteUserAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success('User successfully deleted.');
                 router.push('/user');
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }

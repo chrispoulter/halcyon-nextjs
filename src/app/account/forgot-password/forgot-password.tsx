@@ -16,14 +16,14 @@ export function ForgotPassword() {
     const { execute: forgotPassword, isPending: isSaving } = useAction(
         forgotPasswordAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success(
                     'Instructions as to how to reset your password have been sent to you via email.'
                 );
 
                 router.push('/account/login');
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }

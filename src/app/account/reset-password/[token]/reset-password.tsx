@@ -20,11 +20,11 @@ export function ResetPassword({ token }: ResetPasswordProps) {
     const { execute: resetPassword, isPending: isSaving } = useAction(
         resetPasswordAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success('Your password has been reset.');
                 router.push('/account/login');
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }

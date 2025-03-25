@@ -23,11 +23,11 @@ export function ChangePassword({ profile }: ChangePasswordProps) {
     const { execute: changePassword, isPending: isSaving } = useAction(
         changePasswordAction,
         {
-            onSuccess: () => {
+            onSuccess() {
                 toast.success('Your password has been changed.');
                 router.push('/profile');
             },
-            onError: ({ error }) => {
+            onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
             },
         }
