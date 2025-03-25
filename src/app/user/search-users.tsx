@@ -29,7 +29,7 @@ export function SearchUsers({ request, data }: SearchUsersProps) {
     const searchParams = useSearchParams();
 
     function onSearch(data: SearchUsersFormValues) {
-        const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams(searchParams);
         params.delete('page');
         params.delete('search');
 
@@ -37,25 +37,25 @@ export function SearchUsers({ request, data }: SearchUsersProps) {
             params.set('search', data.search);
         }
 
-        router.push(`?${params.toString()}`);
+        router.replace(`?${params.toString()}`);
     }
 
     function onSort(sort: UserSort) {
-        const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams(searchParams);
         params.set('sort', sort);
-        router.push(`?${params.toString()}`);
+        router.replace(`?${params.toString()}`);
     }
 
     function onPreviousPage() {
-        const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams(searchParams);
         params.set('page', (request.page - 1).toString());
-        router.push(`?${params.toString()}`);
+        router.replace(`?${params.toString()}`);
     }
 
     function onNextPage() {
-        const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams(searchParams);
         params.set('page', (request.page + 1).toString());
-        router.push(`?${params.toString()}`);
+        router.replace(`?${params.toString()}`);
     }
 
     return (
