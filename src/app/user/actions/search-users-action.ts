@@ -30,7 +30,7 @@ export const searchUsersAction = authActionClient(roles)
     .metadata({ actionName: 'searchUsersAction' })
     .schema(schema)
     .action(async ({ parsedInput: { search, page = 1, size = 10, sort } }) => {
-        let where: SQL<unknown> | undefined;
+        let where: SQL | undefined;
 
         if (search) {
             where = sql`${users.searchVector} @@ websearch_to_tsquery('english', ${search})`;
