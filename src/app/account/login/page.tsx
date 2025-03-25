@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { Login } from '@/app/account/login/login';
 
 export const metadata: Metadata = {

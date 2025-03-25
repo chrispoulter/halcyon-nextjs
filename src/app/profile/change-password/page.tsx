@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { getProfileAction } from '@/app/profile/actions/get-profile-action';
 import { ChangePassword } from '@/app/profile/change-password/change-password';
 import {

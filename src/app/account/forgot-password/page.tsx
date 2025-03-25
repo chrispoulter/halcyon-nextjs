@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { ForgotPassword } from '@/app/account/forgot-password/forgot-password';
 
 export const metadata: Metadata = {

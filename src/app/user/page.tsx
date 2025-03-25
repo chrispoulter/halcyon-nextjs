@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { z } from 'zod';
 import { searchUsersAction } from '@/app/user/actions/search-users-action';
 import { SearchUsers } from '@/app/user/search-users';

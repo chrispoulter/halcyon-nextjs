@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { ResetPassword } from '@/app/account/reset-password/[token]/reset-password';
 
 type ResetPasswordPageProps = {
