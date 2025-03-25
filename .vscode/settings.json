@@ -2,8 +2,6 @@
     "files.exclude": {
         "**/node_modules": true,
         "**/.next": true,
-        "**/.swc": true,
-        "**/*.tsbuildinfo": true,
         "**/next-env.d.ts": true
     },
     "files.associations": {

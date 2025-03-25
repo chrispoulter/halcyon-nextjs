@@ -1,6 +1,6 @@
 import path from 'path';
-import { SMTPClient } from 'emailjs';
 import { promises as fs } from 'fs';
+import { SMTPClient } from 'emailjs';
 import { config } from '@/lib/config';
 import { getSiteUrl } from '@/lib/server-utils';
 
