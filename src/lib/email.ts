@@ -52,10 +52,7 @@ export const sendEmail = async (message: EmailMessage) => {
 };
 
 const readResource = (resource: string) =>
-    fs.readFile(
-        `${path.join(process.cwd(), 'templates')}/${resource}.html`,
-        'utf8'
-    );
+    fs.readFile(path.resolve(`src/templates/${resource}.html`), 'utf8');
 
 const getTitle = (template: string) =>
     new RegExp(/<title>\s*(.+?)\s*<\/title>/).exec(template)![1];
