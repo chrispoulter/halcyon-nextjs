@@ -5,7 +5,7 @@ import { Role } from '@/lib/definitions';
 import { generateHash } from '@/lib/hash';
 import { config } from '@/lib/config';
 
-const db = drizzle(config.DATABASE_URL);
+const db = drizzle(config.DATABASE_URL_UNPOOLED);
 
 async function main() {
     const emailAddress = config.SEED_EMAIL_ADDRESS;

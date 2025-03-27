@@ -9,7 +9,7 @@ services:
         command: npm run dev
         environment:
             WATCHPACK_POLLING: true
-            DATABASE_URL: 'postgres://postgres:password@host.docker.internal:5432/halcyon-next'
+            DATABASE_URL_UNPOOLED: 'postgres://postgres:password@host.docker.internal:5432/halcyon-next'
             EMAIL_SMTP_SERVER: host.docker.internal
             EMAIL_SMTP_PORT: 1025
             EMAIL_NO_REPLY_ADDRESS: noreply@example.com

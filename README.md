@@ -45,7 +45,7 @@ npm install
 For local development, you'll need to create a `.env` file in the root of the project to define the environment variables. This file is ignored by Git, so the secrets will not be committed to the repository.
 
 ```
-DATABASE_URL=postgres://postgres:password@localhost:5432/halcyon-next
+DATABASE_URL_UNPOOLED=postgres://postgres:password@localhost:5432/halcyon-next
 
 EMAIL_SMTP_SERVER=localhost
 EMAIL_SMTP_PORT=1025

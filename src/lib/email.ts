@@ -28,6 +28,7 @@ export const sendEmail = async (message: EmailMessage) => {
     const client = new SMTPClient({
         host: config.EMAIL_SMTP_SERVER,
         port: config.EMAIL_SMTP_PORT,
+        ssl: config.EMAIL_SMTP_SSL,
         user: config.EMAIL_SMTP_USERNAME,
         password: config.EMAIL_SMTP_PASSWORD,
     });
