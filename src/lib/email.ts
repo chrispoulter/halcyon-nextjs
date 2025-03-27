@@ -53,7 +53,7 @@ export const sendEmail = async (message: EmailMessage) => {
 
 const readResource = (resource: string) =>
     fs.readFile(
-        `${path.join('./public', 'templates')}/${resource}.html`,
+        path.join(process.cwd(), 'public', 'templates', `${resource}.html`),
         'utf8'
     );
 
