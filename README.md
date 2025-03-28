@@ -49,7 +49,7 @@ DATABASE_URL=postgres://postgres:password@localhost:5432/halcyon-next
 
 EMAIL_SMTP_SERVER=localhost
 EMAIL_SMTP_PORT=1025
-EMAIL_SMTP_SSL=false
+EMAIL_SMTP_SSL=
 EMAIL_SMTP_USERNAME=
 EMAIL_SMTP_PASSWORD=
 EMAIL_NO_REPLY_ADDRESS=noreply@example.com
