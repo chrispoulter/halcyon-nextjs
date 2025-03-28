@@ -15,6 +15,8 @@ type EmailMessage = {
     context: object;
 };
 
+const TEMPLATES_PATH = 'public/templates';
+
 export const sendEmail = async (message: EmailMessage) => {
     const template = await readResource(message.template);
     const title = getTitle(template);
@@ -52,10 +54,7 @@ export const sendEmail = async (message: EmailMessage) => {
 };
 
 const readResource = (resource: string) =>
-    fs.readFile(
-        path.join(process.cwd(), 'public', 'templates', `${resource}.html`),
-        'utf8'
-    );
+    fs.readFile(path.resolve(`${TEMPLATES_PATH}/${resource}.html`), 'utf8');
 
 const getTitle = (template: string) =>
     new RegExp(/<title>\s*(.+?)\s*<\/title>/).exec(template)![1];
