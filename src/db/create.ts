@@ -32,8 +32,8 @@ async function main() {
         await postgresClient.query('CREATE DATABASE $1:name', [database]);
 
         console.log(`🎉 Database "${database}" created.`);
-    } catch (err) {
-        console.error('❌ Failed to create database:', err);
+    } catch (error) {
+        console.error('❌ Failed to create database', error);
         process.exit(1);
     } finally {
         await postgresClient.end();

@@ -29,8 +29,8 @@ async function main() {
         });
 
         console.log(`✅ Seeded user "${emailAddress}"`);
-    } catch (err) {
-        console.error('❌ Failed to seed database:', err);
+    } catch (error) {
+        console.error('❌ Failed to seed database', error);
         process.exit(1);
     }
 }
