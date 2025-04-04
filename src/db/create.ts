@@ -29,7 +29,7 @@ async function main() {
             return;
         }
 
-        await postgresClient.query('CREATE DATABASE $1:name', [database]);
+        await postgresClient.query(`CREATE DATABASE "${database}"`);
 
         console.log(`Database "${database}" created.`);
     } catch (error) {
