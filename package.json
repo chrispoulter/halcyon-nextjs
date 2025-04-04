@@ -13,7 +13,8 @@
         "db:migrate": "drizzle-kit migrate",
         "db:create": "tsx src/db/create.ts",
         "db:seed": "tsx src/db/seed.ts",
-        "email": "email dev --dir src/emails"
+        "email:dev": "email dev --dir src/emails",
+        "email:export": "email export --dir src/emails --pretty"
     },
     "dependencies": {
         "@hookform/resolvers": "4.1.3",
