@@ -3,31 +3,41 @@ import { Client } from 'pg';
 import { config } from '@/lib/config';
 
 async function main() {
-    const client = new Client(config.DATABASE_URL);
+    const mainClient = new Client(config.DATABASE_URL);
+
+    const { host, port, ssl, user, password, database } = mainClient;
 
     const postgresClient = new Client({
-        host: client.host,
-        port: client.port,
-        ssl: client.ssl,
-        user: client.user,
-        password: client.password,
+        host,
+        port,
+        ssl,
+        user,
+        password,
         database: 'postgres',
     });
 
-    await postgresClient.connect();
+    try {
+        await postgresClient.connect();
 
-    const res = await postgresClient.query(
-        `SELECT 1 FROM pg_database WHERE datname='${client.database}'`
-    );
+        const { rows } = await postgresClient.query(
+            'SELECT 1 FROM pg_database WHERE datname = $1',
+            [database]
+        );
 
-    if (res.rowCount === 0) {
-        await postgresClient.query(`CREATE DATABASE "${client.database}"`);
-        console.log(`Database "${client.database}" created.`);
-    } else {
-        console.log(`Database "${client.database}" already exists.`);
+        if (rows.length) {
+            console.log(`✅ Database "${database}" already exists.`);
+            return;
+        }
+
+        await postgresClient.query('CREATE DATABASE $1:name', [database]);
+
+        console.log(`🎉 Database "${database}" created.`);
+    } catch (err) {
+        console.error('❌ Failed to create database:', err);
+        process.exit(1);
+    } finally {
+        await postgresClient.end();
     }
-
-    await postgresClient.end();
 }
 
 main();
