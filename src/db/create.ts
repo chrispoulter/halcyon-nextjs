@@ -25,15 +25,15 @@ async function main() {
         );
 
         if (rows.length) {
-            console.log(`✅ Database "${database}" already exists.`);
+            console.log(`Database "${database}" already exists.`);
             return;
         }
 
         await postgresClient.query('CREATE DATABASE $1:name', [database]);
 
-        console.log(`🎉 Database "${database}" created.`);
+        console.log(`Database "${database}" created.`);
     } catch (error) {
-        console.error('❌ Failed to create database', error);
+        console.error('Failed to create database', error);
         process.exit(1);
     } finally {
         await postgresClient.end();
