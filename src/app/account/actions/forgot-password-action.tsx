@@ -46,7 +46,7 @@ export const forgotPasswordAction = actionClient
                 template: (
                     <ResetPasswordEmail
                         siteUrl={siteUrl}
-                        resetPassworUrl={`${siteUrl}/account/reset-password/${passwordResetToken}`}
+                        resetPasswordUrl={`${siteUrl}/account/reset-password/${passwordResetToken}`}
                     />
                 ),
             });
