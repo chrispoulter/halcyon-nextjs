@@ -6,13 +6,13 @@ type EmailMessage = {
     from?: string;
     to: string;
     subject: string;
-    template: React.ReactElement;
+    react: React.ReactElement;
 };
 
 export const sendEmail = async (message: EmailMessage) => {
-    const html = await render(message.template);
+    const html = await render(message.react);
 
-    const text = await render(message.template, {
+    const text = await render(message.react, {
         plainText: true,
     });
 

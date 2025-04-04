@@ -5,10 +5,10 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
+import { ResetPasswordEmail } from '@/emails/reset-password-email';
 import { sendEmail } from '@/lib/email';
 import { actionClient } from '@/lib/safe-action';
 import { getSiteUrl } from '@/lib/server-utils';
-import { ResetPasswordEmail } from '@/templates/reset-password-email';
 
 const schema = z.object({
     emailAddress: z
@@ -43,12 +43,10 @@ export const forgotPasswordAction = actionClient
             await sendEmail({
                 to: user.emailAddress,
                 subject: 'Reset Password // Halcyon',
-                template: (
-                    <ResetPasswordEmail
-                        siteUrl={siteUrl}
-                        resetPasswordUrl={`${siteUrl}/account/reset-password/${passwordResetToken}`}
-                    />
-                ),
+                react: ResetPasswordEmail({
+                    siteUrl,
+                    resetPasswordUrl: `${siteUrl}/account/reset-password/${passwordResetToken}`,
+                }),
             });
         }
     });

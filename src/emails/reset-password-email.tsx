@@ -59,6 +59,13 @@ export function ResetPasswordEmail({
     );
 }
 
+ResetPasswordEmail.PreviewProps = {
+    siteUrl: 'http://localhost:3000',
+    resetPasswordUrl: 'http://localhost:3000/account/reset-password/1234',
+} as ResetPasswordEmailProps;
+
+export default ResetPasswordEmail;
+
 const main = {
     fontFamily:
         '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
