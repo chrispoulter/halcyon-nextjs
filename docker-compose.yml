@@ -19,7 +19,7 @@ services:
     halcyon-api:
         image: ghcr.io/chrispoulter/halcyon-api:latest
         environment:
-            ConnectionStrings__Database: Host=host.docker.internal;Port=5432;Database=halcyon;Username=postgres;Password=password
+            ConnectionStrings__Database: Host=host.docker.internal;Port=5432;Database=halcyon-api;Username=postgres;Password=password
             ConnectionStrings__RabbitMq: amqp://guest:guest@host.docker.internal:5672
             ConnectionStrings__Redis: host.docker.internal
             Email__SmtpServer: host.docker.internal
