@@ -16,6 +16,8 @@ A Next.js web project template 👷 Built with a sense of peace and tranquillity
   [https://zod.dev/](https://zod.dev/)
 - Tailwind CSS
   [https://tailwindcss.com/](https://tailwindcss.com/)
+- React Email
+  [https://react.email/](https://react.email/)
 - Drizzle ORM
   [https://orm.drizzle.team/](https://orm.drizzle.team/)
 - Docker
