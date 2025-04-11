@@ -62,7 +62,8 @@ export function ResetPasswordEmail({
 
 ResetPasswordEmail.PreviewProps = {
     siteUrl: 'http://localhost:3000',
-    resetPasswordUrl: 'http://localhost:3000/account/reset-password/1234',
+    resetPasswordUrl:
+        'http://localhost:3000/account/reset-password/db424e3c-4cab-4973-bea0-eb6565bb794c',
 } as ResetPasswordEmailProps;
 
 export default ResetPasswordEmail;
