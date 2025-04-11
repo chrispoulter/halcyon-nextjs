@@ -12,8 +12,8 @@ type FlattenedSafeActionResult<S extends Schema, Data> = SafeActionResult<
     string,
     S,
     readonly S[],
-    FlattenedValidationErrors<ValidationErrors<any>>,
-    FlattenedBindArgsValidationErrors<readonly ValidationErrors<any>[]>,
+    FlattenedValidationErrors<ValidationErrors<S>>,
+    FlattenedBindArgsValidationErrors<readonly ValidationErrors<S>[]>,
     Data
 >;
 
@@ -44,7 +44,7 @@ export function ServerActionErrorMessage<S extends Schema, Data>({
         const flattenedErrors = result.bindArgsValidationErrors.flatMap(
             (item) => [
                 ...item.formErrors,
-                ...Object.values(item.fieldErrors).flat(),
+                ...Object.values<string[] | undefined>(item.fieldErrors).flat(),
             ]
         );
 
@@ -60,7 +60,9 @@ export function ServerActionErrorMessage<S extends Schema, Data>({
     if (result?.validationErrors) {
         const flattenedErrors = [
             ...result.validationErrors.formErrors,
-            ...Object.values(result.validationErrors.fieldErrors).flat(),
+            ...Object.values<string[] | undefined>(
+                result.validationErrors.fieldErrors
+            ).flat(),
         ];
 
         return (
