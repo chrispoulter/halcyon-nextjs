@@ -20,21 +20,14 @@ services:
         image: ghcr.io/chrispoulter/halcyon-api:latest
         environment:
             ConnectionStrings__Database: Host=host.docker.internal;Port=5432;Database=halcyon-api;Username=postgres;Password=password
-            ConnectionStrings__RabbitMq: amqp://guest:guest@host.docker.internal:5672
-            ConnectionStrings__Redis: host.docker.internal
             Email__SmtpServer: host.docker.internal
-            Serilog__WriteTo__Seq__Args__serverUrl: http://host.docker.internal:5341
-            Serilog__MinimumLevel__Override__Microsoft.AspNetCore.DataProtection: Error
+            Logging__LogLevel__Microsoft.AspNetCore.DataProtection: Error
         ports:
             - 5257:8080
             - 7257:8081
         restart: always
         depends_on:
             postgres:
-                condition: service_healthy
-            rabbitmq:
-                condition: service_healthy
-            redis:
                 condition: service_healthy
 
     postgres:
@@ -48,35 +41,7 @@ services:
             - postgres:/var/lib/postgresql/data
         restart: always
         healthcheck:
-            test: ['CMD', 'pg_isready']
-            interval: 10s
-            timeout: 5s
-            retries: 3
-
-    rabbitmq:
-        image: rabbitmq:4.0-management
-        hostname: local
-        ports:
-            - 5672:5672
-            - 15672:15672
-        volumes:
-            - rabbitmq:/var/lib/rabbitmq
-        restart: always
-        healthcheck:
-            test: ['CMD', 'rabbitmqctl', 'status']
-            interval: 10s
-            timeout: 5s
-            retries: 3
-
-    redis:
-        image: redis:7.4
-        ports:
-            - 6379:6379
-        volumes:
-            - redis:/data
-        restart: always
-        healthcheck:
-            test: ['CMD', 'redis-cli', 'ping']
+            test: [ 'CMD', 'pg_isready' ]
             interval: 10s
             timeout: 5s
             retries: 3
@@ -92,25 +57,8 @@ services:
             - maildev:/tmp
         restart: always
 
-    seq:
-        image: datalust/seq:2024.3
-        environment:
-            ACCEPT_EULA: Y
-            SEQ_API_CANONICALURI: http://localhost:5341
-        ports:
-            - 5341:80
-        volumes:
-            - seq:/data
-        restart: always
-
 volumes:
     postgres:
         name: halcyon-postgres
-    rabbitmq:
-        name: halcyon-rabbitmq
-    redis:
-        name: halcyon-redis
     maildev:
         name: halcyon-maildev
-    seq:
-        name: halcyon-seq
