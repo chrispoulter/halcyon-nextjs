@@ -20,7 +20,7 @@ services:
         image: ghcr.io/chrispoulter/halcyon-api:latest
         environment:
             ConnectionStrings__Database: Host=host.docker.internal;Port=5432;Database=halcyon-api;Username=postgres;Password=password
-            Email__SmtpServer: host.docker.internal
+            ConnectionStrings__Mail: Endpoint=smtp://host.docker.internal:1025
             Logging__LogLevel__Microsoft.AspNetCore.DataProtection: Error
         ports:
             - 5257:8080
