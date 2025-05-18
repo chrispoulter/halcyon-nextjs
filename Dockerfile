@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV HUSKY=0
