@@ -1,4 +1,4 @@
-# Halcyon
+# Halcyon Next.js
 
 A Next.js web project template 👷 Built with a sense of peace and tranquillity 🙏
 
