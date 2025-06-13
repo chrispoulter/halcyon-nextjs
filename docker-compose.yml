@@ -6,30 +6,22 @@ services:
         build:
             context: .
             target: dev
-        command: npm run dev -- --host=0.0.0.0 --port=5173
+        command: npm run dev
         environment:
-            USE_POLLING: true
-            VITE_API_URL: http://localhost:5257
+            WATCHPACK_POLLING: true
+            DATABASE_URL: 'postgres://postgres:password@host.docker.internal:5432/halcyon-nextjs'
+            EMAIL_SMTP_SERVER: host.docker.internal
+            EMAIL_SMTP_PORT: 1025
+            EMAIL_NO_REPLY_ADDRESS: noreply@example.com
+            SEED_EMAIL_ADDRESS: system.administrator@example.com
+            SEED_PASSWORD: super_secret_password_that_should_be_changed
+            SESSION_DURATION: 3600
+            SESSION_SECRET: super_secret_key_that_should_be_changed
         ports:
-            - 5173:5173
+            - 3000:3000
         volumes:
             - ./src:/app/src
             - ./public:/app/public
-
-    halcyon-api:
-        image: ghcr.io/chrispoulter/halcyon-api:latest
-        environment:
-            ConnectionStrings__Database: Host=host.docker.internal;Port=5432;Database=halcyon-api;Username=postgres;Password=password
-            ConnectionStrings__Mail: Host=host.docker.internal;Port=1025
-            Email__SiteUrl: http://localhost:5173
-            Logging__LogLevel__Microsoft.AspNetCore.DataProtection: Error
-        ports:
-            - 5257:8080
-            - 7257:8081
-        restart: always
-        depends_on:
-            postgres:
-                condition: service_healthy
 
     postgres:
         image: postgres:17.2
@@ -42,7 +34,7 @@ services:
             - postgres:/var/lib/postgresql/data
         restart: always
         healthcheck:
-            test: [ 'CMD', 'pg_isready' ]
+            test: ['CMD', 'pg_isready']
             interval: 10s
             timeout: 5s
             retries: 3

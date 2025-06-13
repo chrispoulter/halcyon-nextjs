@@ -1,8 +1,10 @@
 FROM node:22-alpine AS base
 
+ENV NEXT_TELEMETRY_DISABLED=1
 ENV HUSKY=0
 
 FROM base AS deps
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
@@ -10,22 +12,28 @@ RUN npm ci
 
 FROM base AS dev
 WORKDIR /app
-
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 FROM dev AS builder
-
 RUN npm run build
 
-FROM nginx:alpine AS runner
+FROM base AS runner
+WORKDIR /app
 
-COPY --from=builder /app/default.conf.template /etc/nginx/templates/default.conf.template
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY --from=builder /app/entrypoint.sh /docker-entrypoint.d/entrypoint.sh
+ENV NODE_ENV=production
 
-RUN ["chmod", "755", "/docker-entrypoint.d/entrypoint.sh"]
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-EXPOSE 80
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-CMD ["nginx", "-g", "daemon off;"]
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+CMD ["node", "server.js"]

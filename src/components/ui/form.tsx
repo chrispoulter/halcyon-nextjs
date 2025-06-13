@@ -1,14 +1,16 @@
+'use client';
+
 import * as React from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import {
     Controller,
-    ControllerProps,
-    FieldPath,
-    FieldValues,
     FormProvider,
     useFormContext,
     useFormState,
+    type ControllerProps,
+    type FieldPath,
+    type FieldValues,
 } from 'react-hook-form';
 
 import { cn } from '@/lib/utils';
@@ -136,7 +138,7 @@ function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
 
 function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
     const { error, formMessageId } = useFormField();
-    const body = error ? String(error?.message) : props.children;
+    const body = error ? String(error?.message ?? '') : props.children;
 
     if (!body) {
         return null;
@@ -146,7 +148,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
         <p
             data-slot="form-message"
             id={formMessageId}
-            className={cn('text-destructive text-sm font-medium', className)}
+            className={cn('text-destructive text-sm', className)}
             {...props}
         >
             {body}
@@ -155,7 +157,6 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
 }
 
 export {
-    // eslint-disable-next-line react-refresh/only-export-components
     useFormField,
     Form,
     FormItem,

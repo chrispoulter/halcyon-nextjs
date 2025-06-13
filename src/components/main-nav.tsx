@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from 'react';
-import { Link } from 'react-router';
+import Link from 'next/link';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,8 +12,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from '@/components/ui/drawer';
-import { useAuth } from '@/components/auth-provider';
-import { Role } from '@/lib/session-types';
+import { type SessionPayload, Role } from '@/lib/definitions';
 
 const routes = [
     { href: '/', label: 'Home' },
@@ -23,19 +24,21 @@ const routes = [
     },
 ];
 
-export function MainNav() {
-    const [open, setOpen] = useState(false);
+type MainNavProps = {
+    session?: SessionPayload;
+};
 
-    const { user } = useAuth();
+export function MainNav({ session }: MainNavProps) {
+    const [open, setOpen] = useState(false);
 
     const routeLinks = routes
         .filter(
             ({ roles }) =>
-                !roles || roles.some((value) => user?.roles?.includes(value))
+                !roles || roles.some((value) => session?.roles?.includes(value))
         )
         .map(({ href, label }) => (
             <Button key={href} asChild variant="link">
-                <Link to={href} onClick={() => setOpen(false)}>
+                <Link href={href} onClick={() => setOpen(false)}>
                     {label}
                 </Link>
             </Button>
