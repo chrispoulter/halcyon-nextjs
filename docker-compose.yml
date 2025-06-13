@@ -24,7 +24,7 @@ services:
             - ./public:/app/public
 
     postgres:
-        image: postgres:17.2
+        image: postgres:17.4
         user: postgres
         environment:
             POSTGRES_PASSWORD: password
