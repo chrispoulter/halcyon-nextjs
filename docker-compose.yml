@@ -16,9 +16,6 @@ services:
             SESSION_SECRET: super_secret_key_that_should_be_changed
         ports:
             - 3000:3000
-        depends_on:
-            postgres:
-                condition: service_healthy
 
     postgres:
         image: postgres:17.4
