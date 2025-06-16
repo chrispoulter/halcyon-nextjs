@@ -45,7 +45,7 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const updateUserAction = authActionClient(roles)
     .metadata({ actionName: 'updateUserAction' })
-    .schema(schema)
+    .inputSchema(schema)
     .action(async ({ parsedInput: { id, ...rest } }) => {
         const [user] = await db
             .select({

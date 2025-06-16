@@ -37,7 +37,7 @@ const schema = z.object({
 
 export const registerAction = actionClient
     .metadata({ actionName: 'registerAction' })
-    .schema(schema)
+    .inputSchema(schema)
     .action(async ({ parsedInput }) => {
         const [existing] = await db
             .select({})
