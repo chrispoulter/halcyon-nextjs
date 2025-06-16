@@ -5,8 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 type FlattenedSafeActionResult<T> = SafeActionResult<
     string,
     undefined,
-    | { formErrors: string[]; fieldErrors: { [key: string]: string[] } }
-    | undefined,
+    { formErrors: string[]; fieldErrors: Record<string, string[]> } | undefined,
     T,
     object
 >;
@@ -14,7 +13,7 @@ type FlattenedSafeActionResult<T> = SafeActionResult<
 export function ServerActionError<T>({
     result,
 }: {
-    result: FlattenedSafeActionResult<T>;
+    result?: FlattenedSafeActionResult<T>;
 }) {
     return (
         <div className="mx-auto max-w-screen-sm p-6">
@@ -32,7 +31,7 @@ export function ServerActionError<T>({
 export function ServerActionErrorMessage<T>({
     result,
 }: {
-    result: FlattenedSafeActionResult<T>;
+    result?: FlattenedSafeActionResult<T>;
 }) {
     if (result?.validationErrors) {
         const flattenedErrors = [
@@ -56,7 +55,7 @@ export function ServerActionErrorMessage<T>({
 }
 
 export function isServerActionSuccess<T>(
-    result: FlattenedSafeActionResult<T>
+    result?: FlattenedSafeActionResult<T>
 ): result is { data: T } {
     if (!result) {
         return false;
