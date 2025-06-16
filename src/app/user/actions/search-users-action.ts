@@ -28,7 +28,7 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const searchUsersAction = authActionClient(roles)
     .metadata({ actionName: 'searchUsersAction' })
-    .schema(schema)
+    .inputSchema(schema)
     .action(async ({ parsedInput: { search, page = 1, size = 10, sort } }) => {
         let where: SQL | undefined;
 

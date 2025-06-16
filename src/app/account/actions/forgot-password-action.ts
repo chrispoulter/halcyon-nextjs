@@ -18,7 +18,7 @@ const schema = z.object({
 
 export const forgotPasswordAction = actionClient
     .metadata({ actionName: 'forgotPasswordAction' })
-    .schema(schema)
+    .inputSchema(schema)
     .action(async ({ parsedInput }) => {
         const [user] = await db
             .select({

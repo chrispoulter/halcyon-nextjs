@@ -20,7 +20,7 @@ const schema = z.object({
 
 export const loginAction = actionClient
     .metadata({ actionName: 'loginAction' })
-    .schema(schema)
+    .inputSchema(schema)
     .action(async ({ parsedInput }) => {
         const [user] = await db
             .select({

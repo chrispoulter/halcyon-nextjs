@@ -19,7 +19,7 @@ const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
 
 export const lockUserAction = authActionClient(roles)
     .metadata({ actionName: 'lockUserAction' })
-    .schema(schema)
+    .inputSchema(schema)
     .action(async ({ parsedInput: { id, ...rest }, ctx: { userId } }) => {
         const [user] = await db
             .select({

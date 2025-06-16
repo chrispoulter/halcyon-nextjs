@@ -37,9 +37,7 @@ export function ServerActionErrorMessage<T>({
     if (result?.validationErrors) {
         const flattenedErrors = [
             ...result.validationErrors.formErrors,
-            ...Object.values<string[] | undefined>(
-                result.validationErrors.fieldErrors
-            ).flat(),
+            ...Object.values(result.validationErrors.fieldErrors).flat(),
         ];
 
         return (
