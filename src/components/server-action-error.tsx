@@ -1,29 +1,21 @@
-import {
-    FlattenedBindArgsValidationErrors,
-    FlattenedValidationErrors,
-    SafeActionResult,
-    ValidationErrors,
-} from 'next-safe-action';
-import { Schema } from 'next-safe-action/adapters/types';
+import { SafeActionResult } from 'next-safe-action';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-type FlattenedSafeActionResult<S extends Schema, Data> = SafeActionResult<
+type FlattenedSafeActionResult<T> = SafeActionResult<
     string,
-    S,
-    readonly S[],
-    FlattenedValidationErrors<ValidationErrors<S>>,
-    FlattenedBindArgsValidationErrors<readonly ValidationErrors<S>[]>,
-    Data
+    undefined,
+    | { formErrors: string[]; fieldErrors: { [key: string]: string[] } }
+    | undefined,
+    T,
+    object
 >;
 
-type ServerActionErrorProps<S extends Schema, Data> = {
-    result?: FlattenedSafeActionResult<S, Data>;
-};
-
-export function ServerActionError<S extends Schema, Data>({
+export function ServerActionError<T>({
     result,
-}: ServerActionErrorProps<S, Data>) {
+}: {
+    result: FlattenedSafeActionResult<T>;
+}) {
     return (
         <div className="mx-auto max-w-screen-sm p-6">
             <Alert variant="destructive">
@@ -37,26 +29,11 @@ export function ServerActionError<S extends Schema, Data>({
     );
 }
 
-export function ServerActionErrorMessage<S extends Schema, Data>({
+export function ServerActionErrorMessage<T>({
     result,
-}: ServerActionErrorProps<S, Data>) {
-    if (result?.bindArgsValidationErrors) {
-        const flattenedErrors = result.bindArgsValidationErrors.flatMap(
-            (item) => [
-                ...item.formErrors,
-                ...Object.values<string[] | undefined>(item.fieldErrors).flat(),
-            ]
-        );
-
-        return (
-            <ul className="ml-6 list-disc space-y-0.5">
-                {flattenedErrors.map((error, index) => (
-                    <li key={index}>{error}</li>
-                ))}
-            </ul>
-        );
-    }
-
+}: {
+    result: FlattenedSafeActionResult<T>;
+}) {
     if (result?.validationErrors) {
         const flattenedErrors = [
             ...result.validationErrors.formErrors,
@@ -80,16 +57,10 @@ export function ServerActionErrorMessage<S extends Schema, Data>({
     );
 }
 
-export function isServerActionSuccess<S extends Schema, Data>(
-    result?: FlattenedSafeActionResult<S, Data>
-): result is {
-    data: Data;
-} {
+export function isServerActionSuccess<T>(
+    result: FlattenedSafeActionResult<T>
+): result is { data: T } {
     if (!result) {
-        return false;
-    }
-
-    if (result.bindArgsValidationErrors) {
         return false;
     }
 
