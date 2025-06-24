@@ -10,12 +10,12 @@ import { unlockUserAction } from '@/app/user/actions/unlock-user-action';
 import { deleteUserAction } from '@/app/user/actions/delete-user-action';
 import {
     UpdateUserForm,
-    UpdateUserFormValues,
+    type UpdateUserFormValues,
 } from '@/app/user/[id]/update-user-form';
 import { UnlockUserButton } from '@/app/user/[id]/unlock-user-button';
 import { LockUserButton } from '@/app/user/[id]/lock-user-button';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
-import { GetUserResponse } from '@/app/user/user-types';
+import type { GetUserResponse } from '@/app/user/user-types';
 import { Button } from '@/components/ui/button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 

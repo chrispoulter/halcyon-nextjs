@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { users } from '@/db/schema/users';
-import { Role } from '@/lib/definitions';
 import { generateHash } from '@/lib/hash';
 import { config } from '@/lib/config';
 
@@ -19,7 +18,7 @@ async function main() {
             firstName: 'System',
             lastName: 'Administrator',
             dateOfBirth: '1970-01-01',
-            roles: [Role.SYSTEM_ADMINISTRATOR],
+            roles: ['SYSTEM_ADMINISTRATOR'],
             isLockedOut: false,
         };
 

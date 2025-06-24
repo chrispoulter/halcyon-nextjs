@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { z } from 'zod';
 import { searchUsersAction } from '@/app/user/actions/search-users-action';
 import { SearchUsers } from '@/app/user/search-users';
-import { UserSort } from '@/app/user/user-types';
 import {
     isServerActionSuccess,
     ServerActionError,
@@ -28,10 +27,18 @@ const searchParamsSchema = z.object({
         .positive('Page must be a postive number')
         .catch(1),
     sort: z
-        .nativeEnum(UserSort, {
-            message: 'Sort must be a valid user sort',
-        })
-        .catch(UserSort.NAME_ASC),
+        .enum(
+            [
+                'EMAIL_ADDRESS_ASC',
+                'EMAIL_ADDRESS_DESC',
+                'NAME_ASC',
+                'NAME_DESC',
+            ],
+            {
+                message: 'Sort must be a valid user sort',
+            }
+        )
+        .catch('NAME_ASC'),
 });
 
 const PAGE_SIZE = 5;

@@ -5,15 +5,15 @@ import {
 import { z } from 'zod';
 import { forbidden, notFound, redirect } from 'next/navigation';
 import { getSession } from '@/lib/session';
-import { Role } from '@/lib/definitions';
+import type { Role } from '@/lib/definitions';
 
 export class ActionError extends Error {
-    constructor(
-        message: string,
-        public status?: number
-    ) {
+    status?: number;
+
+    constructor(message: string, status?: number) {
         super(message);
         this.name = 'ActionError';
+        this.status = status;
     }
 }
 

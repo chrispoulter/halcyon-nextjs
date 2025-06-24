@@ -2,11 +2,11 @@
 
 import { z } from 'zod';
 import { desc, asc, sql, SQL } from 'drizzle-orm';
-import { type SearchUsersResponse, UserSort } from '@/app/user/user-types';
+import { type SearchUsersResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { authActionClient } from '@/lib/safe-action';
-import { Role } from '@/lib/definitions';
+import type { Role } from '@/lib/definitions';
 
 const schema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).optional(),
@@ -20,11 +20,21 @@ const schema = z.object({
         .max(50, 'Size must be less than 50')
         .optional(),
     sort: z
-        .nativeEnum(UserSort, { message: 'Sort must be a valid user sort' })
+        .enum(
+            [
+                'EMAIL_ADDRESS_ASC',
+                'EMAIL_ADDRESS_DESC',
+                'NAME_ASC',
+                'NAME_DESC',
+            ],
+            {
+                message: 'Sort must be a valid user sort',
+            }
+        )
         .optional(),
 });
 
-const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
+const roles: Role[] = ['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'];
 
 export const searchUsersAction = authActionClient(roles)
     .metadata({ actionName: 'searchUsersAction' })
@@ -51,15 +61,15 @@ export const searchUsersAction = authActionClient(roles)
             .where(where);
 
         switch (sort) {
-            case UserSort.EMAIL_ADDRESS_DESC:
+            case 'EMAIL_ADDRESS_DESC':
                 query.orderBy(desc(users.emailAddress), asc(users.id));
                 break;
 
-            case UserSort.EMAIL_ADDRESS_ASC:
+            case 'EMAIL_ADDRESS_ASC':
                 query.orderBy(asc(users.emailAddress), asc(users.id));
                 break;
 
-            case UserSort.NAME_DESC:
+            case 'NAME_DESC':
                 query.orderBy(
                     desc(users.firstName),
                     desc(users.lastName),

@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { resetPasswordAction } from '@/app/account/actions/reset-password-action';
 import {
     ResetPasswordForm,
-    ResetPasswordFormValues,
+    type ResetPasswordFormValues,
 } from '@/app/account/reset-password/[token]/reset-password-form';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 

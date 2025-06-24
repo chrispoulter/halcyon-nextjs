@@ -7,7 +7,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
 import { ActionError, authActionClient } from '@/lib/safe-action';
-import { Role } from '@/lib/definitions';
+import type { Role } from '@/lib/definitions';
 
 const schema = z.object({
     id: z
@@ -32,7 +32,7 @@ const schema = z.object({
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
     roles: z
         .array(
-            z.nativeEnum(Role, {
+            z.enum(['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'], {
                 message: 'Role must be a valid user role',
             }),
             { message: 'Role must be a valid array' }
@@ -41,7 +41,7 @@ const schema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
+const roles: Role[] = ['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'];
 
 export const updateUserAction = authActionClient(roles)
     .metadata({ actionName: 'updateUserAction' })

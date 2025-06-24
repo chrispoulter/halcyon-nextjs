@@ -1,4 +1,4 @@
-import { SafeActionResult } from 'next-safe-action';
+import type { SafeActionResult } from 'next-safe-action';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
