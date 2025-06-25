@@ -5,7 +5,7 @@ import { eq, sql } from 'drizzle-orm';
 import type { GetUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import type { Role } from '@/lib/definitions';
+import { type Role, isUserAdministrator } from '@/lib/definitions';
 import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -14,9 +14,7 @@ const schema = z.object({
         .uuid('Id must be a valid UUID'),
 });
 
-const roles: Role[] = ['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'];
-
-export const getUserAction = authActionClient(roles)
+export const getUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'getUserAction' })
     .inputSchema(schema)
     .action(async ({ parsedInput: { id } }) => {

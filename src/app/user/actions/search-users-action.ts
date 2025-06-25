@@ -5,8 +5,8 @@ import { desc, asc, sql, SQL } from 'drizzle-orm';
 import { type SearchUsersResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
+import { type Role, isUserAdministrator } from '@/lib/definitions';
 import { authActionClient } from '@/lib/safe-action';
-import type { Role } from '@/lib/definitions';
 
 const schema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).optional(),
@@ -34,9 +34,7 @@ const schema = z.object({
         .optional(),
 });
 
-const roles: Role[] = ['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'];
-
-export const searchUsersAction = authActionClient(roles)
+export const searchUsersAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'searchUsersAction' })
     .inputSchema(schema)
     .action(async ({ parsedInput: { search, page = 1, size = 10, sort } }) => {

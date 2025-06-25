@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { SearchUsersResponse } from '@/app/user/user-types';
 import { Badge } from '@/components/ui/badge';
-import { roles } from '@/lib/definitions';
+import { roleOptions } from '@/lib/definitions';
 
 type UserCardProps = {
     user: SearchUsersResponse['items'][number];
@@ -33,7 +33,7 @@ export function UserCard({ user }: UserCardProps) {
                         variant="secondary"
                         className="w-full sm:w-auto"
                     >
-                        {roles[role].title}
+                        {roleOptions[role].title}
                     </Badge>
                 ))}
             </div>

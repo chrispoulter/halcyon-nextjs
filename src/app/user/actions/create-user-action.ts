@@ -6,7 +6,7 @@ import type { CreateUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
-import type { Role } from '@/lib/definitions';
+import { type Role, isUserAdministrator } from '@/lib/definitions';
 import { generateHash } from '@/lib/hash';
 import { ActionError, authActionClient } from '@/lib/safe-action';
 
@@ -34,7 +34,7 @@ const schema = z.object({
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
     roles: z
         .array(
-            z.enum(['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'], {
+            z.enum<Role, [Role, ...Role[]]>(isUserAdministrator, {
                 message: 'Role must be a valid user role',
             }),
             { message: 'Role must be a valid array' }
@@ -43,9 +43,7 @@ const schema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-const roles: Role[] = ['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'];
-
-export const createUserAction = authActionClient(roles)
+export const createUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'createUserAction' })
     .inputSchema(schema)
     .action(async ({ parsedInput }) => {

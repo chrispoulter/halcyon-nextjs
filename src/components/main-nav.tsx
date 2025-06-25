@@ -12,7 +12,11 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from '@/components/ui/drawer';
-import type { SessionPayload, Role } from '@/lib/definitions';
+import {
+    type SessionPayload,
+    type Role,
+    isUserAdministrator,
+} from '@/lib/definitions';
 
 type MainNavRoute = { href: string; label: string; roles?: Role[] };
 
@@ -22,7 +26,7 @@ const routes: MainNavRoute[] = [
     {
         href: '/user',
         label: 'Users',
-        roles: ['SYSTEM_ADMINISTRATOR', 'USER_ADMINISTRATOR'],
+        roles: isUserAdministrator,
     },
 ];
 
