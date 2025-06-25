@@ -1,11 +1,10 @@
-import { Role } from '@/lib/definitions';
+import type { Role } from '@/lib/definitions';
 
-export enum UserSort {
-    EMAIL_ADDRESS_ASC = 'EMAIL_ADDRESS_ASC',
-    EMAIL_ADDRESS_DESC = 'EMAIL_ADDRESS_DESC',
-    NAME_ASC = 'NAME_ASC',
-    NAME_DESC = 'NAME_DESC',
-}
+export type UserSort =
+    | 'EMAIL_ADDRESS_ASC'
+    | 'EMAIL_ADDRESS_DESC'
+    | 'NAME_ASC'
+    | 'NAME_DESC';
 
 export type SearchUsersResponse = {
     items: {

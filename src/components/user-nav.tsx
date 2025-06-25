@@ -16,7 +16,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
-import { type SessionPayload, roles } from '@/lib/definitions';
+import { type SessionPayload, roleOptions } from '@/lib/definitions';
 
 type UserNavProps = {
     session?: SessionPayload;
@@ -71,7 +71,7 @@ export function UserNav({ session }: UserNavProps) {
                                 variant="secondary"
                                 className="w-full"
                             >
-                                {roles[role].title}
+                                {roleOptions[role].title}
                             </Badge>
                         ))}
                     </div>

@@ -7,9 +7,9 @@ import { toast } from 'sonner';
 import { changePasswordAction } from '@/app/profile/actions/change-password-action';
 import {
     ChangePasswordForm,
-    ChangePasswordFormValues,
+    type ChangePasswordFormValues,
 } from '@/app/profile/change-password/change-password-form';
-import { GetProfileResponse } from '@/app/profile/profile-types';
+import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { Button } from '@/components/ui/button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 

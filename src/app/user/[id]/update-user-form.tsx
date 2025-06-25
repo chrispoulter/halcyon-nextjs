@@ -8,7 +8,7 @@ import { DateFormField } from '@/components/date-form-field';
 import { SwitchFormField } from '@/components/switch-form-field';
 import { TextFormField } from '@/components/text-form-field';
 import { isInPast } from '@/lib/dates';
-import { Role, roles } from '@/lib/definitions';
+import { type Role, roleOptions, isUserAdministrator } from '@/lib/definitions';
 
 const schema = z.object({
     emailAddress: z
@@ -30,7 +30,7 @@ const schema = z.object({
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
     roles: z
         .array(
-            z.nativeEnum(Role, {
+            z.enum<Role, [Role, ...Role[]]>(isUserAdministrator, {
                 message: 'Role must be a valid user role',
             }),
             { message: 'Role must be a valid array' }
@@ -108,7 +108,7 @@ export function UpdateUserForm({
 
                 <SwitchFormField
                     name="roles"
-                    options={roles}
+                    options={roleOptions}
                     disabled={loading || disabled}
                 />
 

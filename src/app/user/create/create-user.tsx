@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { createUserAction } from '@/app/user/actions/create-user-action';
 import {
     CreateUserForm,
-    CreateUserFormValues,
+    type CreateUserFormValues,
 } from '@/app/user/create/create-user-form';
 import { Button } from '@/components/ui/button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';

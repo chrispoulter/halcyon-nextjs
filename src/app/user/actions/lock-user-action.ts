@@ -5,7 +5,7 @@ import { eq, sql } from 'drizzle-orm';
 import type { LockUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { Role } from '@/lib/definitions';
+import { isUserAdministrator } from '@/lib/definitions';
 import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -15,9 +15,7 @@ const schema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-const roles = [Role.SYSTEM_ADMINISTRATOR, Role.USER_ADMINISTRATOR];
-
-export const lockUserAction = authActionClient(roles)
+export const lockUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'lockUserAction' })
     .inputSchema(schema)
     .action(async ({ parsedInput: { id, ...rest }, ctx: { userId } }) => {

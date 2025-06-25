@@ -6,7 +6,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { deleteAccountAction } from '@/app/profile/actions/delete-account-action';
 import { DeleteAccountButton } from '@/app/profile/delete-account-button';
-import { GetProfileResponse } from '@/app/profile/profile-types';
+import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { Button } from '@/components/ui/button';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toLocaleString } from '@/lib/dates';

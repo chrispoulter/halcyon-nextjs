@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { actionClient, ActionError } from '@/lib/safe-action';
-import { Role } from '@/lib/definitions';
+import type { Role } from '@/lib/definitions';
 import { verifyHash } from '@/lib/hash';
 import { createSession } from '@/lib/session';
 

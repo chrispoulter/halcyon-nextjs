@@ -7,9 +7,9 @@ import { toast } from 'sonner';
 import { updateProfileAction } from '@/app/profile/actions/update-profile-action';
 import {
     UpdateProfileForm,
-    UpdateProfileFormValues,
+    type UpdateProfileFormValues,
 } from '@/app/profile/update-profile/update-profile-form';
-import { GetProfileResponse } from '@/app/profile/profile-types';
+import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { Button } from '@/components/ui/button';
 
