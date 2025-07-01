@@ -62,7 +62,6 @@ jobs:
                   file: ./Dockerfile
                   tags: |
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}
-                      ghcr.io/${{ env.REPO }}:preview
                   context: .
                   push: true
                   provenance: false
