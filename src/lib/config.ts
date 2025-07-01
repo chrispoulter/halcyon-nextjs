@@ -1,5 +1,5 @@
 export const config = {
-    VERSION: String(process.env.npm_package_version),
+    VERSION: String(process.env.VERSION),
     DATABASE_URL: String(process.env.DATABASE_URL),
     EMAIL_SMTP_SERVER: String(process.env.EMAIL_SMTP_SERVER),
     EMAIL_SMTP_PORT: Number(process.env.EMAIL_SMTP_PORT),

@@ -6,7 +6,7 @@ services:
         build:
             context: .
         environment:
-            DATABASE_URL: 'postgres://postgres:password@host.docker.internal:5432/halcyon-nextjs'
+            DATABASE_URL: postgres://postgres:password@host.docker.internal:5432/halcyon-nextjs
             EMAIL_SMTP_SERVER: host.docker.internal
             EMAIL_SMTP_PORT: 1025
             EMAIL_NO_REPLY_ADDRESS: noreply@example.com
@@ -28,7 +28,7 @@ services:
             - postgres:/var/lib/postgresql/data
         restart: always
         healthcheck:
-            test: ['CMD', 'pg_isready']
+            test: [ 'CMD', 'pg_isready' ]
             interval: 10s
             timeout: 5s
             retries: 3
