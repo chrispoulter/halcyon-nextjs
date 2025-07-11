@@ -2,42 +2,40 @@ import 'dotenv/config';
 import { Client } from 'pg';
 import { config } from '@/lib/config';
 
-async function main() {
-    const mainClient = new Client(config.DATABASE_URL);
+console.log('Creating database...');
 
-    const { host, port, ssl, user, password, database } = mainClient;
+const mainClient = new Client(config.DATABASE_URL);
 
-    const postgresClient = new Client({
-        host,
-        port,
-        ssl,
-        user,
-        password,
-        database: 'postgres',
-    });
+const { host, port, ssl, user, password, database } = mainClient;
 
-    try {
-        await postgresClient.connect();
+const postgresClient = new Client({
+    host,
+    port,
+    ssl,
+    user,
+    password,
+    database: 'postgres',
+});
 
-        const { rows } = await postgresClient.query(
-            'SELECT 1 FROM pg_database WHERE datname = $1',
-            [database]
-        );
+try {
+    await postgresClient.connect();
 
-        if (rows.length) {
-            console.log(`Database "${database}" already exists.`);
-            return;
-        }
+    const { rows } = await postgresClient.query(
+        'SELECT 1 FROM pg_database WHERE datname = $1',
+        [database]
+    );
 
+    if (rows.length) {
+        console.log(`Database "${database}" already exists.`);
+    } else {
         await postgresClient.query(`CREATE DATABASE "${database}"`);
-
-        console.log(`Database "${database}" created.`);
-    } catch (error) {
-        console.error('Failed to create database', error);
-        process.exit(1);
-    } finally {
-        await postgresClient.end();
+        console.log(`Database "${database}" created`);
     }
-}
 
-main();
+    // process.exit(0);
+} catch (error) {
+    console.error('Failed to create database', error);
+    process.exit(1);
+} finally {
+    await postgresClient.end();
+}
