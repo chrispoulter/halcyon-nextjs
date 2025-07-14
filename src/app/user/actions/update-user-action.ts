@@ -6,7 +6,7 @@ import type { UpdateUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
-import { type Role, isUserAdministrator } from '@/lib/definitions';
+import { roles, isUserAdministrator } from '@/lib/definitions';
 import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -32,7 +32,7 @@ const schema = z.object({
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
     roles: z
         .array(
-            z.enum<Role, [Role, ...Role[]]>(isUserAdministrator, {
+            z.enum(roles, {
                 message: 'Role must be a valid user role',
             }),
             { message: 'Role must be a valid array' }
