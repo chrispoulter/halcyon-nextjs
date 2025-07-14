@@ -2,7 +2,6 @@
     "name": "@chrispoulter/halcyon",
     "version": "1.0.0",
     "private": true,
-    "type": "module",
     "scripts": {
         "dev": "next dev --turbopack",
         "build": "next build",
@@ -10,9 +9,7 @@
         "lint": "next lint",
         "format": "prettier --write .",
         "db:generate": "drizzle-kit generate",
-        "db:create": "tsx src/db/create.ts",
-        "db:migrate": "tsx src/db/migrate.ts",
-        "db:seed": "tsx src/db/seed.ts",
+        "db:migrate": "drizzle-kit migrate",
         "email": "email dev --dir src/emails"
     },
     "dependencies": {
