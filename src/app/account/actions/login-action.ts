@@ -10,9 +10,7 @@ import { verifyHash } from '@/lib/hash';
 import { createSession } from '@/lib/session';
 
 const schema = z.object({
-    emailAddress: z
-        .string({ message: 'Email Address must be a valid string' })
-        .email('Email Address must be a valid email'),
+    emailAddress: z.email('Email Address must be a valid email'),
     password: z
         .string({ message: 'Password must be a valid string' })
         .min(1, 'Password is a required field'),
