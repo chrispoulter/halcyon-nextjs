@@ -9,9 +9,7 @@ import { isUserAdministrator } from '@/lib/definitions';
 import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
-    id: z
-        .string({ message: 'Id must be a valid string' })
-        .uuid('Id must be a valid UUID'),
+    id: z.uuid('Id must be a valid UUID'),
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 

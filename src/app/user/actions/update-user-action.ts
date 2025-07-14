@@ -6,16 +6,12 @@ import type { UpdateUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
-import { type Role, isUserAdministrator } from '@/lib/definitions';
+import { roles, isUserAdministrator } from '@/lib/definitions';
 import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
-    id: z
-        .string({ message: 'Id must be a valid string' })
-        .uuid('Id must be a valid UUID'),
-    emailAddress: z
-        .string({ message: 'Email Address must be a valid string' })
-        .email('Email Address must be a valid email'),
+    id: z.uuid('Id must be a valid UUID'),
+    emailAddress: z.email('Email Address must be a valid email'),
     firstName: z
         .string({ message: 'First Name must be a valid string' })
         .min(1, 'First Name is a required field')
@@ -24,15 +20,12 @@ const schema = z.object({
         .string({ message: 'Last Name must be a valid string' })
         .min(1, 'Last Name is a required field')
         .max(50, 'Last Name must be no more than 50 characters'),
-    dateOfBirth: z
-        .string({
-            message: 'Date of Birth must be a valid string',
-        })
+    dateOfBirth: z.iso
         .date('Date Of Birth must be a valid date')
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
     roles: z
         .array(
-            z.enum<Role, [Role, ...Role[]]>(isUserAdministrator, {
+            z.enum(roles, {
                 message: 'Role must be a valid user role',
             }),
             { message: 'Role must be a valid array' }

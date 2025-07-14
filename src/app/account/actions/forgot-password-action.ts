@@ -11,9 +11,7 @@ import { actionClient } from '@/lib/safe-action';
 import { getSiteUrl } from '@/lib/server-utils';
 
 const schema = z.object({
-    emailAddress: z
-        .string({ message: 'Email Address must be a valid string' })
-        .email('Email Address must be a valid email'),
+    emailAddress: z.email('Email Address must be a valid email'),
 });
 
 export const forgotPasswordAction = actionClient

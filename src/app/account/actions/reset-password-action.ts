@@ -9,12 +9,8 @@ import { generateHash } from '@/lib/hash';
 import { actionClient, ActionError } from '@/lib/safe-action';
 
 const schema = z.object({
-    token: z
-        .string({ message: 'Token must be a valid string' })
-        .uuid('Token must be a valid UUID'),
-    emailAddress: z
-        .string({ message: 'Email Address must be a valid string' })
-        .email('Email Address must be a valid email'),
+    token: z.uuid('Token must be a valid UUID'),
+    emailAddress: z.email('Email Address must be a valid email'),
     newPassword: z
         .string({ message: 'New Password must be a valid string' })
         .min(8, 'New Password must be at least 8 characters')
