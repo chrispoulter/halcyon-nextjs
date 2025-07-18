@@ -16,33 +16,35 @@ const schema = z.object({
 export const deleteUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'deleteUserAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput: { id, ...rest }, ctx: { userId } }) => {
-        const [user] = await db
-            .select({
-                id: users.id,
-                version: sql<number>`"xmin"`.mapWith(Number),
-            })
-            .from(users)
-            .where(eq(users.id, id))
-            .limit(1);
+    .action<DeleteUserResponse>(
+        async ({ parsedInput: { id, ...rest }, ctx: { userId } }) => {
+            const [user] = await db
+                .select({
+                    id: users.id,
+                    version: sql<number>`"xmin"`.mapWith(Number),
+                })
+                .from(users)
+                .where(eq(users.id, id))
+                .limit(1);
 
-        if (!user) {
-            throw new ActionError('User not found.', 404);
+            if (!user) {
+                throw new ActionError('User not found.', 404);
+            }
+
+            if (rest.version && rest.version !== user.version) {
+                throw new ActionError(
+                    'Data has been modified since entities were loaded.'
+                );
+            }
+
+            if (user.id === userId) {
+                throw new ActionError(
+                    'Cannot delete currently logged in user.'
+                );
+            }
+
+            await db.delete(users).where(eq(users.id, user.id));
+
+            return { id: user.id };
         }
-
-        if (rest.version && rest.version !== user.version) {
-            throw new ActionError(
-                'Data has been modified since entities were loaded.'
-            );
-        }
-
-        if (user.id === userId) {
-            throw new ActionError('Cannot delete currently logged in user.');
-        }
-
-        await db.delete(users).where(eq(users.id, user.id));
-
-        const result: DeleteUserResponse = { id: user.id };
-
-        return result;
-    });
+    );

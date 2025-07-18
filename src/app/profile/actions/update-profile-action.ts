@@ -27,7 +27,7 @@ const schema = z.object({
 export const updateProfileAction = authActionClient()
     .metadata({ actionName: 'updateProfileAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput, ctx: { userId } }) => {
+    .action<UpdateProfileResponse>(async ({ parsedInput, ctx: { userId } }) => {
         const [user] = await db
             .select({
                 id: users.id,
@@ -66,7 +66,5 @@ export const updateProfileAction = authActionClient()
 
         await db.update(users).set(parsedInput).where(eq(users.id, userId));
 
-        const result: UpdateProfileResponse = { id: user.id };
-
-        return result;
+        return { id: user.id };
     });

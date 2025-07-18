@@ -16,7 +16,7 @@ const schema = z.object({
 export const unlockUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'unlockUserAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput: { id, ...rest } }) => {
+    .action<UnlockUserResponse>(async ({ parsedInput: { id, ...rest } }) => {
         const [user] = await db
             .select({
                 id: users.id,
@@ -41,7 +41,5 @@ export const unlockUserAction = authActionClient(isUserAdministrator)
             .set({ isLockedOut: false })
             .where(eq(users.id, user.id));
 
-        const result: UnlockUserResponse = { id: user.id };
-
-        return result;
+        return { id: user.id };
     });

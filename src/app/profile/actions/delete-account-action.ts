@@ -15,7 +15,7 @@ const schema = z.object({
 export const deleteAccountAction = authActionClient()
     .metadata({ actionName: 'deleteAccountAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput, ctx: { userId } }) => {
+    .action<DeleteAccountResponse>(async ({ parsedInput, ctx: { userId } }) => {
         const [user] = await db
             .select({
                 id: users.id,
@@ -40,7 +40,5 @@ export const deleteAccountAction = authActionClient()
 
         await deleteSession();
 
-        const result: DeleteAccountResponse = { id: user.id };
-
-        return result;
+        return { id: user.id };
     });

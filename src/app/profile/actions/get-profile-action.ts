@@ -8,7 +8,7 @@ import { ActionError, authActionClient } from '@/lib/safe-action';
 
 export const getProfileAction = authActionClient()
     .metadata({ actionName: 'getProfileAction' })
-    .action(async ({ ctx: { userId } }) => {
+    .action<GetProfileResponse>(async ({ ctx: { userId } }) => {
         const [user] = await db
             .select({
                 id: users.id,
@@ -27,7 +27,7 @@ export const getProfileAction = authActionClient()
             throw new ActionError('User not found.', 404);
         }
 
-        const result: GetProfileResponse = {
+        return {
             id: user.id,
             emailAddress: user.emailAddress,
             firstName: user.firstName,
@@ -35,6 +35,4 @@ export const getProfileAction = authActionClient()
             dateOfBirth: user.dateOfBirth,
             version: user.version,
         };
-
-        return result;
     });

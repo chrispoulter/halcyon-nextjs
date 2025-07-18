@@ -37,72 +37,72 @@ const schema = z.object({
 export const searchUsersAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'searchUsersAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput: { search, page = 1, size = 10, sort } }) => {
-        let where: SQL | undefined;
+    .action<SearchUsersResponse>(
+        async ({ parsedInput: { search, page = 1, size = 10, sort } }) => {
+            let where: SQL | undefined;
 
-        if (search) {
-            where = sql`${users.searchVector} @@ websearch_to_tsquery('english', ${search})`;
+            if (search) {
+                where = sql`${users.searchVector} @@ websearch_to_tsquery('english', ${search})`;
+            }
+
+            const count = await db.$count(users, where);
+
+            const query = db
+                .select({
+                    id: users.id,
+                    emailAddress: users.emailAddress,
+                    firstName: users.firstName,
+                    lastName: users.lastName,
+                    isLockedOut: users.isLockedOut,
+                    roles: users.roles,
+                })
+                .from(users)
+                .where(where);
+
+            switch (sort) {
+                case 'EMAIL_ADDRESS_DESC':
+                    query.orderBy(desc(users.emailAddress), asc(users.id));
+                    break;
+
+                case 'EMAIL_ADDRESS_ASC':
+                    query.orderBy(asc(users.emailAddress), asc(users.id));
+                    break;
+
+                case 'NAME_DESC':
+                    query.orderBy(
+                        desc(users.firstName),
+                        desc(users.lastName),
+                        asc(users.id)
+                    );
+                    break;
+
+                default:
+                    query.orderBy(
+                        asc(users.firstName),
+                        asc(users.lastName),
+                        asc(users.id)
+                    );
+                    break;
+            }
+
+            const skip = (page - 1) * size;
+            const data = await query.limit(size).offset(skip);
+
+            const pageCount = Math.floor((count + size - 1) / size);
+            const hasNextPage = page < pageCount;
+            const hasPreviousPage = page > 1;
+
+            return {
+                items: data.map((user) => ({
+                    id: user.id,
+                    emailAddress: user.emailAddress,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    isLockedOut: user.isLockedOut,
+                    roles: (user.roles as Role[]) || undefined,
+                })),
+                hasNextPage,
+                hasPreviousPage,
+            };
         }
-
-        const count = await db.$count(users, where);
-
-        const query = db
-            .select({
-                id: users.id,
-                emailAddress: users.emailAddress,
-                firstName: users.firstName,
-                lastName: users.lastName,
-                isLockedOut: users.isLockedOut,
-                roles: users.roles,
-            })
-            .from(users)
-            .where(where);
-
-        switch (sort) {
-            case 'EMAIL_ADDRESS_DESC':
-                query.orderBy(desc(users.emailAddress), asc(users.id));
-                break;
-
-            case 'EMAIL_ADDRESS_ASC':
-                query.orderBy(asc(users.emailAddress), asc(users.id));
-                break;
-
-            case 'NAME_DESC':
-                query.orderBy(
-                    desc(users.firstName),
-                    desc(users.lastName),
-                    asc(users.id)
-                );
-                break;
-
-            default:
-                query.orderBy(
-                    asc(users.firstName),
-                    asc(users.lastName),
-                    asc(users.id)
-                );
-                break;
-        }
-
-        const skip = (page - 1) * size;
-        const data = await query.limit(size).offset(skip);
-
-        const pageCount = Math.floor((count + size - 1) / size);
-        const hasNextPage = page < pageCount;
-        const hasPreviousPage = page > 1;
-
-        const result: SearchUsersResponse = {
-            items: data.map((user) => ({
-                id: user.id,
-                emailAddress: user.emailAddress,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                isLockedOut: user.isLockedOut,
-                roles: (user.roles as Role[]) || undefined,
-            })),
-            hasNextPage,
-            hasPreviousPage,
-        };
-
-        return result;
-    });
+    );

@@ -15,7 +15,7 @@ const schema = z.object({
 export const getUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'getUserAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput: { id } }) => {
+    .action<GetUserResponse>(async ({ parsedInput: { id } }) => {
         const [user] = await db
             .select({
                 id: users.id,
@@ -35,7 +35,7 @@ export const getUserAction = authActionClient(isUserAdministrator)
             throw new ActionError('User not found.', 404);
         }
 
-        const result: GetUserResponse = {
+        return {
             id: user.id,
             emailAddress: user.emailAddress,
             firstName: user.firstName,
@@ -45,6 +45,4 @@ export const getUserAction = authActionClient(isUserAdministrator)
             isLockedOut: user.isLockedOut,
             version: user.version,
         };
-
-        return result;
     });

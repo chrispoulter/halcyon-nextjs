@@ -22,47 +22,50 @@ const schema = z.object({
 export const changePasswordAction = authActionClient()
     .metadata({ actionName: 'changePasswordAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput, ctx: { userId } }) => {
-        const [user] = await db
-            .select({
-                id: users.id,
-                password: users.password,
-                isLockedOut: users.isLockedOut,
-                version: sql<number>`"xmin"`.mapWith(Number),
-            })
-            .from(users)
-            .where(eq(users.id, userId))
-            .limit(1);
+    .action<ChangePasswordResponse>(
+        async ({ parsedInput, ctx: { userId } }) => {
+            const [user] = await db
+                .select({
+                    id: users.id,
+                    password: users.password,
+                    isLockedOut: users.isLockedOut,
+                    version: sql<number>`"xmin"`.mapWith(Number),
+                })
+                .from(users)
+                .where(eq(users.id, userId))
+                .limit(1);
 
-        if (!user || user.isLockedOut) {
-            throw new ActionError('User not found.', 404);
-        }
+            if (!user || user.isLockedOut) {
+                throw new ActionError('User not found.', 404);
+            }
 
-        if (!parsedInput.version && parsedInput.version !== user.version) {
-            throw new ActionError(
-                'Data has been modified since entities were loaded.'
+            if (!parsedInput.version && parsedInput.version !== user.version) {
+                throw new ActionError(
+                    'Data has been modified since entities were loaded.'
+                );
+            }
+
+            if (!user.password) {
+                throw new ActionError('Incorrect password.');
+            }
+
+            const verified = verifyHash(
+                parsedInput.currentPassword,
+                user.password
             );
+
+            if (!verified) {
+                throw new ActionError('Incorrect password.');
+            }
+
+            await db
+                .update(users)
+                .set({
+                    password: parsedInput.newPassword,
+                    passwordResetToken: null,
+                })
+                .where(eq(users.id, userId));
+
+            return { id: user.id };
         }
-
-        if (!user.password) {
-            throw new ActionError('Incorrect password.');
-        }
-
-        const verified = verifyHash(parsedInput.currentPassword, user.password);
-
-        if (!verified) {
-            throw new ActionError('Incorrect password.');
-        }
-
-        await db
-            .update(users)
-            .set({
-                password: parsedInput.newPassword,
-                passwordResetToken: null,
-            })
-            .where(eq(users.id, userId));
-
-        const result: ChangePasswordResponse = { id: user.id };
-
-        return result;
-    });
+    );

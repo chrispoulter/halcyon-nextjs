@@ -16,36 +16,36 @@ const schema = z.object({
 export const lockUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'lockUserAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput: { id, ...rest }, ctx: { userId } }) => {
-        const [user] = await db
-            .select({
-                id: users.id,
-                version: sql<number>`"xmin"`.mapWith(Number),
-            })
-            .from(users)
-            .where(eq(users.id, id))
-            .limit(1);
+    .action<LockUserResponse>(
+        async ({ parsedInput: { id, ...rest }, ctx: { userId } }) => {
+            const [user] = await db
+                .select({
+                    id: users.id,
+                    version: sql<number>`"xmin"`.mapWith(Number),
+                })
+                .from(users)
+                .where(eq(users.id, id))
+                .limit(1);
 
-        if (!user) {
-            throw new ActionError('User not found.', 404);
+            if (!user) {
+                throw new ActionError('User not found.', 404);
+            }
+
+            if (rest.version && rest.version !== user.version) {
+                throw new ActionError(
+                    'Data has been modified since entities were loaded.'
+                );
+            }
+
+            if (user.id === userId) {
+                throw new ActionError('Cannot lock currently logged in user.');
+            }
+
+            await db
+                .update(users)
+                .set({ isLockedOut: true })
+                .where(eq(users.id, user.id));
+
+            return { id: user.id };
         }
-
-        if (rest.version && rest.version !== user.version) {
-            throw new ActionError(
-                'Data has been modified since entities were loaded.'
-            );
-        }
-
-        if (user.id === userId) {
-            throw new ActionError('Cannot lock currently logged in user.');
-        }
-
-        await db
-            .update(users)
-            .set({ isLockedOut: true })
-            .where(eq(users.id, user.id));
-
-        const result: LockUserResponse = { id: user.id };
-
-        return result;
-    });
+    );

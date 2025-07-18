@@ -41,7 +41,7 @@ const schema = z.object({
 export const createUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'createUserAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput }) => {
+    .action<CreateUserResponse>(async ({ parsedInput }) => {
         const [existing] = await db
             .select({})
             .from(users)
@@ -59,7 +59,5 @@ export const createUserAction = authActionClient(isUserAdministrator)
             .values({ ...parsedInput, password })
             .returning({ id: users.id });
 
-        const result: CreateUserResponse = { id: user.id };
-
-        return result;
+        return { id: user.id };
     });

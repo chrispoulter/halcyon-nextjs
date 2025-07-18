@@ -33,7 +33,7 @@ const schema = z.object({
 export const registerAction = actionClient
     .metadata({ actionName: 'registerAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput }) => {
+    .action<RegisterResponse>(async ({ parsedInput }) => {
         const [existing] = await db
             .select({})
             .from(users)
@@ -51,7 +51,5 @@ export const registerAction = actionClient
             .values({ ...parsedInput, password })
             .returning({ id: users.id });
 
-        const result: RegisterResponse = { id: user.id };
-
-        return result;
+        return { id: user.id };
     });

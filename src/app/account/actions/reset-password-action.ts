@@ -20,7 +20,7 @@ const schema = z.object({
 export const resetPasswordAction = actionClient
     .metadata({ actionName: 'resetPasswordAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput }) => {
+    .action<ResetPasswordResponse>(async ({ parsedInput }) => {
         const [user] = await db
             .select({
                 id: users.id,
@@ -49,7 +49,5 @@ export const resetPasswordAction = actionClient
             })
             .where(eq(users.id, user.id));
 
-        const result: ResetPasswordResponse = { id: user.id };
-
-        return result;
+        return { id: user.id };
     });
