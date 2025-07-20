@@ -38,7 +38,6 @@ export type UpdateUserFormValues = z.infer<typeof schema>;
 type UpdateUserFormProps = {
     user: GetUserResponse;
     loading?: boolean;
-    disabled?: boolean;
     onSubmit: (data: UpdateUserFormValues) => void;
     children?: React.ReactNode;
 };
@@ -46,7 +45,6 @@ type UpdateUserFormProps = {
 export function UpdateUserForm({
     user,
     loading,
-    disabled,
     onSubmit,
     children,
 }: UpdateUserFormProps) {
@@ -69,7 +67,7 @@ export function UpdateUserForm({
                     maxLength={254}
                     autoComplete="username"
                     required
-                    disabled={loading || disabled}
+                    disabled={loading}
                 />
 
                 <div className="flex flex-col gap-6 sm:flex-row">
@@ -79,7 +77,7 @@ export function UpdateUserForm({
                         maxLength={50}
                         autoComplete="given-name"
                         required
-                        disabled={loading || disabled}
+                        disabled={loading}
                         className="flex-1"
                     />
                     <TextFormField
@@ -88,7 +86,7 @@ export function UpdateUserForm({
                         maxLength={50}
                         autoComplete="family-name"
                         required
-                        disabled={loading || disabled}
+                        disabled={loading}
                         className="flex-1"
                     />
                 </div>
@@ -98,23 +96,19 @@ export function UpdateUserForm({
                     label="Date Of Birth"
                     autoComplete={['bday-day', 'bday-month', 'bday-year']}
                     required
-                    disabled={loading || disabled}
+                    disabled={loading}
                 />
 
                 <SwitchFormField
                     name="roles"
                     options={roleOptions}
-                    disabled={loading || disabled}
+                    disabled={loading}
                 />
 
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     {children}
 
-                    <LoadingButton
-                        type="submit"
-                        loading={loading}
-                        disabled={disabled}
-                    >
+                    <LoadingButton type="submit" loading={loading}>
                         Submit
                     </LoadingButton>
                 </div>
