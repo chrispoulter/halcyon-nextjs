@@ -1,3 +1,7 @@
+import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'sonner';
+import { unlockUserAction } from '@/app/user/actions/unlock-user-action';
+import type { GetUserResponse } from '@/app/user/user-types';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,27 +14,39 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 type UnlockUserButtonProps = {
-    onClick: () => void;
-    disabled?: boolean;
-    loading?: boolean;
+    user: GetUserResponse;
     className?: string;
 };
 
-export function UnlockUserButton({
-    onClick,
-    disabled,
-    loading,
-    className,
-}: UnlockUserButtonProps) {
+export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
+    const { execute: unlockUser, isPending: isUnlocking } = useAction(
+        unlockUserAction,
+        {
+            onSuccess() {
+                toast.success('User successfully unlocked.');
+            },
+            onError({ error }) {
+                toast.error(<ServerActionErrorMessage result={error} />);
+            },
+        }
+    );
+
+    function onUnlock() {
+        unlockUser({
+            id: user.id,
+            version: user.version,
+        });
+    }
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <LoadingButton
                     variant="secondary"
-                    loading={loading}
-                    disabled={disabled}
+                    loading={isUnlocking}
                     className={className}
                 >
                     Unlock
@@ -47,8 +63,8 @@ export function UnlockUserButton({
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                        disabled={disabled || loading}
-                        onClick={onClick}
+                        disabled={isUnlocking}
+                        onClick={onUnlock}
                     >
                         Continue
                     </AlertDialogAction>

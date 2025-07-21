@@ -1,14 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAction } from 'next-safe-action/hooks';
-import { toast } from 'sonner';
-import { deleteAccountAction } from '@/app/profile/actions/delete-account-action';
 import { DeleteAccountButton } from '@/app/profile/delete-account-button';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { Button } from '@/components/ui/button';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { toLocaleString } from '@/lib/dates';
 
 type ProfileProps = {
@@ -16,27 +11,6 @@ type ProfileProps = {
 };
 
 export function Profile({ profile }: ProfileProps) {
-    const router = useRouter();
-
-    const { execute: deleteAccount, isPending: isDeleting } = useAction(
-        deleteAccountAction,
-        {
-            onSuccess() {
-                toast.success('Your account has been deleted.');
-                router.push('/');
-            },
-            onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
-            },
-        }
-    );
-
-    function onDelete() {
-        deleteAccount({
-            version: profile.version,
-        });
-    }
-
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -94,8 +68,7 @@ export function Profile({ profile }: ProfileProps) {
             </p>
 
             <DeleteAccountButton
-                loading={isDeleting}
-                onClick={onDelete}
+                profile={profile}
                 className="w-full sm:w-auto"
             />
         </main>

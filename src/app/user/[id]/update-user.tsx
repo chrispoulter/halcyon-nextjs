@@ -5,9 +5,6 @@ import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { updateUserAction } from '@/app/user/actions/update-user-action';
-import { lockUserAction } from '@/app/user/actions/lock-user-action';
-import { unlockUserAction } from '@/app/user/actions/unlock-user-action';
-import { deleteUserAction } from '@/app/user/actions/delete-user-action';
 import {
     UpdateUserForm,
     type UpdateUserFormValues,
@@ -39,69 +36,9 @@ export function UpdateUser({ user }: UpdateUserProps) {
         }
     );
 
-    const { execute: lockUser, isPending: isLocking } = useAction(
-        lockUserAction,
-        {
-            onSuccess() {
-                toast.success('User successfully locked.');
-                router.refresh();
-            },
-            onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
-            },
-        }
-    );
-
-    const { execute: unlockUser, isPending: isUnlocking } = useAction(
-        unlockUserAction,
-        {
-            onSuccess() {
-                toast.success('User successfully unlocked.');
-                router.refresh();
-            },
-            onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
-            },
-        }
-    );
-
-    const { execute: deleteUser, isPending: isDeleting } = useAction(
-        deleteUserAction,
-        {
-            onSuccess() {
-                toast.success('User successfully deleted.');
-                router.push('/user');
-            },
-            onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
-            },
-        }
-    );
-
     function onSubmit(data: UpdateUserFormValues) {
         updateUser({
             ...data,
-            id: user.id,
-            version: user.version,
-        });
-    }
-
-    function onLock() {
-        lockUser({
-            id: user.id,
-            version: user.version,
-        });
-    }
-
-    function onUnlock() {
-        unlockUser({
-            id: user.id,
-            version: user.version,
-        });
-    }
-
-    function onDelete() {
-        deleteUser({
             id: user.id,
             version: user.version,
         });
@@ -124,7 +61,6 @@ export function UpdateUser({ user }: UpdateUserProps) {
             <UpdateUserForm
                 user={user}
                 loading={isUpdating}
-                disabled={isLocking || isUnlocking || isDeleting}
                 onSubmit={onSubmit}
             >
                 <Button asChild variant="outline">
@@ -132,24 +68,12 @@ export function UpdateUser({ user }: UpdateUserProps) {
                 </Button>
 
                 {user.isLockedOut ? (
-                    <UnlockUserButton
-                        loading={isUnlocking}
-                        disabled={isUpdating || isLocking || isDeleting}
-                        onClick={onUnlock}
-                    />
+                    <UnlockUserButton user={user} />
                 ) : (
-                    <LockUserButton
-                        loading={isLocking}
-                        disabled={isUpdating || isUnlocking || isDeleting}
-                        onClick={onLock}
-                    />
+                    <LockUserButton user={user} />
                 )}
 
-                <DeleteUserButton
-                    loading={isDeleting}
-                    disabled={isUpdating || isLocking || isUnlocking}
-                    onClick={onDelete}
-                />
+                <DeleteUserButton user={user} />
             </UpdateUserForm>
         </main>
     );

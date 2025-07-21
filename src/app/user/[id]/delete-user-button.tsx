@@ -1,3 +1,8 @@
+import { useRouter } from 'next/navigation';
+import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'sonner';
+import { deleteUserAction } from '@/app/user/actions/delete-user-action';
+import type { GetUserResponse } from '@/app/user/user-types';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,27 +15,42 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 type DeleteUserButtonProps = {
-    onClick: () => void;
-    disabled?: boolean;
-    loading?: boolean;
+    user: GetUserResponse;
     className?: string;
 };
 
-export function DeleteUserButton({
-    onClick,
-    disabled,
-    loading,
-    className,
-}: DeleteUserButtonProps) {
+export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
+    const router = useRouter();
+
+    const { execute: deleteUser, isPending: isDeleting } = useAction(
+        deleteUserAction,
+        {
+            onSuccess() {
+                toast.success('User successfully deleted.');
+                router.push('/user');
+            },
+            onError({ error }) {
+                toast.error(<ServerActionErrorMessage result={error} />);
+            },
+        }
+    );
+
+    function onDelete() {
+        deleteUser({
+            id: user.id,
+            version: user.version,
+        });
+    }
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <LoadingButton
                     variant="destructive"
-                    loading={loading}
-                    disabled={disabled}
+                    loading={isDeleting}
                     className={className}
                 >
                     Delete
@@ -47,10 +67,7 @@ export function DeleteUserButton({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                        disabled={disabled || loading}
-                        onClick={onClick}
-                    >
+                    <AlertDialogAction disabled={isDeleting} onClick={onDelete}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import type { RegisterResponse } from '@/app/account/account-types';
@@ -50,6 +51,8 @@ export const registerAction = actionClient
             .insert(users)
             .values({ ...parsedInput, password })
             .returning({ id: users.id });
+
+        revalidatePath('/user');
 
         return { id: user.id };
     });

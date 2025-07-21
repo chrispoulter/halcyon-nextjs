@@ -1,3 +1,7 @@
+import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'sonner';
+import { lockUserAction } from '@/app/user/actions/lock-user-action';
+import type { GetUserResponse } from '@/app/user/user-types';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,27 +14,39 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
+import { ServerActionErrorMessage } from '@/components/server-action-error';
 
 type LockUserButtonProps = {
-    onClick: () => void;
-    disabled?: boolean;
-    loading?: boolean;
+    user: GetUserResponse;
     className?: string;
 };
 
-export function LockUserButton({
-    onClick,
-    disabled,
-    loading,
-    className,
-}: LockUserButtonProps) {
+export function LockUserButton({ user, className }: LockUserButtonProps) {
+    const { execute: lockUser, isPending: isLocking } = useAction(
+        lockUserAction,
+        {
+            onSuccess() {
+                toast.success('User successfully locked.');
+            },
+            onError({ error }) {
+                toast.error(<ServerActionErrorMessage result={error} />);
+            },
+        }
+    );
+
+    function onLock() {
+        lockUser({
+            id: user.id,
+            version: user.version,
+        });
+    }
+
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <LoadingButton
                     variant="secondary"
-                    loading={loading}
-                    disabled={disabled}
+                    loading={isLocking}
                     className={className}
                 >
                     Lock
@@ -46,10 +62,7 @@ export function LockUserButton({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                        disabled={disabled || loading}
-                        onClick={onClick}
-                    >
+                    <AlertDialogAction disabled={isLocking} onClick={onLock}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

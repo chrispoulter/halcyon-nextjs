@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import type { CreateUserResponse } from '@/app/user/user-types';
@@ -58,6 +59,8 @@ export const createUserAction = authActionClient(isUserAdministrator)
             .insert(users)
             .values({ ...parsedInput, password })
             .returning({ id: users.id });
+
+        revalidatePath('/user');
 
         return { id: user.id };
     });
