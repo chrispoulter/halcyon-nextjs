@@ -40,7 +40,7 @@ export const deleteAccountAction = authActionClient()
 
         await deleteSession();
 
-        // BUGFIX: revalidatePath revalidates all paths. Uncomment when fixed.
+        // TODO: revalidatePath revalidates all paths. Uncomment when fixed.
         // revalidatePath('/user');
 
         return { id: user.id };

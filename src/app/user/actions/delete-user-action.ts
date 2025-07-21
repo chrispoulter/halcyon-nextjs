@@ -45,7 +45,7 @@ export const deleteUserAction = authActionClient(isUserAdministrator)
 
             await db.delete(users).where(eq(users.id, user.id));
 
-            // BUGFIX: revalidatePath revalidates all paths. Uncomment when fixed.
+            // TODO: revalidatePath revalidates all paths. Uncomment when fixed.
             // revalidatePath('/user');
 
             return { id: user.id };
