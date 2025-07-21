@@ -1,6 +1,5 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq, sql } from 'drizzle-orm';
 import type { DeleteAccountResponse } from '@/app/profile/profile-types';
@@ -41,9 +40,8 @@ export const deleteAccountAction = authActionClient()
 
         await deleteSession();
 
-        revalidatePath('/user');
-        revalidatePath(`/user/${user.id}`);
-        revalidatePath('/profile');
+        // BUGFIX: revalidatePath revalidates all paths. Uncomment when fixed.
+        // revalidatePath('/user');
 
         return { id: user.id };
     });
