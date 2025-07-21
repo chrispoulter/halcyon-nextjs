@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq, sql } from 'drizzle-orm';
 import type { UpdateUserResponse } from '@/app/user/user-types';
@@ -73,6 +74,10 @@ export const updateUserAction = authActionClient(isUserAdministrator)
         }
 
         await db.update(users).set(rest).where(eq(users.id, id));
+
+        revalidatePath('/user');
+        revalidatePath(`/user/${user.id}`);
+        revalidatePath('/profile');
 
         return { id: user.id };
     });

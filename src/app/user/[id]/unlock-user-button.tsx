@@ -1,4 +1,3 @@
-import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { unlockUserAction } from '@/app/user/actions/unlock-user-action';
@@ -23,14 +22,11 @@ type UnlockUserButtonProps = {
 };
 
 export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
-    const router = useRouter();
-
     const { execute: unlockUser, isPending: isUnlocking } = useAction(
         unlockUserAction,
         {
             onSuccess() {
                 toast.success('User successfully unlocked.');
-                router.refresh();
             },
             onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);

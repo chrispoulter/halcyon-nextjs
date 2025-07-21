@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq, sql } from 'drizzle-orm';
 import type { LockUserResponse } from '@/app/user/user-types';
@@ -45,6 +46,10 @@ export const lockUserAction = authActionClient(isUserAdministrator)
                 .update(users)
                 .set({ isLockedOut: true })
                 .where(eq(users.id, user.id));
+
+            revalidatePath('/user');
+            revalidatePath(`/user/${user.id}`);
+            revalidatePath('/profile');
 
             return { id: user.id };
         }

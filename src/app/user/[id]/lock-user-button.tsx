@@ -1,4 +1,3 @@
-import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { lockUserAction } from '@/app/user/actions/lock-user-action';
@@ -23,14 +22,11 @@ type LockUserButtonProps = {
 };
 
 export function LockUserButton({ user, className }: LockUserButtonProps) {
-    const router = useRouter();
-
     const { execute: lockUser, isPending: isLocking } = useAction(
         lockUserAction,
         {
             onSuccess() {
                 toast.success('User successfully locked.');
-                router.refresh();
             },
             onError({ error }) {
                 toast.error(<ServerActionErrorMessage result={error} />);
