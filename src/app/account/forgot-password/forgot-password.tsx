@@ -35,7 +35,7 @@ export function ForgotPassword() {
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
                 Forgot Password
             </h1>
 
