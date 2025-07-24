@@ -1,5 +1,5 @@
 import type { SafeActionResult } from 'next-safe-action';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircleIcon } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 type FlattenedSafeActionResult<T> = SafeActionResult<
@@ -18,7 +18,7 @@ export function ServerActionError<T>({
     return (
         <div className="mx-auto max-w-screen-sm p-6">
             <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
+                <AlertCircleIcon />
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>
                     <ServerActionErrorMessage result={result} />
@@ -40,7 +40,7 @@ export function ServerActionErrorMessage<T>({
         ];
 
         return (
-            <ul className="ml-6 list-disc space-y-0.5">
+            <ul className="list-inside list-disc text-sm">
                 {flattenedErrors.map((error, index) => (
                     <li key={index}>{error}</li>
                 ))}
