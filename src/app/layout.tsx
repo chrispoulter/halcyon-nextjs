@@ -1,16 +1,15 @@
 import type { Metadata, Viewport } from 'next';
-import { Open_Sans as FontSans } from 'next/font/google';
+import { Open_Sans } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
-
 import './globals.css';
 
-const fontSans = FontSans({
+const openSans = Open_Sans({
+    variable: '--font-open-sans',
     subsets: ['latin'],
-    variable: '--font-sans',
 });
 
 export const metadata: Metadata = {
@@ -53,7 +52,7 @@ export default function RootLayout({
             <body
                 className={cn(
                     'bg-background min-h-screen font-sans antialiased',
-                    fontSans.variable
+                    openSans.variable
                 )}
             >
                 <ThemeProvider
