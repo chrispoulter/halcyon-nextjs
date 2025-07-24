@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircleIcon } from 'lucide-react';
 import type { SearchUsersResponse, UserSort } from '@/app/user/user-types';
 import {
     SearchUsersForm,
@@ -81,7 +81,7 @@ export function SearchUsers({ request, data }: SearchUsersProps) {
                 </div>
             ) : (
                 <Alert>
-                    <AlertCircle className="h-4 w-4" />
+                    <AlertCircleIcon />
                     <AlertTitle>No Results</AlertTitle>
                     <AlertDescription>
                         No users could be found.
