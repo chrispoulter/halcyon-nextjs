@@ -118,6 +118,7 @@ export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
                 <DateFormField
                     name="dateOfBirth"
                     label="Date Of Birth"
+                    required
                     disabled={loading}
                 />
 

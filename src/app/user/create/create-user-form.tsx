@@ -136,6 +136,7 @@ export function CreateUserForm({
                 <DateFormField
                     name="dateOfBirth"
                     label="Date Of Birth"
+                    required
                     disabled={loading}
                 />
 

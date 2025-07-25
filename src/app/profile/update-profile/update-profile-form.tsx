@@ -83,6 +83,7 @@ export function UpdateProfileForm({
                 <DateFormField
                     name="dateOfBirth"
                     label="Date Of Birth"
+                    required
                     disabled={loading}
                 />
 

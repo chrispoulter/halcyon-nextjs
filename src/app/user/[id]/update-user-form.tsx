@@ -94,6 +94,7 @@ export function UpdateUserForm({
                 <DateFormField
                     name="dateOfBirth"
                     label="Date Of Birth"
+                    required
                     disabled={loading}
                 />
 

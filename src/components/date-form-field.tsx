@@ -25,7 +25,12 @@ type DateFormFieldProps = {
     autoComplete?: [string, string, string];
 };
 
-export function DateFormField({ name, label, disabled }: DateFormFieldProps) {
+export function DateFormField({
+    name,
+    label,
+    required,
+    disabled,
+}: DateFormFieldProps) {
     return (
         <FormField
             name={name}
@@ -70,6 +75,7 @@ export function DateFormField({ name, label, disabled }: DateFormFieldProps) {
                                 <Calendar
                                     mode="single"
                                     selected={field.value}
+                                    required={required}
                                     onSelect={onSelect}
                                     disabled={isDisabled}
                                     captionLayout="dropdown"
