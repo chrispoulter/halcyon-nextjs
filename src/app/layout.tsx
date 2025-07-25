@@ -49,7 +49,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className={cn('antialiased', openSans.variable)}>
+            <body className={cn('font-sans antialiased', openSans.variable)}>
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="system"
