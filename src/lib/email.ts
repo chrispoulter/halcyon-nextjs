@@ -9,7 +9,7 @@ type EmailMessage = {
     react: React.ReactElement;
 };
 
-export const sendEmail = async (message: EmailMessage) => {
+export async function sendEmail(message: EmailMessage) {
     const html = await render(message.react);
 
     const transporter = nodemailer.createTransport({
@@ -32,4 +32,4 @@ export const sendEmail = async (message: EmailMessage) => {
     } catch (error) {
         console.error('Email error', error);
     }
-};
+}
