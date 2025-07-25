@@ -94,8 +94,6 @@ export function UpdateUserForm({
                 <DateFormField
                     name="dateOfBirth"
                     label="Date Of Birth"
-                    autoComplete={['bday-day', 'bday-month', 'bday-year']}
-                    required
                     disabled={loading}
                 />
 
