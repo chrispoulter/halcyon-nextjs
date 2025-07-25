@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { format } from 'date-fns';
 import { DeleteAccountButton } from '@/app/profile/delete-account-button';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { Button } from '@/components/ui/button';
+import { toDisplay } from '@/lib/dates';
 
 type ProfileProps = {
     profile: GetProfileResponse;
@@ -36,7 +36,7 @@ export function Profile({ profile }: ProfileProps) {
                     Date Of Birth
                 </dt>
                 <dd className="text-muted-foreground truncate text-sm">
-                    {format(profile.dateOfBirth, 'PPP')}
+                    {toDisplay(profile.dateOfBirth)}
                 </dd>
             </dl>
 

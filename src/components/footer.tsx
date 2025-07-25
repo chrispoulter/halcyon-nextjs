@@ -1,4 +1,5 @@
 import { config } from '@/lib/config';
+import { currentYear } from '@/lib/dates';
 
 export function Footer() {
     return (
@@ -12,7 +13,7 @@ export function Footer() {
                     >
                         Chris Poulter
                     </a>{' '}
-                    {new Date().getFullYear()}
+                    {currentYear}
                 </div>
                 <div className="text-sm leading-none font-medium">
                     v{config.VERSION}
