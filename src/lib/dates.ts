@@ -13,5 +13,5 @@ export function toDateOnly(value: string | Date | undefined) {
 export function isInPast(value: string | Date) {
     const today = startOfDay(new Date());
     const checkDate = startOfDay(value);
-    return !isBefore(checkDate, today);
+    return isBefore(checkDate, today);
 }
