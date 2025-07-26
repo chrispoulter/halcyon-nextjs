@@ -75,6 +75,7 @@ export function DateFormField({
                                 <Calendar
                                     mode="single"
                                     selected={field.value}
+                                    defaultMonth={field.value}
                                     required={required}
                                     onSelect={onSelect}
                                     disabled={isDisabled}
