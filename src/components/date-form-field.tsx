@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import {
     FormControl,
@@ -14,7 +13,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
-import { isInPast, toDateOnly } from '@/lib/dates';
+import { isInPast, toDateOnly, toDisplay } from '@/lib/dates';
 import { cn } from '@/lib/utils';
 
 type DateFormFieldProps = {
@@ -60,7 +59,7 @@ export function DateFormField({
                                         )}
                                     >
                                         {field.value ? (
-                                            format(field.value, 'PPP')
+                                            toDisplay(field.value)
                                         ) : (
                                             <span>Select...</span>
                                         )}
