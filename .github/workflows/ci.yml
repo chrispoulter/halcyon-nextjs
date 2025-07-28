@@ -64,5 +64,6 @@ jobs:
                   push: true
                   provenance: false
                   tags: |
+                      ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}-${{ steps.version_step.outputs.shortSha }}
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.preReleaseLabel || 'latest' }}
