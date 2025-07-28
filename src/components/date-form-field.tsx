@@ -21,7 +21,6 @@ type DateFormFieldProps = {
     label: string;
     required?: boolean;
     disabled?: boolean;
-    autoComplete?: [string, string, string];
 };
 
 export function DateFormField({
