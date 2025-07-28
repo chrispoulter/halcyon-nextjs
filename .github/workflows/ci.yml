@@ -67,4 +67,4 @@ jobs:
                   provenance: false
                   tags: |
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}
-                      ghcr.io/${{ env.REPO }}:${{ github.ref == 'refs/heads/main' && 'latest' || steps.version_step.outputs.escapedBranchName }}
+                      ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.preReleaseTag || 'latest' }}
