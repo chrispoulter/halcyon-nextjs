@@ -26,6 +26,13 @@ jobs:
                   fetch-depth: 0
                   ref: ${{ github.head_ref }}
 
+            - name: Show branch info
+              run: |
+                echo "GITHUB REF: ${{ github.ref }}"
+                echo "HEAD REF: ${{ github.head_ref }}"
+                git branch --show-current
+                git log --oneline -n 5
+
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
