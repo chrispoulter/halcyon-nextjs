@@ -13,6 +13,7 @@
         "email": "email dev --dir src/emails"
     },
     "dependencies": {
+        "@date-fns/utc": "^2.1.1",
         "@hookform/resolvers": "^5.1.1",
         "@opentelemetry/api-logs": "^0.57.2",
         "@opentelemetry/instrumentation": "^0.57.2",
