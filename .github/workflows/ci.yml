@@ -73,6 +73,7 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         needs: build-and-publish
+        if: ${{ github.event_name == 'workflow_dispatch' || github.ref_name == 'main' }}
         environment: ${{ github.ref_name == 'main' && 'production' || 'preview' }}
         permissions:
             contents: read
