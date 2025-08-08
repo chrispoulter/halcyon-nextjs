@@ -67,3 +67,9 @@ jobs:
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}-${{ steps.version_step.outputs.shortSha }}
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.preReleaseLabel || 'latest' }}
+
+            - name: Deploy
+              env:
+                  deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}?imgURL=ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.preReleaseLabel || 'latest' }}
+              run: |
+                  curl "$deploy_url"
