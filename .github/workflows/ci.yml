@@ -11,6 +11,7 @@ env:
 jobs:
     build-and-publish:
         runs-on: ubuntu-latest
+        environment: ${{ github.ref_name == 'main' && 'production' || 'preview' }}
         permissions:
             contents: read
             packages: write
@@ -72,6 +73,7 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         needs: build-and-publish
+        environment: ${{ github.ref_name == 'main' && 'production' || 'preview' }}
         permissions:
             contents: read
         steps:
