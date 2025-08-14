@@ -11,10 +11,10 @@ env:
 jobs:
     build-and-publish:
         runs-on: ubuntu-latest
+        environment: ${{ github.ref_name == 'main' && 'production' || 'preview' }}
         permissions:
             contents: read
             packages: write
-
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
                   username: ${{ github.actor }}
                   password: ${{ github.token }}
 
-            - name: Lowercase the repo name and username
+            - name: Lowercase the repo name
               run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
             - name: Build and push container image to registry
@@ -67,3 +67,11 @@ jobs:
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}-${{ steps.version_step.outputs.shortSha }}
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.preReleaseLabel || 'latest' }}
+
+            - name: Trigger deployment
+              run: |
+                  curl -X POST \
+                    -H "Content-Type: application/json" \
+                    -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+                    --data "{\"imageUrl\":\"ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}-${{ steps.version_step.outputs.shortSha }}\"}" \
+                    https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
