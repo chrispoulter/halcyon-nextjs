@@ -7,14 +7,6 @@ import {
     ServerActionError,
 } from '@/components/server-action-error';
 
-type SearchUsersPageProps = {
-    searchParams: Promise<{
-        page?: number;
-        sort: string;
-        search: string;
-    }>;
-};
-
 export const metadata: Metadata = {
     title: 'Users',
 };
@@ -45,7 +37,7 @@ const PAGE_SIZE = 5;
 
 export default async function SearchUsersPage({
     searchParams,
-}: SearchUsersPageProps) {
+}: PageProps<'/user'>) {
     const params = await searchParams;
 
     const request = searchParamsSchema.parse(params);

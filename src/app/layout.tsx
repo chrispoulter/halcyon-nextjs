@@ -42,11 +42,7 @@ export const viewport: Viewport = {
     themeColor: '#020617',
 };
 
-export default function RootLayout({
-    children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: LayoutProps<'/'>) {
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={cn('font-sans antialiased', openSans.variable)}>
