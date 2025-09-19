@@ -68,44 +68,44 @@ ResetPasswordEmail.PreviewProps = {
 
 export default ResetPasswordEmail;
 
-const main = {
+const main: React.CSSProperties = {
     fontFamily:
         '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
 };
 
-const container = {
+const container: React.CSSProperties = {
     margin: '0 auto',
     padding: '20px 0 48px',
 };
 
-const heading = {
+const heading: React.CSSProperties = {
     fontSize: '24px',
     fontWeight: 'bold',
     color: '#020817',
 };
 
-const paragraph = {
+const paragraph: React.CSSProperties = {
     fontSize: '14px',
     color: '#020817',
 };
 
-const link = {
+const link: React.CSSProperties = {
     color: '#020817',
     textDecoration: 'underline',
 };
 
-const buttonContainer = {
-    textAlign: 'center' as const,
+const buttonContainer: React.CSSProperties = {
+    textAlign: 'center',
 };
 
-const button = {
+const button: React.CSSProperties = {
     backgroundColor: '#0f172a',
     borderRadius: '5px',
     color: '#fff',
     fontSize: '14px',
     fontWeight: 'bold',
     textDecoration: 'none',
-    textAlign: 'center' as const,
+    textAlign: 'center',
     display: 'block',
     padding: '16px 8px',
 };
