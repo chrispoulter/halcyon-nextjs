@@ -1,14 +1,24 @@
 import 'server-only';
 
+import { cache } from 'react';
+import { notFound, redirect, forbidden } from 'next/navigation';
 import { eq, sql } from 'drizzle-orm';
-import type { GetUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { type Role } from '@/lib/definitions';
+import { isUserAdministrator, type Role } from '@/lib/definitions';
+import { getSession } from '@/lib/session';
 
-export async function getUser(
-    userId: string
-): Promise<GetUserResponse | undefined> {
+export const getUser = cache(async (userId: string) => {
+    const session = await getSession();
+
+    if (!session) {
+        redirect('/account/login');
+    }
+
+    if (!isUserAdministrator.some((value) => session.roles?.includes(value))) {
+        forbidden();
+    }
+
     const [user] = await db
         .select({
             id: users.id,
@@ -25,7 +35,7 @@ export async function getUser(
         .limit(1);
 
     if (!user) {
-        return undefined;
+        notFound();
     }
 
     return {
@@ -38,4 +48,4 @@ export async function getUser(
         isLockedOut: user.isLockedOut,
         version: user.version,
     };
-}
+});
