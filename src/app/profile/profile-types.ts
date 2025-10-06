@@ -4,6 +4,7 @@ export type GetProfileResponse = {
     firstName: string;
     lastName: string;
     dateOfBirth: string;
+    isLockedOut: boolean;
     version: number;
 };
 

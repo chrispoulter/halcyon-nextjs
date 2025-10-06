@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
+import { redirect, forbidden } from 'next/navigation';
 import { z } from 'zod';
-import { searchUsersAction } from '@/app/user/actions/search-users-action';
+import { searchUsers } from '@/app/user/data/search-users';
 import { SearchUsers } from '@/app/user/search-users';
-import {
-    isServerActionSuccess,
-    ServerActionError,
-} from '@/components/server-action-error';
+import { isUserAdministrator } from '@/lib/definitions';
+import { getSession } from '@/lib/session';
 
 export const metadata: Metadata = {
     title: 'Users',
@@ -38,18 +37,19 @@ const PAGE_SIZE = 5;
 export default async function SearchUsersPage({
     searchParams,
 }: PageProps<'/user'>) {
-    const params = await searchParams;
+    const session = await getSession();
 
-    const request = searchParamsSchema.parse(params);
-
-    const result = await searchUsersAction({
-        ...request,
-        size: PAGE_SIZE,
-    });
-
-    if (!isServerActionSuccess(result)) {
-        return <ServerActionError result={result} />;
+    if (!session) {
+        redirect('/account/login');
     }
 
-    return <SearchUsers data={result.data} request={request} />;
+    if (!isUserAdministrator.some((value) => session.roles?.includes(value))) {
+        forbidden();
+    }
+
+    const params = await searchParams;
+    const request = searchParamsSchema.parse(params);
+    const data = await searchUsers({ ...request, size: PAGE_SIZE });
+
+    return <SearchUsers data={data} request={request} />;
 }

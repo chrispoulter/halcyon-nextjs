@@ -1,21 +1,25 @@
 import type { Metadata } from 'next';
-import { getProfileAction } from '@/app/profile/actions/get-profile-action';
+import { notFound, redirect } from 'next/navigation';
+import { getProfile } from '@/app/profile/data/get-profile';
 import { Profile } from '@/app/profile/profile';
-import {
-    isServerActionSuccess,
-    ServerActionError,
-} from '@/components/server-action-error';
+import { getSession } from '@/lib/session';
 
 export const metadata: Metadata = {
     title: 'My Account',
 };
 
 export default async function ProfilePage() {
-    const result = await getProfileAction();
+    const session = await getSession();
 
-    if (!isServerActionSuccess(result)) {
-        return <ServerActionError result={result} />;
+    if (!session) {
+        redirect('/account/login');
     }
 
-    return <Profile profile={result.data} />;
+    const profile = await getProfile(session.sub);
+
+    if (!profile || profile.isLockedOut) {
+        notFound();
+    }
+
+    return <Profile profile={profile} />;
 }

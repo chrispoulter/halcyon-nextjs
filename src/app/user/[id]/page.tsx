@@ -1,34 +1,51 @@
-import { getUserAction } from '@/app/user/actions/get-user-action';
+import { redirect, notFound, forbidden } from 'next/navigation';
+import { getUser } from '@/app/user/data/get-user';
 import { UpdateUser } from '@/app/user/[id]/update-user';
-import {
-    isServerActionSuccess,
-    ServerActionError,
-} from '@/components/server-action-error';
+import { getSession } from '@/lib/session';
+import { isUserAdministrator } from '@/lib/definitions';
 
 export async function generateMetadata({ params }: PageProps<'/user/[id]'>) {
+    const session = await getSession();
+
+    if (!session) {
+        redirect('/account/login');
+    }
+
+    if (!isUserAdministrator.some((value) => session.roles?.includes(value))) {
+        forbidden();
+    }
+
     const { id } = await params;
+    const user = await getUser(id);
 
-    const result = await getUserAction({ id });
-
-    if (!isServerActionSuccess(result)) {
-        return { title: 'Update User' };
+    if (!user) {
+        notFound();
     }
 
     return {
-        title: `${result.data.firstName} ${result.data.lastName}`,
+        title: `${user.firstName} ${user.lastName}`,
     };
 }
 
 export default async function UpdateUserPage({
     params,
 }: PageProps<'/user/[id]'>) {
-    const { id } = await params;
+    const session = await getSession();
 
-    const result = await getUserAction({ id });
-
-    if (!isServerActionSuccess(result)) {
-        return <ServerActionError result={result} />;
+    if (!session) {
+        redirect('/account/login');
     }
 
-    return <UpdateUser user={result.data} />;
+    if (!isUserAdministrator.some((value) => session.roles?.includes(value))) {
+        forbidden();
+    }
+
+    const { id } = await params;
+    const user = await getUser(id);
+
+    if (!user) {
+        notFound();
+    }
+
+    return <UpdateUser user={user} />;
 }
