@@ -1,10 +1,11 @@
 import 'server-only';
 
+import { cache } from 'react';
 import { forbidden, redirect } from 'next/navigation';
 import { getSession } from '@/lib/session';
 import { Role } from '@/lib/definitions';
 
-export async function verifySession(roles?: Role[]) {
+export const verifySession = cache(async (roles?: Role[]) => {
     const session = await getSession();
 
     if (!session) {
@@ -16,4 +17,4 @@ export async function verifySession(roles?: Role[]) {
     }
 
     return session;
-}
+});
