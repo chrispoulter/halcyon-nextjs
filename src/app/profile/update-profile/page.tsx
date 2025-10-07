@@ -1,19 +1,15 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { getProfile } from '@/app/profile/data/get-profile';
 import { UpdateProfile } from '@/app/profile/update-profile/update-profile';
-import { getSession } from '@/lib/session';
+import { ensureAuthorized } from '@/lib/permissions';
 
 export const metadata: Metadata = {
     title: 'Update Profile',
 };
 
 export default async function UpdateProfilePage() {
-    const session = await getSession();
-
-    if (!session) {
-        redirect('/account/login');
-    }
+    const session = await ensureAuthorized();
 
     const profile = await getProfile(session.sub);
 

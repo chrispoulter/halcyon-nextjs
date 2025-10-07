@@ -1,19 +1,11 @@
-import { forbidden, notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { getUser } from '@/app/user/data/get-user';
 import { UpdateUser } from '@/app/user/[id]/update-user';
 import { isUserAdministrator } from '@/lib/definitions';
-import { getSession } from '@/lib/session';
+import { ensureAuthorized } from '@/lib/permissions';
 
 async function loadUser({ params }: PageProps<'/user/[id]'>) {
-    const session = await getSession();
-
-    if (!session) {
-        redirect('/account/login');
-    }
-
-    if (!isUserAdministrator.some((value) => session.roles?.includes(value))) {
-        forbidden();
-    }
+    await ensureAuthorized(isUserAdministrator);
 
     const { id } = await params;
     const user = await getUser(id);

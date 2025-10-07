@@ -3,9 +3,9 @@ import {
     DEFAULT_SERVER_ERROR_MESSAGE,
 } from 'next-safe-action';
 import { z } from 'zod';
-import { forbidden, notFound, redirect } from 'next/navigation';
-import { getSession } from '@/lib/session';
+import { notFound } from 'next/navigation';
 import type { Role } from '@/lib/definitions';
+import { ensureAuthorized } from './permissions';
 
 export class ActionError extends Error {
     status?: number;
@@ -43,15 +43,6 @@ export const actionClient = createSafeActionClient({
 
 export const authActionClient = (roles?: Role[]) =>
     actionClient.use(async ({ next }) => {
-        const session = await getSession();
-
-        if (!session) {
-            redirect('/account/login');
-        }
-
-        if (roles && !roles.some((value) => session.roles?.includes(value))) {
-            forbidden();
-        }
-
+        const session = await ensureAuthorized(roles);
         return next({ ctx: { userId: session.sub } });
     });
