@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getProfile } from '@/app/profile/data/get-profile';
 import { UpdateProfile } from '@/app/profile/update-profile/update-profile';
-import { verifySession } from '@/lib/permissions';
+import { verifySession } from '@/lib/dal';
 
 export const metadata: Metadata = {
     title: 'Update Profile',

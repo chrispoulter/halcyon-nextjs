@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { searchUsers } from '@/app/user/data/search-users';
 import { SearchUsers } from '@/app/user/search-users';
+import { verifySession } from '@/lib/dal';
 import { isUserAdministrator } from '@/lib/definitions';
-import { verifySession } from '@/lib/permissions';
 
 export const metadata: Metadata = {
     title: 'Users',

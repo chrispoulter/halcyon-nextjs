@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { forbidden, redirect } from 'next/navigation';
 import { getSession } from '@/lib/session';
 import { Role } from '@/lib/definitions';

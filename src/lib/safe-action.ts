@@ -4,8 +4,8 @@ import {
 } from 'next-safe-action';
 import { z } from 'zod';
 import { notFound } from 'next/navigation';
+import { verifySession } from '@/lib/dal';
 import type { Role } from '@/lib/definitions';
-import { verifySession } from './permissions';
 
 export class ActionError extends Error {
     status?: number;
