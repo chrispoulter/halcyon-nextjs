@@ -5,7 +5,7 @@ import {
 import { z } from 'zod';
 import { notFound } from 'next/navigation';
 import type { Role } from '@/lib/definitions';
-import { ensureAuthorized } from './permissions';
+import { verifySession } from './permissions';
 
 export class ActionError extends Error {
     status?: number;
@@ -43,6 +43,6 @@ export const actionClient = createSafeActionClient({
 
 export const authActionClient = (roles?: Role[]) =>
     actionClient.use(async ({ next }) => {
-        const session = await ensureAuthorized(roles);
+        const session = await verifySession(roles);
         return next({ ctx: { userId: session.sub } });
     });

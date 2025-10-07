@@ -2,10 +2,10 @@ import { notFound } from 'next/navigation';
 import { getUser } from '@/app/user/data/get-user';
 import { UpdateUser } from '@/app/user/[id]/update-user';
 import { isUserAdministrator } from '@/lib/definitions';
-import { ensureAuthorized } from '@/lib/permissions';
+import { verifySession } from '@/lib/permissions';
 
 async function loadUser({ params }: PageProps<'/user/[id]'>) {
-    await ensureAuthorized(isUserAdministrator);
+    await verifySession(isUserAdministrator);
 
     const { id } = await params;
     const user = await getUser(id);

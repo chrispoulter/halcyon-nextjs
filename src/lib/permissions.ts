@@ -2,7 +2,7 @@ import { forbidden, redirect } from 'next/navigation';
 import { getSession } from '@/lib/session';
 import { Role } from '@/lib/definitions';
 
-export async function ensureAuthorized(roles?: Role[]) {
+export async function verifySession(roles?: Role[]) {
     const session = await getSession();
 
     if (!session) {
