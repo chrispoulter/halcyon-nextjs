@@ -1,40 +1,16 @@
 import 'server-only';
 
-import z from 'zod';
 import { desc, asc, sql, SQL } from 'drizzle-orm';
+import { SearchUsersRequest } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { type Role } from '@/lib/definitions';
 import { cache } from 'react';
 
-const searchParamsSchema = z.object({
-    search: z.string({ message: 'Search must be a valid string' }).catch(''),
-    page: z.coerce
-        .number({ message: 'Page must be a valid number' })
-        .int('Page must be a valid integer')
-        .positive('Page must be a postive number')
-        .catch(1),
-    sort: z
-        .enum(
-            [
-                'EMAIL_ADDRESS_ASC',
-                'EMAIL_ADDRESS_DESC',
-                'NAME_ASC',
-                'NAME_DESC',
-            ],
-            {
-                message: 'Sort must be a valid user sort',
-            }
-        )
-        .catch('NAME_ASC'),
-});
-
 const PAGE_SIZE = 5;
 
 export const searchUsers = cache(
-    async (params: Record<string, string | string[] | undefined>) => {
-        const { search, page = 1, sort } = searchParamsSchema.parse(params);
-
+    async ({ search, page = 1, sort }: SearchUsersRequest) => {
         let where: SQL | undefined;
 
         if (search) {
@@ -89,19 +65,16 @@ export const searchUsers = cache(
         const hasPreviousPage = page > 1;
 
         return {
-            data: {
-                items: data.map((user) => ({
-                    id: user.id,
-                    emailAddress: user.emailAddress,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    isLockedOut: user.isLockedOut,
-                    roles: (user.roles as Role[]) || undefined,
-                })),
-                hasNextPage,
-                hasPreviousPage,
-            },
-            request: { search, page, sort },
+            items: data.map((user) => ({
+                id: user.id,
+                emailAddress: user.emailAddress,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                isLockedOut: user.isLockedOut,
+                roles: (user.roles as Role[]) || undefined,
+            })),
+            hasNextPage,
+            hasPreviousPage,
         };
     }
 );
