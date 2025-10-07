@@ -1,19 +1,11 @@
 import 'server-only';
 
 import { cache } from 'react';
-import { notFound, redirect } from 'next/navigation';
 import { eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { getSession } from '@/lib/session';
 
-export const getProfile = cache(async () => {
-    const session = await getSession();
-
-    if (!session) {
-        redirect('/account/login');
-    }
-
+export const getProfile = cache(async (userId: string) => {
     const [user] = await db
         .select({
             id: users.id,
@@ -25,11 +17,11 @@ export const getProfile = cache(async () => {
             version: sql<number>`"xmin"`.mapWith(Number),
         })
         .from(users)
-        .where(eq(users.id, session.sub))
+        .where(eq(users.id, userId))
         .limit(1);
 
     if (!user || user.isLockedOut) {
-        notFound();
+        return undefined;
     }
 
     return {

@@ -1,12 +1,10 @@
 import 'server-only';
 
-import { redirect, forbidden } from 'next/navigation';
 import z from 'zod';
 import { desc, asc, sql, SQL } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { isUserAdministrator, type Role } from '@/lib/definitions';
-import { getSession } from '@/lib/session';
+import { type Role } from '@/lib/definitions';
 import { cache } from 'react';
 
 const searchParamsSchema = z.object({
@@ -35,18 +33,6 @@ const PAGE_SIZE = 5;
 
 export const searchUsers = cache(
     async (params: Record<string, string | string[] | undefined>) => {
-        const session = await getSession();
-
-        if (!session) {
-            redirect('/account/login');
-        }
-
-        if (
-            !isUserAdministrator.some((value) => session.roles?.includes(value))
-        ) {
-            forbidden();
-        }
-
         const { search, page = 1, sort } = searchParamsSchema.parse(params);
 
         let where: SQL | undefined;

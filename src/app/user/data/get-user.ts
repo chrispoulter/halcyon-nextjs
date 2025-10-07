@@ -1,24 +1,12 @@
 import 'server-only';
 
 import { cache } from 'react';
-import { notFound, redirect, forbidden } from 'next/navigation';
 import { eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { isUserAdministrator, type Role } from '@/lib/definitions';
-import { getSession } from '@/lib/session';
+import { type Role } from '@/lib/definitions';
 
 export const getUser = cache(async (userId: string) => {
-    const session = await getSession();
-
-    if (!session) {
-        redirect('/account/login');
-    }
-
-    if (!isUserAdministrator.some((value) => session.roles?.includes(value))) {
-        forbidden();
-    }
-
     const [user] = await db
         .select({
             id: users.id,
@@ -35,7 +23,7 @@ export const getUser = cache(async (userId: string) => {
         .limit(1);
 
     if (!user) {
-        notFound();
+        return undefined;
     }
 
     return {
