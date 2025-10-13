@@ -8,7 +8,7 @@ import {
     ForgotPasswordForm,
     type ForgotPasswordFormValues,
 } from '@/app/account/forgot-password/forgot-password-form';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { ServerActionError } from '@/components/server-action-error';
 
 export function ForgotPassword() {
     const router = useRouter();
@@ -24,7 +24,7 @@ export function ForgotPassword() {
                 router.push('/account/login');
             },
             onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
+                toast.error(<ServerActionError result={error} />);
             },
         }
     );

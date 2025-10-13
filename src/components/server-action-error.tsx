@@ -8,7 +8,7 @@ type FlattenedSafeActionResult<T> = SafeActionResult<
     object
 >;
 
-export function ServerActionErrorMessage<T>({
+export function ServerActionError<T>({
     result,
 }: {
     result?: FlattenedSafeActionResult<T>;

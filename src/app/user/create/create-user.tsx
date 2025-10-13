@@ -10,7 +10,7 @@ import {
     type CreateUserFormValues,
 } from '@/app/user/create/create-user-form';
 import { Button } from '@/components/ui/button';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { ServerActionError } from '@/components/server-action-error';
 
 export function CreateUser() {
     const router = useRouter();
@@ -23,7 +23,7 @@ export function CreateUser() {
                 router.push('/user');
             },
             onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
+                toast.error(<ServerActionError result={error} />);
             },
         }
     );

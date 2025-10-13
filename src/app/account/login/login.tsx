@@ -9,7 +9,7 @@ import {
     LoginForm,
     type LoginFormValues,
 } from '@/app/account/login/login-form';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { ServerActionError } from '@/components/server-action-error';
 
 export function Login() {
     const router = useRouter();
@@ -19,7 +19,7 @@ export function Login() {
             router.push('/');
         },
         onError({ error }) {
-            toast.error(<ServerActionErrorMessage result={error} />);
+            toast.error(<ServerActionError result={error} />);
         },
     });
 

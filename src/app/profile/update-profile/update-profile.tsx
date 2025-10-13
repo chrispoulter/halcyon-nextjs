@@ -10,7 +10,7 @@ import {
     type UpdateProfileFormValues,
 } from '@/app/profile/update-profile/update-profile-form';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { ServerActionError } from '@/components/server-action-error';
 import { Button } from '@/components/ui/button';
 
 type ProfileProps = {
@@ -28,7 +28,7 @@ export function UpdateProfile({ profile }: ProfileProps) {
                 router.push('/profile');
             },
             onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
+                toast.error(<ServerActionError result={error} />);
             },
         }
     );

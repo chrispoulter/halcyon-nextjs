@@ -15,7 +15,7 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { ServerActionError } from '@/components/server-action-error';
 
 type DeleteUserButtonProps = {
     user: GetUserResponse;
@@ -33,7 +33,7 @@ export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
                 router.push('/user');
             },
             onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
+                toast.error(<ServerActionError result={error} />);
             },
         }
     );

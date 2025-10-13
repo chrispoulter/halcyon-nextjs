@@ -14,7 +14,7 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { ServerActionError } from '@/components/server-action-error';
 
 type UnlockUserButtonProps = {
     user: GetUserResponse;
@@ -29,7 +29,7 @@ export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
                 toast.success('User successfully unlocked.');
             },
             onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
+                toast.error(<ServerActionError result={error} />);
             },
         }
     );

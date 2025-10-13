@@ -8,7 +8,7 @@ import {
     ResetPasswordForm,
     type ResetPasswordFormValues,
 } from '@/app/account/reset-password/[token]/reset-password-form';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { ServerActionError } from '@/components/server-action-error';
 
 type ResetPasswordProps = {
     token: string;
@@ -25,7 +25,7 @@ export function ResetPassword({ token }: ResetPasswordProps) {
                 router.push('/account/login');
             },
             onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
+                toast.error(<ServerActionError result={error} />);
             },
         }
     );

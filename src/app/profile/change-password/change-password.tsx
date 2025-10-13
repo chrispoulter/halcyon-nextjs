@@ -11,7 +11,7 @@ import {
 } from '@/app/profile/change-password/change-password-form';
 import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { Button } from '@/components/ui/button';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { ServerActionError } from '@/components/server-action-error';
 
 type ChangePasswordProps = {
     profile: GetProfileResponse;
@@ -28,7 +28,7 @@ export function ChangePassword({ profile }: ChangePasswordProps) {
                 router.push('/profile');
             },
             onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
+                toast.error(<ServerActionError result={error} />);
             },
         }
     );
