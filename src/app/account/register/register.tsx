@@ -9,7 +9,7 @@ import {
     RegisterForm,
     type RegisterFormValues,
 } from '@/app/account/register/register-form';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { ServerActionError } from '@/components/server-action-error';
 
 export function Register() {
     const router = useRouter();
@@ -22,7 +22,7 @@ export function Register() {
                 router.push('/account/login');
             },
             onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
+                toast.error(<ServerActionError result={error} />);
             },
         }
     );

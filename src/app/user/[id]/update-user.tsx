@@ -14,7 +14,7 @@ import { LockUserButton } from '@/app/user/[id]/lock-user-button';
 import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
 import type { GetUserResponse } from '@/app/user/user-types';
 import { Button } from '@/components/ui/button';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
+import { ServerActionError } from '@/components/server-action-error';
 
 type UpdateUserProps = {
     user: GetUserResponse;
@@ -31,7 +31,7 @@ export function UpdateUser({ user }: UpdateUserProps) {
                 router.push('/user');
             },
             onError({ error }) {
-                toast.error(<ServerActionErrorMessage result={error} />);
+                toast.error(<ServerActionError result={error} />);
             },
         }
     );

@@ -5,15 +5,16 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
+type ErrorPageProps = Readonly<{
+    error: Error & { digest?: string };
+    reset: () => void;
+}>;
+
 export const metadata: Metadata = {
     title: 'Error',
 };
 
-export default function Error({
-    error,
-}: {
-    error: Error & { digest?: string };
-}) {
+export default function Error({ error }: ErrorPageProps) {
     useEffect(() => {
         // Log the error to an error reporting service
         console.error(error.message);

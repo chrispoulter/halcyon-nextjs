@@ -3,9 +3,8 @@ import {
     DEFAULT_SERVER_ERROR_MESSAGE,
 } from 'next-safe-action';
 import { z } from 'zod';
-import { forbidden, notFound, redirect } from 'next/navigation';
-import { getSession } from '@/lib/session';
 import type { Role } from '@/lib/definitions';
+import { getSession } from '@/lib/session';
 
 export class ActionError extends Error {
     status?: number;
@@ -26,11 +25,6 @@ export const actionClient = createSafeActionClient({
     },
     handleServerError: (error, utils) => {
         if (error instanceof ActionError) {
-            switch (error.status) {
-                case 404:
-                    notFound();
-            }
-
             return error.message;
         }
 
@@ -46,11 +40,11 @@ export const authActionClient = (roles?: Role[]) =>
         const session = await getSession();
 
         if (!session) {
-            redirect('/account/login');
+            throw new ActionError('Unauthorized.', 401);
         }
 
         if (roles && !roles.some((value) => session.roles?.includes(value))) {
-            forbidden();
+            throw new ActionError('Forbidden.', 403);
         }
 
         return next({ ctx: { userId: session.sub } });

@@ -1,8 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useAction } from 'next-safe-action/hooks';
-import { toast } from 'sonner';
 import { logoutAction } from '@/app/account/actions/logout-action';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -15,7 +13,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ServerActionErrorMessage } from '@/components/server-action-error';
 import { type SessionPayload, roleOptions } from '@/lib/definitions';
 
 type UserNavProps = {
@@ -23,14 +20,8 @@ type UserNavProps = {
 };
 
 export function UserNav({ session }: UserNavProps) {
-    const { execute: logout, isPending: isSaving } = useAction(logoutAction, {
-        onError({ error }) {
-            toast.error(<ServerActionErrorMessage result={error} />);
-        },
-    });
-
     function onLogout() {
-        logout();
+        logoutAction();
     }
 
     if (!session) {
@@ -85,9 +76,7 @@ export function UserNav({ session }: UserNavProps) {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={onLogout} disabled={isSaving}>
-                    Log out
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={onLogout}>Log out</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );

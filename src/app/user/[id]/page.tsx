@@ -1,34 +1,31 @@
-import { getUserAction } from '@/app/user/actions/get-user-action';
+import { notFound } from 'next/navigation';
+import { getUser } from '@/app/user/data/get-user';
 import { UpdateUser } from '@/app/user/[id]/update-user';
-import {
-    isServerActionSuccess,
-    ServerActionError,
-} from '@/components/server-action-error';
+import { verifySession } from '@/lib/dal';
+import { isUserAdministrator } from '@/lib/definitions';
 
-export async function generateMetadata({ params }: PageProps<'/user/[id]'>) {
+async function loadUser({ params }: PageProps<'/user/[id]'>) {
+    await verifySession(isUserAdministrator);
+
     const { id } = await params;
+    const user = await getUser(id);
 
-    const result = await getUserAction({ id });
-
-    if (!isServerActionSuccess(result)) {
-        return { title: 'Update User' };
+    if (!user) {
+        notFound();
     }
 
+    return user;
+}
+
+export async function generateMetadata(props: PageProps<'/user/[id]'>) {
+    const user = await loadUser(props);
+
     return {
-        title: `${result.data.firstName} ${result.data.lastName}`,
+        title: `${user.firstName} ${user.lastName}`,
     };
 }
 
-export default async function UpdateUserPage({
-    params,
-}: PageProps<'/user/[id]'>) {
-    const { id } = await params;
-
-    const result = await getUserAction({ id });
-
-    if (!isServerActionSuccess(result)) {
-        return <ServerActionError result={result} />;
-    }
-
-    return <UpdateUser user={result.data} />;
+export default async function UpdateUserPage(props: PageProps<'/user/[id]'>) {
+    const user = await loadUser(props);
+    return <UpdateUser user={user} />;
 }

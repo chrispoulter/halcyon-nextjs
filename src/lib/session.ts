@@ -6,6 +6,8 @@ import { SignJWT, jwtVerify } from 'jose';
 import { config } from '@/lib/config';
 import type { SessionPayload } from '@/lib/definitions';
 
+const SESSION_COOKIE = 'session';
+
 const sessionDuration = config.SESSION_DURATION;
 const sessionSecret = config.SESSION_SECRET;
 const encodedSecret = new TextEncoder().encode(sessionSecret);
@@ -38,7 +40,7 @@ export async function createSession(payload: SessionPayload) {
     const cookieStore = await cookies();
     const session = await encrypt(payload, expires);
 
-    cookieStore.set('session', session, {
+    cookieStore.set(SESSION_COOKIE, session, {
         httpOnly: true,
         secure: true,
         expires,
@@ -49,11 +51,11 @@ export async function createSession(payload: SessionPayload) {
 
 export async function deleteSession() {
     const cookieStore = await cookies();
-    cookieStore.delete('session');
+    cookieStore.delete(SESSION_COOKIE);
 }
 
 export const getSession = cache(async () => {
     const cookieStore = await cookies();
-    const cookie = cookieStore.get('session');
+    const cookie = cookieStore.get(SESSION_COOKIE);
     return await decrypt(cookie?.value);
 });

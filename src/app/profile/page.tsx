@@ -1,21 +1,21 @@
 import type { Metadata } from 'next';
-import { getProfileAction } from '@/app/profile/actions/get-profile-action';
+import { notFound } from 'next/navigation';
+import { getProfile } from '@/app/profile/data/get-profile';
 import { Profile } from '@/app/profile/profile';
-import {
-    isServerActionSuccess,
-    ServerActionError,
-} from '@/components/server-action-error';
+import { verifySession } from '@/lib/dal';
 
 export const metadata: Metadata = {
     title: 'My Account',
 };
 
 export default async function ProfilePage() {
-    const result = await getProfileAction();
+    const session = await verifySession();
 
-    if (!isServerActionSuccess(result)) {
-        return <ServerActionError result={result} />;
+    const profile = await getProfile(session.sub);
+
+    if (!profile) {
+        notFound();
     }
 
-    return <Profile profile={result.data} />;
+    return <Profile profile={profile} />;
 }

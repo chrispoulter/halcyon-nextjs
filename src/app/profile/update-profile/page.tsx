@@ -1,21 +1,21 @@
 import type { Metadata } from 'next';
-import { getProfileAction } from '@/app/profile/actions/get-profile-action';
+import { notFound } from 'next/navigation';
+import { getProfile } from '@/app/profile/data/get-profile';
 import { UpdateProfile } from '@/app/profile/update-profile/update-profile';
-import {
-    isServerActionSuccess,
-    ServerActionError,
-} from '@/components/server-action-error';
+import { verifySession } from '@/lib/dal';
 
 export const metadata: Metadata = {
     title: 'Update Profile',
 };
 
 export default async function UpdateProfilePage() {
-    const result = await getProfileAction();
+    const session = await verifySession();
 
-    if (!isServerActionSuccess(result)) {
-        return <ServerActionError result={result} />;
+    const profile = await getProfile(session.sub);
+
+    if (!profile) {
+        notFound();
     }
 
-    return <UpdateProfile profile={result.data} />;
+    return <UpdateProfile profile={profile} />;
 }

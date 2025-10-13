@@ -6,6 +6,12 @@ export type UserSort =
     | 'NAME_ASC'
     | 'NAME_DESC';
 
+export type SearchUsersRequest = {
+    search?: string;
+    page?: number;
+    sort?: UserSort;
+};
+
 export type SearchUsersResponse = {
     items: {
         id: string;

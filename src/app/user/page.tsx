@@ -1,22 +1,16 @@
 import type { Metadata } from 'next';
 import { z } from 'zod';
-import { searchUsersAction } from '@/app/user/actions/search-users-action';
+import { searchUsers } from '@/app/user/data/search-users';
 import { SearchUsers } from '@/app/user/search-users';
-import {
-    isServerActionSuccess,
-    ServerActionError,
-} from '@/components/server-action-error';
-
-export const metadata: Metadata = {
-    title: 'Users',
-};
+import { verifySession } from '@/lib/dal';
+import { isUserAdministrator } from '@/lib/definitions';
 
 const searchParamsSchema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).catch(''),
     page: z.coerce
         .number({ message: 'Page must be a valid number' })
         .int('Page must be a valid integer')
-        .positive('Page must be a postive number')
+        .positive('Page must be a positive number')
         .catch(1),
     sort: z
         .enum(
@@ -33,23 +27,17 @@ const searchParamsSchema = z.object({
         .catch('NAME_ASC'),
 });
 
-const PAGE_SIZE = 5;
+export const metadata: Metadata = {
+    title: 'Users',
+};
 
 export default async function SearchUsersPage({
     searchParams,
 }: PageProps<'/user'>) {
+    await verifySession(isUserAdministrator);
+
     const params = await searchParams;
-
     const request = searchParamsSchema.parse(params);
-
-    const result = await searchUsersAction({
-        ...request,
-        size: PAGE_SIZE,
-    });
-
-    if (!isServerActionSuccess(result)) {
-        return <ServerActionError result={result} />;
-    }
-
-    return <SearchUsers data={result.data} request={request} />;
+    const data = await searchUsers(request);
+    return <SearchUsers data={data} request={request} />;
 }
