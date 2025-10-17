@@ -18,7 +18,7 @@ services:
             - 3000:3000
 
     postgres:
-        image: postgres:17.4
+        image: postgres:17.6
         user: postgres
         environment:
             POSTGRES_PASSWORD: password
