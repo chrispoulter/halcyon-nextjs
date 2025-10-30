@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { AlertCircleIcon } from 'lucide-react';
+import { User } from 'lucide-react';
 import type {
     SearchUsersResponse,
     UserSort,
@@ -92,7 +92,7 @@ export function SearchUsers({ request, data }: SearchUsersProps) {
                 <Empty className="border border-dashed">
                     <EmptyHeader>
                         <EmptyMedia variant="icon">
-                            <AlertCircleIcon />
+                            <User />
                         </EmptyMedia>
                         <EmptyTitle>No Results</EmptyTitle>
                         <EmptyDescription>
