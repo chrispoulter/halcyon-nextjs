@@ -1,6 +1,13 @@
 import Link from 'next/link';
 import type { SearchUsersResponse } from '@/app/user/data/search-users';
 import { Badge } from '@/components/ui/badge';
+import {
+    Item,
+    ItemContent,
+    ItemDescription,
+    ItemFooter,
+    ItemTitle,
+} from '@/components/ui/item';
 import { roleOptions } from '@/lib/definitions';
 
 type UserCardProps = {
@@ -9,34 +16,34 @@ type UserCardProps = {
 
 export function UserCard({ user }: UserCardProps) {
     return (
-        <Link
-            href={`/user/${user.id}`}
-            className="focus-within:bg-card hover:bg-card block space-y-2 rounded-lg border p-4"
-        >
-            <div className="space-y-0.5">
-                <div className="truncate text-base font-medium">
-                    {user.firstName} {user.lastName}
-                </div>
-                <div className="text-muted-foreground truncate text-sm">
-                    {user.emailAddress}
-                </div>
-            </div>
-            <div className="flex flex-col gap-2 sm:flex-row">
-                {user.isLockedOut && (
-                    <Badge variant="destructive" className="w-full sm:w-auto">
-                        Locked
-                    </Badge>
-                )}
-                {user.roles?.map((role) => (
-                    <Badge
-                        key={role}
-                        variant="secondary"
-                        className="w-full sm:w-auto"
-                    >
-                        {roleOptions[role].title}
-                    </Badge>
-                ))}
-            </div>
-        </Link>
+        <Item variant="outline" asChild>
+            <Link href={`/user/${user.id}`}>
+                <ItemContent>
+                    <ItemTitle>
+                        {user.firstName} {user.lastName}
+                    </ItemTitle>
+                    <ItemDescription>{user.emailAddress}</ItemDescription>
+                </ItemContent>
+                <ItemFooter className="flex flex-col justify-start gap-2 sm:flex-row">
+                    {user.isLockedOut && (
+                        <Badge
+                            variant="destructive"
+                            className="w-full sm:w-auto"
+                        >
+                            Locked
+                        </Badge>
+                    )}
+                    {user.roles?.map((role) => (
+                        <Badge
+                            key={role}
+                            variant="secondary"
+                            className="w-full sm:w-auto"
+                        >
+                            {roleOptions[role].title}
+                        </Badge>
+                    ))}
+                </ItemFooter>
+            </Link>
+        </Item>
     );
 }
