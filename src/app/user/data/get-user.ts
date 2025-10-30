@@ -6,6 +6,17 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { type Role } from '@/lib/definitions';
 
+export type GetUserResponse = {
+    id: string;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    isLockedOut: boolean;
+    roles?: Role[];
+    version: number;
+};
+
 export const getUser = cache(async (userId: string) => {
     const [user] = await db
         .select({

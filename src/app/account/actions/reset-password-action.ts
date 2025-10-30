@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
-import type { ResetPasswordResponse } from '@/app/account/account-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { generateHash } from '@/lib/hash';
@@ -16,6 +15,10 @@ const schema = z.object({
         .min(8, 'New Password must be at least 8 characters')
         .max(50, 'New Password must be no more than 50 characters'),
 });
+
+type ResetPasswordResponse = {
+    id: string;
+};
 
 export const resetPasswordAction = actionClient
     .metadata({ actionName: 'resetPasswordAction' })

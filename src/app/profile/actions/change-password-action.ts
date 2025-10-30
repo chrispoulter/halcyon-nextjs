@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq, sql } from 'drizzle-orm';
-import type { ChangePasswordResponse } from '@/app/profile/profile-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { ActionError, authActionClient } from '@/lib/safe-action';
@@ -19,6 +18,10 @@ const schema = z.object({
         .max(50, 'New Password must be no more than 50 characters'),
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
+
+type ChangePasswordResponse = {
+    id: string;
+};
 
 export const changePasswordAction = authActionClient()
     .metadata({ actionName: 'changePasswordAction' })

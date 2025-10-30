@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { SearchUsersResponse } from '@/app/user/user-types';
+import type { SearchUsersResponse } from '@/app/user/data/search-users';
 import { Badge } from '@/components/ui/badge';
 import { roleOptions } from '@/lib/definitions';
 

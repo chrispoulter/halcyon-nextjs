@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq, sql } from 'drizzle-orm';
-import type { UnlockUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isUserAdministrator } from '@/lib/definitions';
@@ -13,6 +12,10 @@ const schema = z.object({
     id: z.uuid('Id must be a valid UUID'),
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
+
+type UnlockUserResponse = {
+    id: string;
+};
 
 export const unlockUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'unlockUserAction' })

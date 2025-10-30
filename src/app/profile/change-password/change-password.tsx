@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { changePasswordAction } from '@/app/profile/actions/change-password-action';
+import type { GetProfileResponse } from '@/app/profile/data/get-profile';
 import {
     ChangePasswordForm,
     type ChangePasswordFormValues,
 } from '@/app/profile/change-password/change-password-form';
-import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 

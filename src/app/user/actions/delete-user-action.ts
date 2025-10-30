@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import { eq, sql } from 'drizzle-orm';
-import type { DeleteUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isUserAdministrator } from '@/lib/definitions';
@@ -12,6 +11,10 @@ const schema = z.object({
     id: z.uuid('Id must be a valid UUID'),
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
+
+type DeleteUserResponse = {
+    id: string;
+};
 
 export const deleteUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'deleteUserAction' })

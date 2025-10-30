@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq, sql } from 'drizzle-orm';
-import type { UpdateUserResponse } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
@@ -34,6 +33,10 @@ const schema = z.object({
         .optional(),
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
+
+type UpdateUserResponse = {
+    id: string;
+};
 
 export const updateUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'updateUserAction' })

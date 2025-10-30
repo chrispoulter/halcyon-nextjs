@@ -3,11 +3,14 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq, sql } from 'drizzle-orm';
-import type { UpdateProfileResponse } from '@/app/profile/profile-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
 import { ActionError, authActionClient } from '@/lib/safe-action';
+
+type UpdateProfileResponse = {
+    id: string;
+};
 
 const schema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),

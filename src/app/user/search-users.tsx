@@ -3,7 +3,10 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { AlertCircleIcon } from 'lucide-react';
-import type { SearchUsersResponse, UserSort } from '@/app/user/user-types';
+import type {
+    SearchUsersResponse,
+    UserSort,
+} from '@/app/user/data/search-users';
 import {
     SearchUsersForm,
     type SearchUsersFormValues,

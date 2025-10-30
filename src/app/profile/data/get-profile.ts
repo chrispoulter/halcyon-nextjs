@@ -5,6 +5,16 @@ import { eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 
+export type GetProfileResponse = {
+    id: string;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    isLockedOut: boolean;
+    version: number;
+};
+
 export const getProfile = cache(async (userId: string) => {
     const [user] = await db
         .select({

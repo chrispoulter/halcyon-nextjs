@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { deleteAccountAction } from '@/app/profile/actions/delete-account-action';
-import type { GetProfileResponse } from '@/app/profile/profile-types';
+import type { GetProfileResponse } from '@/app/profile/data/get-profile';
 import {
     AlertDialog,
     AlertDialogAction,

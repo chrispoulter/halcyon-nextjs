@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { deleteUserAction } from '@/app/user/actions/delete-user-action';
-import type { GetUserResponse } from '@/app/user/user-types';
+import type { GetUserResponse } from '@/app/user/data/get-user';
 import {
     AlertDialog,
     AlertDialogAction,

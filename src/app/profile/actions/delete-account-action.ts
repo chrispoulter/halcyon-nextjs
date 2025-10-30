@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import { eq, sql } from 'drizzle-orm';
-import type { DeleteAccountResponse } from '@/app/profile/profile-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { ActionError, authActionClient } from '@/lib/safe-action';
@@ -11,6 +10,10 @@ import { deleteSession } from '@/lib/session';
 const schema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
+
+type DeleteAccountResponse = {
+    id: string;
+};
 
 export const deleteAccountAction = authActionClient()
     .metadata({ actionName: 'deleteAccountAction' })

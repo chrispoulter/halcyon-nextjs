@@ -1,7 +1,7 @@
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { unlockUserAction } from '@/app/user/actions/unlock-user-action';
-import type { GetUserResponse } from '@/app/user/user-types';
+import type { GetUserResponse } from '@/app/user/data/get-user';
 import {
     AlertDialog,
     AlertDialogAction,

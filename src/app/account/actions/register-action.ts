@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
-import type { RegisterResponse } from '@/app/account/account-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
@@ -30,6 +29,10 @@ const schema = z.object({
             message: 'Date Of Birth must be in the past',
         }),
 });
+
+type RegisterResponse = {
+    id: string;
+};
 
 export const registerAction = actionClient
     .metadata({ actionName: 'registerAction' })

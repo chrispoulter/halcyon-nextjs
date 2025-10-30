@@ -1,11 +1,35 @@
 import 'server-only';
 
 import { desc, asc, sql, SQL } from 'drizzle-orm';
-import { SearchUsersRequest } from '@/app/user/user-types';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { type Role } from '@/lib/definitions';
 import { cache } from 'react';
+
+export type UserSort =
+    | 'EMAIL_ADDRESS_ASC'
+    | 'EMAIL_ADDRESS_DESC'
+    | 'NAME_ASC'
+    | 'NAME_DESC';
+
+type SearchUsersRequest = {
+    search?: string;
+    page?: number;
+    sort?: UserSort;
+};
+
+export type SearchUsersResponse = {
+    items: {
+        id: string;
+        emailAddress: string;
+        firstName: string;
+        lastName: string;
+        isLockedOut: boolean;
+        roles?: Role[];
+    }[];
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+};
 
 const PAGE_SIZE = 5;
 

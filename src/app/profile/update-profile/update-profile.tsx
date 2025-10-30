@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { updateProfileAction } from '@/app/profile/actions/update-profile-action';
+import type { GetProfileResponse } from '@/app/profile/data/get-profile';
 import {
     UpdateProfileForm,
     type UpdateProfileFormValues,
 } from '@/app/profile/update-profile/update-profile-form';
-import type { GetProfileResponse } from '@/app/profile/profile-types';
 import { ServerActionError } from '@/components/server-action-error';
 import { Button } from '@/components/ui/button';
 
