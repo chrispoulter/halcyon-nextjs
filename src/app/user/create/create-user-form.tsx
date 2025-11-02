@@ -224,70 +224,55 @@ export function CreateUserForm({
                 <Controller
                     name="roles"
                     control={form.control}
-                    render={({ field, fieldState }) => {
-                        function onCheckChanged(key: string, checked: boolean) {
-                            if (checked) {
-                                return field.onChange([
-                                    ...(field.value || []),
-                                    key,
-                                ]);
-                            }
+                    render={({ field, fieldState }) => (
+                        <>
+                            {Object.entries(roleOptions).map(
+                                ([key, { title, description }]) => (
+                                    <Field
+                                        key={key}
+                                        orientation="horizontal"
+                                        data-invalid={fieldState.invalid}
+                                        className="rounded-lg border p-4"
+                                    >
+                                        <FieldContent>
+                                            <FieldLabel
+                                                htmlFor={`${field.name}-${key}`}
+                                            >
+                                                {title}
+                                            </FieldLabel>
+                                            <FieldDescription>
+                                                {description}
+                                            </FieldDescription>
+                                        </FieldContent>
+                                        <Switch
+                                            id={`${field.name}-${key}`}
+                                            name={field.name}
+                                            checked={field.value?.includes(
+                                                key as Role
+                                            )}
+                                            value={key}
+                                            onCheckedChange={(checked) => {
+                                                if (checked) {
+                                                    return field.onChange([
+                                                        ...(field.value || []),
+                                                        key,
+                                                    ]);
+                                                }
 
-                            return field.onChange(
-                                field.value?.filter(
-                                    (item: string) => item !== key
+                                                return field.onChange(
+                                                    field.value?.filter(
+                                                        (item) => item !== key
+                                                    )
+                                                );
+                                            }}
+                                            disabled={loading}
+                                            aria-invalid={fieldState.invalid}
+                                        />
+                                    </Field>
                                 )
-                            );
-                        }
-
-                        return (
-                            <>
-                                {Object.entries(roleOptions).map(
-                                    ([key, { title, description }]) => (
-                                        <Field
-                                            key={key}
-                                            orientation="horizontal"
-                                            data-invalid={fieldState.invalid}
-                                            className='rounded-lg border p-4'
-                                        >
-                                            <FieldContent>
-                                                <FieldLabel
-                                                    htmlFor={`${field.name}-${key}`}
-                                                >
-                                                    {title}
-                                                </FieldLabel>
-                                                <FieldDescription>
-                                                    {description}
-                                                </FieldDescription>
-                                                {fieldState.invalid && (
-                                                    <FieldError
-                                                        errors={[
-                                                            fieldState.error,
-                                                        ]}
-                                                    />
-                                                )}
-                                            </FieldContent>
-                                            <Switch
-                                                id={`${field.name}-${key}`}
-                                                name={field.name}
-                                                checked={field.value?.includes(
-                                                    key as Role
-                                                )}
-                                                value={key}
-                                                onCheckedChange={(checked) =>
-                                                    onCheckChanged(key, checked)
-                                                }
-                                                disabled={loading}
-                                                aria-invalid={
-                                                    fieldState.invalid
-                                                }
-                                            />
-                                        </Field>
-                                    )
-                                )}
-                            </>
-                        );
-                    }}
+                            )}
+                        </>
+                    )}
                 />
 
                 <Field orientation="horizontal">
