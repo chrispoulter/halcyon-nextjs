@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { LoadingButton } from '@/components/loading-button';
 import { isInPast } from '@/lib/dates';
-import { roleOptions, roles } from '@/lib/definitions';
+import { Role, roleOptions, roles } from '@/lib/definitions';
 
 const schema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),
@@ -181,6 +181,7 @@ export function UpdateUserForm({
                                             key={key}
                                             orientation="horizontal"
                                             data-invalid={fieldState.invalid}
+                                            className='rounded-lg border p-4'
                                         >
                                             <FieldContent>
                                                 <FieldLabel
@@ -203,7 +204,7 @@ export function UpdateUserForm({
                                                 id={`${field.name}-${key}`}
                                                 name={field.name}
                                                 checked={field.value?.includes(
-                                                    key
+                                                    key as Role
                                                 )}
                                                 value={key}
                                                 onCheckedChange={(checked) =>

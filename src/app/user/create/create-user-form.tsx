@@ -248,6 +248,7 @@ export function CreateUserForm({
                                             key={key}
                                             orientation="horizontal"
                                             data-invalid={fieldState.invalid}
+                                            className='rounded-lg border p-4'
                                         >
                                             <FieldContent>
                                                 <FieldLabel
@@ -270,7 +271,7 @@ export function CreateUserForm({
                                                 id={`${field.name}-${key}`}
                                                 name={field.name}
                                                 checked={field.value?.includes(
-                                                    key
+                                                    key as Role
                                                 )}
                                                 value={key}
                                                 onCheckedChange={(checked) =>
