@@ -1,9 +1,14 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Form } from '@/components/ui/form';
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import { LoadingButton } from '@/components/loading-button';
-import { TextFormField } from '@/components/text-form-field';
 
 const schema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),
@@ -28,28 +33,38 @@ export function ForgotPasswordForm({
     });
 
     return (
-        <Form {...form}>
-            <form
-                noValidate
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-            >
-                <TextFormField
+        <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+                <Controller
                     name="emailAddress"
-                    label="Email Address"
-                    type="email"
-                    maxLength={254}
-                    autoComplete="username"
-                    required
-                    disabled={loading}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                Email Address
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                type="email"
+                                maxLength={254}
+                                autoComplete="username"
+                                required
+                                disabled={loading}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
                 />
 
-                <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                <Field orientation="horizontal">
                     <LoadingButton type="submit" loading={loading}>
                         Submit
                     </LoadingButton>
-                </div>
-            </form>
-        </Form>
+                </Field>
+            </FieldGroup>
+        </form>
     );
 }

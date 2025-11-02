@@ -1,10 +1,5 @@
-import {
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
+import { Controller } from 'react-hook-form';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 type TextFormFieldProps = {
@@ -25,16 +20,20 @@ export function TextFormField({
     ...props
 }: TextFormFieldProps) {
     return (
-        <FormField
+        <Controller
             name={name}
-            render={({ field }) => (
-                <FormItem className={className}>
-                    <FormLabel>{label}</FormLabel>
-                    <FormControl>
-                        <Input {...field} {...props} />
-                    </FormControl>
-                    <FormMessage />
-                </FormItem>
+            render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className={className}>
+                    <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+                    <Input
+                        {...field}
+                        {...props}
+                        aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                    )}
+                </Field>
             )}
         />
     );

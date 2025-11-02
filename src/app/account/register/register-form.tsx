@@ -1,10 +1,14 @@
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Form } from '@/components/ui/form';
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import { LoadingButton } from '@/components/loading-button';
-import { DateFormField } from '@/components/date-form-field';
-import { TextFormField } from '@/components/text-form-field';
 import { isInPast } from '@/lib/dates';
 
 const schema = z
@@ -55,79 +59,154 @@ export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
     });
 
     return (
-        <Form {...form}>
-            <form
-                noValidate
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-            >
-                <TextFormField
+        <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+                <Controller
                     name="emailAddress"
-                    label="Email Address"
-                    type="email"
-                    maxLength={254}
-                    autoComplete="username"
-                    required
-                    disabled={loading}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                Email Address
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                type="email"
+                                maxLength={254}
+                                autoComplete="username"
+                                required
+                                disabled={loading}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
                 />
 
-                <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField
-                        name="password"
-                        label="Password"
-                        type="password"
-                        maxLength={50}
-                        autoComplete="new-password"
-                        required
-                        disabled={loading}
-                        className="flex-1"
-                    />
-                    <TextFormField
-                        name="confirmPassword"
-                        label="Confirm Password"
-                        type="password"
-                        maxLength={50}
-                        autoComplete="new-password"
-                        required
-                        disabled={loading}
-                        className="flex-1"
-                    />
-                </div>
+                <Controller
+                    name="password"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                Password
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                type="password"
+                                maxLength={50}
+                                autoComplete="new-password"
+                                required
+                                disabled={loading}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
+                />
 
-                <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField
-                        name="firstName"
-                        label="First Name"
-                        maxLength={50}
-                        autoComplete="given-name"
-                        required
-                        disabled={loading}
-                        className="flex-1"
-                    />
-                    <TextFormField
-                        name="lastName"
-                        label="Last Name"
-                        maxLength={50}
-                        autoComplete="family-name"
-                        required
-                        disabled={loading}
-                        className="flex-1"
-                    />
-                </div>
+                <Controller
+                    name="confirmPassword"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                Confirm Password
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                type="password"
+                                maxLength={50}
+                                autoComplete="new-password"
+                                required
+                                disabled={loading}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
+                />
 
-                <DateFormField
+                <Controller
+                    name="firstName"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                First Name
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                maxLength={50}
+                                autoComplete="given-name"
+                                required
+                                disabled={loading}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
+                />
+
+                <Controller
+                    name="lastName"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                Last Name
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                maxLength={50}
+                                autoComplete="family-name"
+                                required
+                                disabled={loading}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
+                />
+
+                <Controller
                     name="dateOfBirth"
-                    label="Date Of Birth"
-                    required
-                    disabled={loading}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                Date Of Birth
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                type="date"
+                                required
+                                disabled={loading}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
                 />
 
-                <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                <Field orientation="horizontal">
                     <LoadingButton type="submit" loading={loading}>
                         Submit
                     </LoadingButton>
-                </div>
-            </form>
-        </Form>
+                </Field>
+            </FieldGroup>
+        </form>
     );
 }

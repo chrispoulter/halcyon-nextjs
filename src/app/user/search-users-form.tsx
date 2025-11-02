@@ -1,15 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
-} from '@/components/ui/form';
+import { Field, FieldError } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 const schema = z.object({
@@ -41,39 +35,37 @@ export function SearchUsersForm({
     });
 
     return (
-        <Form {...form}>
-            <form
-                noValidate
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="flex w-full gap-2"
+        <form
+            noValidate
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex w-full gap-2"
+        >
+            <Controller
+                control={form.control}
+                name="search"
+                render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="w-full">
+                        <Input
+                            {...field}
+                            type="search"
+                            placeholder="Search Users..."
+                            disabled={disabled}
+                        />
+                        {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                        )}
+                    </Field>
+                )}
+            />
+            <Button
+                type="submit"
+                variant="secondary"
+                size="icon"
+                disabled={disabled}
             >
-                <FormField
-                    control={form.control}
-                    name="search"
-                    render={({ field }) => (
-                        <FormItem className="w-full">
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="search"
-                                    placeholder="Search Users..."
-                                    disabled={disabled}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button
-                    type="submit"
-                    variant="secondary"
-                    size="icon"
-                    disabled={disabled}
-                >
-                    <Search />
-                    <span className="sr-only">Search users</span>
-                </Button>
-            </form>
-        </Form>
+                <Search />
+                <span className="sr-only">Search users</span>
+            </Button>
+        </form>
     );
 }

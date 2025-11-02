@@ -1,9 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Form } from '@/components/ui/form';
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from '@/components/ui/field';
 import { LoadingButton } from '@/components/loading-button';
-import { TextFormField } from '@/components/text-form-field';
+import { Input } from '@/components/ui/input';
 
 const schema = z
     .object({
@@ -46,53 +51,88 @@ export function ChangePasswordForm({
     });
 
     return (
-        <Form {...form}>
-            <form
-                noValidate
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-            >
-                <TextFormField
+        <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+                <Controller
                     name="currentPassword"
-                    label="Current Password"
-                    type="password"
-                    maxLength={50}
-                    autoComplete="current-password"
-                    required
-                    disabled={loading}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                Current Password
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                type="password"
+                                maxLength={50}
+                                autoComplete="current-password"
+                                required
+                                disabled={loading}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
                 />
 
-                <div className="flex flex-col gap-6 sm:flex-row">
-                    <TextFormField
-                        name="newPassword"
-                        label="New Password"
-                        type="password"
-                        maxLength={50}
-                        autoComplete="new-password"
-                        required
-                        disabled={loading}
-                        className="flex-1"
-                    />
-                    <TextFormField
-                        name="confirmNewPassword"
-                        label="Confirm New Password"
-                        type="password"
-                        maxLength={50}
-                        autoComplete="new-password"
-                        required
-                        disabled={loading}
-                        className="flex-1"
-                    />
-                </div>
+                <Controller
+                    name="newPassword"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                New Password
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                type="password"
+                                maxLength={50}
+                                autoComplete="new-password"
+                                required
+                                disabled={loading}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
+                />
 
-                <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                <Controller
+                    name="confirmNewPassword"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                                Confirm New Password
+                            </FieldLabel>
+                            <Input
+                                {...field}
+                                type="password"
+                                maxLength={50}
+                                autoComplete="new-password"
+                                required
+                                disabled={loading}
+                                aria-invalid={fieldState.invalid}
+                            />
+                            {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                            )}
+                        </Field>
+                    )}
+                />
+
+                <Field orientation="horizontal">
                     {children}
 
                     <LoadingButton type="submit" loading={loading}>
                         Submit
                     </LoadingButton>
-                </div>
-            </form>
-        </Form>
+                </Field>
+            </FieldGroup>
+        </form>
     );
 }

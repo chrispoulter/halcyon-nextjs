@@ -1,12 +1,12 @@
 import {
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
+    Field,
+    FieldDescription,
+    FieldError,
+    FieldError,
+    FieldLabel,
+} from '@/components/ui/field';
 import { Switch } from '@/components/ui/switch';
+import { Controller } from 'react-hook-form';
 
 type SwitchFormFieldProps = {
     name: string;
@@ -20,11 +20,11 @@ export function SwitchFormField({
     disabled,
 }: SwitchFormFieldProps) {
     return (
-        <FormField
+        <Controller
             name={name}
-            render={({ field: { value = [], onChange } }) => {
+            render={({ field: { value = [], onChange }, fieldState }) => {
                 return (
-                    <FormItem>
+                    <Field data-invalid={fieldState.invalid}>
                         {Object.entries(options).map(
                             ([key, { title, description }]) => {
                                 const checked = value.includes(key);
@@ -47,29 +47,30 @@ export function SwitchFormField({
                                         className="flex flex-row items-center justify-between rounded-lg border p-4"
                                     >
                                         <div className="space-y-0.5">
-                                            <FormLabel
+                                            <FieldLabel
                                                 htmlFor={`${name}-${key}`}
                                                 className="text-base"
                                             >
                                                 {title}
-                                            </FormLabel>
-                                            <FormDescription>
+                                            </FieldLabel>
+                                            <FieldDescription>
                                                 {description}
-                                            </FormDescription>
+                                            </FieldDescription>
                                         </div>
-                                        <FormControl id={`${name}-${key}`}>
-                                            <Switch
-                                                checked={checked}
-                                                onCheckedChange={onCheckChanged}
-                                                disabled={disabled}
-                                            />
-                                        </FormControl>
+                                        <Switch
+                                            id={`${name}-${key}`}
+                                            checked={checked}
+                                            onCheckedChange={onCheckChanged}
+                                            disabled={disabled}
+                                        />
                                     </div>
                                 );
                             }
                         )}
-                        <FormMessage />
-                    </FormItem>
+                        {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                        )}
+                    </Field>
                 );
             }}
         />
