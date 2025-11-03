@@ -44,7 +44,7 @@ export function SearchUsersForm({
                 control={form.control}
                 name="search"
                 render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="w-full">
+                    <Field data-invalid={fieldState.invalid}>
                         <Input
                             {...field}
                             type="search"
@@ -57,6 +57,7 @@ export function SearchUsersForm({
                     </Field>
                 )}
             />
+
             <Button
                 type="submit"
                 variant="secondary"
