@@ -1,7 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
+import { CalendarIcon } from 'lucide-react';
 import { z } from 'zod';
-import type { GetUserResponse } from '@/app/user/data/get-user';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
     Field,
     FieldContent,
@@ -10,10 +12,16 @@ import {
     FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
 import { LoadingButton } from '@/components/loading-button';
-import { isInPast } from '@/lib/dates';
+import { isInPast, toDateOnly, toDisplay } from '@/lib/dates';
 import { Role, roleOptions, roles } from '@/lib/definitions';
+import { cn } from '@/lib/utils';
 
 const schema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),
@@ -144,13 +152,50 @@ export function UpdateUserForm({
                         <FieldLabel htmlFor={field.name}>
                             Date Of Birth
                         </FieldLabel>
-                        <Input
-                            {...field}
-                            type="date"
-                            required
-                            disabled={loading}
-                            aria-invalid={fieldState.invalid}
-                        />
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant={'outline'}
+                                    disabled={field.disabled}
+                                    className={cn(
+                                        'w-full pl-3 text-left font-normal',
+                                        !field.value && 'text-muted-foreground'
+                                    )}
+                                >
+                                    {field.value ? (
+                                        toDisplay(field.value)
+                                    ) : (
+                                        <span>Select...</span>
+                                    )}
+                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent
+                                className="w-auto p-0"
+                                align="start"
+                            >
+                                <Calendar
+                                    timeZone="UTC"
+                                    mode="single"
+                                    selected={
+                                        field.value
+                                            ? new Date(field.value)
+                                            : undefined
+                                    }
+                                    defaultMonth={
+                                        field.value
+                                            ? new Date(field.value)
+                                            : undefined
+                                    }
+                                    required
+                                    onSelect={(date) =>
+                                        field.onChange(toDateOnly(date))
+                                    }
+                                    disabled={(date) => !isInPast(date)}
+                                    captionLayout="dropdown"
+                                />
+                            </PopoverContent>
+                        </Popover>
                         {fieldState.invalid && (
                             <FieldError errors={[fieldState.error]} />
                         )}
