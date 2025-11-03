@@ -1,12 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import {
-    Field,
-    FieldError,
-    FieldGroup,
-    FieldLabel,
-} from '@/components/ui/field';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { LoadingButton } from '@/components/loading-button';
 import { Input } from '@/components/ui/input';
 
@@ -51,32 +46,36 @@ export function ChangePasswordForm({
     });
 
     return (
-        <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup>
-                <Controller
-                    name="currentPassword"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                Current Password
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                type="password"
-                                maxLength={50}
-                                autoComplete="current-password"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
-                />
+        <form
+            noValidate
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6"
+        >
+            <Controller
+                name="currentPassword"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                            Current Password
+                        </FieldLabel>
+                        <Input
+                            {...field}
+                            type="password"
+                            maxLength={50}
+                            autoComplete="current-password"
+                            required
+                            disabled={loading}
+                            aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                        )}
+                    </Field>
+                )}
+            />
 
+            <div className="flex flex-col gap-6 sm:flex-row">
                 <Controller
                     name="newPassword"
                     control={form.control}
@@ -124,15 +123,15 @@ export function ChangePasswordForm({
                         </Field>
                     )}
                 />
+            </div>
 
-                <Field orientation="horizontal">
-                    {children}
+            <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                {children}
 
-                    <LoadingButton type="submit" loading={loading}>
-                        Submit
-                    </LoadingButton>
-                </Field>
-            </FieldGroup>
+                <LoadingButton type="submit" loading={loading}>
+                    Submit
+                </LoadingButton>
+            </div>
         </form>
     );
 }

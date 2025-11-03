@@ -1,12 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import {
-    Field,
-    FieldError,
-    FieldGroup,
-    FieldLabel,
-} from '@/components/ui/field';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { LoadingButton } from '@/components/loading-button';
 import { isInPast } from '@/lib/dates';
@@ -47,32 +42,36 @@ export function UpdateProfileForm({
     });
 
     return (
-        <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup>
-                <Controller
-                    name="emailAddress"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                Email Address
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                type="email"
-                                maxLength={254}
-                                autoComplete="username"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
-                />
+        <form
+            noValidate
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6"
+        >
+            <Controller
+                name="emailAddress"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                            Email Address
+                        </FieldLabel>
+                        <Input
+                            {...field}
+                            type="email"
+                            maxLength={254}
+                            autoComplete="username"
+                            required
+                            disabled={loading}
+                            aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                        )}
+                    </Field>
+                )}
+            />
 
+            <div className="flex flex-col gap-6 sm:flex-row">
                 <Controller
                     name="firstName"
                     control={form.control}
@@ -118,37 +117,37 @@ export function UpdateProfileForm({
                         </Field>
                     )}
                 />
+            </div>
 
-                <Controller
-                    name="dateOfBirth"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                Date Of Birth
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                type="date"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
-                />
+            <Controller
+                name="dateOfBirth"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                            Date Of Birth
+                        </FieldLabel>
+                        <Input
+                            {...field}
+                            type="date"
+                            required
+                            disabled={loading}
+                            aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                        )}
+                    </Field>
+                )}
+            />
 
-                <Field orientation="horizontal">
-                    {children}
+            <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                {children}
 
-                    <LoadingButton type="submit" loading={loading}>
-                        Submit
-                    </LoadingButton>
-                </Field>
-            </FieldGroup>
+                <LoadingButton type="submit" loading={loading}>
+                    Submit
+                </LoadingButton>
+            </div>
         </form>
     );
 }

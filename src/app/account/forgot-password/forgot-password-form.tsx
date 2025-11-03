@@ -1,12 +1,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
-    Field,
-    FieldError,
-    FieldGroup,
-    FieldLabel,
-} from '@/components/ui/field';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { LoadingButton } from '@/components/loading-button';
 
@@ -33,38 +28,40 @@ export function ForgotPasswordForm({
     });
 
     return (
-        <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup>
-                <Controller
-                    name="emailAddress"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                Email Address
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                type="email"
-                                maxLength={254}
-                                autoComplete="username"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
-                />
+        <form
+            noValidate
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6"
+        >
+            <Controller
+                name="emailAddress"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                            Email Address
+                        </FieldLabel>
+                        <Input
+                            {...field}
+                            type="email"
+                            maxLength={254}
+                            autoComplete="username"
+                            required
+                            disabled={loading}
+                            aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                        )}
+                    </Field>
+                )}
+            />
 
-                <Field orientation="horizontal">
-                    <LoadingButton type="submit" loading={loading}>
-                        Submit
-                    </LoadingButton>
-                </Field>
-            </FieldGroup>
+            <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                <LoadingButton type="submit" loading={loading}>
+                    Submit
+                </LoadingButton>
+            </div>
         </form>
     );
 }

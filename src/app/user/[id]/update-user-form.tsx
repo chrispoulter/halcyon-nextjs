@@ -7,7 +7,6 @@ import {
     FieldContent,
     FieldDescription,
     FieldError,
-    FieldGroup,
     FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -60,32 +59,36 @@ export function UpdateUserForm({
     });
 
     return (
-        <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup>
-                <Controller
-                    name="emailAddress"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                Email Address
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                type="email"
-                                maxLength={254}
-                                autoComplete="username"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
-                />
+        <form
+            noValidate
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6"
+        >
+            <Controller
+                name="emailAddress"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                            Email Address
+                        </FieldLabel>
+                        <Input
+                            {...field}
+                            type="email"
+                            maxLength={254}
+                            autoComplete="username"
+                            required
+                            disabled={loading}
+                            aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                        )}
+                    </Field>
+                )}
+            />
 
+            <div className="flex flex-col gap-6 sm:flex-row">
                 <Controller
                     name="firstName"
                     control={form.control}
@@ -131,91 +134,91 @@ export function UpdateUserForm({
                         </Field>
                     )}
                 />
+            </div>
 
-                <Controller
-                    name="dateOfBirth"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                Date Of Birth
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                type="date"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
-                />
+            <Controller
+                name="dateOfBirth"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>
+                            Date Of Birth
+                        </FieldLabel>
+                        <Input
+                            {...field}
+                            type="date"
+                            required
+                            disabled={loading}
+                            aria-invalid={fieldState.invalid}
+                        />
+                        {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                        )}
+                    </Field>
+                )}
+            />
 
-                <Controller
-                    name="roles"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <>
-                            {Object.entries(roleOptions).map(
-                                ([key, { title, description }]) => (
-                                    <Field
-                                        key={key}
-                                        orientation="horizontal"
-                                        data-invalid={fieldState.invalid}
-                                        className="rounded-lg border p-4"
-                                    >
-                                        <FieldContent>
-                                            <FieldLabel
-                                                htmlFor={`${field.name}-${key}`}
-                                            >
-                                                {title}
-                                            </FieldLabel>
-                                            <FieldDescription>
-                                                {description}
-                                            </FieldDescription>
-                                        </FieldContent>
-                                        <Switch
-                                            id={`${field.name}-${key}`}
-                                            name={field.name}
-                                            checked={field.value?.includes(
-                                                key as Role
-                                            )}
-                                            value={key}
-                                            onCheckedChange={(checked) => {
-                                                if (checked) {
-                                                    return field.onChange([
-                                                        ...(field.value || []),
-                                                        key,
-                                                    ]);
-                                                }
+            <Controller
+                name="roles"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <>
+                        {Object.entries(roleOptions).map(
+                            ([key, { title, description }]) => (
+                                <Field
+                                    key={key}
+                                    orientation="horizontal"
+                                    data-invalid={fieldState.invalid}
+                                    className="rounded-lg border p-4"
+                                >
+                                    <FieldContent>
+                                        <FieldLabel
+                                            htmlFor={`${field.name}-${key}`}
+                                        >
+                                            {title}
+                                        </FieldLabel>
+                                        <FieldDescription>
+                                            {description}
+                                        </FieldDescription>
+                                    </FieldContent>
+                                    <Switch
+                                        id={`${field.name}-${key}`}
+                                        name={field.name}
+                                        checked={field.value?.includes(
+                                            key as Role
+                                        )}
+                                        value={key}
+                                        onCheckedChange={(checked) => {
+                                            if (checked) {
+                                                return field.onChange([
+                                                    ...(field.value || []),
+                                                    key,
+                                                ]);
+                                            }
 
-                                                return field.onChange(
-                                                    field.value?.filter(
-                                                        (item) => item !== key
-                                                    )
-                                                );
-                                            }}
-                                            disabled={loading}
-                                            aria-invalid={fieldState.invalid}
-                                        />
-                                    </Field>
-                                )
-                            )}
-                        </>
-                    )}
-                />
+                                            return field.onChange(
+                                                field.value?.filter(
+                                                    (item) => item !== key
+                                                )
+                                            );
+                                        }}
+                                        disabled={loading}
+                                        aria-invalid={fieldState.invalid}
+                                    />
+                                </Field>
+                            )
+                        )}
+                    </>
+                )}
+            />
 
-                <Field orientation="horizontal">
-                    {children}
+            <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                {children}
 
-                    <LoadingButton type="submit" loading={loading}>
-                        Submit
-                    </LoadingButton>
-                </Field>
-            </FieldGroup>
+                <LoadingButton type="submit" loading={loading}>
+                    Submit
+                </LoadingButton>
+            </div>
         </form>
     );
 }
