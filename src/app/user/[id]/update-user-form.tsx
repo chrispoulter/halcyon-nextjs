@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { CalendarIcon } from 'lucide-react';
 import { z } from 'zod';
+import { GetUserResponse } from '@/app/user/data/get-user';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -61,6 +63,8 @@ export function UpdateUserForm({
     onSubmit,
     children,
 }: UpdateUserFormProps) {
+    const [open, setOpen] = useState(false);
+
     const form = useForm<UpdateUserFormValues>({
         resolver: zodResolver(schema),
         values: user,
@@ -152,10 +156,10 @@ export function UpdateUserForm({
                         <FieldLabel htmlFor={field.name}>
                             Date Of Birth
                         </FieldLabel>
-                        <Popover>
+                        <Popover open={open} onOpenChange={setOpen}>
                             <PopoverTrigger asChild>
                                 <Button
-                                    variant={'outline'}
+                                    variant="outline"
                                     disabled={field.disabled}
                                     className={cn(
                                         'w-full pl-3 text-left font-normal',
@@ -177,20 +181,15 @@ export function UpdateUserForm({
                                 <Calendar
                                     timeZone="UTC"
                                     mode="single"
-                                    selected={
-                                        field.value
-                                            ? new Date(field.value)
-                                            : undefined
-                                    }
+                                    selected={field.value as unknown as Date}
                                     defaultMonth={
-                                        field.value
-                                            ? new Date(field.value)
-                                            : undefined
+                                        field.value as unknown as Date
                                     }
                                     required
-                                    onSelect={(date) =>
-                                        field.onChange(toDateOnly(date))
-                                    }
+                                    onSelect={(date) => {
+                                        field.onChange(toDateOnly(date));
+                                        setOpen(false);
+                                    }}
                                     disabled={(date) => !isInPast(date)}
                                     captionLayout="dropdown"
                                 />
