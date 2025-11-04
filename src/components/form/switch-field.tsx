@@ -43,7 +43,7 @@ export function SwitchFormField({
                                 return (
                                     <div
                                         key={key}
-                                        className="flex flex-row items-center justify-between rounded-lg border p-4"
+                                        className="flex flex-row items-center justify-between rounded-md border p-4"
                                     >
                                         <div className="space-y-0.5">
                                             <FieldLabel

@@ -116,7 +116,7 @@ export function UpdateUserForm({
                                     key={key}
                                     orientation="horizontal"
                                     data-invalid={fieldState.invalid}
-                                    className="rounded-lg border p-4"
+                                    className="rounded-md border p-4"
                                 >
                                     <FieldContent>
                                         <FieldLabel
