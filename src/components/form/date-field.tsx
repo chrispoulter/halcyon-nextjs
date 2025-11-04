@@ -16,7 +16,6 @@ interface DateFieldProps<T extends FieldValues> {
     control: Control<T>;
     name: FieldPath<T>;
     label: string;
-    required?: boolean;
     disabled?: boolean;
 }
 
@@ -24,7 +23,6 @@ export function DateField<T extends FieldValues>({
     control,
     name,
     label,
-    required,
     disabled,
 }: DateFieldProps<T>) {
     const [open, setOpen] = useState(false);
@@ -76,7 +74,6 @@ export function DateField<T extends FieldValues>({
                                     captionLayout="dropdown"
                                     selected={field.value}
                                     defaultMonth={field.value}
-                                    required={required}
                                     onSelect={onSelect}
                                     disabled={isDisabled}
                                 />

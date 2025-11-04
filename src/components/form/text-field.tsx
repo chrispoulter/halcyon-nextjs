@@ -22,7 +22,11 @@ export function TextField<T extends FieldValues>({
             render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor={name}>{label}</FieldLabel>
-                    <Input {...props} {...field} />
+                    <Input
+                        aria-invalid={fieldState.invalid}
+                        {...props}
+                        {...field}
+                    />
                     {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
                     )}
