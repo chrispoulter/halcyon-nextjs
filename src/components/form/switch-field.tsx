@@ -3,6 +3,7 @@ import {
     Field,
     FieldContent,
     FieldDescription,
+    FieldError,
     FieldLabel,
 } from '@/components/ui/field';
 import { Switch } from '@/components/ui/switch';
@@ -61,6 +62,11 @@ export function SwitchField<T extends FieldValues>({
                                         <FieldDescription>
                                             {description}
                                         </FieldDescription>
+                                        {fieldState.invalid && (
+                                            <FieldError
+                                                errors={[fieldState.error]}
+                                            />
+                                        )}
                                     </FieldContent>
                                     <Switch
                                         id={`${field.name}-${key}`}
