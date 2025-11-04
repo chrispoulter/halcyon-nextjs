@@ -206,6 +206,7 @@ export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
                                 <Button
                                     variant="outline"
                                     disabled={field.disabled}
+                                    aria-invalid={fieldState.invalid}
                                     className={cn(
                                         'w-full pl-3 text-left font-normal',
                                         !field.value && 'text-muted-foreground'
