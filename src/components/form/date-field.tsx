@@ -1,36 +1,43 @@
-import { Controller } from 'react-hook-form';
-import { CalendarIcon } from 'lucide-react';
-import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import { useState } from 'react';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
+import { ChevronDownIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import {
     Popover,
-    PopoverContent,
     PopoverTrigger,
+    PopoverContent,
 } from '@/components/ui/popover';
 import { isInPast, toDateOnly, toDisplay } from '@/lib/dates';
 import { cn } from '@/lib/utils';
 
-type DateFormFieldProps = {
-    name: string;
+interface DateFieldProps<T extends FieldValues> {
+    control: Control<T>;
+    name: FieldPath<T>;
     label: string;
     required?: boolean;
     disabled?: boolean;
-};
+}
 
-export function DateFormField({
+export function DateField<T extends FieldValues>({
+    control,
     name,
     label,
     required,
     disabled,
-}: DateFormFieldProps) {
+}: DateFieldProps<T>) {
+    const [open, setOpen] = useState(false);
+
     return (
         <Controller
             name={name}
+            control={control}
             render={({ field, fieldState }) => {
                 function onSelect(date?: Date) {
                     const value = toDateOnly(date);
                     field.onChange(value);
+                    setOpen(false);
                 }
 
                 function isDisabled(date: Date) {
@@ -38,18 +45,16 @@ export function DateFormField({
                 }
 
                 return (
-                    <Field
-                        data-invalid={fieldState.invalid}
-                        className="flex flex-col"
-                    >
-                        <FieldLabel>{label}</FieldLabel>
-                        <Popover>
+                    <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={name}>{label}</FieldLabel>
+                        <Popover open={open} onOpenChange={setOpen}>
                             <PopoverTrigger asChild>
                                 <Button
-                                    variant={'outline'}
+                                    variant="outline"
                                     disabled={disabled}
+                                    aria-invalid={fieldState.invalid}
                                     className={cn(
-                                        'w-full pl-3 text-left font-normal',
+                                        'w-48 justify-between font-normal',
                                         !field.value && 'text-muted-foreground'
                                     )}
                                 >
@@ -58,22 +63,22 @@ export function DateFormField({
                                     ) : (
                                         <span>Select...</span>
                                     )}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                    <ChevronDownIcon />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent
-                                className="w-auto p-0"
+                                className="w-auto overflow-hidden p-0"
                                 align="start"
                             >
                                 <Calendar
                                     timeZone="UTC"
                                     mode="single"
+                                    captionLayout="dropdown"
                                     selected={field.value}
                                     defaultMonth={field.value}
                                     required={required}
                                     onSelect={onSelect}
                                     disabled={isDisabled}
-                                    captionLayout="dropdown"
                                 />
                             </PopoverContent>
                         </Popover>

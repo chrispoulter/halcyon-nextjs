@@ -1,20 +1,10 @@
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
-import { ChevronDownIcon } from 'lucide-react';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { Field, FieldError, FieldLabel } from '@/components/ui/field';
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover';
 import { TextField } from '@/components/form/text-field';
+import { DateField } from '@/components/form/date-field';
 import { LoadingButton } from '@/components/loading-button';
-import { isInPast, toDateOnly, toDisplay } from '@/lib/dates';
-import { cn } from '@/lib/utils';
+import { isInPast } from '@/lib/dates';
 
 const schema = z
     .object({
@@ -51,8 +41,6 @@ type RegisterFormProps = {
 };
 
 export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
-    const [open, setOpen] = useState(false);
-
     const form = useForm<RegisterFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -128,58 +116,12 @@ export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
                 />
             </div>
 
-            <Controller
-                name="dateOfBirth"
+            <DateField
                 control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                            Date Of Birth
-                        </FieldLabel>
-                        <Popover open={open} onOpenChange={setOpen}>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    disabled={field.disabled}
-                                    aria-invalid={fieldState.invalid}
-                                    className={cn(
-                                        'w-48 justify-between font-normal',
-                                        !field.value && 'text-muted-foreground'
-                                    )}
-                                >
-                                    {field.value ? (
-                                        toDisplay(field.value)
-                                    ) : (
-                                        <span>Select...</span>
-                                    )}
-                                    <ChevronDownIcon />
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent
-                                className="w-auto overflow-hidden p-0"
-                                align="start"
-                            >
-                                <Calendar
-                                    timeZone="UTC"
-                                    mode="single"
-                                    captionLayout="dropdown"
-                                    selected={field.value as unknown as Date}
-                                    defaultMonth={
-                                        field.value as unknown as Date
-                                    }
-                                    onSelect={(date) => {
-                                        field.onChange(toDateOnly(date));
-                                        setOpen(false);
-                                    }}
-                                    disabled={(date) => !isInPast(date)}
-                                />
-                            </PopoverContent>
-                        </Popover>
-                        {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                )}
+                name="dateOfBirth"
+                label="Date Of Birth"
+                required
+                disabled={loading}
             />
 
             <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
