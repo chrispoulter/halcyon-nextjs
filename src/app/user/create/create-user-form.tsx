@@ -138,6 +138,7 @@ export function CreateUserForm({
                 control={form.control}
                 name="dateOfBirth"
                 label="Date Of Birth"
+                required
                 disabled={loading}
             />
 

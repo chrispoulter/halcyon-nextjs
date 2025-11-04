@@ -84,6 +84,7 @@ export function UpdateProfileForm({
                 control={form.control}
                 name="dateOfBirth"
                 label="Date Of Birth"
+                required
                 disabled={loading}
             />
 

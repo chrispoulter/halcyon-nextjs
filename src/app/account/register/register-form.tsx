@@ -120,6 +120,7 @@ export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
                 control={form.control}
                 name="dateOfBirth"
                 label="Date Of Birth"
+                required
                 disabled={loading}
             />
 
