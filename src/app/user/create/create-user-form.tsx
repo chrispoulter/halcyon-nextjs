@@ -1,18 +1,12 @@
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
-    Field,
-    FieldContent,
-    FieldDescription,
-    FieldLabel,
-} from '@/components/ui/field';
-import { Switch } from '@/components/ui/switch';
 import { TextField } from '@/components/form/text-field';
 import { DateField } from '@/components/form/date-field';
+import { SwitchField } from '@/components/form/switch-field';
 import { LoadingButton } from '@/components/loading-button';
 import { isInPast } from '@/lib/dates';
-import { Role, roleOptions, roles } from '@/lib/definitions';
+import { roleOptions, roles } from '@/lib/definitions';
 
 const schema = z
     .object({
@@ -148,58 +142,11 @@ export function CreateUserForm({
                 disabled={loading}
             />
 
-            <Controller
-                name="roles"
+            <SwitchField
                 control={form.control}
-                render={({ field, fieldState }) => (
-                    <div className="space-y-2">
-                        {Object.entries(roleOptions).map(
-                            ([key, { title, description }]) => (
-                                <Field
-                                    key={key}
-                                    orientation="horizontal"
-                                    data-invalid={fieldState.invalid}
-                                    className="rounded-md border p-4"
-                                >
-                                    <FieldContent>
-                                        <FieldLabel
-                                            htmlFor={`${field.name}-${key}`}
-                                        >
-                                            {title}
-                                        </FieldLabel>
-                                        <FieldDescription>
-                                            {description}
-                                        </FieldDescription>
-                                    </FieldContent>
-                                    <Switch
-                                        id={`${field.name}-${key}`}
-                                        name={field.name}
-                                        checked={field.value?.includes(
-                                            key as Role
-                                        )}
-                                        value={key}
-                                        onCheckedChange={(checked) => {
-                                            if (checked) {
-                                                return field.onChange([
-                                                    ...(field.value || []),
-                                                    key,
-                                                ]);
-                                            }
-
-                                            return field.onChange(
-                                                field.value?.filter(
-                                                    (item) => item !== key
-                                                )
-                                            );
-                                        }}
-                                        disabled={loading}
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                </Field>
-                            )
-                        )}
-                    </div>
-                )}
+                name="roles"
+                options={roleOptions}
+                disabled={loading}
             />
 
             <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">

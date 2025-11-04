@@ -1,77 +1,82 @@
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 import {
     Field,
+    FieldContent,
     FieldDescription,
-    FieldError,
     FieldLabel,
 } from '@/components/ui/field';
 import { Switch } from '@/components/ui/switch';
-import { Controller } from 'react-hook-form';
 
-type SwitchFormFieldProps = {
-    name: string;
+interface SwitchFieldProps<T extends FieldValues> {
+    control: Control<T>;
+    name: FieldPath<T>;
     disabled?: boolean;
     options: Record<string, { title: string; description: string }>;
-};
+}
 
-export function SwitchFormField({
+export function SwitchField<T extends FieldValues>({
+    control,
     name,
-    options,
     disabled,
-}: SwitchFormFieldProps) {
+    options,
+}: SwitchFieldProps<T>) {
     return (
         <Controller
             name={name}
-            render={({ field: { value = [], onChange }, fieldState }) => {
-                return (
-                    <Field data-invalid={fieldState.invalid}>
-                        {Object.entries(options).map(
-                            ([key, { title, description }]) => {
-                                const checked = value.includes(key);
+            control={control}
+            render={({ field, fieldState }) => (
+                <div className="space-y-2">
+                    {Object.entries(options).map(
+                        ([key, { title, description }]) => {
+                            const checked = field.value.includes(key);
 
-                                function onCheckChanged(checked: boolean) {
-                                    if (checked) {
-                                        return onChange([...value, key]);
-                                    }
-
-                                    return onChange(
-                                        value.filter(
-                                            (item: string) => item !== key
-                                        )
-                                    );
+                            function onCheckChanged(checked: boolean) {
+                                if (checked) {
+                                    return field.onChange([
+                                        ...field.value,
+                                        key,
+                                    ]);
                                 }
 
-                                return (
-                                    <div
-                                        key={key}
-                                        className="flex flex-row items-center justify-between rounded-md border p-4"
-                                    >
-                                        <div className="space-y-0.5">
-                                            <FieldLabel
-                                                htmlFor={`${name}-${key}`}
-                                                className="text-base"
-                                            >
-                                                {title}
-                                            </FieldLabel>
-                                            <FieldDescription>
-                                                {description}
-                                            </FieldDescription>
-                                        </div>
-                                        <Switch
-                                            id={`${name}-${key}`}
-                                            checked={checked}
-                                            onCheckedChange={onCheckChanged}
-                                            disabled={disabled}
-                                        />
-                                    </div>
+                                return field.onChange(
+                                    field.value.filter(
+                                        (item: string) => item !== key
+                                    )
                                 );
                             }
-                        )}
-                        {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                );
-            }}
+
+                            return (
+                                <Field
+                                    key={key}
+                                    orientation="horizontal"
+                                    data-invalid={fieldState.invalid}
+                                    className="rounded-md border p-4"
+                                >
+                                    <FieldContent>
+                                        <FieldLabel
+                                            htmlFor={`${field.name}-${key}`}
+                                        >
+                                            {title}
+                                        </FieldLabel>
+                                        <FieldDescription>
+                                            {description}
+                                        </FieldDescription>
+                                    </FieldContent>
+                                    <Switch
+                                        id={`${field.name}-${key}`}
+                                        name={field.name}
+                                        checked={checked}
+                                        value={key}
+                                        onCheckedChange={onCheckChanged}
+                                        disabled={disabled}
+                                        aria-invalid={fieldState.invalid}
+                                    />
+                                </Field>
+                            );
+                        }
+                    )}
+                </div>
+            )}
         />
     );
 }
