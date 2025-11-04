@@ -1,10 +1,9 @@
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Field, FieldError } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { TextField } from '@/components/form/text-field';
 
 const schema = z.object({
     search: z
@@ -40,22 +39,12 @@ export function SearchUsersForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex w-full gap-2"
         >
-            <Controller
+            <TextField
                 control={form.control}
                 name="search"
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <Input
-                            {...field}
-                            type="search"
-                            placeholder="Search Users..."
-                            disabled={disabled}
-                        />
-                        {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                )}
+                type="search"
+                placeholder="Search Users..."
+                disabled={disabled}
             />
 
             <Button

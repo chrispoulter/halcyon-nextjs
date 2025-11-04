@@ -6,7 +6,7 @@ interface TextFieldProps<T extends FieldValues>
     extends React.ComponentProps<'input'> {
     control: Control<T>;
     name: FieldPath<T>;
-    label: string;
+    label?: string;
 }
 
 export function TextField<T extends FieldValues>({
@@ -21,7 +21,7 @@ export function TextField<T extends FieldValues>({
             control={control}
             render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={name}>{label}</FieldLabel>
+                    {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
                     <Input
                         aria-invalid={fieldState.invalid}
                         {...props}
