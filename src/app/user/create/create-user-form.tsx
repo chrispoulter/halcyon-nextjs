@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { CalendarIcon } from 'lucide-react';
+import { ChevronDownIcon } from 'lucide-react';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -232,7 +232,7 @@ export function CreateUserForm({
                                     disabled={field.disabled}
                                     aria-invalid={fieldState.invalid}
                                     className={cn(
-                                        'w-full pl-3 text-left font-normal',
+                                        'w-48 justify-between font-normal',
                                         !field.value && 'text-muted-foreground'
                                     )}
                                 >
@@ -241,27 +241,26 @@ export function CreateUserForm({
                                     ) : (
                                         <span>Select...</span>
                                     )}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                    <ChevronDownIcon />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent
-                                className="w-auto p-0"
+                                className="w-auto overflow-hidden p-0"
                                 align="start"
                             >
                                 <Calendar
                                     timeZone="UTC"
                                     mode="single"
+                                    captionLayout="dropdown"
                                     selected={field.value as unknown as Date}
                                     defaultMonth={
                                         field.value as unknown as Date
                                     }
-                                    required
                                     onSelect={(date) => {
                                         field.onChange(toDateOnly(date));
                                         setOpen(false);
                                     }}
                                     disabled={(date) => !isInPast(date)}
-                                    captionLayout="dropdown"
                                 />
                             </PopoverContent>
                         </Popover>
