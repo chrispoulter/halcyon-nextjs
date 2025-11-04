@@ -206,7 +206,7 @@ export function UpdateUserForm({
                 name="roles"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                    <>
+                    <div className="space-y-2">
                         {Object.entries(roleOptions).map(
                             ([key, { title, description }]) => (
                                 <Field
@@ -252,7 +252,7 @@ export function UpdateUserForm({
                                 </Field>
                             )
                         )}
-                    </>
+                    </div>
                 )}
             />
 
