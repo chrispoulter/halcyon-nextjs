@@ -1,8 +1,7 @@
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Field, FieldError, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
 
 const schema = z
@@ -47,77 +46,38 @@ export function ResetPasswordForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6"
         >
-            <Controller
-                name="emailAddress"
+            <TextField
                 control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                            Email Address
-                        </FieldLabel>
-                        <Input
-                            {...field}
-                            type="email"
-                            maxLength={254}
-                            autoComplete="username"
-                            required
-                            disabled={loading}
-                            aria-invalid={fieldState.invalid}
-                        />
-                        {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                )}
+                name="emailAddress"
+                label="Email Address"
+                type="email"
+                maxLength={254}
+                autoComplete="username"
+                required
+                disabled={loading}
             />
 
             <div className="flex flex-col gap-6 sm:flex-row">
-                <Controller
-                    name="newPassword"
+                <TextField
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                New Password
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                type="password"
-                                maxLength={50}
-                                autoComplete="new-password"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
+                    name="newPassword"
+                    label="New Password"
+                    type="password"
+                    maxLength={50}
+                    autoComplete="new-password"
+                    required
+                    disabled={loading}
                 />
 
-                <Controller
-                    name="confirmNewPassword"
+                <TextField
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                Confirm New Password
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                type="password"
-                                maxLength={50}
-                                autoComplete="new-password"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
+                    name="confirmNewPassword"
+                    label="Confirm New Password"
+                    type="password"
+                    maxLength={50}
+                    autoComplete="new-password"
+                    required
+                    disabled={loading}
                 />
             </div>
 

@@ -1,9 +1,8 @@
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
-import { Input } from '@/components/ui/input';
 
 const schema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),
@@ -33,50 +32,26 @@ export function LoginForm({ loading, onSubmit }: LoginFormProps) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6"
         >
-            <Controller
-                name="emailAddress"
+            <TextField
                 control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                            Email Address
-                        </FieldLabel>
-                        <Input
-                            {...field}
-                            type="email"
-                            maxLength={254}
-                            autoComplete="username"
-                            required
-                            disabled={loading}
-                            aria-invalid={fieldState.invalid}
-                        />
-                        {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                )}
+                name="emailAddress"
+                label="Email Address"
+                type="email"
+                maxLength={254}
+                autoComplete="username"
+                required
+                disabled={loading}
             />
 
-            <Controller
-                name="password"
+            <TextField
                 control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                        <Input
-                            {...field}
-                            type="password"
-                            maxLength={50}
-                            autoComplete="new-password"
-                            required
-                            disabled={loading}
-                            aria-invalid={fieldState.invalid}
-                        />
-                        {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                )}
+                name="password"
+                label="Password"
+                type="password"
+                maxLength={50}
+                autoComplete="current-password"
+                required
+                disabled={loading}
             />
 
             <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">

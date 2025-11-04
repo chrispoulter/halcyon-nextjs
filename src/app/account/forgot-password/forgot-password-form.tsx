@@ -1,8 +1,7 @@
-import { Controller, useForm } from 'react-hook-form';
+import {  useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Field, FieldError, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
 
 const schema = z.object({
@@ -33,28 +32,15 @@ export function ForgotPasswordForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6"
         >
-            <Controller
-                name="emailAddress"
+            <TextField
                 control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                            Email Address
-                        </FieldLabel>
-                        <Input
-                            {...field}
-                            type="email"
-                            maxLength={254}
-                            autoComplete="username"
-                            required
-                            disabled={loading}
-                            aria-invalid={fieldState.invalid}
-                        />
-                        {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                )}
+                name="emailAddress"
+                label="Email Address"
+                type="email"
+                maxLength={254}
+                autoComplete="username"
+                required
+                disabled={loading}
             />
 
             <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">

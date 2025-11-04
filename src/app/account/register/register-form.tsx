@@ -6,12 +6,12 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
+import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
 import { isInPast, toDateOnly, toDisplay } from '@/lib/dates';
 import { cn } from '@/lib/utils';
@@ -71,125 +71,60 @@ export function RegisterForm({ loading, onSubmit }: RegisterFormProps) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6"
         >
-            <Controller
-                name="emailAddress"
+            <TextField
                 control={form.control}
-                render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor={field.name}>
-                            Email Address
-                        </FieldLabel>
-                        <Input
-                            {...field}
-                            type="email"
-                            maxLength={254}
-                            autoComplete="username"
-                            required
-                            disabled={loading}
-                            aria-invalid={fieldState.invalid}
-                        />
-                        {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                        )}
-                    </Field>
-                )}
+                name="emailAddress"
+                label="Email Address"
+                type="email"
+                maxLength={254}
+                autoComplete="username"
+                required
+                disabled={loading}
             />
 
             <div className="flex flex-col gap-6 sm:flex-row">
-                <Controller
-                    name="password"
+                <TextField
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                Password
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                type="password"
-                                maxLength={50}
-                                autoComplete="new-password"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
+                    name="password"
+                    label="Password"
+                    type="password"
+                    maxLength={50}
+                    autoComplete="new-password"
+                    required
+                    disabled={loading}
                 />
 
-                <Controller
-                    name="confirmPassword"
+                <TextField
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                Confirm Password
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                type="password"
-                                maxLength={50}
-                                autoComplete="new-password"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                    maxLength={50}
+                    autoComplete="new-password"
+                    required
+                    disabled={loading}
                 />
             </div>
 
             <div className="flex flex-col gap-6 sm:flex-row">
-                <Controller
-                    name="firstName"
+                <TextField
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                First Name
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                maxLength={50}
-                                autoComplete="given-name"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
+                    name="firstName"
+                    label="First Name"
+                    maxLength={50}
+                    autoComplete="given-name"
+                    required
+                    disabled={loading}
                 />
 
-                <Controller
-                    name="lastName"
+                <TextField
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Field data-invalid={fieldState.invalid}>
-                            <FieldLabel htmlFor={field.name}>
-                                Last Name
-                            </FieldLabel>
-                            <Input
-                                {...field}
-                                maxLength={50}
-                                autoComplete="family-name"
-                                required
-                                disabled={loading}
-                                aria-invalid={fieldState.invalid}
-                            />
-                            {fieldState.invalid && (
-                                <FieldError errors={[fieldState.error]} />
-                            )}
-                        </Field>
-                    )}
+                    name="lastName"
+                    label="Last Name"
+                    maxLength={50}
+                    autoComplete="family-name"
+                    required
+                    disabled={loading}
                 />
             </div>
 
