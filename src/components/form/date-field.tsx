@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
+import {
+    Controller,
+    type Control,
+    type FieldPath,
+    type FieldValues,
+} from 'react-hook-form';
 import { ChevronDownIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
