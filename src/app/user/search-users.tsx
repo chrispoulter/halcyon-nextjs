@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { AlertCircleIcon } from 'lucide-react';
+import { User } from 'lucide-react';
 import type {
     SearchUsersResponse,
     UserSort,
@@ -13,8 +13,14 @@ import {
 } from '@/app/user/search-users-form';
 import { SortUsersDropdown } from '@/app/user/sort-users-dropdown';
 import { UserCard } from '@/app/user/user-card';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import {
+    Empty,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+    EmptyDescription,
+} from '@/components/ui/empty';
 import { Pager } from '@/components/pager';
 
 type SearchUsersProps = {
@@ -83,13 +89,17 @@ export function SearchUsers({ request, data }: SearchUsersProps) {
                     ))}
                 </div>
             ) : (
-                <Alert>
-                    <AlertCircleIcon />
-                    <AlertTitle>No Results</AlertTitle>
-                    <AlertDescription>
-                        No users could be found.
-                    </AlertDescription>
-                </Alert>
+                <Empty className="border border-dashed">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <User />
+                        </EmptyMedia>
+                        <EmptyTitle>No Results</EmptyTitle>
+                        <EmptyDescription>
+                            No users could be found.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
             )}
 
             <Pager
