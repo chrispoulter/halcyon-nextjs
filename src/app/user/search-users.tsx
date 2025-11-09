@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { User } from 'lucide-react';
 import type {
     SearchUsersResponse,
     UserSort,
@@ -12,16 +11,11 @@ import {
     type SearchUsersFormValues,
 } from '@/app/user/search-users-form';
 import { SortUsersDropdown } from '@/app/user/sort-users-dropdown';
-import { UserCard } from '@/app/user/user-card';
 import { Button } from '@/components/ui/button';
-import {
-    Empty,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-    EmptyDescription,
-} from '@/components/ui/empty';
+import { Checkbox } from '@/components/ui/checkbox';
+import { DataTable } from '@/components/table/data-table';
 import { Pager } from '@/components/pager';
+import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
 
 type SearchUsersProps = {
     request: {
@@ -82,25 +76,65 @@ export function SearchUsers({ request, data }: SearchUsersProps) {
                 <Link href="/user/create">Create New</Link>
             </Button>
 
-            {data.items.length ? (
-                <div className="space-y-2">
-                    {data.items.map((user) => (
-                        <UserCard key={user.id} user={user} />
-                    ))}
-                </div>
-            ) : (
-                <Empty className="border border-dashed">
-                    <EmptyHeader>
-                        <EmptyMedia variant="icon">
-                            <User />
-                        </EmptyMedia>
-                        <EmptyTitle>No Results</EmptyTitle>
-                        <EmptyDescription>
-                            No users could be found.
-                        </EmptyDescription>
-                    </EmptyHeader>
-                </Empty>
-            )}
+            <DataTable
+                columns={[
+                    {
+                        id: 'select',
+                        header: ({ table }) => (
+                            <Checkbox
+                                checked={
+                                    table.getIsAllPageRowsSelected() ||
+                                    (table.getIsSomePageRowsSelected() &&
+                                        'indeterminate')
+                                }
+                                onCheckedChange={(value) =>
+                                    table.toggleAllPageRowsSelected(!!value)
+                                }
+                                aria-label="Select all"
+                            />
+                        ),
+                        cell: ({ row }) => (
+                            <Checkbox
+                                checked={row.getIsSelected()}
+                                onCheckedChange={(value) =>
+                                    row.toggleSelected(!!value)
+                                }
+                                aria-label="Select row"
+                            />
+                        ),
+                        enableSorting: false,
+                        enableHiding: false,
+                    },
+                    {
+                        header: ({ column }) => (
+                            <DataTableColumnHeader
+                                column={column}
+                                title="Email"
+                            />
+                        ),
+                        accessorKey: 'emailAddress',
+                    },
+                    {
+                        header: ({ column }) => (
+                            <DataTableColumnHeader
+                                column={column}
+                                title="First Name"
+                            />
+                        ),
+                        accessorKey: 'firstName',
+                    },
+                    {
+                        header: ({ column }) => (
+                            <DataTableColumnHeader
+                                column={column}
+                                title="Last Name"
+                            />
+                        ),
+                        accessorKey: 'lastName',
+                    },
+                ]}
+                data={data.items}
+            />
 
             <Pager
                 hasPreviousPage={data.hasPreviousPage}
