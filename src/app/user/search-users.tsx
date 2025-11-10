@@ -14,7 +14,6 @@ import { SortUsersDropdown } from '@/app/user/sort-users-dropdown';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DataTable } from '@/components/table/data-table';
-import { Pager } from '@/components/pager';
 import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
 
 type SearchUsersProps = {
@@ -134,13 +133,6 @@ export function SearchUsers({ request, data }: SearchUsersProps) {
                     },
                 ]}
                 data={data.items}
-            />
-
-            <Pager
-                hasPreviousPage={data.hasPreviousPage}
-                hasNextPage={data.hasNextPage}
-                onPreviousPage={onPreviousPage}
-                onNextPage={onNextPage}
             />
         </main>
     );
