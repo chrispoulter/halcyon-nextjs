@@ -82,7 +82,7 @@ jobs:
                   creds: ${{ secrets.AZURE_CREDENTIALS }}
 
             - name: Trigger deployment
-              uses: azure/container-apps-deploy-action@v2
+              uses: azure/container-apps-deploy-action@v1
               with:
                   containerAppName: ${{ secrets.AZURE_CONTAINER_APP_NAME }}
                   resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
