@@ -68,7 +68,7 @@ jobs:
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}-${{ steps.version_step.outputs.shortSha }}
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.preReleaseLabel || 'latest' }}
 
-            # - name: Trigger deployment (Render)
+            # - name: Trigger deployment
             #   run: |
             #       curl -X POST \
             #         -H "Content-Type: application/json" \
@@ -81,10 +81,9 @@ jobs:
               with:
                   creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-            - name: Trigger deployment (Azure)
+            - name: Trigger deployment
               uses: azure/container-apps-deploy-action@v1
               with:
                   containerAppName: ${{ secrets.AZURE_CONTAINER_APP_NAME }}
                   resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
                   imageToDeploy: ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}-${{ steps.version_step.outputs.shortSha }}
-                  registryServer: ghcr.io
