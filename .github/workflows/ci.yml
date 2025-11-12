@@ -68,14 +68,6 @@ jobs:
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}-${{ steps.version_step.outputs.shortSha }}
                       ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.preReleaseLabel || 'latest' }}
 
-            # - name: Trigger deployment
-            #   run: |
-            #       curl -X POST \
-            #         -H "Content-Type: application/json" \
-            #         -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-            #         --data "{\"imageUrl\":\"ghcr.io/${{ env.REPO }}:${{ steps.version_step.outputs.semVer }}-${{ steps.version_step.outputs.shortSha }}\"}" \
-            #         https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
-
             - name: Log in to Azure
               uses: azure/login@v2
               with:
