@@ -5,12 +5,12 @@ import Link from 'next/link';
 import type {
     SearchUsersResponse,
     UserSort,
-} from '@/app/user/data/search-users';
+} from '@/app/users/data/search-users';
 import {
     SearchUsersForm,
     type SearchUsersFormValues,
-} from '@/app/user/search-users-form';
-import { SortUsersDropdown } from '@/app/user/sort-users-dropdown';
+} from '@/app/users/search-users-form';
+import { SortUsersDropdown } from '@/app/users/sort-users-dropdown';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DataTable } from '@/components/table/data-table';
@@ -72,7 +72,7 @@ export function SearchUsers({ request, data }: SearchUsersProps) {
             </div>
 
             <Button asChild className="w-full sm:w-auto">
-                <Link href="/user/create">Create New</Link>
+                <Link href="/users/create">Create New</Link>
             </Button>
 
             <DataTable

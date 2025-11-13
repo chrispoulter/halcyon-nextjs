@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { SearchUsersResponse } from '@/app/user/data/search-users';
+import type { SearchUsersResponse } from '@/app/users/data/search-users';
 import { Badge } from '@/components/ui/badge';
 import { roleOptions } from '@/lib/definitions';
 
@@ -10,7 +10,7 @@ type UserCardProps = {
 export function UserCard({ user }: UserCardProps) {
     return (
         <Link
-            href={`/user/${user.id}`}
+            href={`/users/${user.id}`}
             className="focus-within:bg-accent hover:bg-accent block space-y-2 rounded-lg border p-4"
         >
             <div className="space-y-0.5">

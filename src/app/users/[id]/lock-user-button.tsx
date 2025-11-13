@@ -1,8 +1,7 @@
-import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { deleteUserAction } from '@/app/user/actions/delete-user-action';
-import type { GetUserResponse } from '@/app/user/data/get-user';
+import { lockUserAction } from '@/app/users/actions/lock-user-action';
+import type { GetUserResponse } from '@/app/users/data/get-user';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -17,20 +16,17 @@ import {
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionError } from '@/components/server-action-error';
 
-type DeleteUserButtonProps = {
+type LockUserButtonProps = {
     user: GetUserResponse;
     className?: string;
 };
 
-export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
-    const router = useRouter();
-
-    const { execute: deleteUser, isPending: isDeleting } = useAction(
-        deleteUserAction,
+export function LockUserButton({ user, className }: LockUserButtonProps) {
+    const { execute: lockUser, isPending: isLocking } = useAction(
+        lockUserAction,
         {
             onSuccess() {
-                toast.success('User successfully deleted.');
-                router.push('/user');
+                toast.success('User successfully locked.');
             },
             onError({ error }) {
                 toast.error(<ServerActionError result={error} />);
@@ -38,8 +34,8 @@ export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
         }
     );
 
-    function onDelete() {
-        deleteUser({
+    function onLock() {
+        lockUser({
             id: user.id,
             version: user.version,
         });
@@ -49,25 +45,24 @@ export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
         <AlertDialog>
             <AlertDialogTrigger asChild>
                 <LoadingButton
-                    variant="destructive"
-                    loading={isDeleting}
+                    variant="secondary"
+                    loading={isLocking}
                     className={className}
                 >
-                    Delete
+                    Lock
                 </LoadingButton>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Delete User</AlertDialogTitle>
+                    <AlertDialogTitle>Lock User</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to delete this user account? All
-                        of the data will be permanently removed. This action
-                        cannot be undone.
+                        Are you sure you want to lock this user account? The
+                        user will no longer be able to access the system.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction disabled={isDeleting} onClick={onDelete}>
+                    <AlertDialogAction disabled={isLocking} onClick={onLock}>
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

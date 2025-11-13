@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { createUserAction } from '@/app/user/actions/create-user-action';
+import { createUserAction } from '@/app/users/actions/create-user-action';
 import {
     CreateUserForm,
     type CreateUserFormValues,
-} from '@/app/user/create/create-user-form';
+} from '@/app/users/create/create-user-form';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
@@ -20,7 +20,7 @@ export function CreateUser() {
         {
             onSuccess() {
                 toast.success('User successfully created.');
-                router.push('/user');
+                router.push('/users');
             },
             onError({ error }) {
                 toast.error(<ServerActionError result={error} />);
@@ -48,7 +48,7 @@ export function CreateUser() {
 
             <CreateUserForm loading={isSaving} onSubmit={onSubmit}>
                 <Button asChild variant="outline">
-                    <Link href="/user">Cancel</Link>
+                    <Link href="/users">Cancel</Link>
                 </Button>
             </CreateUserForm>
         </main>

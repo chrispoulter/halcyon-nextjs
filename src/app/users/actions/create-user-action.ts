@@ -63,7 +63,7 @@ export const createUserAction = authActionClient(isUserAdministrator)
             .values({ ...parsedInput, password })
             .returning({ id: users.id });
 
-        revalidatePath('/user');
+        revalidatePath('/users');
 
         return { id: user.id };
     });

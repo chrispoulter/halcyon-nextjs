@@ -78,8 +78,8 @@ export const updateUserAction = authActionClient(isUserAdministrator)
 
         await db.update(users).set(rest).where(eq(users.id, id));
 
-        revalidatePath('/user');
-        revalidatePath(`/user/${user.id}`);
+        revalidatePath('/users');
+        revalidatePath(`/users/${user.id}`);
         revalidatePath('/profile');
 
         return { id: user.id };

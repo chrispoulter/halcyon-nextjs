@@ -1,7 +1,7 @@
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { lockUserAction } from '@/app/user/actions/lock-user-action';
-import type { GetUserResponse } from '@/app/user/data/get-user';
+import { unlockUserAction } from '@/app/users/actions/unlock-user-action';
+import type { GetUserResponse } from '@/app/users/data/get-user';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -16,17 +16,17 @@ import {
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionError } from '@/components/server-action-error';
 
-type LockUserButtonProps = {
+type UnlockUserButtonProps = {
     user: GetUserResponse;
     className?: string;
 };
 
-export function LockUserButton({ user, className }: LockUserButtonProps) {
-    const { execute: lockUser, isPending: isLocking } = useAction(
-        lockUserAction,
+export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
+    const { execute: unlockUser, isPending: isUnlocking } = useAction(
+        unlockUserAction,
         {
             onSuccess() {
-                toast.success('User successfully locked.');
+                toast.success('User successfully unlocked.');
             },
             onError({ error }) {
                 toast.error(<ServerActionError result={error} />);
@@ -34,8 +34,8 @@ export function LockUserButton({ user, className }: LockUserButtonProps) {
         }
     );
 
-    function onLock() {
-        lockUser({
+    function onUnlock() {
+        unlockUser({
             id: user.id,
             version: user.version,
         });
@@ -46,23 +46,26 @@ export function LockUserButton({ user, className }: LockUserButtonProps) {
             <AlertDialogTrigger asChild>
                 <LoadingButton
                     variant="secondary"
-                    loading={isLocking}
+                    loading={isUnlocking}
                     className={className}
                 >
-                    Lock
+                    Unlock
                 </LoadingButton>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Lock User</AlertDialogTitle>
+                    <AlertDialogTitle>Unlock User</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to lock this user account? The
-                        user will no longer be able to access the system.
+                        Are you sure you want to unlock this user account? The
+                        user will now be able to access the system.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction disabled={isLocking} onClick={onLock}>
+                    <AlertDialogAction
+                        disabled={isUnlocking}
+                        onClick={onUnlock}
+                    >
                         Continue
                     </AlertDialogAction>
                 </AlertDialogFooter>

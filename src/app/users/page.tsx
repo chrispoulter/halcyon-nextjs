@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { z } from 'zod';
-import { searchUsers } from '@/app/user/data/search-users';
-import { SearchUsers } from '@/app/user/search-users';
+import { searchUsers } from '@/app/users/data/search-users';
+import { SearchUsers } from '@/app/users/search-users';
 import { verifySession } from '@/lib/dal';
 import { isUserAdministrator } from '@/lib/definitions';
 
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 
 export default async function SearchUsersPage({
     searchParams,
-}: PageProps<'/user'>) {
+}: PageProps<'/users'>) {
     await verifySession(isUserAdministrator);
 
     const params = await searchParams;
