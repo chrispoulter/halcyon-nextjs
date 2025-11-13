@@ -4,15 +4,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { updateUserAction } from '@/app/user/actions/update-user-action';
-import type { GetUserResponse } from '@/app/user/data/get-user';
+import { updateUserAction } from '@/app/users/actions/update-user-action';
+import type { GetUserResponse } from '@/app/users/data/get-user';
 import {
     UpdateUserForm,
     type UpdateUserFormValues,
-} from '@/app/user/[id]/update-user-form';
-import { UnlockUserButton } from '@/app/user/[id]/unlock-user-button';
-import { LockUserButton } from '@/app/user/[id]/lock-user-button';
-import { DeleteUserButton } from '@/app/user/[id]/delete-user-button';
+} from '@/app/users/[id]/update-user-form';
+import { UnlockUserButton } from '@/app/users/[id]/unlock-user-button';
+import { LockUserButton } from '@/app/users/[id]/lock-user-button';
+import { DeleteUserButton } from '@/app/users/[id]/delete-user-button';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
@@ -28,7 +28,7 @@ export function UpdateUser({ user }: UpdateUserProps) {
         {
             onSuccess() {
                 toast.success('User successfully updated.');
-                router.push('/user');
+                router.push('/users');
             },
             onError({ error }) {
                 toast.error(<ServerActionError result={error} />);
@@ -64,7 +64,7 @@ export function UpdateUser({ user }: UpdateUserProps) {
                 onSubmit={onSubmit}
             >
                 <Button asChild variant="outline">
-                    <Link href="/user">Cancel</Link>
+                    <Link href="/users">Cancel</Link>
                 </Button>
 
                 {user.isLockedOut ? (

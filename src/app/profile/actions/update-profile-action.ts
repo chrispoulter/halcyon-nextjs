@@ -70,8 +70,8 @@ export const updateProfileAction = authActionClient()
 
         await db.update(users).set(parsedInput).where(eq(users.id, userId));
 
-        revalidatePath('/user');
-        revalidatePath(`/user/${user.id}`);
+        revalidatePath('/users');
+        revalidatePath(`/users/${user.id}`);
         revalidatePath('/profile');
 
         return { id: user.id };

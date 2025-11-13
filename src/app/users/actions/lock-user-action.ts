@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
@@ -12,14 +13,14 @@ const schema = z.object({
     version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
-type DeleteUserResponse = {
+type LockUserResponse = {
     id: string;
 };
 
-export const deleteUserAction = authActionClient(isUserAdministrator)
-    .metadata({ actionName: 'deleteUserAction' })
+export const lockUserAction = authActionClient(isUserAdministrator)
+    .metadata({ actionName: 'lockUserAction' })
     .inputSchema(schema)
-    .action<DeleteUserResponse>(
+    .action<LockUserResponse>(
         async ({ parsedInput: { id, ...rest }, ctx: { userId } }) => {
             const [user] = await db
                 .select({
@@ -41,15 +42,17 @@ export const deleteUserAction = authActionClient(isUserAdministrator)
             }
 
             if (user.id === userId) {
-                throw new ActionError(
-                    'Cannot delete currently logged in user.'
-                );
+                throw new ActionError('Cannot lock currently logged in user.');
             }
 
-            await db.delete(users).where(eq(users.id, user.id));
+            await db
+                .update(users)
+                .set({ isLockedOut: true })
+                .where(eq(users.id, user.id));
 
-            // TODO: revalidatePath revalidates all paths. Uncomment when fixed.
-            // revalidatePath('/user');
+            revalidatePath('/users');
+            revalidatePath(`/users/${user.id}`);
+            revalidatePath('/profile');
 
             return { id: user.id };
         }

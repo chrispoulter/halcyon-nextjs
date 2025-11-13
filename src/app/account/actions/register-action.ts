@@ -55,7 +55,7 @@ export const registerAction = actionClient
             .values({ ...parsedInput, password })
             .returning({ id: users.id });
 
-        revalidatePath('/user');
+        revalidatePath('/users');
 
         return { id: user.id };
     });
