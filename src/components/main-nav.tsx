@@ -24,7 +24,7 @@ const routes: MainNavRoute[] = [
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About' },
     {
-        href: '/user',
+        href: '/users',
         label: 'Users',
         roles: isUserAdministrator,
     },

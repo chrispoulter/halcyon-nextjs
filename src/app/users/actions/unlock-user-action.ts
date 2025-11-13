@@ -45,8 +45,8 @@ export const unlockUserAction = authActionClient(isUserAdministrator)
             .set({ isLockedOut: false })
             .where(eq(users.id, user.id));
 
-        revalidatePath('/user');
-        revalidatePath(`/user/${user.id}`);
+        revalidatePath('/users');
+        revalidatePath(`/users/${user.id}`);
         revalidatePath('/profile');
 
         return { id: user.id };

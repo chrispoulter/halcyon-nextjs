@@ -6,13 +6,13 @@ import { User } from 'lucide-react';
 import type {
     SearchUsersResponse,
     UserSort,
-} from '@/app/user/data/search-users';
+} from '@/app/users/data/search-users';
 import {
     SearchUsersForm,
     type SearchUsersFormValues,
-} from '@/app/user/search-users-form';
-import { SortUsersDropdown } from '@/app/user/sort-users-dropdown';
-import { UserCard } from '@/app/user/user-card';
+} from '@/app/users/search-users-form';
+import { SortUsersDropdown } from '@/app/users/sort-users-dropdown';
+import { UserCard } from '@/app/users/user-card';
 import { Button } from '@/components/ui/button';
 import {
     Empty,
@@ -79,7 +79,7 @@ export function SearchUsers({ request, data }: SearchUsersProps) {
             </div>
 
             <Button asChild className="w-full sm:w-auto">
-                <Link href="/user/create">Create New</Link>
+                <Link href="/users/create">Create New</Link>
             </Button>
 
             {data.items.length ? (

@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
-import { getUser } from '@/app/user/data/get-user';
-import { UpdateUser } from '@/app/user/[id]/update-user';
+import { getUser } from '@/app/users/data/get-user';
+import { UpdateUser } from '@/app/users/[id]/update-user';
 import { verifySession } from '@/lib/dal';
 import { isUserAdministrator } from '@/lib/definitions';
 
-async function loadUser({ params }: PageProps<'/user/[id]'>) {
+async function loadUser({ params }: PageProps<'/users/[id]'>) {
     await verifySession(isUserAdministrator);
 
     const { id } = await params;
@@ -17,7 +17,7 @@ async function loadUser({ params }: PageProps<'/user/[id]'>) {
     return user;
 }
 
-export async function generateMetadata(props: PageProps<'/user/[id]'>) {
+export async function generateMetadata(props: PageProps<'/users/[id]'>) {
     const user = await loadUser(props);
 
     return {
@@ -25,7 +25,7 @@ export async function generateMetadata(props: PageProps<'/user/[id]'>) {
     };
 }
 
-export default async function UpdateUserPage(props: PageProps<'/user/[id]'>) {
+export default async function UpdateUserPage(props: PageProps<'/users/[id]'>) {
     const user = await loadUser(props);
     return <UpdateUser user={user} />;
 }
