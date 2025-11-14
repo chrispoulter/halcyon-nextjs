@@ -1,6 +1,8 @@
 import { SQL, sql } from 'drizzle-orm';
 import {
     pgTable,
+    primaryKey,
+    uniqueIndex,
     uuid,
     text,
     date,
@@ -18,10 +20,10 @@ const tsVector = customType<{ data: string }>({
 export const users = pgTable(
     'users',
     {
-        id: uuid('id').primaryKey().defaultRandom(),
-        emailAddress: text('email_address').notNull().unique(),
+        id: uuid('id').notNull().defaultRandom(),
+        emailAddress: text('email_address').notNull(),
         password: text('password'),
-        passwordResetToken: text('password_reset_token'),
+        passwordResetToken: uuid('password_reset_token'),
         firstName: text('first_name').notNull(),
         lastName: text('last_name').notNull(),
         dateOfBirth: date('date_of_birth').notNull(),
@@ -33,6 +35,8 @@ export const users = pgTable(
         ),
     },
     (table) => [
+        primaryKey({ columns: [table.id], name: 'pk_users' }),
+        uniqueIndex('ix_users_email_address').on(table.emailAddress),
         index('ix_users_search_vector').using('gin', table.searchVector),
     ]
 );
