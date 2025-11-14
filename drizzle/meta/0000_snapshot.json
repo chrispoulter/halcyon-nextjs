@@ -1,5 +1,5 @@
 {
-    "id": "7b74c10f-a1a8-43e8-aefd-82a2d30a365d",
+    "id": "d051f48c-bfa4-42ad-bf49-37035acb716e",
     "prevId": "00000000-0000-0000-0000-000000000000",
     "version": "7",
     "dialect": "postgresql",
@@ -11,7 +11,7 @@
                 "id": {
                     "name": "id",
                     "type": "uuid",
-                    "primaryKey": true,
+                    "primaryKey": false,
                     "notNull": true,
                     "default": "gen_random_uuid()"
                 },
@@ -29,7 +29,7 @@
                 },
                 "password_reset_token": {
                     "name": "password_reset_token",
-                    "type": "text",
+                    "type": "uuid",
                     "primaryKey": false,
                     "notNull": false
                 },
@@ -63,18 +63,58 @@
                     "type": "text[]",
                     "primaryKey": false,
                     "notNull": false
+                },
+                "search_vector": {
+                    "name": "search_vector",
+                    "type": "tsvector",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "generated": {
+                        "as": "to_tsvector('english', \"users\".\"first_name\" || ' ' || \"users\".\"last_name\" || ' ' || \"users\".\"email_address\")",
+                        "type": "stored"
+                    }
                 }
             },
-            "indexes": {},
+            "indexes": {
+                "ix_users_email_address": {
+                    "name": "ix_users_email_address",
+                    "columns": [
+                        {
+                            "expression": "email_address",
+                            "isExpression": false,
+                            "asc": true,
+                            "nulls": "last"
+                        }
+                    ],
+                    "isUnique": true,
+                    "concurrently": false,
+                    "method": "btree",
+                    "with": {}
+                },
+                "ix_users_search_vector": {
+                    "name": "ix_users_search_vector",
+                    "columns": [
+                        {
+                            "expression": "search_vector",
+                            "isExpression": false,
+                            "asc": true,
+                            "nulls": "last"
+                        }
+                    ],
+                    "isUnique": false,
+                    "concurrently": false,
+                    "method": "gin",
+                    "with": {}
+                }
+            },
             "foreignKeys": {},
-            "compositePrimaryKeys": {},
-            "uniqueConstraints": {
-                "users_email_address_unique": {
-                    "name": "users_email_address_unique",
-                    "nullsNotDistinct": false,
-                    "columns": ["email_address"]
+            "compositePrimaryKeys": {
+                "pk_users": {
+                    "name": "pk_users",
+                    "columns": ["id"]
                 }
             },
+            "uniqueConstraints": {},
             "policies": {},
             "checkConstraints": {},
             "isRLSEnabled": false
