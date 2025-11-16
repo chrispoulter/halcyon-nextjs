@@ -33,19 +33,19 @@ services:
             timeout: 5s
             retries: 3
 
-    maildev:
-        image: maildev/maildev:2.1.0
+    mailpit:
+        image: axllent/mailpit:v1.22.3
         environment:
-            MAILDEV_MAIL_DIRECTORY: /tmp
+            MP_DATABASE: /data/mailpit.db
         ports:
             - 1025:1025
-            - 1080:1080
+            - 8025:8025
         volumes:
-            - maildev:/tmp
+            - mailpit:/data
         restart: always
 
 volumes:
     postgres:
         name: halcyon-postgres
-    maildev:
-        name: halcyon-maildev
+    mailpit:
+        name: halcyon-mailpit
