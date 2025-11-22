@@ -37,7 +37,7 @@ export type UpdateUserFormValues = z.infer<typeof schema>;
 type UpdateUserFormProps = {
     user: GetUserResponse;
     loading?: boolean;
-    onSubmit: (data: UpdateUserFormValues) => void;
+    onSubmit: (values: UpdateUserFormValues) => void;
     children?: React.ReactNode;
 };
 

@@ -23,8 +23,8 @@ export function Login() {
         },
     });
 
-    function onSubmit(data: LoginFormValues) {
-        login(data);
+    function onSubmit(values: LoginFormValues) {
+        login(values);
     }
 
     return (

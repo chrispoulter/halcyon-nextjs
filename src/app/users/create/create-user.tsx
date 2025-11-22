@@ -28,8 +28,8 @@ export function CreateUser() {
         }
     );
 
-    function onSubmit(data: CreateUserFormValues) {
-        createUser(data);
+    function onSubmit(values: CreateUserFormValues) {
+        createUser(values);
     }
 
     return (

@@ -20,7 +20,7 @@ const schema = z.object({
 });
 
 type ChangePasswordResponse = {
-    id: string;
+    userId: string;
 };
 
 export const changePasswordAction = authActionClient()
@@ -74,6 +74,6 @@ export const changePasswordAction = authActionClient()
             revalidatePath(`/users/${user.id}`);
             revalidatePath('/profile');
 
-            return { id: user.id };
+            return { userId: user.id };
         }
     );

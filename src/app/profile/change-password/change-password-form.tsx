@@ -26,7 +26,7 @@ export type ChangePasswordFormValues = z.infer<typeof schema>;
 
 type ChangePasswordFormProps = {
     loading?: boolean;
-    onSubmit: (data: ChangePasswordFormValues) => void;
+    onSubmit: (values: ChangePasswordFormValues) => void;
     children?: React.ReactNode;
 };
 

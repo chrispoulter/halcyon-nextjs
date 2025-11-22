@@ -14,7 +14,7 @@ const schema = z.object({
 });
 
 type UnlockUserResponse = {
-    id: string;
+    userId: string;
 };
 
 export const unlockUserAction = authActionClient(isUserAdministrator)
@@ -49,5 +49,5 @@ export const unlockUserAction = authActionClient(isUserAdministrator)
         revalidatePath(`/users/${user.id}`);
         revalidatePath('/profile');
 
-        return { id: user.id };
+        return { userId: user.id };
     });

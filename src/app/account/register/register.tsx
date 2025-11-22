@@ -27,8 +27,8 @@ export function Register() {
         }
     );
 
-    function onSubmit(data: RegisterFormValues) {
-        register(data);
+    function onSubmit(values: RegisterFormValues) {
+        register(values);
     }
 
     return (

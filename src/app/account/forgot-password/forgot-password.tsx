@@ -29,8 +29,8 @@ export function ForgotPassword() {
         }
     );
 
-    function onSubmit(data: ForgotPasswordFormValues) {
-        forgotPassword(data);
+    function onSubmit(values: ForgotPasswordFormValues) {
+        forgotPassword(values);
     }
 
     return (

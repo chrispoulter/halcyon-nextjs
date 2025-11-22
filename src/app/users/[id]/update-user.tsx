@@ -36,9 +36,9 @@ export function UpdateUser({ user }: UpdateUserProps) {
         }
     );
 
-    function onSubmit(data: UpdateUserFormValues) {
+    function onSubmit(values: UpdateUserFormValues) {
         updateUser({
-            ...data,
+            ...values,
             id: user.id,
             version: user.version,
         });

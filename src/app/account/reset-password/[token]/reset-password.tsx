@@ -30,8 +30,8 @@ export function ResetPassword({ token }: ResetPasswordProps) {
         }
     );
 
-    function onSubmit(data: ResetPasswordFormValues) {
-        resetPassword({ ...data, token });
+    function onSubmit(values: ResetPasswordFormValues) {
+        resetPassword({ ...values, token });
     }
 
     return (

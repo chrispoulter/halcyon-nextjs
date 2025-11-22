@@ -33,9 +33,9 @@ export function ChangePassword({ profile }: ChangePasswordProps) {
         }
     );
 
-    function onSubmit(data: ChangePasswordFormValues) {
+    function onSubmit(values: ChangePasswordFormValues) {
         changePassword({
-            ...data,
+            ...values,
             version: profile.version,
         });
     }

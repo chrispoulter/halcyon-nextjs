@@ -49,7 +49,7 @@ export type CreateUserFormValues = z.infer<typeof schema>;
 
 type CreateUserFormProps = {
     loading?: boolean;
-    onSubmit: (data: CreateUserFormValues) => void;
+    onSubmit: (values: CreateUserFormValues) => void;
     children?: React.ReactNode;
 };
 

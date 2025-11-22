@@ -9,7 +9,7 @@ import { isInPast } from '@/lib/dates';
 import { ActionError, authActionClient } from '@/lib/safe-action';
 
 type UpdateProfileResponse = {
-    id: string;
+    userId: string;
 };
 
 const schema = z.object({
@@ -74,5 +74,5 @@ export const updateProfileAction = authActionClient()
         revalidatePath(`/users/${user.id}`);
         revalidatePath('/profile');
 
-        return { id: user.id };
+        return { userId: user.id };
     });

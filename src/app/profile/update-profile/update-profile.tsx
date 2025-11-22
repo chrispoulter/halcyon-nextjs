@@ -33,9 +33,9 @@ export function UpdateProfile({ profile }: ProfileProps) {
         }
     );
 
-    function onSubmit(data: UpdateProfileFormValues) {
+    function onSubmit(values: UpdateProfileFormValues) {
         updateProfile({
-            ...data,
+            ...values,
             version: profile.version,
         });
     }
