@@ -39,7 +39,7 @@ const schema = z.object({
 });
 
 type CreateUserResponse = {
-    userId: string;
+    id: string;
 };
 
 export const createUserAction = authActionClient(isUserAdministrator)
@@ -65,5 +65,5 @@ export const createUserAction = authActionClient(isUserAdministrator)
 
         revalidatePath('/users');
 
-        return { userId: user.id };
+        return { id: user.id };
     });

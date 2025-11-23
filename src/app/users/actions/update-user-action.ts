@@ -35,7 +35,7 @@ const schema = z.object({
 });
 
 type UpdateUserResponse = {
-    userId: string;
+    id: string;
 };
 
 export const updateUserAction = authActionClient(isUserAdministrator)
@@ -82,5 +82,5 @@ export const updateUserAction = authActionClient(isUserAdministrator)
         revalidatePath(`/users/${user.id}`);
         revalidatePath('/profile');
 
-        return { userId: user.id };
+        return { id: user.id };
     });

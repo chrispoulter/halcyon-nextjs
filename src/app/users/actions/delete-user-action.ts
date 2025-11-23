@@ -13,7 +13,7 @@ const schema = z.object({
 });
 
 type DeleteUserResponse = {
-    userId: string;
+    id: string;
 };
 
 export const deleteUserAction = authActionClient(isUserAdministrator)
@@ -51,6 +51,6 @@ export const deleteUserAction = authActionClient(isUserAdministrator)
             // TODO: revalidatePath revalidates all paths. Uncomment when fixed.
             // revalidatePath('/users');
 
-            return { userId: user.id };
+            return { id: user.id };
         }
     );

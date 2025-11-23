@@ -17,7 +17,7 @@ const schema = z.object({
 });
 
 type ResetPasswordResponse = {
-    userId: string;
+    id: string;
 };
 
 export const resetPasswordAction = actionClient
@@ -52,5 +52,5 @@ export const resetPasswordAction = actionClient
             })
             .where(eq(users.id, user.id));
 
-        return { userId: user.id };
+        return { id: user.id };
     });

@@ -31,7 +31,7 @@ const schema = z.object({
 });
 
 type RegisterResponse = {
-    userId: string;
+    id: string;
 };
 
 export const registerAction = actionClient
@@ -57,5 +57,5 @@ export const registerAction = actionClient
 
         revalidatePath('/users');
 
-        return { userId: user.id };
+        return { id: user.id };
     });
