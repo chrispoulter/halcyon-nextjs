@@ -67,10 +67,7 @@ export function Profile({ profile }: ProfileProps) {
                 be removed. Please be certain.
             </p>
 
-            <DeleteAccountButton
-                profile={profile}
-                className="w-full sm:w-auto"
-            />
+            <DeleteAccountButton className="w-full sm:w-auto" />
         </main>
     );
 }
