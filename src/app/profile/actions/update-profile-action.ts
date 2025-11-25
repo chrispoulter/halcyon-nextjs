@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { eq, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
@@ -25,7 +25,6 @@ const schema = z.object({
     dateOfBirth: z.iso
         .date('Date Of Birth must be a valid date')
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
-    version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
 export const updateProfileAction = authActionClient()
@@ -37,7 +36,6 @@ export const updateProfileAction = authActionClient()
                 id: users.id,
                 emailAddress: users.emailAddress,
                 isLockedOut: users.isLockedOut,
-                version: sql<number>`"xmin"`.mapWith(Number),
             })
             .from(users)
             .where(eq(users.id, userId))
@@ -45,12 +43,6 @@ export const updateProfileAction = authActionClient()
 
         if (!user || user.isLockedOut) {
             throw new ActionError('User not found.', 404);
-        }
-
-        if (!parsedInput.version && parsedInput.version !== user.version) {
-            throw new ActionError(
-                'Data has been modified since entities were loaded.'
-            );
         }
 
         if (

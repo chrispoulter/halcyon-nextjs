@@ -35,7 +35,6 @@ const schema = z.object({
             { message: 'Role must be a valid array' }
         )
         .optional(),
-    version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
 type CreateUserResponse = {

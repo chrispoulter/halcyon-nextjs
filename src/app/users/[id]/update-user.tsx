@@ -40,7 +40,6 @@ export function UpdateUser({ user }: UpdateUserProps) {
         updateUser({
             ...values,
             id: user.id,
-            version: user.version,
         });
     }
 

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { eq, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { ActionError, authActionClient } from '@/lib/safe-action';
@@ -16,7 +16,6 @@ const schema = z.object({
         .string({ message: 'New Password must be a valid string' })
         .min(8, 'New Password must be at least 8 characters')
         .max(50, 'New Password must be no more than 50 characters'),
-    version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
 type ChangePasswordResponse = {
@@ -33,7 +32,6 @@ export const changePasswordAction = authActionClient()
                     id: users.id,
                     password: users.password,
                     isLockedOut: users.isLockedOut,
-                    version: sql<number>`"xmin"`.mapWith(Number),
                 })
                 .from(users)
                 .where(eq(users.id, userId))
@@ -41,12 +39,6 @@ export const changePasswordAction = authActionClient()
 
             if (!user || user.isLockedOut) {
                 throw new ActionError('User not found.', 404);
-            }
-
-            if (!parsedInput.version && parsedInput.version !== user.version) {
-                throw new ActionError(
-                    'Data has been modified since entities were loaded.'
-                );
             }
 
             if (!user.password) {

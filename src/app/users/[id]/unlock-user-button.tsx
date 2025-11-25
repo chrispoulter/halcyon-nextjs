@@ -37,7 +37,6 @@ export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
     function onUnlock() {
         unlockUser({
             id: user.id,
-            version: user.version,
         });
     }
 

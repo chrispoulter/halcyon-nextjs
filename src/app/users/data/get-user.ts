@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { cache } from 'react';
-import { eq, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { type Role } from '@/lib/definitions';
@@ -14,7 +14,6 @@ export type GetUserResponse = {
     dateOfBirth: string;
     isLockedOut: boolean;
     roles?: Role[];
-    version: number;
 };
 
 export const getUser = cache(async (userId: string) => {
@@ -27,7 +26,6 @@ export const getUser = cache(async (userId: string) => {
             dateOfBirth: users.dateOfBirth,
             roles: users.roles,
             isLockedOut: users.isLockedOut,
-            version: sql<number>`"xmin"`.mapWith(Number),
         })
         .from(users)
         .where(eq(users.id, userId))
@@ -45,6 +43,5 @@ export const getUser = cache(async (userId: string) => {
         dateOfBirth: user.dateOfBirth,
         roles: (user.roles as Role[]) || undefined,
         isLockedOut: user.isLockedOut,
-        version: user.version,
     };
 });

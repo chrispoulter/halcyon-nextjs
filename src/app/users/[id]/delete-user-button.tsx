@@ -41,7 +41,6 @@ export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
     function onDelete() {
         deleteUser({
             id: user.id,
-            version: user.version,
         });
     }
 

@@ -34,10 +34,7 @@ export function UpdateProfile({ profile }: ProfileProps) {
     );
 
     function onSubmit(values: UpdateProfileFormValues) {
-        updateProfile({
-            ...values,
-            version: profile.version,
-        });
+        updateProfile(values);
     }
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
