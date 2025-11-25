@@ -37,7 +37,6 @@ export function LockUserButton({ user, className }: LockUserButtonProps) {
     function onLock() {
         lockUser({
             id: user.id,
-            version: user.version,
         });
     }
 

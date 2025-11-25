@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { changePasswordAction } from '@/app/profile/actions/change-password-action';
-import type { GetProfileResponse } from '@/app/profile/data/get-profile';
 import {
     ChangePasswordForm,
     type ChangePasswordFormValues,
@@ -13,11 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
-type ChangePasswordProps = {
-    profile: GetProfileResponse;
-};
-
-export function ChangePassword({ profile }: ChangePasswordProps) {
+export function ChangePassword() {
     const router = useRouter();
 
     const { execute: changePassword, isPending: isSaving } = useAction(
@@ -34,10 +29,7 @@ export function ChangePassword({ profile }: ChangePasswordProps) {
     );
 
     function onSubmit(values: ChangePasswordFormValues) {
-        changePassword({
-            ...values,
-            version: profile.version,
-        });
+        changePassword(values);
     }
 
     return (

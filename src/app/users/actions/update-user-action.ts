@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { eq, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
@@ -31,7 +31,6 @@ const schema = z.object({
             { message: 'Role must be a valid array' }
         )
         .optional(),
-    version: z.number({ message: 'Version must be a valid number' }).optional(),
 });
 
 type UpdateUserResponse = {
@@ -46,7 +45,6 @@ export const updateUserAction = authActionClient(isUserAdministrator)
             .select({
                 id: users.id,
                 emailAddress: users.emailAddress,
-                version: sql<number>`"xmin"`.mapWith(Number),
             })
             .from(users)
             .where(eq(users.id, id))
@@ -54,12 +52,6 @@ export const updateUserAction = authActionClient(isUserAdministrator)
 
         if (!user) {
             throw new ActionError('User not found.', 404);
-        }
-
-        if (rest.version && rest.version !== user.version) {
-            throw new ActionError(
-                'Data has been modified since entities were loaded.'
-            );
         }
 
         if (
