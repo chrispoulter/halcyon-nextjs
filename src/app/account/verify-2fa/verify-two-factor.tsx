@@ -25,7 +25,7 @@ export type VerifyFormValues = z.infer<typeof schema>;
 
 export function VerifyTwoFactor() {
     const router = useRouter();
-    
+
     const { execute: verify, isPending } = useAction(verifyTwoFactorAction, {
         onSuccess() {
             router.push('/');

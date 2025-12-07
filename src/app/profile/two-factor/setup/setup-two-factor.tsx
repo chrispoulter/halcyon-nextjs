@@ -63,33 +63,50 @@ export function SetupTwoFactor() {
                 Enable Two Factor Authentication
             </h1>
             <p className="leading-7">
-                Scan the QR code with your authenticator app (e.g., Authy), then enter the 6-digit code to confirm setup.
-                If you cannot scan the QR code, manually enter the setup key below in your authenticator app.
+                Scan the QR code with your authenticator app (e.g., Authy), then
+                enter the 6-digit code to confirm setup. If you cannot scan the
+                QR code, manually enter the setup key below in your
+                authenticator app.
             </p>
 
             {qr && (
                 <div className="flex justify-center">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={qr} alt="Authenticator QR code" className="rounded border" />
+                    <img
+                        src={qr}
+                        alt="Authenticator QR code"
+                        className="rounded border"
+                    />
                 </div>
             )}
 
             {secret && (
                 <div className="space-y-2">
-                    <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">Manual Setup Key</h2>
-                    <p className="text-muted-foreground text-sm">Enter this key in your authenticator app if you cannot scan the QR code.</p>
+                    <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+                        Manual Setup Key
+                    </h2>
+                    <p className="text-muted-foreground text-sm">
+                        Enter this key in your authenticator app if you cannot
+                        scan the QR code.
+                    </p>
                     <div className="flex items-center gap-2">
-                        <code className="rounded border px-2 py-1 text-sm break-all">{secret}</code>
+                        <code className="rounded border px-2 py-1 text-sm break-all">
+                            {secret}
+                        </code>
                         <button
                             type="button"
                             className="rounded border px-2 py-1 text-sm"
                             onClick={() => {
                                 if (secret) {
                                     navigator.clipboard.writeText(secret);
-                                    toast.success('Setup key copied to clipboard');
+                                    toast.success(
+                                        'Setup key copied to clipboard'
+                                    );
                                 }
                             }}
-                        >Copy</button>
+                        >
+                            Copy
+                        </button>
                     </div>
                 </div>
             )}

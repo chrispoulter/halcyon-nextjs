@@ -1,5 +1,5 @@
 {
-    "id": "c7ea4d5e-75f3-4ea4-83e7-82e969ac3d52",
+    "id": "c4bf889b-e5de-4d53-8677-6bbfd9439203",
     "prevId": "d051f48c-bfa4-42ad-bf49-37035acb716e",
     "version": "7",
     "dialect": "postgresql",
@@ -73,6 +73,12 @@
                 },
                 "two_factor_secret": {
                     "name": "two_factor_secret",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "two_factor_temp_secret": {
+                    "name": "two_factor_temp_secret",
                     "type": "text",
                     "primaryKey": false,
                     "notNull": false

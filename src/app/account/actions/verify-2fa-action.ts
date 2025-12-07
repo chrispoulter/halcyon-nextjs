@@ -60,7 +60,7 @@ export const verifyTwoFactorAction = actionClient
 
         if (parsedInput.recoveryCode) {
             const codes = user.twoFactorRecoveryCodes ?? [];
-            
+
             const matchIndex = codes.findIndex((c) =>
                 verifyHash(parsedInput.recoveryCode!, c)
             );
