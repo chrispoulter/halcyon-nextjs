@@ -16,7 +16,7 @@ export function generateTOTPSecret(email: string) {
 
     return {
         base32: secret.base32,
-        otpauth: secret.otpauth_url,
+        otpauth: secret.otpauth_url!,
     };
 }
 
