@@ -13,8 +13,8 @@ import { ServerActionError } from '@/components/server-action-error';
 
 const schema = z
     .object({
-        code: z.string().max(6).optional(),
-        recoveryCode: z.string().max(100).optional(),
+        code: z.string().max(6),
+        recoveryCode: z.string().max(100),
     })
     .refine((data) => !!data.code || !!data.recoveryCode, {
         message: 'Provide either a 2FA code or a recovery code',

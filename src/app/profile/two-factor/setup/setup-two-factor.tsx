@@ -36,7 +36,7 @@ export function SetupTwoFactor() {
                     'Two factor enabled. Save your recovery codes now.'
                 );
                 // Optionally show recovery codes inline or prompt download
-                alert(`Recovery Codes:\n\n${data?.recoveryCodes.join('\n')}`);
+                alert(`Recovery Codes:\n\n${data.recoveryCodes.join('\n')}`);
             }
         },
         onError({ error }) {

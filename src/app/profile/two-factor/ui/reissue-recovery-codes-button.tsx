@@ -11,7 +11,7 @@ export function ReissueRecoveryCodesButton() {
             if (data?.recoveryCodes) {
                 toast.success('New recovery codes issued');
                 // Optionally show recovery codes inline or prompt download
-                alert(`Recovery Codes:\n\n${data?.recoveryCodes.join('\n')}`);
+                alert(`Recovery Codes:\n\n${data.recoveryCodes.join('\n')}`);
             }
         },
         onError({ error }) {

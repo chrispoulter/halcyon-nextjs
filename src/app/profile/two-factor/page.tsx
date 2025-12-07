@@ -8,6 +8,7 @@ import { ReissueRecoveryCodesButton } from './ui/reissue-recovery-codes-button';
 
 export default async function Page() {
     const session = await getSession();
+
     if (!session) {
         return (
             <main className="mx-auto max-w-screen-sm space-y-6 p-6">
