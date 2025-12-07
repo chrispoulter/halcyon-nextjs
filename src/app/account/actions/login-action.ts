@@ -54,9 +54,6 @@ export const loginAction = actionClient
         if (user.twoFactorEnabled) {
             await createPendingSession({
                 sub: user.id,
-                email: user.emailAddress,
-                given_name: user.firstName,
-                family_name: user.lastName,
                 requires2fa: true,
             });
 

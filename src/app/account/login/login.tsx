@@ -10,17 +10,17 @@ import {
     type LoginFormValues,
 } from '@/app/account/login/login-form';
 import { ServerActionError } from '@/components/server-action-error';
-import { PendingSessionPayload } from '@/lib/definitions';
 
 export function Login() {
     const router = useRouter();
 
     const { execute: login, isPending: isSaving } = useAction(loginAction, {
         onSuccess({ data }) {
-            if (data && (data as PendingSessionPayload).requires2fa) {
+            if (data?.requires2fa) {
                 router.push('/account/verify-two-factor');
                 return;
             }
+
             router.push('/');
         },
         onError({ error }) {

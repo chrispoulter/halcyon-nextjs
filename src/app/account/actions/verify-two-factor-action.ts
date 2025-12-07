@@ -11,9 +11,8 @@ import {
     deletePendingSession,
     getPendingSession,
 } from '@/lib/session';
-import type { PendingSessionPayload } from '@/lib/definitions';
-import { verifyHash } from '@/lib/hash';
 import type { Role } from '@/lib/definitions';
+import { verifyHash } from '@/lib/hash';
 
 const schema = z
     .object({
@@ -29,12 +28,10 @@ export const verifyTwoFactorAction = actionClient
     .metadata({ actionName: 'verifyTwoFactorAction' })
     .inputSchema(schema)
     .action(async ({ parsedInput }) => {
-        const pending = (await getPendingSession()) as
-            | PendingSessionPayload
-            | undefined;
+        const pending = await getPendingSession();
 
         if (!pending || !pending.requires2fa) {
-            throw new ActionError('No pending 2FA verification found.');
+            throw new ActionError('No pending two factor verification found.');
         }
 
         const [user] = await db
@@ -99,6 +96,4 @@ export const verifyTwoFactorAction = actionClient
             family_name: user.lastName,
             roles: user.roles as Role[],
         });
-
-        return { success: true };
     });
