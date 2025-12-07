@@ -10,37 +10,36 @@ import { setupTwoFactorAction } from '@/app/profile/actions/setup-two-factor-act
 import { confirmTwoFactorAction } from '@/app/profile/actions/confirm-two-factor-action';
 import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
+import { ServerActionError } from '@/components/server-action-error';
 
 const schema = z.object({ code: z.string().min(6).max(6) });
 
 type FormValues = z.infer<typeof schema>;
 
-export function SetupTwoFactor() {
+export function TwoFactor() {
     const [qr, setQr] = useState<string | null>(null);
     const [secret, setSecret] = useState<string | null>(null);
 
     const setup = useAction(setupTwoFactorAction, {
         onSuccess({ data }) {
-            setQr(data?.qr ?? null);
-            setSecret(data?.secret ?? null);
+            setQr(data.qr);
+            setSecret(data?.secret);
         },
         onError({ error }) {
-            toast.error(error.serverError ?? 'An error occurred');
+            toast.error(<ServerActionError result={error} />);
         },
     });
 
     const confirm = useAction(confirmTwoFactorAction, {
         onSuccess({ data }) {
             if (data?.recoveryCodes) {
-                toast.success(
-                    'Two factor enabled. Save your recovery codes now.'
-                );
+                toast.success('Two factor authentication enabled.');
                 // Optionally show recovery codes inline or prompt download
                 alert(`Recovery Codes:\n\n${data.recoveryCodes.join('\n')}`);
             }
         },
         onError({ error }) {
-            toast.error(error.serverError ?? 'An error occurred');
+            toast.error(<ServerActionError result={error} />);
         },
     });
 

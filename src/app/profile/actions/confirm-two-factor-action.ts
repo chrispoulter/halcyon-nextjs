@@ -4,59 +4,65 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { actionClient, ActionError } from '@/lib/safe-action';
-import { getSession } from '@/lib/session';
+import { authActionClient, ActionError } from '@/lib/safe-action';
 import {
     generateRecoveryCodes,
     hashRecoveryCodes,
     verifyTOTP,
 } from '@/lib/two-factor';
 
+type ConfirmTwoFactorResponse = {
+    id: string;
+    recoveryCodes: string[];
+};
+
 const schema = z.object({
     code: z.string().min(6).max(6),
 });
 
-export const confirmTwoFactorAction = actionClient
+export const confirmTwoFactorAction = authActionClient()
     .metadata({ actionName: 'confirmTwoFactorAction' })
     .inputSchema(schema)
-    .action(async ({ parsedInput }) => {
-        const session = await getSession();
+    .action<ConfirmTwoFactorResponse>(
+        async ({ parsedInput, ctx: { userId } }) => {
+            const [user] = await db
+                .select({
+                    id: users.id,
+                    isLockedOut: users.isLockedOut,
+                    twoFactorTempSecret: users.twoFactorTempSecret,
+                })
+                .from(users)
+                .where(eq(users.id, userId))
+                .limit(1);
 
-        if (!session) {
-            throw new ActionError(
-                'You must be signed in to configure two-factor authentication'
-            );
+            if (!user || user.isLockedOut) {
+                throw new ActionError('User not found.', 404);
+            }
+
+            if (!user.twoFactorTempSecret) {
+                throw new ActionError(
+                    'Two factor authentication configuration not found.'
+                );
+            }
+
+            const ok = verifyTOTP(user.twoFactorTempSecret, parsedInput.code);
+
+            if (!ok) {
+                throw new ActionError('Invalid authenticator code.');
+            }
+
+            const recoveryCodes = generateRecoveryCodes(10);
+
+            await db
+                .update(users)
+                .set({
+                    twoFactorEnabled: true,
+                    twoFactorSecret: user.twoFactorTempSecret,
+                    twoFactorTempSecret: null,
+                    twoFactorRecoveryCodes: hashRecoveryCodes(recoveryCodes),
+                })
+                .where(eq(users.id, userId));
+
+            return { id: user.id, recoveryCodes };
         }
-
-        const [user] = await db
-            .select({ id: users.id, tempSecret: users.twoFactorTempSecret })
-            .from(users)
-            .where(eq(users.id, session.sub))
-            .limit(1);
-
-        if (!user || !user.tempSecret) {
-            throw new ActionError(
-                'Two factor secret not found. Start setup again.'
-            );
-        }
-
-        const ok = verifyTOTP(user.tempSecret, parsedInput.code);
-
-        if (!ok) {
-            throw new ActionError('Invalid authenticator code.');
-        }
-
-        const recoveryCodes = generateRecoveryCodes(10);
-
-        await db
-            .update(users)
-            .set({
-                twoFactorEnabled: true,
-                twoFactorSecret: user.tempSecret,
-                twoFactorTempSecret: null,
-                twoFactorRecoveryCodes: hashRecoveryCodes(recoveryCodes),
-            })
-            .where(eq(users.id, session.sub));
-
-        return { recoveryCodes };
-    });
+    );

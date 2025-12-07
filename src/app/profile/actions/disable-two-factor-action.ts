@@ -3,18 +3,26 @@
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { actionClient, ActionError } from '@/lib/safe-action';
-import { getSession } from '@/lib/session';
+import { authActionClient, ActionError } from '@/lib/safe-action';
 
-export const disableTwoFactorAction = actionClient
+type DisableTwoFactorResponse = {
+    id: string;
+};
+
+export const disableTwoFactorAction = authActionClient()
     .metadata({ actionName: 'disableTwoFactorAction' })
-    .action(async () => {
-        const session = await getSession();
+    .action<DisableTwoFactorResponse>(async ({ ctx: { userId } }) => {
+        const [user] = await db
+            .select({
+                id: users.id,
+                isLockedOut: users.isLockedOut,
+            })
+            .from(users)
+            .where(eq(users.id, userId))
+            .limit(1);
 
-        if (!session) {
-            throw new ActionError(
-                'You must be signed in to disable two-factor authentication'
-            );
+        if (!user || user.isLockedOut) {
+            throw new ActionError('User not found.', 404);
         }
 
         await db
@@ -25,7 +33,7 @@ export const disableTwoFactorAction = actionClient
                 twoFactorTempSecret: null,
                 twoFactorRecoveryCodes: null,
             })
-            .where(eq(users.id, session.sub));
+            .where(eq(users.id, userId));
 
-        return { success: true };
+        return { id: user.id };
     });
