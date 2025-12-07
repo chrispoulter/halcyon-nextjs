@@ -21,7 +21,6 @@ export const startTwoFactorSetupAction = actionClient
         }
 
         const { base32, otpauth } = generateTOTPSecret(session.email);
-
         const qr = await generateQRCodeDataUrl(otpauth);
 
         await db

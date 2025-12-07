@@ -59,6 +59,7 @@ export const loginAction = actionClient
                 family_name: user.lastName,
                 requires2fa: true,
             });
+
             return { requires2fa: true };
         } else {
             await createSession({

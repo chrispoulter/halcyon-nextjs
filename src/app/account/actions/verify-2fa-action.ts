@@ -17,8 +17,8 @@ import type { Role } from '@/lib/definitions';
 
 const schema = z
     .object({
-        code: z.string().min(6).max(10).optional(),
-        recoveryCode: z.string().min(6).max(100).optional(),
+        code: z.string().max(10),
+        recoveryCode: z.string().max(100),
     })
     .refine((data) => !!data.code || !!data.recoveryCode, {
         message: 'Provide either a 2FA code or a recovery code',
@@ -32,6 +32,7 @@ export const verifyTwoFactorAction = actionClient
         const pending = (await getPendingSession()) as
             | PendingSessionPayload
             | undefined;
+
         if (!pending || !pending.requires2fa) {
             throw new ActionError('No pending 2FA verification found.');
         }
@@ -59,15 +60,19 @@ export const verifyTwoFactorAction = actionClient
 
         if (parsedInput.recoveryCode) {
             const codes = user.twoFactorRecoveryCodes ?? [];
+            
             const matchIndex = codes.findIndex((c) =>
                 verifyHash(parsedInput.recoveryCode!, c)
             );
+
             if (matchIndex === -1) {
                 throw new ActionError('Invalid recovery code.');
             }
+
             // Consume the recovery code
             const updated = [...codes];
             updated.splice(matchIndex, 1);
+
             await db
                 .update(users)
                 .set({ twoFactorRecoveryCodes: updated })
@@ -79,12 +84,14 @@ export const verifyTwoFactorAction = actionClient
                 window: 1,
                 token: parsedInput.code!,
             });
+
             if (!verified) {
                 throw new ActionError('Invalid two factor code.');
             }
         }
 
         await deletePendingSession();
+
         await createSession({
             sub: user.id,
             email: user.emailAddress,
