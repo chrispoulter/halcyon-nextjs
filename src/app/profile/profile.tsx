@@ -69,7 +69,7 @@ export function Profile({ profile }: ProfileProps) {
                 two factor authentication using an authenticator app like Authy.
             </p>
 
-            {profile.twoFactorEnabled ? (
+            {!profile.twoFactorEnabled ? (
                 <>
                     <DisableTwoFactorButton />
                     <GenerateRecoveryCodesButton />
@@ -87,10 +87,6 @@ export function Profile({ profile }: ProfileProps) {
                     </Link>
                 </Button>
             )}
-
-            <Button asChild className="w-full sm:w-auto">
-                <Link href="/profile/change-password">Change Password</Link>
-            </Button>
 
             <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight">
                 Settings
