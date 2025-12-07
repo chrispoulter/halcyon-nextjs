@@ -10,13 +10,14 @@ import {
     type LoginFormValues,
 } from '@/app/account/login/login-form';
 import { ServerActionError } from '@/components/server-action-error';
+import { PendingSessionPayload } from '@/lib/definitions';
 
 export function Login() {
     const router = useRouter();
 
     const { execute: login, isPending: isSaving } = useAction(loginAction, {
         onSuccess({ data }) {
-            if (data && (data as any).requires2fa) {
+            if (data && (data as PendingSessionPayload).requires2fa) {
                 router.push('/account/verify-2fa');
                 return;
             }

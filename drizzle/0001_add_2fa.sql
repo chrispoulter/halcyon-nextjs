@@ -1,5 +1,3 @@
--- Add 2FA fields to users table
-ALTER TABLE "users"
-    ADD COLUMN IF NOT EXISTS "two_factor_enabled" boolean NOT NULL DEFAULT false,
-    ADD COLUMN IF NOT EXISTS "two_factor_secret" text,
-    ADD COLUMN IF NOT EXISTS "two_factor_recovery_codes" text[];
+ALTER TABLE "users" ADD COLUMN "two_factor_enabled" boolean DEFAULT false NOT NULL;--> statement-breakpoint
+ALTER TABLE "users" ADD COLUMN "two_factor_secret" text;--> statement-breakpoint
+ALTER TABLE "users" ADD COLUMN "two_factor_recovery_codes" text[];
