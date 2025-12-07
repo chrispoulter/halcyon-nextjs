@@ -10,6 +10,7 @@ export const disableTwoFactorAction = actionClient
     .metadata({ actionName: 'disableTwoFactorAction' })
     .action(async () => {
         const session = await getSession();
+        
         if (!session) {
             throw new ActionError('You must be signed in to disable 2FA');
         }
@@ -19,7 +20,7 @@ export const disableTwoFactorAction = actionClient
             .set({
                 twoFactorEnabled: false,
                 twoFactorSecret: null,
-                twoFactorRecoveryCodes: [],
+                twoFactorRecoveryCodes: null,
             })
             .where(eq(users.id, session.sub));
 

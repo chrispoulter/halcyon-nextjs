@@ -10,12 +10,15 @@ export function ReissueRecoveryCodesButton() {
         onSuccess({ data }) {
             if (data?.recoveryCodes) {
                 toast.success('New recovery codes issued');
+                // Optionally show recovery codes inline or prompt download
+                alert(`Recovery Codes:\n\n${data?.recoveryCodes.join('\n')}`);
             }
         },
         onError({ error }) {
             toast.error(error.serverError ?? 'An error occurred');
         },
     });
+
     return (
         <LoadingButton onClick={() => execute()} loading={isPending}>
             Reissue Recovery Codes

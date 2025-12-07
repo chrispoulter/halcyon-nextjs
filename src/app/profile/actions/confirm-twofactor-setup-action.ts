@@ -21,6 +21,7 @@ export const confirmTwoFactorSetupAction = actionClient
     .inputSchema(schema)
     .action(async ({ parsedInput }) => {
         const session = await getSession();
+
         if (!session) {
             throw new ActionError('You must be signed in to configure 2FA');
         }
@@ -38,11 +39,13 @@ export const confirmTwoFactorSetupAction = actionClient
         }
 
         const ok = verifyTOTP(user.secret, parsedInput.code);
+
         if (!ok) {
             throw new ActionError('Invalid authenticator code.');
         }
 
         const recoveryCodes = generateRecoveryCodes(10);
+
         await db
             .update(users)
             .set({

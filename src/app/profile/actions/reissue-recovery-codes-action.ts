@@ -11,6 +11,7 @@ export const reissueRecoveryCodesAction = actionClient
     .metadata({ actionName: 'reissueRecoveryCodesAction' })
     .action(async () => {
         const session = await getSession();
+
         if (!session) {
             throw new ActionError(
                 'You must be signed in to reissue recovery codes'
@@ -18,6 +19,7 @@ export const reissueRecoveryCodesAction = actionClient
         }
 
         const recoveryCodes = generateRecoveryCodes(10);
+
         await db
             .update(users)
             .set({ twoFactorRecoveryCodes: hashRecoveryCodes(recoveryCodes) })

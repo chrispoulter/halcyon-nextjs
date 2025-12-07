@@ -15,11 +15,13 @@ export const startTwoFactorSetupAction = actionClient
     .inputSchema(schema)
     .action(async () => {
         const session = await getSession();
+
         if (!session) {
             throw new ActionError('You must be signed in to configure 2FA');
         }
 
         const { base32, otpauth } = generateTOTPSecret(session.email);
+
         const qr = await generateQRCodeDataUrl(otpauth);
 
         await db

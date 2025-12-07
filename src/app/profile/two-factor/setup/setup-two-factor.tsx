@@ -10,6 +10,7 @@ import { startTwoFactorSetupAction } from '@/app/profile/actions/start-twofactor
 import { confirmTwoFactorSetupAction } from '@/app/profile/actions/confirm-twofactor-setup-action';
 import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
+import Image from 'next/image';
 
 const schema = z.object({ code: z.string().min(6).max(6) });
 
@@ -30,12 +31,11 @@ export function SetupTwoFactor() {
     const confirm = useAction(confirmTwoFactorSetupAction, {
         onSuccess({ data }) {
             if (data?.recoveryCodes) {
-                const codes = (data.recoveryCodes as string[]).join('\n');
                 toast.success(
                     'Two factor enabled. Save your recovery codes now.'
                 );
                 // Optionally show recovery codes inline or prompt download
-                alert(`Recovery Codes:\n\n${codes}`);
+                alert(`Recovery Codes:\n\n${data?.recoveryCodes.join('\n')}`);
             }
         },
         onError({ error }) {
@@ -45,7 +45,7 @@ export function SetupTwoFactor() {
 
     useEffect(() => {
         start.execute({});
-    }, [start]);
+    }, []);
 
     const form = useForm<FormValues>({
         resolver: zodResolver(schema),
@@ -69,7 +69,6 @@ export function SetupTwoFactor() {
 
             {qr && (
                 <div className="flex justify-center">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src={qr}
                         alt="Authenticator QR code"

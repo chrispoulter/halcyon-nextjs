@@ -14,6 +14,7 @@ export function DisableTwoFactorButton() {
             toast.error(error.serverError ?? 'An error occurred');
         },
     });
+
     return (
         <LoadingButton onClick={() => execute()} loading={isPending}>
             Disable Two Factor
