@@ -18,7 +18,7 @@ export function Login() {
     const { execute: login, isPending: isSaving } = useAction(loginAction, {
         onSuccess({ data }) {
             if (data && (data as PendingSessionPayload).requires2fa) {
-                router.push('/account/verify-2fa');
+                router.push('/account/verify-two-factor');
                 return;
             }
             router.push('/');

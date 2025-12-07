@@ -23,7 +23,9 @@ export const confirmTwoFactorAction = actionClient
         const session = await getSession();
 
         if (!session) {
-            throw new ActionError('You must be signed in to configure two-factor authentication');
+            throw new ActionError(
+                'You must be signed in to configure two-factor authentication'
+            );
         }
 
         const [user] = await db

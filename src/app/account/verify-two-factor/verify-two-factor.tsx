@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { verifyTwoFactorAction } from '@/app/account/actions/verify-2fa-action';
+import { verifyTwoFactorAction } from '@/app/account/actions/verify-two-factor-action';
 import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionError } from '@/components/server-action-error';
