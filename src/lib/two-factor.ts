@@ -4,6 +4,7 @@ import speakeasy from 'speakeasy';
 import QRCode from 'qrcode';
 import { config } from '@/lib/config';
 import { generateHash } from '@/lib/hash';
+import { randomBytes } from 'crypto';
 
 export function generateTOTPSecret(email: string) {
     const issuer = config.APP_NAME ?? 'Halcyon';
@@ -34,20 +35,11 @@ export function verifyTOTP(secretBase32: string, token: string) {
 }
 
 export function generateRecoveryCodes(count = 10) {
-    const codes: string[] = [];
-
-    for (let i = 0; i < count; i++) {
-        const raw = Array.from(crypto.getRandomValues(new Uint32Array(4)))
-            .map((n) => n.toString(16).padStart(8, '0'))
-            .join('')
-            .slice(0, 20);
-
-        codes.push(raw);
-    }
-
-    return codes;
+    return Array.from({ length: count }, () =>
+        randomBytes(8).toString('hex').toUpperCase()
+    );
 }
 
 export function hashRecoveryCodes(codes: string[]) {
-    return codes.map((c) => generateHash(c));
+    return codes.map(generateHash);
 }
