@@ -16,9 +16,14 @@ export type TwoFactorFormValues = z.infer<typeof schema>;
 type TwoFactorFormProps = {
     loading?: boolean;
     onSubmit: (values: TwoFactorFormValues) => void;
+    children?: React.ReactNode;
 };
 
-export function TwoFactorForm({ loading, onSubmit }: TwoFactorFormProps) {
+export function TwoFactorForm({
+    loading,
+    onSubmit,
+    children,
+}: TwoFactorFormProps) {
     const form = useForm<TwoFactorFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -44,6 +49,7 @@ export function TwoFactorForm({ loading, onSubmit }: TwoFactorFormProps) {
             />
 
             <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                {children}
                 <LoadingButton type="submit" loading={loading}>
                     Submit
                 </LoadingButton>

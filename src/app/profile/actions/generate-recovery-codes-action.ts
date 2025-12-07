@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
@@ -18,7 +19,7 @@ export const generateRecoveryCodesAction = authActionClient()
             .select({
                 id: users.id,
                 isLockedOut: users.isLockedOut,
-                twofactorEnabled: users.twoFactorEnabled,
+                twoFactorEnabled: users.twoFactorEnabled,
             })
             .from(users)
             .where(eq(users.id, userId))
@@ -28,7 +29,7 @@ export const generateRecoveryCodesAction = authActionClient()
             throw new ActionError('User not found.', 404);
         }
 
-        if (!user.twofactorEnabled) {
+        if (!user.twoFactorEnabled) {
             throw new ActionError('Two factor authentication is not enabled.');
         }
 
@@ -38,6 +39,10 @@ export const generateRecoveryCodesAction = authActionClient()
             .update(users)
             .set({ twoFactorRecoveryCodes: hashRecoveryCodes(recoveryCodes) })
             .where(eq(users.id, userId));
+
+        revalidatePath('/users');
+        revalidatePath(`/users/${user.id}`);
+        revalidatePath('/profile');
 
         return { id: user.id, recoveryCodes };
     });

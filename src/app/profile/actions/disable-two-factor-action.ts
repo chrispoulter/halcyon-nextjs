@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
@@ -34,6 +35,10 @@ export const disableTwoFactorAction = authActionClient()
                 twoFactorRecoveryCodes: null,
             })
             .where(eq(users.id, userId));
+
+        revalidatePath('/users');
+        revalidatePath(`/users/${user.id}`);
+        revalidatePath('/profile');
 
         return { id: user.id };
     });

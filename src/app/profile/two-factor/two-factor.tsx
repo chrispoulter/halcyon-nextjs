@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { confirmTwoFactorAction } from '@/app/profile/actions/confirm-two-factor-action';
@@ -8,6 +9,7 @@ import {
     TwoFactorForm,
     TwoFactorFormValues,
 } from '@/app/profile/two-factor/two-factor-form';
+import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
 type TwoFactorProps = {
@@ -87,7 +89,11 @@ export function TwoFactor({ twoFactorSetup }: TwoFactorProps) {
                 </div>
             </div>
 
-            <TwoFactorForm onSubmit={onSubmit} loading={isConfirming} />
+            <TwoFactorForm onSubmit={onSubmit} loading={isConfirming}>
+                <Button asChild variant="outline">
+                    <Link href="/profile">Cancel</Link>
+                </Button>
+            </TwoFactorForm>
         </main>
     );
 }

@@ -17,7 +17,10 @@ type ConfirmTwoFactorResponse = {
 };
 
 const schema = z.object({
-    code: z.string().min(6).max(6),
+    code:  z
+            .string({ message: 'Code must be a valid string' })
+            .min(6, 'Code must be at least 6 characters')
+            .max(6, 'Code must be no more than 6 characters')
 });
 
 export const confirmTwoFactorAction = authActionClient()
@@ -45,9 +48,12 @@ export const confirmTwoFactorAction = authActionClient()
                 );
             }
 
-            const ok = verifyTOTP(user.twoFactorTempSecret, parsedInput.code);
+            const verified = verifyTOTP(
+                user.twoFactorTempSecret,
+                parsedInput.code
+            );
 
-            if (!ok) {
+            if (!verified) {
                 throw new ActionError('Invalid authenticator code.');
             }
 

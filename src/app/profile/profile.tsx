@@ -69,17 +69,16 @@ export function Profile({ profile }: ProfileProps) {
                 two factor authentication using an authenticator app like Authy.
             </p>
 
-            {!profile.twoFactorEnabled ? (
-                <>
+            {profile.twoFactorEnabled ? (
+                <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
                     <DisableTwoFactorButton />
                     <GenerateRecoveryCodesButton />
-                    <Link
-                        href="/profile/two-factor"
-                        className="underline underline-offset-4"
-                    >
-                        Reconfigure Authenticator App
-                    </Link>
-                </>
+                    <Button asChild>
+                        <Link href="/profile/two-factor">
+                            Reconfigure Authenticator App
+                        </Link>
+                    </Button>
+                </div>
             ) : (
                 <Button asChild className="w-full sm:w-auto">
                     <Link href="/profile/two-factor">

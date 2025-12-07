@@ -16,11 +16,21 @@ import { verifyHash } from '@/lib/hash';
 
 const schema = z
     .object({
-        code: z.string().max(10),
-        recoveryCode: z.string().max(100),
+        code: z
+            .string({ message: 'Code must be a valid string' })
+            .min(6, 'Code must be at least 6 characters')
+            .max(6, 'Code must be no more than 6 characters')
+            .optional(),
+        recoveryCode: z
+            .string({ message: 'Recovery Code must be a valid string' })
+            .min(8, 'Recovery Code must be at least 8 characters')
+            .max(8, 'Recovery Code must be no more than 8 characters')
+            .optional(),
     })
     .refine((data) => !!data.code || !!data.recoveryCode, {
-        message: 'Provide either a 2FA code or a recovery code',
+        message:
+            'Provide either a two factor authentication code or a recovery code',
+
         path: ['code'],
     });
 
@@ -44,6 +54,7 @@ export const verifyTwoFactorAction = actionClient
                 twoFactorEnabled: users.twoFactorEnabled,
                 twoFactorSecret: users.twoFactorSecret,
                 twoFactorRecoveryCodes: users.twoFactorRecoveryCodes,
+                isLockedOut: users.isLockedOut,
             })
             .from(users)
             .where(eq(users.id, pending.sub))
@@ -66,6 +77,12 @@ export const verifyTwoFactorAction = actionClient
                 throw new ActionError('Invalid recovery code.');
             }
 
+            if (user.isLockedOut) {
+                throw new ActionError(
+                    'This account has been locked out, please try again later.'
+                );
+            }
+
             // Consume the recovery code
             const updated = [...codes];
             updated.splice(matchIndex, 1);
@@ -84,6 +101,12 @@ export const verifyTwoFactorAction = actionClient
 
             if (!verified) {
                 throw new ActionError('Invalid two factor code.');
+            }
+
+            if (user.isLockedOut) {
+                throw new ActionError(
+                    'This account has been locked out, please try again later.'
+                );
             }
         }
 
