@@ -7,7 +7,7 @@ import { generateHash } from '@/lib/hash';
 import { randomBytes } from 'crypto';
 
 export function generateTOTPSecret(email: string) {
-    const issuer = config.APP_NAME ?? 'Halcyon';
+    const issuer = config.APP_NAME;
 
     const secret = speakeasy.generateSecret({
         length: 20,

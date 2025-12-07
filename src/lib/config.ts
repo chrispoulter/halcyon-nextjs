@@ -1,5 +1,6 @@
 export const config = {
     VERSION: String(process.env.VERSION),
+    APP_NAME: String(process.env.APP_NAME) ?? 'Halcyon',
     DATABASE_URL: String(process.env.DATABASE_URL),
     EMAIL_SMTP_SERVER: String(process.env.EMAIL_SMTP_SERVER),
     EMAIL_SMTP_PORT: Number(process.env.EMAIL_SMTP_PORT),
@@ -11,5 +12,4 @@ export const config = {
     SEED_PASSWORD: String(process.env.SEED_PASSWORD),
     SESSION_SECRET: String(process.env.SESSION_SECRET),
     SESSION_DURATION: Number(process.env.SESSION_DURATION),
-    APP_NAME: String(process.env.APP_NAME),
 };
