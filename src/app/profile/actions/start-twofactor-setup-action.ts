@@ -25,7 +25,7 @@ export const startTwoFactorSetupAction = actionClient
 
         await db
             .update(users)
-            .set({ twoFactorSecret: base32 })
+            .set({ twoFactorTempSecret: base32, twoFactorEnabled: false })
             .where(eq(users.id, session.sub));
 
         return { qr, secret: base32 };

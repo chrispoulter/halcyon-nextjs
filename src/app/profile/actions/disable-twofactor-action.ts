@@ -20,6 +20,7 @@ export const disableTwoFactorAction = actionClient
             .set({
                 twoFactorEnabled: false,
                 twoFactorSecret: null,
+                twoFactorTempSecret: null,
                 twoFactorRecoveryCodes: null,
             })
             .where(eq(users.id, session.sub));

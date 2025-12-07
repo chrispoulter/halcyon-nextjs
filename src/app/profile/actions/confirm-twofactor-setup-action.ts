@@ -27,18 +27,18 @@ export const confirmTwoFactorSetupAction = actionClient
         }
 
         const [user] = await db
-            .select({ id: users.id, secret: users.twoFactorSecret })
+            .select({ id: users.id, tempSecret: users.twoFactorTempSecret })
             .from(users)
             .where(eq(users.id, session.sub))
             .limit(1);
 
-        if (!user || !user.secret) {
+        if (!user || !user.tempSecret) {
             throw new ActionError(
                 'Two factor secret not found. Start setup again.'
             );
         }
 
-        const ok = verifyTOTP(user.secret, parsedInput.code);
+        const ok = verifyTOTP(user.tempSecret, parsedInput.code);
 
         if (!ok) {
             throw new ActionError('Invalid authenticator code.');
@@ -50,6 +50,8 @@ export const confirmTwoFactorSetupAction = actionClient
             .update(users)
             .set({
                 twoFactorEnabled: true,
+                twoFactorSecret: user.tempSecret,
+                twoFactorTempSecret: null,
                 twoFactorRecoveryCodes: hashRecoveryCodes(recoveryCodes),
             })
             .where(eq(users.id, session.sub));
