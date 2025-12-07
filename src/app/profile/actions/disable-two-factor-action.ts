@@ -1,10 +1,10 @@
 'use server';
 
 import { eq } from 'drizzle-orm';
-import { actionClient, ActionError } from '@/lib/safe-action';
-import { getSession } from '@/lib/session';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
+import { actionClient, ActionError } from '@/lib/safe-action';
+import { getSession } from '@/lib/session';
 
 export const disableTwoFactorAction = actionClient
     .metadata({ actionName: 'disableTwoFactorAction' })

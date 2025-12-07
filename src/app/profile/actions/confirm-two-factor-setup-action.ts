@@ -2,15 +2,15 @@
 
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
-import { actionClient, ActionError } from '@/lib/safe-action';
-import { getSession } from '@/lib/session';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
+import { actionClient, ActionError } from '@/lib/safe-action';
+import { getSession } from '@/lib/session';
 import {
     generateRecoveryCodes,
     hashRecoveryCodes,
     verifyTOTP,
-} from '@/lib/twofactor';
+} from '@/lib/two-factor';
 
 const schema = z.object({
     code: z.string().min(6).max(6),

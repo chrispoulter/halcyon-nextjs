@@ -2,7 +2,7 @@
 
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { disableTwoFactorAction } from '@/app/profile/actions/disable-twofactor-action';
+import { disableTwoFactorAction } from '@/app/profile/actions/disable-two-factor-action';
 import { LoadingButton } from '@/components/loading-button';
 
 export function DisableTwoFactorButton() {

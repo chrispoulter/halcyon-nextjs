@@ -1,11 +1,11 @@
 'use server';
 
 import { eq } from 'drizzle-orm';
-import { actionClient, ActionError } from '@/lib/safe-action';
-import { getSession } from '@/lib/session';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { generateRecoveryCodes, hashRecoveryCodes } from '@/lib/twofactor';
+import { actionClient, ActionError } from '@/lib/safe-action';
+import { getSession } from '@/lib/session';
+import { generateRecoveryCodes, hashRecoveryCodes } from '@/lib/two-factor';
 
 export const reissueRecoveryCodesAction = actionClient
     .metadata({ actionName: 'reissueRecoveryCodesAction' })

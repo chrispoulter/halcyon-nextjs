@@ -2,11 +2,11 @@
 
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
-import { actionClient, ActionError } from '@/lib/safe-action';
-import { getSession } from '@/lib/session';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { generateQRCodeDataUrl, generateTOTPSecret } from '@/lib/twofactor';
+import { actionClient, ActionError } from '@/lib/safe-action';
+import { getSession } from '@/lib/session';
+import { generateQRCodeDataUrl, generateTOTPSecret } from '@/lib/two-factor';
 
 const schema = z.object({});
 

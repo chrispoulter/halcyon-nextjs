@@ -7,19 +7,21 @@ import { generateHash } from '@/lib/hash';
 
 export function generateTOTPSecret(email: string) {
     const issuer = config.APP_NAME ?? 'Halcyon';
+
     const secret = speakeasy.generateSecret({
         length: 20,
         name: `${issuer}:${email}`,
         issuer,
     });
+
     return {
         base32: secret.base32,
-        otpauth: secret.otpauth_url!,
+        otpauth: secret.otpauth_url,
     };
 }
 
-export async function generateQRCodeDataUrl(otpauthUrl: string) {
-    return await QRCode.toDataURL(otpauthUrl);
+export function generateQRCodeDataUrl(otpauthUrl: string) {
+    return QRCode.toDataURL(otpauthUrl);
 }
 
 export function verifyTOTP(secretBase32: string, token: string) {
@@ -33,13 +35,16 @@ export function verifyTOTP(secretBase32: string, token: string) {
 
 export function generateRecoveryCodes(count = 10) {
     const codes: string[] = [];
+
     for (let i = 0; i < count; i++) {
         const raw = Array.from(crypto.getRandomValues(new Uint32Array(4)))
             .map((n) => n.toString(16).padStart(8, '0'))
             .join('')
             .slice(0, 20);
+
         codes.push(raw);
     }
+
     return codes;
 }
 

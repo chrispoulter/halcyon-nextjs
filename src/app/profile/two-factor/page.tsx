@@ -1,10 +1,10 @@
-import { getSession } from '@/lib/session';
-import { db } from '@/db';
-import { users } from '@/db/schema/users';
 import { eq } from 'drizzle-orm';
 import Link from 'next/link';
-import { DisableTwoFactorButton } from './ui/disable-twofactor-button';
-import { ReissueRecoveryCodesButton } from './ui/reissue-recovery-codes-button';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
+import { DisableTwoFactorButton } from '@/app/profile/two-factor/ui/disable-two-factor-button';
+import { ReissueRecoveryCodesButton } from '@/app/profile/two-factor/ui/reissue-recovery-codes-button';
+import { getSession } from '@/lib/session';
 
 export default async function Page() {
     const session = await getSession();

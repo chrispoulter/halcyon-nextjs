@@ -6,8 +6,8 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { startTwoFactorSetupAction } from '@/app/profile/actions/start-twofactor-setup-action';
-import { confirmTwoFactorSetupAction } from '@/app/profile/actions/confirm-twofactor-setup-action';
+import { startTwoFactorSetupAction } from '@/app/profile/actions/start-two-factor-setup-action';
+import { confirmTwoFactorSetupAction } from '@/app/profile/actions/confirm-two-factor-setup-action';
 import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
 
