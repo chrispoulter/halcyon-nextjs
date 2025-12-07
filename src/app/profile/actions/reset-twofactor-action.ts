@@ -28,5 +28,5 @@ export const resetTwoFactorAction = actionClient
             .set({ twoFactorSecret: base32, twoFactorEnabled: false })
             .where(eq(users.id, session.sub));
 
-        return { qr, otpauth };
+        return { qr, secret: base32 };
     });

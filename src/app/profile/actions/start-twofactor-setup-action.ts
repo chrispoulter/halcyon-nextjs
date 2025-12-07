@@ -29,5 +29,5 @@ export const startTwoFactorSetupAction = actionClient
             .set({ twoFactorSecret: base32 })
             .where(eq(users.id, session.sub));
 
-        return { qr, otpauth };
+        return { qr, secret: base32 };
     });
