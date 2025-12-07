@@ -4,9 +4,10 @@ import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
 import { config } from '@/lib/config';
-import type { SessionPayload } from '@/lib/definitions';
+import type { PendingSessionPayload, SessionPayload } from '@/lib/definitions';
 
 const SESSION_COOKIE = 'session';
+const PENDING_SESSION_COOKIE = 'pending_session';
 
 const sessionDuration = config.SESSION_DURATION;
 const sessionSecret = config.SESSION_SECRET;
@@ -57,5 +58,33 @@ export async function deleteSession() {
 export const getSession = cache(async () => {
     const cookieStore = await cookies();
     const cookie = cookieStore.get(SESSION_COOKIE);
+    return await decrypt(cookie?.value);
+});
+
+export async function createPendingSession(payload: PendingSessionPayload) {
+    const expires = new Date(Date.now() + 10 * 60 * 1000);
+    const cookieStore = await cookies();
+    const session = await encrypt(
+        payload as unknown as SessionPayload,
+        expires
+    );
+
+    cookieStore.set(PENDING_SESSION_COOKIE, session, {
+        httpOnly: true,
+        secure: true,
+        expires,
+        sameSite: 'lax',
+        path: '/',
+    });
+}
+
+export async function deletePendingSession() {
+    const cookieStore = await cookies();
+    cookieStore.delete(PENDING_SESSION_COOKIE);
+}
+
+export const getPendingSession = cache(async () => {
+    const cookieStore = await cookies();
+    const cookie = cookieStore.get(PENDING_SESSION_COOKIE);
     return await decrypt(cookie?.value);
 });

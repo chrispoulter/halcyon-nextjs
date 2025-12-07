@@ -7,7 +7,7 @@ import { users } from '@/db/schema/users';
 import { actionClient, ActionError } from '@/lib/safe-action';
 import type { Role } from '@/lib/definitions';
 import { verifyHash } from '@/lib/hash';
-import { createSession } from '@/lib/session';
+import { createPendingSession, createSession } from '@/lib/session';
 
 const schema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),
@@ -29,6 +29,7 @@ export const loginAction = actionClient
                 lastName: users.lastName,
                 isLockedOut: users.isLockedOut,
                 roles: users.roles,
+                twoFactorEnabled: users.twoFactorEnabled,
             })
             .from(users)
             .where(eq(users.emailAddress, parsedInput.emailAddress))
@@ -50,11 +51,22 @@ export const loginAction = actionClient
             );
         }
 
-        await createSession({
-            sub: user.id,
-            email: user.emailAddress,
-            given_name: user.firstName,
-            family_name: user.lastName,
-            roles: user.roles as Role[],
-        });
+        if (user.twoFactorEnabled) {
+            await createPendingSession({
+                sub: user.id,
+                email: user.emailAddress,
+                given_name: user.firstName,
+                family_name: user.lastName,
+                requires2fa: true,
+            });
+            return { requires2fa: true };
+        } else {
+            await createSession({
+                sub: user.id,
+                email: user.emailAddress,
+                given_name: user.firstName,
+                family_name: user.lastName,
+                roles: user.roles as Role[],
+            });
+        }
     });

@@ -31,3 +31,11 @@ export type SessionPayload = {
     family_name: string;
     roles?: Role[];
 };
+
+export type PendingSessionPayload = {
+    sub: string;
+    email: string;
+    given_name: string;
+    family_name: string;
+    requires2fa: true;
+};

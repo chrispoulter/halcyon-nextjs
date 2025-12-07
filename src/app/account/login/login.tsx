@@ -15,7 +15,11 @@ export function Login() {
     const router = useRouter();
 
     const { execute: login, isPending: isSaving } = useAction(loginAction, {
-        onSuccess() {
+        onSuccess({ data }) {
+            if (data && (data as any).requires2fa) {
+                router.push('/account/verify-2fa');
+                return;
+            }
             router.push('/');
         },
         onError({ error }) {

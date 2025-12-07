@@ -29,6 +29,11 @@ export const users = pgTable(
         dateOfBirth: date('date_of_birth').notNull(),
         isLockedOut: boolean('is_locked_out').notNull().default(false),
         roles: text('roles').array(),
+        twoFactorEnabled: boolean('two_factor_enabled')
+            .notNull()
+            .default(false),
+        twoFactorSecret: text('two_factor_secret'),
+        twoFactorRecoveryCodes: text('two_factor_recovery_codes').array(),
         searchVector: tsVector('search_vector').generatedAlwaysAs(
             (): SQL =>
                 sql`to_tsvector('english', ${users.firstName} || ' ' || ${users.lastName} || ' ' || ${users.emailAddress})`

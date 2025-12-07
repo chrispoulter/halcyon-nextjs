@@ -58,6 +58,19 @@ export function Profile({ profile }: ProfileProps) {
                 <Link href="/profile/change-password">Change Password</Link>
             </Button>
 
+            <div className="pt-4">
+                <p className="leading-7">
+                    Add extra protection to your account with two factor
+                    authentication.
+                </p>
+
+                <Button asChild className="mt-2 w-full sm:w-auto">
+                    <Link href="/profile/two-factor">
+                        Manage Two Factor Authentication
+                    </Link>
+                </Button>
+            </div>
+
             <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight">
                 Settings
             </h2>

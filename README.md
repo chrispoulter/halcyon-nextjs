@@ -73,6 +73,19 @@ npm run dev
 
 Open http://localhost:3000 in your browser to see the project running.
 
+### Two Factor Authentication (2FA)
+
+- Enable/disable/manage 2FA under `/profile/two-factor`.
+- Setup flow: generate QR → scan in app → enter 6-digit code → receive 10 recovery codes (store securely).
+- Login flow: if 2FA enabled, you are redirected to `/account/verify-2fa` to enter your authenticator code or a recovery code.
+- Reissue recovery codes at any time from the manage page (old codes become invalid).
+- Reconfigure replaces your authenticator secret; you must confirm again with a 6-digit code.
+
+Notes:
+
+- Recovery codes are stored hashed and are one-time use.
+- Uses `speakeasy` for TOTP and `qrcode` for QR generation.
+
 ## Building for Production
 
 To build the project for production:
