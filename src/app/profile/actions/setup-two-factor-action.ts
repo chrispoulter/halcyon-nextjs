@@ -6,18 +6,18 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { actionClient, ActionError } from '@/lib/safe-action';
 import { getSession } from '@/lib/session';
-import { generateTOTPSecret, generateQRCodeDataUrl } from '@/lib/two-factor';
+import { generateQRCodeDataUrl, generateTOTPSecret } from '@/lib/two-factor';
 
 const schema = z.object({});
 
-export const resetTwoFactorAction = actionClient
-    .metadata({ actionName: 'resetTwoFactorAction' })
+export const setupTwoFactorAction = actionClient
+    .metadata({ actionName: 'setupTwoFactorAction' })
     .inputSchema(schema)
     .action(async () => {
         const session = await getSession();
 
         if (!session) {
-            throw new ActionError('You must be signed in to reconfigure 2FA');
+            throw new ActionError('You must be signed in to configure two-factor authentication');
         }
 
         const { base32, otpauth } = generateTOTPSecret(session.email);

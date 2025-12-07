@@ -16,14 +16,14 @@ const schema = z.object({
     code: z.string().min(6).max(6),
 });
 
-export const confirmTwoFactorSetupAction = actionClient
-    .metadata({ actionName: 'confirmTwoFactorSetupAction' })
+export const confirmTwoFactorAction = actionClient
+    .metadata({ actionName: 'confirmTwoFactorAction' })
     .inputSchema(schema)
     .action(async ({ parsedInput }) => {
         const session = await getSession();
 
         if (!session) {
-            throw new ActionError('You must be signed in to configure 2FA');
+            throw new ActionError('You must be signed in to configure two-factor authentication');
         }
 
         const [user] = await db

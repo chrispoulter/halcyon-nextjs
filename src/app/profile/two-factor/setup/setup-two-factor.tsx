@@ -6,8 +6,8 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { startTwoFactorSetupAction } from '@/app/profile/actions/start-two-factor-setup-action';
-import { confirmTwoFactorSetupAction } from '@/app/profile/actions/confirm-two-factor-setup-action';
+import { setupTwoFactorAction } from '@/app/profile/actions/setup-two-factor-action';
+import { confirmTwoFactorAction } from '@/app/profile/actions/confirm-two-factor-action';
 import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
 
@@ -19,7 +19,7 @@ export function SetupTwoFactor() {
     const [qr, setQr] = useState<string | null>(null);
     const [secret, setSecret] = useState<string | null>(null);
 
-    const start = useAction(startTwoFactorSetupAction, {
+    const setup = useAction(setupTwoFactorAction, {
         onSuccess({ data }) {
             setQr(data?.qr ?? null);
             setSecret(data?.secret ?? null);
@@ -29,7 +29,7 @@ export function SetupTwoFactor() {
         },
     });
 
-    const confirm = useAction(confirmTwoFactorSetupAction, {
+    const confirm = useAction(confirmTwoFactorAction, {
         onSuccess({ data }) {
             if (data?.recoveryCodes) {
                 toast.success(
@@ -45,7 +45,7 @@ export function SetupTwoFactor() {
     });
 
     useEffect(() => {
-        start.execute({});
+        setup.execute({});
     }, []);
 
     const form = useForm<FormValues>({

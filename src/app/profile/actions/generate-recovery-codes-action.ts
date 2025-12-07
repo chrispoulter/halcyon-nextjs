@@ -7,8 +7,8 @@ import { actionClient, ActionError } from '@/lib/safe-action';
 import { getSession } from '@/lib/session';
 import { generateRecoveryCodes, hashRecoveryCodes } from '@/lib/two-factor';
 
-export const reissueRecoveryCodesAction = actionClient
-    .metadata({ actionName: 'reissueRecoveryCodesAction' })
+export const generateRecoveryCodesAction = actionClient
+    .metadata({ actionName: 'generateRecoveryCodesAction' })
     .action(async () => {
         const session = await getSession();
 

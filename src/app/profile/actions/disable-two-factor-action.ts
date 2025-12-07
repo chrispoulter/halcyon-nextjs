@@ -12,7 +12,9 @@ export const disableTwoFactorAction = actionClient
         const session = await getSession();
 
         if (!session) {
-            throw new ActionError('You must be signed in to disable 2FA');
+            throw new ActionError(
+                'You must be signed in to disable two-factor authentication'
+            );
         }
 
         await db
