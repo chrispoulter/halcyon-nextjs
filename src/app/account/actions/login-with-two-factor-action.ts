@@ -16,7 +16,7 @@ import type { Role } from '@/lib/definitions';
 const schema = z.object({
     twoFactorCode: z
         .string({ message: 'Authenticator Code must be a valid string' })
-        .regex(/^[0-9]{6}$/, 'Authenticator Code must be exactly 6 digits'),
+        .regex(/^[0-9]{6}$/, 'Authenticator Code must be 6 digits'),
 });
 export const loginWithTwoFactorAction = actionClient
     .metadata({ actionName: 'loginWithTwoFactorAction' })
