@@ -12,7 +12,6 @@ import {
 } from '@/lib/session';
 import type { Role } from '@/lib/definitions';
 import { verifyHash } from '@/lib/hash';
-import { hashRecoveryCodes } from '@/lib/two-factor';
 
 const schema = z.object({
     recoveryCode: z
@@ -53,10 +52,17 @@ export const loginWithRecoveryCodeAction = actionClient
         }
 
         const codes = user.twoFactorRecoveryCodes ?? [];
-        
-        const matchedRecoveryCode = await Promise.any(
-            codes.map((code) => verifyHash(parsedInput.recoveryCode, code))
-        ).catch(() => false);
+
+        let matchedRecoveryCode: string | undefined;
+
+        for (const code of codes) {
+            const verified = await verifyHash(parsedInput.recoveryCode, code);
+
+            if (verified) {
+                matchedRecoveryCode = code;
+                break;
+            }
+        }
 
         if (!matchedRecoveryCode) {
             throw new ActionError('Invalid recovery code.');
@@ -69,14 +75,12 @@ export const loginWithRecoveryCodeAction = actionClient
         }
 
         const updatedRecoveryCodes = codes.filter(
-            (code) => !verifyHash(parsedInput.recoveryCode, code)
+            (code) => code !== matchedRecoveryCode
         );
-
-        const hashedRecoveryCodes = await hashRecoveryCodes(updatedRecoveryCodes);
 
         await db
             .update(users)
-            .set({ twoFactorRecoveryCodes: hashedRecoveryCodes })
+            .set({ twoFactorRecoveryCodes: updatedRecoveryCodes })
             .where(eq(users.id, user.id));
 
         await deletePendingSession();
