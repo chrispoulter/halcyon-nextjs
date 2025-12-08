@@ -29,7 +29,7 @@ export function verifyTOTP(base32secret: string, token: string) {
     return speakeasy.totp.verify({
         secret: base32secret,
         encoding: 'base32',
-        window: 6,
+        window: 1,
         token,
     });
 }
