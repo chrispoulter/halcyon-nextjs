@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { confirmTwoFactorAction } from '@/app/profile/actions/confirm-two-factor-action';
+import { confirmTwoFactorAction } from '@/app/profile/actions/verify-two-factor-action';
 import { SetupTwoFactorResponse } from '@/app/profile/data/setup-two-factor';
 import {
     TwoFactorForm,

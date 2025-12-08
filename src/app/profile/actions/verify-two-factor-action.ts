@@ -11,22 +11,21 @@ import {
     verifyTOTP,
 } from '@/lib/two-factor';
 
-type ConfirmTwoFactorResponse = {
+type VerifyTwoFactorResponse = {
     id: string;
     recoveryCodes: string[];
 };
 
 const schema = z.object({
-    code:  z
-            .string({ message: 'Code must be a valid string' })
-            .min(6, 'Code must be at least 6 characters')
-            .max(6, 'Code must be no more than 6 characters')
+    code: z
+        .string({ message: 'Authenticator Code must be a valid string' })
+        .regex(/^[0-9]{6}$/, 'Authenticator Code must be exactly 6 digits'),
 });
 
-export const confirmTwoFactorAction = authActionClient()
-    .metadata({ actionName: 'confirmTwoFactorAction' })
+export const verifyTwoFactorAction = authActionClient()
+    .metadata({ actionName: 'VerifyTwoFactorAction' })
     .inputSchema(schema)
-    .action<ConfirmTwoFactorResponse>(
+    .action<VerifyTwoFactorResponse>(
         async ({ parsedInput, ctx: { userId } }) => {
             const [user] = await db
                 .select({

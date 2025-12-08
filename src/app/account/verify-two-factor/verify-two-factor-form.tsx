@@ -4,24 +4,11 @@ import { z } from 'zod';
 import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
 
-const schema = z
-    .object({
-        code: z
-            .string({ message: 'Code must be a valid string' })
-            .min(6, 'Code must be at least 6 characters')
-            .max(6, 'Code must be no more than 6 characters')
-            .optional(),
-        recoveryCode: z
-            .string({ message: 'Recovery Code must be a valid string' })
-            .min(8, 'Recovery Code must be at least 8 characters')
-            .max(8, 'Recovery Code must be no more than 8 characters')
-            .optional(),
-    })
-    .refine((data) => !!data.code || !!data.recoveryCode, {
-        message:
-            'Provide either a two factor authentication code or a recovery code',
-        path: ['code'],
-    });
+const schema = z.object({
+    code: z
+        .string({ message: 'Authenticator Code must be a valid string' })
+        .regex(/^[0-9]{6}$/, 'Authenticator Code must be exactly 6 digits'),
+});
 
 export type VerifyTwoFactorFormValues = z.infer<typeof schema>;
 
@@ -38,7 +25,6 @@ export function VerifyTwoFactorForm({
         resolver: zodResolver(schema),
         defaultValues: {
             code: '',
-            recoveryCode: '',
         },
     });
     return (
@@ -55,15 +41,6 @@ export function VerifyTwoFactorForm({
                 maxLength={6}
                 inputMode="numeric"
                 pattern="[0-9]*"
-                disabled={loading}
-            />
-
-            <TextField
-                control={form.control}
-                name="recoveryCode"
-                label="Recovery Code (optional)"
-                type="text"
-                maxLength={8}
                 disabled={loading}
             />
 

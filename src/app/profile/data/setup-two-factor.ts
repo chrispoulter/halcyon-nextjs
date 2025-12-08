@@ -7,7 +7,7 @@ import { users } from '@/db/schema/users';
 import { generateQRCodeDataUrl, generateTOTPSecret } from '@/lib/two-factor';
 
 export type SetupTwoFactorResponse = {
-    qr: string;
+    otpauthUri: string;
     secret: string;
 };
 
@@ -27,12 +27,12 @@ export const setupTwoFactor = cache(async (userId: string) => {
     }
 
     const { base32, otpauth } = generateTOTPSecret(user.emailAddress);
-    const qr = await generateQRCodeDataUrl(otpauth);
+    const otpauthUri = await generateQRCodeDataUrl(otpauth);
 
     await db
         .update(users)
         .set({ twoFactorTempSecret: base32 })
         .where(eq(users.id, userId));
 
-    return { qr, secret: base32 };
+    return { otpauthUri, secret: base32 };
 });

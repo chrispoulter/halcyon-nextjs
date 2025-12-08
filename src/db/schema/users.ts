@@ -29,7 +29,7 @@ export const users = pgTable(
         dateOfBirth: date('date_of_birth').notNull(),
         isLockedOut: boolean('is_locked_out').notNull().default(false),
         roles: text('roles').array(),
-        isTwoFactorEnabled: boolean('two_factor_enabled')
+        isTwoFactorEnabled: boolean('is_two_factor_enabled')
             .notNull()
             .default(false),
         twoFactorSecret: text('two_factor_secret'),

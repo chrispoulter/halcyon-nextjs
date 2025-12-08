@@ -64,8 +64,8 @@
                     "primaryKey": false,
                     "notNull": false
                 },
-                "two_factor_enabled": {
-                    "name": "two_factor_enabled",
+                "is_two_factor_enabled": {
+                    "name": "is_two_factor_enabled",
                     "type": "boolean",
                     "primaryKey": false,
                     "notNull": true,

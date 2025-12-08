@@ -16,8 +16,7 @@ import { verifyHash } from '@/lib/hash';
 const schema = z.object({
     recoveryCode: z
         .string({ message: 'Recovery Code must be a valid string' })
-        .min(8, 'Recovery Code must be at least 8 characters')
-        .max(8, 'Recovery Code must be no more than 8 characters'),
+        .regex(/^[0-9]{8}$/, 'Recovery Code must be exactly 8 digits'),
 });
 
 export const loginWithRecoveryCodeAction = actionClient
