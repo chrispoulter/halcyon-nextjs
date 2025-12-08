@@ -42,7 +42,7 @@ export const resetPasswordAction = actionClient
             throw new ActionError('Invalid token.');
         }
 
-        const password = generateHash(parsedInput.newPassword);
+        const password = await generateHash(parsedInput.newPassword);
 
         await db
             .update(users)
