@@ -34,10 +34,11 @@ export const generateRecoveryCodesAction = authActionClient()
         }
 
         const recoveryCodes = generateRecoveryCodes(10);
+        const hashedRecoveryCodes = await hashRecoveryCodes(recoveryCodes);
 
         await db
             .update(users)
-            .set({ twoFactorRecoveryCodes: hashRecoveryCodes(recoveryCodes) })
+            .set({ twoFactorRecoveryCodes: hashedRecoveryCodes })
             .where(eq(users.id, userId));
 
         revalidatePath('/users');

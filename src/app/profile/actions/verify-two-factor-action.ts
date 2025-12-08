@@ -57,6 +57,7 @@ export const verifyTwoFactorAction = authActionClient()
             }
 
             const recoveryCodes = generateRecoveryCodes(10);
+            const hashedRecoveryCodes = await hashRecoveryCodes(recoveryCodes);
 
             await db
                 .update(users)
@@ -64,7 +65,7 @@ export const verifyTwoFactorAction = authActionClient()
                     isTwoFactorEnabled: true,
                     twoFactorSecret: user.twoFactorTempSecret,
                     twoFactorTempSecret: null,
-                    twoFactorRecoveryCodes: hashRecoveryCodes(recoveryCodes),
+                    twoFactorRecoveryCodes: hashedRecoveryCodes,
                 })
                 .where(eq(users.id, userId));
 

@@ -41,5 +41,5 @@ export function generateRecoveryCodes(count = 10) {
 }
 
 export function hashRecoveryCodes(codes: string[]) {
-    return codes.map(generateHash);
+    return Promise.all(codes.map(generateHash));
 }
