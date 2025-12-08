@@ -62,7 +62,7 @@ export const confirmTwoFactorAction = authActionClient()
             await db
                 .update(users)
                 .set({
-                    twoFactorEnabled: true,
+                    isTwoFactorEnabled: true,
                     twoFactorSecret: user.twoFactorTempSecret,
                     twoFactorTempSecret: null,
                     twoFactorRecoveryCodes: hashRecoveryCodes(recoveryCodes),

@@ -13,7 +13,7 @@ export type GetUserResponse = {
     lastName: string;
     dateOfBirth: string;
     isLockedOut: boolean;
-    twoFactorEnabled: boolean;
+    isTwoFactorEnabled: boolean;
     roles?: Role[];
 };
 
@@ -26,7 +26,7 @@ export const getUser = cache(async (userId: string) => {
             lastName: users.lastName,
             dateOfBirth: users.dateOfBirth,
             isLockedOut: users.isLockedOut,
-            twoFactorEnabled: users.twoFactorEnabled,
+            isTwoFactorEnabled: users.isTwoFactorEnabled,
             roles: users.roles,
         })
         .from(users)
@@ -44,7 +44,7 @@ export const getUser = cache(async (userId: string) => {
         lastName: user.lastName,
         dateOfBirth: user.dateOfBirth,
         isLockedOut: user.isLockedOut,
-        twoFactorEnabled: user.twoFactorEnabled,
+        isTwoFactorEnabled: user.isTwoFactorEnabled,
         roles: (user.roles as Role[]) || undefined,
     };
 });

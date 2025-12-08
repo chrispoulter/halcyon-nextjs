@@ -1,0 +1,78 @@
+'use server';
+
+import { z } from 'zod';
+import { eq } from 'drizzle-orm';
+import speakeasy from 'speakeasy';
+import { db } from '@/db';
+import { users } from '@/db/schema/users';
+import { actionClient, ActionError } from '@/lib/safe-action';
+import {
+    createSession,
+    deletePendingSession,
+    getPendingSession,
+} from '@/lib/session';
+import type { Role } from '@/lib/definitions';
+
+const schema = z.object({
+    code: z
+        .string({ message: 'Code must be a valid string' })
+        .min(6, 'Code must be at least 6 characters')
+        .max(6, 'Code must be no more than 6 characters'),
+});
+export const loginWithTwoFactorAction = actionClient
+    .metadata({ actionName: 'loginWithTwoFactorAction' })
+    .inputSchema(schema)
+    .action(async ({ parsedInput }) => {
+        const pending = await getPendingSession();
+
+        if (!pending || !pending.requiresTwoFactor) {
+            throw new ActionError('No pending two factor verification found.');
+        }
+
+        const [user] = await db
+            .select({
+                id: users.id,
+                emailAddress: users.emailAddress,
+                firstName: users.firstName,
+                lastName: users.lastName,
+                roles: users.roles,
+                isTwoFactorEnabled: users.isTwoFactorEnabled,
+                twoFactorSecret: users.twoFactorSecret,
+                twoFactorRecoveryCodes: users.twoFactorRecoveryCodes,
+                isLockedOut: users.isLockedOut,
+            })
+            .from(users)
+            .where(eq(users.id, pending.sub))
+            .limit(1);
+
+        if (!user || !user.isTwoFactorEnabled || !user.twoFactorSecret) {
+            throw new ActionError('Two factor authentication is not enabled.');
+        }
+
+        const verified = speakeasy.totp.verify({
+            secret: user.twoFactorSecret,
+            encoding: 'base32',
+            window: 1,
+            token: parsedInput.code,
+        });
+
+        if (!verified) {
+            throw new ActionError('Invalid authenticator code.');
+        }
+
+        if (user.isLockedOut) {
+            throw new ActionError(
+                'This account has been locked out, please try again later.'
+            );
+        }
+
+        await deletePendingSession();
+
+        await createSession({
+            sub: user.id,
+            email: user.emailAddress,
+            given_name: user.firstName,
+            family_name: user.lastName,
+            roles: user.roles as Role[],
+        });
+    });

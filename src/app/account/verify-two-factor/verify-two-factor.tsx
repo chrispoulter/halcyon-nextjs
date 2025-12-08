@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { verifyTwoFactorAction } from '@/app/account/actions/verify-two-factor-action';
+import { verifyTwoFactorAction } from '@/app/account/actions/login-with-two-factor-action';
 import {
     VerifyTwoFactorForm,
     VerifyTwoFactorFormValues,

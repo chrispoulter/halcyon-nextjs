@@ -34,5 +34,5 @@ export type SessionPayload = {
 
 export type PendingSessionPayload = {
     sub: string;
-    requires2fa: true;
+    requiresTwoFactor: true;
 };

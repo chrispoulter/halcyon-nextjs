@@ -29,7 +29,7 @@ export const loginAction = actionClient
                 lastName: users.lastName,
                 isLockedOut: users.isLockedOut,
                 roles: users.roles,
-                twoFactorEnabled: users.twoFactorEnabled,
+                isTwoFactorEnabled: users.isTwoFactorEnabled,
             })
             .from(users)
             .where(eq(users.emailAddress, parsedInput.emailAddress))
@@ -51,20 +51,20 @@ export const loginAction = actionClient
             );
         }
 
-        if (user.twoFactorEnabled) {
+        if (user.isTwoFactorEnabled) {
             await createPendingSession({
                 sub: user.id,
-                requires2fa: true,
+                requiresTwoFactor: true,
             });
 
-            return { requires2fa: true };
-        } else {
-            await createSession({
-                sub: user.id,
-                email: user.emailAddress,
-                given_name: user.firstName,
-                family_name: user.lastName,
-                roles: user.roles as Role[],
-            });
+            return { requiresTwoFactor: true };
         }
+
+        await createSession({
+            sub: user.id,
+            email: user.emailAddress,
+            given_name: user.firstName,
+            family_name: user.lastName,
+            roles: user.roles as Role[],
+        });
     });

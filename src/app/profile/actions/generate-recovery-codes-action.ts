@@ -19,7 +19,7 @@ export const generateRecoveryCodesAction = authActionClient()
             .select({
                 id: users.id,
                 isLockedOut: users.isLockedOut,
-                twoFactorEnabled: users.twoFactorEnabled,
+                isTwoFactorEnabled: users.isTwoFactorEnabled,
             })
             .from(users)
             .where(eq(users.id, userId))
@@ -29,7 +29,7 @@ export const generateRecoveryCodesAction = authActionClient()
             throw new ActionError('User not found.', 404);
         }
 
-        if (!user.twoFactorEnabled) {
+        if (!user.isTwoFactorEnabled) {
             throw new ActionError('Two factor authentication is not enabled.');
         }
 

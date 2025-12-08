@@ -29,7 +29,7 @@ export const disableTwoFactorAction = authActionClient()
         await db
             .update(users)
             .set({
-                twoFactorEnabled: false,
+                isTwoFactorEnabled: false,
                 twoFactorSecret: null,
                 twoFactorTempSecret: null,
                 twoFactorRecoveryCodes: null,
