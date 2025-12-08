@@ -5,9 +5,9 @@ import { TextField } from '@/components/form/text-field';
 import { LoadingButton } from '@/components/loading-button';
 
 const schema = z.object({
-    code: z
-        .string({ message: 'Authenticator Code must be a valid string' })
-        .regex(/^[0-9]{6}$/, 'Authenticator Code must be exactly 6 digits'),
+    verificationCode: z
+        .string({ message: 'Verification Code must be a valid string' })
+        .regex(/^[0-9]{6}$/, 'Verification Code must be exactly 6 digits'),
 });
 
 export type SetupTwoFactorFormValues = z.infer<typeof schema>;
@@ -26,7 +26,7 @@ export function SetupTwoFactorForm({
     const form = useForm<SetupTwoFactorFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
-            code: '',
+            verificationCode: '',
         },
     });
 
@@ -38,8 +38,8 @@ export function SetupTwoFactorForm({
         >
             <TextField
                 control={form.control}
-                name="code"
-                label="Authenticator Code"
+                name="verificationCode"
+                label="Verification Code"
                 maxLength={6}
                 inputMode="numeric"
                 pattern="[0-9]{6}"

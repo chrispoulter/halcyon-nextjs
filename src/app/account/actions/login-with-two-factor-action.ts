@@ -14,7 +14,7 @@ import {
 import type { Role } from '@/lib/definitions';
 
 const schema = z.object({
-    code: z
+    twoFactorCode: z
         .string({ message: 'Authenticator Code must be a valid string' })
         .regex(/^[0-9]{6}$/, 'Authenticator Code must be exactly 6 digits'),
 });
@@ -25,7 +25,7 @@ export const loginWithTwoFactorAction = actionClient
         const pending = await getPendingSession();
 
         if (!pending || !pending.requiresTwoFactor) {
-            throw new ActionError('No pending two factor verification found.');
+            throw new ActionError('No pending two-factor verification found.');
         }
 
         const [user] = await db
@@ -45,14 +45,14 @@ export const loginWithTwoFactorAction = actionClient
             .limit(1);
 
         if (!user || !user.isTwoFactorEnabled || !user.twoFactorSecret) {
-            throw new ActionError('Two factor authentication is not enabled.');
+            throw new ActionError('Two-factor authentication is not enabled.');
         }
 
         const verified = speakeasy.totp.verify({
             secret: user.twoFactorSecret,
             encoding: 'base32',
             window: 1,
-            token: parsedInput.code,
+            token: parsedInput.twoFactorCode,
         });
 
         if (!verified) {

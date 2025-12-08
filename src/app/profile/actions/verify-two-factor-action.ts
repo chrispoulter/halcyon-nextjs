@@ -17,9 +17,9 @@ type VerifyTwoFactorResponse = {
 };
 
 const schema = z.object({
-    code: z
-        .string({ message: 'Authenticator Code must be a valid string' })
-        .regex(/^[0-9]{6}$/, 'Authenticator Code must be exactly 6 digits'),
+    verificationCode: z
+        .string({ message: 'Verification Code must be a valid string' })
+        .regex(/^[0-9]{6}$/, 'Verification Code must be exactly 6 digits'),
 });
 
 export const verifyTwoFactorAction = authActionClient()
@@ -43,17 +43,17 @@ export const verifyTwoFactorAction = authActionClient()
 
             if (!user.twoFactorTempSecret) {
                 throw new ActionError(
-                    'Two factor authentication configuration not found.'
+                    'Two-factor authentication configuration not found.'
                 );
             }
 
             const verified = verifyTOTP(
                 user.twoFactorTempSecret,
-                parsedInput.code
+                parsedInput.verificationCode
             );
 
             if (!verified) {
-                throw new ActionError('Invalid authenticator code.');
+                throw new ActionError('Invalid verification code.');
             }
 
             const recoveryCodes = generateRecoveryCodes(10);

@@ -26,7 +26,7 @@ export const loginWithRecoveryCodeAction = actionClient
         const pending = await getPendingSession();
 
         if (!pending || !pending.requiresTwoFactor) {
-            throw new ActionError('No pending two factor verification found.');
+            throw new ActionError('No pending two-factor verification found.');
         }
 
         const [user] = await db
@@ -47,7 +47,7 @@ export const loginWithRecoveryCodeAction = actionClient
 
         if (!user || !user.isTwoFactorEnabled || !user.twoFactorSecret) {
             throw new ActionError(
-                'Two factor authentication is not configured.'
+                'Two-factor authentication is not configured.'
             );
         }
 

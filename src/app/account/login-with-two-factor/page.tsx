@@ -3,7 +3,7 @@ import { LoginWithTwoFactor } from '@/app/account/login-with-two-factor/login-wi
 import { verifyPendingSession } from '@/lib/dal';
 
 export const metadata: Metadata = {
-    title: 'Two Factor Authentication',
+    title: 'Two-Factor Authentication',
 };
 
 export default async function Page() {

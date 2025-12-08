@@ -61,13 +61,8 @@ export function Profile({ profile }: ProfileProps) {
             </Button>
 
             <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight">
-                Two Factor Authentication
+                Two-Factor Authentication
             </h2>
-
-            <p className="leading-7">
-                Protect your account with a second step when logging in. Enable
-                two factor authentication using an authenticator app like Authy.
-            </p>
 
             {profile.isTwoFactorEnabled ? (
                 <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
@@ -81,8 +76,8 @@ export function Profile({ profile }: ProfileProps) {
                 </div>
             ) : (
                 <Button asChild className="w-full sm:w-auto">
-                    <Link href="/profile/two-factor">
-                        Enable Two Factor Authentication
+                    <Link href="/profile/setup-two-factor">
+                        Set up Authenticator App
                     </Link>
                 </Button>
             )}

@@ -6,7 +6,7 @@ import { SetupTwoFactor } from '@/app/profile/setup-two-factor/setup-two-factor'
 import { verifySession } from '@/lib/dal';
 
 export const metadata: Metadata = {
-    title: 'Two Factor Authentication',
+    title: 'Set up Two-Factor Authentication',
 };
 
 export default async function Page() {

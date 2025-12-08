@@ -22,7 +22,7 @@ export function SetupTwoFactor({ configuration }: TwoFactorProps) {
         {
             onSuccess({ data }) {
                 if (data?.recoveryCodes) {
-                    toast.success('Two factor authentication enabled.');
+                    toast.success('Two-factor authentication enabled.');
                     // Optionally show recovery codes inline or prompt download
                     alert(
                         `Recovery Codes:\n\n${data.recoveryCodes.join('\n')}`
@@ -42,7 +42,7 @@ export function SetupTwoFactor({ configuration }: TwoFactorProps) {
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
-                Two Factor Authentication
+                Two-Factor Authentication
             </h1>
 
             <p className="leading-7">
@@ -87,7 +87,7 @@ export function SetupTwoFactor({ configuration }: TwoFactorProps) {
                     <code className="bg-muted rounded p-1 font-mono font-semibold">
                         {configuration.secret}
                     </code>{' '}
-                    into your two factor authenticator app. Spaces and casing do
+                    into your two-factor authenticator app. Spaces and casing do
                     not matter.
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -98,7 +98,7 @@ export function SetupTwoFactor({ configuration }: TwoFactorProps) {
                 </li>
                 <li>
                     Once you have scanned the QR code or input the key above,
-                    your two factor authentication app will provide you with a
+                    your two-factor authentication app will provide you with a
                     unique code. Enter the code in the confirmation box below.
                 </li>
             </ol>

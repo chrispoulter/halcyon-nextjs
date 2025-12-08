@@ -26,7 +26,7 @@ export function DisableTwoFactorButton({
         disableTwoFactorAction,
         {
             onSuccess() {
-                toast.success('Two factor authentication disabled.');
+                toast.success('Two-factor authentication disabled.');
             },
             onError({ error }) {
                 toast.error(<ServerActionError result={error} />);
@@ -46,14 +46,14 @@ export function DisableTwoFactorButton({
                     loading={isDisabling}
                     className={className}
                 >
-                    Disable Two Factor
+                    Disable Two-Factor
                 </LoadingButton>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Disable Two Factor</AlertDialogTitle>
+                    <AlertDialogTitle>Disable Two-Factor</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to disable two factor
+                        Are you sure you want to disable two-factor
                         authentication?
                     </AlertDialogDescription>
                 </AlertDialogHeader>
