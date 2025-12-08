@@ -25,11 +25,11 @@ export function generateQRCodeDataUrl(otpauthUrl: string) {
     return QRCode.toDataURL(otpauthUrl);
 }
 
-export function verifyTOTP(secretBase32: string, token: string) {
+export function verifyTOTP(base32secret: string, token: string) {
     return speakeasy.totp.verify({
-        secret: secretBase32,
+        secret: base32secret,
         encoding: 'base32',
-        window: 1,
+        window: 6,
         token,
     });
 }
