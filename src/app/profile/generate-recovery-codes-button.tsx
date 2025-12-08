@@ -54,9 +54,7 @@ export function GenerateRecoveryCodesButton({
                 <AlertDialogHeader>
                     <AlertDialogTitle>Generate Recovery Codes</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to generate new recovery codes? If
-                        you lose your device and don&apos;t have the recovery
-                        codes you will lose access to your account.
+                        Are you sure you want to generate new recovery codes?
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

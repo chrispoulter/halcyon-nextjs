@@ -64,6 +64,11 @@ export function Profile({ profile }: ProfileProps) {
                 Two-Factor Authentication
             </h2>
 
+            <p className="leading-7">
+                Enhance the security of your account by enabling two-factor
+                authentication.
+            </p>
+
             <div className="flex flex-col gap-2 sm:flex-row">
                 <Button asChild>
                     <Link href="/profile/two-factor">
