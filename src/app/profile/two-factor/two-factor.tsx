@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { verifyTwoFactorAction } from '@/app/profile/actions/verify-two-factor-action';
@@ -94,11 +95,13 @@ export function TwoFactor({ configuration }: TwoFactorProps) {
                     </code>{' '}
                     into your two-factor authenticator app. Spaces and casing do
                     not matter.
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                         src={configuration.otpauthUri}
-                        alt="Authenticator QR code"
+                        width={180}
+                        height={180}
+                        alt="Authenticator QR Code"
                         className="mt-2 rounded border bg-white p-1"
+                        unoptimized
                     />
                 </li>
                 <li>
