@@ -27,6 +27,7 @@ export function GenerateRecoveryCodesButton({
             onSuccess({ data }) {
                 if (data.recoveryCodes) {
                     toast.success('Recovery codes generated.');
+
                     // Optionally show recovery codes inline or prompt download
                     alert(
                         `Recovery Codes:\n\n${data.recoveryCodes.join('\n')}`

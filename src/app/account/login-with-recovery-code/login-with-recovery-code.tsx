@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { loginWithRecoveryCodeAction } from '@/app/account/actions/login-with-recovery-code-action';
@@ -10,7 +11,6 @@ import {
 } from '@/app/account/login-with-recovery-code/login-with-recovery-code-form';
 import { ServerActionError } from '@/components/server-action-error';
 import { Button } from '@/components/ui/button';
-import { Link } from 'lucide-react';
 
 export function LoginWithRecoveryCode() {
     const router = useRouter();
@@ -44,7 +44,7 @@ export function LoginWithRecoveryCode() {
 
             <LoginWithRecoveryCodeForm loading={isSaving} onSubmit={onSubmit}>
                 <Button asChild variant="outline">
-                    <Link href="/login-with-two-factor">Cancel</Link>
+                    <Link href="/account/login-with-two-factor">Cancel</Link>
                 </Button>
             </LoginWithRecoveryCodeForm>
         </main>

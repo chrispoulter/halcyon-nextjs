@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
@@ -17,12 +18,16 @@ type TwoFactorProps = {
 };
 
 export function TwoFactor({ configuration }: TwoFactorProps) {
+    const router = useRouter();
+
     const { execute: verifyTwoFactor, isPending: isVerifying } = useAction(
         verifyTwoFactorAction,
         {
             onSuccess({ data }) {
                 if (data?.recoveryCodes) {
                     toast.success('Two-factor authentication enabled.');
+                    router.push('/profile');
+
                     // Optionally show recovery codes inline or prompt download
                     alert(
                         `Recovery Codes:\n\n${data.recoveryCodes.join('\n')}`

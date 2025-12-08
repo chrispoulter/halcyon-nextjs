@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { loginWithTwoFactorAction } from '@/app/account/actions/login-with-two-factor-action';
@@ -10,12 +11,11 @@ import {
 } from '@/app/account/login-with-two-factor/login-with-two-factor-form';
 import { ServerActionError } from '@/components/server-action-error';
 import { Button } from '@/components/ui/button';
-import { Link } from 'lucide-react';
 
 export function LoginWithTwoFactor() {
     const router = useRouter();
 
-    const { execute: LoginWithTwoFactor, isPending: isSaving } = useAction(
+    const { execute: loginWithTwoFactor, isPending: isSaving } = useAction(
         loginWithTwoFactorAction,
         {
             onSuccess() {
@@ -28,7 +28,7 @@ export function LoginWithTwoFactor() {
     );
 
     function onSubmit(values: LoginWithTwoFactorFormValues) {
-        LoginWithTwoFactor(values);
+        loginWithTwoFactor(values);
     }
 
     return (
@@ -44,7 +44,7 @@ export function LoginWithTwoFactor() {
 
             <LoginWithTwoFactorForm loading={isSaving} onSubmit={onSubmit}>
                 <Button asChild variant="outline">
-                    <Link href="/login">Cancel</Link>
+                    <Link href="/account/login">Cancel</Link>
                 </Button>
             </LoginWithTwoFactorForm>
 
