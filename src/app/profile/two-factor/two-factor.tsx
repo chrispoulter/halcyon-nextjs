@@ -24,7 +24,7 @@ export function TwoFactor({ configuration }: TwoFactorProps) {
         verifyTwoFactorAction,
         {
             onSuccess({ data }) {
-                if (data?.recoveryCodes) {
+                if (data.recoveryCodes) {
                     toast.success('Two-factor authentication enabled.');
                     router.push('/profile');
 

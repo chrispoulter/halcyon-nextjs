@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
@@ -13,14 +12,9 @@ import { ServerActionError } from '@/components/server-action-error';
 import { Button } from '@/components/ui/button';
 
 export function LoginWithTwoFactor() {
-    const router = useRouter();
-
     const { execute: loginWithTwoFactor, isPending: isSaving } = useAction(
         loginWithTwoFactorAction,
         {
-            onSuccess() {
-                router.push('/');
-            },
             onError({ error }) {
                 toast.error(<ServerActionError result={error} />);
             },

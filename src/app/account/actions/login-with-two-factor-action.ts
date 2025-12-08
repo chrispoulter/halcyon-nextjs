@@ -1,5 +1,6 @@
 'use server';
 
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import speakeasy from 'speakeasy';
@@ -18,6 +19,7 @@ const schema = z.object({
         .string({ message: 'Authenticator Code must be a valid string' })
         .regex(/^[0-9]{6}$/, 'Authenticator Code must be 6 digits'),
 });
+
 export const loginWithTwoFactorAction = actionClient
     .metadata({ actionName: 'loginWithTwoFactorAction' })
     .inputSchema(schema)
@@ -73,4 +75,6 @@ export const loginWithTwoFactorAction = actionClient
             family_name: user.lastName,
             roles: user.roles as Role[],
         });
+
+        redirect('/');
     });
