@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { updateProfileAction } from '@/app/profile/actions/update-profile-action';
-import type { GetProfileResponse } from '@/app/profile/data/get-profile';
+import type { Profile } from '@/app/profile/data/get-profile';
 import {
     UpdateProfileForm,
     type UpdateProfileFormValues,
@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
 type ProfileProps = {
-    profile: GetProfileResponse;
+    profile: Profile;
 };
 
 export function UpdateProfile({ profile }: ProfileProps) {

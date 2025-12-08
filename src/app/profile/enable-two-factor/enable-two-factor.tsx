@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { verifyTwoFactorAction } from '@/app/profile/actions/verify-two-factor-action';
-import { GetTwoFactorConfigResponse } from '@/app/profile/data/get-two-factor-config';
+import { TwoFactorConfig } from '@/app/profile/data/get-two-factor-config';
 import {
     EnableTwoFactorForm,
     EnableTwoFactorFormValues,
@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
 type EnableTwoFactorProps = {
-    configuration: GetTwoFactorConfigResponse;
+    configuration: TwoFactorConfig;
 };
 
 export function EnableTwoFactor({ configuration }: EnableTwoFactorProps) {
