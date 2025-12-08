@@ -37,7 +37,6 @@ export const loginWithTwoFactorAction = actionClient
                 roles: users.roles,
                 isTwoFactorEnabled: users.isTwoFactorEnabled,
                 twoFactorSecret: users.twoFactorSecret,
-                twoFactorRecoveryCodes: users.twoFactorRecoveryCodes,
                 isLockedOut: users.isLockedOut,
             })
             .from(users)
