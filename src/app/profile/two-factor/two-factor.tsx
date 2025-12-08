@@ -6,17 +6,17 @@ import { toast } from 'sonner';
 import { verifyTwoFactorAction } from '@/app/profile/actions/verify-two-factor-action';
 import { TwoFactorConfig } from '@/app/profile/data/get-two-factor-config';
 import {
-    EnableTwoFactorForm,
-    EnableTwoFactorFormValues,
-} from '@/app/profile/enable-two-factor/enable-two-factor-form';
+    TwoFactorForm,
+    TwoFactorFormValues,
+} from '@/app/profile/two-factor/two-factor-form';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
-type EnableTwoFactorProps = {
+type TwoFactorProps = {
     configuration: TwoFactorConfig;
 };
 
-export function EnableTwoFactor({ configuration }: EnableTwoFactorProps) {
+export function TwoFactor({ configuration }: TwoFactorProps) {
     const { execute: verifyTwoFactor, isPending: isVerifying } = useAction(
         verifyTwoFactorAction,
         {
@@ -35,7 +35,7 @@ export function EnableTwoFactor({ configuration }: EnableTwoFactorProps) {
         }
     );
 
-    function onSubmit(values: EnableTwoFactorFormValues) {
+    function onSubmit(values: TwoFactorFormValues) {
         verifyTwoFactor(values);
     }
 
@@ -103,11 +103,11 @@ export function EnableTwoFactor({ configuration }: EnableTwoFactorProps) {
                 </li>
             </ol>
 
-            <EnableTwoFactorForm onSubmit={onSubmit} loading={isVerifying}>
+            <TwoFactorForm onSubmit={onSubmit} loading={isVerifying}>
                 <Button asChild variant="outline">
                     <Link href="/profile">Cancel</Link>
                 </Button>
-            </EnableTwoFactorForm>
+            </TwoFactorForm>
         </main>
     );
 }

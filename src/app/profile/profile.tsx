@@ -69,14 +69,14 @@ export function Profile({ profile }: ProfileProps) {
                     <DisableTwoFactorButton />
                     <GenerateRecoveryCodesButton />
                     <Button asChild>
-                        <Link href="/profile/enable-two-factor">
+                        <Link href="/profile/two-factor">
                             Reconfigure Authenticator App
                         </Link>
                     </Button>
                 </div>
             ) : (
                 <Button asChild className="w-full sm:w-auto">
-                    <Link href="/profile/enable-two-factor">
+                    <Link href="/profile/two-factor">
                         Set up Authenticator App
                     </Link>
                 </Button>
