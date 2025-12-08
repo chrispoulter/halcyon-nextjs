@@ -51,11 +51,11 @@ export const loginWithRecoveryCodeAction = actionClient
             );
         }
 
-        const codes = user.twoFactorRecoveryCodes ?? [];
+        const recoveryCodes = user.twoFactorRecoveryCodes ?? [];
 
         let matchedRecoveryCode: string | undefined;
 
-        for (const code of codes) {
+        for (const code of recoveryCodes) {
             const verified = await verifyHash(parsedInput.recoveryCode, code);
 
             if (verified) {
@@ -74,7 +74,7 @@ export const loginWithRecoveryCodeAction = actionClient
             );
         }
 
-        const updatedRecoveryCodes = codes.filter(
+        const updatedRecoveryCodes = recoveryCodes.filter(
             (code) => code !== matchedRecoveryCode
         );
 
