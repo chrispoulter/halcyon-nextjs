@@ -6,12 +6,12 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { generateQRCodeDataUrl, generateTOTPSecret } from '@/lib/two-factor';
 
-export type SetupTwoFactorResponse = {
+export type GetTwoFactorConfigResponse = {
     otpauthUri: string;
     secret: string;
 };
 
-export const setupTwoFactor = cache(async (userId: string) => {
+export const getTwoFactorConfig = cache(async (userId: string) => {
     const [user] = await db
         .select({
             id: users.id,

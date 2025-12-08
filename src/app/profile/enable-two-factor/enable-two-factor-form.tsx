@@ -10,20 +10,20 @@ const schema = z.object({
         .regex(/^[0-9]{6}$/, 'Verification Code must be 6 digits'),
 });
 
-export type SetupTwoFactorFormValues = z.infer<typeof schema>;
+export type EnableTwoFactorFormValues = z.infer<typeof schema>;
 
-type SetupTwoFactorFormProps = {
+type EnableTwoFactorFormProps = {
     loading?: boolean;
-    onSubmit: (values: SetupTwoFactorFormValues) => void;
+    onSubmit: (values: EnableTwoFactorFormValues) => void;
     children?: React.ReactNode;
 };
 
-export function SetupTwoFactorForm({
+export function EnableTwoFactorForm({
     loading,
     onSubmit,
     children,
-}: SetupTwoFactorFormProps) {
-    const form = useForm<SetupTwoFactorFormValues>({
+}: EnableTwoFactorFormProps) {
+    const form = useForm<EnableTwoFactorFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             verificationCode: '',

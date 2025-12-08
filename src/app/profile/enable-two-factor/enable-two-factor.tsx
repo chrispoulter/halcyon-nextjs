@@ -4,19 +4,19 @@ import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { verifyTwoFactorAction } from '@/app/profile/actions/verify-two-factor-action';
-import { SetupTwoFactorResponse } from '@/app/profile/data/setup-two-factor';
+import { GetTwoFactorConfigResponse } from '@/app/profile/data/get-two-factor-config';
 import {
-    SetupTwoFactorForm,
-    SetupTwoFactorFormValues,
-} from '@/app/profile/setup-two-factor/setup-two-factor-form';
+    EnableTwoFactorForm,
+    EnableTwoFactorFormValues,
+} from '@/app/profile/enable-two-factor/enable-two-factor-form';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
-type TwoFactorProps = {
-    configuration: SetupTwoFactorResponse;
+type EnableTwoFactorProps = {
+    configuration: GetTwoFactorConfigResponse;
 };
 
-export function SetupTwoFactor({ configuration }: TwoFactorProps) {
+export function EnableTwoFactor({ configuration }: EnableTwoFactorProps) {
     const { execute: verifyTwoFactor, isPending: isVerifying } = useAction(
         verifyTwoFactorAction,
         {
@@ -35,14 +35,14 @@ export function SetupTwoFactor({ configuration }: TwoFactorProps) {
         }
     );
 
-    function onSubmit(values: SetupTwoFactorFormValues) {
+    function onSubmit(values: EnableTwoFactorFormValues) {
         verifyTwoFactor(values);
     }
 
     return (
         <main className="mx-auto max-w-screen-sm space-y-6 p-6">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
-                Setup Two-Factor Authentication
+                Enable Two-Factor Authentication
             </h1>
 
             <p className="leading-7">
@@ -103,11 +103,11 @@ export function SetupTwoFactor({ configuration }: TwoFactorProps) {
                 </li>
             </ol>
 
-            <SetupTwoFactorForm onSubmit={onSubmit} loading={isVerifying}>
+            <EnableTwoFactorForm onSubmit={onSubmit} loading={isVerifying}>
                 <Button asChild variant="outline">
                     <Link href="/profile">Cancel</Link>
                 </Button>
-            </SetupTwoFactorForm>
+            </EnableTwoFactorForm>
         </main>
     );
 }
