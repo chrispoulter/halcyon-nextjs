@@ -64,23 +64,19 @@ export function Profile({ profile }: ProfileProps) {
                 Two-Factor Authentication
             </h2>
 
-            {profile.isTwoFactorEnabled ? (
-                <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
-                    <DisableTwoFactorButton />
-                    <GenerateRecoveryCodesButton />
-                    <Button asChild>
-                        <Link href="/profile/two-factor">
-                            Reconfigure Authenticator App
-                        </Link>
-                    </Button>
-                </div>
-            ) : (
-                <Button asChild className="w-full sm:w-auto">
+            <div className="flex flex-col gap-2 sm:flex-row">
+                <Button asChild>
                     <Link href="/profile/two-factor">
-                        Set up Authenticator App
+                        Configure Authenticator App
                     </Link>
                 </Button>
-            )}
+                {profile.isTwoFactorEnabled && (
+                    <>
+                        <GenerateRecoveryCodesButton />
+                        <DisableTwoFactorButton />
+                    </>
+                )}
+            </div>
 
             <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight">
                 Settings
