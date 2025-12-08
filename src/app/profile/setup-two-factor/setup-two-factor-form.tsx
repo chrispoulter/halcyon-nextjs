@@ -10,20 +10,20 @@ const schema = z.object({
         .regex(/^[0-9]{6}$/, 'Authenticator Code must be exactly 6 digits'),
 });
 
-export type TwoFactorFormValues = z.infer<typeof schema>;
+export type SetupTwoFactorFormValues = z.infer<typeof schema>;
 
-type TwoFactorFormProps = {
+type SetupTwoFactorFormProps = {
     loading?: boolean;
-    onSubmit: (values: TwoFactorFormValues) => void;
+    onSubmit: (values: SetupTwoFactorFormValues) => void;
     children?: React.ReactNode;
 };
 
-export function TwoFactorForm({
+export function SetupTwoFactorForm({
     loading,
     onSubmit,
     children,
-}: TwoFactorFormProps) {
-    const form = useForm<TwoFactorFormValues>({
+}: SetupTwoFactorFormProps) {
+    const form = useForm<SetupTwoFactorFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             code: '',
@@ -40,10 +40,11 @@ export function TwoFactorForm({
                 control={form.control}
                 name="code"
                 label="Authenticator Code"
-                type="text"
                 maxLength={6}
                 inputMode="numeric"
-                pattern="[0-9]*"
+                pattern="[0-9]{6}"
+                autoComplete="one-time-code"
+                required
                 disabled={loading}
             />
 

@@ -2,7 +2,7 @@ import 'server-only';
 
 import { cache } from 'react';
 import { forbidden, redirect } from 'next/navigation';
-import { getSession } from '@/lib/session';
+import { getPendingSession, getSession } from '@/lib/session';
 import { Role } from '@/lib/definitions';
 
 export const verifySession = cache(async (roles?: Role[]) => {
@@ -14,6 +14,16 @@ export const verifySession = cache(async (roles?: Role[]) => {
 
     if (roles && !roles.some((value) => session.roles?.includes(value))) {
         forbidden();
+    }
+
+    return session;
+});
+
+export const verifyPendingSession = cache(async () => {
+    const session = await getPendingSession();
+
+    if (!session) {
+        redirect('/account/login');
     }
 
     return session;

@@ -10,23 +10,26 @@ const schema = z.object({
         .regex(/^[0-9]{6}$/, 'Authenticator Code must be exactly 6 digits'),
 });
 
-export type VerifyTwoFactorFormValues = z.infer<typeof schema>;
+export type LoginWithTwoFactorFormValues = z.infer<typeof schema>;
 
-type VerifyTwoFactorFormProps = {
+type LoginWithTwoFactorFormProps = {
     loading?: boolean;
-    onSubmit: (values: VerifyTwoFactorFormValues) => void;
+    onSubmit: (values: LoginWithTwoFactorFormValues) => void;
+    children?: React.ReactNode;
 };
 
-export function VerifyTwoFactorForm({
+export function LoginWithTwoFactorForm({
     loading,
     onSubmit,
-}: VerifyTwoFactorFormProps) {
-    const form = useForm<VerifyTwoFactorFormValues>({
+    children,
+}: LoginWithTwoFactorFormProps) {
+    const form = useForm<LoginWithTwoFactorFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             code: '',
         },
     });
+
     return (
         <form
             noValidate
@@ -37,14 +40,16 @@ export function VerifyTwoFactorForm({
                 control={form.control}
                 name="code"
                 label="Authenticator Code"
-                type="text"
                 maxLength={6}
                 inputMode="numeric"
-                pattern="[0-9]*"
+                pattern="[0-9]{6}"
+                autoComplete="one-time-code"
+                required
                 disabled={loading}
             />
 
             <div className="flex flex-col-reverse justify-end gap-2 sm:flex-row">
+                {children}
                 <LoadingButton type="submit" loading={loading}>
                     Submit
                 </LoadingButton>

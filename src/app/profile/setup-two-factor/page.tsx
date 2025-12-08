@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getProfile } from '@/app/profile/data/get-profile';
 import { setupTwoFactor } from '@/app/profile/data/setup-two-factor';
-import { TwoFactor } from '@/app/profile/two-factor/two-factor';
+import { SetupTwoFactor } from '@/app/profile/setup-two-factor/setup-two-factor';
 import { verifySession } from '@/lib/dal';
 
 export const metadata: Metadata = {
@@ -18,11 +18,11 @@ export default async function Page() {
         notFound();
     }
 
-    const twoFactorSetup = await setupTwoFactor(session.sub);
+    const configuration = await setupTwoFactor(session.sub);
 
-    if (!twoFactorSetup) {
+    if (!configuration) {
         notFound();
     }
 
-    return <TwoFactor twoFactorSetup={twoFactorSetup} />;
+    return <SetupTwoFactor configuration={configuration} />;
 }
