@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import type { Profile } from '@/app/profile/data/get-profile';
+import type { GetProfileResponse } from '@/app/profile/data/get-profile';
 import { DeleteAccountButton } from '@/app/profile/delete-account-button';
 import { Button } from '@/components/ui/button';
 import { toDisplay } from '@/lib/dates';
@@ -9,7 +9,7 @@ import { DisableTwoFactorButton } from './disable-two-factor-button';
 import { GenerateRecoveryCodesButton } from './generate-recovery-codes-button';
 
 type ProfileProps = {
-    profile: Profile;
+    profile: GetProfileResponse;
 };
 
 export function Profile({ profile }: ProfileProps) {

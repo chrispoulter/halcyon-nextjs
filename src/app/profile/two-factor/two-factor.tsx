@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { verifyTwoFactorAction } from '@/app/profile/actions/verify-two-factor-action';
-import { TwoFactorConfig } from '@/app/profile/data/get-two-factor-config';
+import { type GetTwoFactorConfigResponse } from '@/app/profile/data/get-two-factor-config';
 import {
     TwoFactorForm,
     TwoFactorFormValues,
@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
 type TwoFactorProps = {
-    configuration: TwoFactorConfig;
+    configuration: GetTwoFactorConfigResponse;
 };
 
 export function TwoFactor({ configuration }: TwoFactorProps) {

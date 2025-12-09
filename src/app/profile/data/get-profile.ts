@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 
-export type Profile = {
+export type GetProfileResponse = {
     id: string;
     emailAddress: string;
     firstName: string;
@@ -16,7 +16,7 @@ export type Profile = {
 };
 
 export const getProfile = cache(
-    async (userId: string): Promise<Profile | undefined> => {
+    async (userId: string): Promise<GetProfileResponse | undefined> => {
         const [user] = await db
             .select({
                 id: users.id,
