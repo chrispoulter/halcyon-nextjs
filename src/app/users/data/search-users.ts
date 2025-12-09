@@ -1,10 +1,10 @@
 import 'server-only';
 
+import { cache } from 'react';
 import { desc, asc, sql, SQL } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { type Role } from '@/lib/definitions';
-import { cache } from 'react';
 
 export type UserSort =
     | 'EMAIL_ADDRESS_ASC'
@@ -34,7 +34,11 @@ export type SearchUsersResponse = {
 const PAGE_SIZE = 5;
 
 export const searchUsers = cache(
-    async ({ search, page = 1, sort }: SearchUsersRequest) => {
+    async ({
+        search,
+        page = 1,
+        sort,
+    }: SearchUsersRequest): Promise<SearchUsersResponse> => {
         let where: SQL | undefined;
 
         if (search) {

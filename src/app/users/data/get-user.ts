@@ -16,32 +16,34 @@ export type GetUserResponse = {
     roles?: Role[];
 };
 
-export const getUser = cache(async (userId: string) => {
-    const [user] = await db
-        .select({
-            id: users.id,
-            emailAddress: users.emailAddress,
-            firstName: users.firstName,
-            lastName: users.lastName,
-            dateOfBirth: users.dateOfBirth,
-            roles: users.roles,
-            isLockedOut: users.isLockedOut,
-        })
-        .from(users)
-        .where(eq(users.id, userId))
-        .limit(1);
+export const getUser = cache(
+    async (userId: string): Promise<GetUserResponse | undefined> => {
+        const [user] = await db
+            .select({
+                id: users.id,
+                emailAddress: users.emailAddress,
+                firstName: users.firstName,
+                lastName: users.lastName,
+                dateOfBirth: users.dateOfBirth,
+                isLockedOut: users.isLockedOut,
+                roles: users.roles,
+            })
+            .from(users)
+            .where(eq(users.id, userId))
+            .limit(1);
 
-    if (!user) {
-        return undefined;
+        if (!user) {
+            return undefined;
+        }
+
+        return {
+            id: user.id,
+            emailAddress: user.emailAddress,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            dateOfBirth: user.dateOfBirth,
+            isLockedOut: user.isLockedOut,
+            roles: (user.roles as Role[]) || undefined,
+        };
     }
-
-    return {
-        id: user.id,
-        emailAddress: user.emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
-        roles: (user.roles as Role[]) || undefined,
-        isLockedOut: user.isLockedOut,
-    };
-});
+);

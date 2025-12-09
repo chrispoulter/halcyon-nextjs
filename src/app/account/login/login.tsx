@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
@@ -12,12 +11,7 @@ import {
 import { ServerActionError } from '@/components/server-action-error';
 
 export function Login() {
-    const router = useRouter();
-
     const { execute: login, isPending: isSaving } = useAction(loginAction, {
-        onSuccess() {
-            router.push('/');
-        },
         onError({ error }) {
             toast.error(<ServerActionError result={error} />);
         },

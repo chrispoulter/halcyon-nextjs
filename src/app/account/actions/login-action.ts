@@ -1,5 +1,6 @@
 'use server';
 
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
@@ -57,4 +58,6 @@ export const loginAction = actionClient
             family_name: user.lastName,
             roles: user.roles as Role[],
         });
+
+        redirect('/');
     });
