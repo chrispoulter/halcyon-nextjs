@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { generateRecoveryCodesAction } from '@/app/profile/actions/generate-recovery-codes-action';
+import { RecoveryCodesDialog } from '@/app/profile/recovery-codes-dialog';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -22,16 +24,16 @@ type GenerateRecoveryCodesButtonProps = {
 export function GenerateRecoveryCodesButton({
     className,
 }: GenerateRecoveryCodesButtonProps) {
+    const [recoveryCodes, setRecoveryCodes] = useState<string[] | undefined>();
+    const [showDialog, setShowDialog] = useState(false);
+
     const { execute: generateRecoveryCodes, isPending: isGenerating } =
         useAction(generateRecoveryCodesAction, {
             onSuccess({ data }) {
                 if (data.recoveryCodes) {
                     toast.success('Recovery codes generated.');
-
-                    // Optionally show recovery codes inline or prompt download
-                    alert(
-                        `Recovery Codes:\n\n${data.recoveryCodes.join('\n')}`
-                    );
+                    setRecoveryCodes(data.recoveryCodes);
+                    setShowDialog(true);
                 }
             },
             onError({ error }) {
@@ -44,29 +46,40 @@ export function GenerateRecoveryCodesButton({
     }
 
     return (
-        <AlertDialog>
-            <AlertDialogTrigger asChild>
-                <LoadingButton loading={isGenerating} className={className}>
-                    Generate Recovery Codes
-                </LoadingButton>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Generate Recovery Codes</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        Are you sure you want to generate new recovery codes?
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                        disabled={isGenerating}
-                        onClick={onGenerate}
-                    >
-                        Continue
-                    </AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
+        <>
+            <AlertDialog>
+                <AlertDialogTrigger asChild>
+                    <LoadingButton loading={isGenerating} className={className}>
+                        Generate Recovery Codes
+                    </LoadingButton>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Generate Recovery Codes
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to generate new recovery
+                            codes?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            disabled={isGenerating}
+                            onClick={onGenerate}
+                        >
+                            Continue
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            <RecoveryCodesDialog
+                open={showDialog}
+                onOpenChange={setShowDialog}
+                codes={recoveryCodes}
+            />
+        </>
     );
 }

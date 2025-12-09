@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -11,6 +12,7 @@ import {
     TwoFactorForm,
     TwoFactorFormValues,
 } from '@/app/profile/two-factor/two-factor-form';
+import { RecoveryCodesDialog } from '@/app/profile/recovery-codes-dialog';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
@@ -20,6 +22,8 @@ type TwoFactorProps = {
 
 export function TwoFactor({ configuration }: TwoFactorProps) {
     const router = useRouter();
+    const [recoveryCodes, setRecoveryCodes] = useState<string[] | undefined>();
+    const [showDialog, setShowDialog] = useState(false);
 
     const { execute: verifyTwoFactor, isPending: isVerifying } = useAction(
         verifyTwoFactorAction,
@@ -27,12 +31,9 @@ export function TwoFactor({ configuration }: TwoFactorProps) {
             onSuccess({ data }) {
                 if (data.recoveryCodes) {
                     toast.success('Two-factor authentication enabled.');
+                    setRecoveryCodes(data.recoveryCodes);
+                    setShowDialog(true);
                     router.push('/profile');
-
-                    // Optionally show recovery codes inline or prompt download
-                    alert(
-                        `Recovery Codes:\n\n${data.recoveryCodes.join('\n')}`
-                    );
                 }
             },
             onError({ error }) {
@@ -116,6 +117,12 @@ export function TwoFactor({ configuration }: TwoFactorProps) {
                     <Link href="/profile">Cancel</Link>
                 </Button>
             </TwoFactorForm>
+
+            <RecoveryCodesDialog
+                open={showDialog}
+                onOpenChange={setShowDialog}
+                codes={recoveryCodes}
+            />
         </main>
     );
 }
