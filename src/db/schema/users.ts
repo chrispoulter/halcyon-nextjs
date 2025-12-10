@@ -23,7 +23,7 @@ export const users = pgTable(
         id: uuid('id').notNull().defaultRandom(),
         emailAddress: text('email_address').notNull(),
         password: text('password'),
-        passwordResetToken: uuid('password_reset_token'),
+        passwordResetToken: text('password_reset_token'),
         firstName: text('first_name').notNull(),
         lastName: text('last_name').notNull(),
         dateOfBirth: date('date_of_birth').notNull(),
