@@ -20,11 +20,11 @@ export const verifySession = cache(async (roles?: Role[]) => {
 });
 
 export const verifyPendingSession = cache(async () => {
-    const session = await getPendingSession();
+    const pending = await getPendingSession();
 
-    if (!session) {
+    if (!pending) {
         redirect('/account/login');
     }
 
-    return session;
+    return pending;
 });
