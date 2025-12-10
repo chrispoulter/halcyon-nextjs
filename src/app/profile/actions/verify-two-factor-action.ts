@@ -23,7 +23,7 @@ const schema = z.object({
 });
 
 export const verifyTwoFactorAction = authActionClient()
-    .metadata({ actionName: 'VerifyTwoFactorAction' })
+    .metadata({ actionName: 'verifyTwoFactorAction' })
     .inputSchema(schema)
     .action<VerifyTwoFactorResponse>(
         async ({ parsedInput, ctx: { userId } }) => {
