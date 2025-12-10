@@ -19,7 +19,7 @@ type VerifyTwoFactorResponse = {
 const schema = z.object({
     verificationCode: z
         .string({ message: 'Verification Code must be a valid string' })
-        .regex(/^[0-9]{6}$/, 'Verification Code must be 6 digits'),
+        .regex(/^[0-9]{6}$/, 'Verification Code is not in the correct format'),
 });
 
 export const verifyTwoFactorAction = authActionClient()

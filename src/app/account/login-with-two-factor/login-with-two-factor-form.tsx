@@ -7,7 +7,7 @@ import { LoadingButton } from '@/components/loading-button';
 const schema = z.object({
     twoFactorCode: z
         .string({ message: 'Authenticator Code must be a valid string' })
-        .regex(/^[0-9]{6}$/, 'Authenticator Code must be 6 digits'),
+        .regex(/^[0-9]{6}$/, 'Authenticator Code is not in the correct format'),
 });
 
 export type LoginWithTwoFactorFormValues = z.infer<typeof schema>;
