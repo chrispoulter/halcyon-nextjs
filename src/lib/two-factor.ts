@@ -13,11 +13,12 @@ export function generateTOTPSecret(email: string) {
         length: 20,
         name: `${issuer}:${email}`,
         issuer,
+        otpauth_url: true,
     });
 
     return {
         base32: secret.base32,
-        otpauth: secret.otpauth_url!,
+        otpauth: secret.otpauth_url,
     };
 }
 
