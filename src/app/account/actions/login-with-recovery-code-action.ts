@@ -56,13 +56,12 @@ export const loginWithRecoveryCodeAction = actionClient
             );
         }
 
-        const normalizedInputCode = parsedInput.recoveryCode.toUpperCase();
         const recoveryCodes = user.twoFactorRecoveryCodes ?? [];
 
         let matchedRecoveryCode: string | undefined;
 
         for (const code of recoveryCodes) {
-            const verified = await verifyHash(normalizedInputCode, code);
+            const verified = await verifyHash(parsedInput.recoveryCode, code);
 
             if (verified) {
                 matchedRecoveryCode = code;
