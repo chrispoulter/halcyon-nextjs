@@ -2,7 +2,7 @@ CREATE TABLE "users" (
 	"id" uuid DEFAULT gen_random_uuid() NOT NULL,
 	"email_address" text NOT NULL,
 	"password" text,
-	"password_reset_token" uuid,
+	"password_reset_token" text,
 	"first_name" text NOT NULL,
 	"last_name" text NOT NULL,
 	"date_of_birth" date NOT NULL,

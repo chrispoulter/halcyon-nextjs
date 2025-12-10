@@ -1,6 +1,6 @@
 'use server';
 
-import { randomUUID } from 'crypto';
+import { randomBytes } from 'crypto';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
@@ -29,7 +29,9 @@ export const forgotPasswordAction = actionClient
             .limit(1);
 
         if (user && !user.isLockedOut) {
-            const passwordResetToken = randomUUID();
+            const passwordResetToken = randomBytes(16)
+                .toString('hex')
+                .toUpperCase();
 
             await db
                 .update(users)

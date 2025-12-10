@@ -29,7 +29,7 @@
                 },
                 "password_reset_token": {
                     "name": "password_reset_token",
-                    "type": "uuid",
+                    "type": "text",
                     "primaryKey": false,
                     "notNull": false
                 },
