@@ -36,7 +36,7 @@ export function verifyTOTP(base32secret: string, token: string) {
 
 export function generateRecoveryCodes(count = 10) {
     return Array.from({ length: count }, () =>
-        randomBytes(8).toString('hex').toUpperCase()
+        randomBytes(5).toString('hex').toUpperCase()
     );
 }
 

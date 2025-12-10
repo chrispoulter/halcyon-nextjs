@@ -17,7 +17,7 @@ import { verifyHash } from '@/lib/hash';
 const schema = z.object({
     recoveryCode: z
         .string({ message: 'Recovery Code must be a valid string' })
-        .regex(/^[0-9]{8}$/, 'Recovery Code must be 8 digits'),
+        .regex(/^[A-Za-z0-9]{10}$/, 'Recovery Code must be 8 characters'),
 });
 
 export const loginWithRecoveryCodeAction = actionClient
@@ -57,7 +57,8 @@ export const loginWithRecoveryCodeAction = actionClient
         let matchedRecoveryCode: string | undefined;
 
         for (const code of recoveryCodes) {
-            const verified = await verifyHash(parsedInput.recoveryCode, code);
+            const normalized = parsedInput.recoveryCode.toUpperCase();
+            const verified = await verifyHash(normalized, code);
 
             if (verified) {
                 matchedRecoveryCode = code;
