@@ -40,9 +40,8 @@ export function LoginWithRecoveryCodeForm({
                 control={form.control}
                 name="recoveryCode"
                 label="Recovery Code"
-                maxLength={8}
-                inputMode="numeric"
-                pattern="[0-9]{8}"
+                maxLength={10}
+                pattern="[A-F][0-9]{10}"
                 autoComplete="off"
                 required
                 disabled={loading}
