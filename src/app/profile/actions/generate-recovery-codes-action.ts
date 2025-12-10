@@ -30,7 +30,9 @@ export const generateRecoveryCodesAction = authActionClient()
         }
 
         if (!user.isTwoFactorEnabled) {
-            throw new ActionError('Two-factor authentication is not enabled.');
+            throw new ActionError(
+                'Two-factor authentication is not configured.'
+            );
         }
 
         const recoveryCodes = generateRecoveryCodes(10);

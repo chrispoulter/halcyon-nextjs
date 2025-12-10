@@ -43,7 +43,7 @@ export const verifyTwoFactorAction = authActionClient()
 
             if (!user.twoFactorTempSecret) {
                 throw new ActionError(
-                    'Two-factor authentication configuration not found.'
+                    'Two-factor authentication is not configured.'
                 );
             }
 

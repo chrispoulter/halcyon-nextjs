@@ -45,8 +45,14 @@ export const loginWithTwoFactorAction = actionClient
             .where(eq(users.id, pending.sub))
             .limit(1);
 
-        if (!user || !user.isTwoFactorEnabled || !user.twoFactorSecret) {
-            throw new ActionError('Two-factor authentication is not enabled.');
+        if (!user || user.isLockedOut) {
+            throw new ActionError('User not found.', 404);
+        }
+
+        if (!user.isTwoFactorEnabled || !user.twoFactorSecret) {
+            throw new ActionError(
+                'Two-factor authentication is not configured.'
+            );
         }
 
         const verified = speakeasy.totp.verify({
@@ -58,12 +64,6 @@ export const loginWithTwoFactorAction = actionClient
 
         if (!verified) {
             throw new ActionError('Invalid authenticator code.');
-        }
-
-        if (user.isLockedOut) {
-            throw new ActionError(
-                'This account has been locked out, please try again later.'
-            );
         }
 
         await deletePendingSession();

@@ -46,19 +46,23 @@ export const loginWithRecoveryCodeAction = actionClient
             .where(eq(users.id, pending.sub))
             .limit(1);
 
-        if (!user || !user.isTwoFactorEnabled || !user.twoFactorSecret) {
+        if (!user || user.isLockedOut) {
+            throw new ActionError('User not found.', 404);
+        }
+
+        if (!user.isTwoFactorEnabled || !user.twoFactorSecret) {
             throw new ActionError(
                 'Two-factor authentication is not configured.'
             );
         }
 
+        const normalizedInputCode = parsedInput.recoveryCode.toUpperCase();
         const recoveryCodes = user.twoFactorRecoveryCodes ?? [];
 
         let matchedRecoveryCode: string | undefined;
 
         for (const code of recoveryCodes) {
-            const normalized = parsedInput.recoveryCode.toUpperCase();
-            const verified = await verifyHash(normalized, code);
+            const verified = await verifyHash(normalizedInputCode, code);
 
             if (verified) {
                 matchedRecoveryCode = code;
@@ -68,12 +72,6 @@ export const loginWithRecoveryCodeAction = actionClient
 
         if (!matchedRecoveryCode) {
             throw new ActionError('Invalid recovery code.');
-        }
-
-        if (user.isLockedOut) {
-            throw new ActionError(
-                'This account has been locked out, please try again later.'
-            );
         }
 
         const updatedRecoveryCodes = recoveryCodes.filter(
