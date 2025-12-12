@@ -26,7 +26,7 @@ export function DisableTwoFactorButton({
         disableTwoFactorAction,
         {
             onSuccess() {
-                toast.success('Two-factor authentication disabled.');
+                toast.success('Two-factor authentication has been disabled.');
             },
             onError({ error }) {
                 toast.error(<ServerActionError result={error} />);
@@ -51,7 +51,9 @@ export function DisableTwoFactorButton({
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Disable Two-Factor</AlertDialogTitle>
+                    <AlertDialogTitle>
+                        Disable Two-Factor Authentication
+                    </AlertDialogTitle>
                     <AlertDialogDescription>
                         Are you sure you want to disable two-factor
                         authentication?

@@ -31,7 +31,7 @@ export function GenerateRecoveryCodesButton({
         useAction(generateRecoveryCodesAction, {
             onSuccess({ data }) {
                 if (data.recoveryCodes) {
-                    toast.success('Recovery codes generated.');
+                    toast.success('Recovery codes have been generated.');
                     setRecoveryCodes(data.recoveryCodes);
                     setShowDialog(true);
                 }

@@ -32,7 +32,9 @@ export function EnableAuthenticator({
         {
             onSuccess({ data }) {
                 if (data.recoveryCodes) {
-                    toast.success('Two-factor authentication enabled.');
+                    toast.success(
+                        'Two-factor authentication has been enabled.'
+                    );
                     setRecoveryCodes(data.recoveryCodes);
                     setShowDialog(true);
                     router.push('/profile');
