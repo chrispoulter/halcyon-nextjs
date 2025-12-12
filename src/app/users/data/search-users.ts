@@ -25,7 +25,6 @@ export type SearchUsersResponse = {
         firstName: string;
         lastName: string;
         isLockedOut: boolean;
-        isTwoFactorEnabled: boolean;
         roles?: Role[];
     }[];
     hasNextPage: boolean;
@@ -55,7 +54,6 @@ export const searchUsers = cache(
                 firstName: users.firstName,
                 lastName: users.lastName,
                 isLockedOut: users.isLockedOut,
-                isTwoFactorEnabled: users.isTwoFactorEnabled,
                 roles: users.roles,
             })
             .from(users)
@@ -101,7 +99,6 @@ export const searchUsers = cache(
                 firstName: user.firstName,
                 lastName: user.lastName,
                 isLockedOut: user.isLockedOut,
-                isTwoFactorEnabled: user.isTwoFactorEnabled,
                 roles: (user.roles as Role[]) || undefined,
             })),
             hasNextPage,

@@ -24,6 +24,7 @@ export function EnableAuthenticator({
     configuration,
 }: EnableAuthenticatorProps) {
     const router = useRouter();
+
     const [recoveryCodes, setRecoveryCodes] = useState<string[] | undefined>();
     const [showDialog, setShowDialog] = useState(false);
 

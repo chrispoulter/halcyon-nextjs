@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import type { GetProfileResponse } from '@/app/profile/data/get-profile';
+import { DisableTwoFactorButton } from '@/app/profile/disable-two-factor-button';
+import { GenerateRecoveryCodesButton } from '@/app/profile/generate-recovery-codes-button';
 import { DeleteAccountButton } from '@/app/profile/delete-account-button';
 import { Button } from '@/components/ui/button';
 import { toDisplay } from '@/lib/dates';
-import { DisableTwoFactorButton } from './disable-two-factor-button';
-import { GenerateRecoveryCodesButton } from './generate-recovery-codes-button';
 
 type ProfileProps = {
     profile: GetProfileResponse;

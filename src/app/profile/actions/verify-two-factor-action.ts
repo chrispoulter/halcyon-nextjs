@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
@@ -68,6 +69,11 @@ export const verifyTwoFactorAction = authActionClient()
                     twoFactorRecoveryCodes: hashedRecoveryCodes,
                 })
                 .where(eq(users.id, userId));
+
+            revalidatePath('/users');
+            revalidatePath(`/users/${user.id}`);
+            revalidatePath('/profile');
+            revalidatePath('/enable-authenticator');
 
             return { id: user.id, recoveryCodes };
         }

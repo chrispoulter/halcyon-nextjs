@@ -39,6 +39,7 @@ export const disableTwoFactorAction = authActionClient()
         revalidatePath('/users');
         revalidatePath(`/users/${user.id}`);
         revalidatePath('/profile');
+        revalidatePath('/enable-authenticator');
 
         return { id: user.id };
     });
