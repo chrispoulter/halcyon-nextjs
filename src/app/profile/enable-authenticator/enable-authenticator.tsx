@@ -96,9 +96,9 @@ export function EnableAuthenticator({
                 </li>
                 <li>
                     Scan the QR Code or enter this key{' '}
-                    <code className="bg-muted rounded p-1 font-mono font-semibold">
+                    <span className="bg-muted rounded px-2 py-1 font-mono font-semibold">
                         {configuration.secret}
-                    </code>{' '}
+                    </span>{' '}
                     into your two-factor authenticator app.
                     <Image
                         src={configuration.otpauthUri}
