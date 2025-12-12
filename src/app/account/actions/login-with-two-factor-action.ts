@@ -15,7 +15,7 @@ import {
 import type { Role } from '@/lib/definitions';
 
 const schema = z.object({
-    twoFactorCode: z
+    authenticatorCode: z
         .string({ message: 'Authenticator Code must be a valid string' })
         .regex(/^[0-9]{6}$/, 'Authenticator Code is not in the correct format'),
 });
@@ -59,7 +59,7 @@ export const loginWithTwoFactorAction = actionClient
             secret: user.twoFactorSecret,
             encoding: 'base32',
             window: 1,
-            token: parsedInput.twoFactorCode,
+            token: parsedInput.authenticatorCode,
         });
 
         if (!verified) {
