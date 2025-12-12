@@ -99,8 +99,7 @@ export function EnableAuthenticator({
                     <code className="bg-muted rounded p-1 font-mono font-semibold">
                         {configuration.secret}
                     </code>{' '}
-                    into your two-factor authenticator app. Spaces and casing do
-                    not matter.
+                    into your two-factor authenticator app.
                     <Image
                         src={configuration.otpauthUri}
                         width={180}
