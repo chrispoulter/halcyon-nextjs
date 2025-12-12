@@ -71,7 +71,7 @@ export function Profile({ profile }: ProfileProps) {
 
             <div className="flex flex-col gap-2 sm:flex-row">
                 <Button asChild>
-                    <Link href="/profile/two-factor">
+                    <Link href="/profile/enable-authenticator">
                         Configure Authenticator App
                     </Link>
                 </Button>

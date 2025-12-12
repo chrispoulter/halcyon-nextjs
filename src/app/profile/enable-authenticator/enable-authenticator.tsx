@@ -9,18 +9,20 @@ import { toast } from 'sonner';
 import { verifyTwoFactorAction } from '@/app/profile/actions/verify-two-factor-action';
 import { type GetTwoFactorConfigResponse } from '@/app/profile/data/get-two-factor-config';
 import {
-    TwoFactorForm,
-    TwoFactorFormValues,
-} from '@/app/profile/two-factor/two-factor-form';
+    EnableAuthenticatorForm,
+    EnableAuthenticatorFormValues,
+} from '@/app/profile/enable-authenticator/enable-authenticator-form';
 import { RecoveryCodesDialog } from '@/app/profile/recovery-codes-dialog';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
-type TwoFactorProps = {
+type EnableAuthenticatorProps = {
     configuration: GetTwoFactorConfigResponse;
 };
 
-export function TwoFactor({ configuration }: TwoFactorProps) {
+export function EnableAuthenticator({
+    configuration,
+}: EnableAuthenticatorProps) {
     const router = useRouter();
     const [recoveryCodes, setRecoveryCodes] = useState<string[] | undefined>();
     const [showDialog, setShowDialog] = useState(false);
@@ -42,7 +44,7 @@ export function TwoFactor({ configuration }: TwoFactorProps) {
         }
     );
 
-    function onSubmit(values: TwoFactorFormValues) {
+    function onSubmit(values: EnableAuthenticatorFormValues) {
         verifyTwoFactor(values);
     }
 
@@ -112,11 +114,11 @@ export function TwoFactor({ configuration }: TwoFactorProps) {
                 </li>
             </ol>
 
-            <TwoFactorForm onSubmit={onSubmit} loading={isVerifying}>
+            <EnableAuthenticatorForm onSubmit={onSubmit} loading={isVerifying}>
                 <Button asChild variant="outline">
                     <Link href="/profile">Cancel</Link>
                 </Button>
-            </TwoFactorForm>
+            </EnableAuthenticatorForm>
 
             <RecoveryCodesDialog
                 open={showDialog}

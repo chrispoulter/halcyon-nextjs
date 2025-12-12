@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTwoFactorConfig } from '@/app/profile/data/get-two-factor-config';
-import { TwoFactor } from '@/app/profile/two-factor/two-factor';
+import { EnableAuthenticator } from '@/app/profile/enable-authenticator/enable-authenticator';
 import { verifySession } from '@/lib/dal';
 
 export const metadata: Metadata = {
@@ -17,5 +17,5 @@ export default async function Page() {
         notFound();
     }
 
-    return <TwoFactor configuration={configuration} />;
+    return <EnableAuthenticator configuration={configuration} />;
 }

@@ -10,20 +10,20 @@ const schema = z.object({
         .regex(/^[0-9]{6}$/, 'Verification Code is not in the correct format'),
 });
 
-export type TwoFactorFormValues = z.infer<typeof schema>;
+export type EnableAuthenticatorFormValues = z.infer<typeof schema>;
 
-type TwoFactorFormProps = {
+type EnableAuthenticatorFormProps = {
     loading?: boolean;
-    onSubmit: (values: TwoFactorFormValues) => void;
+    onSubmit: (values: EnableAuthenticatorFormValues) => void;
     children?: React.ReactNode;
 };
 
-export function TwoFactorForm({
+export function EnableAuthenticatorForm({
     loading,
     onSubmit,
     children,
-}: TwoFactorFormProps) {
-    const form = useForm<TwoFactorFormValues>({
+}: EnableAuthenticatorFormProps) {
+    const form = useForm<EnableAuthenticatorFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
             verificationCode: '',
