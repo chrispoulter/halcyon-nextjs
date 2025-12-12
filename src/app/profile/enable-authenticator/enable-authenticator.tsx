@@ -40,7 +40,6 @@ export function EnableAuthenticator({
                     );
                     setRecoveryCodes(data.recoveryCodes);
                     setShowRecoveryCodesDialog(true);
-                    router.push('/profile');
                 }
             },
             onError({ error }) {
