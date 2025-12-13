@@ -111,9 +111,9 @@ export function EnableAuthenticator({
                     into your two-factor authenticator app.
                     <QRCodeSVG
                         value={configuration.otpauth}
-                        width={180}
-                        height={180}
-                        className="mt-2 rounded border bg-white p-1"
+                        size={180}
+                        marginSize={3}
+                        className="mt-2 rounded border"
                     />
                 </li>
                 <li>
