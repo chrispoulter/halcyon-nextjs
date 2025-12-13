@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
+import { QRCodeSVG } from 'qrcode.react';
 import { verifyTwoFactorAction } from '@/app/profile/actions/verify-two-factor-action';
 import { type GetTwoFactorConfigResponse } from '@/app/profile/data/get-two-factor-config';
 import {
@@ -109,13 +109,11 @@ export function EnableAuthenticator({
                         {configuration.secret}
                     </code>{' '}
                     into your two-factor authenticator app.
-                    <Image
-                        src={configuration.otpauthUri}
+                    <QRCodeSVG
+                        value={configuration.otpauth}
                         width={180}
                         height={180}
-                        alt="Authenticator QR Code"
                         className="mt-2 rounded border bg-white p-1"
-                        unoptimized
                     />
                 </li>
                 <li>

@@ -4,10 +4,10 @@ import { cache } from 'react';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { generateQRCodeDataUrl, generateTOTPSecret } from '@/lib/two-factor';
+import { generateTOTPSecret } from '@/lib/two-factor';
 
 export type GetTwoFactorConfigResponse = {
-    otpauthUri: string;
+    otpauth: string;
     secret: string;
 };
 
@@ -28,13 +28,12 @@ export const getTwoFactorConfig = cache(
         }
 
         const { base32, otpauth } = generateTOTPSecret(user.emailAddress);
-        const otpauthUri = await generateQRCodeDataUrl(otpauth);
 
         await db
             .update(users)
             .set({ twoFactorTempSecret: base32 })
             .where(eq(users.id, userId));
 
-        return { otpauthUri, secret: base32 };
+        return { otpauth, secret: base32 };
     }
 );

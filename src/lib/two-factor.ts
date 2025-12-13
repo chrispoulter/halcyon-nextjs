@@ -1,7 +1,6 @@
 import 'server-only';
 
 import speakeasy from 'speakeasy';
-import QRCode from 'qrcode';
 import { config } from '@/lib/config';
 import { generateHash } from '@/lib/hash';
 import { randomBytes } from 'crypto';
@@ -20,10 +19,6 @@ export function generateTOTPSecret(email: string) {
         base32: secret.base32,
         otpauth: secret.otpauth_url,
     };
-}
-
-export function generateQRCodeDataUrl(otpauthUrl: string) {
-    return QRCode.toDataURL(otpauthUrl);
 }
 
 export function verifyTOTP(base32secret: string, token: string) {
