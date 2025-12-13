@@ -10,8 +10,8 @@ import {
     UpdateProfileForm,
     type UpdateProfileFormValues,
 } from '@/app/profile/update-profile/update-profile-form';
-import { ServerActionError } from '@/components/server-action-error';
 import { Button } from '@/components/ui/button';
+import { ServerActionError } from '@/components/server-action-error';
 
 type ProfileProps = {
     profile: GetProfileResponse;

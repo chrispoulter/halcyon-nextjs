@@ -71,6 +71,10 @@ async function seedDb() {
             dateOfBirth: '1970-01-01',
             roles: ['SYSTEM_ADMINISTRATOR'],
             isLockedOut: false,
+            isTwoFactorEnabled: false,
+            twoFactorSecret: null,
+            twoFactorTempSecret: null,
+            twoFactorRecoveryCodes: null,
         };
 
         await db.insert(users).values(user).onConflictDoUpdate({
