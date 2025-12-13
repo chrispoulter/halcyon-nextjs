@@ -6,9 +6,9 @@ import { config } from '@/lib/config';
 import { generateHash } from '@/lib/hash';
 import { randomBytes } from 'crypto';
 
-export function generateTOTPSecret(email: string) {
-    const issuer = config.APP_NAME;
+const issuer = config.TWO_FACTOR_ISSUER;
 
+export function generateTOTPSecret(email: string) {
     const secret = speakeasy.generateSecret({
         length: 20,
         name: `${issuer}:${email}`,
