@@ -6,11 +6,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { authActionClient, ActionError } from '@/lib/safe-action';
-import {
-    generateRecoveryCodes,
-    hashRecoveryCodes,
-    verifyTOTP,
-} from '@/lib/two-factor';
+import { verifySecret, generateRecoveryCodes } from '@/lib/two-factor';
 
 type VerifyTwoFactorResponse = {
     id: string;
@@ -31,6 +27,7 @@ export const verifyTwoFactorAction = authActionClient()
             const [user] = await db
                 .select({
                     id: users.id,
+                    emailAddress: users.emailAddress,
                     isLockedOut: users.isLockedOut,
                     twoFactorTempSecret: users.twoFactorTempSecret,
                 })
@@ -48,8 +45,9 @@ export const verifyTwoFactorAction = authActionClient()
                 );
             }
 
-            const verified = verifyTOTP(
+            const verified = verifySecret(
                 user.twoFactorTempSecret,
+                user.emailAddress,
                 parsedInput.verificationCode
             );
 
@@ -57,8 +55,8 @@ export const verifyTwoFactorAction = authActionClient()
                 throw new ActionError('Invalid verification code.');
             }
 
-            const recoveryCodes = generateRecoveryCodes(10);
-            const hashedRecoveryCodes = await hashRecoveryCodes(recoveryCodes);
+            const { recoveryCodes, hashedRecoveryCodes } =
+                await generateRecoveryCodes(10);
 
             await db
                 .update(users)

@@ -3,7 +3,6 @@
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
-import speakeasy from 'speakeasy';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { actionClient, ActionError } from '@/lib/safe-action';
@@ -13,6 +12,7 @@ import {
     getPendingSession,
 } from '@/lib/session';
 import type { Role } from '@/lib/definitions';
+import { verifySecret } from '@/lib/two-factor';
 
 const schema = z.object({
     authenticatorCode: z
@@ -55,12 +55,11 @@ export const loginWithTwoFactorAction = actionClient
             );
         }
 
-        const verified = speakeasy.totp.verify({
-            secret: user.twoFactorSecret,
-            encoding: 'base32',
-            window: 1,
-            token: parsedInput.authenticatorCode,
-        });
+        const verified = verifySecret(
+            user.emailAddress,
+            user.twoFactorSecret,
+            parsedInput.authenticatorCode
+        );
 
         if (!verified) {
             throw new ActionError('Invalid authenticator code.');

@@ -4,7 +4,7 @@ import { cache } from 'react';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { generateTOTPSecret } from '@/lib/two-factor';
+import { generateSecret, generateOtpauth } from '@/lib/two-factor';
 
 export type GetTwoFactorConfigResponse = {
     otpauth: string;
@@ -18,6 +18,7 @@ export const getTwoFactorConfig = cache(
                 id: users.id,
                 emailAddress: users.emailAddress,
                 isLockedOut: users.isLockedOut,
+                twoFactorTempSecret: users.twoFactorTempSecret,
             })
             .from(users)
             .where(eq(users.id, userId))
@@ -27,7 +28,16 @@ export const getTwoFactorConfig = cache(
             return undefined;
         }
 
-        const { base32, otpauth } = generateTOTPSecret(user.emailAddress);
+        if (user.twoFactorTempSecret) {
+            const otpauth = generateOtpauth(
+                user.twoFactorTempSecret,
+                user.emailAddress
+            );
+
+            return { otpauth, secret: user.twoFactorTempSecret };
+        }
+
+        const { base32, otpauth } = generateSecret(user.emailAddress);
 
         await db
             .update(users)

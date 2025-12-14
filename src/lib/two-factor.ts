@@ -1,41 +1,37 @@
 import 'server-only';
 
-import speakeasy from 'speakeasy';
+import { TOTP } from 'otpauth';
+import { randomBytes } from 'crypto';
 import { config } from '@/lib/config';
 import { generateHash } from '@/lib/hash';
-import { randomBytes } from 'crypto';
 
 const issuer = config.TWO_FACTOR_ISSUER;
 
-export function generateTOTPSecret(email: string) {
-    const secret = speakeasy.generateSecret({
-        length: 20,
-        name: `${issuer}:${email}`,
-        issuer,
-        otpauth_url: true,
-    });
+export function generateSecret(label: string) {
+    const totp = new TOTP({ issuer, label });
 
     return {
-        base32: secret.base32,
-        otpauth: secret.otpauth_url,
+        base32: totp.secret.base32,
+        otpauth: totp.toString(),
     };
 }
 
-export function verifyTOTP(base32secret: string, token: string) {
-    return speakeasy.totp.verify({
-        secret: base32secret,
-        encoding: 'base32',
-        window: 1,
-        token,
-    });
+export function generateOtpauth(secret: string, label: string) {
+    return new TOTP({ issuer, label, secret }).toString();
 }
 
-export function generateRecoveryCodes(count = 10) {
-    return Array.from({ length: count }, () =>
+export function verifySecret(secret: string, label: string, token: string) {
+    return new TOTP({ issuer, label, secret }).validate({ token });
+}
+
+export async function generateRecoveryCodes(count = 10) {
+    const recoveryCodes = Array.from({ length: count }, () =>
         randomBytes(5).toString('hex').toUpperCase()
     );
-}
 
-export function hashRecoveryCodes(codes: string[]) {
-    return Promise.all(codes.map(generateHash));
+    const hashedRecoveryCodes = await Promise.all(
+        recoveryCodes.map(generateHash)
+    );
+
+    return { recoveryCodes, hashedRecoveryCodes };
 }

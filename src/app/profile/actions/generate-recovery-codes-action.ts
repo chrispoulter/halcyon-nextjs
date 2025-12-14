@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { authActionClient, ActionError } from '@/lib/safe-action';
-import { generateRecoveryCodes, hashRecoveryCodes } from '@/lib/two-factor';
+import { generateRecoveryCodes } from '@/lib/two-factor';
 
 type GenerateRecoveryCodesResponse = {
     id: string;
@@ -35,8 +35,8 @@ export const generateRecoveryCodesAction = authActionClient()
             );
         }
 
-        const recoveryCodes = generateRecoveryCodes(10);
-        const hashedRecoveryCodes = await hashRecoveryCodes(recoveryCodes);
+        const { recoveryCodes, hashedRecoveryCodes } =
+            await generateRecoveryCodes(10);
 
         await db
             .update(users)
