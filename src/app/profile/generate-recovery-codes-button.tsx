@@ -26,15 +26,12 @@ export function GenerateRecoveryCodesButton({
 }: GenerateRecoveryCodesButtonProps) {
     const [recoveryCodes, setRecoveryCodes] = useState<string[] | undefined>();
 
-    const [showDialog, setShowDialog] = useState(false);
-
     const { execute: generateRecoveryCodes, isPending: isGenerating } =
         useAction(generateRecoveryCodesAction, {
             onSuccess({ data }) {
                 if (data.recoveryCodes) {
                     toast.success('Recovery codes have been generated.');
                     setRecoveryCodes(data.recoveryCodes);
-                    setShowDialog(true);
                 }
             },
             onError({ error }) {
@@ -44,6 +41,10 @@ export function GenerateRecoveryCodesButton({
 
     function onGenerate() {
         generateRecoveryCodes();
+    }
+
+    function onOpenChange() {
+        setRecoveryCodes(undefined);
     }
 
     return (
@@ -77,8 +78,8 @@ export function GenerateRecoveryCodesButton({
             </AlertDialog>
 
             <RecoveryCodesDialog
-                open={showDialog}
-                onOpenChange={setShowDialog}
+                open={!!recoveryCodes}
+                onOpenChange={onOpenChange}
                 codes={recoveryCodes}
             />
         </>

@@ -27,9 +27,6 @@ export function EnableAuthenticator({
 
     const [recoveryCodes, setRecoveryCodes] = useState<string[] | undefined>();
 
-    const [showRecoveryCodesDialog, setShowRecoveryCodesDialog] =
-        useState(false);
-
     const { execute: verifyTwoFactor, isPending: isVerifying } = useAction(
         verifyTwoFactorAction,
         {
@@ -39,7 +36,6 @@ export function EnableAuthenticator({
                         'Two-factor authentication has been enabled.'
                     );
                     setRecoveryCodes(data.recoveryCodes);
-                    setShowRecoveryCodesDialog(true);
                 }
             },
             onError({ error }) {
@@ -48,12 +44,8 @@ export function EnableAuthenticator({
         }
     );
 
-    function onRecoveryCodeDialogChange(open: boolean) {
-        setShowRecoveryCodesDialog(open);
-
-        if (!open) {
-            router.push('/profile');
-        }
+    function onOpenChange() {
+        router.push('/profile');
     }
 
     function onSubmit(values: EnableAuthenticatorFormValues) {
@@ -130,8 +122,8 @@ export function EnableAuthenticator({
             </EnableAuthenticatorForm>
 
             <RecoveryCodesDialog
-                open={showRecoveryCodesDialog}
-                onOpenChange={onRecoveryCodeDialogChange}
+                open={!!recoveryCodes}
+                onOpenChange={onOpenChange}
                 codes={recoveryCodes}
             />
         </main>
