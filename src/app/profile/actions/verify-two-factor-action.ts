@@ -47,7 +47,6 @@ export const verifyTwoFactorAction = authActionClient()
 
             const verified = verifySecret(
                 user.twoFactorTempSecret,
-                user.emailAddress,
                 parsedInput.verificationCode
             );
 

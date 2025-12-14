@@ -17,11 +17,13 @@ export function generateSecret(label: string) {
 }
 
 export function generateOtpauth(secret: string, label: string) {
-    return new TOTP({ issuer, label, secret }).toString();
+    const totp = new TOTP({ issuer, label, secret });
+    return totp.toString();
 }
 
-export function verifySecret(secret: string, label: string, token: string) {
-    return new TOTP({ issuer, label, secret }).validate({ token });
+export function verifySecret(secret: string, token: string) {
+    const totp = new TOTP({ issuer, secret });
+    return totp.validate({ token }) !== null;
 }
 
 export async function generateRecoveryCodes(count = 10) {
