@@ -44,12 +44,12 @@ export function LoginWithTwoFactor() {
 
             <div className="space-y-2">
                 <p className="text-muted-foreground text-sm">
-                    Don&apos;t have access to your authenticator device? You can{' '}
+                    Don&apos;t have access to your authenticator device?{' '}
                     <Link
                         href="/account/login-with-recovery-code"
                         className="underline underline-offset-4"
                     >
-                        login with a recovery code
+                        Login with a recovery code
                     </Link>
                     .
                 </p>
