@@ -31,7 +31,6 @@ export const disableTwoFactorAction = authActionClient()
             .set({
                 isTwoFactorEnabled: false,
                 twoFactorSecret: null,
-                twoFactorTempSecret: null,
                 twoFactorRecoveryCodes: null,
             })
             .where(eq(users.id, userId));

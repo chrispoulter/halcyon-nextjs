@@ -29,7 +29,7 @@ export const verifyTwoFactorAction = authActionClient()
                     id: users.id,
                     emailAddress: users.emailAddress,
                     isLockedOut: users.isLockedOut,
-                    twoFactorTempSecret: users.twoFactorTempSecret,
+                    twoFactorSecret: users.twoFactorSecret,
                 })
                 .from(users)
                 .where(eq(users.id, userId))
@@ -39,14 +39,14 @@ export const verifyTwoFactorAction = authActionClient()
                 throw new ActionError('User not found.', 404);
             }
 
-            if (!user.twoFactorTempSecret) {
+            if (!user.twoFactorSecret) {
                 throw new ActionError(
                     'Two-factor authentication is not configured.'
                 );
             }
 
             const verified = verifySecret(
-                user.twoFactorTempSecret,
+                user.twoFactorSecret,
                 parsedInput.verificationCode
             );
 
@@ -61,8 +61,6 @@ export const verifyTwoFactorAction = authActionClient()
                 .update(users)
                 .set({
                     isTwoFactorEnabled: true,
-                    twoFactorSecret: user.twoFactorTempSecret,
-                    twoFactorTempSecret: null,
                     twoFactorRecoveryCodes: hashedRecoveryCodes,
                 })
                 .where(eq(users.id, userId));

@@ -18,7 +18,7 @@ export const getTwoFactorConfig = cache(
                 id: users.id,
                 emailAddress: users.emailAddress,
                 isLockedOut: users.isLockedOut,
-                twoFactorTempSecret: users.twoFactorTempSecret,
+                twoFactorSecret: users.twoFactorSecret,
             })
             .from(users)
             .where(eq(users.id, userId))
@@ -28,20 +28,20 @@ export const getTwoFactorConfig = cache(
             return undefined;
         }
 
-        if (user.twoFactorTempSecret) {
+        if (user.twoFactorSecret) {
             const otpauth = generateOtpauth(
-                user.twoFactorTempSecret,
+                user.twoFactorSecret,
                 user.emailAddress
             );
 
-            return { otpauth, secret: user.twoFactorTempSecret };
+            return { otpauth, secret: user.twoFactorSecret };
         }
 
         const { base32, otpauth } = generateSecret(user.emailAddress);
 
         await db
             .update(users)
-            .set({ twoFactorTempSecret: base32 })
+            .set({ twoFactorSecret: base32 })
             .where(eq(users.id, userId));
 
         return { otpauth, secret: base32 };
