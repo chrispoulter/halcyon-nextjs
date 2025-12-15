@@ -70,7 +70,7 @@ export const verifyTwoFactorAction = authActionClient()
             revalidatePath('/users');
             revalidatePath(`/users/${user.id}`);
             revalidatePath('/profile');
-            revalidatePath('/enable-authenticator');
+            revalidatePath('/profile/enable-authenticator');
 
             return { id: user.id, recoveryCodes };
         }

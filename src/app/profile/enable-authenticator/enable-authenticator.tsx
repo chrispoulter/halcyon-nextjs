@@ -44,8 +44,10 @@ export function EnableAuthenticator({
         }
     );
 
-    function onOpenChange() {
-        router.push('/profile');
+    function onOpenChange(open: boolean) {
+        if (!open) {
+            router.push('/profile');
+        }
     }
 
     function onSubmit(values: EnableAuthenticatorFormValues) {
