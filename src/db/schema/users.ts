@@ -33,7 +33,6 @@ export const users = pgTable(
             .notNull()
             .default(false),
         twoFactorSecret: text('two_factor_secret'),
-        twoFactorTempSecret: text('two_factor_temp_secret'),
         twoFactorRecoveryCodes: text('two_factor_recovery_codes').array(),
         searchVector: tsVector('search_vector').generatedAlwaysAs(
             (): SQL =>

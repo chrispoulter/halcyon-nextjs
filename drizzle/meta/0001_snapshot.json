@@ -77,12 +77,6 @@
                     "primaryKey": false,
                     "notNull": false
                 },
-                "two_factor_temp_secret": {
-                    "name": "two_factor_temp_secret",
-                    "type": "text",
-                    "primaryKey": false,
-                    "notNull": false
-                },
                 "two_factor_recovery_codes": {
                     "name": "two_factor_recovery_codes",
                     "type": "text[]",
