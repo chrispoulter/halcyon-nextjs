@@ -7,7 +7,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { QRCodeSVG } from 'qrcode.react';
 import { verifyTwoFactorAction } from '@/app/profile/actions/verify-two-factor-action';
-import { type GetTwoFactorConfigResponse } from '@/app/profile/data/get-two-factor-config';
+import { type SetupTwoFactorResponse } from '@/app/profile/data/setup-two-factor';
 import {
     EnableAuthenticatorForm,
     EnableAuthenticatorFormValues,
@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
 
 type EnableAuthenticatorProps = {
-    configuration: GetTwoFactorConfigResponse;
+    configuration: SetupTwoFactorResponse;
 };
 
 export function EnableAuthenticator({

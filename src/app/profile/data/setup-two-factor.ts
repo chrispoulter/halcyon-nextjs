@@ -6,13 +6,13 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { generateSecret, generateOtpauth } from '@/lib/two-factor';
 
-export type GetTwoFactorConfigResponse = {
+export type SetupTwoFactorResponse = {
     otpauth: string;
     secret: string;
 };
 
-export const getTwoFactorConfig = cache(
-    async (userId: string): Promise<GetTwoFactorConfigResponse | undefined> => {
+export const setupTwoFactor = cache(
+    async (userId: string): Promise<SetupTwoFactorResponse | undefined> => {
         const [user] = await db
             .select({
                 id: users.id,
