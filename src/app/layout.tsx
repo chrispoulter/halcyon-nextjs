@@ -1,14 +1,20 @@
 import type { Metadata, Viewport } from 'next';
-import { Open_Sans } from 'next/font/google';
+import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/sonner';
-import { cn } from '@/lib/utils';
 import './globals.css';
 
-const openSans = Open_Sans({
-    variable: '--font-open-sans',
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+
+const geistSans = Geist({
+    variable: '--font-geist-sans',
+    subsets: ['latin'],
+});
+
+const geistMono = Geist_Mono({
+    variable: '--font-geist-mono',
     subsets: ['latin'],
 });
 
@@ -44,8 +50,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
     return (
-        <html lang="en" suppressHydrationWarning>
-            <body className={cn('font-sans antialiased', openSans.variable)}>
+        <html lang="en" className={inter.variable} suppressHydrationWarning>
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            >
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="system"
