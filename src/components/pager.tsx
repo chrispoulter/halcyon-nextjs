@@ -19,7 +19,6 @@ export function Pager({
     hasNextPage,
     onPreviousPage,
     onNextPage,
-    disabled,
 }: PagerProps) {
     if (!hasPreviousPage && !hasNextPage) {
         return null;
@@ -30,18 +29,12 @@ export function Pager({
             <PaginationContent>
                 {hasPreviousPage && (
                     <PaginationItem>
-                        <PaginationPrevious
-                            disabled={disabled}
-                            onClick={() => onPreviousPage()}
-                        />
+                        <PaginationPrevious onClick={() => onPreviousPage()} />
                     </PaginationItem>
                 )}
                 {hasNextPage && (
                     <PaginationItem>
-                        <PaginationNext
-                            disabled={disabled}
-                            onClick={() => onNextPage()}
-                        />
+                        <PaginationNext onClick={() => onNextPage()} />
                     </PaginationItem>
                 )}
             </PaginationContent>
