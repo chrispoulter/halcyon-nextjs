@@ -43,7 +43,7 @@ export function MainNav({ session }: MainNavProps) {
                 !roles || roles.some((value) => session?.roles?.includes(value))
         )
         .map(({ href, label }) => (
-            <Button key={href} asChild variant="link">
+            <Button key={href} asChild variant="ghost">
                 <Link href={href} onClick={() => setOpen(false)}>
                     {label}
                 </Link>

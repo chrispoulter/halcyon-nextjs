@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from 'next';
-import { Open_Sans, Geist, Geist_Mono } from 'next/font/google';
+import { Inter, Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 
-const openSans = Open_Sans({ subsets: ['latin'], variable: '--font-sans' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -50,7 +50,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
     return (
-        <html lang="en" suppressHydrationWarning className={openSans.variable}>
+        <html lang="en" suppressHydrationWarning className={inter.variable}>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
