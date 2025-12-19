@@ -13,13 +13,13 @@ import {
 } from '@react-email/components';
 
 type ResetPasswordEmailProps = {
-    resetPasswordUrl: string;
     siteUrl: string;
+    passwordResetToken: string;
 };
 
 export function ResetPasswordEmail({
-    resetPasswordUrl,
     siteUrl,
+    passwordResetToken,
 }: ResetPasswordEmailProps) {
     return (
         <Html>
@@ -36,7 +36,10 @@ export function ResetPasswordEmail({
                         password please click here:
                     </Text>
                     <Section style={buttonContainer}>
-                        <Button style={button} href={resetPasswordUrl}>
+                        <Button
+                            style={button}
+                            href={`${siteUrl}/account/reset-password/${passwordResetToken}`}
+                        >
                             Reset your password
                         </Button>
                     </Section>
@@ -62,8 +65,7 @@ export function ResetPasswordEmail({
 
 ResetPasswordEmail.PreviewProps = {
     siteUrl: 'http://localhost:3000',
-    resetPasswordUrl:
-        'http://localhost:3000/account/reset-password/db424e3c-4cab-4973-bea0-eb6565bb794c',
+    passwordResetToken: 'B4276C117FCF0F7A7BB590E4AFB61343',
 } as ResetPasswordEmailProps;
 
 export default ResetPasswordEmail;

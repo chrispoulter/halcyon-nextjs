@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { generateHash } from '@/lib/hash';
+import { generateHash, verifyHash } from '@/lib/hash';
 import { actionClient, ActionError } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -36,11 +36,16 @@ export const resetPasswordAction = actionClient
             .where(eq(users.emailAddress, parsedInput.emailAddress))
             .limit(1);
 
-        if (
-            !user ||
-            user.isLockedOut ||
-            parsedInput.token !== user.passwordResetToken
-        ) {
+        if (!user || user.isLockedOut || !user.passwordResetToken) {
+            throw new ActionError('Invalid token.');
+        }
+
+        const verified = await verifyHash(
+            parsedInput.token,
+            user.passwordResetToken
+        );
+
+        if (!verified) {
             throw new ActionError('Invalid token.');
         }
 
