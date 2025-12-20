@@ -45,7 +45,7 @@ export const changePasswordAction = authActionClient()
                 throw new ActionError('Incorrect password.');
             }
 
-            const verified = await verifyHash(
+            const verified = verifyHash(
                 parsedInput.currentPassword,
                 user.password
             );
@@ -54,7 +54,7 @@ export const changePasswordAction = authActionClient()
                 throw new ActionError('Incorrect password.');
             }
 
-            const password = await generateHash(parsedInput.newPassword);
+            const password = generateHash(parsedInput.newPassword);
 
             await db
                 .update(users)

@@ -40,16 +40,13 @@ export const resetPasswordAction = actionClient
             throw new ActionError('Invalid token.');
         }
 
-        const verified = await verifyHash(
-            parsedInput.token,
-            user.passwordResetToken
-        );
+        const verified = verifyHash(parsedInput.token, user.passwordResetToken);
 
         if (!verified) {
             throw new ActionError('Invalid token.');
         }
 
-        const password = await generateHash(parsedInput.newPassword);
+        const password = generateHash(parsedInput.newPassword);
 
         await db
             .update(users)

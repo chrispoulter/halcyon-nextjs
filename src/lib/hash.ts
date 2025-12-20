@@ -5,7 +5,7 @@ const SALT_SIZE = 16;
 const KEY_SIZE = 32;
 const ITERATIONS = 10000;
 
-export function generateHash(value: string): string {
+export function generateHash(value: string) {
     const salt = randomBytes(SALT_SIZE);
     const key = pbkdf2Sync(value, salt, ITERATIONS, KEY_SIZE, ALGORITHM);
 
@@ -15,7 +15,7 @@ export function generateHash(value: string): string {
     return `${saltBase64}.${keyBase64}`;
 }
 
-export function verifyHash(value: string, hash: string): boolean {
+export function verifyHash(value: string, hash: string) {
     const parts = hash.split('.', 2);
 
     if (parts.length !== 2) {

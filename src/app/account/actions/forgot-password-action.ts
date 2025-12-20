@@ -37,7 +37,7 @@ export const forgotPasswordAction = actionClient
             .toString('hex')
             .toUpperCase();
 
-        const hashedPasswordResetToken = await generateHash(passwordResetToken);
+        const hashedPasswordResetToken = generateHash(passwordResetToken);
 
         await db
             .update(users)
