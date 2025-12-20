@@ -7,9 +7,9 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { ResetPasswordEmail } from '@/emails/reset-password-email';
 import { sendEmail } from '@/lib/email';
-import { generateHash } from '@/lib/hash';
 import { actionClient } from '@/lib/safe-action';
 import { getSiteUrl } from '@/lib/server-utils';
+import { hashToken } from '@/lib/token';
 
 const schema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),
@@ -37,7 +37,7 @@ export const forgotPasswordAction = actionClient
             .toString('hex')
             .toUpperCase();
 
-        const hashedPasswordResetToken = await generateHash(passwordResetToken);
+        const hashedPasswordResetToken = hashToken(passwordResetToken);
 
         await db
             .update(users)

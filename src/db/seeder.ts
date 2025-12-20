@@ -3,7 +3,7 @@ import { Client } from 'pg';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { generateHash } from '@/lib/hash';
+import { hashPassword } from '@/lib/password';
 import { config } from '@/lib/config';
 
 async function createDb() {
@@ -60,7 +60,7 @@ async function seedDb() {
 
     try {
         const emailAddress = config.SEED_EMAIL_ADDRESS;
-        const password = await generateHash(config.SEED_PASSWORD);
+        const password = await hashPassword(config.SEED_PASSWORD);
 
         const user: typeof users.$inferInsert = {
             emailAddress,

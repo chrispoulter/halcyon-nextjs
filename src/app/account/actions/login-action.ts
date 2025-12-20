@@ -7,7 +7,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { actionClient, ActionError } from '@/lib/safe-action';
 import type { Role } from '@/lib/definitions';
-import { verifyHash } from '@/lib/hash';
+import { verifyPassword } from '@/lib/password';
 import { createSession } from '@/lib/session';
 
 const schema = z.object({
@@ -39,7 +39,7 @@ export const loginAction = actionClient
             throw new ActionError('The credentials provided were invalid.');
         }
 
-        const verified = await verifyHash(parsedInput.password, user.password);
+        const verified = await verifyPassword(parsedInput.password, user.password);
 
         if (!verified) {
             throw new ActionError('The credentials provided were invalid.');

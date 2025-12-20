@@ -5,8 +5,8 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
+import { hashPassword, verifyPassword } from '@/lib/password';
 import { ActionError, authActionClient } from '@/lib/safe-action';
-import { generateHash, verifyHash } from '@/lib/hash';
 
 const schema = z.object({
     currentPassword: z
@@ -45,7 +45,7 @@ export const changePasswordAction = authActionClient()
                 throw new ActionError('Incorrect password.');
             }
 
-            const verified = await verifyHash(
+            const verified = await verifyPassword(
                 parsedInput.currentPassword,
                 user.password
             );
@@ -54,7 +54,7 @@ export const changePasswordAction = authActionClient()
                 throw new ActionError('Incorrect password.');
             }
 
-            const password = await generateHash(parsedInput.newPassword);
+            const password = await hashPassword(parsedInput.newPassword);
 
             await db
                 .update(users)
