@@ -60,7 +60,7 @@ async function seedDb() {
 
     try {
         const emailAddress = config.SEED_EMAIL_ADDRESS;
-        const password = await generateHash(config.SEED_PASSWORD);
+        const password = generateHash(config.SEED_PASSWORD);
 
         const user: typeof users.$inferInsert = {
             emailAddress,

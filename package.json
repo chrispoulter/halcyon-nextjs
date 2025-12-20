@@ -22,7 +22,6 @@
         "@opentelemetry/sdk-logs": "^0.208.0",
         "@react-email/components": "^1.0.2",
         "@vercel/otel": "^2.1.0",
-        "bcrypt": "^6.0.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "date-fns": "^4.1.0",
@@ -51,7 +50,6 @@
     "devDependencies": {
         "@react-email/preview-server": "^5.1.0",
         "@tailwindcss/postcss": "^4.1.18",
-        "@types/bcrypt": "^6.0.0",
         "@types/node": "^25.0.3",
         "@types/nodemailer": "^7.0.4",
         "@types/pg": "^8.16.0",
