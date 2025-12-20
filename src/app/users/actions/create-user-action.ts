@@ -55,7 +55,7 @@ export const createUserAction = authActionClient(isUserAdministrator)
             throw new ActionError('User name is already taken.');
         }
 
-        const password = await generateHash(parsedInput.password);
+        const password = generateHash(parsedInput.password);
 
         const [user] = await db
             .insert(users)
