@@ -1,9 +1,11 @@
-import argon2 from 'argon2';
+import bcrypt from 'bcrypt';
+
+const ROUNDS = 10;
 
 export function generateHash(value: string) {
-    return argon2.hash(value);
+    return bcrypt.hash(value, ROUNDS);
 }
 
 export function verifyHash(value: string, hash: string) {
-    return argon2.verify(hash, value);
+    return bcrypt.compare(value, hash);
 }
