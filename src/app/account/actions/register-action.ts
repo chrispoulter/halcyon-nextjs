@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
-import { hashPassword } from '@/lib/password';
+import { generateHash } from '@/lib/hash';
 import { actionClient, ActionError } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -48,7 +48,7 @@ export const registerAction = actionClient
             throw new ActionError('User name is already taken.');
         }
 
-        const password = await hashPassword(parsedInput.password);
+        const password = await generateHash(parsedInput.password);
 
         const [user] = await db
             .insert(users)

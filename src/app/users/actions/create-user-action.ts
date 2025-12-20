@@ -7,7 +7,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
 import { roles, isUserAdministrator } from '@/lib/definitions';
-import { hashPassword } from '@/lib/password';
+import { generateHash } from '@/lib/hash';
 import { ActionError, authActionClient } from '@/lib/safe-action';
 
 const schema = z.object({
@@ -55,7 +55,7 @@ export const createUserAction = authActionClient(isUserAdministrator)
             throw new ActionError('User name is already taken.');
         }
 
-        const password = await hashPassword(parsedInput.password);
+        const password = await generateHash(parsedInput.password);
 
         const [user] = await db
             .insert(users)

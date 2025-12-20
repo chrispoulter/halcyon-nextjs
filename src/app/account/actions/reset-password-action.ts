@@ -4,9 +4,8 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { hashPassword } from '@/lib/password';
+import { generateHash, verifyHash } from '@/lib/hash';
 import { actionClient, ActionError } from '@/lib/safe-action';
-import { verifyToken } from '@/lib/token';
 
 const schema = z.object({
     token: z
@@ -41,7 +40,7 @@ export const resetPasswordAction = actionClient
             throw new ActionError('Invalid token.');
         }
 
-        const verified = verifyToken(
+        const verified = await verifyHash(
             parsedInput.token,
             user.passwordResetToken
         );
@@ -50,7 +49,7 @@ export const resetPasswordAction = actionClient
             throw new ActionError('Invalid token.');
         }
 
-        const password = await hashPassword(parsedInput.newPassword);
+        const password = await generateHash(parsedInput.newPassword);
 
         await db
             .update(users)
