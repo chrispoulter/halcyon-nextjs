@@ -26,14 +26,12 @@ export function verifySecret(secret: string, token: string) {
     return totp.validate({ token }) !== null;
 }
 
-export async function generateRecoveryCodes(count = 10) {
+export function generateRecoveryCodes(count = 10) {
     const recoveryCodes = Array.from({ length: count }, () =>
         randomBytes(5).toString('hex').toUpperCase()
     );
 
-    const hashedRecoveryCodes = await Promise.all(
-        recoveryCodes.map(generateHash)
-    );
+    const hashedRecoveryCodes = recoveryCodes.map(generateHash);
 
     return { recoveryCodes, hashedRecoveryCodes };
 }

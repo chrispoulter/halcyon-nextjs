@@ -61,7 +61,7 @@ export const loginWithRecoveryCodeAction = actionClient
         let matchedRecoveryCode: string | undefined;
 
         for (const code of recoveryCodes) {
-            const verified = await verifyHash(parsedInput.recoveryCode, code);
+            const verified = verifyHash(parsedInput.recoveryCode, code);
 
             if (verified) {
                 matchedRecoveryCode = code;

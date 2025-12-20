@@ -55,7 +55,7 @@ export const verifyTwoFactorAction = authActionClient()
             }
 
             const { recoveryCodes, hashedRecoveryCodes } =
-                await generateRecoveryCodes(10);
+                generateRecoveryCodes(10);
 
             await db
                 .update(users)
