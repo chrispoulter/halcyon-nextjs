@@ -21,6 +21,16 @@
                     "primaryKey": false,
                     "notNull": true
                 },
+                "normalized_email_address": {
+                    "name": "normalized_email_address",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "generated": {
+                        "as": "lower(\"users\".\"email_address\")",
+                        "type": "stored"
+                    }
+                },
                 "password": {
                     "name": "password",
                     "type": "text",
@@ -76,11 +86,11 @@
                 }
             },
             "indexes": {
-                "ix_users_email_address": {
-                    "name": "ix_users_email_address",
+                "ix_users_normalized_email_address": {
+                    "name": "ix_users_normalized_email_address",
                     "columns": [
                         {
-                            "expression": "email_address",
+                            "expression": "normalized_email_address",
                             "isExpression": false,
                             "asc": true,
                             "nulls": "last"

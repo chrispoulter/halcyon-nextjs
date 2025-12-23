@@ -38,10 +38,12 @@ export const registerAction = actionClient
     .metadata({ actionName: 'registerAction' })
     .inputSchema(schema)
     .action<RegisterResponse>(async ({ parsedInput }) => {
+        const normalizedEmailAddress = parsedInput.emailAddress.toLowerCase();
+
         const [existing] = await db
             .select({})
             .from(users)
-            .where(eq(users.emailAddress, parsedInput.emailAddress))
+            .where(eq(users.normalizedEmailAddress, normalizedEmailAddress))
             .limit(1);
 
         if (existing) {

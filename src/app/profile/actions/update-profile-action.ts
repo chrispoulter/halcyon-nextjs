@@ -34,7 +34,7 @@ export const updateProfileAction = authActionClient()
         const [user] = await db
             .select({
                 id: users.id,
-                emailAddress: users.emailAddress,
+                normalizedEmailAddress: users.normalizedEmailAddress,
                 isLockedOut: users.isLockedOut,
             })
             .from(users)
@@ -45,14 +45,13 @@ export const updateProfileAction = authActionClient()
             throw new ActionError('User not found.', 404);
         }
 
-        if (
-            parsedInput.emailAddress.toLowerCase() !==
-            user.emailAddress.toLowerCase()
-        ) {
+        const normalizedEmailAddress = parsedInput.emailAddress.toLowerCase();
+
+        if (normalizedEmailAddress !== user.normalizedEmailAddress) {
             const [existing] = await db
                 .select({})
                 .from(users)
-                .where(eq(users.emailAddress, parsedInput.emailAddress))
+                .where(eq(users.normalizedEmailAddress, normalizedEmailAddress))
                 .limit(1);
 
             if (existing) {

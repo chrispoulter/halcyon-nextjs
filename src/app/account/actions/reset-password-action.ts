@@ -26,6 +26,8 @@ export const resetPasswordAction = actionClient
     .metadata({ actionName: 'resetPasswordAction' })
     .inputSchema(schema)
     .action<ResetPasswordResponse>(async ({ parsedInput }) => {
+        const normalizedEmailAddress = parsedInput.emailAddress.toLowerCase();
+
         const [user] = await db
             .select({
                 id: users.id,
@@ -33,7 +35,7 @@ export const resetPasswordAction = actionClient
                 isLockedOut: users.isLockedOut,
             })
             .from(users)
-            .where(eq(users.emailAddress, parsedInput.emailAddress))
+            .where(eq(users.normalizedEmailAddress, normalizedEmailAddress))
             .limit(1);
 
         if (!user || user.isLockedOut || !user.passwordResetToken) {

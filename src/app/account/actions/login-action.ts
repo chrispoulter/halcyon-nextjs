@@ -21,6 +21,8 @@ export const loginAction = actionClient
     .metadata({ actionName: 'loginAction' })
     .inputSchema(schema)
     .action(async ({ parsedInput }) => {
+        const normalizedEmailAddress = parsedInput.emailAddress.toLowerCase();
+
         const [user] = await db
             .select({
                 id: users.id,
@@ -33,7 +35,7 @@ export const loginAction = actionClient
                 isTwoFactorEnabled: users.isTwoFactorEnabled,
             })
             .from(users)
-            .where(eq(users.emailAddress, parsedInput.emailAddress))
+            .where(eq(users.normalizedEmailAddress, normalizedEmailAddress))
             .limit(1);
 
         if (!user || !user.password) {

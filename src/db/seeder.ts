@@ -77,7 +77,7 @@ async function seedDb() {
         };
 
         await db.insert(users).values(user).onConflictDoUpdate({
-            target: users.emailAddress,
+            target: users.normalizedEmailAddress,
             set: user,
         });
     } catch (error) {

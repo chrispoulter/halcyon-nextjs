@@ -44,7 +44,7 @@ export const updateUserAction = authActionClient(isUserAdministrator)
         const [user] = await db
             .select({
                 id: users.id,
-                emailAddress: users.emailAddress,
+                normalizedEmailAddress: users.normalizedEmailAddress,
             })
             .from(users)
             .where(eq(users.id, id))
@@ -54,13 +54,13 @@ export const updateUserAction = authActionClient(isUserAdministrator)
             throw new ActionError('User not found.', 404);
         }
 
-        if (
-            rest.emailAddress.toLowerCase() !== user.emailAddress.toLowerCase()
-        ) {
+        const normalizedEmailAddress = rest.emailAddress.toLowerCase();
+
+        if (normalizedEmailAddress !== user.normalizedEmailAddress) {
             const [existing] = await db
                 .select({})
                 .from(users)
-                .where(eq(users.emailAddress, rest.emailAddress))
+                .where(eq(users.normalizedEmailAddress, normalizedEmailAddress))
                 .limit(1);
 
             if (existing) {

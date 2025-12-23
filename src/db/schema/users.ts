@@ -22,6 +22,9 @@ export const users = pgTable(
     {
         id: uuid('id').notNull().defaultRandom(),
         emailAddress: text('email_address').notNull(),
+        normalizedEmailAddress: text(
+            'normalized_email_address'
+        ).generatedAlwaysAs((): SQL => sql`lower(${users.emailAddress})`),
         password: text('password'),
         passwordResetToken: text('password_reset_token'),
         firstName: text('first_name').notNull(),
@@ -41,7 +44,9 @@ export const users = pgTable(
     },
     (table) => [
         primaryKey({ columns: [table.id], name: 'pk_users' }),
-        uniqueIndex('ix_users_email_address').on(table.emailAddress),
+        uniqueIndex('ix_users_normalized_email_address').on(
+            table.normalizedEmailAddress
+        ),
         index('ix_users_search_vector').using('gin', table.searchVector),
     ]
 );
