@@ -45,10 +45,12 @@ export const createUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'createUserAction' })
     .inputSchema(schema)
     .action<CreateUserResponse>(async ({ parsedInput }) => {
+        const normalizedEmailAddress = parsedInput.emailAddress.toLowerCase();
+
         const [existing] = await db
             .select({})
             .from(users)
-            .where(eq(users.emailAddress, parsedInput.emailAddress))
+            .where(eq(users.normalizedEmailAddress, normalizedEmailAddress))
             .limit(1);
 
         if (existing) {

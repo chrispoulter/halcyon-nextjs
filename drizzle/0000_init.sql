@@ -1,6 +1,7 @@
 CREATE TABLE "users" (
 	"id" uuid DEFAULT gen_random_uuid() NOT NULL,
 	"email_address" text NOT NULL,
+	"normalized_email_address" text GENERATED ALWAYS AS (lower("users"."email_address")) STORED,
 	"password" text,
 	"password_reset_token" text,
 	"first_name" text NOT NULL,
@@ -12,5 +13,5 @@ CREATE TABLE "users" (
 	CONSTRAINT "pk_users" PRIMARY KEY("id")
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX "ix_users_email_address" ON "users" USING btree ("email_address");--> statement-breakpoint
+CREATE UNIQUE INDEX "ix_users_normalized_email_address" ON "users" USING btree ("normalized_email_address");--> statement-breakpoint
 CREATE INDEX "ix_users_search_vector" ON "users" USING gin ("search_vector");
