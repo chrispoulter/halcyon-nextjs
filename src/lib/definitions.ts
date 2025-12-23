@@ -31,3 +31,8 @@ export type SessionPayload = {
     family_name: string;
     roles?: Role[];
 };
+
+export type PendingSessionPayload = {
+    sub: string;
+    requiresTwoFactor: true;
+};
