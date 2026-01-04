@@ -8,22 +8,19 @@ import type { PendingSessionPayload, SessionPayload } from '@/lib/definitions';
 
 const SESSION_COOKIE = 'session';
 const PENDING_SESSION_COOKIE = 'pending_session';
-
-const sessionDuration = config.SESSION_DURATION;
-const sessionSecret = config.SESSION_SECRET;
-const encodedSecret = new TextEncoder().encode(sessionSecret);
+const ENCODED_SESSION_SECRET = new TextEncoder().encode(config.SESSION_SECRET);
 
 async function encrypt(payload: JWTPayload, expires: Date) {
     return new SignJWT(payload)
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
         .setExpirationTime(expires)
-        .sign(encodedSecret);
+        .sign(ENCODED_SESSION_SECRET);
 }
 
 async function decrypt<T>(value = ''): Promise<T | undefined> {
     try {
-        const { payload } = await jwtVerify<T>(value, encodedSecret, {
+        const { payload } = await jwtVerify<T>(value, ENCODED_SESSION_SECRET, {
             algorithms: ['HS256'],
         });
         return payload;
@@ -33,7 +30,7 @@ async function decrypt<T>(value = ''): Promise<T | undefined> {
 }
 
 export async function createSession(payload: SessionPayload) {
-    const expires = new Date(Date.now() + sessionDuration * 1000);
+    const expires = new Date(Date.now() + config.SESSION_DURATION * 1000);
     const cookieStore = await cookies();
     const session = await encrypt(payload, expires);
 

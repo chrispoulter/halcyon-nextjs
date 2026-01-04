@@ -63,6 +63,7 @@ SESSION_DURATION=3600
 SESSION_SECRET=super_secret_key_that_should_be_changed
 
 TWO_FACTOR_ISSUER=Halcyon
+ENCRYPTION_KEY=c3VwZXJfc2VjcmV0X2tleV90aGF0X3Nob3VsZF9iZV9jaGFuZ2Vk
 ```
 
 ### Running the development server

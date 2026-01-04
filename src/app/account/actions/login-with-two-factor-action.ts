@@ -12,6 +12,7 @@ import {
     getPendingSession,
 } from '@/lib/session';
 import type { Role } from '@/lib/definitions';
+import { decryptSecret } from '@/lib/encrypt';
 import { verifySecret } from '@/lib/two-factor';
 
 const schema = z.object({
@@ -55,8 +56,10 @@ export const loginWithTwoFactorAction = actionClient
             );
         }
 
+        const decryptedSecret = decryptSecret(user.twoFactorSecret);
+
         const verified = verifySecret(
-            user.twoFactorSecret,
+            decryptedSecret,
             parsedInput.authenticatorCode
         );
 

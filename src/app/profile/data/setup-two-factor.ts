@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { generateSecret, generateOtpauth } from '@/lib/two-factor';
+import { decryptSecret, encryptSecret } from '@/lib/encrypt';
 
 export type SetupTwoFactorResponse = {
     otpauth: string;
@@ -29,19 +30,18 @@ export const setupTwoFactor = cache(
         }
 
         if (user.twoFactorSecret) {
-            const otpauth = generateOtpauth(
-                user.twoFactorSecret,
-                user.emailAddress
-            );
+            const decryptedSecret = decryptSecret(user.twoFactorSecret);
+            const otpauth = generateOtpauth(decryptedSecret, user.emailAddress);
 
-            return { otpauth, secret: user.twoFactorSecret };
+            return { otpauth, secret: decryptedSecret };
         }
 
         const { base32, otpauth } = generateSecret(user.emailAddress);
+        const encryptedSecret = encryptSecret(base32);
 
         await db
             .update(users)
-            .set({ twoFactorSecret: base32 })
+            .set({ twoFactorSecret: encryptedSecret })
             .where(eq(users.id, userId));
 
         return { otpauth, secret: base32 };

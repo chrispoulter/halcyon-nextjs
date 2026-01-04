@@ -5,10 +5,8 @@ import { randomBytes } from 'crypto';
 import { config } from '@/lib/config';
 import { generateHash } from '@/lib/hash';
 
-const issuer = config.TWO_FACTOR_ISSUER;
-
 export function generateSecret(label: string) {
-    const totp = new TOTP({ issuer, label });
+    const totp = new TOTP({ issuer: config.TWO_FACTOR_ISSUER, label });
 
     return {
         base32: totp.secret.base32,
@@ -17,12 +15,12 @@ export function generateSecret(label: string) {
 }
 
 export function generateOtpauth(secret: string, label: string) {
-    const totp = new TOTP({ issuer, label, secret });
+    const totp = new TOTP({ issuer: config.TWO_FACTOR_ISSUER, label, secret });
     return totp.toString();
 }
 
 export function verifySecret(secret: string, token: string) {
-    const totp = new TOTP({ issuer, secret });
+    const totp = new TOTP({ issuer: config.TWO_FACTOR_ISSUER, secret });
     return totp.validate({ token }) !== null;
 }
 

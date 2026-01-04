@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
+import { decryptSecret } from '@/lib/encrypt';
 import { authActionClient, ActionError } from '@/lib/safe-action';
 import { verifySecret, generateRecoveryCodes } from '@/lib/two-factor';
 
@@ -45,8 +46,10 @@ export const verifyTwoFactorAction = authActionClient()
                 );
             }
 
+            const decryptedSecret = decryptSecret(user.twoFactorSecret);
+
             const verified = verifySecret(
-                user.twoFactorSecret,
+                decryptedSecret,
                 parsedInput.verificationCode
             );
 
