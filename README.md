@@ -64,7 +64,7 @@ SESSION_SECRET=super_secret_key_that_should_be_changed
 
 TWO_FACTOR_ISSUER=Halcyon
 
-ENCRYPTION_KEY=c3VwZXJfc2VjcmV0X2tleV90aGF0X3Nob3VsZF9iZV9jaGFuZ2Vk
+ENCRYPTION_KEY=GZqvNnVvKJw5j7N3mZ9PZ2P+7nGk8Hk9c1Z6xZr8L2U=
 ```
 
 ### Running the development server
