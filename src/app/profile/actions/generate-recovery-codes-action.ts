@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { authActionClient, ActionError } from '@/lib/safe-action';
-import { generateRecoveryCodes } from '@/lib/two-factor';
+import { generateRecoveryCodes } from '@/lib/totp';
 
 type GenerateRecoveryCodesResponse = {
     id: string;

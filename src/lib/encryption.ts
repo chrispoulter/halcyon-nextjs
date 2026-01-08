@@ -2,10 +2,13 @@ import crypto from 'crypto';
 import { config } from '@/lib/config';
 
 const ALGORITHM = 'aes-256-gcm';
+const NONCE_SIZE = 12;
+const TAG_SIZE = 16;
+
 const ENCRYPTION_KEY = Buffer.from(config.ENCRYPTION_KEY, 'base64');
 
 export function encryptSecret(text: string): string {
-    const iv = crypto.randomBytes(12);
+    const iv = crypto.randomBytes(NONCE_SIZE);
     const cipher = crypto.createCipheriv(ALGORITHM, ENCRYPTION_KEY, iv);
 
     const encrypted = Buffer.concat([
@@ -21,9 +24,9 @@ export function encryptSecret(text: string): string {
 export function decryptSecret(cipherText: string): string {
     const data = Buffer.from(cipherText, 'base64');
 
-    const iv = data.subarray(0, 12);
-    const authTag = data.subarray(12, 28);
-    const encrypted = data.subarray(28);
+    const iv = data.subarray(0, NONCE_SIZE);
+    const authTag = data.subarray(NONCE_SIZE, NONCE_SIZE + TAG_SIZE);
+    const encrypted = data.subarray(NONCE_SIZE + TAG_SIZE);
 
     const decipher = crypto.createDecipheriv(ALGORITHM, ENCRYPTION_KEY, iv);
     decipher.setAuthTag(authTag);

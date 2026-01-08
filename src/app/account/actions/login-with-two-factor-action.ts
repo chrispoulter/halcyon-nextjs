@@ -12,8 +12,8 @@ import {
     getPendingSession,
 } from '@/lib/session';
 import type { Role } from '@/lib/definitions';
-import { decryptSecret } from '@/lib/encrypt';
-import { verifySecret } from '@/lib/two-factor';
+import { decryptSecret } from '@/lib/encryption';
+import { verifySecret } from '@/lib/totp';
 
 const schema = z.object({
     authenticatorCode: z
