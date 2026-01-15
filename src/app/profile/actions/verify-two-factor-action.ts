@@ -7,7 +7,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { decryptSecret } from '@/lib/encryption';
 import { authActionClient, ActionError } from '@/lib/safe-action';
-import { verifySecret, generateRecoveryCodes } from '@/lib/totp';
+import { verifySecret, generateRecoveryCodes } from '@/lib/two-factor';
 
 type VerifyTwoFactorResponse = {
     id: string;

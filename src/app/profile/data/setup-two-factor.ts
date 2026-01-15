@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { decryptSecret, encryptSecret } from '@/lib/encryption';
-import { generateSecret, generateOtpauth } from '@/lib/totp';
+import { generateSecret, generateOtpauth } from '@/lib/two-factor';
 
 export type SetupTwoFactorResponse = {
     otpauth: string;

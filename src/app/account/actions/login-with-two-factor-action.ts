@@ -13,7 +13,7 @@ import {
 } from '@/lib/session';
 import type { Role } from '@/lib/definitions';
 import { decryptSecret } from '@/lib/encryption';
-import { verifySecret } from '@/lib/totp';
+import { verifySecret } from '@/lib/two-factor';
 
 const schema = z.object({
     authenticatorCode: z
