@@ -61,6 +61,10 @@ SEED_PASSWORD=super_secret_password_that_should_be_changed
 
 SESSION_DURATION=3600
 SESSION_SECRET=super_secret_key_that_should_be_changed
+
+TWO_FACTOR_ISSUER=Halcyon
+
+ENCRYPTION_KEY=GZqvNnVvKJw5j7N3mZ9PZ2P+7nGk8Hk9c1Z6xZr8L2U=
 ```
 
 ### Running the development server

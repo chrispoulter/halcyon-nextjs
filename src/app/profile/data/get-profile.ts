@@ -12,6 +12,7 @@ export type GetProfileResponse = {
     lastName: string;
     dateOfBirth: string;
     isLockedOut: boolean;
+    isTwoFactorEnabled: boolean;
 };
 
 export const getProfile = cache(
@@ -24,6 +25,7 @@ export const getProfile = cache(
                 lastName: users.lastName,
                 dateOfBirth: users.dateOfBirth,
                 isLockedOut: users.isLockedOut,
+                isTwoFactorEnabled: users.isTwoFactorEnabled,
             })
             .from(users)
             .where(eq(users.id, userId))
@@ -40,6 +42,7 @@ export const getProfile = cache(
             lastName: user.lastName,
             dateOfBirth: user.dateOfBirth,
             isLockedOut: user.isLockedOut,
+            isTwoFactorEnabled: user.isTwoFactorEnabled,
         };
     }
 );

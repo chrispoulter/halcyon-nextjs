@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import type { GetProfileResponse } from '@/app/profile/data/get-profile';
+import { DisableTwoFactorButton } from '@/app/profile/disable-two-factor-button';
+import { GenerateRecoveryCodesButton } from '@/app/profile/generate-recovery-codes-button';
 import { DeleteAccountButton } from '@/app/profile/delete-account-button';
 import { Button } from '@/components/ui/button';
 import { toDisplay } from '@/lib/dates';
@@ -57,6 +59,29 @@ export function Profile({ profile }: ProfileProps) {
             <Button asChild className="w-full sm:w-auto">
                 <Link href="/profile/change-password">Change Password</Link>
             </Button>
+
+            <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight">
+                Two-Factor Authentication
+            </h2>
+
+            <p className="leading-7">
+                Enhance the security of your account by enabling two-factor
+                authentication.
+            </p>
+
+            <div className="flex flex-col gap-2 sm:flex-row">
+                <Button asChild>
+                    <Link href="/profile/enable-authenticator">
+                        Configure Authenticator App
+                    </Link>
+                </Button>
+                {profile.isTwoFactorEnabled && (
+                    <>
+                        <GenerateRecoveryCodesButton />
+                        <DisableTwoFactorButton />
+                    </>
+                )}
+            </div>
 
             <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight">
                 Settings

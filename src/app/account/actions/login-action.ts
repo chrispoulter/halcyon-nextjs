@@ -8,7 +8,7 @@ import { users } from '@/db/schema/users';
 import { actionClient, ActionError } from '@/lib/safe-action';
 import type { Role } from '@/lib/definitions';
 import { verifyHash } from '@/lib/hash';
-import { createSession } from '@/lib/session';
+import { createPendingSession, createSession } from '@/lib/session';
 
 const schema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),
@@ -32,6 +32,7 @@ export const loginAction = actionClient
                 lastName: users.lastName,
                 isLockedOut: users.isLockedOut,
                 roles: users.roles,
+                isTwoFactorEnabled: users.isTwoFactorEnabled,
             })
             .from(users)
             .where(eq(users.normalizedEmailAddress, normalizedEmailAddress))
@@ -51,6 +52,15 @@ export const loginAction = actionClient
             throw new ActionError(
                 'This account has been locked out, please try again later.'
             );
+        }
+
+        if (user.isTwoFactorEnabled) {
+            await createPendingSession({
+                sub: user.id,
+                requiresTwoFactor: true,
+            });
+
+            redirect('/account/login-with-two-factor');
         }
 
         await createSession({

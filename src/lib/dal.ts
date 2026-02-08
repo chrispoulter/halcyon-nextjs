@@ -2,7 +2,7 @@ import 'server-only';
 
 import { cache } from 'react';
 import { forbidden, redirect } from 'next/navigation';
-import { getSession } from '@/lib/session';
+import { getPendingSession, getSession } from '@/lib/session';
 import { Role } from '@/lib/definitions';
 
 export const verifySession = cache(async (roles?: Role[]) => {
@@ -17,4 +17,14 @@ export const verifySession = cache(async (roles?: Role[]) => {
     }
 
     return session;
+});
+
+export const verifyPendingSession = cache(async () => {
+    const pending = await getPendingSession();
+
+    if (!pending) {
+        redirect('/account/login');
+    }
+
+    return pending;
 });
