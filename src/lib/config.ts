@@ -11,4 +11,6 @@ export const config = {
     SEED_PASSWORD: String(process.env.SEED_PASSWORD),
     SESSION_SECRET: String(process.env.SESSION_SECRET),
     SESSION_DURATION: Number(process.env.SESSION_DURATION),
+    TWO_FACTOR_ISSUER: String(process.env.TWO_FACTOR_ISSUER),
+    ENCRYPTION_KEY: String(process.env.ENCRYPTION_KEY),
 };
