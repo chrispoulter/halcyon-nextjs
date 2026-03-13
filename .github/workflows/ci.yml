@@ -28,13 +28,13 @@ jobs:
                   cache: 'npm'
 
             - name: Install GitVersion
-              uses: gittools/actions/gitversion/setup@v4.2.0
+              uses: gittools/actions/gitversion/setup@v4.3.3
               with:
                   versionSpec: '6.6.x'
 
             - name: Determine Version
               id: version_step
-              uses: gittools/actions/gitversion/execute@v4.2.0
+              uses: gittools/actions/gitversion/execute@v4.3.3
 
             - name: Build and lint
               run: |
