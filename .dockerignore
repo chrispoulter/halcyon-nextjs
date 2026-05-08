@@ -7,9 +7,11 @@
 **/.github
 **/.vscode
 **/.next
+**/.claude
 **/docker-compose*
 **/Dockerfile
 **/node_modules
 **/next-env.d.ts
+**/tsconfig.tsbuildinfo
 **/LICENSE
 **/README.md

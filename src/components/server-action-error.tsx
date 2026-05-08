@@ -1,17 +1,15 @@
-import type { SafeActionResult } from 'next-safe-action';
+type ServerActionErrorResult = {
+    serverError?: string;
+    validationErrors?: {
+        formErrors: string[];
+        fieldErrors: Record<string, string[]>;
+    };
+};
 
-type FlattenedSafeActionResult<T> = SafeActionResult<
-    string,
-    undefined,
-    { formErrors: string[]; fieldErrors: Record<string, string[]> } | undefined,
-    T,
-    object
->;
-
-export function ServerActionError<T>({
+export function ServerActionError({
     result,
 }: {
-    result?: FlattenedSafeActionResult<T>;
+    result?: ServerActionErrorResult;
 }) {
     if (result?.validationErrors) {
         const flattenedErrors = [
