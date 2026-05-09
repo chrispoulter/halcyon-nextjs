@@ -10,7 +10,7 @@ import {
     Text,
     Heading,
     Link,
-} from '@react-email/components';
+} from 'react-email';
 
 type ResetPasswordEmailProps = {
     siteUrl: string;

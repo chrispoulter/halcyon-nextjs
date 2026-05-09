@@ -1,6 +1,8 @@
 node_modules
+.claude
 .next
 .eslintcache
 .env*
 !.env.example
 next-env.d.ts
+tsconfig.tsbuildinfo
