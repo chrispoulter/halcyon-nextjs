@@ -50,7 +50,7 @@ export function ChangePassword() {
                 </Button>
             </ChangePasswordForm>
 
-            <p className="text-muted-foreground text-sm">
+            <p className="text-sm text-muted-foreground">
                 Forgotten your password?{' '}
                 <Link
                     href="/account/forgot-password"

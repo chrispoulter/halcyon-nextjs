@@ -1,21 +1,18 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Geist, Geist_Mono } from 'next/font/google';
+import { Inter, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/sonner';
+import { cn } from '@/lib/utils';
+
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
-const geistSans = Geist({
-    variable: '--font-geist-sans',
+const fontMono = Geist_Mono({
     subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-    variable: '--font-geist-mono',
-    subsets: ['latin'],
+    variable: '--font-mono',
 });
 
 export const metadata: Metadata = {
@@ -50,16 +47,18 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
     return (
-        <html lang="en" suppressHydrationWarning className={inter.variable}>
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
-                >
+        <html
+            lang="en"
+            suppressHydrationWarning
+            className={cn(
+                'antialiased',
+                fontMono.variable,
+                'font-sans',
+                inter.variable
+            )}
+        >
+            <body>
+                <ThemeProvider>
                     <Header />
                     {children}
                     <Footer />

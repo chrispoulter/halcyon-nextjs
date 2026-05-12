@@ -34,7 +34,7 @@ export function Login() {
             <LoginForm loading={isSaving} onSubmit={onSubmit} />
 
             <div className="space-y-2">
-                <p className="text-muted-foreground text-sm">
+                <p className="text-sm text-muted-foreground">
                     Not already a member?{' '}
                     <Link
                         href="/account/register"
@@ -43,7 +43,7 @@ export function Login() {
                         Register now
                     </Link>
                 </p>
-                <p className="text-muted-foreground text-sm">
+                <p className="text-sm text-muted-foreground">
                     Forgotten your password?{' '}
                     <Link
                         href="/account/forgot-password"
