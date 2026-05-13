@@ -44,7 +44,7 @@ export function Register() {
 
             <RegisterForm loading={isSaving} onSubmit={onSubmit} />
 
-            <p className="text-muted-foreground text-sm">
+            <p className="text-sm text-muted-foreground">
                 Already have an account?{' '}
                 <Link
                     href="/account/login"

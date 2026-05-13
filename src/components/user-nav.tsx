@@ -51,7 +51,7 @@ export function UserNav({ session }: UserNavProps) {
                         <div className="truncate text-sm font-medium">
                             {session.given_name} {session.family_name}
                         </div>
-                        <div className="text-muted-foreground truncate text-sm">
+                        <div className="truncate text-sm text-muted-foreground">
                             {session.email}
                         </div>
                     </div>
