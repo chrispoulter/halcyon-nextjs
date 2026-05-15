@@ -1,8 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { deleteUserAction } from '@/app/users/actions/delete-user-action';
-import type { GetUserResponse } from '@/app/users/data/get-user';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -16,6 +14,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionError } from '@/components/server-action-error';
+import { deleteUserAction } from '../actions/delete-user-action';
+import type { GetUserResponse } from '../data/get-user';
 
 type DeleteUserButtonProps = {
     user: GetUserResponse;

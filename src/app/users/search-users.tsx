@@ -3,16 +3,6 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { User } from 'lucide-react';
-import type {
-    SearchUsersResponse,
-    UserSort,
-} from '@/app/users/data/search-users';
-import {
-    SearchUsersForm,
-    type SearchUsersFormValues,
-} from '@/app/users/search-users-form';
-import { SortUsersDropdown } from '@/app/users/sort-users-dropdown';
-import { UserCard } from '@/app/users/user-card';
 import { Button } from '@/components/ui/button';
 import {
     Empty,
@@ -22,6 +12,13 @@ import {
     EmptyDescription,
 } from '@/components/ui/empty';
 import { Pager } from '@/components/pager';
+import type { SearchUsersResponse, UserSort } from './data/search-users';
+import {
+    SearchUsersForm,
+    type SearchUsersFormValues,
+} from './search-users-form';
+import { SortUsersDropdown } from './sort-users-dropdown';
+import { UserCard } from './user-card';
 
 type SearchUsersProps = {
     request: {

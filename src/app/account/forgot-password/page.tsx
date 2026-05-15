@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ForgotPassword } from '@/app/account/forgot-password/forgot-password';
+import { ForgotPassword } from './forgot-password';
 
 export const metadata: Metadata = {
     title: 'Forgot Password',

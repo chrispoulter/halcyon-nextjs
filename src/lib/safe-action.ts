@@ -3,8 +3,8 @@ import {
     DEFAULT_SERVER_ERROR_MESSAGE,
 } from 'next-safe-action';
 import { z } from 'zod';
-import type { Role } from '@/lib/definitions';
-import { getSession } from '@/lib/session';
+import type { Role } from './definitions';
+import { getSession } from './session';
 
 export class ActionError extends Error {
     status?: number;

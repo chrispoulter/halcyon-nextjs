@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import { render } from 'react-email';
-import { config } from '@/lib/config';
+import { config } from './config';
 
 type EmailMessage = {
     from?: string;

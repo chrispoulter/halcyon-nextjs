@@ -4,12 +4,9 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { registerAction } from '@/app/account/actions/register-action';
-import {
-    RegisterForm,
-    type RegisterFormValues,
-} from '@/app/account/register/register-form';
 import { ServerActionError } from '@/components/server-action-error';
+import { registerAction } from '../actions/register-action';
+import { RegisterForm, type RegisterFormValues } from './register-form';
 
 export function Register() {
     const router = useRouter();

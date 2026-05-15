@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { ModeToggle } from '@/components/mode-toggle';
-import { MainNav } from '@/components/main-nav';
-import { UserNav } from '@/components/user-nav';
 import { getSession } from '@/lib/session';
+import { ModeToggle } from './mode-toggle';
+import { MainNav } from './main-nav';
+import { UserNav } from './user-nav';
 
 export async function Header() {
     const session = await getSession();

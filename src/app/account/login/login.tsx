@@ -3,12 +3,9 @@
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { loginAction } from '@/app/account/actions/login-action';
-import {
-    LoginForm,
-    type LoginFormValues,
-} from '@/app/account/login/login-form';
 import { ServerActionError } from '@/components/server-action-error';
+import { loginAction } from '../actions/login-action';
+import { LoginForm, type LoginFormValues } from './login-form';
 
 export function Login() {
     const { execute: login, isPending: isSaving } = useAction(loginAction, {

@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
-import { getUser } from '@/app/users/data/get-user';
-import { UpdateUser } from '@/app/users/[id]/update-user';
 import { verifySession } from '@/lib/dal';
 import { isUserAdministrator } from '@/lib/definitions';
+import { getUser } from '../data/get-user';
+import { UpdateUser } from './update-user';
 
 async function loadUser({ params }: PageProps<'/users/[id]'>) {
     await verifySession(isUserAdministrator);

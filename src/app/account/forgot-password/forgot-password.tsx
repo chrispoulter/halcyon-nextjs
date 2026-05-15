@@ -3,12 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { forgotPasswordAction } from '@/app/account/actions/forgot-password-action';
+import { ServerActionError } from '@/components/server-action-error';
+import { forgotPasswordAction } from '../actions/forgot-password-action';
 import {
     ForgotPasswordForm,
     type ForgotPasswordFormValues,
-} from '@/app/account/forgot-password/forgot-password-form';
-import { ServerActionError } from '@/components/server-action-error';
+} from './forgot-password-form';
 
 export function ForgotPassword() {
     const router = useRouter();

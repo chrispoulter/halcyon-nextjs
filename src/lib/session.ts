@@ -3,8 +3,8 @@ import 'server-only';
 import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
-import { config } from '@/lib/config';
-import type { SessionPayload } from '@/lib/definitions';
+import { config } from './config';
+import type { SessionPayload } from './definitions';
 
 const SESSION_COOKIE = 'session';
 

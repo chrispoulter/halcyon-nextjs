@@ -4,14 +4,14 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { updateProfileAction } from '@/app/profile/actions/update-profile-action';
-import type { GetProfileResponse } from '@/app/profile/data/get-profile';
+import { Button } from '@/components/ui/button';
+import { ServerActionError } from '@/components/server-action-error';
+import { updateProfileAction } from '../actions/update-profile-action';
+import type { GetProfileResponse } from '../data/get-profile';
 import {
     UpdateProfileForm,
     type UpdateProfileFormValues,
-} from '@/app/profile/update-profile/update-profile-form';
-import { ServerActionError } from '@/components/server-action-error';
-import { Button } from '@/components/ui/button';
+} from './update-profile-form';
 
 type ProfileProps = {
     profile: GetProfileResponse;

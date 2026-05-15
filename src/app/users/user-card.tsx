@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import type { SearchUsersResponse } from '@/app/users/data/search-users';
 import { Badge } from '@/components/ui/badge';
 import { roleOptions } from '@/lib/definitions';
+import type { SearchUsersResponse } from './data/search-users';
 
 type UserCardProps = {
     user: SearchUsersResponse['items'][number];

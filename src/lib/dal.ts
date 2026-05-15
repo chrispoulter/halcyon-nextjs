@@ -2,8 +2,8 @@ import 'server-only';
 
 import { cache } from 'react';
 import { forbidden, redirect } from 'next/navigation';
-import { getSession } from '@/lib/session';
-import { Role } from '@/lib/definitions';
+import { getSession } from './session';
+import { Role } from './definitions';
 
 export const verifySession = cache(async (roles?: Role[]) => {
     const session = await getSession();

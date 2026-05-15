@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getProfile } from '@/app/profile/data/get-profile';
-import { Profile } from '@/app/profile/profile';
 import { verifySession } from '@/lib/dal';
+import { getProfile } from './data/get-profile';
+import { Profile } from './profile';
 
 export const metadata: Metadata = {
     title: 'My Account',

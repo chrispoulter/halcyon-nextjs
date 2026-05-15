@@ -4,13 +4,13 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { changePasswordAction } from '@/app/profile/actions/change-password-action';
+import { Button } from '@/components/ui/button';
+import { ServerActionError } from '@/components/server-action-error';
+import { changePasswordAction } from '../actions/change-password-action';
 import {
     ChangePasswordForm,
     type ChangePasswordFormValues,
-} from '@/app/profile/change-password/change-password-form';
-import { Button } from '@/components/ui/button';
-import { ServerActionError } from '@/components/server-action-error';
+} from './change-password-form';
 
 export function ChangePassword() {
     const router = useRouter();

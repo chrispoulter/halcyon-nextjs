@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { ChangePassword } from '@/app/profile/change-password/change-password';
 import { verifySession } from '@/lib/dal';
+import { ChangePassword } from './change-password';
 
 export const metadata: Metadata = {
     title: 'Change Password',

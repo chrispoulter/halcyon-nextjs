@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import { Client } from 'pg';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
-import { db } from '@/db';
-import { users } from '@/db/schema/users';
 import { generateHash } from '@/lib/hash';
 import { config } from '@/lib/config';
+import { users } from './schema/users';
+import { db } from '.';
 
 async function createDb() {
     console.log('Creating database...');

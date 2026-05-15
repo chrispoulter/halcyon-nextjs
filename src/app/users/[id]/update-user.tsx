@@ -4,17 +4,14 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { updateUserAction } from '@/app/users/actions/update-user-action';
-import type { GetUserResponse } from '@/app/users/data/get-user';
-import {
-    UpdateUserForm,
-    type UpdateUserFormValues,
-} from '@/app/users/[id]/update-user-form';
-import { UnlockUserButton } from '@/app/users/[id]/unlock-user-button';
-import { LockUserButton } from '@/app/users/[id]/lock-user-button';
-import { DeleteUserButton } from '@/app/users/[id]/delete-user-button';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
+import { updateUserAction } from '../actions/update-user-action';
+import type { GetUserResponse } from '../data/get-user';
+import { UpdateUserForm, type UpdateUserFormValues } from './update-user-form';
+import { UnlockUserButton } from './unlock-user-button';
+import { LockUserButton } from './lock-user-button';
+import { DeleteUserButton } from './delete-user-button';
 
 type UpdateUserProps = {
     user: GetUserResponse;

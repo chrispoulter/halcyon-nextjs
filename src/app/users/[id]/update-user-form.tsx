@@ -1,13 +1,13 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { GetUserResponse } from '@/app/users/data/get-user';
 import { TextField } from '@/components/form/text-field';
 import { DateField } from '@/components/form/date-field';
 import { SwitchField } from '@/components/form/switch-field';
 import { LoadingButton } from '@/components/loading-button';
 import { isInPast } from '@/lib/dates';
 import { roleOptions, roles } from '@/lib/definitions';
+import { GetUserResponse } from '../data/get-user';
 
 const schema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),

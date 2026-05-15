@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Register } from '@/app/account/register/register';
+import { Register } from './register';
 
 export const metadata: Metadata = {
     title: 'Register',

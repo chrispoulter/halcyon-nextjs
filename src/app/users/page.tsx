@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { z } from 'zod';
-import { searchUsers } from '@/app/users/data/search-users';
-import { SearchUsers } from '@/app/users/search-users';
 import { verifySession } from '@/lib/dal';
 import { isUserAdministrator } from '@/lib/definitions';
+import { searchUsers } from './data/search-users';
+import { SearchUsers } from './search-users';
 
 const searchParamsSchema = z.object({
     search: z.string({ message: 'Search must be a valid string' }).catch(''),

@@ -4,13 +4,10 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { createUserAction } from '@/app/users/actions/create-user-action';
-import {
-    CreateUserForm,
-    type CreateUserFormValues,
-} from '@/app/users/create/create-user-form';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
+import { createUserAction } from '../actions/create-user-action';
+import { CreateUserForm, type CreateUserFormValues } from './create-user-form';
 
 export function CreateUser() {
     const router = useRouter();

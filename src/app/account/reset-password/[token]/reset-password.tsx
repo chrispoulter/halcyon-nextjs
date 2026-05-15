@@ -3,12 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { resetPasswordAction } from '@/app/account/actions/reset-password-action';
+import { ServerActionError } from '@/components/server-action-error';
+import { resetPasswordAction } from '../../actions/reset-password-action';
 import {
     ResetPasswordForm,
     type ResetPasswordFormValues,
-} from '@/app/account/reset-password/[token]/reset-password-form';
-import { ServerActionError } from '@/components/server-action-error';
+} from './reset-password-form';
 
 type ResetPasswordProps = {
     token: string;

@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import type { GetProfileResponse } from '@/app/profile/data/get-profile';
-import { DeleteAccountButton } from '@/app/profile/delete-account-button';
 import { Button } from '@/components/ui/button';
 import { toDisplay } from '@/lib/dates';
+import type { GetProfileResponse } from './data/get-profile';
+import { DeleteAccountButton } from './delete-account-button';
 
 type ProfileProps = {
     profile: GetProfileResponse;

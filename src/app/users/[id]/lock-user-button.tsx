@@ -1,7 +1,5 @@
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { lockUserAction } from '@/app/users/actions/lock-user-action';
-import type { GetUserResponse } from '@/app/users/data/get-user';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -15,6 +13,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionError } from '@/components/server-action-error';
+import { lockUserAction } from '../actions/lock-user-action';
+import type { GetUserResponse } from '../data/get-user';
 
 type LockUserButtonProps = {
     user: GetUserResponse;

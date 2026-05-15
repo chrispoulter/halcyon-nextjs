@@ -1,7 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { deleteAccountAction } from '@/app/profile/actions/delete-account-action';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -15,6 +14,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionError } from '@/components/server-action-error';
+import { deleteAccountAction } from './actions/delete-account-action';
 
 type DeleteAccountButtonProps = {
     className?: string;
