@@ -18,9 +18,9 @@ import {
     isUserAdministrator,
 } from '@/lib/definitions';
 
-type MainNavRoute = { href: string; label: string; roles?: Role[] };
+type NavItem = { href: string; label: string; roles?: Role[] };
 
-const routes: MainNavRoute[] = [
+const navItems: NavItem[] = [
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About' },
     {
@@ -30,14 +30,14 @@ const routes: MainNavRoute[] = [
     },
 ];
 
-type MainNavProps = {
+type MainMenuProps = {
     session?: SessionPayload;
 };
 
-export function MainMenu({ session }: MainNavProps) {
+export function MainMenu({ session }: MainMenuProps) {
     const [open, setOpen] = useState(false);
 
-    const routeLinks = routes
+    const navLinks = navItems
         .filter(
             ({ roles }) =>
                 !roles || roles.some((value) => session?.roles?.includes(value))
@@ -52,7 +52,7 @@ export function MainMenu({ session }: MainNavProps) {
 
     return (
         <>
-            <nav className="hidden gap-2 sm:flex">{routeLinks}</nav>
+            <nav className="hidden gap-2 sm:flex">{navLinks}</nav>
             <Drawer open={open} onOpenChange={setOpen}>
                 <DrawerTrigger asChild>
                     <Button variant="outline" size="icon" className="sm:hidden">
@@ -67,7 +67,7 @@ export function MainMenu({ session }: MainNavProps) {
                             <DrawerDescription>Main Menu</DrawerDescription>
                         </DrawerHeader>
                         <nav className="flex flex-col items-stretch justify-center gap-2 p-4">
-                            {routeLinks}
+                            {navLinks}
                         </nav>
                     </div>
                 </DrawerContent>
