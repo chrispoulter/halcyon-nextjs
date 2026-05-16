@@ -1,10 +1,52 @@
 import 'server-only';
 
 import { cache } from 'react';
-import { desc, asc, sql, SQL } from 'drizzle-orm';
+import { eq, desc, asc, sql, SQL } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { type Role } from '@/lib/definitions';
+
+export type GetUserResponse = {
+    id: string;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    isLockedOut: boolean;
+    roles?: Role[];
+};
+
+export const getUser = cache(
+    async (userId: string): Promise<GetUserResponse | undefined> => {
+        const [user] = await db
+            .select({
+                id: users.id,
+                emailAddress: users.emailAddress,
+                firstName: users.firstName,
+                lastName: users.lastName,
+                dateOfBirth: users.dateOfBirth,
+                isLockedOut: users.isLockedOut,
+                roles: users.roles,
+            })
+            .from(users)
+            .where(eq(users.id, userId))
+            .limit(1);
+
+        if (!user) {
+            return undefined;
+        }
+
+        return {
+            id: user.id,
+            emailAddress: user.emailAddress,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            dateOfBirth: user.dateOfBirth,
+            isLockedOut: user.isLockedOut,
+            roles: (user.roles as Role[]) || undefined,
+        };
+    }
+);
 
 export type UserSort =
     | 'EMAIL_ADDRESS_ASC'

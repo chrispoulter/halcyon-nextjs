@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { ServerActionError } from '@/components/server-action-error';
-import { loginAction } from '../actions/login-action';
+import { loginAction } from '../account-actions';
 import { LoginForm, type LoginFormValues } from './login-form';
 
 export function Login() {

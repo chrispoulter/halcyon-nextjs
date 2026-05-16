@@ -6,8 +6,8 @@ import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
-import { updateProfileAction } from '../actions/update-profile-action';
-import type { GetProfileResponse } from '../data/get-profile';
+import { updateProfileAction } from '../profile-actions';
+import type { GetProfileResponse } from '../profile-data';
 import {
     UpdateProfileForm,
     type UpdateProfileFormValues,

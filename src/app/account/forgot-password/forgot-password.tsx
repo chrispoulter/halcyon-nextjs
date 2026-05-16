@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { ServerActionError } from '@/components/server-action-error';
-import { forgotPasswordAction } from '../actions/forgot-password-action';
+import { forgotPasswordAction } from '../account-actions';
 import {
     ForgotPasswordForm,
     type ForgotPasswordFormValues,

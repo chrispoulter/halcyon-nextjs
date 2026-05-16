@@ -6,7 +6,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
-import { createUserAction } from '../actions/create-user-action';
+import { createUserAction } from '../users-actions';
 import { CreateUserForm, type CreateUserFormValues } from './create-user-form';
 
 export function CreateUser() {

@@ -7,7 +7,6 @@ import { config } from './config';
 import type { SessionPayload } from './definitions';
 
 const SESSION_COOKIE = 'session';
-
 const sessionDuration = config.SESSION_DURATION;
 const sessionSecret = config.SESSION_SECRET;
 const encodedSecret = new TextEncoder().encode(sessionSecret);

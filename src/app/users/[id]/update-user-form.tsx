@@ -7,7 +7,7 @@ import { SwitchField } from '@/components/form/switch-field';
 import { LoadingButton } from '@/components/loading-button';
 import { isInPast } from '@/lib/dates';
 import { roleOptions, roles } from '@/lib/definitions';
-import { GetUserResponse } from '../data/get-user';
+import { GetUserResponse } from '../users-data';
 
 const schema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),

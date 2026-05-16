@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionError } from '@/components/server-action-error';
-import { deleteAccountAction } from './actions/delete-account-action';
+import { deleteAccountAction } from './profile-actions';
 
 type DeleteAccountButtonProps = {
     className?: string;

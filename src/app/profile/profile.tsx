@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { toDisplay } from '@/lib/dates';
-import type { GetProfileResponse } from './data/get-profile';
+import type { GetProfileResponse } from './profile-data';
 import { DeleteAccountButton } from './delete-account-button';
 
 type ProfileProps = {

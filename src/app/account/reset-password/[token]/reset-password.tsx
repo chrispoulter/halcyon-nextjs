@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { ServerActionError } from '@/components/server-action-error';
-import { resetPasswordAction } from '../../actions/reset-password-action';
+import { resetPasswordAction } from '../../account-actions';
 import {
     ResetPasswordForm,
     type ResetPasswordFormValues,

@@ -12,7 +12,7 @@ import {
     EmptyDescription,
 } from '@/components/ui/empty';
 import { Pager } from '@/components/pager';
-import type { SearchUsersResponse, UserSort } from './data/search-users';
+import type { SearchUsersResponse, UserSort } from './users-data';
 import {
     SearchUsersForm,
     type SearchUsersFormValues,

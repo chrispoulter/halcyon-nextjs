@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { logoutAction } from '@/app/account/actions/logout-action';
+import { logoutAction } from '@/app/account/account-actions';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

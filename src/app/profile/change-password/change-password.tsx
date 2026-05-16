@@ -6,7 +6,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { ServerActionError } from '@/components/server-action-error';
-import { changePasswordAction } from '../actions/change-password-action';
+import { changePasswordAction } from '../profile-actions';
 import {
     ChangePasswordForm,
     type ChangePasswordFormValues,

@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { LoadingButton } from '@/components/loading-button';
 import { ServerActionError } from '@/components/server-action-error';
-import { unlockUserAction } from '../actions/unlock-user-action';
-import type { GetUserResponse } from '../data/get-user';
+import { unlockUserAction } from '../users-actions';
+import type { GetUserResponse } from '../users-data';
 
 type UnlockUserButtonProps = {
     user: GetUserResponse;

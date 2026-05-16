@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { ServerActionError } from '@/components/server-action-error';
-import { registerAction } from '../actions/register-action';
+import { registerAction } from '../account-actions';
 import { RegisterForm, type RegisterFormValues } from './register-form';
 
 export function Register() {
