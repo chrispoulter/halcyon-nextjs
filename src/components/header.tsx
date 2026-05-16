@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { getSession } from '@/lib/session';
 import { ModeToggle } from './mode-toggle';
-import { MainNav } from './main-nav';
-import { UserNav } from './user-nav';
+import { MainMenu } from './main-menu';
+import { UserMenu } from './user-menu';
 
 export async function Header() {
     const session = await getSession();
@@ -20,9 +20,9 @@ export async function Header() {
                 </div>
 
                 <div className="ml-auto flex items-center gap-2">
-                    <MainNav session={session} />
+                    <MainMenu session={session} />
                     <ModeToggle />
-                    <UserNav session={session} />
+                    <UserMenu session={session} />
                 </div>
             </div>
         </header>

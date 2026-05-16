@@ -19,7 +19,7 @@ type UserNavProps = {
     session?: SessionPayload;
 };
 
-export function UserNav({ session }: UserNavProps) {
+export function UserMenu({ session }: UserNavProps) {
     function onLogout() {
         logoutAction();
     }

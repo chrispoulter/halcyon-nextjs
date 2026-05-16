@@ -34,7 +34,7 @@ type MainNavProps = {
     session?: SessionPayload;
 };
 
-export function MainNav({ session }: MainNavProps) {
+export function MainMenu({ session }: MainNavProps) {
     const [open, setOpen] = useState(false);
 
     const routeLinks = routes
