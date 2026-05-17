@@ -4,7 +4,7 @@ import { cache } from 'react';
 import { eq, desc, asc, sql, SQL } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
-import { type Role } from '@/lib/definitions';
+import { type Role } from '@/lib/types';
 
 export type GetUserResponse = {
     id: string;

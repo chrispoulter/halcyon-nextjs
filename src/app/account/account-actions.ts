@@ -9,7 +9,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { ResetPasswordEmail } from '@/emails/reset-password-email';
 import { isInPast } from '@/lib/dates';
-import { type Role } from '@/lib/definitions';
+import { type Role } from '@/lib/types';
 import { sendEmail } from '@/lib/email';
 import { generateHash, verifyHash } from '@/lib/hash';
 import { actionClient, ActionError } from '@/lib/safe-action';

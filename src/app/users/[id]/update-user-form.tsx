@@ -6,7 +6,7 @@ import { DateField } from '@/components/form/date-field';
 import { SwitchField } from '@/components/form/switch-field';
 import { LoadingButton } from '@/components/loading-button';
 import { isInPast } from '@/lib/dates';
-import { roleOptions, roles } from '@/lib/definitions';
+import { roleOptions, roles } from '@/lib/types';
 import { GetUserResponse } from '../users-data';
 
 const schema = z.object({

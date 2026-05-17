@@ -4,7 +4,7 @@ import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
 import { config } from './config';
-import type { SessionPayload } from './definitions';
+import type { SessionPayload } from './types';
 
 const SESSION_COOKIE = 'session';
 const sessionDuration = config.SESSION_DURATION;

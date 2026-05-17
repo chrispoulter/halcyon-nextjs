@@ -3,7 +3,7 @@ import 'server-only';
 import { cache } from 'react';
 import { forbidden, redirect } from 'next/navigation';
 import { getSession } from './session';
-import { Role } from './definitions';
+import { Role } from './types';
 
 export const verifySession = cache(async (roles?: Role[]) => {
     const session = await getSession();

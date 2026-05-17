@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { type SessionPayload, roleOptions } from '@/lib/definitions';
+import { type SessionPayload, roleOptions } from '@/lib/types';
 
 type UserNavProps = {
     session?: SessionPayload;

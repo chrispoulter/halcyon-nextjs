@@ -16,7 +16,7 @@ import {
     type SessionPayload,
     type Role,
     isUserAdministrator,
-} from '@/lib/definitions';
+} from '@/lib/types';
 
 type NavItem = { href: string; label: string; roles?: Role[] };
 

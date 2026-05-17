@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { verifySession } from '@/lib/dal';
-import { isUserAdministrator } from '@/lib/definitions';
+import { isUserAdministrator } from '@/lib/types';
 import { getUser } from '../users-data';
 import { UpdateUser } from './update-user';
 

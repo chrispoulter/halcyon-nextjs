@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { roleOptions } from '@/lib/definitions';
+import { roleOptions } from '@/lib/types';
 import type { SearchUsersResponse } from './users-data';
 
 type UserCardProps = {

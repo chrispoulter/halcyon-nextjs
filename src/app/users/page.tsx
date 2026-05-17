@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { z } from 'zod';
 import { verifySession } from '@/lib/dal';
-import { isUserAdministrator } from '@/lib/definitions';
+import { isUserAdministrator } from '@/lib/types';
 import { searchUsers } from './users-data';
 import { SearchUsers } from './search-users';
 

@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { isInPast } from '@/lib/dates';
-import { roles, isUserAdministrator } from '@/lib/definitions';
+import { roles, isUserAdministrator } from '@/lib/types';
 import { generateHash } from '@/lib/hash';
 import { ActionError, authActionClient } from '@/lib/safe-action';
 

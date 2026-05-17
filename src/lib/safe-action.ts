@@ -3,7 +3,7 @@ import {
     DEFAULT_SERVER_ERROR_MESSAGE,
 } from 'next-safe-action';
 import { z } from 'zod';
-import type { Role } from './definitions';
+import type { Role } from './types';
 import { getSession } from './session';
 
 export class ActionError extends Error {

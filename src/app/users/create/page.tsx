@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { verifySession } from '@/lib/dal';
-import { isUserAdministrator } from '@/lib/definitions';
+import { isUserAdministrator } from '@/lib/types';
 import { CreateUser } from './create-user';
 
 export const metadata: Metadata = {
