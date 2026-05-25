@@ -6,7 +6,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema/users';
 import { type Role } from '@/lib/types';
 
-export type GetUserResponse = {
+export interface GetUserResponse {
     id: string;
     emailAddress: string;
     firstName: string;
@@ -14,7 +14,7 @@ export type GetUserResponse = {
     dateOfBirth: string;
     isLockedOut: boolean;
     roles?: Role[];
-};
+}
 
 export const getUser = cache(
     async (userId: string): Promise<GetUserResponse | undefined> => {
@@ -54,13 +54,13 @@ export type UserSort =
     | 'NAME_ASC'
     | 'NAME_DESC';
 
-type SearchUsersRequest = {
+interface SearchUsersRequest {
     search?: string;
     page?: number;
     sort?: UserSort;
-};
+}
 
-export type SearchUsersResponse = {
+export interface SearchUsersResponse {
     items: {
         id: string;
         emailAddress: string;
@@ -71,7 +71,7 @@ export type SearchUsersResponse = {
     }[];
     hasNextPage: boolean;
     hasPreviousPage: boolean;
-};
+}
 
 const PAGE_SIZE = 5;
 

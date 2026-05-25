@@ -6,9 +6,9 @@ import { toDisplay } from '@/lib/dates';
 import type { GetProfileResponse } from './profile-data';
 import { DeleteAccountButton } from './delete-account-button';
 
-type ProfileProps = {
+interface ProfileProps {
     profile: GetProfileResponse;
-};
+}
 
 export function Profile({ profile }: ProfileProps) {
     return (

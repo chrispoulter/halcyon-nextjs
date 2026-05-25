@@ -6,12 +6,12 @@ import {
     PaginationPrevious,
 } from '@/components/ui/pagination';
 
-type PagerProps = {
+interface PagerProps {
     hasPreviousPage: boolean;
     hasNextPage: boolean;
     onPreviousPage: () => void;
     onNextPage: () => void;
-};
+}
 
 export function Pager({
     hasPreviousPage,

@@ -13,11 +13,11 @@ import {
     type UpdateProfileFormValues,
 } from './update-profile-form';
 
-type ProfileProps = {
+interface UpdateProfileProps {
     profile: GetProfileResponse;
-};
+}
 
-export function UpdateProfile({ profile }: ProfileProps) {
+export function UpdateProfile({ profile }: UpdateProfileProps) {
     const router = useRouter();
 
     const { execute: updateProfile, isPending: isSaving } = useAction(

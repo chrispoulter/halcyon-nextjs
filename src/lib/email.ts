@@ -2,12 +2,12 @@ import nodemailer from 'nodemailer';
 import { render } from 'react-email';
 import { config } from './config';
 
-type EmailMessage = {
+interface EmailMessage {
     from?: string;
     to: string;
     subject: string;
     react: React.ReactElement;
-};
+}
 
 export async function sendEmail(message: EmailMessage) {
     const html = await render(message.react);

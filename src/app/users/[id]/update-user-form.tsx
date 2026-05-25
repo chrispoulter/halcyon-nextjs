@@ -34,12 +34,12 @@ const schema = z.object({
 
 export type UpdateUserFormValues = z.infer<typeof schema>;
 
-type UpdateUserFormProps = {
+interface UpdateUserFormProps {
     user: GetUserResponse;
     loading?: boolean;
     onSubmit: (values: UpdateUserFormValues) => void;
     children?: React.ReactNode;
-};
+}
 
 export function UpdateUserForm({
     user,

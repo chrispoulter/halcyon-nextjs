@@ -37,9 +37,9 @@ const createUserSchema = z.object({
         .optional(),
 });
 
-type CreateUserResponse = {
+interface CreateUserResponse {
     id: string;
-};
+}
 
 export const createUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'createUserAction' })
@@ -93,9 +93,9 @@ const updateUserSchema = z.object({
         .optional(),
 });
 
-type UpdateUserResponse = {
+interface UpdateUserResponse {
     id: string;
-};
+}
 
 export const updateUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'updateUserAction' })
@@ -141,9 +141,9 @@ const deleteUserSchema = z.object({
     id: z.uuid('Id must be a valid UUID'),
 });
 
-type DeleteUserResponse = {
+interface DeleteUserResponse {
     id: string;
-};
+}
 
 export const deleteUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'deleteUserAction' })
@@ -181,9 +181,9 @@ const lockUserSchema = z.object({
     id: z.uuid('Id must be a valid UUID'),
 });
 
-type LockUserResponse = {
+interface LockUserResponse {
     id: string;
-};
+}
 
 export const lockUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'lockUserAction' })
@@ -223,9 +223,9 @@ const unlockUserSchema = z.object({
     id: z.uuid('Id must be a valid UUID'),
 });
 
-type UnlockUserResponse = {
+interface UnlockUserResponse {
     id: string;
-};
+}
 
 export const unlockUserAction = authActionClient(isUserAdministrator)
     .metadata({ actionName: 'unlockUserAction' })

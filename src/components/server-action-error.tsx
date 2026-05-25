@@ -1,16 +1,16 @@
-type ServerActionErrorResult = {
+interface ServerActionErrorResult {
     serverError?: string;
     validationErrors?: {
         formErrors: string[];
         fieldErrors: Record<string, string[]>;
     };
-};
+}
 
-export function ServerActionError({
-    result,
-}: {
+interface ServerActionErrorProps {
     result?: ServerActionErrorResult;
-}) {
+}
+
+export function ServerActionError({ result }: ServerActionErrorProps) {
     if (result?.validationErrors) {
         const flattenedErrors = [
             ...result.validationErrors.formErrors,

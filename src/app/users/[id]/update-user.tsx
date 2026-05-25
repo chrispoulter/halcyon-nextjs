@@ -13,9 +13,9 @@ import { UnlockUserButton } from './unlock-user-button';
 import { LockUserButton } from './lock-user-button';
 import { DeleteUserButton } from './delete-user-button';
 
-type UpdateUserProps = {
+interface UpdateUserProps {
     user: GetUserResponse;
-};
+}
 
 export function UpdateUser({ user }: UpdateUserProps) {
     const router = useRouter();

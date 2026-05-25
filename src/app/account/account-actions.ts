@@ -96,9 +96,9 @@ const registerSchema = z.object({
         }),
 });
 
-type RegisterResponse = {
+interface RegisterResponse {
     id: string;
-};
+}
 
 export const registerAction = actionClient
     .metadata({ actionName: 'registerAction' })
@@ -186,9 +186,9 @@ const resetPasswordSchema = z.object({
         .max(50, 'New Password must be no more than 50 characters'),
 });
 
-type ResetPasswordResponse = {
+interface ResetPasswordResponse {
     id: string;
-};
+}
 
 export const resetPasswordAction = actionClient
     .metadata({ actionName: 'resetPasswordAction' })

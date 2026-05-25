@@ -17,10 +17,10 @@ import { ServerActionError } from '@/components/server-action-error';
 import { deleteUserAction } from '../users-actions';
 import type { GetUserResponse } from '../users-data';
 
-type DeleteUserButtonProps = {
+interface DeleteUserButtonProps {
     user: GetUserResponse;
     className?: string;
-};
+}
 
 export function DeleteUserButton({ user, className }: DeleteUserButtonProps) {
     const router = useRouter();

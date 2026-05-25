@@ -16,10 +16,10 @@ import { ServerActionError } from '@/components/server-action-error';
 import { unlockUserAction } from '../users-actions';
 import type { GetUserResponse } from '../users-data';
 
-type UnlockUserButtonProps = {
+interface UnlockUserButtonProps {
     user: GetUserResponse;
     className?: string;
-};
+}
 
 export function UnlockUserButton({ user, className }: UnlockUserButtonProps) {
     const { execute: unlockUser, isPending: isUnlocking } = useAction(

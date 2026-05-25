@@ -15,9 +15,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { type SessionPayload, roleOptions } from '@/lib/types';
 
-type UserNavProps = {
+interface UserNavProps {
     session?: SessionPayload;
-};
+}
 
 export function UserMenu({ session }: UserNavProps) {
     function onLogout() {

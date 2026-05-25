@@ -47,11 +47,11 @@ const schema = z
 
 export type CreateUserFormValues = z.infer<typeof schema>;
 
-type CreateUserFormProps = {
+interface CreateUserFormProps {
     loading?: boolean;
     onSubmit: (values: CreateUserFormValues) => void;
     children?: React.ReactNode;
-};
+}
 
 export function CreateUserForm({
     loading,

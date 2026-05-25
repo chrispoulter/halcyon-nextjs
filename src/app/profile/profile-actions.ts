@@ -25,9 +25,9 @@ const updateProfileSchema = z.object({
         .refine(isInPast, { message: 'Date Of Birth must be in the past' }),
 });
 
-type UpdateProfileResponse = {
+interface UpdateProfileResponse {
     id: string;
-};
+}
 
 export const updateProfileAction = authActionClient()
     .metadata({ actionName: 'updateProfileAction' })
@@ -80,9 +80,9 @@ const changePasswordSchema = z.object({
         .max(50, 'New Password must be no more than 50 characters'),
 });
 
-type ChangePasswordResponse = {
+interface ChangePasswordResponse {
     id: string;
-};
+}
 
 export const changePasswordAction = authActionClient()
     .metadata({ actionName: 'changePasswordAction' })
@@ -134,9 +134,9 @@ export const changePasswordAction = authActionClient()
         }
     );
 
-type DeleteAccountResponse = {
+interface DeleteAccountResponse {
     id: string;
-};
+}
 
 export const deleteAccountAction = authActionClient()
     .metadata({ actionName: 'deleteAccountAction' })

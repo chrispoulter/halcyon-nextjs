@@ -24,11 +24,11 @@ const schema = z
 
 export type ChangePasswordFormValues = z.infer<typeof schema>;
 
-type ChangePasswordFormProps = {
+interface ChangePasswordFormProps {
     loading?: boolean;
     onSubmit: (values: ChangePasswordFormValues) => void;
     children?: React.ReactNode;
-};
+}
 
 export function ChangePasswordForm({
     loading,

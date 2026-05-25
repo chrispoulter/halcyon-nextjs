@@ -5,14 +5,14 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db';
 import { users } from '@/db/schema/users';
 
-export type GetProfileResponse = {
+export interface GetProfileResponse {
     id: string;
     emailAddress: string;
     firstName: string;
     lastName: string;
     dateOfBirth: string;
     isLockedOut: boolean;
-};
+}
 
 export const getProfile = cache(
     async (userId: string): Promise<GetProfileResponse | undefined> => {

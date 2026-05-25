@@ -20,14 +20,14 @@ import {
 import { SortUsersDropdown } from './sort-users-dropdown';
 import { UserCard } from './user-card';
 
-type SearchUsersProps = {
+interface SearchUsersProps {
     request: {
         page: number;
         sort: UserSort;
         search: string;
     };
     data: SearchUsersResponse;
-};
+}
 
 export function SearchUsers({ request, data }: SearchUsersProps) {
     const router = useRouter();

@@ -12,10 +12,10 @@ import {
     Link,
 } from 'react-email';
 
-type ResetPasswordEmailProps = {
+interface ResetPasswordEmailProps {
     siteUrl: string;
     passwordResetToken: string;
-};
+}
 
 export function ResetPasswordEmail({
     siteUrl,

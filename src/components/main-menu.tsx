@@ -18,7 +18,11 @@ import {
     isUserAdministrator,
 } from '@/lib/types';
 
-type NavItem = { href: string; label: string; roles?: Role[] };
+interface NavItem {
+    href: string;
+    label: string;
+    roles?: Role[];
+}
 
 const navItems: NavItem[] = [
     { href: '/', label: 'Home' },

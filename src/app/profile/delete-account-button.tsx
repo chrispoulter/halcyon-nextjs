@@ -16,9 +16,9 @@ import { LoadingButton } from '@/components/loading-button';
 import { ServerActionError } from '@/components/server-action-error';
 import { deleteAccountAction } from './profile-actions';
 
-type DeleteAccountButtonProps = {
+interface DeleteAccountButtonProps {
     className?: string;
-};
+}
 
 export function DeleteAccountButton({ className }: DeleteAccountButtonProps) {
     const router = useRouter();

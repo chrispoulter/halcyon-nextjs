@@ -10,9 +10,9 @@ import {
     type ResetPasswordFormValues,
 } from './reset-password-form';
 
-type ResetPasswordProps = {
+interface ResetPasswordProps {
     token: string;
-};
+}
 
 export function ResetPassword({ token }: ResetPasswordProps) {
     const router = useRouter();
