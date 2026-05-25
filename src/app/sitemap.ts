@@ -8,14 +8,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         {
             url: siteUrl,
         },
-        {
-            url: `${siteUrl}/account/login`,
-        },
-        {
-            url: `${siteUrl}/account/register`,
-        },
-        {
-            url: `${siteUrl}/account/forgot-password`,
-        },
     ];
 }
