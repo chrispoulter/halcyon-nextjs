@@ -1,5 +1,6 @@
 'use server';
 
+import { createElement } from 'react';
 import { randomBytes } from 'crypto';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -10,7 +11,7 @@ import { users } from '@/db/schema/users';
 import { ResetPasswordEmail } from '@/emails/reset-password-email';
 import { isInPast } from '@/lib/dates';
 import { type Role } from '@/lib/types';
-import { sendEmail } from '@/lib/email';
+import { sendMail } from '@/lib/mailer';
 import { generateHash, verifyHash } from '@/lib/hash';
 import { actionClient, ActionError } from '@/lib/safe-action';
 import { createSession, deleteSession } from '@/lib/session';
@@ -165,10 +166,10 @@ export const forgotPasswordAction = actionClient
 
         const siteUrl = await getSiteUrl();
 
-        await sendEmail({
+        await sendMail({
             to: user.emailAddress,
             subject: 'Reset Password // Halcyon',
-            react: ResetPasswordEmail({
+            template: createElement(ResetPasswordEmail, {
                 siteUrl,
                 passwordResetToken,
             }),
