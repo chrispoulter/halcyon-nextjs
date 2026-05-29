@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import path from 'node:path';
 import { Client } from 'pg';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { generateHash } from '@/lib/hash';
@@ -48,7 +49,7 @@ async function migrateDb() {
 
     try {
         await migrate(db, {
-            migrationsFolder: './drizzle',
+            migrationsFolder: path.join(process.cwd(), 'drizzle'),
         });
     } catch (error) {
         console.error('Failed to migrate database', error);
