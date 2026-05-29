@@ -1,12 +1,10 @@
-name: halcyon
-
 services:
     halcyon-nextjs:
         image: halcyon-nextjs:latest
         build:
             context: .
         environment:
-            DATABASE_URL: postgres://postgres:password@host.docker.internal:5432/halcyon-nextjs
+            DATABASE_URL: postgres://postgres:password@host.docker.internal:5432/halcyon_nextjs
             EMAIL_SMTP_SERVER: host.docker.internal
             EMAIL_SMTP_PORT: 1025
             EMAIL_NO_REPLY_ADDRESS: noreply@example.com
@@ -24,15 +22,15 @@ services:
         image: postgres:17.6
         user: postgres
         environment:
-            POSTGRES_DB: halcyon-nextjs
+            POSTGRES_DB: halcyon_nextjs
             POSTGRES_PASSWORD: password
         ports:
             - 5432:5432
         volumes:
-            - postgres:/var/lib/postgresql/data
+            - postgres_data:/var/lib/postgresql/data
         restart: always
         healthcheck:
-            test: ['CMD', 'pg_isready']
+            test: [ 'CMD', 'pg_isready' ]
             interval: 10s
             timeout: 5s
             retries: 3
@@ -45,11 +43,9 @@ services:
             - 1025:1025
             - 8025:8025
         volumes:
-            - mailpit:/data
+            - mailpit_data:/data
         restart: always
 
 volumes:
-    postgres:
-        name: halcyon-postgres
-    mailpit:
-        name: halcyon-mailpit
+    postgres_data:
+    mailpit_data:
