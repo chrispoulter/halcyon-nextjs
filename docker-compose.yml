@@ -24,6 +24,7 @@ services:
         image: postgres:17.6
         user: postgres
         environment:
+            POSTGRES_DB: halcyon-nextjs
             POSTGRES_PASSWORD: password
         ports:
             - 5432:5432
