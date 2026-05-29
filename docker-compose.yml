@@ -4,8 +4,8 @@ services:
         build:
             context: .
         environment:
-            DATABASE_URL: postgres://postgres:password@host.docker.internal:5432/halcyon_nextjs
-            EMAIL_SMTP_SERVER: host.docker.internal
+            DATABASE_URL: postgres://postgres:password@postgres:5432/halcyon_nextjs
+            EMAIL_SMTP_SERVER: mailpit
             EMAIL_SMTP_PORT: 1025
             EMAIL_NO_REPLY_ADDRESS: noreply@example.com
             SEED_EMAIL_ADDRESS: system.administrator@example.com
@@ -15,8 +15,22 @@ services:
         ports:
             - 3000:3000
         depends_on:
+            halcyon-nextjs-migrate:
+                condition: service_completed_successfully
+
+    halcyon-nextjs-migrate:
+        image: halcyon-nextjs:migrator
+        build:
+            context: .
+            target: migrator
+        environment:
+            DATABASE_URL: postgres://postgres:password@postgres:5432/halcyon_nextjs
+            SEED_EMAIL_ADDRESS: system.administrator@example.com
+            SEED_PASSWORD: super_secret_password_that_should_be_changed
+        depends_on:
             postgres:
                 condition: service_healthy
+        restart: no
 
     postgres:
         image: postgres:17.6

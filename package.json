@@ -10,9 +10,9 @@
         "format": "prettier --write .",
         "db:generate": "drizzle-kit generate",
         "db:migrate": "drizzle-kit migrate",
-        "docker:up": "docker-compose up -d postgres mailpit",
-        "docker:down": "docker-compose down",
-        "email": "email dev -p 3001 -d src/emails"
+        "db:studio": "drizzle-kit studio",
+        "email": "email dev -p 3001 -d src/emails",
+        "vercel-build": "tsx src/db/migrate.ts"
     },
     "dependencies": {
         "@date-fns/utc": "^2.1.1",
@@ -60,6 +60,7 @@
         "prettier": "^3.8.3",
         "prettier-plugin-tailwindcss": "^0.8.0",
         "tailwindcss": "^4.2.4",
+        "tsx": "^4.22.3",
         "typescript": "^5.9.3"
     }
 }
