@@ -33,7 +33,7 @@ services:
         restart: no
 
     postgres:
-        image: postgres:17.6
+        image: postgres:18.3
         user: postgres
         environment:
             POSTGRES_DB: halcyon_nextjs
@@ -41,7 +41,7 @@ services:
         ports:
             - 5432:5432
         volumes:
-            - postgres_data:/var/lib/postgresql/data
+            - postgres_data:/var/lib/postgresql
         restart: always
         healthcheck:
             test: [ 'CMD', 'pg_isready' ]
