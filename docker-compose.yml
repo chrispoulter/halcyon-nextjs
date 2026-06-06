@@ -22,7 +22,7 @@ services:
         image: halcyon-nextjs:latest
         build:
             context: .
-        command: node seeder.js
+        command: node migrate.js
         environment:
             DATABASE_URL: postgresql://postgres:password@postgres:5432/halcyon_nextjs
             SEED_EMAIL_ADDRESS: system.administrator@example.com

@@ -67,7 +67,7 @@ RUN if [ -f package-lock.json ]; then \
   echo "No lockfile found." && exit 1; \
   fi
 
-RUN npx esbuild src/db/seeder.ts --bundle --platform=node --outfile=.next/standalone/seeder.js --external:pg-native
+RUN npx esbuild src/db/migrate.ts --bundle --platform=node --outfile=.next/standalone/migrate.js --external:pg-native
 
 # ============================================
 # Stage 3: Run Next.js application
