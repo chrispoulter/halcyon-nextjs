@@ -10,8 +10,7 @@
         "format": "prettier --write .",
         "db:generate": "drizzle-kit generate",
         "db:migrate": "drizzle-kit migrate",
-        "docker:up": "docker-compose up -d postgres mailpit",
-        "docker:down": "docker-compose down",
+        "db:studio": "drizzle-kit studio",
         "email": "email dev -p 3001 -d src/emails"
     },
     "dependencies": {
