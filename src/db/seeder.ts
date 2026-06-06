@@ -9,40 +9,32 @@ import { db } from '.';
 async function migrateDb() {
     console.log('Migrating database...');
 
-    try {
-        await migrate(db, {
-            migrationsFolder: path.join(process.cwd(), 'drizzle'),
-        });
-    } catch (error) {
-        console.error('Failed to migrate database', error);
-    }
+    await migrate(db, {
+        migrationsFolder: path.join(process.cwd(), 'drizzle'),
+    });
 }
 
 async function seedDb() {
     console.log('Seeding database...');
 
-    try {
-        const emailAddress = config.SEED_EMAIL_ADDRESS;
-        const password = generateHash(config.SEED_PASSWORD);
+    const emailAddress = config.SEED_EMAIL_ADDRESS;
+    const password = generateHash(config.SEED_PASSWORD);
 
-        const user: typeof users.$inferInsert = {
-            emailAddress,
-            password,
-            passwordResetToken: null,
-            firstName: 'System',
-            lastName: 'Administrator',
-            dateOfBirth: '1970-01-01',
-            roles: ['SYSTEM_ADMINISTRATOR'],
-            isLockedOut: false,
-        };
+    const user: typeof users.$inferInsert = {
+        emailAddress,
+        password,
+        passwordResetToken: null,
+        firstName: 'System',
+        lastName: 'Administrator',
+        dateOfBirth: '1970-01-01',
+        roles: ['SYSTEM_ADMINISTRATOR'],
+        isLockedOut: false,
+    };
 
-        await db.insert(users).values(user).onConflictDoUpdate({
-            target: users.normalizedEmailAddress,
-            set: user,
-        });
-    } catch (error) {
-        console.error('Failed to seed database', error);
-    }
+    await db.insert(users).values(user).onConflictDoUpdate({
+        target: users.normalizedEmailAddress,
+        set: user,
+    });
 }
 
 async function main() {
@@ -50,4 +42,9 @@ async function main() {
     await seedDb();
 }
 
-main();
+main()
+    .catch((error) => {
+        console.error(error);
+        process.exitCode = 1;
+    })
+    .finally(() => db.$client.end());

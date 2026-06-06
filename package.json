@@ -11,7 +11,8 @@
         "db:generate": "drizzle-kit generate",
         "db:migrate": "drizzle-kit migrate",
         "db:studio": "drizzle-kit studio",
-        "email": "email dev -p 3001 -d src/emails"
+        "email": "email dev -p 3001 -d src/emails",
+        "vercel-build": "tsx src/db/seeder.ts && next build"
     },
     "dependencies": {
         "@date-fns/utc": "^2.1.1",
@@ -46,6 +47,7 @@
     },
     "devDependencies": {
         "@react-email/ui": "6.1.1",
+        "esbuild": "^0.25.0",
         "@tailwindcss/postcss": "^4.2.4",
         "@types/node": "^25.6.2",
         "@types/nodemailer": "^8.0.0",
