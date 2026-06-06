@@ -47,7 +47,6 @@
     },
     "devDependencies": {
         "@react-email/ui": "6.1.1",
-        "esbuild": "^0.25.0",
         "@tailwindcss/postcss": "^4.2.4",
         "@types/node": "^25.6.2",
         "@types/nodemailer": "^8.0.0",
