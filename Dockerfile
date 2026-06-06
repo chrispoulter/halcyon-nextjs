@@ -17,16 +17,16 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
 
 # Install project dependencies with frozen lockfile for reproducible builds
 RUN --mount=type=cache,target=/root/.npm \
-    --mount=type=cache,target=/usr/local/share/.cache/yarn \
-    --mount=type=cache,target=/root/.local/share/pnpm/store \
+  --mount=type=cache,target=/usr/local/share/.cache/yarn \
+  --mount=type=cache,target=/root/.local/share/pnpm/store \
   if [ -f package-lock.json ]; then \
-    npm ci --no-audit --no-fund; \
+  npm ci --no-audit --no-fund; \
   elif [ -f yarn.lock ]; then \
-    corepack enable yarn && yarn install --frozen-lockfile --production=false; \
+  corepack enable yarn && yarn install --frozen-lockfile --production=false; \
   elif [ -f pnpm-lock.yaml ]; then \
-    corepack enable pnpm && pnpm install --frozen-lockfile; \
+  corepack enable pnpm && pnpm install --frozen-lockfile; \
   else \
-    echo "No lockfile found." && exit 1; \
+  echo "No lockfile found." && exit 1; \
   fi
 
 # ============================================
@@ -58,13 +58,13 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # .next/cache/fetch-cache from being included in the final image, meaning
 # cached fetch responses from the build won't be available at runtime.
 RUN if [ -f package-lock.json ]; then \
-    npm run build; \
+  npm run build; \
   elif [ -f yarn.lock ]; then \
-    corepack enable yarn && yarn build; \
+  corepack enable yarn && yarn build; \
   elif [ -f pnpm-lock.yaml ]; then \
-    corepack enable pnpm && pnpm build; \
+  corepack enable pnpm && pnpm build; \
   else \
-    echo "No lockfile found." && exit 1; \
+  echo "No lockfile found." && exit 1; \
   fi
 
 # ============================================
@@ -80,8 +80,8 @@ ENV NODE_ENV=production
 # Install only production deps (excludes webpack, Next.js, TypeScript, ESLint, etc.)
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev && \
-    npm install --no-save --no-audit --no-fund tsx
+  npm ci --omit=dev && \
+  npm install --no-save --no-audit --no-fund tsx
 
 # Copy only the files the migration script needs
 COPY tsconfig.json ./
