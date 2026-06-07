@@ -3,7 +3,7 @@ import 'server-only';
 import { cache } from 'react';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
-import { users } from '@/db/schema/users';
+import { users } from '@/db/schema';
 
 export interface GetProfileResponse {
     id: string;

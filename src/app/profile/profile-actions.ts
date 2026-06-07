@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
-import { users } from '@/db/schema/users';
+import { users } from '@/db/schema';
 import { isInPast } from '@/lib/dates';
 import { generateHash, verifyHash } from '@/lib/hash';
 import { ActionError, authActionClient } from '@/lib/safe-action';
