@@ -3,7 +3,7 @@ import path from 'node:path';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { generateHash } from '@/lib/hash';
 import { config } from '@/lib/config';
-import { users } from './schema/users';
+import { users } from './schema';
 import { db } from '.';
 
 async function migrateDb() {
