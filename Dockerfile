@@ -53,6 +53,7 @@ ENV NODE_ENV=production
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV SKIP_ENV_VALIDATION=1
 
 # Build Next.js application
 # If you want to speed up Docker rebuilds, you can cache the build artifacts
