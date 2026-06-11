@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { db } from '@/db';
-import { users } from '@/db/schema/users';
+import { users } from '@/db/schema';
 import { ResetPasswordEmail } from '@/emails/reset-password-email';
 import { isInPast } from '@/lib/dates';
 import { type Role } from '@/lib/types';

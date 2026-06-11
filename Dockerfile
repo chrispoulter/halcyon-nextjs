@@ -35,6 +35,9 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node:${NODE_VERSION} AS builder
 
+ARG GIT_COMMIT_SHA
+ENV GIT_COMMIT_SHA=$GIT_COMMIT_SHA
+
 # Set working directory
 WORKDIR /app
 
@@ -50,6 +53,7 @@ ENV NODE_ENV=production
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV SKIP_ENV_VALIDATION=1
 
 # Build Next.js application
 # If you want to speed up Docker rebuilds, you can cache the build artifacts
@@ -66,6 +70,8 @@ RUN if [ -f package-lock.json ]; then \
   else \
   echo "No lockfile found." && exit 1; \
   fi
+
+RUN npx esbuild src/db/migrate.ts --bundle --platform=node --outfile=.next/standalone/migrate.js --external:pg-native
 
 # ============================================
 # Stage 3: Run Next.js application

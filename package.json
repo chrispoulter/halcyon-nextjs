@@ -11,7 +11,8 @@
         "db:generate": "drizzle-kit generate",
         "db:migrate": "drizzle-kit migrate",
         "db:studio": "drizzle-kit studio",
-        "email": "email dev -p 3001 -d src/emails"
+        "email": "email dev -p 3001 -d src/emails",
+        "vercel-build": "tsx src/db/migrate.ts && next build"
     },
     "dependencies": {
         "@date-fns/utc": "^2.1.1",
@@ -19,11 +20,11 @@
         "@opentelemetry/api-logs": "^0.217.0",
         "@opentelemetry/instrumentation": "^0.217.0",
         "@opentelemetry/sdk-logs": "^0.217.0",
+        "@t3-oss/env-nextjs": "^0.13.11",
         "@vercel/otel": "^2.1.2",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "date-fns": "^4.1.0",
-        "dotenv": "^17.4.2",
         "drizzle-orm": "^0.45.2",
         "jose": "^6.2.3",
         "lucide-react": "^1.14.0",

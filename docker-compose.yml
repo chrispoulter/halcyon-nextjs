@@ -8,8 +8,6 @@ services:
             EMAIL_SMTP_SERVER: mailpit
             EMAIL_SMTP_PORT: 1025
             EMAIL_NO_REPLY_ADDRESS: noreply@example.com
-            SEED_EMAIL_ADDRESS: system.administrator@example.com
-            SEED_PASSWORD: super_secret_password_that_should_be_changed
             SESSION_DURATION: 3600
             SESSION_SECRET: super_secret_key_that_should_be_changed
         ports:
@@ -17,6 +15,22 @@ services:
         depends_on:
             postgres:
                 condition: service_healthy
+            halcyon-nextjs-migrate:
+                condition: service_completed_successfully
+
+    halcyon-nextjs-migrate:
+        image: halcyon-nextjs:latest
+        build:
+            context: .
+        command: node migrate.js
+        environment:
+            DATABASE_URL: postgresql://postgres:password@postgres:5432/halcyon_nextjs
+            SEED_EMAIL_ADDRESS: system.administrator@example.com
+            SEED_PASSWORD: super_secret_password_that_should_be_changed
+        depends_on:
+            postgres:
+                condition: service_healthy
+        restart: no
 
     postgres:
         image: postgres:18.3
