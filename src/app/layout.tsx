@@ -62,7 +62,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
                     <Header />
                     {children}
                     <Footer />
-                    <Toaster invert />
+                    <Toaster richColors />
                 </ThemeProvider>
             </body>
         </html>
