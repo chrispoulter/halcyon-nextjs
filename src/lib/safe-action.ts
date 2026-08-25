@@ -3,8 +3,10 @@ import {
     DEFAULT_SERVER_ERROR_MESSAGE,
 } from 'next-safe-action';
 import { z } from 'zod';
+import { trace } from '@opentelemetry/api';
 import type { Role } from './types';
 import { getSession } from './session';
+import { logger } from './logger';
 
 export class ActionError extends Error {
     status?: number;
@@ -28,8 +30,9 @@ export const actionClient = createSafeActionClient({
             return error.message;
         }
 
-        // Log the error to an error reporting service
-        console.error(error, utils.metadata);
+        logger.error('Unhandled server action error', error, {
+            actionName: utils.metadata.actionName,
+        });
 
         return DEFAULT_SERVER_ERROR_MESSAGE;
     },
@@ -46,6 +49,8 @@ export const authActionClient = (roles?: Role[]) =>
         if (roles && !roles.some((value) => session.roles?.includes(value))) {
             throw new ActionError('Forbidden.', 403);
         }
+
+        trace.getActiveSpan()?.setAttribute('enduser.id', session.sub);
 
         return next({ ctx: { userId: session.sub } });
     });

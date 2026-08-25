@@ -16,6 +16,7 @@ import { generateHash, verifyHash } from '@/lib/hash';
 import { actionClient, ActionError } from '@/lib/safe-action';
 import { createSession, deleteSession } from '@/lib/session';
 import { getSiteUrl } from '@/lib/server-utils';
+import { loginAttempts } from '@/lib/telemetry';
 
 const loginSchema = z.object({
     emailAddress: z.email('Email Address must be a valid email'),
@@ -45,16 +46,19 @@ export const loginAction = actionClient
             .limit(1);
 
         if (!user || !user.password) {
+            loginAttempts.add(1, { outcome: 'invalid_credentials' });
             throw new ActionError('The credentials provided were invalid.');
         }
 
         const verified = verifyHash(parsedInput.password, user.password);
 
         if (!verified) {
+            loginAttempts.add(1, { outcome: 'invalid_credentials' });
             throw new ActionError('The credentials provided were invalid.');
         }
 
         if (user.isLockedOut) {
+            loginAttempts.add(1, { outcome: 'locked_out' });
             throw new ActionError(
                 'This account has been locked out, please try again later.'
             );
@@ -67,6 +71,8 @@ export const loginAction = actionClient
             family_name: user.lastName,
             roles: user.roles as Role[],
         });
+
+        loginAttempts.add(1, { outcome: 'success' });
 
         redirect('/');
     });

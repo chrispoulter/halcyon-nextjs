@@ -12,6 +12,7 @@ services:
             SESSION_SECRET: super_secret_key_that_should_be_changed
             OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18890
             OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+            OTEL_RESOURCE_ATTRIBUTES: deployment.environment=docker
         ports:
             - 3000:3000
         depends_on:
@@ -48,7 +49,7 @@ services:
             - postgres_data:/var/lib/postgresql
         restart: always
         healthcheck:
-            test: [ 'CMD', 'pg_isready' ]
+            test: ['CMD', 'pg_isready']
             interval: 10s
             timeout: 5s
             retries: 3
