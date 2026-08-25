@@ -20,7 +20,11 @@ async function encrypt(payload: SessionPayload, expires: Date) {
         .sign(encodedSecret);
 }
 
-async function decrypt(value = ''): Promise<SessionPayload | undefined> {
+async function decrypt(value?: string): Promise<SessionPayload | undefined> {
+    if (!value) {
+        return undefined;
+    }
+
     try {
         const { payload } = await jwtVerify<SessionPayload>(
             value,
