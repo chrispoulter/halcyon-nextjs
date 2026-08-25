@@ -1,6 +1,8 @@
 import nodemailer from 'nodemailer';
 import { render } from 'react-email';
 import { config } from './config';
+import { logger } from './logger';
+import { tracer, emailSendDuration } from './telemetry';
 
 const transporter = nodemailer.createTransport({
     host: config.EMAIL_SMTP_SERVER,
@@ -23,7 +25,7 @@ export async function check(): Promise<{
         await transporter.verify();
         return { service: 'mailer', status: 'ok' };
     } catch (error) {
-        console.error('Mailer health check failed', error);
+        logger.error('Mailer health check failed', error);
         return { service: 'mailer', status: 'unhealthy' };
     }
 }
@@ -37,14 +39,27 @@ interface MailMessage {
 export async function sendMail(message: MailMessage) {
     const html = await render(message.template);
 
-    try {
-        await transporter.sendMail({
-            from: config.EMAIL_NO_REPLY_ADDRESS,
-            to: message.to,
-            subject: message.subject,
-            html,
-        });
-    } catch (error) {
-        console.error('Mail sending failed', error);
-    }
+    await tracer.startActiveSpan('email.send', async (span) => {
+        span.setAttribute('email.subject', message.subject);
+        const start = performance.now();
+
+        try {
+            await transporter.sendMail({
+                from: config.EMAIL_NO_REPLY_ADDRESS,
+                to: message.to,
+                subject: message.subject,
+                html,
+            });
+            emailSendDuration.record(performance.now() - start, {
+                outcome: 'success',
+            });
+        } catch (error) {
+            emailSendDuration.record(performance.now() - start, {
+                outcome: 'failure',
+            });
+            logger.error('Mail sending failed', error);
+        } finally {
+            span.end();
+        }
+    });
 }

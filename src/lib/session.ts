@@ -4,6 +4,7 @@ import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { SignJWT, jwtVerify } from 'jose';
 import { config } from './config';
+import { logger } from './logger';
 import type { SessionPayload } from './types';
 
 const SESSION_COOKIE = 'session';
@@ -19,7 +20,11 @@ async function encrypt(payload: SessionPayload, expires: Date) {
         .sign(encodedSecret);
 }
 
-async function decrypt(value = ''): Promise<SessionPayload | undefined> {
+async function decrypt(value?: string): Promise<SessionPayload | undefined> {
+    if (!value) {
+        return undefined;
+    }
+
     try {
         const { payload } = await jwtVerify<SessionPayload>(
             value,
@@ -30,7 +35,7 @@ async function decrypt(value = ''): Promise<SessionPayload | undefined> {
         );
         return payload;
     } catch {
-        console.log('Failed to verify session');
+        logger.warn('Failed to verify session');
     }
 }
 

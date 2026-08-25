@@ -10,11 +10,16 @@ services:
             EMAIL_NO_REPLY_ADDRESS: noreply@example.com
             SESSION_DURATION: 3600
             SESSION_SECRET: super_secret_key_that_should_be_changed
+            OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire-dashboard:18890
+            OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+            OTEL_RESOURCE_ATTRIBUTES: deployment.environment=docker
         ports:
             - 3000:3000
         depends_on:
             postgres:
                 condition: service_healthy
+            aspire-dashboard:
+                condition: service_started
             halcyon-nextjs-migrate:
                 condition: service_completed_successfully
 
@@ -58,6 +63,17 @@ services:
             - 8025:8025
         volumes:
             - mailpit_data:/data
+        restart: always
+
+    aspire-dashboard:
+        image: mcr.microsoft.com/dotnet/aspire-dashboard:latest
+        environment:
+            DASHBOARD__FRONTEND__AUTHMODE: Unsecured
+            DASHBOARD__OTLP__AUTHMODE: Unsecured
+        ports:
+            - 18888:18888
+            - 4317:18889
+            - 4318:18890
         restart: always
 
 volumes:
